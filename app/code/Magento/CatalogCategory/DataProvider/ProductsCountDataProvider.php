@@ -25,7 +25,6 @@ class ProductsCountDataProvider implements DataProviderInterface
      */
     private $productsCountBuilder;
 
-
     /**
      * ProductsCountDataProvider constructor.
      * @param ResourceConnection $resourceConnection

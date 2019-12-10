@@ -79,7 +79,6 @@ class CategoryList implements BatchResolverInterface
             $storefrontRequests[] = [$request, $storefrontRequest];
         }
 
-
         return $this->serviceInvoker->invoke(
             CategorySearchInterface::class,
             'search',

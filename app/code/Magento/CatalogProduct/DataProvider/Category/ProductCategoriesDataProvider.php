@@ -87,11 +87,13 @@ class ProductCategoriesDataProvider implements DataProviderInterface
         // get categories attributes
         $attributeCodes = \array_merge($attributes['categories'], self::$requiredCategoryAttributes);
 
-        $requests = $this->categorySearchCriteriaFactory->create([
-            'filters' => ['ids' => ['in' => $categoryIds]],
-            'scopes' => $scopes,
-            'attributes' => $attributeCodes
-        ]);
+        $requests = $this->categorySearchCriteriaFactory->create(
+            [
+                'filters' => ['ids' => ['in' => $categoryIds]],
+                'scopes' => $scopes,
+                'attributes' => $attributeCodes
+            ]
+        );
         $categories = $this->categorySearch->search([$requests])[0]->getCategories();
 
         // format output

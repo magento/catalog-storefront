@@ -100,8 +100,8 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 ['default_attribute1', 'price' => ['min_price', 'max_price']],
             ],
             'default with custom attributes' => [
-                ['default_attribute1', 'price'],
-                ['default_attribute1', 'price'],
+                ['default_attribute1', 'price' => []],
+                ['default_attribute1', 'price' => []],
             ],
             'custom attributes' => [
                 ['default_attribute1', 'items.options' => ['name', 'sku']],

@@ -8,8 +8,15 @@
         "php": "~7.1.3||~7.2.0||~7.3.0",
         "magento/framework": "*",
         "magento/module-catalog-product-api": "*",
+        "magento/module-catalog-category-api": "*",
         "magento/module-catalog": "*",
-        "magento/module-graph-ql": "*"
+        "magento/module-catalog-graph-ql": "*",
+        "magento/module-catalog-customer-graph-ql": "*",
+        "magento/module-catalog-cms-graph-ql": "*",
+        "magento/module-cms-graph-ql": "*",
+        "magento/module-graph-ql": "*",
+        "magento/module-related-product-graph-ql": "*",
+        "magento/module-store-front-graph-ql": "*"
     },
     "type": "magento2-module",
     "license": [
