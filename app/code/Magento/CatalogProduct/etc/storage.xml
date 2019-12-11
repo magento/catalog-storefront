@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+* Copyright © Magento, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="storage.xsd">
+    <!--
+        Desired structure that has to be hardcoded to app/etc/env.php under the 'catalog-store-front' key
+        until Catalog Store front application still be the part of Magento monolith.
+    -->
+    <connections>
+        <item name="default">
+            <protocol>http</protocol>
+            <hostname>localhost</hostname>
+            <port>9200</port>
+            <username />
+            <password />
+            <timeout>3</timeout>
+        </item>
+    </connections>
+    <timeout>60</timeout>
+    <alias_name>catalog_storefront</alias_name>
+    <source_prefix>catalog_storefront_v</source_prefix>
+    <source_current_version>1</source_current_version>
+</config>
