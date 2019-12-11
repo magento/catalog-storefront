@@ -26,6 +26,7 @@ class OutputFormatter
      * @param BatchRequestItemInterface $request
      * @return array
      * @throws GraphQlInputException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __invoke(
         ProductResultContainerInterface $result,
