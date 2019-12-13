@@ -14,7 +14,7 @@
         "magento/module-catalog-url-rewrite": "*",
         "magento/module-eav": "*",
         "magento/module-store": "*",
-        "magento/module-url-rewrite": "*",
+        "magento/module-url-rewrite": "*"
     },
     "suggest": {
         "magento/module-customer": "*",
