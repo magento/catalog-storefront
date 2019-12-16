@@ -18,12 +18,12 @@ use Magento\Framework\ObjectManagerInterface;
 class ServiceInvoker
 {
     /**
-     * GraphQL request
+     * GraphQL request identifier
      */
     private const GRAPHQL_REQUEST = 0;
 
     /**
-     * StoreFront request
+     * StoreFront request identifier
      */
     private const STOREFRONT_REQUEST = 1;
 

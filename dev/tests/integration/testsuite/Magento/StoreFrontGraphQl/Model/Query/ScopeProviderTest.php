@@ -8,9 +8,10 @@ namespace Magento\StoreFrontGraphQl\Model\Query;
 
 use Magento\Customer\Model\Group as CustomerGroup;
 use Magento\Customer\Model\Session;
+use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
-use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * @magentoAppArea graphql
@@ -87,10 +88,13 @@ class ScopeProviderTest extends \PHPUnit\Framework\TestCase
         $customerRepository = $this->objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $customer = $customerRepository->get('customer@example.com');
         $extensionAttributesFactory = $this->objectManager->get(
-            \Magento\GraphQl\Model\Query\ContextExtensionFactory::class
+            ExtensionAttributesFactory::class
         );
-        $extensionAttributes = $extensionAttributesFactory->create();
+        $extensionAttributes = $extensionAttributesFactory->create(
+            ContextInterface::class
+        );
         $extensionAttributes->setCustomerGroupId($customer->getGroupId());
+
         $context = $this->objectManager->create(
             ContextInterface::class,
             [
@@ -115,7 +119,7 @@ class ScopeProviderTest extends \PHPUnit\Framework\TestCase
         $customerRepository = $this->objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $customer = $customerRepository->get('customer@example.com');
         $extensionAttributesFactory = $this->objectManager->get(
-            \Magento\GraphQl\Model\Query\ContextExtensionFactory::class
+            ExtensionAttributesFactory::class
         );
 
         $storeId = $customer->getStoreId();
@@ -123,7 +127,9 @@ class ScopeProviderTest extends \PHPUnit\Framework\TestCase
         $store = $this->objectManager->create(Store::class);
         $store->load($storeId, 'store_id');
 
-        $extensionAttributes = $extensionAttributesFactory->create();
+        $extensionAttributes = $extensionAttributesFactory->create(
+            ContextInterface::class
+        );
         $extensionAttributes->setStore($store);
         $extensionAttributes->setCustomerGroupId(null);
         $context = $this->objectManager->create(

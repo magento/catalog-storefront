@@ -18,6 +18,7 @@ use Magento\StoreFrontGraphQl\Model\Query\ScopeProvider;
 
 /**
  * Build request for storefront service.
+ *
  * Return array of request [[GraphQl request, StoreFront request], ...]
  */
 class RequestBuilder
@@ -43,6 +44,8 @@ class RequestBuilder
     }
 
     /**
+     * Build GraphQL request
+     *
      * @param ContextInterface $context
      * @param BatchRequestItemInterface|ResolveRequestInterface $request
      * @param array|null $filter
