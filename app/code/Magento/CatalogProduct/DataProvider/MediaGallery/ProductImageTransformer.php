@@ -36,16 +36,12 @@ class ProductImageTransformer implements TransformerInterface
     public function transform(array $productItems, array $attributes): array
     {
         foreach ($productItems as &$item) {
-            foreach ($attributes as $attributeName => $outputAttributes) {
+            foreach (\array_keys($attributes) as $attributeName) {
                 $rawValue = $item[$attributeName] ?? '';
                 $item[$attributeName] = [];
 
-                if (\in_array('url', $outputAttributes, true)) {
-                    $item[$attributeName]['url'] = $this->imageUrlResolver->resolve($rawValue, $attributeName);
-                }
-                if (\in_array('label', $outputAttributes, true)) {
-                    $item[$attributeName]['label'] = $item[$attributeName . '_label'] ?? $item['name'] ?? '';
-                }
+                $item[$attributeName]['url'] = $this->imageUrlResolver->resolve($rawValue, $attributeName);
+                $item[$attributeName]['label'] = $item[$attributeName . '_label'] ?? $item['name'] ?? '';
             }
         }
 

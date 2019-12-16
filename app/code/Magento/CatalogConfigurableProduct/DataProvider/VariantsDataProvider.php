@@ -100,21 +100,22 @@ class VariantsDataProvider implements DataProviderInterface
 
         $result = [];
 
-        if (isset($requestedAttributes['variants']['product'])) {
+        // TODO: handle ad-hoc solution MC-29791
+        if (empty($requestedAttributes) || isset($requestedAttributes['variants']['product'])) {
             $result[] = $this->childProductVariantsProvider->getProductVariants(
                 $products,
-                $requestedAttributes['variants']['product'],
+                $requestedAttributes['variants']['product'] ?? [],
                 $scopes
             );
         }
-        if (isset($requestedAttributes['variants']['attributes'])) {
+        if (empty($requestedAttributes) || isset($requestedAttributes['variants']['attributes'])) {
             $result[] = $this->buildVariantAttributes($products, $attributesPerProduct, $childAttributeOptions);
         }
-        if (isset($requestedAttributes['configurable_options'])) {
+        if (empty($requestedAttributes) || isset($requestedAttributes['configurable_options'])) {
             $result[] = $this->buildConfigurableOptions($products, $attributesPerProduct, $childAttributeOptions);
         }
 
-        return array_replace_recursive(...$result);
+        return !empty($result) ? array_replace_recursive(...$result) : $result;
     }
 
     /**
@@ -234,7 +235,9 @@ class VariantsDataProvider implements DataProviderInterface
     ): array {
         $attributesPerProduct = [];
         $childAttributeOptions = [];
-        if ($this->isLoadAttributes($requestedAttributes)) {
+
+        // TODO: handle ad-hoc solution MC-29791
+        if (empty($requestedAttributes) || $this->isLoadAttributes($requestedAttributes)) {
             $attributesPerProduct = $this->configurableAttributesProvider->provide(
                 $parentProductIds,
                 $requestedAttributes,
@@ -251,7 +254,6 @@ class VariantsDataProvider implements DataProviderInterface
             }
             $childAttributeOptions = $this->attributeOptionsProvider->provide(
                 $products,
-                $requestedAttributes,
                 $attributesPerProduct,
                 $scopes
             );

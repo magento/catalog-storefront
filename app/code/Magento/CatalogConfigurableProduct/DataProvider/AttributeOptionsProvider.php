@@ -30,6 +30,19 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
  */
 class AttributeOptionsProvider
 {
+    private const ATTRIBUTES = [
+        // "system" attributes
+        'attribute_id',
+        'product_id',
+
+        // entity attributes
+        'value_index',
+        'default_label',
+        'label',
+        'store_label',
+        'use_default_value',
+    ];
+
     /**
      * @var ResourceConnection
      */
@@ -56,7 +69,6 @@ class AttributeOptionsProvider
      * Get configurable attribute options
      *
      * @param array $products
-     * @param array $requestedAttributes
      * @param array $attributesPerProduct
      * @param array $scopes
      * @return array
@@ -64,19 +76,10 @@ class AttributeOptionsProvider
      */
     public function provide(
         array $products,
-        array $requestedAttributes,
         array $attributesPerProduct,
         array $scopes
     ): array {
         $storeId = (int)$scopes['store'];
-
-        $requestedOptions = $requestedAttributes['configurable_options']['values'] ?? [];
-        $requiredAttributes = ['value_index', 'attribute_id', 'product_id'];
-        if ($this->isLabelRequested($requestedAttributes)) {
-            $requiredAttributes[] = 'label';
-        }
-        $requestedOptions = \array_merge($requestedOptions, $requiredAttributes);
-
         $childProductIds = [];
         $attributeIds = [];
         $childProductAttributes = [];
@@ -93,7 +96,7 @@ class AttributeOptionsProvider
         $attributeIds = \array_unique(\array_merge(...$attributeIds));
 
         $optionValuesSelect = $this->configurableOptionValuesBuilder->build(
-            $requestedOptions,
+            self::ATTRIBUTES,
             $childProductIds,
             $attributeIds,
             $storeId
@@ -109,17 +112,5 @@ class AttributeOptionsProvider
         }
 
         return $attributeOptionsValues;
-    }
-
-    /**
-     * Is label requested
-     *
-     * @param array $requestedAttributes
-     * @return bool
-     */
-    private function isLabelRequested(array $requestedAttributes): bool
-    {
-        return isset($requestedAttributes['variants']['attributes'])
-            && \in_array('label', $requestedAttributes['variants']['attributes'], true);
     }
 }

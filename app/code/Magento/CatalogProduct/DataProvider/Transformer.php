@@ -52,7 +52,12 @@ class Transformer implements TransformerInterface
                     )
                 );
             }
-            $outputAttributes = $attributes[$attributeName] ?? null;
+            // TODO: handle ad-hoc solution MC-29791
+            if (empty($attributes)) {
+                $outputAttributes = $attributeName;
+            } else {
+                $outputAttributes = $attributes[$attributeName] ?? null;
+            }
             if ($outputAttributes === null) {
                 $index = \array_search($attributeName, $attributes, true);
                 $outputAttributes = $index !== false ? $attributes[$index] : null;
