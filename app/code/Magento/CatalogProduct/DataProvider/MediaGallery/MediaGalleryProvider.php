@@ -12,22 +12,15 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\CatalogProduct\DataProvider\MediaGallery\Query\MediaGalleryQueryBuilder;
 
 /**
- * Provide data for media gallery: url, label, video_content
+ * Provide data for media gallery:
+ *  'media_gallery' => [
+ *     'url',
+ *     'label',
+ *     'video_content'
+ *   ]
  */
 class MediaGalleryProvider implements DataProviderInterface
 {
-    /**
-     * Provided attributes
-     */
-    private const ATTRIBUTES = [
-        'media_gallery' => [
-            'url',
-            'label',
-            'video_content'
-        ]
-    ];
-
-
     /**
      * @var MediaGalleryQueryBuilder
      */
@@ -60,6 +53,7 @@ class MediaGalleryProvider implements DataProviderInterface
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Zend_Db_Statement_Exception
      */
@@ -68,7 +62,7 @@ class MediaGalleryProvider implements DataProviderInterface
         $output = [];
         $storeId = (int)$scopes['store'];
 
-        $attributesMapping = $this->getAttributesMapping($attributes);
+        $attributesMapping = $this->getAttributesMapping();
         $connection = $this->resourceConnection->getConnection();
         $statement = $connection->query(
             $this->galleryQuery->build($productIds, $storeId)
@@ -102,24 +96,20 @@ class MediaGalleryProvider implements DataProviderInterface
     /**
      * Get mapping for output attributes
      *
-     * @param array $attributes
      * @return array
      */
-    private function getAttributesMapping(array $attributes): array
+    private function getAttributesMapping(): array
     {
-        $attributes = $attributes ?: self::ATTRIBUTES;
-
+        $attributeName = 'media_gallery';
         $attributesMapping = [];
-        foreach ($attributes as $attributeName => $outputAttributes) {
-                $attributesMapping[$attributeName]['url'] = function ($item) use ($attributeName) {
-                    return $this->imageUrlResolver->resolve($item['file'] ?? '', $attributeName);
-                };
-                $attributesMapping[$attributeName]['label'] = 'label';
-                $attributesMapping[$attributeName]['video_content'] = function ($item) {
-                    return $this->getVideoContent($item);
-                };
-            $attributesMapping[$attributeName]['media_type'] = 'media_type';
-        }
+        $attributesMapping[$attributeName]['url'] = function ($item) use ($attributeName) {
+            return $this->imageUrlResolver->resolve($item['file'] ?? '', $attributeName);
+        };
+        $attributesMapping[$attributeName]['label'] = 'label';
+        $attributesMapping[$attributeName]['video_content'] = function ($item) {
+            return $this->getVideoContent($item);
+        };
+        $attributesMapping[$attributeName]['media_type'] = 'media_type';
 
         return $attributesMapping;
     }

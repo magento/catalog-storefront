@@ -36,7 +36,7 @@ class ProductImageTransformer implements TransformerInterface
     public function transform(array $productItems, array $attributes): array
     {
         foreach ($productItems as &$item) {
-            foreach ($attributes as $attributeName => $outputAttributes) {
+            foreach (\array_keys($attributes) as $attributeName) {
                 $rawValue = $item[$attributeName] ?? '';
                 $item[$attributeName] = [];
 
