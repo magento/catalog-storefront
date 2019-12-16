@@ -10,7 +10,9 @@
         "magento/module-catalog": "*",
         "magento/module-eav": "*",
         "magento/module-catalog-product": "*",
-        "magento/module-catalog-category-api": "*"
+        "magento/module-catalog-category-api": "*",
+        "magento/module-store": "*",
+        "magento/module-search": "*"
     },
     "suggest": {
         "magento/module-customer": "*",

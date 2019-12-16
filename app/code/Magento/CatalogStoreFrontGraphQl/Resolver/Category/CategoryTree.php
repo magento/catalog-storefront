@@ -81,7 +81,6 @@ class CategoryTree implements BatchResolverInterface
             $storefrontRequests[] = [$request, $storefrontRequest];
         }
 
-
         return $this->serviceInvoker->invoke(
             CategorySearchInterface::class,
             'search',
@@ -91,7 +90,7 @@ class CategoryTree implements BatchResolverInterface
                 GraphQlInputException $e,
                 BatchRequestItemInterface $request
             ) use ($context) {
-                $errors = $result->getErrors();
+                $errors = $result->getErrors() ?? $e->getErrors();
                 if (!empty($errors)) {
                     //ad-hoc solution with __() as GraphQlInputException accepts Phrase in construct
                     throw new InputException(

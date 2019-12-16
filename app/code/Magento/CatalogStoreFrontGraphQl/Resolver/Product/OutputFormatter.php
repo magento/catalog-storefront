@@ -19,11 +19,14 @@ use Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface;
 class OutputFormatter
 {
     /**
+     * Format Storefront output for GraphQL response
+     *
      * @param ProductResultContainerInterface $result
      * @param GraphQlInputException $e
      * @param BatchRequestItemInterface $request
      * @return array
      * @throws GraphQlInputException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __invoke(
         ProductResultContainerInterface $result,
