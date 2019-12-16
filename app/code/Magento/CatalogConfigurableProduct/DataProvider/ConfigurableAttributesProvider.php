@@ -62,12 +62,10 @@ class ConfigurableAttributesProvider
     {
         $storeId = (int)$scopes['store'];
 
-        $requestedOptions = $requestedAttributes['configurable_options'] ?? [];
-        $requestedOptions = \array_merge($requestedOptions, ['product_id', 'attribute_id', 'attribute_code']);
         /** @var \Magento\Framework\DB\Select $configurableOptionsSelect */
         $select = $this->configurableOptionsBuilder->build(
             $parentProductIds,
-            $requestedOptions,
+            $requestedAttributes['configurable_options'] ?? [],
             $storeId
         );
 

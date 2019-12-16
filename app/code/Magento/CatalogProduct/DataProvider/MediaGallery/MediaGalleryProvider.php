@@ -17,6 +17,18 @@ use Magento\CatalogProduct\DataProvider\MediaGallery\Query\MediaGalleryQueryBuil
 class MediaGalleryProvider implements DataProviderInterface
 {
     /**
+     * Provided attributes
+     */
+    private const ATTRIBUTES = [
+        'media_gallery' => [
+            'url',
+            'label',
+            'video_content'
+        ]
+    ];
+
+
+    /**
      * @var MediaGalleryQueryBuilder
      */
     private $galleryQuery;
@@ -95,21 +107,17 @@ class MediaGalleryProvider implements DataProviderInterface
      */
     private function getAttributesMapping(array $attributes): array
     {
+        $attributes = $attributes ?: self::ATTRIBUTES;
+
         $attributesMapping = [];
         foreach ($attributes as $attributeName => $outputAttributes) {
-            if (\in_array('url', $outputAttributes, true)) {
                 $attributesMapping[$attributeName]['url'] = function ($item) use ($attributeName) {
                     return $this->imageUrlResolver->resolve($item['file'] ?? '', $attributeName);
                 };
-            }
-            if (\in_array('label', $outputAttributes, true)) {
                 $attributesMapping[$attributeName]['label'] = 'label';
-            }
-            if (isset($outputAttributes['ProductVideo.video_content'])) {
                 $attributesMapping[$attributeName]['video_content'] = function ($item) {
                     return $this->getVideoContent($item);
                 };
-            }
             $attributesMapping[$attributeName]['media_type'] = 'media_type';
         }
 
@@ -131,7 +139,9 @@ class MediaGalleryProvider implements DataProviderInterface
             $data = [];
             foreach ($fieldData as $outputField => $attribute) {
                 $outputValue = \is_callable($attribute) ? $attribute($item) : ($item[$attribute] ?? '');
-                $data[$outputField] = $outputValue;
+                if (null !== $outputValue) {
+                    $data[$outputField] = $outputValue;
+                }
             }
             $output[$productId][$outputAttribute][] = $data;
 

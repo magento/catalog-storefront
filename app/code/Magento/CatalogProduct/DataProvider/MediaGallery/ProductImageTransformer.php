@@ -40,12 +40,8 @@ class ProductImageTransformer implements TransformerInterface
                 $rawValue = $item[$attributeName] ?? '';
                 $item[$attributeName] = [];
 
-                if (\in_array('url', $outputAttributes, true)) {
-                    $item[$attributeName]['url'] = $this->imageUrlResolver->resolve($rawValue, $attributeName);
-                }
-                if (\in_array('label', $outputAttributes, true)) {
-                    $item[$attributeName]['label'] = $item[$attributeName . '_label'] ?? $item['name'] ?? '';
-                }
+                $item[$attributeName]['url'] = $this->imageUrlResolver->resolve($rawValue, $attributeName);
+                $item[$attributeName]['label'] = $item[$attributeName . '_label'] ?? $item['name'] ?? '';
             }
         }
 

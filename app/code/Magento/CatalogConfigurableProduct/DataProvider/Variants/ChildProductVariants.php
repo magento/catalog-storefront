@@ -41,6 +41,17 @@ class ChildProductVariants
     {
         $childrenMap = [];
         $variantIds = array_unique(array_column($products, 'variant_id'));
+        // TODO: handle ad-hoc solution MC-29791
+        if (empty($productAttributes)) {
+            foreach ($products as $child) {
+                $variantId = $child['variant_id'] ?? null;
+                if ($variantId) {
+                    $childrenMap[$child['parent_id']]['variants'][$variantId]['product'] = $variantId;
+                }
+            }
+
+            return $childrenMap;
+        }
 
         $attributesData = $this->generalDataProvider->fetch($variantIds, $productAttributes, $scopes);
         foreach ($products as $child) {
