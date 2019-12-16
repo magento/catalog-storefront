@@ -76,6 +76,7 @@ class ConfigurableOptionsBuilder
         if (empty($requestedOptions)) {
             $optionColumns = $this->getAvailableColumns();
         } else {
+            $requestedOptions = \array_merge($requestedOptions, ['product_id', 'attribute_id', 'attribute_code']);
             $optionColumns = $this->columnsDataMapper->filter($requestedOptions, $this->getAvailableColumns());
         }
 
