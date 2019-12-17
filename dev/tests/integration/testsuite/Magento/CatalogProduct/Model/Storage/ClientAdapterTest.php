@@ -69,10 +69,17 @@ class ClientAdapterTest extends TestCase
         $this->documentFactory = Bootstrap::getObjectManager()->get(DocumentFactory::class);;
         $this->documentIteratorFactory = Bootstrap::getObjectManager()->get(DocumentIteratorFactory::class);
 
-        $this->storageClient->deleteDataSource($this->state->getCurrentDataSourceName());
         $this->storageClient->createDataSource($this->state->getCurrentDataSourceName(), []);
         $this->storageClient->createEntity($this->state->getCurrentDataSourceName(), 'product', []);
         $this->storageClient->createAlias($this->state->getAliasName(), $this->state->getCurrentDataSourceName());
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        $this->storageClient->deleteDataSource($this->state->getCurrentDataSourceName());
     }
 
     /**
