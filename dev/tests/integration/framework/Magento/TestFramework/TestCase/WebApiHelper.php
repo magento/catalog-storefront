@@ -5,9 +5,7 @@
  */
 namespace Magento\TestFramework\TestCase;
 
-use Magento\TestFramework\Helper\Bootstrap;
-
-class WebApiHelper extends \Magento\TestFramework\TestCase\WebapiAbstract
+class WebApiHelper extends WebapiAbstract
 {
 //    /**
 //     * Application cache model.
@@ -147,32 +145,6 @@ class WebApiHelper extends \Magento\TestFramework\TestCase\WebapiAbstract
         $storeCode = null,
         $integration = null
     ) {
-        if ($webApiAdapterCode === null) {
-            /** Default adapter code is defined in PHPUnit configuration */
-            $webApiAdapterCode = strtolower(TESTS_WEB_API_ADAPTER);
-        }
-        return $this->_getWebApiAdapter($webApiAdapterCode)->call($serviceInfo, $arguments, $storeCode, $integration);
-    }
-
-    /**
-     * Get Web API adapter (create if requested one does not exist).
-     *
-     * @param string $webApiAdapterCode
-     * @return \Magento\TestFramework\TestCase\Webapi\AdapterInterface
-     * @throws \LogicException When requested Web API adapter is not declared
-     */
-    public function _getWebApiAdapter($webApiAdapterCode)
-    {
-        if (!isset($this->_webApiAdapters[$webApiAdapterCode])) {
-            if (!isset($this->_webApiAdaptersMap[$webApiAdapterCode])) {
-                throw new \LogicException(
-                    sprintf('Declaration of the requested Web API adapter "%s" was not found.', $webApiAdapterCode)
-                );
-            }
-            $this->_webApiAdapters[$webApiAdapterCode] = Bootstrap::getObjectManager()->get(
-                $this->_webApiAdaptersMap[$webApiAdapterCode]
-            );
-        }
-        return $this->_webApiAdapters[$webApiAdapterCode];
+        return parent::_webApiCall($serviceInfo, $arguments, $webApiAdapterCode, $storeCode, $integration);
     }
 }

@@ -92,20 +92,30 @@ interface ClientInterface
     public function createEntity(string $dataSourceName, string $entityName, array $schema);
 
     /**
-     * Switch link of alias from one data source to another.
+     * Create alias for data source.
      *
-     * @param string $dataSourceName
      * @param string $aliasName
-     * @param string $oldEntityName
-     * @param string $newEntityName
+     * @param string $dataSourceName
      * @return void
      * @throws StateException
      */
-    public function switchAlias(
-        string $dataSourceName,
+    public function createAlias(
         string $aliasName,
-        string $oldEntityName,
-        string $newEntityName
+        string $dataSourceName
+    );
+
+    /**
+     * Switch link of alias from one data source to another.
+     *
+     * @param string $aliasName
+     * @param string $oldDataSourceName
+     * @param string $newDataSourceName
+     * @return void
+     */
+    public function switchAlias(
+        string $aliasName,
+        string $oldDataSourceName,
+        string $newDataSourceName
     );
 
     /**

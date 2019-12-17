@@ -5,23 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogProduct\Model\MessageBus;
+namespace Magento\CatalogProduct\Model\Storage;
 
 use Magento\CatalogProduct\Model\Storage\ElasticsearchClientAdapter;
 use Magento\CatalogProduct\Model\Storage\State;
-use Magento\Store\Model\WebsiteRepository;
+use Magento\Integration\Api\AdminTokenServiceInterface;
+use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\TestFramework\TestCase\WebApiHelper;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 use \Magento\Framework\ObjectManagerInterface;
 
-
-/**
- * Class for category url rewrites tests
- *
- * @magentoDbIsolation enabled
- */
-class ConsumerTest extends TestCase
+class ClientAdapterTest extends TestCase
 {
     const SERVICE_NAME = 'catalogProductRepositoryV1';
     const SERVICE_VERSION = 'V1';
@@ -36,11 +31,6 @@ class ConsumerTest extends TestCase
     private $webApiHelper;
 
     /**
-     * @var Consumer
-     */
-    private $object;
-
-    /**
      * @var ElasticsearchClientAdapter
      */
     private $storageClient;
@@ -51,6 +41,11 @@ class ConsumerTest extends TestCase
     private $state;
 
     /**
+     * @var AdminTokenServiceInterface
+     */
+    private $adminTokens;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -58,31 +53,29 @@ class ConsumerTest extends TestCase
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->webApiHelper = $this->objectManager->create(WebApiHelper::class);
-        $this->object = $this->objectManager->create(Consumer::class);
+//        $this->webApiHelper = $this->objectManager->create(WebApiHelper::class);
         $this->state = $this->objectManager->create(State::class);
         $this->storageClient = $this->objectManager->create(ElasticsearchClientAdapter::class);
+        $this->adminTokens = Bootstrap::getObjectManager()->get(AdminTokenServiceInterface::class);
+
+        $this->storageClient->deleteDataSource($this->state->getCurrentDataSourceName());
+        $this->storageClient->createDataSource($this->state->getCurrentDataSourceName(), []);
+        $this->storageClient->createEntity($this->state->getCurrentDataSourceName(), 'product', []);
+        $this->storageClient->createAlias($this->state->getAliasName(), $this->state->getCurrentDataSourceName());
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/category_with_position.php
-     * @dataProvider processProvider
-     * @param array $data
      * @return void
      */
-    public function testProcess(array $data): void
+    public function testBulkInsert(): void
     {
         $productBuilder = $this->getSimpleProductData();
         $productBuilder['sku'] = 'test-sku-default-site-123';
-        $websitesData = [
-            'website_ids' => [
-                1,
-            ]
-        ];
-        $productBuilder['extension_attributes'] = $websitesData;
-        $this->saveProduct($productBuilder);
+//        $id = $this->saveProduct($productBuilder);
+//        $productData = $this->getProduct('test-sku-default-site-123');
+        $productData = $productBuilder;
 
-        $this->object->process();
+        $this->storageClient->bulkInsert($this->state->getAliasName(), 'product', $productData);
 
         $entry = $this->storageClient->getEntry(
             $this->state->getAliasName(),
@@ -90,15 +83,17 @@ class ConsumerTest extends TestCase
             $productBuilder['id'],
             ['sku']
         );
+
+        $t= 9;
+
     }
 
     /**
      * Get Simple Product Data
      *
-     * @param array $productData
      * @return array
      */
-    protected function getSimpleProductData($productData = [])
+    protected function getSimpleProductData()
     {
         return [
             'id' => uniqid(),
@@ -117,6 +112,14 @@ class ConsumerTest extends TestCase
     }
 
 
+    /**
+     * Save Product
+     *
+     * @param $product
+     * @param string|null $storeCode
+     * @param string|null $token
+     * @return mixed
+     */
     /**
      * Save Product
      *
@@ -152,7 +155,7 @@ class ConsumerTest extends TestCase
         }
         $requestData = ['product' => $product];
 
-        return $this->webApiHelper->_webApiCall($serviceInfo, $requestData, null, $storeCode);
+        return $this->_webApiCall($serviceInfo, $requestData, null, $storeCode);
     }
 
     protected function getProduct($sku, $storeCode = null)
@@ -162,33 +165,14 @@ class ConsumerTest extends TestCase
                 'resourcePath' => self::RESOURCE_PATH . '/' . $sku,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Get',
-            ],
+//            'soap' => [
+//                'service' => self::SERVICE_NAME,
+//                'serviceVersion' => self::SERVICE_VERSION,
+//                'operation' => self::SERVICE_NAME . 'Get',
+//            ],
         ];
         $response = $this->webApiHelper->_webApiCall($serviceInfo, ['sku' => $sku], null, $storeCode);
 
         return $response;
-    }
-
-    /**
-     * @return array
-     */
-    public function processProvider(): array
-    {
-        return [
-            'variation 1' => [
-                [
-                    'data' => [
-
-                    ],
-                    'expected_data' => [
-
-                    ],
-                ],
-            ],
-        ];
     }
 }

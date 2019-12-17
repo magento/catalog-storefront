@@ -6,14 +6,16 @@
 
 declare(strict_types=1);
 
-namespace Magento\CatalogProduct\Setup\Patch\Data;
+namespace Magento\CatalogProduct\Setup;
 
-use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\InstallSchemaInterface;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
  * Temporary solution to configure connection for data storage service.
  */
-class ConnectionSetup implements DataPatchInterface
+class Recurring implements InstallSchemaInterface
 {
     /**
      * @var \Magento\Framework\App\DeploymentConfig\Reader
@@ -42,7 +44,7 @@ class ConnectionSetup implements DataPatchInterface
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function apply()
+    public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $config = $this->configReader->load(\Magento\Framework\Config\File\ConfigFilePool::APP_ENV);
         $config['catalog-store-front'] = [
@@ -62,21 +64,5 @@ class ConnectionSetup implements DataPatchInterface
             'source_current_version' => 1,
         ];
         $this->configWriter->saveConfig([\Magento\Framework\Config\File\ConfigFilePool::APP_ENV => $config], true);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public static function getDependencies()
-    {
-        return [];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getAliases()
-    {
-        return [];
     }
 }

@@ -40,7 +40,8 @@ class ElasticsearchClientAdapter implements ClientInterface
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function __construct(Reader $configReader) {
+    public function __construct(Reader $configReader)
+    {
         $configData = $configReader->load(ConfigFilePool::APP_ENV)['catalog-store-front'];
         $options = $configData['connections']['default'];
 
@@ -119,7 +120,7 @@ class ElasticsearchClientAdapter implements ClientInterface
     public function deleteDataSource($name)
     {
         try {
-        $this->getConnection()->indices()->delete(['index' => $name]);
+            $this->getConnection()->indices()->delete(['index' => $name]);
         } catch (\Throwable $throwable) {
             throw new CouldNotDeleteException(
                 __("Error occurred while deleting '$name' index."),
@@ -170,18 +171,17 @@ class ElasticsearchClientAdapter implements ClientInterface
     /**
      * @inheritdoc
      */
-    public function switchAlias(string $dataSourceName, string $aliasName, string $oldEntityName, string $newEntityName)
+    public function createAlias(string $aliasName, string $dataSourceName)
     {
         $params['body']['actions'] = [
-            'add' => ['alias' => $aliasName, 'index' => $newEntityName],
-            'remove' => ['alias' => $aliasName, 'index' => $oldEntityName]
+            'add' => ['alias' => $aliasName, 'index' => $dataSourceName],
         ];
 
         try {
             $this->getConnection()->indices()->updateAliases($params);
         } catch (\Throwable $throwable) {
             throw new StateException(
-                __("Error occurred while switching alias from '$oldEntityName' index to '$newEntityName' index."),
+                __("Error occurred while creating alias for '$dataSourceName' index."),
                 $throwable
             );
         }
@@ -190,7 +190,28 @@ class ElasticsearchClientAdapter implements ClientInterface
     /**
      * @inheritdoc
      */
-    public function getEntry(string $aliasName, string $entityName, int $id, array $fields) : array
+    public function switchAlias(string $aliasName, string $oldDataSourceName, string $newDataSourceName)
+    {
+        $params['body']['actions'] = [
+            'add' => ['alias' => $aliasName, 'index' => $newDataSourceName],
+            'remove' => ['alias' => $aliasName, 'index' => $oldDataSourceName]
+        ];
+
+        try {
+            $this->getConnection()->indices()->updateAliases($params);
+        } catch (\Throwable $throwable) {
+            throw new StateException(
+                __("Error occurred while switching alias "
+                    . "from '$oldDataSourceName' index to '$newDataSourceName' index."),
+                $throwable
+            );
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getEntry(string $aliasName, string $entityName, int $id, array $fields): array
     {
         $query = [
             'index' => $aliasName,
@@ -213,7 +234,7 @@ class ElasticsearchClientAdapter implements ClientInterface
     /**
      * @inheritdoc
      */
-    public function getEntries(string $aliasName, string $entityName, array $ids, array $fields) : array
+    public function getEntries(string $aliasName, string $entityName, array $ids, array $fields): array
     {
         $query = [
             'index' => $aliasName,
