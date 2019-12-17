@@ -76,6 +76,15 @@ class ProductCategoriesDataProvider implements DataProviderInterface
 
         // get categories and product -> categories map
         $productCategories = [];
+
+        // TODO: handle ad-hoc solution MC-29791
+        if (empty($attributes)) {
+            foreach ($categoryProducts as $item) {
+                $productCategories[$item['product_id']]['categories'][] = $item['category_id'];
+            }
+            return $productCategories;
+        }
+
         $categoryIds = [];
 
         foreach ($categoryProducts as $item) {
@@ -87,11 +96,13 @@ class ProductCategoriesDataProvider implements DataProviderInterface
         // get categories attributes
         $attributeCodes = \array_merge($attributes['categories'], self::$requiredCategoryAttributes);
 
-        $requests = $this->categorySearchCriteriaFactory->create([
-            'filters' => ['ids' => ['in' => $categoryIds]],
-            'scopes' => $scopes,
-            'attributes' => $attributeCodes
-        ]);
+        $requests = $this->categorySearchCriteriaFactory->create(
+            [
+                'filters' => ['ids' => ['in' => $categoryIds]],
+                'scopes' => $scopes,
+                'attributes' => $attributeCodes
+            ]
+        );
         $categories = $this->categorySearch->search([$requests])[0]->getCategories();
 
         // format output

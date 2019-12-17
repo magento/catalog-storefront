@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogProduct\DataProvider\Query\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\Framework\DB\Select;
 use Magento\CatalogProduct\DataProvider\Query\EavAttributeQueryBuilderFactory;
 
@@ -39,20 +40,33 @@ class ProductAttributeQueryBuilder
     ];
 
     /**
+     * @var string[]|null
+     */
+    private $allAttributes;
+
+    /**
      * @var EavAttributeQueryBuilderFactory
      */
     private $attributeQueryFactory;
 
     /**
+     * @var CollectionFactory
+     */
+    private $attributeCollectionFactory;
+
+    /**
      * @param EavAttributeQueryBuilderFactory $attributeQueryFactory
+     * @param CollectionFactory $attributeCollectionFactory
      * @param array $linkedAttributes
      */
     public function __construct(
         EavAttributeQueryBuilderFactory $attributeQueryFactory,
+        CollectionFactory $attributeCollectionFactory,
         array $linkedAttributes = []
     ) {
         $this->attributeQueryFactory = $attributeQueryFactory;
         self::$linkedAttributeMap = array_merge(self::$linkedAttributeMap, $linkedAttributes);
+        $this->attributeCollectionFactory = $attributeCollectionFactory;
     }
 
     /**
@@ -66,6 +80,8 @@ class ProductAttributeQueryBuilder
      */
     public function build(array $productIds, array $productAttributes, int $storeId): Select
     {
+        $productAttributes = $productAttributes ?: $this->getAttributes();
+
         $productAttributes = \array_merge($productAttributes, self::$requiredProductAttributes);
 
         $attributeQueryBuilder = $this->attributeQueryFactory->create(
@@ -76,5 +92,26 @@ class ProductAttributeQueryBuilder
         );
 
         return $attributeQueryBuilder->build($productIds, $productAttributes, $storeId);
+    }
+
+    /**
+     * Get all product attributes that have to be indexed
+     *
+     * @return string[]
+     */
+    private function getAttributes(): array
+    {
+        if ($this->allAttributes === null) {
+            /** @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection $productAttributes */
+            $productAttributes = $this->attributeCollectionFactory->create();
+            $productAttributes->addToIndexFilter(true);
+
+            /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
+            foreach ($productAttributes->getItems() as $attribute) {
+                $this->allAttributes[] = $attribute->getAttributeCode();
+            }
+        }
+
+        return $this->allAttributes;
     }
 }

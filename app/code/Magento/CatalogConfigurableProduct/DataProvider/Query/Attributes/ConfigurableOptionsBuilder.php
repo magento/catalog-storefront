@@ -72,7 +72,13 @@ class ConfigurableOptionsBuilder
         $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $linkField = $metadata->getLinkField();
 
-        $optionColumns = $this->columnsDataMapper->filter($requestedOptions, $this->getAvailableColumns());
+        // TODO: handle ad-hoc solution MC-29791
+        if (empty($requestedOptions)) {
+            $optionColumns = $this->getAvailableColumns();
+        } else {
+            $requestedOptions = \array_merge($requestedOptions, ['product_id', 'attribute_id', 'attribute_code']);
+            $optionColumns = $this->columnsDataMapper->filter($requestedOptions, $this->getAvailableColumns());
+        }
 
         $configurableOptionsSelect = $connection->select()
             ->from(['main_table' =>  $this->resourceConnection->getTableName('catalog_product_super_attribute')], [])

@@ -65,6 +65,7 @@ class BreadcrumbsDataProvider implements DataProviderInterface
                 $pathMap[$categoryId][$categoryPaths[$categoryId]['path']]  = \implode('/', $pathArray);
                 $pathArray = \array_slice($pathArray, 2);
                 $entityIds[] = $pathArray;
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $entityIds = \array_unique(\array_merge(...$entityIds));
                 $categories = $this->getCategories($entityIds, (int)$scopes['store']);
 
@@ -121,6 +122,8 @@ class BreadcrumbsDataProvider implements DataProviderInterface
     }
 
     /**
+     * Get breadcrumbs by child category ID
+     *
      * @param array $child
      * @param array $breadcrumbAttributes
      * @return mixed

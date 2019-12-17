@@ -79,13 +79,6 @@
                     <item name="label" xsi:type="string">label</item>
                     <item name="product" xsi:type="string">product</item> <!-- get product on 2nd request? -->
                 </item>
-                <item name="GiftCardProduct" xsi:type="array">
-                    <item name="giftcard_type" xsi:type="string">giftcard_type</item>
-                    <item name="is_redeemable" xsi:type="string">is_redeemable</item>
-                    <item name="lifetime" xsi:type="string">lifetime</item>
-                    <item name="allow_message" xsi:type="string">allow_message</item>
-                    <item name="message_max_length" xsi:type="string">message_max_length</item>
-                </item>
             </argument>
         </arguments>
     </type>

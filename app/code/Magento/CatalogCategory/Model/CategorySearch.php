@@ -60,7 +60,6 @@ class CategorySearch implements CategorySearchInterface
         LoggerInterface $logger,
         CategoryFilter $categoryFilter,
         CollectionFactory $collectionFactory
-
     ) {
         $this->categoryResultContainerFactory = $categoryResultContainerFactory;
         $this->dataProvider = $dataProvider;

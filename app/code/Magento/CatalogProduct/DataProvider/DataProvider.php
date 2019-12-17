@@ -141,6 +141,7 @@ class DataProvider implements DataProviderInterface
             $items = \array_combine($productIds, \array_fill(0, \count($productIds), []));
         }
 
+        // TODO: MC-29513 - do not sort items (not needed due to data pushed to storage)
         // return items in the same order as product ids
         $sortedItems = [];
         foreach ($productIds as $id) {
@@ -175,13 +176,22 @@ class DataProvider implements DataProviderInterface
      * Get data providers for specified attributes
      *
      * @param array $attributes
-     * @param bool $useDefaultProvider
      *
      * @return array
      */
-    private function getDataProviders(array $attributes, bool $useDefaultProvider = true): array
+    private function getDataProviders(array $attributes): array
     {
         $attributesProviderMap = [];
+
+        if (empty($attributes)) {
+            $attributesProviderMap[$this->defaultDataProvider] = [[]];
+            foreach ($this->dataProviders as $attributeName => $dataProvider) {
+                $attributesProviderMap[$dataProvider][] = [];
+            }
+
+            return $attributesProviderMap;
+        }
+
         foreach ($attributes as $attributeName => $outputAttributes) {
             $cleanAttributeName = $attributeName;
             if (\is_string($attributeName) && false !== \strpos($attributeName, '.')) {
@@ -200,7 +210,7 @@ class DataProvider implements DataProviderInterface
                 $attributesProviderMap[$this->dataProviders[$attributeName]][] = [
                     $cleanAttributeName => $outputAttributes
                 ];
-            } elseif (true === $useDefaultProvider) {
+            } else {
                 // Default attributes provider do not support nested attributes
                 $attributesProviderMap[$this->defaultDataProvider][] = [$cleanAttributeName];
             }
