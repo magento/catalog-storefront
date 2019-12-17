@@ -11,6 +11,7 @@ use Magento\CatalogGraphQl\Model\Resolver\Product\ProductFieldsSelector;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product as ProductDataProvider;
 use Magento\CatalogStoreFrontGraphQl\Model\ProductModelHydrator;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResponse;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\ResolveRequestFactory;
@@ -31,6 +32,16 @@ trait RelatedProductsTrait
      * @var ResolveRequestFactory
      */
     private $resolveRequestFactory;
+
+    /**
+     * @var ProductFieldsSelector
+     */
+    private $productFieldsSelector;
+
+    /**
+     * @var RelatedProductDataProvider
+     */
+    private $relatedProductDataProvider;
 
     /**
      * @param ProductFieldsSelector $productFieldsSelector
@@ -56,6 +67,8 @@ trait RelatedProductsTrait
         );
         $this->productModelHydrator = $productModelHydrator;
         $this->resolveRequestFactory = $resolveRequestFactory;
+        $this->productFieldsSelector = $productFieldsSelector;
+        $this->relatedProductDataProvider = $relatedProductDataProvider;
     }
 
     /**
@@ -65,7 +78,7 @@ trait RelatedProductsTrait
      * @param Field $field
      * @param array $requests
      * @return BatchResponse
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      * @throws \Throwable
      */
     public function resolve(
@@ -88,6 +101,12 @@ trait RelatedProductsTrait
                 ]
             );
         }
+
+        $fields = $this->getFields($requests);
+        if (empty($fields)) {
+            return $this->getRelationsOnly($requests, $requestsOriginal);
+        }
+
         $resolvedRequests = parent::resolve($context, $field, $requests);
 
         $response = new BatchResponse();
@@ -96,6 +115,49 @@ trait RelatedProductsTrait
             $response->addResponse($requestsOriginal[$key], $result);
         }
 
+        return $response;
+    }
+
+    /**
+     * Get list of fields from request.
+     *
+     * @param array $requests
+     * @return array
+     */
+    private function getFields(array $requests): array
+    {
+        $fields = [];
+        /** @var \Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface $request */
+        foreach ($requests as $request) {
+            $fields[] = $this->productFieldsSelector->getProductFieldsFromInfo($request->getInfo(), $this->getNode());
+        }
+        $fields = array_unique(array_merge(...$fields));
+
+        return $fields;
+    }
+
+    /**
+     * Get list of related products.
+     *
+     * @param $requests
+     * @param $requestsOriginal
+     * @return BatchResponse
+     */
+    private function getRelationsOnly($requests, $requestsOriginal): BatchResponse
+    {
+        $products = [];
+        /** @var \Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface $request */
+        foreach ($requests as $request) {
+            $products[] = $request->getValue()['model'];
+        }
+
+        // TODO: handle ad-hoc solution MC-29791
+        // TODO: determine if we need add relations to $response or return $relations
+        $relations = $this->relatedProductDataProvider->getRelations($products, $this->getLinkType());
+        $response = new BatchResponse();
+        foreach ($requests as $key => $request) {
+            $response->addResponse($requestsOriginal[$key], $relations);
+        }
         return $response;
     }
 }
