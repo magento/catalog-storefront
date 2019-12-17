@@ -14,6 +14,7 @@
             <module name="Magento_Store"/>
             <module name="Magento_Eav"/>
             <module name="Magento_CatalogSearch"/>
+            <module name="Magento_AsynchronousOperations"/>
         </sequence>
     </module>
 </config>

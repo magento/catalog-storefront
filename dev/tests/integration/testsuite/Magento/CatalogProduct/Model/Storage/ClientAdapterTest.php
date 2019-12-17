@@ -66,7 +66,7 @@ class ClientAdapterTest extends TestCase
         $this->state = $this->objectManager->create(State::class);
         $this->storageClient = $this->objectManager->create(ElasticsearchClientAdapter::class);
         $this->adminTokens = Bootstrap::getObjectManager()->get(AdminTokenServiceInterface::class);
-        $this->documentFactory = Bootstrap::getObjectManager()->get(DocumentFactory::class);;
+        $this->documentFactory = Bootstrap::getObjectManager()->get(DocumentFactory::class);
         $this->documentIteratorFactory = Bootstrap::getObjectManager()->get(DocumentIteratorFactory::class);
 
         $this->storageClient->createDataSource($this->state->getCurrentDataSourceName(), []);

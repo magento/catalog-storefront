@@ -5,7 +5,7 @@
 * See COPYING.txt for license details.
 */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="storage.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:CatalogProduct/etc/something.xsd">
     <!--
         Desired structure that has to be hardcoded to app/etc/env.php under the 'catalog-store-front' key
         until Catalog Store front application still be the part of Magento monolith.

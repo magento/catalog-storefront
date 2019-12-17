@@ -35,7 +35,6 @@ class ElasticsearchClientAdapter implements ClientInterface
     const BULK_ACTION_UPDATE = 'update';
     /**#@-*/
 
-
     /**
      * @var \Elasticsearch\Client[]
      */
@@ -70,15 +69,15 @@ class ElasticsearchClientAdapter implements ClientInterface
         Reader $configReader,
         DocumentFactory $documentFactory,
         DocumentIteratorFactory $documentIteratorFactory
-    )
-    {
+    ) {
         $this->documentFactory = $documentFactory;
         $this->documentIteratorFactory = $documentIteratorFactory;
         $configData = $configReader->load(ConfigFilePool::APP_ENV)['catalog-store-front'];
         $options = $configData['connections']['default'];
 
-        if (empty($options['hostname']) || ((!empty($options['enableAuth']) &&
-                    ($options['enableAuth'] == 1)) && (empty($options['username']) || empty($options['password'])))) {
+        if (empty($options['hostname']) || ((!empty($options['enableAuth'])
+                    && ($options['enableAuth'] == 1)) && (empty($options['username']) || empty($options['password'])))
+        ) {
             throw new ConfigurationMismatchException(
                 __('The search failed because of a search engine misconfiguration.')
             );
@@ -233,8 +232,10 @@ class ElasticsearchClientAdapter implements ClientInterface
             $this->getConnection()->indices()->updateAliases($params);
         } catch (\Throwable $throwable) {
             throw new StateException(
-                __("Error occurred while switching alias "
-                    . "from '$oldDataSourceName' index to '$newDataSourceName' index."),
+                __(
+                    "Error occurred while switching alias "
+                    . "from '$oldDataSourceName' index to '$newDataSourceName' index."
+                ),
                 $throwable
             );
         }
@@ -280,7 +281,7 @@ class ElasticsearchClientAdapter implements ClientInterface
             throw new NotFoundException(
                 __(
                     "'$entityName' type documents with ids '"
-                    . print_r($ids, true)
+                    . json_encode($ids)
                     . "' not found in index '$aliasName'."
                 ),
                 $throwable

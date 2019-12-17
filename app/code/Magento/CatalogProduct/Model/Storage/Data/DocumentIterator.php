@@ -26,7 +26,8 @@ class DocumentIterator implements EntryIteratorInterface
     /**
      * @param Document[] $documents
      */
-    public function __construct(array $documents) {
+    public function __construct(array $documents)
+    {
         $this->documents = $documents;
     }
 
