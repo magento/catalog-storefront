@@ -46,8 +46,12 @@ class ColumnsDataMapper
      */
     public function filter(array $requested, array $available): array
     {
-        $requestedAttributes = array_filter($requested, 'is_string');
-        $columns = array_intersect_key($available, array_fill_keys($requestedAttributes, 1));
+        if (empty($requested)) {
+            $columns = $available;
+        } else {
+            $requestedAttributes = array_filter($requested, 'is_string');
+            $columns = array_intersect_key($available, array_fill_keys($requestedAttributes, 1));
+        }
 
         return $columns;
     }

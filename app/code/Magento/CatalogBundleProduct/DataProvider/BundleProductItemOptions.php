@@ -58,10 +58,7 @@ class BundleProductItemOptions implements NestedDataProviderInterface
      */
     public function fetch(array $attributes, array $scopes, array $parentData): array
     {
-        $attributes = $attributes['options'] ?? null;
-        if (!$attributes) {
-            return $parentData;
-        }
+        $attributes = $attributes['options'] ?? [];
 
         $optionIds = $this->collectFieldIds($parentData, 'option_id');
         $parentIds = $this->collectFieldIds($parentData, 'parent_id');
