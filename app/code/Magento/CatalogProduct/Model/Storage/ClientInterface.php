@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogProduct\Model\Storage;
 
+use Magento\CatalogProduct\Model\Storage\Data\EntryInterface;
+use Magento\CatalogProduct\Model\Storage\Data\EntryIteratorInterface;
 use Magento\Framework\Exception\BulkException;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -130,10 +132,10 @@ interface ClientInterface
      * @param string $entityName
      * @param int $id
      * @param array $fields
-     * @return array
+     * @return EntryInterface
      * @throws NotFoundException
      */
-    public function getEntry(string $aliasName, string $entityName, int $id, array $fields);
+    public function getEntry(string $aliasName, string $entityName, int $id, array $fields): EntryInterface;
 
     /**
      * Access entries of Entity by array of unique identifier.
@@ -147,10 +149,15 @@ interface ClientInterface
      * @param string $entityName
      * @param array $ids
      * @param array $fields
-     * @return array
+     * @return EntryIteratorInterface
      * @throws NotFoundException
      */
-    public function getEntries(string $aliasName, string $entityName, array $ids, array $fields);
+    public function getEntries(
+        string $aliasName,
+        string $entityName,
+        array $ids,
+        array $fields
+    ): EntryIteratorInterface;
 
     /**
      * Performs bulk insert.

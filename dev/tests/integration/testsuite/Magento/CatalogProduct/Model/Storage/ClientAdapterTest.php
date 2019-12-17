@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogProduct\Model\Storage;
 
+use Magento\CatalogProduct\Model\Storage\Data\DocumentFactory;
+use Magento\CatalogProduct\Model\Storage\Data\DocumentIteratorFactory;
 use Magento\CatalogProduct\Model\Storage\ElasticsearchClientAdapter;
 use Magento\CatalogProduct\Model\Storage\State;
 use Magento\Integration\Api\AdminTokenServiceInterface;
@@ -46,6 +48,16 @@ class ClientAdapterTest extends TestCase
     private $adminTokens;
 
     /**
+     * @var DocumentFactory
+     */
+    private $documentFactory;
+
+    /**
+     * @var DocumentIteratorFactory
+     */
+    private $documentIteratorFactory;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -57,6 +69,8 @@ class ClientAdapterTest extends TestCase
         $this->state = $this->objectManager->create(State::class);
         $this->storageClient = $this->objectManager->create(ElasticsearchClientAdapter::class);
         $this->adminTokens = Bootstrap::getObjectManager()->get(AdminTokenServiceInterface::class);
+        $this->documentFactory = Bootstrap::getObjectManager()->get(DocumentFactory::class);;
+        $this->documentIteratorFactory = Bootstrap::getObjectManager()->get(DocumentIteratorFactory::class);
 
         $this->storageClient->deleteDataSource($this->state->getCurrentDataSourceName());
         $this->storageClient->createDataSource($this->state->getCurrentDataSourceName(), []);
@@ -75,7 +89,11 @@ class ClientAdapterTest extends TestCase
 //        $productData = $this->getProduct('test-sku-default-site-123');
         $productData = $productBuilder;
 
-        $this->storageClient->bulkInsert($this->state->getAliasName(), 'product', $productData);
+        $this->storageClient->bulkInsert(
+            $this->state->getAliasName(),
+            'product',
+            [$productData]
+        );
 
         $entry = $this->storageClient->getEntry(
             $this->state->getAliasName(),
@@ -84,8 +102,16 @@ class ClientAdapterTest extends TestCase
             ['sku']
         );
 
-        $t= 9;
+        $this->assertEquals($productData['sku'], $entry->getData('sku'));
 
+        $entry = $this->storageClient->getEntries(
+            $this->state->getAliasName(),
+            'product',
+            [$productBuilder['id']],
+            ['sku']
+        )->current();
+
+        $this->assertEquals($productData['sku'], $entry->getData('sku'));
     }
 
     /**
@@ -96,7 +122,7 @@ class ClientAdapterTest extends TestCase
     protected function getSimpleProductData()
     {
         return [
-            'id' => uniqid(),
+            'id' => rand(),
             'sku' => uniqid('sku-', true),
             'name' => uniqid('name-', true),
             'visibility' => 4,
@@ -111,15 +137,6 @@ class ClientAdapterTest extends TestCase
         ];
     }
 
-
-    /**
-     * Save Product
-     *
-     * @param $product
-     * @param string|null $storeCode
-     * @param string|null $token
-     * @return mixed
-     */
     /**
      * Save Product
      *
@@ -144,14 +161,9 @@ class ClientAdapterTest extends TestCase
                 'resourcePath' => self::RESOURCE_PATH,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Save',
-            ],
         ];
         if ($token) {
-            $serviceInfo['rest']['token'] = $serviceInfo['soap']['token'] = $token;
+            $serviceInfo['rest']['token'] = $token;
         }
         $requestData = ['product' => $product];
 
@@ -165,11 +177,6 @@ class ClientAdapterTest extends TestCase
                 'resourcePath' => self::RESOURCE_PATH . '/' . $sku,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
-//            'soap' => [
-//                'service' => self::SERVICE_NAME,
-//                'serviceVersion' => self::SERVICE_VERSION,
-//                'operation' => self::SERVICE_NAME . 'Get',
-//            ],
         ];
         $response = $this->webApiHelper->_webApiCall($serviceInfo, ['sku' => $sku], null, $storeCode);
 

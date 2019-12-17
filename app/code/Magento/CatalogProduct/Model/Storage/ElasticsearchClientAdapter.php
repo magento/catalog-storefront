@@ -8,6 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\CatalogProduct\Model\Storage;
 
+use Magento\CatalogProduct\Model\Storage\Data\DocumentFactory;
+use Magento\CatalogProduct\Model\Storage\Data\DocumentIteratorFactory;
+use Magento\CatalogProduct\Model\Storage\Data\EntryInterface;
+use Magento\CatalogProduct\Model\Storage\Data\EntryIteratorInterface;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\Exception\BulkException;
 use Magento\Framework\Exception\CouldNotDeleteException;
@@ -22,6 +26,16 @@ use Magento\Framework\Config\File\ConfigFilePool;
  */
 class ElasticsearchClientAdapter implements ClientInterface
 {
+    /**#@+
+     * Text flags for Elasticsearch bulk actions
+     */
+    const BULK_ACTION_INDEX = 'index';
+    const BULK_ACTION_CREATE = 'create';
+    const BULK_ACTION_DELETE = 'delete';
+    const BULK_ACTION_UPDATE = 'update';
+    /**#@-*/
+
+
     /**
      * @var \Elasticsearch\Client[]
      */
@@ -33,15 +47,33 @@ class ElasticsearchClientAdapter implements ClientInterface
     private $clientOptions;
 
     /**
+     * @var DocumentFactory
+     */
+    private $documentFactory;
+
+    /**
+     * @var DocumentIteratorFactory
+     */
+    private $documentIteratorFactory;
+
+    /**
      * Initialize Elasticsearch Client
      *
      * @param Reader $configReader
+     * @param DocumentFactory $documentFactory
+     * @param DocumentIteratorFactory $documentIteratorFactory
      * @throws ConfigurationMismatchException
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function __construct(Reader $configReader)
+    public function __construct(
+        Reader $configReader,
+        DocumentFactory $documentFactory,
+        DocumentIteratorFactory $documentIteratorFactory
+    )
     {
+        $this->documentFactory = $documentFactory;
+        $this->documentIteratorFactory = $documentIteratorFactory;
         $configData = $configReader->load(ConfigFilePool::APP_ENV)['catalog-store-front'];
         $options = $configData['connections']['default'];
 
@@ -211,7 +243,7 @@ class ElasticsearchClientAdapter implements ClientInterface
     /**
      * @inheritdoc
      */
-    public function getEntry(string $aliasName, string $entityName, int $id, array $fields): array
+    public function getEntry(string $aliasName, string $entityName, int $id, array $fields): EntryInterface
     {
         $query = [
             'index' => $aliasName,
@@ -228,18 +260,18 @@ class ElasticsearchClientAdapter implements ClientInterface
             );
         }
 
-        return $result;
+        return $this->documentFactory->create(['data' => $result]);
     }
 
     /**
      * @inheritdoc
      */
-    public function getEntries(string $aliasName, string $entityName, array $ids, array $fields): array
+    public function getEntries(string $aliasName, string $entityName, array $ids, array $fields): EntryIteratorInterface
     {
         $query = [
             'index' => $aliasName,
             'type' => $entityName,
-            'ids' => $ids,
+            'body' => ['ids' => $ids],
             '_source' => $fields
         ];
         try {
@@ -254,7 +286,12 @@ class ElasticsearchClientAdapter implements ClientInterface
                 $throwable
             );
         }
-        return $result;
+
+        $documents = [];
+        foreach ($result['docs'] as $item) {
+            $documents[] = $this->documentFactory->create(['data' => $item]);
+        }
+        return $this->documentIteratorFactory->create(['documents' => $documents]);
     }
 
     /**
@@ -262,11 +299,7 @@ class ElasticsearchClientAdapter implements ClientInterface
      */
     public function bulkInsert(string $dataSourceName, string $entityName, array $entries)
     {
-        $query = [
-            'index' => $dataSourceName,
-            'type' => $entityName,
-            'body' => $entries
-        ];
+        $query = $this->getDocsArrayInBulkIndexFormat($dataSourceName, $entityName, $entries);
         try {
             $this->getConnection()->bulk($query);
         } catch (\Throwable $throwable) {
@@ -275,5 +308,43 @@ class ElasticsearchClientAdapter implements ClientInterface
                 $throwable
             );
         }
+    }
+
+    /**
+     * Reformat documents array to bulk format.
+     *
+     * @param string $indexName
+     * @param string $entityName
+     * @param array $documents
+     * @param string $action
+     * @return array
+     */
+    private function getDocsArrayInBulkIndexFormat(
+        string $indexName,
+        string $entityName,
+        array $documents,
+        string $action = self::BULK_ACTION_INDEX
+    ): array {
+        $bulkArray = [
+            'index' => $indexName,
+            'type' => $entityName,
+            'body' => [],
+            'refresh' => true,
+        ];
+
+        foreach ($documents as $document) {
+            $bulkArray['body'][] = [
+                $action => [
+                    '_id' => $document['id'],
+                    '_type' => $entityName,
+                    '_index' => $indexName
+                ]
+            ];
+            if ($action == self::BULK_ACTION_INDEX) {
+                $bulkArray['body'][] = $document;
+            }
+        }
+
+        return $bulkArray;
     }
 }
