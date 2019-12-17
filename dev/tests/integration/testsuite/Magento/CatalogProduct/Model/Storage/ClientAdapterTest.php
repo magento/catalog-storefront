@@ -9,8 +9,6 @@ namespace Magento\CatalogProduct\Model\Storage;
 
 use Magento\CatalogProduct\Model\Storage\Data\DocumentFactory;
 use Magento\CatalogProduct\Model\Storage\Data\DocumentIteratorFactory;
-use Magento\CatalogProduct\Model\Storage\ElasticsearchClientAdapter;
-use Magento\CatalogProduct\Model\Storage\State;
 use Magento\Integration\Api\AdminTokenServiceInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\TestFramework\TestCase\WebApiHelper;
@@ -65,7 +63,6 @@ class ClientAdapterTest extends TestCase
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
-//        $this->webApiHelper = $this->objectManager->create(WebApiHelper::class);
         $this->state = $this->objectManager->create(State::class);
         $this->storageClient = $this->objectManager->create(ElasticsearchClientAdapter::class);
         $this->adminTokens = Bootstrap::getObjectManager()->get(AdminTokenServiceInterface::class);
@@ -85,8 +82,6 @@ class ClientAdapterTest extends TestCase
     {
         $productBuilder = $this->getSimpleProductData();
         $productBuilder['sku'] = 'test-sku-default-site-123';
-//        $id = $this->saveProduct($productBuilder);
-//        $productData = $this->getProduct('test-sku-default-site-123');
         $productData = $productBuilder;
 
         $this->storageClient->bulkInsert(
@@ -135,51 +130,5 @@ class ClientAdapterTest extends TestCase
                 ['attribute_code' => 'description', 'value' => 'Description'],
             ]
         ];
-    }
-
-    /**
-     * Save Product
-     *
-     * @param $product
-     * @param string|null $storeCode
-     * @param string|null $token
-     * @return mixed
-     */
-    protected function saveProduct($product, $storeCode = null, ?string $token = null)
-    {
-        if (isset($product['custom_attributes'])) {
-            foreach ($product['custom_attributes'] as &$attribute) {
-                if ($attribute['attribute_code'] == 'category_ids'
-                    && !is_array($attribute['value'])
-                ) {
-                    $attribute['value'] = [""];
-                }
-            }
-        }
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
-            ],
-        ];
-        if ($token) {
-            $serviceInfo['rest']['token'] = $token;
-        }
-        $requestData = ['product' => $product];
-
-        return $this->_webApiCall($serviceInfo, $requestData, null, $storeCode);
-    }
-
-    protected function getProduct($sku, $storeCode = null)
-    {
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $sku,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
-            ],
-        ];
-        $response = $this->webApiHelper->_webApiCall($serviceInfo, ['sku' => $sku], null, $storeCode);
-
-        return $response;
     }
 }
