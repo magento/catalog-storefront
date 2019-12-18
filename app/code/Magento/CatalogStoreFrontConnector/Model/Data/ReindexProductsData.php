@@ -5,8 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogStoreFrontConnector\Model;
+namespace Magento\CatalogStoreFrontConnector\Model\Data;
 
+/**
+ * Data object for reindexed products collector
+ */
 class ReindexProductsData implements ReindexProductsDataInterface
 {
     /**
@@ -15,22 +18,20 @@ class ReindexProductsData implements ReindexProductsDataInterface
     private $storeId;
 
     /**
-     * @var array
+     * @var int[]
      */
     private $productIds;
 
     /**
-     * @param int $storeId
-     *
-     * @return void
+     * @inheritdoc
      */
-    public function setStoreId(int $storeId)
+    public function setStoreId(int $storeId): void
     {
         $this->storeId = $storeId;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getStoreId(): int
     {
@@ -38,17 +39,15 @@ class ReindexProductsData implements ReindexProductsDataInterface
     }
 
     /**
-     * @param array $productIds
-     *
-     * @return void
+     * @inheritdoc
      */
-    public function setProductIds(array $productIds)
+    public function setProductIds(array $productIds): void
     {
         $this->productIds = $productIds;
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getProductIds(): array
     {

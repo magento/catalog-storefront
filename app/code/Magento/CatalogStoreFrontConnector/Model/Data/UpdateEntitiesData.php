@@ -1,9 +1,15 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 
+namespace Magento\CatalogStoreFrontConnector\Model\Data;
 
-namespace Magento\CatalogStoreFrontConnector\Model;
-
-
+/**
+ * Data object for collect updated entities data
+ */
 class UpdateEntitiesData implements UpdateEntitiesDataInterface
 {
     /**
@@ -27,16 +33,15 @@ class UpdateEntitiesData implements UpdateEntitiesDataInterface
     private $entityData;
 
     /**
-     * @param string $entityType
-     * @return void
+     * @inheritdoc
      */
-    public function setEntityType(string $entityType)
+    public function setEntityType(string $entityType): void
     {
         $this->entityType = $entityType;
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getEntityType(): string
     {
@@ -44,16 +49,15 @@ class UpdateEntitiesData implements UpdateEntitiesDataInterface
     }
 
     /**
-     * @param int $entityId
-     * @return void
+     * @inheritdoc
      */
-    public function setEntityId(int $entityId)
+    public function setEntityId(int $entityId): void
     {
         $this->entityId = $entityId;
     }
 
     /**
-     * @return int
+     * @inheritdoc
      */
     public function getEntityId(): int
     {
@@ -61,19 +65,15 @@ class UpdateEntitiesData implements UpdateEntitiesDataInterface
     }
 
     /**
-     * @param int $storeId
-     *
-     * @return void
+     * @inheritdoc
      */
-    public function setStoreId(int $storeId)
+    public function setStoreId(int $storeId): void
     {
         $this->storeId = $storeId;
     }
 
     /**
-     * Get store ID for products reindex
-     *
-     * @return int
+     * @inheritdoc
      */
     public function getStoreId(): int
     {
@@ -81,16 +81,15 @@ class UpdateEntitiesData implements UpdateEntitiesDataInterface
     }
 
     /**
-     * @param array $entityData
-     * @return void
+     * @inheritdoc
      */
-    public function setEntityData(array $entityData)
+    public function setEntityData(array $entityData): void
     {
         $this->entityData = $entityData;
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function getEntityData(): array
     {

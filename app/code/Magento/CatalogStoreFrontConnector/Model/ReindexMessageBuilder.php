@@ -7,6 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStoreFrontConnector\Model;
 
+use Magento\CatalogStoreFrontConnector\Model\Data\ReindexProductsDataInterface;
+
+/**
+ * Reindex message builder
+ */
 class ReindexMessageBuilder
 {
     /**
@@ -24,12 +29,14 @@ class ReindexMessageBuilder
     }
 
     /**
+     * Prepare message for storefront.collect.reindex.products.data topic
+     *
      * @param int $storeId
      * @param array $productIds
      *
      * @return ReindexProductsDataInterface
      */
-    public function prepareMessage($storeId, array $productIds)
+    public function prepareMessage($storeId, array $productIds): ReindexProductsDataInterface
     {
 
         $this->reindexProducts->setStoreId($storeId);

@@ -6,6 +6,7 @@
 
 namespace Magento\CatalogStoreFrontConnector\Model;
 
+use Magento\Framework\MessageQueue\MergedMessageInterfaceFactory;
 use Magento\Framework\MessageQueue\MergerInterface;
 
 /**
@@ -14,30 +15,23 @@ use Magento\Framework\MessageQueue\MergerInterface;
 class Merger implements MergerInterface
 {
     /**
-     * @var \Magento\Framework\MessageQueue\MergedMessageInterfaceFactory
+     * @var MergedMessageInterfaceFactory
      */
     private $mergedMessageFactory;
-    /**
-     * @var ReindexProductsDataInterfaceFactory
-     */
-    private $reindexProductsDataFactory;
 
     /**
-     * @param ReindexProductsDataInterfaceFactory $reindexProductsDataFactory
-     * @param \Magento\Framework\MessageQueue\MergedMessageInterfaceFactory $mergedMessageFactory
+     * @param MergedMessageInterfaceFactory $mergedMessageFactory
      */
     public function __construct(
-        ReindexProductsDataInterfaceFactory $reindexProductsDataFactory,
-        \Magento\Framework\MessageQueue\MergedMessageInterfaceFactory $mergedMessageFactory
+        MergedMessageInterfaceFactory $mergedMessageFactory
     ) {
         $this->mergedMessageFactory = $mergedMessageFactory;
-        $this->reindexProductsDataFactory = $reindexProductsDataFactory;
     }
 
     /**
      * @inheritdoc
      */
-    public function merge(array $messages)
+    public function merge(array $messages): array
     {
         $result = [];
 

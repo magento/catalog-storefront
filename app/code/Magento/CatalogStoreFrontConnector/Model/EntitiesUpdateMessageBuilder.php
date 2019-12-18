@@ -7,6 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStoreFrontConnector\Model;
 
+use Magento\CatalogStoreFrontConnector\Model\Data\UpdateEntitiesDataInterface;
+
+/**
+ * Message builder for publish entities update
+ */
 class EntitiesUpdateMessageBuilder
 {
     /**
@@ -24,15 +29,20 @@ class EntitiesUpdateMessageBuilder
     }
 
     /**
+     * Prepare message for entities update publishing process
+     *
      * @param int $storeId
      * @param string $entityType
      * @param int $entityId
      * @param array $entityData
      * @return UpdateEntitiesDataInterface
      */
-    public function prepareMessage($storeId, string $entityType, int $entityId, array $entityData)
-    {
-
+    public function prepareMessage(
+        int $storeId,
+        string $entityType,
+        int $entityId,
+        array $entityData
+    ): UpdateEntitiesDataInterface {
         $this->updateEntitiesData->setStoreId($storeId);
         $this->updateEntitiesData->setEntityType($entityType);
         $this->updateEntitiesData->setEntityId($entityId);

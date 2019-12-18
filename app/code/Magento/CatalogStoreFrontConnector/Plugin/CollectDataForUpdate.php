@@ -7,11 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStoreFrontConnector\Plugin;
 
-use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full;
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\CatalogStoreFrontConnector\Model\ReindexMessageBuilder;
 use Magento\Framework\MessageQueue\PublisherInterface;
+use Magento\Store\Model\StoreDimensionProvider;
 
 /**
+ * Plugin for collect products data during reindex
  */
 class CollectDataForUpdate
 {
@@ -19,6 +21,7 @@ class CollectDataForUpdate
      * @var PublisherInterface
      */
     private $queuePublisher;
+
     /**
      * @var ReindexMessageBuilder
      */
@@ -42,27 +45,26 @@ class CollectDataForUpdate
     }
 
     /**
+     * Collect store ID and product IDs for scope of reindexed products
      *
-     * @param Full $subject
+     * @param Fulltext $subject
      * @param \Closure $proceed
-     * @param int $storeId
-     * @param int[]|null $productIds
+     * @param array $dimensions
+     * @param \Traversable|null $entityIds
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @throws \Exception
      */
-    public function aroundRebuildStoreIndex(
-        Full $subject,
+    public function aroundExecuteByDimensions(
+        Fulltext $subject,
         \Closure $proceed,
-        int $storeId,
-        $productIds = []
+        array $dimensions,
+        \Traversable $entityIds = null
     ) {
-        $result = $proceed($storeId, $productIds);
+        $proceed($dimensions, $entityIds);
 
-        $productIds = $productIds ?? [];
+        $productIds = $entityIds instanceof \Traversable ? $entityIds->getArrayCopy() : [];
+        $storeId = (int)$dimensions[StoreDimensionProvider::DIMENSION_NAME]->getValue();
         $message = $this->messageBuilder->prepareMessage($storeId, $productIds);
         $this->queuePublisher->publish($this->topic, $message);
-
-        return $result;
     }
 }
