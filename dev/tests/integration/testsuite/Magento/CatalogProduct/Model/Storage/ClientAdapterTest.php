@@ -10,8 +10,6 @@ namespace Magento\CatalogProduct\Model\Storage;
 use Magento\CatalogProduct\Model\Storage\Data\DocumentFactory;
 use Magento\CatalogProduct\Model\Storage\Data\DocumentIteratorFactory;
 use Magento\Integration\Api\AdminTokenServiceInterface;
-use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\TestFramework\TestCase\WebApiHelper;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 use \Magento\Framework\ObjectManagerInterface;
@@ -24,11 +22,6 @@ class ClientAdapterTest extends TestCase
 
     /** @var ObjectManagerInterface */
     private $objectManager;
-
-    /**
-     * @var WebApiHelper
-     */
-    private $webApiHelper;
 
     /**
      * @var ElasticsearchClientAdapter

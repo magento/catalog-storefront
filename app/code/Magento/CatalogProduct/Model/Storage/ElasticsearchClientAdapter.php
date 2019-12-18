@@ -8,18 +8,16 @@ declare(strict_types=1);
 
 namespace Magento\CatalogProduct\Model\Storage;
 
+use Magento\CatalogProduct\Model\Storage\Client\ConnectionPull;
 use Magento\CatalogProduct\Model\Storage\Data\DocumentFactory;
 use Magento\CatalogProduct\Model\Storage\Data\DocumentIteratorFactory;
 use Magento\CatalogProduct\Model\Storage\Data\EntryInterface;
 use Magento\CatalogProduct\Model\Storage\Data\EntryIteratorInterface;
-use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\Exception\BulkException;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\StateException;
-use Magento\Framework\Exception\ConfigurationMismatchException;
-use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
  * Elasticsearch client adapter.
@@ -29,21 +27,16 @@ class ElasticsearchClientAdapter implements ClientInterface
     /**#@+
      * Text flags for Elasticsearch bulk actions
      */
-    const BULK_ACTION_INDEX = 'index';
-    const BULK_ACTION_CREATE = 'create';
-    const BULK_ACTION_DELETE = 'delete';
-    const BULK_ACTION_UPDATE = 'update';
+    private const BULK_ACTION_INDEX = 'index';
+    private const BULK_ACTION_CREATE = 'create';
+    private const BULK_ACTION_DELETE = 'delete';
+    private const BULK_ACTION_UPDATE = 'update';
     /**#@-*/
 
     /**
-     * @var \Elasticsearch\Client[]
+     * @var ConnectionPull
      */
     private $connectionPull;
-
-    /**
-     * @var array
-     */
-    private $clientOptions;
 
     /**
      * @var DocumentFactory
@@ -58,36 +51,18 @@ class ElasticsearchClientAdapter implements ClientInterface
     /**
      * Initialize Elasticsearch Client
      *
-     * @param Reader $configReader
+     * @param ConnectionPull $connectionPull
      * @param DocumentFactory $documentFactory
      * @param DocumentIteratorFactory $documentIteratorFactory
-     * @throws ConfigurationMismatchException
-     * @throws \Magento\Framework\Exception\FileSystemException
-     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function __construct(
-        Reader $configReader,
+        ConnectionPull $connectionPull,
         DocumentFactory $documentFactory,
         DocumentIteratorFactory $documentIteratorFactory
     ) {
         $this->documentFactory = $documentFactory;
         $this->documentIteratorFactory = $documentIteratorFactory;
-        $configData = $configReader->load(ConfigFilePool::APP_ENV)['catalog-store-front'];
-        $options = $configData['connections']['default'];
-
-        if (empty($options['hostname']) || ((!empty($options['enableAuth'])
-                    && ($options['enableAuth'] == 1)) && (empty($options['username']) || empty($options['password'])))
-        ) {
-            throw new ConfigurationMismatchException(
-                __('The search failed because of a search engine misconfiguration.')
-            );
-        }
-
-        $config = $this->buildConfig($options);
-        $elasticsearchClient = \Elasticsearch\ClientBuilder::fromConfig($config, true);
-
-        $this->connectionPull[getmypid()] = $elasticsearchClient;
-        $this->clientOptions = $options;
+        $this->connectionPull = $connectionPull;
     }
 
     /**
@@ -97,32 +72,7 @@ class ElasticsearchClientAdapter implements ClientInterface
      */
     private function getConnection()
     {
-        $pid = getmypid();
-        if (!isset($this->client[$pid])) {
-            $config = $this->buildConfig($this->clientOptions);
-            $this->connectionPull[$pid] = \Elasticsearch\ClientBuilder::fromConfig($config, true);
-        }
-        return $this->connectionPull[$pid];
-    }
-
-    /**
-     * Build config.
-     *
-     * @param array $options
-     * @return array
-     */
-    private function buildConfig($options = [])
-    {
-        $portString = '';
-        if (!empty($options['port'])) {
-            $portString = ':' . $options['port'];
-        }
-
-        $host = $options['protocol'] . '://' . $options['hostname'] . $portString;
-
-        $options['hosts'] = [$host];
-
-        return $options;
+        return $this->connectionPull->getConnection();
     }
 
     /**

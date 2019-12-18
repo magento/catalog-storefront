@@ -14,6 +14,10 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
  * Temporary solution to configure connection for data storage service.
+ *
+ * @see \Magento\CatalogProduct\Model\Storage\Client\ConnectionPull
+ *
+ * TODO: MC-29894
  */
 class Recurring implements InstallSchemaInterface
 {

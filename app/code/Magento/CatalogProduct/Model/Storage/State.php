@@ -65,6 +65,6 @@ class State
     public function generateNewDataSourceName(): string
     {
         $config = $this->configReader->load(ConfigFilePool::APP_ENV)['catalog-store-front'];
-        return $config['source_prefix'] . ++$config['source_current_version'];
+        return $config['source_prefix'] . (++$config['source_current_version']);
     }
 }
