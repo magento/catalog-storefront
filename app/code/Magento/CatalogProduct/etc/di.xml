@@ -9,6 +9,7 @@
     <preference for="Magento\CatalogProductApi\Api\ProductSearchInterface" type="Magento\CatalogProduct\Model\ProductSearch"/>
     <preference for="Magento\CatalogProductApi\Api\Data\ProductResultContainerInterface" type="Magento\CatalogProduct\Model\ProductSearch\ProductResultContainer"/>
     <preference for="Magento\CatalogProductApi\Api\Data\ProductSearchCriteriaInterface" type="Magento\CatalogProduct\Model\ProductSearch\ProductSearchCriteria"/>
+    <preference for="Magento\CatalogProduct\Model\Storage\ClientInterface" type="Magento\CatalogProduct\Model\Storage\ElasticsearchClientAdapter"/>
 
     <preference for="Magento\CatalogProduct\DataProvider\DataProviderInterface" type="Magento\CatalogProduct\DataProvider\DataProvider"/>
     <type name="Magento\CatalogProduct\DataProvider\MediaGallery\ImageUrlResolver">
