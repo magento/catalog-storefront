@@ -110,11 +110,123 @@ class ClientAdapterTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testSubquery(): void
+    {
+        $productBuilder = $this->getConfigurableProductData();
+        $productBuilder['sku'] = 'test-configurable-product-with-variations-123';
+        $productData = $productBuilder;
+
+        $simple1 = $this->getSimpleProductData();
+        $simple2 = $this->getSimpleProductData();
+        $simple3 = $this->getSimpleProductData();
+        $simple4 = $this->getSimpleProductData();
+
+        $productData['parent_id'] = 'complex';
+        $simple1['parent_id'] = [
+            'name' => 'variant',
+            'parent' => $productData['id']
+        ];
+        $simple2['parent_id'] = [
+            'name' => 'variant',
+            'parent' => $productData['id']
+        ];
+        $simple3['parent_id'] = [
+            'name' => 'variant',
+            'parent' => $productData['id']
+        ];
+        $simple4['parent_id'] = [
+            'name' => 'variant',
+            'parent' => $productData['id']
+        ];
+
+        $this->storageClient->bulkInsert(
+            $this->state->getAliasName(),
+            'product',
+            [$productData, $simple1, $simple2, $simple3, $simple4]
+        );
+
+        $entry = $this->storageClient->getEntry(
+            $this->state->getAliasName(),
+            'product',
+            $productBuilder['id'],
+            ['sku', 'name', 'variants' => ['sku', 'name', 'price']]
+        );
+
+        $this->assertEquals($productData['sku'], $entry->getData('sku'));
+        $this->assertEquals($simple1['id'], $entry->getVariants()->current()->getId());
+        $entry->getVariants()->next();
+        $this->assertEquals($simple2['price'], $entry->getVariants()->current()->getData('price'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testSubqueries(): void
+    {
+        $configurable1 = $this->getConfigurableProductData();
+        $configurable1['sku'] = 'test-configurable-product-with-variations-123';
+
+        $configurable2 = $this->getConfigurableProductData();
+        $configurable2['sku'] = 'test-configurable-product-with-variations-123';
+
+        $simple1 = $this->getSimpleProductData();
+        $simple2 = $this->getSimpleProductData();
+
+        $simple3 = $this->getSimpleProductData();
+        $simple4 = $this->getSimpleProductData();
+        $simple5 = $this->getSimpleProductData();
+
+        $configurable1['parent_id'] = 'complex';
+        $configurable2['parent_id'] = 'complex';
+        $simple1['parent_id'] = [
+            'name' => 'variant',
+            'parent' => $configurable1['id']
+        ];
+        $simple2['parent_id'] = [
+            'name' => 'variant',
+            'parent' => $configurable2['id']
+        ];
+        $simple3['parent_id'] = [
+            'name' => 'variant',
+            'parent' => $configurable2['id']
+        ];
+        $simple4['parent_id'] = [
+            'name' => 'variant',
+            'parent' => $configurable1['id']
+        ];
+        $simple5['parent_id'] = [
+            'name' => 'variant',
+            'parent' => $configurable1['id']
+        ];
+
+        $this->storageClient->bulkInsert(
+            $this->state->getAliasName(),
+            'product',
+            [$configurable1, $configurable2, $simple1, $simple2, $simple3, $simple4, $simple5]
+        );
+
+        $entries = $this->storageClient->getEntries(
+            $this->state->getAliasName(),
+            'product',
+            [$configurable1['id'], $configurable2['id']],
+            ['sku', 'name', 'variants' => ['sku', 'name', 'price']]
+        );
+
+        $this->assertEquals($configurable1['sku'], $entries->current()->getData('sku'));
+        $this->assertEquals($simple1['id'], $entries->current()->getVariants()->current()->getId());
+        $entries->next();
+        $entries->current()->getVariants()->next();
+        $this->assertEquals($simple3['price'], $entries->current()->getVariants()->current()->getData('price'));
+    }
+
+    /**
      * Get Simple Product Data
      *
      * @return array
      */
-    protected function getSimpleProductData()
+    private function getSimpleProductData()
     {
         return [
             'id' => rand(),
@@ -129,6 +241,32 @@ class ClientAdapterTest extends TestCase
                 ['attribute_code' => 'cost', 'value' => ''],
                 ['attribute_code' => 'description', 'value' => 'Description'],
             ]
+        ];
+    }
+
+    /**
+     * Get Configurable Product Data.
+     *
+     * @return array
+     */
+    private function getConfigurableProductData()
+    {
+        return [
+            'id' => rand(),
+            'sku' => uniqid('sku-', true),
+            'name' => uniqid('name-', true),
+            'visibility' => 4,
+            'type_id' => 'configurable',
+            'price' => 3.62,
+            'status' => 1,
+            'attribute_set_id' => 4,
+            'custom_attributes' => [
+                ['attribute_code' => 'cost', 'value' => ''],
+                ['attribute_code' => 'description', 'value' => 'Description'],
+            ],
+//            'variations' => [
+//                '%id%' => ['product' => '%id%']
+//            ]
         ];
     }
 }

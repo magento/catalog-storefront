@@ -120,6 +120,14 @@ class ElasticsearchClientAdapter implements ClientInterface
             'type' => $entityName,
             'body' => [
                 $entityName => [
+                    'properties' => [
+                        'parent_id' => [
+                            'type' => 'join',
+                            'relations' => [
+                                'complex' => 'variant'
+                            ]
+                        ],
+                    ],
                     'dynamic_templates' => [
                         [
                             'default_mapping' => [
@@ -196,19 +204,57 @@ class ElasticsearchClientAdapter implements ClientInterface
      */
     public function getEntry(string $aliasName, string $entityName, int $id, array $fields): EntryInterface
     {
-        $query = [
-            'index' => $aliasName,
-            'type' => $entityName,
-            'id' => $id,
-            '_source' => $fields
-        ];
-        try {
-            $result = $this->getConnection()->get($query);
-        } catch (\Throwable $throwable) {
-            throw new NotFoundException(
-                __("'$entityName' type document with id '$id' not found in index '$aliasName'."),
-                $throwable
-            );
+        if (isset($fields['variants'])) {
+            $variants = array_merge($fields['variants'], ['parent_id']);
+            unset($fields['variants']);
+
+            $query = [
+                'index' => $aliasName,
+                'type' => $entityName,
+                'body' => [
+                    'query' => ['term' => ['_id' => $id]],
+                    'aggs' => [
+                        'nested_products' => [
+                            'children' => ['type' => 'variant'],
+                            'aggs' => [
+                                'variants' => [
+                                    'top_hits' => [
+                                        '_source' => [
+                                            'includes' => $variants
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ],
+
+                    ]
+                ],
+                '_source' => $fields
+            ];
+
+            try {
+                $result = $this->getConnection()->search($query);
+            } catch (\Throwable $throwable) {
+                throw new NotFoundException(
+                    __("'$entityName' type document with id '$id' not found in index '$aliasName'."),
+                    $throwable
+                );
+            }
+        } else {
+            $query = [
+                'index' => $aliasName,
+                'type' => $entityName,
+                'id' => $id,
+                '_source' => $fields
+            ];
+            try {
+                $result = $this->getConnection()->get($query);
+            } catch (\Throwable $throwable) {
+                throw new NotFoundException(
+                    __("'$entityName' type document with id '$id' not found in index '$aliasName'."),
+                    $throwable
+                );
+            }
         }
 
         return $this->documentFactory->create(['data' => $result]);
@@ -219,30 +265,74 @@ class ElasticsearchClientAdapter implements ClientInterface
      */
     public function getEntries(string $aliasName, string $entityName, array $ids, array $fields): EntryIteratorInterface
     {
-        $query = [
-            'index' => $aliasName,
-            'type' => $entityName,
-            'body' => ['ids' => $ids],
-            '_source' => $fields
-        ];
-        try {
-            $result = $this->getConnection()->mget($query);
-        } catch (\Throwable $throwable) {
-            throw new NotFoundException(
-                __(
-                    "'$entityName' type documents with ids '"
-                    . json_encode($ids)
-                    . "' not found in index '$aliasName'."
-                ),
-                $throwable
-            );
-        }
+        if (isset($fields['variants'])) {
+            $variants = array_merge($fields['variants'], ['parent_id']);
+            unset($fields['variants']);
 
-        $documents = [];
-        foreach ($result['docs'] as $item) {
-            $documents[] = $this->documentFactory->create(['data' => $item]);
+            $query = [
+                'index' => $aliasName,
+                'type' => $entityName,
+                'body' => [
+                    'query' => ['terms' => ['_id' => $ids]],
+                    'aggs' => [
+                        'nested_products' => [
+                            'children' => ['type' => 'variant'],
+                            'aggs' => [
+                                'variants' => [
+                                    'top_hits' => [
+                                        '_source' => [
+                                            'includes' => $variants
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ],
+
+                    ]
+                ],
+                '_source' => $fields
+            ];
+
+            try {
+                $result = $this->getConnection()->search($query);
+            } catch (\Throwable $throwable) {
+                throw new NotFoundException(
+                    __(
+                        "'$entityName' type documents with ids '"
+                        . json_encode($ids)
+                        . "' not found in index '$aliasName'."
+                    ),
+                    $throwable
+                );
+            }
+
+            return $this->documentIteratorFactory->create(['documents' => $result]);
+        } else {
+            $query = [
+                'index' => $aliasName,
+                'type' => $entityName,
+                'body' => ['ids' => $ids],
+                '_source' => $fields
+            ];
+            try {
+                $result = $this->getConnection()->mget($query);
+            } catch (\Throwable $throwable) {
+                throw new NotFoundException(
+                    __(
+                        "'$entityName' type documents with ids '"
+                        . json_encode($ids)
+                        . "' not found in index '$aliasName'."
+                    ),
+                    $throwable
+                );
+            }
+
+            $documents = [];
+            foreach ($result['docs'] as $item) {
+                $documents[] = $this->documentFactory->create(['data' => $item]);
+            }
+            return $this->documentIteratorFactory->create(['documents' => $documents]);
         }
-        return $this->documentIteratorFactory->create(['documents' => $documents]);
     }
 
     /**
@@ -284,12 +374,16 @@ class ElasticsearchClientAdapter implements ClientInterface
         ];
 
         foreach ($documents as $document) {
+            $metaInfo = [
+                '_id' => $document['id'],
+                '_type' => $entityName,
+                '_index' => $indexName
+            ];
+            if (isset($document['parent_id']['parent'])) {
+                $metaInfo['routing'] = $document['parent_id']['parent'];
+            }
             $bulkArray['body'][] = [
-                $action => [
-                    '_id' => $document['id'],
-                    '_type' => $entityName,
-                    '_index' => $indexName
-                ]
+                $action => $metaInfo
             ];
             if ($action == self::BULK_ACTION_INDEX) {
                 $bulkArray['body'][] = $document;
