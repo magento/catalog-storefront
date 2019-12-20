@@ -139,11 +139,11 @@ trait RelatedProductsTrait
     /**
      * Get list of related products.
      *
-     * @param $requests
-     * @param $requestsOriginal
+     * @param array $requests
+     * @param array $requestsOriginal
      * @return BatchResponse
      */
-    private function getRelationsOnly($requests, $requestsOriginal): BatchResponse
+    private function getRelationsOnly(array $requests, array $requestsOriginal): BatchResponse
     {
         $products = [];
         /** @var \Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface $request */
