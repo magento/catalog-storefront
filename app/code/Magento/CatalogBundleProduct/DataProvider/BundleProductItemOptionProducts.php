@@ -52,11 +52,7 @@ class BundleProductItemOptionProducts implements NestedDataProviderInterface
                 }
                 foreach ($item['options'] as $optionKey => $option) {
                     $optionProductId = $option['entity_id'];
-                    if (isset($attributesData[$optionProductId])) {
-                        $product = $attributesData[$optionProductId];
-                    } else {
-                        $product = $optionProductId;
-                    }
+                    $product = $attributesData[$optionProductId] ?? $optionProductId;
                     $parentData[$entityId]['items'][$itemKey]['options'][$optionKey]['product'] = $product;
                 }
             }

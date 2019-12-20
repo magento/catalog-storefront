@@ -16,6 +16,7 @@ use Magento\Framework\GraphQl\Query\Resolver\BatchResponse;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\ResolveRequestFactory;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\RelatedProductGraphQl\Model\DataProvider\RelatedProductDataProvider;
 
 /**
@@ -42,6 +43,18 @@ trait RelatedProductsTrait
      * @var RelatedProductDataProvider
      */
     private $relatedProductDataProvider;
+    /**
+     * @var ProductDataProvider
+     */
+    private $productDataProvider;
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
 
     /**
      * @param ProductFieldsSelector $productFieldsSelector
@@ -57,7 +70,8 @@ trait RelatedProductsTrait
         ProductDataProvider $productDataProvider,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         ProductModelHydrator $productModelHydrator,
-        ResolveRequestFactory $resolveRequestFactory
+        ResolveRequestFactory $resolveRequestFactory,
+        ObjectManagerInterface $objectManager
     ) {
         parent::__construct(
             $productFieldsSelector,
@@ -69,6 +83,7 @@ trait RelatedProductsTrait
         $this->resolveRequestFactory = $resolveRequestFactory;
         $this->productFieldsSelector = $productFieldsSelector;
         $this->relatedProductDataProvider = $relatedProductDataProvider;
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -109,7 +124,7 @@ trait RelatedProductsTrait
 
         $resolvedRequests = parent::resolve($context, $field, $requests);
 
-        $response = new BatchResponse();
+        $response = $this->objectManager->get(BatchResponse::class);
         foreach ($requests as $key => $request) {
             $result = $resolvedRequests->findResponseFor($request);
             $response->addResponse($requestsOriginal[$key], $result);
@@ -131,7 +146,7 @@ trait RelatedProductsTrait
         foreach ($requests as $request) {
             $fields[] = $this->productFieldsSelector->getProductFieldsFromInfo($request->getInfo(), $this->getNode());
         }
-        $fields = array_unique(array_merge(...$fields));
+        $fields = !empty($fields) ? array_unique(array_merge(...$fields)) : [];
 
         return $fields;
     }
@@ -154,7 +169,7 @@ trait RelatedProductsTrait
         // TODO: handle ad-hoc solution MC-29791
         // TODO: determine if we need add relations to $response or return $relations
         $relations = $this->relatedProductDataProvider->getRelations($products, $this->getLinkType());
-        $response = new BatchResponse();
+        $response = $this->objectManager->get(BatchResponse::class);
         foreach ($requests as $key => $request) {
             $response->addResponse($requestsOriginal[$key], $relations);
         }
