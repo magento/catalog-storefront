@@ -43,16 +43,6 @@ trait RelatedProductsTrait
      */
     private $relatedProductDataProvider;
 
-    /*
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var ProductDataProvider
-     */
-    private $productDataProvider;
-
     /**
      * @param ProductFieldsSelector $productFieldsSelector
      * @param RelatedProductDataProvider $relatedProductDataProvider
@@ -79,8 +69,6 @@ trait RelatedProductsTrait
         $this->resolveRequestFactory = $resolveRequestFactory;
         $this->productFieldsSelector = $productFieldsSelector;
         $this->relatedProductDataProvider = $relatedProductDataProvider;
-        $this->productDataProvider = $productDataProvider;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
