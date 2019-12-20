@@ -37,24 +37,26 @@ class DocumentFactory
      * @param array $data
      * @return Document
      */
-    public function create(array $data = []) : Document
+    public function create(array $data = []): Document
     {
-        if (isset($data['data']['aggregations'])) {
-            $result = $data['data']['hits']['hits'][0];
-            if ($data['data']['aggregations']['nested_products']['doc_count'] > 0) {
-                $documents = [];
-                foreach ($data['data']['aggregations']['nested_products']['variants']['hits']['hits'] as $item) {
-                    $documents[] = $this->create(['data' => $item]);
+        if (isset($data['hits']['hits'])) {
+            $nestedEntries = isset($data['aggregations']['nested_entries'])
+                ? $data['aggregations']['nested_entries']
+                : [];
+            $data = $data['hits']['hits'][0];
+            $subDocuments = [];
+
+            if (!empty($nestedEntries) && $nestedEntries['doc_count'] > 0) {
+                foreach ($nestedEntries['variants']['hits']['hits'] as $item) {
+                    $subDocuments[] = $this->create($item);
                 }
-                $result['variants'] = $this->objectManager->create(
-                    DocumentIteratorFactory::class,
-                    ['documents' => $documents]
+                $data['variants'] = $this->objectManager->create(
+                    DocumentIterator::class,
+                    ['documents' => $subDocuments]
                 );
             }
-
-            return $this->objectManager->create(Document::class, ['data' => $result]);
-        } else {
-            return $this->objectManager->create(Document::class, $data);
         }
+
+        return $this->objectManager->create(Document::class, ['data' => $data]);
     }
 }

@@ -147,11 +147,12 @@ class ClientAdapterTest extends TestCase
             [$productData, $simple1, $simple2, $simple3, $simple4]
         );
 
-        $entry = $this->storageClient->getEntry(
+        $entry = $this->storageClient->getCompositeEntry(
             $this->state->getAliasName(),
             'product',
             $productBuilder['id'],
-            ['sku', 'name', 'variants' => ['sku', 'name', 'price']]
+            ['sku', 'name'],
+            ['sku', 'name', 'price']
         );
 
         $this->assertEquals($productData['sku'], $entry->getData('sku'));
@@ -207,11 +208,12 @@ class ClientAdapterTest extends TestCase
             [$configurable1, $configurable2, $simple1, $simple2, $simple3, $simple4, $simple5]
         );
 
-        $entries = $this->storageClient->getEntries(
+        $entries = $this->storageClient->getCompositeEntries(
             $this->state->getAliasName(),
             'product',
             [$configurable1['id'], $configurable2['id']],
-            ['sku', 'name', 'variants' => ['sku', 'name', 'price']]
+            ['sku', 'name'],
+            ['sku', 'name', 'price']
         );
 
         $this->assertEquals($configurable1['sku'], $entries->current()->getData('sku'));
@@ -264,9 +266,6 @@ class ClientAdapterTest extends TestCase
                 ['attribute_code' => 'cost', 'value' => ''],
                 ['attribute_code' => 'description', 'value' => 'Description'],
             ],
-//            'variations' => [
-//                '%id%' => ['product' => '%id%']
-//            ]
         ];
     }
 }

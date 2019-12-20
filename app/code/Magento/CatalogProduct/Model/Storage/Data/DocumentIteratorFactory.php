@@ -45,27 +45,35 @@ class DocumentIteratorFactory
      * @param array $data
      * @return DocumentIterator
      */
-    public function create(array $data = []) : DocumentIterator
+    public function create(array $data = []): DocumentIterator
     {
-        if (isset($data['documents']['hits'])) {
-            $documents = [];
-            foreach ($result['docs'] as $item) {
-                $documents[] = $this->documentFactory->create(['data' => $item]);
-            }
-            return $this->documentIteratorFactory->create(['documents' => $documents]);
+        $subDocuments = [];
+        $nestedEntries = isset($data['aggregations']['nested_entries'])
+            ? $data['aggregations']['nested_entries']
+            : [];
 
-            $result = $data['data']['hits']['hits'][0];
-            if ($data['data']['aggregations']['nested_products']['doc_count'] > 0) {
-                $documents = [];
-                foreach ($data['data']['aggregations']['nested_products']['variants']['hits']['hits'] as $item) {
-                    $documents[] = $this->create(['data' => $item]);
-                }
-                $result['variants'] = $this->documentFactory->create(['documents' => $documents]);
+        if (!empty($nestedEntries) && $nestedEntries['doc_count'] > 0) {
+            foreach ($nestedEntries['variants']['hits']['hits'] as $item) {
+                $subDocuments[(int)$item['_routing']][] = $this->documentFactory->create($item);
             }
-
-            return $this->objectManager->create(DocumentIterator::class, ['data' => $result]);
-        } else {
-            return $this->objectManager->create(DocumentIterator::class, $data);
         }
+
+        $items = isset($data['hits']['hits'])
+            ? $data['hits']['hits']
+            : $data['docs'];
+
+        $documents = [];
+        foreach ($items as $item) {
+            if (!empty($subDocuments) && isset($subDocuments[$item['_id']])) {
+                $item['variants'] = $this->objectManager->create(
+                    DocumentIterator::class,
+                    ['documents' => $subDocuments[$item['_id']]]
+                );
+            }
+            $documents[] = $this->documentFactory->create($item);
+        }
+
+        return $this->objectManager->create(DocumentIterator::class, ['documents' => $documents]);
+
     }
 }
