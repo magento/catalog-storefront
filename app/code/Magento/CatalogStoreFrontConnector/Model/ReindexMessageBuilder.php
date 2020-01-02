@@ -29,14 +29,14 @@ class ReindexMessageBuilder
     }
 
     /**
-     * Prepare message for storefront.collect.reindex.products.data topic
+     * Build message for storefront.collect.reindex.products.data topic
      *
      * @param int $storeId
      * @param array $productIds
      *
      * @return ReindexProductsDataInterface
      */
-    public function prepareMessage($storeId, array $productIds): ReindexProductsDataInterface
+    public function build($storeId, array $productIds): ReindexProductsDataInterface
     {
 
         $this->reindexProducts->setStoreId($storeId);

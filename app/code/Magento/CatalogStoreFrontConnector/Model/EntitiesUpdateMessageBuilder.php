@@ -29,7 +29,7 @@ class EntitiesUpdateMessageBuilder
     }
 
     /**
-     * Prepare message for entities update publishing process
+     * Build message for entities update publishing process
      *
      * @param int $storeId
      * @param string $entityType
@@ -37,7 +37,7 @@ class EntitiesUpdateMessageBuilder
      * @param array $entityData
      * @return UpdateEntitiesDataInterface
      */
-    public function prepareMessage(
+    public function build(
         int $storeId,
         string $entityType,
         int $entityId,

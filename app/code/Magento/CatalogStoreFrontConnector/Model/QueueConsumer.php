@@ -85,7 +85,7 @@ class QueueConsumer
                 $messages = [];
                 $productsData = $this->productsDataProvider->fetch($idsBunch, [], ['store' => $storeId]);
                 foreach ($productsData as $product) {
-                    $messages[] = $this->messageBuilder->prepareMessage(
+                    $messages[] = $this->messageBuilder->build(
                         (int)$storeId,
                         $product['type_id'],
                         (int)$product['entity_id'],

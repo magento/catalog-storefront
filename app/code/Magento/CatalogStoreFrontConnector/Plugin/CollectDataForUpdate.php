@@ -64,7 +64,7 @@ class CollectDataForUpdate
 
         $productIds = $entityIds instanceof \Traversable ? $entityIds->getArrayCopy() : [];
         $storeId = (int)$dimensions[StoreDimensionProvider::DIMENSION_NAME]->getValue();
-        $message = $this->messageBuilder->prepareMessage($storeId, $productIds);
+        $message = $this->messageBuilder->build($storeId, $productIds);
         $this->queuePublisher->publish($this->topic, $message);
     }
 }
