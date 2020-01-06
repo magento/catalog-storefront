@@ -8,6 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\CatalogProduct\Model\Storage\Client;
 
+use Magento\CatalogProduct\Model\Storage\Client\Config\EntityConfigInterface;
+use Magento\CatalogProduct\Model\Storage\Client\Config\EntityConfigPool;
+use Magento\CatalogProduct\Model\Storage\Client\Config\NestedEntityConfigInterface;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\Config\File\ConfigFilePool;
@@ -48,15 +51,6 @@ use Magento\Framework\Config\File\ConfigFilePool;
  */
 class Config
 {
-    /**#@+
-     * Text flags for Elasticsearch relation actions.
-     */
-    private const CHILD_KEY = 'variant';
-    private const PARENT_KEY = 'complex';
-    private const JOIN_FIELD = 'parent_id';
-    private const MAX_CHILDREN = 100;
-    /**#@-*/
-
     /**
      * @var array
      */
@@ -68,14 +62,20 @@ class Config
     private $clientOptions;
 
     /**
+     * @var EntityConfigPool
+     */
+    private $entityConfigPool;
+
+    /**
      * Initialize Elasticsearch Client
      *
      * @param Reader $configReader
+     * @param EntityConfigPool $entityConfigPool
      * @throws ConfigurationMismatchException
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function __construct(Reader $configReader)
+    public function __construct(Reader $configReader, EntityConfigPool $entityConfigPool)
     {
         $configData = $configReader->load(ConfigFilePool::APP_ENV)['catalog-store-front'];
         $options = $configData['connections']['default'];
@@ -89,68 +89,7 @@ class Config
         }
         $this->connectionConfig = $options;
         $this->clientOptions = $configData;
-    }
-
-    /**
-     * Return config of the Client.
-     *
-     * @return array
-     */
-    public function getClientConfig()
-    {
-        return $this->clientOptions;
-    }
-
-    /**
-     * Get max children for complex entries.
-     *
-     * @param string $entityType
-     * @return int
-     */
-    public function getMaxChildren(string $entityType): int
-    {
-        return isset($this->clientOptions[$entityType]['max_children'])
-            ? $this->clientOptions[$entityType]['max_children']
-            : self::MAX_CHILDREN;
-    }
-
-    /**
-     * Get join field.
-     *
-     * @param string $entityType
-     * @return string
-     */
-    public function getJoinField(string $entityType): string
-    {
-        return isset($this->clientOptions[$entityType]['join_field'])
-            ? $this->clientOptions[$entityType]['join_field']
-            : self::JOIN_FIELD;
-    }
-
-    /**
-     * Get parent key.
-     *
-     * @param string $entityType
-     * @return string
-     */
-    public function getParentKey(string $entityType): string
-    {
-        return isset($this->clientOptions[$entityType]['parent_key'])
-            ? $this->clientOptions[$entityType]['parent_key']
-            : self::PARENT_KEY;
-    }
-
-    /**
-     * Get child key.
-     *
-     * @param string $entityType
-     * @return string
-     */
-    public function getChildKey(string $entityType): string
-    {
-        return isset($this->clientOptions[$entityType]['child_key'])
-            ? $this->clientOptions[$entityType]['child_key']
-            : self::CHILD_KEY;
+        $this->entityConfigPool = $entityConfigPool;
     }
 
     /**
@@ -161,6 +100,17 @@ class Config
     public function getConnectionConfig()
     {
         return $this->connectionConfig;
+    }
+
+    /**
+     * Get entity config instance.
+     *
+     * @param string $entityName
+     * @return EntityConfigInterface|NestedEntityConfigInterface
+     */
+    public function getEntityConfig(string $entityName): EntityConfigInterface
+    {
+        return $this->entityConfigPool->getConfig($entityName);
     }
 
     /**
