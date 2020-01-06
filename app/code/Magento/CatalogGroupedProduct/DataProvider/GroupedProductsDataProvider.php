@@ -30,6 +30,14 @@ use Magento\Framework\App\ResourceConnection;
 class GroupedProductsDataProvider implements DataProviderInterface
 {
     /**
+     * Grouped items attributes
+     */
+    private const ATTRIBUTES = [
+        'qty',
+        'position',
+    ];
+
+    /**
      * @var ResourceConnection
      */
     private $resourceConnection;
@@ -65,16 +73,21 @@ class GroupedProductsDataProvider implements DataProviderInterface
      */
     public function fetch(array $productIds, array $attributes, array $scopes): array
     {
-        $productLinks = [];
-
         $groupedAttributes = $attributes['items'] ?? [];
-        if (empty($groupedAttributes)) {
-            return $productLinks;
-        }
-        $select = $this->linkAttributesBuilder->build($productIds, $groupedAttributes, $scopes);
+        // TODO: handle ad-hoc solution MC-29791
+        $select = $this->linkAttributesBuilder->build(
+            $productIds,
+            $groupedAttributes ?: self::ATTRIBUTES,
+            $scopes
+        );
         $linkedProducts = $this->resourceConnection->getConnection()->fetchAll($select);
-        $linkIds = \array_unique(\array_column($linkedProducts, 'product_id'));
-        $productsInfo = $this->getProductsInfo($linkIds, $groupedAttributes, $scopes);
+        $productsInfo = [];
+        // TODO: handle ad-hoc solution MC-29791
+        if (!empty($groupedAttributes)) {
+            $linkIds = \array_unique(\array_column($linkedProducts, 'product_id'));
+            $productsInfo = $this->getProductsInfo($linkIds, $groupedAttributes ?: self::ATTRIBUTES, $scopes);
+        }
+
         $productLinks = $this->getLinkAttributes($linkedProducts, $productsInfo, $groupedAttributes);
 
         return $productLinks;
@@ -95,6 +108,14 @@ class GroupedProductsDataProvider implements DataProviderInterface
             $linkAttributes = [];
             $groupedProductId = $linkedProduct['parent_id'];
             $linkedProductId = $linkedProduct['product_id'];
+
+            // TODO: handle ad-hoc solution MC-29791
+            if (empty($attributes)) {
+                $linkedProduct['product'] = $linkedProductId;
+                $links[$groupedProductId]['items'][$linkedProductId] = $linkedProduct;
+                continue;
+            }
+
             foreach ($attributes as $attributeKey => $attributeName) {
                 if (\is_string($attributeName)) {
                     $linkAttributes[$attributeName] = $linkedProduct[$attributeName] ?? null;

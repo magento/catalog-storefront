@@ -73,12 +73,10 @@ class ConfigurableOptionsBuilder
         $linkField = $metadata->getLinkField();
 
         // TODO: handle ad-hoc solution MC-29791
-        if (empty($requestedOptions)) {
-            $optionColumns = $this->getAvailableColumns();
-        } else {
-            $requestedOptions = \array_merge($requestedOptions, ['product_id', 'attribute_id', 'attribute_code']);
-            $optionColumns = $this->columnsDataMapper->filter($requestedOptions, $this->getAvailableColumns());
-        }
+        $optionColumns = $this->columnsDataMapper->filter($requestedOptions, $this->getAvailableColumns());
+        $optionColumns['product_id'] = 'product.entity_id';
+        $optionColumns['attribute_code'] = 'attribute.attribute_code';
+        $optionColumns['attribute_id'] = 'attribute.attribute_id';
 
         $configurableOptionsSelect = $connection->select()
             ->from(['main_table' =>  $this->resourceConnection->getTableName('catalog_product_super_attribute')], [])
@@ -129,9 +127,6 @@ class ConfigurableOptionsBuilder
     private function getAvailableColumns(): array
     {
         return [
-            'product_id' => 'product.entity_id',
-            'attribute_code' => 'attribute.attribute_code',
-            'attribute_id' => 'attribute.attribute_id',
             'id' => 'main_table.product_super_attribute_id',
             'label' =>  new \Zend_Db_Expr(
                 'IFNULL(eav_attr_label.value, IFNULL(store.VALUE, ' .
