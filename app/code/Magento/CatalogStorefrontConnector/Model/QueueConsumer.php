@@ -117,6 +117,7 @@ class QueueConsumer
             } elseif (!isset($storesProductIds[$storeId])) {
                 $storesProductIds[$storeId] = $reindexProductsData->getProductIds();
             } else {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $storesProductIds[$storeId] = array_merge(
                     $storesProductIds[$storeId],
                     $reindexProductsData->getProductIds()
