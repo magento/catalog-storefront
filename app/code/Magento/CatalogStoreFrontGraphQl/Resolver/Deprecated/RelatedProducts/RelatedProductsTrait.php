@@ -13,10 +13,10 @@ use Magento\CatalogStoreFrontGraphQl\Model\ProductModelHydrator;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResponse;
+use Magento\Framework\GraphQl\Query\Resolver\BatchResponseFactory;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\ResolveRequestFactory;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\RelatedProductGraphQl\Model\DataProvider\RelatedProductDataProvider;
 
 /**
@@ -43,18 +43,21 @@ trait RelatedProductsTrait
      * @var RelatedProductDataProvider
      */
     private $relatedProductDataProvider;
+
     /**
      * @var ProductDataProvider
      */
     private $productDataProvider;
+
     /**
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
+
     /**
-     * @var ObjectManagerInterface
+     * @var BatchResponseFactory
      */
-    private $objectManager;
+    private $batchResponseFactory;
 
     /**
      * @param ProductFieldsSelector $productFieldsSelector
@@ -63,6 +66,7 @@ trait RelatedProductsTrait
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param ProductModelHydrator $productModelHydrator
      * @param ResolveRequestFactory $resolveRequestFactory
+     * @param BatchResponseFactory $batchResponseFactory
      */
     public function __construct(
         ProductFieldsSelector $productFieldsSelector,
@@ -71,7 +75,7 @@ trait RelatedProductsTrait
         SearchCriteriaBuilder $searchCriteriaBuilder,
         ProductModelHydrator $productModelHydrator,
         ResolveRequestFactory $resolveRequestFactory,
-        ObjectManagerInterface $objectManager
+        BatchResponseFactory $batchResponseFactory
     ) {
         parent::__construct(
             $productFieldsSelector,
@@ -83,7 +87,7 @@ trait RelatedProductsTrait
         $this->resolveRequestFactory = $resolveRequestFactory;
         $this->productFieldsSelector = $productFieldsSelector;
         $this->relatedProductDataProvider = $relatedProductDataProvider;
-        $this->objectManager = $objectManager;
+        $this->batchResponseFactory = $batchResponseFactory;
     }
 
     /**
@@ -124,7 +128,7 @@ trait RelatedProductsTrait
 
         $resolvedRequests = parent::resolve($context, $field, $requests);
 
-        $response = $this->objectManager->get(BatchResponse::class);
+        $response = $this->batchResponseFactory->create();
         foreach ($requests as $key => $request) {
             $result = $resolvedRequests->findResponseFor($request);
             $response->addResponse($requestsOriginal[$key], $result);
@@ -169,7 +173,7 @@ trait RelatedProductsTrait
         // TODO: handle ad-hoc solution MC-29791
         // TODO: determine if we need add relations to $response or return $relations
         $relations = $this->relatedProductDataProvider->getRelations($products, $this->getLinkType());
-        $response = $this->objectManager->get(BatchResponse::class);
+        $response = $this->batchResponseFactory->create();
         foreach ($requests as $key => $request) {
             $response->addResponse($requestsOriginal[$key], $relations);
         }
