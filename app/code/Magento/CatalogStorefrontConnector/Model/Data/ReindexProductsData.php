@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogStoreFrontConnector\Model\Data;
+namespace Magento\CatalogStorefrontConnector\Model\Data;
 
 /**
  * Data object for reindexed products collector

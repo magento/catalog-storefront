@@ -6,4 +6,4 @@
 
 use \Magento\Framework\Component\ComponentRegistrar;
 
-ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Magento_CatalogStoreFrontConnector', __DIR__);
+ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Magento_CatalogStorefrontConnector', __DIR__);

@@ -5,12 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogStoreFrontConnector\Plugin;
+namespace Magento\CatalogStorefrontConnector\Plugin;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
-use Magento\CatalogStoreFrontConnector\Model\ReindexMessageBuilder;
+use Magento\CatalogStorefrontConnector\Model\ReindexMessageBuilder;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Store\Model\StoreDimensionProvider;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
 
 /**
  * Plugin for collect products data during reindex
@@ -28,6 +29,11 @@ class CollectDataForUpdate
     private $messageBuilder;
 
     /**
+     * @var FulltextResource
+     */
+    private $fulltextResource;
+
+    /**
      * @var string
      */
     private $topic = 'storefront.collect.reindex.products.data';
@@ -35,13 +41,16 @@ class CollectDataForUpdate
     /**
      * @param PublisherInterface $queuePublisher
      * @param ReindexMessageBuilder $messageBuilder
+     * @param FulltextResource $fulltextResource
      */
     public function __construct(
         PublisherInterface $queuePublisher,
-        ReindexMessageBuilder $messageBuilder
+        ReindexMessageBuilder $messageBuilder,
+        FulltextResource $fulltextResource
     ) {
         $this->queuePublisher = $queuePublisher;
         $this->messageBuilder = $messageBuilder;
+        $this->fulltextResource = $fulltextResource;
     }
 
     /**
@@ -62,7 +71,10 @@ class CollectDataForUpdate
     ) {
         $proceed($dimensions, $entityIds);
 
-        $productIds = $entityIds instanceof \Traversable ? $entityIds->getArrayCopy() : [];
+        $entityIds = $entityIds instanceof \Traversable ? $entityIds->getArrayCopy() : [];
+        $productIds = array_unique(
+            array_merge($entityIds, $this->fulltextResource->getRelationsByChild($entityIds))
+        );
         $storeId = (int)$dimensions[StoreDimensionProvider::DIMENSION_NAME]->getValue();
         $message = $this->messageBuilder->build($storeId, $productIds);
         $this->queuePublisher->publish($this->topic, $message);

@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogStoreFrontConnector\Model;
+namespace Magento\CatalogStorefrontConnector\Model;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogProduct\DataProvider\DataProviderInterface;
-use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider;
 use Magento\Framework\MessageQueue\PublisherInterface;
-use Magento\CatalogStoreFrontConnector\Model\Data\ReindexProductsDataInterface;
+use Magento\CatalogStorefrontConnector\Model\Data\ReindexProductsDataInterface;
 
 /**
  * Consumer processes messages with store front products data
@@ -32,9 +32,9 @@ class QueueConsumer
     private $queuePublisher;
 
     /**
-     * @var DataProvider
+     * @var Collection
      */
-    private $fulltextDataProvider;
+    private $productsCollection;
 
     /**
      * @var string
@@ -50,20 +50,20 @@ class QueueConsumer
      * @param DataProviderInterface $productsDataProvider
      * @param EntitiesUpdateMessageBuilder $messageBuilder
      * @param PublisherInterface $queuePublisher
-     * @param DataProvider $fulltextDataProvider
+     * @param Collection $productsCollection
      * @param int $batchSize
      */
     public function __construct(
         DataProviderInterface $productsDataProvider,
         EntitiesUpdateMessageBuilder $messageBuilder,
         PublisherInterface $queuePublisher,
-        DataProvider $fulltextDataProvider,
+        Collection $productsCollection,
         int $batchSize
     ) {
         $this->productsDataProvider = $productsDataProvider;
         $this->messageBuilder = $messageBuilder;
         $this->queuePublisher = $queuePublisher;
-        $this->fulltextDataProvider = $fulltextDataProvider;
+        $this->productsCollection = $productsCollection;
         $this->batchSize = $batchSize;
     }
 
@@ -80,14 +80,13 @@ class QueueConsumer
     {
         $storeProducts = $this->getUniqueIdsForStores($messages);
         foreach ($storeProducts as $storeId => $productIds) {
-            $offset = 0;
-            while ($idsBunch = \array_slice($productIds, $offset, $this->batchSize)) {
+            foreach (\array_chunk($productIds, $this->batchSize) as $idsBunch) {
                 $messages = [];
                 $productsData = $this->productsDataProvider->fetch($idsBunch, [], ['store' => $storeId]);
                 foreach ($productsData as $product) {
                     $messages[] = $this->messageBuilder->build(
                         (int)$storeId,
-                        $product['type_id'],
+                        'product',
                         (int)$product['entity_id'],
                         $product
                     );
@@ -106,17 +105,29 @@ class QueueConsumer
     private function getUniqueIdsForStores(array $messages): array
     {
         $result = [];
-        /** @var \Magento\CatalogStoreFrontConnector\Model\Data\ReindexProductsData $reindexProductsData */
+        $storesProductIds = [];
+        /** @var \Magento\CatalogStorefrontConnector\Model\Data\ReindexProductsData $reindexProductsData */
         foreach ($messages as $reindexProductsData) {
             $storeId = $reindexProductsData->getStoreId();
-            $productIds = !empty($reindexProductsData->getProductIds())
-                ? $reindexProductsData->getProductIds()
+
+            if (isset($storesProductIds[$storeId]) && empty($reindexProductsData->getProductIds())) {
+                $storesProductIds[$storeId] = [];
+            } elseif (isset($storesProductIds[$storeId]) && empty($storesProductIds[$storeId])) {
+                continue;
+            } elseif (!isset($storesProductIds[$storeId])) {
+                $storesProductIds[$storeId] = $reindexProductsData->getProductIds();
+            } else {
+                $storesProductIds[$storeId] = array_merge(
+                    $storesProductIds[$storeId],
+                    $reindexProductsData->getProductIds()
+                );
+            }
+        }
+        foreach ($storesProductIds as $storeId => $productIds) {
+            $productIds = !empty($productIds)
+                ? $productIds
                 : $this->getAllProductIdsForStore($storeId);
-            $storeProductIds = isset($result[$storeId])
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                ? \array_merge($result[$storeId], $productIds)
-                : $productIds;
-            $result[$storeId] = \array_unique($storeProductIds);
+            $result[$storeId] = \array_unique($productIds);
         }
 
         return $result;
@@ -126,55 +137,19 @@ class QueueConsumer
      * Get all product IDs assigned to store
      *
      * @param int $storeId
-     * @return array
+     * @return int[]
      */
     private function getAllProductIdsForStore(int $storeId): array
     {
-        $productIds = [];
+        $storeProductIds = [];
         $lastProductId = 0;
-        $products = $this->fulltextDataProvider->getSearchableProducts(
-            $storeId,
-            [],
-            null,
-            $lastProductId,
-            $this->batchSize
-        );
-        while (\count($products) > 0) {
-            $productIds = \array_column($products, 'entity_id');
+        $this->productsCollection->setStoreId($storeId);
+
+        while ($productIds = $this->productsCollection->getAllIds($this->batchSize, $lastProductId)) {
             $lastProductId = \end($productIds);
-            $relatedProducts = $this->getRelatedProducts($products);
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $productIds = \array_merge($productIds, $relatedProducts);
-            $products = $this->fulltextDataProvider->getSearchableProducts(
-                $storeId,
-                [],
-                null,
-                $lastProductId,
-                $this->batchSize
-            );
+            $storeProductIds = \array_merge($storeProductIds, $productIds);
         }
 
-        return $productIds;
-    }
-
-    /**
-     * Get related products for provided array of products data
-     *
-     * @param array $products
-     * @return array
-     */
-    private function getRelatedProducts(array $products): array
-    {
-        $relatedProducts = [];
-        foreach ($products as $productData) {
-            $relatedProducts[$productData['entity_id']] = $this->fulltextDataProvider->getProductChildIds(
-                $productData['entity_id'],
-                $productData['type_id']
-            );
-        }
-        $relatedProducts = array_filter($relatedProducts);
-        $relatedIds = !empty($relatedProducts) ? array_merge(...$relatedProducts) : [];
-        
-        return $relatedIds;
+        return $storeProductIds;
     }
 }

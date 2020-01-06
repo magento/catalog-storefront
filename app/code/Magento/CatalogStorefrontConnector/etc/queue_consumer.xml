@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
-    <consumer name="store_front_products_consumer" queue="store_front.products.update" connection="amqp" consumerInstance="Magento\Framework\MessageQueue\BatchConsumer" handler="Magento\CatalogStoreFrontConnector\Model\QueueConsumer::processMessages"/>
+    <consumer name="storefront_products_consumer" queue="storefront.products.update" connection="db" consumerInstance="Magento\Framework\MessageQueue\BatchConsumer" handler="Magento\CatalogStorefrontConnector\Model\QueueConsumer::processMessages"/>
 </config>

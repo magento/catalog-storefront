@@ -1,6 +1,6 @@
 {
-    "name": "magento/module-catalog-store-front-connector",
-    "description": "Catalog Store Front Connector Module",
+    "name": "magento/module-catalog-storefront-connector",
+    "description": "Catalog Storefront Connector Module",
     "config": {
         "sort-packages": true
     },
@@ -21,7 +21,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\CatalogStoreFrontConnector\\": ""
+            "Magento\\CatalogStorefrontConnector\\": ""
         }
     }
 }
