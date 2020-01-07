@@ -12,6 +12,9 @@ use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Entity config pool.
+ * Pool of all existing entity configs.
+ *
+ * @see EntityConfigInterface to understand what's the Entity Config is.
  */
 class EntityConfigPool
 {
@@ -33,12 +36,13 @@ class EntityConfigPool
      *
      * @param string $entityName
      * @return EntityConfigInterface
+     * @throws NotFoundException
      */
     public function getConfig(string $entityName): EntityConfigInterface
     {
         if (!isset($this->configs[$entityName])) {
             throw new NotFoundException(
-                __("'$entityName' type config not found.")
+                __("'$entityName' storage entity type config not found.")
             );
         }
 

@@ -13,7 +13,7 @@ use Magento\Framework\Exception\BulkException;
 /**
  * Storage client interface for Write access operations.
  */
-interface WriteAccessInterface
+interface CommandInterface
 {
     /**
      * Performs bulk insert.

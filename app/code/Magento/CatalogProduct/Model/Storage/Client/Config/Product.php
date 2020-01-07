@@ -33,6 +33,8 @@ class Product implements NestedEntityConfigInterface
 
     /**
      * @param Reader $configReader
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function __construct(Reader $configReader)
     {

@@ -14,11 +14,10 @@ use Magento\CatalogProduct\Model\Storage\Data\EntryInterface;
 use Magento\CatalogProduct\Model\Storage\Data\EntryIteratorInterface;
 use Magento\Framework\Exception\NotFoundException;
 
-
 /**
  * Elasticsearch client adapter for read access operations.
  */
-class Read implements ReadAccessInterface
+class ElasticsearchQuery implements QueryInterface
 {
     /**
      * @var Config

@@ -13,7 +13,7 @@ use Magento\Framework\Exception\BulkException;
 /**
  * Elasticsearch client for write access operations.
  */
-class Write implements WriteAccessInterface
+class ElasticsearchCommand implements CommandInterface
 {
     /**#@+
      * Text flags for Elasticsearch bulk actions.

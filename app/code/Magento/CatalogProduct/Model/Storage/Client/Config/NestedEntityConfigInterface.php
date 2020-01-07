@@ -10,6 +10,8 @@ namespace Magento\CatalogProduct\Model\Storage\Client\Config;
 
 /**
  * Config of nested entity.
+ *
+ * This specific entity type config if depicts the 1 depth tree structure with parent-children relations.
  */
 interface NestedEntityConfigInterface extends EntityConfigInterface
 {

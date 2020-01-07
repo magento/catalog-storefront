@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CatalogProduct\Model\Storage;
 
+use Magento\CatalogProduct\Model\Storage\Client\ElasticsearchCommand;
+use Magento\CatalogProduct\Model\Storage\Client\ElasticsearchDataDefinitionAdapter;
+use Magento\CatalogProduct\Model\Storage\Client\ElasticsearchQuery;
 use Magento\CatalogProduct\Model\Storage\Data\DocumentFactory;
 use Magento\CatalogProduct\Model\Storage\Data\DocumentIteratorFactory;
 use Magento\Integration\Api\AdminTokenServiceInterface;
@@ -49,6 +52,21 @@ class ClientAdapterTest extends TestCase
     private $documentIteratorFactory;
 
     /**
+     * @var ElasticsearchDataDefinitionAdapter
+     */
+    private $storageDDL;
+
+    /**
+     * @var ElasticsearchQuery
+     */
+    private $storageQuery;
+
+    /**
+     * @var ElasticsearchCommand
+     */
+    private $storageCommand;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -57,14 +75,16 @@ class ClientAdapterTest extends TestCase
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->state = $this->objectManager->create(State::class);
-        $this->storageClient = $this->objectManager->create(ElasticsearchClientAdapter::class);
+        $this->storageDDL = $this->objectManager->create(ElasticsearchDataDefinitionAdapter::class);
+        $this->storageQuery = $this->objectManager->create(ElasticsearchQuery::class);
+        $this->storageCommand = $this->objectManager->create(ElasticsearchCommand::class);
         $this->adminTokens = Bootstrap::getObjectManager()->get(AdminTokenServiceInterface::class);
         $this->documentFactory = Bootstrap::getObjectManager()->get(DocumentFactory::class);
         $this->documentIteratorFactory = Bootstrap::getObjectManager()->get(DocumentIteratorFactory::class);
 
-        $this->storageClient->createDataSource($this->state->getCurrentDataSourceName(), []);
-        $this->storageClient->createEntity($this->state->getCurrentDataSourceName(), 'product', []);
-        $this->storageClient->createAlias($this->state->getAliasName(), $this->state->getCurrentDataSourceName());
+        $this->storageDDL->createDataSource($this->state->getCurrentDataSourceName(), []);
+        $this->storageDDL->createEntity($this->state->getCurrentDataSourceName(), 'product', []);
+        $this->storageDDL->createAlias($this->state->getAliasName(), $this->state->getCurrentDataSourceName());
     }
 
     /**
@@ -72,7 +92,7 @@ class ClientAdapterTest extends TestCase
      */
     protected function tearDown()
     {
-        $this->storageClient->deleteDataSource($this->state->getCurrentDataSourceName());
+        $this->storageDDL->deleteDataSource($this->state->getCurrentDataSourceName());
     }
 
     /**
@@ -84,13 +104,13 @@ class ClientAdapterTest extends TestCase
         $productBuilder['sku'] = 'test-sku-default-site-123';
         $productData = $productBuilder;
 
-        $this->storageClient->bulkInsert(
+        $this->storageCommand->bulkInsert(
             $this->state->getAliasName(),
             'product',
             [$productData]
         );
 
-        $entry = $this->storageClient->getEntry(
+        $entry = $this->storageQuery->getEntry(
             $this->state->getAliasName(),
             'product',
             $productBuilder['id'],
@@ -99,7 +119,7 @@ class ClientAdapterTest extends TestCase
 
         $this->assertEquals($productData['sku'], $entry->getData('sku'));
 
-        $entry = $this->storageClient->getEntries(
+        $entry = $this->storageQuery->getEntries(
             $this->state->getAliasName(),
             'product',
             [$productBuilder['id']],
@@ -120,8 +140,11 @@ class ClientAdapterTest extends TestCase
 
         $simple1 = $this->getSimpleProductData();
         $simple2 = $this->getSimpleProductData();
+        $simple2['id'] += $simple1['id'];
         $simple3 = $this->getSimpleProductData();
+        $simple3['id'] += $simple2['id'];
         $simple4 = $this->getSimpleProductData();
+        $simple4['id'] += $simple3['id'];
 
         $productData['parent_id'] = 'complex';
         $simple1['parent_id'] = [
@@ -141,13 +164,13 @@ class ClientAdapterTest extends TestCase
             'parent' => $productData['id']
         ];
 
-        $this->storageClient->bulkInsert(
+        $this->storageCommand->bulkInsert(
             $this->state->getAliasName(),
             'product',
             [$productData, $simple1, $simple2, $simple3, $simple4]
         );
 
-        $entry = $this->storageClient->getCompositeEntry(
+        $entry = $this->storageQuery->getCompositeEntry(
             $this->state->getAliasName(),
             'product',
             $productBuilder['id'],
@@ -172,12 +195,17 @@ class ClientAdapterTest extends TestCase
         $configurable2 = $this->getConfigurableProductData();
         $configurable2['sku'] = 'test-configurable-product-with-variations-123';
 
+        // make sure $configurable2['id'] > $configurable1['id']
+        $configurable2['id'] += $configurable1['id'];
+
         $simple1 = $this->getSimpleProductData();
         $simple2 = $this->getSimpleProductData();
-
         $simple3 = $this->getSimpleProductData();
+        $simple3['id'] += $simple2['id'];
         $simple4 = $this->getSimpleProductData();
+        $simple4['id'] += $simple1['id'];
         $simple5 = $this->getSimpleProductData();
+        $simple5['id'] += $simple4['id'];
 
         $configurable1['parent_id'] = 'complex';
         $configurable2['parent_id'] = 'complex';
@@ -202,13 +230,13 @@ class ClientAdapterTest extends TestCase
             'parent' => $configurable1['id']
         ];
 
-        $this->storageClient->bulkInsert(
+        $this->storageCommand->bulkInsert(
             $this->state->getAliasName(),
             'product',
             [$configurable1, $configurable2, $simple1, $simple2, $simple3, $simple4, $simple5]
         );
 
-        $entries = $this->storageClient->getCompositeEntries(
+        $entries = $this->storageQuery->getCompositeEntries(
             $this->state->getAliasName(),
             'product',
             [$configurable1['id'], $configurable2['id']],

@@ -10,8 +10,8 @@
     <preference for="Magento\CatalogProductApi\Api\Data\ProductResultContainerInterface" type="Magento\CatalogProduct\Model\ProductSearch\ProductResultContainer"/>
     <preference for="Magento\CatalogProductApi\Api\Data\ProductSearchCriteriaInterface" type="Magento\CatalogProduct\Model\ProductSearch\ProductSearchCriteria"/>
     <preference for="Magento\CatalogProduct\Model\Storage\Client\DataDefinitionInterface" type="Magento\CatalogProduct\Model\Storage\Client\ElasticsearchDataDefinitionAdapter"/>
-    <preference for="Magento\CatalogProduct\Model\Storage\Client\ReadAccessInterface" type="Magento\CatalogProduct\Model\Storage\Client\Read"/>
-    <preference for="Magento\CatalogProduct\Model\Storage\Client\WriteAccessInterface" type="Magento\CatalogProduct\Model\Storage\Client\Write"/>
+    <preference for="Magento\CatalogProduct\Model\Storage\Client\QueryInterface" type="Magento\CatalogProduct\Model\Storage\Client\ElasticsearchQuery"/>
+    <preference for="Magento\CatalogProduct\Model\Storage\Client\CommandInterface" type="Magento\CatalogProduct\Model\Storage\Client\ElasticsearchCommand"/>
 
     <preference for="Magento\CatalogProduct\DataProvider\DataProviderInterface" type="Magento\CatalogProduct\DataProvider\DataProvider"/>
     <type name="Magento\CatalogProduct\DataProvider\MediaGallery\ImageUrlResolver">
