@@ -17,6 +17,11 @@ use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 use \Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Class ClientAdapterTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ClientAdapterTest extends TestCase
 {
     const SERVICE_NAME = 'catalogProductRepositoryV1';
