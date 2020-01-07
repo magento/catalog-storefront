@@ -5,9 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogStoreFrontConnector\Model;
+namespace Magento\CatalogStorefrontConnector\Model;
 
-use Magento\CatalogStoreFrontConnector\Model\Data\ReindexProductsDataInterface;
+use Magento\CatalogStorefrontConnector\Model\Data\ReindexProductsDataInterface;
 
 /**
  * Reindex message builder

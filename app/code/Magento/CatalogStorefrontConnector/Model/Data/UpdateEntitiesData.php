@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogStoreFrontConnector\Model\Data;
+namespace Magento\CatalogStorefrontConnector\Model\Data;
 
 /**
  * Data object for collect updated entities data
@@ -28,16 +28,22 @@ class UpdateEntitiesData implements UpdateEntitiesDataInterface
     private $storeId;
 
     /**
-     * @var array
+     * @var string
      */
     private $entityData;
 
     /**
-     * @inheritdoc
+     * @param string $entityType
+     * @param int $entityId
+     * @param int $storeId
+     * @param string $entityData
      */
-    public function setEntityType(string $entityType): void
+    public function __construct(string $entityType, int $entityId, int $storeId, string $entityData)
     {
         $this->entityType = $entityType;
+        $this->entityId = $entityId;
+        $this->storeId = $storeId;
+        $this->entityData = $entityData;
     }
 
     /**
@@ -51,25 +57,9 @@ class UpdateEntitiesData implements UpdateEntitiesDataInterface
     /**
      * @inheritdoc
      */
-    public function setEntityId(int $entityId): void
-    {
-        $this->entityId = $entityId;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getEntityId(): int
     {
         return $this->entityId;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setStoreId(int $storeId): void
-    {
-        $this->storeId = $storeId;
     }
 
     /**
@@ -83,15 +73,7 @@ class UpdateEntitiesData implements UpdateEntitiesDataInterface
     /**
      * @inheritdoc
      */
-    public function setEntityData(array $entityData): void
-    {
-        $this->entityData = $entityData;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getEntityData(): array
+    public function getEntityData(): string
     {
         return $this->entityData;
     }

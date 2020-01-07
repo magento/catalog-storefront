@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogStoreFrontConnector\Model;
+namespace Magento\CatalogStorefrontConnector\Model;
 
 use Magento\Framework\MessageQueue\MergedMessageInterfaceFactory;
 use Magento\Framework\MessageQueue\MergerInterface;
