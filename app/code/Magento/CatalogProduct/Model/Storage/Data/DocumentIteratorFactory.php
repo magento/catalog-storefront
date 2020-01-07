@@ -74,6 +74,5 @@ class DocumentIteratorFactory
         }
 
         return $this->objectManager->create(DocumentIterator::class, ['documents' => $documents]);
-
     }
 }

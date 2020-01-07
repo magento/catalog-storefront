@@ -10,13 +10,13 @@ namespace Magento\CatalogProduct\Model\Storage\Client;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\StateException;
 
 /**
  * Storage client DDL operations interface.
  *
- * This interface responsible for communication with data storage service behind Catalog Product Storefront App service.
+ * This interface responsible for communication with data storage service in terms of DDL operations behind Catalog
+ * Product Storefront App service.
  *
  * Data Storage that this interface is represent has to support next data model:
  * {

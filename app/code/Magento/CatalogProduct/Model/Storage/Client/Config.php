@@ -107,6 +107,7 @@ class Config
      *
      * @param string $entityName
      * @return EntityConfigInterface|NestedEntityConfigInterface
+     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function getEntityConfig(string $entityName): EntityConfigInterface
     {

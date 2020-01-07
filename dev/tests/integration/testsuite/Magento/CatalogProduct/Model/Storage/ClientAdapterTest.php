@@ -27,11 +27,6 @@ class ClientAdapterTest extends TestCase
     private $objectManager;
 
     /**
-     * @var ElasticsearchClientAdapter
-     */
-    private $storageClient;
-
-    /**
      * @var State
      */
     private $state;
@@ -97,6 +92,10 @@ class ClientAdapterTest extends TestCase
 
     /**
      * @return void
+     * @throws \Magento\Framework\Exception\BulkException
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\NotFoundException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function testBulkInsert(): void
     {
@@ -131,6 +130,10 @@ class ClientAdapterTest extends TestCase
 
     /**
      * @return void
+     * @throws \Magento\Framework\Exception\BulkException
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\NotFoundException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function testSubquery(): void
     {
@@ -186,6 +189,10 @@ class ClientAdapterTest extends TestCase
 
     /**
      * @return void
+     * @throws \Magento\Framework\Exception\BulkException
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\NotFoundException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function testSubqueries(): void
     {

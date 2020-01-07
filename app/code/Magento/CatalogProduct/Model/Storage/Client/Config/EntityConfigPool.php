@@ -12,6 +12,7 @@ use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Entity config pool.
+ *
  * Pool of all existing entity configs.
  *
  * @see EntityConfigInterface to understand what's the Entity Config is.
