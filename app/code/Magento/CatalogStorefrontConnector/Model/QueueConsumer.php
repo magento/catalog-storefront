@@ -7,9 +7,9 @@
 namespace Magento\CatalogStorefrontConnector\Model;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\CatalogProduct\DataProvider\DataProviderInterface;
-use Magento\Framework\MessageQueue\PublisherInterface;
+use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 use Magento\CatalogStorefrontConnector\Model\Data\ReindexProductsDataInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Consumer processes messages with store front products data
@@ -17,54 +17,31 @@ use Magento\CatalogStorefrontConnector\Model\Data\ReindexProductsDataInterface;
 class QueueConsumer
 {
     /**
-     * @var DataProviderInterface
-     */
-    private $productsDataProvider;
-
-    /**
-     * @var EntitiesUpdateMessageBuilder
-     */
-    private $messageBuilder;
-
-    /**
-     * @var PublisherInterface
-     */
-    private $queuePublisher;
-
-    /**
      * @var Collection
      */
     private $productsCollection;
 
     /**
-     * @var string
+     * @var ProductPublisher
      */
-    private $topicName = 'storefront.collect.update.entities.data';
+    private $productPublisher;
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
-     * @var int
-     */
-    private $batchSize;
-
-    /**
-     * @param DataProviderInterface $productsDataProvider
-     * @param EntitiesUpdateMessageBuilder $messageBuilder
-     * @param PublisherInterface $queuePublisher
+     * @param ProductPublisher $productPublisher
      * @param Collection $productsCollection
-     * @param int $batchSize
      */
     public function __construct(
-        DataProviderInterface $productsDataProvider,
-        EntitiesUpdateMessageBuilder $messageBuilder,
-        PublisherInterface $queuePublisher,
+        ProductPublisher $productPublisher,
         Collection $productsCollection,
-        int $batchSize
+        StoreManagerInterface $storeManager
     ) {
-        $this->productsDataProvider = $productsDataProvider;
-        $this->messageBuilder = $messageBuilder;
-        $this->queuePublisher = $queuePublisher;
         $this->productsCollection = $productsCollection;
-        $this->batchSize = $batchSize;
+        $this->productPublisher = $productPublisher;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -80,19 +57,7 @@ class QueueConsumer
     {
         $storeProducts = $this->getUniqueIdsForStores($messages);
         foreach ($storeProducts as $storeId => $productIds) {
-            foreach (\array_chunk($productIds, $this->batchSize) as $idsBunch) {
-                $messages = [];
-                $productsData = $this->productsDataProvider->fetch($idsBunch, [], ['store' => $storeId]);
-                foreach ($productsData as $product) {
-                    $messages[] = $this->messageBuilder->build(
-                        (int)$storeId,
-                        'product',
-                        (int)$product['entity_id'],
-                        $product
-                    );
-                }
-                $this->queuePublisher->publish($this->topicName, $messages);
-            }
+            $this->productPublisher->publish($productIds, $storeId);
         }
     }
 
@@ -109,8 +74,8 @@ class QueueConsumer
         /** @var \Magento\CatalogStorefrontConnector\Model\Data\ReindexProductsData $reindexProductsData */
         foreach ($messages as $reindexProductsData) {
             $storeId = $reindexProductsData->getStoreId();
-
-            if (isset($storesProductIds[$storeId]) && empty($reindexProductsData->getProductIds())) {
+            if (empty($reindexProductsData->getProductIds())) {
+                // full reindex
                 $storesProductIds[$storeId] = [];
             } elseif (isset($storesProductIds[$storeId]) && empty($storesProductIds[$storeId])) {
                 continue;
@@ -144,7 +109,8 @@ class QueueConsumer
     {
         $storeProductIds = [];
         $lastProductId = 0;
-        $this->productsCollection->setStoreId($storeId);
+        $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
+        $this->productsCollection->addWebsiteFilter($websiteId);
 
         while ($productIds = $this->productsCollection->getAllIds($this->batchSize, $lastProductId)) {
             $lastProductId = \end($productIds);

@@ -5,11 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogStorefrontConnector\Model;
+namespace Magento\CatalogStorefrontConnector\Model\Publisher;
 
 use Magento\CatalogStorefrontConnector\Model\Data\UpdateEntitiesDataInterfaceFactory;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdateEntitiesDataInterface;
-use Magento\Framework\Json\Encoder;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Message builder for publish entities update
@@ -17,9 +17,9 @@ use Magento\Framework\Json\Encoder;
 class EntitiesUpdateMessageBuilder
 {
     /**
-     * @var Encoder
+     * @var SerializerInterface
      */
-    private $encoder;
+    private $serializer;
     /**
      * @var UpdateEntitiesDataInterfaceFactory
      */
@@ -27,13 +27,13 @@ class EntitiesUpdateMessageBuilder
 
     /**
      * @param UpdateEntitiesDataInterfaceFactory $updateEntitiesDataInterfaceFactory
-     * @param Encoder $encoder
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         UpdateEntitiesDataInterfaceFactory $updateEntitiesDataInterfaceFactory,
-        Encoder $encoder
+        SerializerInterface $serializer
     ) {
-        $this->encoder = $encoder;
+        $this->serializer = $serializer;
         $this->updateEntitiesDataInterfaceFactory = $updateEntitiesDataInterfaceFactory;
     }
 
@@ -58,7 +58,7 @@ class EntitiesUpdateMessageBuilder
                 'entityType' => $entityType,
                 'entityId' => $entityId,
                 'storeId' => $storeId,
-                'entityData' => $this->encoder->encode($entityData)
+                'entityData' => $this->serializer->serialize($entityData)
             ]
         );
 
