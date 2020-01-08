@@ -147,12 +147,13 @@ class ClientAdapterTest extends TestCase
         $productData = $productBuilder;
 
         $simple1 = $this->getSimpleProductData();
+        $simple1['id'] = 100;
         $simple2 = $this->getSimpleProductData();
-        $simple2['id'] += $simple1['id'];
+        $simple2['id'] = 200;
         $simple3 = $this->getSimpleProductData();
-        $simple3['id'] += $simple2['id'];
+        $simple3['id'] = 300;
         $simple4 = $this->getSimpleProductData();
-        $simple4['id'] += $simple3['id'];
+        $simple4['id'] = 400;
 
         $productData['parent_id'] = 'complex';
         $simple1['parent_id'] = [
@@ -208,16 +209,19 @@ class ClientAdapterTest extends TestCase
         $configurable2['sku'] = 'test-configurable-product-with-variations-123';
 
         // make sure $configurable2['id'] > $configurable1['id']
-        $configurable2['id'] += $configurable1['id'];
+        $configurable1['id'] = 10;
+        $configurable2['id'] = 20;
 
         $simple1 = $this->getSimpleProductData();
+        $simple1['id'] = 100;
         $simple2 = $this->getSimpleProductData();
+        $simple2['id'] = 200;
         $simple3 = $this->getSimpleProductData();
-        $simple3['id'] += $simple2['id'];
+        $simple3['id'] = 300;
         $simple4 = $this->getSimpleProductData();
-        $simple4['id'] += $simple1['id'];
+        $simple4['id'] = 400;
         $simple5 = $this->getSimpleProductData();
-        $simple5['id'] += $simple4['id'];
+        $simple5['id'] = 500;
 
         $configurable1['parent_id'] = 'complex';
         $configurable2['parent_id'] = 'complex';
