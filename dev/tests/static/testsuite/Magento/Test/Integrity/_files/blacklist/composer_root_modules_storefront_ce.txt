@@ -8,4 +8,5 @@ magento/module-catalog-inventory-storefront
 magento/module-catalog-product
 magento/module-catalog-product-api
 magento/module-catalog-store-front-graph-ql
+magento/module-catalog-storefront-connector
 magento/module-store-front-graph-ql

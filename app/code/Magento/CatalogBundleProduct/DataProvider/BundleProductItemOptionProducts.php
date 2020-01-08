@@ -40,7 +40,11 @@ class BundleProductItemOptionProducts implements NestedDataProviderInterface
     public function fetch(array $attributes, array $scopes, array $parentData): array
     {
         $productIds = $this->getProductIds($parentData);
-        $attributesData = $this->generalDataProvider->fetch($productIds, $attributes, $scopes);
+
+        $attributesData = [];
+        if (!empty($attributes)) {
+            $attributesData = $this->generalDataProvider->fetch($productIds, $attributes, $scopes);
+        }
         foreach ($parentData as $entityId => $child) {
             foreach ($child['items'] as $itemKey => $item) {
                 if (!isset($item['options'])) {
@@ -48,10 +52,8 @@ class BundleProductItemOptionProducts implements NestedDataProviderInterface
                 }
                 foreach ($item['options'] as $optionKey => $option) {
                     $optionProductId = $option['entity_id'];
-                    if (isset($attributesData[$optionProductId])) {
-                        $parentData[$entityId]['items'][$itemKey]['options'][$optionKey]['product'] =
-                            $attributesData[$optionProductId];
-                    }
+                    $product = $attributesData[$optionProductId] ?? $optionProductId;
+                    $parentData[$entityId]['items'][$itemKey]['options'][$optionKey]['product'] = $product;
                 }
             }
         }

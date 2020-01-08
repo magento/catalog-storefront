@@ -84,16 +84,13 @@ class ProductItems implements \Magento\CatalogProduct\DataProvider\DataProviderI
         $result = $this->bundleProductItemOptions->fetch($attributes, $scopes, $result);
 
         $productAttributes = $attributes['options']['product'] ?? [];
-        $requestOptionLabel = \in_array('label', $attributes['options'], true);
+        $requestOptionLabel = \in_array('label', $attributes['options'] ?? [], true);
         if ($requestOptionLabel) {
             $productAttributes[] = 'name';
         }
 
-        if (empty($productAttributes)) {
-            return $result;
-        }
-
         $result = $this->bundleProductItemOptionProducts->fetch($productAttributes, $scopes, $result);
+        // TODO: handle ad-hoc solution MC-29791 - need to add product label from product (SF application)
         if ($requestOptionLabel) {
             $result = $this->bundleProductItemOptionLabels->fetch($productAttributes, $scopes, $result);
         }
