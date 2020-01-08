@@ -22,6 +22,14 @@ class ProductImageTransformer implements TransformerInterface
     private $imageUrlResolver;
 
     /**
+     * Image attributes
+     */
+    private const IMAGE_ATTRIBUTES = [
+        'url',
+        'label',
+    ];
+
+    /**
      * @param ImageUrlResolver $imageUrlResolver
      */
     public function __construct(ImageUrlResolver $imageUrlResolver)
@@ -35,12 +43,27 @@ class ProductImageTransformer implements TransformerInterface
      */
     public function transform(array $productItems, array $attributes): array
     {
-        foreach ($productItems as &$item) {
-            foreach (\array_keys($attributes) as $attributeName) {
-                $rawValue = $item[$attributeName] ?? '';
-                $item[$attributeName] = [];
+        $attributeName = key($attributes);
+        $fields = [];
 
+        if (\is_int($attributeName)) {
+            $attributeName = current($attributes);
+        } else {
+            $fields = current($attributes);
+        }
+
+        if (empty($fields)) {
+            $fields = self::IMAGE_ATTRIBUTES;
+        }
+
+        foreach ($productItems as &$item) {
+            $rawValue = $item[$attributeName] ?? '';
+            $item[$attributeName] = [];
+
+            if (\in_array('url', $fields, true)) {
                 $item[$attributeName]['url'] = $this->imageUrlResolver->resolve($rawValue, $attributeName);
+            }
+            if (\in_array('label', $fields, true)) {
                 $item[$attributeName]['label'] = $item[$attributeName . '_label'] ?? $item['name'] ?? '';
             }
         }

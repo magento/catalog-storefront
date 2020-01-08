@@ -27,6 +27,14 @@ class UrlRewritesDataProvider implements DataProviderInterface
     private $urlRewritesQuery;
 
     /**
+     * Url Rewrites Attributes
+     */
+    private const URL_REWRITES_ATTRIBUTES = [
+        'url',
+        'parameters' => ['name', 'value'],
+    ];
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param UrlRewritesQuery $urlRewritesQuery
      */
@@ -48,12 +56,24 @@ class UrlRewritesDataProvider implements DataProviderInterface
         // get url rewrites for products
         $urlRewrites = $this->getUrlRewrites($productIds, $storeId);
 
+        if (!empty($attributes['url_rewrites'])) {
+            $urlRewriteAttributes = $attributes['url_rewrites'];
+        } else {
+            $urlRewriteAttributes = self::URL_REWRITES_ATTRIBUTES;
+        }
+
         $output = [];
         foreach ($urlRewrites as $item) {
-            $output[$item['entity_id']]['url_rewrites'][] = [
-                'url' => $item['request_path'],
-                'parameters' => $this->getUrlParameters($item['target_path']),
-            ];
+            $urlRewrite = [];
+
+            if (\in_array('url', $urlRewriteAttributes, true)) {
+                $urlRewrite['url'] = $item['request_path'];
+            }
+            if (isset($urlRewriteAttributes['parameters'])) {
+                $urlRewrite['parameters'] = $this->getUrlParameters($item['target_path']);
+            }
+
+            $output[$item['entity_id']]['url_rewrites'][] = $urlRewrite;
         }
 
         return $output;
