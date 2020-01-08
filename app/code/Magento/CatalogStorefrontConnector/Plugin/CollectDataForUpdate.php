@@ -75,7 +75,7 @@ class CollectDataForUpdate
         // add related products only in case of partial reindex
         if ($productIds) {
             $productIds = array_unique(
-                array_merge($entityIds, $this->fulltextResource->getRelationsByChild($entityIds))
+                array_merge($productIds, $this->fulltextResource->getRelationsByChild($productIds))
             );
         }
         $storeId = (int)$dimensions[StoreDimensionProvider::DIMENSION_NAME]->getValue();

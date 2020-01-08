@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Command;
 
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 use Magento\Store\Model\StoreManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
 
 /**
  * Sync Catalog data with Storefront storage. Collect product data and push it to the Message Bus
@@ -22,16 +22,19 @@ class Sync extends Command
 {
     /**
      * Command name
+     * @var string
      */
     private const COMMAND_NAME = 'storefront:catalog:sync';
 
     /**
      * Option name for batch size
+     * @var string
      */
     private const INPUT_BATCH_SIZE = 'batch_size';
 
     /**
      * Default batch size
+     * @var int
      */
     private const DEFAULT_BATCH_SIZE = 1000;
 
@@ -67,26 +70,24 @@ class Sync extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
         $this->setName(self::COMMAND_NAME)
             ->setDescription('Run full reindex for Catalog Storefront service')
             ->addOption(
-            self::INPUT_BATCH_SIZE,
-            null,
-            InputOption::VALUE_NONE,
-            'Batch size of processed amount of entities in one time'
-        );
+                self::INPUT_BATCH_SIZE,
+                null,
+                InputOption::VALUE_NONE,
+                'Batch size of processed amount of entities in one time'
+            );
 
         parent::configure();
     }
 
     /**
-     * Runs cron jobs if cron is not disabled in Magento configurations
-     *
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

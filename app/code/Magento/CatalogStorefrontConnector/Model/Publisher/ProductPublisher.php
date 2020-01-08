@@ -11,8 +11,10 @@ use Magento\Framework\App\State;
 use Magento\Framework\MessageQueue\PublisherInterface;
 
 /**
- * Push product data for given product ids and store id to the Message Bus with topic
- * storefront.collect.update.entities.data
+ * Product publisher
+ *
+ * Push product data for given product ids and store id to the Message Bus
+ * with topic storefront.collect.update.entities.data
  */
 class ProductPublisher
 {
@@ -40,6 +42,7 @@ class ProductPublisher
      * @var int
      */
     private $batchSize;
+
     /**
      * @var State
      */

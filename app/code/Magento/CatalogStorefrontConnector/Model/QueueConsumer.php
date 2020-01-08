@@ -25,6 +25,7 @@ class QueueConsumer
      * @var ProductPublisher
      */
     private $productPublisher;
+
     /**
      * @var StoreManagerInterface
      */
@@ -33,6 +34,7 @@ class QueueConsumer
     /**
      * @param ProductPublisher $productPublisher
      * @param Collection $productsCollection
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ProductPublisher $productPublisher,
