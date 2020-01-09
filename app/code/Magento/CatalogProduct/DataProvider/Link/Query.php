@@ -73,7 +73,9 @@ class Query
     {
         $resourceConnection = $this->resourceConnection;
         $connection = $resourceConnection->getConnection();
-        $productLinkField = $this->getLinkField('catalog_product_entity');
+        /** @var \Magento\Framework\EntityManager\EntityMetadataInterface $metadata */
+        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $productLinkField = $metadata->getLinkField();
         $catalogProductTable = $resourceConnection->getTableName('catalog_product_entity');
         $catalogProductLinkTable = $resourceConnection->getTableName('catalog_product_link');
         $catalogProductLinkAttributeTable = $resourceConnection->getTableName('catalog_product_link_attribute');

@@ -44,15 +44,9 @@ class ProductImageTransformer implements TransformerInterface
     public function transform(array $productItems, array $attributes): array
     {
         $attributeName = key($attributes);
-        $fields = [];
+        $fields = current($attributes);
 
-        if (\is_int($attributeName)) {
-            $attributeName = current($attributes);
-        } else {
-            $fields = current($attributes);
-        }
-
-        if (empty($fields)) {
+        if (empty($fields) || (\is_string($fields) && ($attributeName === $fields))) {
             $fields = self::IMAGE_ATTRIBUTES;
         }
 
