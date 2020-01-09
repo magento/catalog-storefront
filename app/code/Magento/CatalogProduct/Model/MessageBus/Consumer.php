@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogProduct\Model\MessageBus;
 
-use Magento\CatalogProduct\Model\Storage\ClientInterface;
+use Magento\CatalogProduct\Model\Storage\Client\CommandInterface;
 use Magento\CatalogProduct\Model\Storage\State;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\Bulk\OperationInterface;
@@ -20,7 +20,7 @@ use Psr\Log\LoggerInterface;
 class Consumer
 {
     /**
-     * @var ClientInterface
+     * @var CommandInterface
      */
     private $storage;
 
@@ -45,14 +45,14 @@ class Consumer
     private $serializer;
 
     /**
-     * @param ClientInterface $storage
+     * @param CommandInterface $storage
      * @param State $storageState
      * @param SerializerInterface $serializer
      * @param EntityManager $entityManager
      * @param LoggerInterface $logger
      */
     public function __construct(
-        ClientInterface $storage,
+        CommandInterface $storage,
         State $storageState,
         SerializerInterface $serializer,
         EntityManager $entityManager,
