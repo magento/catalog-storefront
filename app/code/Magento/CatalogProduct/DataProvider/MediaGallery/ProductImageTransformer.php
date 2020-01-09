@@ -22,7 +22,7 @@ class ProductImageTransformer implements TransformerInterface
     private $imageUrlResolver;
 
     /**
-     * Image attributes
+     * Product image attributes.
      */
     private const IMAGE_ATTRIBUTES = [
         'url',

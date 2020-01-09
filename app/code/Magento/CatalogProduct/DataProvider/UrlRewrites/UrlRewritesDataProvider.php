@@ -27,7 +27,7 @@ class UrlRewritesDataProvider implements DataProviderInterface
     private $urlRewritesQuery;
 
     /**
-     * Url Rewrites Attributes
+     * Url Rewrites Attributes.
      */
     private const URL_REWRITES_ATTRIBUTES = [
         'url',
