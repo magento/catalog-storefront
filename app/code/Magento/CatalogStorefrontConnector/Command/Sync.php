@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Command;
 
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 use Magento\Store\Model\StoreManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -44,9 +44,9 @@ class Sync extends Command
     private $productPublisher;
 
     /**
-     * @var Collection
+     * @var CollectionFactory
      */
-    private $productsCollection;
+    private $productsCollectionFactory;
 
     /**
      * @var StoreManagerInterface
@@ -55,17 +55,17 @@ class Sync extends Command
 
     /**
      * @param ProductPublisher $productPublisher
-     * @param Collection $productsCollection
+     * @param CollectionFactory $productsCollectionFactory
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ProductPublisher $productPublisher,
-        Collection $productsCollection,
+        CollectionFactory $productsCollectionFactory,
         StoreManagerInterface $storeManager
     ) {
         parent::__construct();
         $this->productPublisher = $productPublisher;
-        $this->productsCollection = $productsCollection;
+        $this->productsCollectionFactory = $productsCollectionFactory;
         $this->storeManager = $storeManager;
     }
 
@@ -96,9 +96,10 @@ class Sync extends Command
         // TODO: clean product ids from storefront.collect.reindex.products.data topic
         foreach ($this->storeManager->getStores() as $store) {
             $lastProductId = 0;
-            $this->productsCollection->addWebsiteFilter($store->getWebsiteId());
+            $productCollection = $this->productsCollectionFactory->create();
+            $productCollection->addWebsiteFilter($store->getWebsiteId());
 
-            while ($productIds = $this->productsCollection->getAllIds($this->getBatchSize($input), $lastProductId)) {
+            while ($productIds = $productCollection->getAllIds($this->getBatchSize($input), $lastProductId)) {
                 $lastProductId = \end($productIds);
                 $this->productPublisher->publish($productIds, (int)$store->getId());
             }
