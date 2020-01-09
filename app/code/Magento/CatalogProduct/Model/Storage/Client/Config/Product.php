@@ -1,0 +1,112 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+declare(strict_types=1);
+
+namespace Magento\CatalogProduct\Model\Storage\Client\Config;
+
+use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Framework\Config\File\ConfigFilePool;
+
+/**
+ * Product entity type config.
+ */
+class Product implements NestedEntityConfigInterface
+{
+    /**#@+
+     * Text flags for Elasticsearch relation actions.
+     */
+    private const ENTITY_NAME = 'product';
+    private const CHILD_KEY = 'variant';
+    private const PARENT_KEY = 'complex';
+    private const JOIN_FIELD = 'parent_id';
+    private const MAX_CHILDREN = 100;
+    /**#@-*/
+
+    /**
+     * @var array
+     */
+    private $clientOptions;
+
+    /**
+     * @param Reader $configReader
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
+     */
+    public function __construct(Reader $configReader)
+    {
+        $configData = $configReader->load(ConfigFilePool::APP_ENV)['catalog-store-front'];
+        $this->clientOptions = $configData;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSettings() : array
+    {
+        return [
+            'properties' => [
+                $this->getJoinField() => [
+                    'type' => 'join',
+                    'relations' => [
+                        $this->getParentKey() => $this->getChildKey()
+                    ]
+                ],
+            ],
+            'dynamic_templates' => [
+                [
+                    'default_mapping' => [
+                        'match' => '*',
+                        'match_mapping_type' => '*',
+                        'mapping' => [
+                            'index' => false,
+                        ],
+                    ],
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getMaxChildren(): int
+    {
+        return isset($this->clientOptions[self::ENTITY_NAME]['max_children'])
+            ? $this->clientOptions[self::ENTITY_NAME]['max_children']
+            : self::MAX_CHILDREN;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getJoinField(): string
+    {
+        return isset($this->clientOptions[self::ENTITY_NAME]['join_field'])
+            ? $this->clientOptions[self::ENTITY_NAME]['join_field']
+            : self::JOIN_FIELD;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getParentKey(): string
+    {
+        return isset($this->clientOptions[self::ENTITY_NAME]['parent_key'])
+            ? $this->clientOptions[self::ENTITY_NAME]['parent_key']
+            : self::PARENT_KEY;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getChildKey(): string
+    {
+        return isset($this->clientOptions[self::ENTITY_NAME]['child_key'])
+            ? $this->clientOptions[self::ENTITY_NAME]['child_key']
+            : self::CHILD_KEY;
+    }
+}

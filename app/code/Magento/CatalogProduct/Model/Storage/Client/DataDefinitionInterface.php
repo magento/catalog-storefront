@@ -6,20 +6,17 @@
 
 declare(strict_types=1);
 
-namespace Magento\CatalogProduct\Model\Storage;
+namespace Magento\CatalogProduct\Model\Storage\Client;
 
-use Magento\CatalogProduct\Model\Storage\Data\EntryInterface;
-use Magento\CatalogProduct\Model\Storage\Data\EntryIteratorInterface;
-use Magento\Framework\Exception\BulkException;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\StateException;
 
 /**
- * Storage client interface.
+ * Storage client DDL operations interface.
  *
- * This interface responsible for communication with data storage service behind Catalog Product Storefront App service.
+ * This interface responsible for communication with data storage service in terms of DDL operations behind Catalog
+ * Product Storefront App service.
  *
  * Data Storage that this interface is represent has to support next data model:
  * {
@@ -57,7 +54,7 @@ use Magento\Framework\Exception\StateException;
  * of link for alias from 'Data source 1' to 'Data source 2'. After that switch query operations would access to
  * 'Data source 2' by the same alias.
  */
-interface ClientInterface
+interface DataDefinitionInterface
 {
     /**
      * Creates a data source in storage.
@@ -119,65 +116,4 @@ interface ClientInterface
         string $oldDataSourceName,
         string $newDataSourceName
     );
-
-    /**
-     * Access entry of Entity by unique identifier.
-     *
-     * $fields argument needs to specify array of fields that need to retrieve from document to avoid situation
-     * of retrieving entire document that could badly influence on bandwidth, elapsed time and performance in general.
-     *
-     * Any query operations MUST work only through alias endpoint to avoid data integrity problems.
-     *
-     * @param string $aliasName
-     * @param string $entityName
-     * @param int $id
-     * @param array $fields
-     * @return EntryInterface
-     * @throws NotFoundException
-     */
-    public function getEntry(string $aliasName, string $entityName, int $id, array $fields): EntryInterface;
-
-    /**
-     * Access entries of Entity by array of unique identifier.
-     *
-     * $fields argument needs to specify array of fields that need to retrieve from document to avoid situation
-     * of retrieving entire document that could badly influence on bandwidth, elapsed time and performance in general.
-     *
-     * Any query operations MUST work only through alias endpoint to avoid data integrity problems.
-     *
-     * @param string $aliasName
-     * @param string $entityName
-     * @param array $ids
-     * @param array $fields
-     * @return EntryIteratorInterface
-     * @throws NotFoundException
-     */
-    public function getEntries(
-        string $aliasName,
-        string $entityName,
-        array $ids,
-        array $fields
-    ): EntryIteratorInterface;
-
-    /**
-     * Performs bulk insert.
-     *
-     * Any command operations SHOULD work through data source endpoint to avoid degradation of performance of query
-     * operations. Instead of data source you can access alias as well and perform command operations on them, but
-     * in this case significant insert of data for particular data source could influence of query operation
-     * performance toward the same data source.
-     *
-     * Recommended way to perform bulk insert is:
-     * 1. Create new data source.
-     * 2. Fulfill the newly created data source by data.
-     * 3. Switch link of alias from old data source to new one.
-     * 4. Delete/archive the old data source.
-     *
-     * @param string $dataSourceName
-     * @param string $entityName
-     * @param array $entries
-     * @return void
-     * @throws BulkException
-     */
-    public function bulkInsert(string $dataSourceName, string $entityName, array $entries);
 }
