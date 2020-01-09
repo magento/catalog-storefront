@@ -18,9 +18,24 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogStorefrontConnector\Model\QueueConsumer">
+    <type name="Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher">
         <arguments>
             <argument name="batchSize" xsi:type="number">500</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="storefront:catalog:sync" xsi:type="object">Magento\CatalogStorefrontConnector\Command\Sync</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\CatalogStorefrontConnector\Command\Sync">
+        <arguments>
+            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+            <argument name="productPublisher" xsi:type="object">Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher\Proxy</argument>
         </arguments>
     </type>
 </config>

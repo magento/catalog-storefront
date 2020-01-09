@@ -71,10 +71,13 @@ class CollectDataForUpdate
     ) {
         $proceed($dimensions, $entityIds);
 
-        $entityIds = $entityIds instanceof \Traversable ? $entityIds->getArrayCopy() : [];
-        $productIds = array_unique(
-            array_merge($entityIds, $this->fulltextResource->getRelationsByChild($entityIds))
-        );
+        $productIds = $entityIds instanceof \Traversable ? $entityIds->getArrayCopy() : [];
+        // add related products only in case of partial reindex
+        if ($productIds) {
+            $productIds = array_unique(
+                array_merge($productIds, $this->fulltextResource->getRelationsByChild($productIds))
+            );
+        }
         $storeId = (int)$dimensions[StoreDimensionProvider::DIMENSION_NAME]->getValue();
         $message = $this->messageBuilder->build($storeId, $productIds);
         $this->queuePublisher->publish($this->topic, $message);
