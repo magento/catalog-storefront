@@ -29,4 +29,11 @@ interface EntryInterface
      * @return mixed
      */
     public function getData(string $field = '');
+
+    /**
+     * Get variants of composite entry.
+     *
+     * @return EntryIteratorInterface
+     */
+    public function getVariants(): EntryIteratorInterface;
 }
