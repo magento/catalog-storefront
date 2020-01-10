@@ -118,18 +118,4 @@ class Query
 
         return $select;
     }
-
-    /**
-     * Get Link field by table name.
-     *
-     * @param string $tableName
-     * @return string
-     */
-    private function getLinkField(string $tableName): string
-    {
-        $connection = $this->resourceConnection->getConnection();
-        $indexList = $connection->getIndexList($tableName);
-
-        return $indexList[$connection->getPrimaryKeyName($tableName)]['COLUMNS_LIST'][0];
-    }
 }
