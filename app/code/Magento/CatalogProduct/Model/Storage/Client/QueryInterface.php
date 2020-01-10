@@ -42,7 +42,7 @@ interface QueryInterface
      *
      * Any query operations MUST work only through alias endpoint to avoid data integrity problems.
      *
-     * @param string $aliasName
+     * @param string $indexName
      * @param string $entityName
      * @param array $ids
      * @param array $fields
@@ -50,7 +50,7 @@ interface QueryInterface
      * @throws NotFoundException
      */
     public function getEntries(
-        string $aliasName,
+        string $indexName,
         string $entityName,
         array $ids,
         array $fields
@@ -92,7 +92,7 @@ interface QueryInterface
      *
      * Any query operations MUST work only through alias endpoint to avoid data integrity problems.
      *
-     * @param string $aliasName
+     * @param string $indexName
      * @param string $entityName
      * @param array $ids
      * @param array $fields
@@ -100,7 +100,7 @@ interface QueryInterface
      * @return EntryIteratorInterface
      */
     public function getCompositeEntries(
-        string $aliasName,
+        string $indexName,
         string $entityName,
         array $ids,
         array $fields,

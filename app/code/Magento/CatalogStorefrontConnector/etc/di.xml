@@ -14,7 +14,7 @@
     <type name="Magento\Framework\MessageQueue\MergerFactory">
         <arguments>
             <argument name="mergers" xsi:type="array">
-                <item name="storefront_products_consumer" xsi:type="string">Magento\CatalogStorefrontConnector\Model\Merger</item>
+                <item name="storefront.collect.reindex.products.data" xsi:type="string">Magento\CatalogStorefrontConnector\Model\Merger</item>
             </argument>
         </arguments>
     </type>

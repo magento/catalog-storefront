@@ -6,12 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
-    <exchange name="magento" type="topic" connection="amqp">
-        <binding id="reindexEntitiesBinding" topic="storefront.collect.reindex.products.data" destinationType="queue" destination="storefront.products.reindex"/>
-        <binding id="updateEntitiesBinding" topic="storefront.collect.update.entities.data" destinationType="queue" destination="storefront.entities.update"/>
-    </exchange>
     <exchange name="magento-db" type="topic" connection="db">
-        <binding id="reindexEntitiesBinding" topic="storefront.collect.reindex.products.data" destinationType="queue" destination="storefront.products.reindex"/>
-        <binding id="updateEntitiesBinding" topic="storefront.collect.update.entities.data" destinationType="queue" destination="storefront.entities.update"/>
+        <binding id="reindexEntitiesBinding" topic="storefront.collect.reindex.products.data" destinationType="queue" destination="storefront.catalog.products.reindex"/>
     </exchange>
 </config>

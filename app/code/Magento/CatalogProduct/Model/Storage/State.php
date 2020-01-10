@@ -17,6 +17,16 @@ use Magento\Framework\Config\File\ConfigFilePool;
 class State
 {
     /**
+     * Entity type "product" represent product-related data
+     */
+    public const ENTITY_TYPE_PRODUCT = 'product';
+
+    /**
+     * Entity type "category" represent category-related data
+     */
+    public const ENTITY_TYPE_CATEGORY = 'category';
+
+    /**
      * @var Reader
      */
     private $configReader;
@@ -45,14 +55,15 @@ class State
     /**
      * Get current data source name of storage taking into account version of the data source.
      *
+     * @param array $scopes
      * @return string
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function getCurrentDataSourceName(): string
+    public function getCurrentDataSourceName(array $scopes): string
     {
         $config = $this->configReader->load(ConfigFilePool::APP_ENV)['catalog-store-front'];
-        return $config['source_prefix'] . $config['source_current_version'];
+        return $config['source_prefix'] . $config['source_current_version'] . '_' . \implode('_', $scopes);
     }
 
     /**

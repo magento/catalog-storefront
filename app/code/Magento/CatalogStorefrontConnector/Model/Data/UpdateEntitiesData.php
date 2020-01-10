@@ -33,17 +33,18 @@ class UpdateEntitiesData implements UpdateEntitiesDataInterface
     private $entityData;
 
     /**
-     * @param string $entityType
-     * @param int $entityId
-     * @param int $storeId
-     * @param string $entityData
+     * @param string $entity_type
+     * @param int $entity_id
+     * @param int $store_id
+     * @param string $entity_data
+     * @see \Magento\Framework\Webapi\ServiceInputProcessor::process for exalanation snake_case argument naming
      */
-    public function __construct(string $entityType, int $entityId, int $storeId, string $entityData)
+    public function __construct(string $entity_type, int $entity_id, int $store_id, string $entity_data)
     {
-        $this->entityType = $entityType;
-        $this->entityId = $entityId;
-        $this->storeId = $storeId;
-        $this->entityData = $entityData;
+        $this->entityType = $entity_type;
+        $this->entityId = $entity_id;
+        $this->storeId = $store_id;
+        $this->entityData = $entity_data;
     }
 
     /**

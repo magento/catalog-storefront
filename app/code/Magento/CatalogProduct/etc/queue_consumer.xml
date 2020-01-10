@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
-    <consumer name="catalog_storefront_connector.sync" queue="catalog_storefront_connector.sync" connection="db" maxMessages="5000" consumerInstance="Magento\Framework\MessageQueue\Consumer" handler="Magento\CatalogProduct\Model\MessageBus\Consumer::process" />
+    <consumer name="catalog_storefront_connector.sync" queue="catalog_storefront_connector.sync" connection="db" maxMessages="5000" />
 </config>

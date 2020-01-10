@@ -84,11 +84,13 @@ class DataProvider implements DataProviderInterface
         unset($dataProviders[$this->defaultDataProvider]);
 
         $entityTypeProductIds = [];
+        $productIds = [];
         foreach ($generalDataProviderResult as $entityId => $entityData) {
             if (!isset($entityData['type_id'])) {
                 continue;
             }
             $entityTypeProductIds[$entityData['type_id']][] = $entityId;
+            $productIds[] = $entityId;
         }
 
         $items[] = $generalDataProviderResult;

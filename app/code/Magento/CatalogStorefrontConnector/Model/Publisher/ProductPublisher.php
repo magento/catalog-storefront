@@ -14,7 +14,7 @@ use Magento\Framework\MessageQueue\PublisherInterface;
  * Product publisher
  *
  * Push product data for given product ids and store id to the Message Bus
- * with topic storefront.collect.update.entities.data
+ * with topic catalog_storefront_connector.sync
  */
 class ProductPublisher
 {
@@ -36,7 +36,7 @@ class ProductPublisher
     /**
      * @var string
      */
-    private const TOPIC_NAME = 'storefront.collect.update.entities.data';
+    private const TOPIC_NAME = 'catalog_storefront_connector.sync';
 
     /**
      * @var int

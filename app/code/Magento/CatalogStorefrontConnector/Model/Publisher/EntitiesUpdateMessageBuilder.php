@@ -55,10 +55,10 @@ class EntitiesUpdateMessageBuilder
         /** @var UpdateEntitiesDataInterface $updateEntitiesData */
         $updateEntitiesData = $this->updateEntitiesDataInterfaceFactory->create(
             [
-                'entityType' => $entityType,
-                'entityId' => $entityId,
-                'storeId' => $storeId,
-                'entityData' => $this->serializer->serialize($entityData)
+                'entity_type' => $entityType,
+                'entity_id' => $entityId,
+                'store_id' => $storeId,
+                'entity_data' => $this->serializer->serialize($entityData)
             ]
         );
 

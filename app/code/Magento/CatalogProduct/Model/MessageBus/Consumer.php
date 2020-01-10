@@ -8,11 +8,12 @@ declare(strict_types=1);
 namespace Magento\CatalogProduct\Model\MessageBus;
 
 use Magento\CatalogProduct\Model\Storage\Client\CommandInterface;
+use Magento\CatalogProduct\Model\Storage\Client\DataDefinitionInterface;
 use Magento\CatalogProduct\Model\Storage\State;
-use Magento\Framework\EntityManager\EntityManager;
-use Magento\Framework\Bulk\OperationInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Psr\Log\LoggerInterface;
+// TODO: new connector module between Magento and StoreFront
+use Magento\CatalogStorefrontConnector\Model\Data\UpdateEntitiesDataInterface;
 
 /**
  * Consumer for store data to data storage.
@@ -35,61 +36,79 @@ class Consumer
     private $logger;
 
     /**
-     * @var EntityManager
-     */
-    private $entityManager;
-
-    /**
      * @var SerializerInterface
      */
     private $serializer;
 
     /**
+     * @var DataDefinitionInterface
+     */
+    private $dataDefinition;
+
+    /**
      * @param CommandInterface $storage
+     * @param DataDefinitionInterface $dataDefinition
      * @param State $storageState
      * @param SerializerInterface $serializer
-     * @param EntityManager $entityManager
      * @param LoggerInterface $logger
      */
     public function __construct(
         CommandInterface $storage,
+        DataDefinitionInterface $dataDefinition,
         State $storageState,
         SerializerInterface $serializer,
-        EntityManager $entityManager,
         LoggerInterface $logger
     ) {
         $this->storage = $storage;
         $this->storageState = $storageState;
         $this->serializer = $serializer;
-        $this->entityManager = $entityManager;
         $this->logger = $logger;
+        $this->dataDefinition = $dataDefinition;
     }
 
     /**
      * Process
      *
-     * @param \Magento\AsynchronousOperations\Api\Data\OperationInterface $operation
-     * @throws \Exception
-     *
+     * @param \Magento\CatalogStorefrontConnector\Model\Data\UpdateEntitiesDataInterface[] $entities
      * @return void
+     * @throws \Throwable
      */
-    public function process(\Magento\AsynchronousOperations\Api\Data\OperationInterface $operation)
+    public function process(array $entities): void
     {
         try {
-            $serializedData = $operation->getSerializedData();
-            $data = $this->serializer->unserialize($serializedData);
-            $this->storage->bulkInsert($this->storageState->getAliasName(), 'product', $data);
+            // collect data by entity type and store id
+            $dataPerType = [];
+            foreach ($entities as $entity) {
+                $this->validateEntityType($entity);
+                $entityData = $this->serializer->unserialize($entity->getEntityData());
+                $entityData['id'] = $entity->getEntityId();
+                $entityData['store_id'] = $entity->getStoreId();
+                $dataPerType[$entity->getEntityType()][$entity->getStoreId()][] = $entityData;
+            }
+
+            // save data to storage
+            foreach ($dataPerType as $entityType => $dataPerStore) {
+                foreach ($dataPerStore as $storeId => $data) {
+                    $sourceName = $this->storageState->getCurrentDataSourceName([$storeId, $entityType]);
+                    // TODO: fix error "mapping type is missing;"
+                    // $this->dataDefinition->createEntity($sourceName, $entityType, []);
+                    $this->storage->bulkInsert($sourceName, $entityType, $data);
+                }
+            }
         } catch (\Throwable $e) {
-            $this->logger->critical($e->getMessage());
-            $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
-            $errorCode = $e->getCode();
-            $message = __('Sorry, something went wrong during population data storage. Please see log for details.');
+            $this->logger->critical($e);
         }
+    }
 
-        $operation->setStatus($status ?? OperationInterface::STATUS_TYPE_COMPLETE)
-            ->setErrorCode($errorCode ?? null)
-            ->setResultMessage($message ?? null);
-
-        $this->entityManager->save($operation);
+    /**
+     * Check entity type before put data to storage
+     *
+     * @param \Magento\CatalogStorefrontConnector\Model\Data\UpdateEntitiesDataInterface $entity
+     */
+    private function validateEntityType(UpdateEntitiesDataInterface $entity): void
+    {
+        if (!\in_array($entity->getEntityType(), [State::ENTITY_TYPE_PRODUCT, State::ENTITY_TYPE_CATEGORY], true)) {
+            throw new \LogicException(\sprintf('Entity type "%s" is not supported', $entity->getEntityType()));
+        }
     }
 }

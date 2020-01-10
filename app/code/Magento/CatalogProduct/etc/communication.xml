@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
-    <topic name="catalog_storefront_connector.sync" request="Magento\AsynchronousOperations\Api\Data\OperationInterface">
+    <topic name="catalog_storefront_connector.sync" request="Magento\CatalogStorefrontConnector\Model\Data\UpdateEntitiesDataInterface[]">
         <handler name="catalog_storefront_connector.sync" type="Magento\CatalogProduct\Model\MessageBus\Consumer" method="process" />
     </topic>
 </config>

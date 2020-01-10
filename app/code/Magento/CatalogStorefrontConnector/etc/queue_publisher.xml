@@ -10,7 +10,7 @@
         <connection name="amqp" exchange="magento" disabled="true"/>
         <connection name="db" exchange="magento-db" disabled="false"/>
     </publisher>
-    <publisher topic="storefront.collect.update.entities.data">
+    <publisher topic="catalog_storefront_connector.sync">
         <connection name="amqp" exchange="magento" disabled="true"/>
         <connection name="db" exchange="magento-db" disabled="false"/>
     </publisher>

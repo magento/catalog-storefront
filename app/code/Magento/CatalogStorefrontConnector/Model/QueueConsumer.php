@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogStorefrontConnector\Model;
 
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 use Magento\CatalogStorefrontConnector\Model\Data\ReindexProductsDataInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -17,9 +17,9 @@ use Magento\Store\Model\StoreManagerInterface;
 class QueueConsumer
 {
     /**
-     * @var Collection
+     * @var CollectionFactory
      */
-    private $productsCollection;
+    private $productsCollectionFactory;
 
     /**
      * @var ProductPublisher
@@ -33,15 +33,15 @@ class QueueConsumer
 
     /**
      * @param ProductPublisher $productPublisher
-     * @param Collection $productsCollection
+     * @param CollectionFactory $productsCollectionFactory
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ProductPublisher $productPublisher,
-        Collection $productsCollection,
+        CollectionFactory $productsCollectionFactory,
         StoreManagerInterface $storeManager
     ) {
-        $this->productsCollection = $productsCollection;
+        $this->productsCollectionFactory = $productsCollectionFactory;
         $this->productPublisher = $productPublisher;
         $this->storeManager = $storeManager;
     }
@@ -54,6 +54,7 @@ class QueueConsumer
      *
      * @param ReindexProductsDataInterface[] $messages
      * @return void
+     * @throws \Exception
      */
     public function processMessages(array $messages): void
     {
@@ -68,6 +69,7 @@ class QueueConsumer
      *
      * @param array $messages
      * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getUniqueIdsForStores(array $messages): array
     {
@@ -106,19 +108,14 @@ class QueueConsumer
      *
      * @param int $storeId
      * @return int[]
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getAllProductIdsForStore(int $storeId): array
     {
-        $storeProductIds = [];
-        $lastProductId = 0;
         $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
-        $this->productsCollection->addWebsiteFilter($websiteId);
+        $productsCollection = $this->productsCollectionFactory->create();
+        $productsCollection->addWebsiteFilter($websiteId);
 
-        while ($productIds = $this->productsCollection->getAllIds($this->batchSize, $lastProductId)) {
-            $lastProductId = \end($productIds);
-            $storeProductIds = \array_merge($storeProductIds, $productIds);
-        }
-
-        return $storeProductIds;
+        return $productsCollection->getAllIds();
     }
 }

@@ -104,7 +104,7 @@ class ElasticsearchQuery implements QueryInterface
     ): EntryInterface {
         $query = [
             'index' => $aliasName,
-            'type' => $entityName,
+            // 'type' => $entityName,
             'body' => [
                 'query' => ['term' => ['_id' => $id]],
                 'aggs' => [
@@ -144,11 +144,11 @@ class ElasticsearchQuery implements QueryInterface
     /**
      * @inheritdoc
      */
-    public function getEntries(string $aliasName, string $entityName, array $ids, array $fields): EntryIteratorInterface
+    public function getEntries(string $indexName, string $entityName, array $ids, array $fields): EntryIteratorInterface
     {
         $query = [
-            'index' => $aliasName,
-            'type' => $entityName,
+            'index' => $indexName,
+            // 'type' => $entityName,
             'body' => ['ids' => $ids],
             '_source' => $fields
         ];
@@ -159,7 +159,7 @@ class ElasticsearchQuery implements QueryInterface
                 __(
                     "'$entityName' type documents with ids '"
                     . json_encode($ids)
-                    . "' not found in index '$aliasName'."
+                    . "' not found in index '$indexName'."
                 ),
                 $throwable
             );
@@ -172,15 +172,15 @@ class ElasticsearchQuery implements QueryInterface
      * @inheritdoc
      */
     public function getCompositeEntries(
-        string $aliasName,
+        string $indexName,
         string $entityName,
         array $ids,
         array $fields,
         array $subEntityFields
     ): EntryIteratorInterface {
         $query = [
-            'index' => $aliasName,
-            'type' => $entityName,
+            'index' => $indexName,
+            // 'type' => $entityName,
             'body' => [
                 'query' => ['terms' => ['_id' => $ids]],
                 'aggs' => [
@@ -212,7 +212,7 @@ class ElasticsearchQuery implements QueryInterface
                 __(
                     "'$entityName' type documents with ids '"
                     . json_encode($ids)
-                    . "' not found in index '$aliasName'."
+                    . "' not found in index '$indexName'."
                 ),
                 $throwable
             );

@@ -93,7 +93,8 @@ class ElasticsearchDataDefinitionAdapter implements DataDefinitionInterface
     {
         $params = [
             'index' => $dataSourceName,
-            'type' => $entityName,
+            // type is deprecated @see https://www.elastic.co/guide/en/elasticsearch/reference/6.1/removal-of-types.html
+            // 'type' => $dataSourceName,
             'body' => [
                 $entityName => $this->config->getEntityConfig($entityName)->getSettings()
             ],
