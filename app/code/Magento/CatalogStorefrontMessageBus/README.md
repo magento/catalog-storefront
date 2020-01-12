@@ -1,0 +1,1 @@
+Catalog Storefront Message Bus is responsible for queue declaration, which is used to transfer data from Magento Admin to Catalog Storefront service

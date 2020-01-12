@@ -10,10 +10,9 @@ namespace Magento\CatalogProduct\Model\MessageBus;
 use Magento\CatalogProduct\Model\Storage\Client\CommandInterface;
 use Magento\CatalogProduct\Model\Storage\Client\DataDefinitionInterface;
 use Magento\CatalogProduct\Model\Storage\State;
+use Magento\CatalogStorefrontMessageBus\Message\CatalogItem;
 use Magento\Framework\Serialize\SerializerInterface;
 use Psr\Log\LoggerInterface;
-// TODO: new connector module between Magento and StoreFront
-use Magento\CatalogStorefrontConnector\Model\Data\UpdateEntitiesDataInterface;
 
 /**
  * Consumer for store data to data storage.
@@ -69,7 +68,7 @@ class Consumer
     /**
      * Process
      *
-     * @param \Magento\CatalogStorefrontConnector\Model\Data\UpdateEntitiesDataInterface[] $entities
+     * @param CatalogItem[] $entities
      * @return void
      * @throws \Throwable
      */
@@ -103,9 +102,9 @@ class Consumer
     /**
      * Check entity type before put data to storage
      *
-     * @param \Magento\CatalogStorefrontConnector\Model\Data\UpdateEntitiesDataInterface $entity
+     * @param CatalogItem $entity
      */
-    private function validateEntityType(UpdateEntitiesDataInterface $entity): void
+    private function validateEntityType(CatalogItem $entity): void
     {
         if (!\in_array($entity->getEntityType(), [State::ENTITY_TYPE_PRODUCT, State::ENTITY_TYPE_CATEGORY], true)) {
             throw new \LogicException(\sprintf('Entity type "%s" is not supported', $entity->getEntityType()));

@@ -5,12 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogStorefrontConnector\Model\Data;
+namespace Magento\CatalogStorefrontMessageBus\Message;
 
 /**
- * Data object for collect updated entities data
+ * DTO to transfer product/category data between different systems.
+ *
+ * Used by Product Information Manager system, which collect entity updates and put message into the queue.
+ * Catalog Storefront consume message from queue
  */
-class UpdateEntitiesData implements UpdateEntitiesDataInterface
+class CatalogItem
 {
     /**
      * @var string
@@ -48,7 +51,9 @@ class UpdateEntitiesData implements UpdateEntitiesDataInterface
     }
 
     /**
-     * @inheritdoc
+     * Get entity type
+     *
+     * @return string
      */
     public function getEntityType(): string
     {
@@ -56,7 +61,9 @@ class UpdateEntitiesData implements UpdateEntitiesDataInterface
     }
 
     /**
-     * @inheritdoc
+     * Get entity ID
+     *
+     * @return int
      */
     public function getEntityId(): int
     {
@@ -64,7 +71,9 @@ class UpdateEntitiesData implements UpdateEntitiesDataInterface
     }
 
     /**
-     * @inheritdoc
+     * Get store ID
+     *
+     * @return int
      */
     public function getStoreId(): int
     {
@@ -72,7 +81,9 @@ class UpdateEntitiesData implements UpdateEntitiesDataInterface
     }
 
     /**
-     * @inheritdoc
+     * Get entity data
+     *
+     * @return string
      */
     public function getEntityData(): string
     {

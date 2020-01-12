@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Model\Publisher;
 
-use Magento\CatalogStorefrontConnector\Model\Data\UpdateEntitiesDataInterfaceFactory;
-use Magento\CatalogStorefrontConnector\Model\Data\UpdateEntitiesDataInterface;
+use Magento\CatalogStorefrontMessageBus\Message\CatalogItemFactory;
+use Magento\CatalogStorefrontMessageBus\Message\CatalogItem;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
@@ -20,21 +20,22 @@ class EntitiesUpdateMessageBuilder
      * @var SerializerInterface
      */
     private $serializer;
-    /**
-     * @var UpdateEntitiesDataInterfaceFactory
-     */
-    private $updateEntitiesDataInterfaceFactory;
 
     /**
-     * @param UpdateEntitiesDataInterfaceFactory $updateEntitiesDataInterfaceFactory
+     * @var CatalogItemFactory
+     */
+    private $catalogItemFactory;
+
+    /**
+     * @param CatalogItemFactory $catalogItemFactory
      * @param SerializerInterface $serializer
      */
     public function __construct(
-        UpdateEntitiesDataInterfaceFactory $updateEntitiesDataInterfaceFactory,
+        CatalogItemFactory $catalogItemFactory,
         SerializerInterface $serializer
     ) {
         $this->serializer = $serializer;
-        $this->updateEntitiesDataInterfaceFactory = $updateEntitiesDataInterfaceFactory;
+        $this->catalogItemFactory = $catalogItemFactory;
     }
 
     /**
@@ -44,16 +45,16 @@ class EntitiesUpdateMessageBuilder
      * @param string $entityType
      * @param int $entityId
      * @param array $entityData
-     * @return UpdateEntitiesDataInterface
+     * @return CatalogItem
      */
     public function build(
         int $storeId,
         string $entityType,
         int $entityId,
         array $entityData
-    ): UpdateEntitiesDataInterface {
-        /** @var UpdateEntitiesDataInterface $updateEntitiesData */
-        $updateEntitiesData = $this->updateEntitiesDataInterfaceFactory->create(
+    ): CatalogItem {
+        /** @var CatalogItem $catalogItem */
+        $catalogItem = $this->catalogItemFactory->create(
             [
                 'entity_type' => $entityType,
                 'entity_id' => $entityId,
@@ -62,6 +63,6 @@ class EntitiesUpdateMessageBuilder
             ]
         );
 
-        return $updateEntitiesData;
+        return $catalogItem;
     }
 }
