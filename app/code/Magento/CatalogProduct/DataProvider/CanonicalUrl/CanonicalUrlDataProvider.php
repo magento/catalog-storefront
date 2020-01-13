@@ -71,6 +71,8 @@ class CanonicalUrlDataProvider implements DataProviderInterface
 
         $output = [];
         $rewrites = $this->getRewrites($productIds, $storeId);
+        $url = $this->urlFactory->create()->setScope($storeId);
+
         foreach ($productIds as $productId) {
             $routePath = '';
             $requestPath = '';
@@ -89,7 +91,6 @@ class CanonicalUrlDataProvider implements DataProviderInterface
                 $routeParams['id'] = $productId;
             }
 
-            $url = $this->urlFactory->create()->setScope($storeId);
             $output[$productId]['canonical_url'] = $url->getUrl($routePath, $routeParams);
         }
 
