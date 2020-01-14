@@ -17,16 +17,6 @@ use Magento\Framework\Config\File\ConfigFilePool;
 class State
 {
     /**
-     * Entity type "product" represent product-related data
-     */
-    public const ENTITY_TYPE_PRODUCT = 'product';
-
-    /**
-     * Entity type "category" represent category-related data
-     */
-    public const ENTITY_TYPE_CATEGORY = 'category';
-
-    /**
      * @var Reader
      */
     private $configReader;

@@ -155,7 +155,7 @@ class ElasticsearchQuery implements QueryInterface
         try {
             $result = $this->getConnection()->mget($query);
 
-            // TODO: handle error in $result['error']['root_cause'], e.g. index_not_found_exception
+            // TODO: MC-29513 handle error in $result['error']['root_cause'], e.g. index_not_found_exception
             if (isset($result['docs'][0]['error'])) {
                 throw new NotFoundException(__('Error TBD'));
             }

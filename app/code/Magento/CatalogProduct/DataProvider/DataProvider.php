@@ -170,9 +170,8 @@ class DataProvider implements DataProviderInterface
         $mergedAttributes = isset($dataProviders[$this->defaultDataProvider])
             ? \array_merge(...$dataProviders[$this->defaultDataProvider])
             : [];
-        $result = $generalDataProvider->fetch($productIds, $mergedAttributes, $scopes);
 
-        return $result;
+        return $generalDataProvider->fetch($productIds, $mergedAttributes, $scopes);
     }
 
     /**

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogProduct\DataProvider;
 
+use Magento\CatalogProduct\Model\Storage\Client\Config\Product;
 use Magento\CatalogProduct\Model\Storage\Client\QueryInterface;
 use Magento\CatalogProduct\Model\Storage\State;
 use Magento\Framework\Exception\NotFoundException;
@@ -60,11 +61,11 @@ class ProductDataProvider
             return $items;
         }
         $products = [];
-        $storageName = $this->storageState->getCurrentDataSourceName([$scopes['store'], State::ENTITY_TYPE_PRODUCT]);
+        $storageName = $this->storageState->getCurrentDataSourceName([$scopes['store'], Product::ENTITY_NAME]);
         try {
             $entities = $this->query->getEntries(
                 $storageName,
-                State::ENTITY_TYPE_PRODUCT,
+                Product::ENTITY_NAME,
                 $productIds,
                 $this->getFirstLevelAttributes($attributes)
             );

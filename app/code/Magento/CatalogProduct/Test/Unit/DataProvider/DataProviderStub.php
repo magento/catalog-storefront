@@ -25,6 +25,7 @@ class DataProviderStub implements DataProviderInterface
     public function fetch(array $productIds, array $attributes, array $scopes): array
     {
         $items = [];
+        $attributes['type_id'] = 'simple';
         foreach ($productIds as $productId) {
             $items[$productId] = $attributes;
         }

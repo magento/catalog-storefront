@@ -64,39 +64,49 @@ class Consumer
     public function process(array $entities): void
     {
         try {
-            // collect data by entity type and store id
-            $dataPerType = [];
-            foreach ($entities as $entity) {
-                $this->validateEntityType($entity);
-                $entityData = $this->serializer->unserialize($entity->getEntityData());
-                $entityData['id'] = $entity->getEntityId();
-                $entityData['store_id'] = $entity->getStoreId();
-                $dataPerType[$entity->getEntityType()][$entity->getStoreId()][] = $entityData;
-            }
-
-            // save data to storage
-            foreach ($dataPerType as $entityType => $dataPerStore) {
-                foreach ($dataPerStore as $storeId => $data) {
-                    $sourceName = $this->storageState->getCurrentDataSourceName([$storeId, $entityType]);
-                    // TODO: MC-30401
-                    // $this->dataDefinition->createEntity($sourceName, $entityType, []);
-                    $this->storage->bulkInsert($sourceName, $entityType, $data);
-                }
-            }
+            $dataPerType = $this->collectDataByEntityTypeAnsScope($entities);
+            $this->saveToStorage($dataPerType);
         } catch (\Throwable $e) {
             $this->logger->critical($e);
         }
     }
 
     /**
-     * Check entity type before put data to storage
+     * Collect catalog data. Structure by entity type and scope
      *
-     * @param CatalogItemMessage $entity
+     * @param array $entities
+     * @return array
      */
-    private function validateEntityType(CatalogItemMessage $entity): void
+    private function collectDataByEntityTypeAnsScope(array $entities): array
     {
-        if (!\in_array($entity->getEntityType(), [State::ENTITY_TYPE_PRODUCT, State::ENTITY_TYPE_CATEGORY], true)) {
-            throw new \LogicException(\sprintf('Entity type "%s" is not supported', $entity->getEntityType()));
+        $dataPerType = [];
+        foreach ($entities as $entity) {
+            $entityData = $this->serializer->unserialize($entity->getEntityData());
+            $entityData['id'] = $entity->getEntityId();
+            $entityData['store_id'] = $entity->getStoreId();
+            $dataPerType[$entity->getEntityType()][$entity->getStoreId()][] = $entityData;
+        }
+
+        return $dataPerType;
+    }
+
+    /**
+     * Save catalog data to the internal storage
+     *
+     * @param array $dataPerType
+     * @throws \Magento\Framework\Exception\BulkException
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
+     */
+    private function saveToStorage(array $dataPerType): void
+    {
+        foreach ($dataPerType as $entityType => $dataPerStore) {
+            foreach ($dataPerStore as $storeId => $data) {
+                $sourceName = $this->storageState->getCurrentDataSourceName([$storeId, $entityType]);
+                // TODO: MC-30401
+                // $this->dataDefinition->createEntity($sourceName, $entityType, []);
+                $this->storage->bulkInsert($sourceName, $entityType, $data);
+            }
         }
     }
 }
