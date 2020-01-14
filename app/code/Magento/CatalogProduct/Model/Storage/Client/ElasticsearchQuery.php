@@ -72,10 +72,10 @@ class ElasticsearchQuery implements QueryInterface
     /**
      * @inheritdoc
      */
-    public function getEntry(string $aliasName, string $entityName, int $id, array $fields): EntryInterface
+    public function getEntry(string $indexName, string $entityName, int $id, array $fields): EntryInterface
     {
         $query = [
-            'index' => $aliasName,
+            'index' => $indexName,
             'type' => $entityName,
             'id' => $id,
             '_source' => $fields
@@ -84,7 +84,7 @@ class ElasticsearchQuery implements QueryInterface
             $result = $this->getConnection()->get($query);
         } catch (\Throwable $throwable) {
             throw new NotFoundException(
-                __("'$entityName' type document with id '$id' not found in index '$aliasName'."),
+                __("'$entityName' type document with id '$id' not found in index '$indexName'."),
                 $throwable
             );
         }
@@ -96,15 +96,15 @@ class ElasticsearchQuery implements QueryInterface
      * @inheritdoc
      */
     public function getCompositeEntry(
-        string $aliasName,
+        string $indexName,
         string $entityName,
         int $id,
         array $fields,
         array $subEntityFields
     ): EntryInterface {
         $query = [
-            'index' => $aliasName,
-            // 'type' => $entityName,
+            'index' => $indexName,
+            'type' => $entityName,
             'body' => [
                 'query' => ['term' => ['_id' => $id]],
                 'aggs' => [
@@ -133,7 +133,7 @@ class ElasticsearchQuery implements QueryInterface
             $result = $this->getConnection()->search($query);
         } catch (\Throwable $throwable) {
             throw new NotFoundException(
-                __("'$entityName' type document with id '$id' not found in index '$aliasName'."),
+                __("'$entityName' type document with id '$id' not found in index '$indexName'."),
                 $throwable
             );
         }
@@ -148,7 +148,7 @@ class ElasticsearchQuery implements QueryInterface
     {
         $query = [
             'index' => $indexName,
-            // 'type' => $entityName,
+            'type' => $entityName,
             'body' => ['ids' => $ids],
             '_source' => $fields
         ];
@@ -157,12 +157,12 @@ class ElasticsearchQuery implements QueryInterface
 
             // TODO: handle error in $result['error']['root_cause'], e.g. index_not_found_exception
             if (isset($result['docs'][0]['error'])) {
-                throw new \Exception;
+                throw new NotFoundException(__('Error TBD'));
             }
         } catch (\Throwable $throwable) {
             throw new NotFoundException(
                 __(
-                    "'$entityName' type documents with ids '"
+                    "Documents with ids '"
                     . json_encode($ids)
                     . "' not found in index '$indexName'."
                 ),
@@ -185,7 +185,7 @@ class ElasticsearchQuery implements QueryInterface
     ): EntryIteratorInterface {
         $query = [
             'index' => $indexName,
-            // 'type' => $entityName,
+            'type' => $entityName,
             'body' => [
                 'query' => ['terms' => ['_id' => $ids]],
                 'aggs' => [

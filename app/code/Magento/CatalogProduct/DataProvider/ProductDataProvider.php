@@ -9,11 +9,11 @@ namespace Magento\CatalogProduct\DataProvider;
 
 use Magento\CatalogProduct\Model\Storage\Client\QueryInterface;
 use Magento\CatalogProduct\Model\Storage\State;
+use Magento\Framework\Exception\NotFoundException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Product storage reader.
- *
- * @inheritdoc
  */
 class ProductDataProvider
 {
@@ -28,19 +28,30 @@ class ProductDataProvider
     private $storageState;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param QueryInterface $query
      * @param State $storageState
+     * @param LoggerInterface $logger
      */
     public function __construct(
         QueryInterface $query,
-        State $storageState
+        State $storageState,
+        LoggerInterface $logger
     ) {
         $this->query = $query;
         $this->storageState = $storageState;
+        $this->logger = $logger;
     }
 
     /**
      * @inheritdoc
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function fetch(array $productIds, array $attributes, array $scopes): array
     {
@@ -50,12 +61,24 @@ class ProductDataProvider
         }
         $products = [];
         $storageName = $this->storageState->getCurrentDataSourceName([$scopes['store'], State::ENTITY_TYPE_PRODUCT]);
-        foreach ($this->query->getEntries(
-            $storageName,
-            State::ENTITY_TYPE_PRODUCT,
-            $productIds,
-            $this->getFirstLevelAttributes($attributes)
-        ) as $entry) {
+        try {
+            $entities = $this->query->getEntries(
+                $storageName,
+                State::ENTITY_TYPE_PRODUCT,
+                $productIds,
+                $this->getFirstLevelAttributes($attributes)
+            );
+        } catch (NotFoundException $notFoundException) {
+            $this->logger->notice(
+                \sprintf(
+                    'Data Provider: Cannot find products for ids "%s" in the scope "%s"',
+                    \implode(', ', $productIds),
+                    \implode(', ', $scopes)
+                )
+            );
+            return [];
+        }
+        foreach ($entities as $entry) {
             $data = $entry->getData();
             $products[$data['entity_id']] = $data;
         }

@@ -8,9 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogProduct\Model\MessageBus;
 
 use Magento\CatalogProduct\Model\Storage\Client\CommandInterface;
-use Magento\CatalogProduct\Model\Storage\Client\DataDefinitionInterface;
 use Magento\CatalogProduct\Model\Storage\State;
-use Magento\CatalogStorefrontMessageBus\Message\CatalogItem;
 use Magento\Framework\Serialize\SerializerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -40,20 +38,13 @@ class Consumer
     private $serializer;
 
     /**
-     * @var DataDefinitionInterface
-     */
-    private $dataDefinition;
-
-    /**
      * @param CommandInterface $storage
-     * @param DataDefinitionInterface $dataDefinition
      * @param State $storageState
      * @param SerializerInterface $serializer
      * @param LoggerInterface $logger
      */
     public function __construct(
         CommandInterface $storage,
-        DataDefinitionInterface $dataDefinition,
         State $storageState,
         SerializerInterface $serializer,
         LoggerInterface $logger
@@ -62,15 +53,13 @@ class Consumer
         $this->storageState = $storageState;
         $this->serializer = $serializer;
         $this->logger = $logger;
-        $this->dataDefinition = $dataDefinition;
     }
 
     /**
      * Process
      *
-     * @param CatalogItem[] $entities
+     * @param CatalogItemMessage[] $entities
      * @return void
-     * @throws \Throwable
      */
     public function process(array $entities): void
     {
@@ -89,7 +78,7 @@ class Consumer
             foreach ($dataPerType as $entityType => $dataPerStore) {
                 foreach ($dataPerStore as $storeId => $data) {
                     $sourceName = $this->storageState->getCurrentDataSourceName([$storeId, $entityType]);
-                    // TODO: fix error "mapping type is missing;"
+                    // TODO: MC-30401
                     // $this->dataDefinition->createEntity($sourceName, $entityType, []);
                     $this->storage->bulkInsert($sourceName, $entityType, $data);
                 }
@@ -102,9 +91,9 @@ class Consumer
     /**
      * Check entity type before put data to storage
      *
-     * @param CatalogItem $entity
+     * @param CatalogItemMessage $entity
      */
-    private function validateEntityType(CatalogItem $entity): void
+    private function validateEntityType(CatalogItemMessage $entity): void
     {
         if (!\in_array($entity->getEntityType(), [State::ENTITY_TYPE_PRODUCT, State::ENTITY_TYPE_CATEGORY], true)) {
             throw new \LogicException(\sprintf('Entity type "%s" is not supported', $entity->getEntityType()));

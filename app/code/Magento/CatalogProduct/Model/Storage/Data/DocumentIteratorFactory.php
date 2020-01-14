@@ -48,9 +48,7 @@ class DocumentIteratorFactory
     public function create(array $data = []): DocumentIterator
     {
         $subDocuments = [];
-        $nestedEntries = isset($data['aggregations']['nested_entries'])
-            ? $data['aggregations']['nested_entries']
-            : [];
+        $nestedEntries = $data['aggregations']['nested_entries'] ?? [];
 
         if (!empty($nestedEntries) && $nestedEntries['doc_count'] > 0) {
             foreach ($nestedEntries['variants']['hits']['hits'] as $item) {
@@ -58,9 +56,7 @@ class DocumentIteratorFactory
             }
         }
 
-        $items = isset($data['hits']['hits'])
-            ? $data['hits']['hits']
-            : $data['docs'];
+        $items = $data['hits']['hits'] ?? $data['docs'];
 
         $documents = [];
         foreach ($items as $item) {

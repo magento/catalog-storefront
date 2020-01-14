@@ -24,7 +24,7 @@ class ProductPublisher
     private $productsDataProvider;
 
     /**
-     * @var EntitiesUpdateMessageBuilder
+     * @var CatalogItemMessageBuilder
      */
     private $messageBuilder;
 
@@ -50,14 +50,14 @@ class ProductPublisher
 
     /**
      * @param DataProviderInterface $productsDataProvider
-     * @param EntitiesUpdateMessageBuilder $messageBuilder
+     * @param CatalogItemMessageBuilder $messageBuilder
      * @param PublisherInterface $queuePublisher
      * @param State $state
      * @param int $batchSize
      */
     public function __construct(
         DataProviderInterface $productsDataProvider,
-        EntitiesUpdateMessageBuilder $messageBuilder,
+        CatalogItemMessageBuilder $messageBuilder,
         PublisherInterface $queuePublisher,
         State $state,
         int $batchSize

@@ -5,15 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogStorefrontMessageBus\Message;
+namespace Magento\CatalogStorefrontConnector\Model\Publisher;
 
 /**
- * DTO to transfer product/category data between different systems.
- *
- * Used by Product Information Manager system, which collect entity updates and put message into the queue.
- * Catalog Storefront consume message from queue
+ * DTO to transfer product/category data from Magento Admin to Catalog Storefront service via message bus
  */
-class CatalogItem
+class CatalogItemMessage
 {
     /**
      * @var string
@@ -36,18 +33,17 @@ class CatalogItem
     private $entityData;
 
     /**
-     * @param string $entity_type
-     * @param int $entity_id
-     * @param int $store_id
-     * @param string $entity_data
-     * @see \Magento\Framework\Webapi\ServiceInputProcessor::process for exalanation snake_case argument naming
+     * @param string $entityType
+     * @param int $entityId
+     * @param int $storeId
+     * @param string $entityData
      */
-    public function __construct(string $entity_type, int $entity_id, int $store_id, string $entity_data)
+    public function __construct(string $entityType, int $entityId, int $storeId, string $entityData)
     {
-        $this->entityType = $entity_type;
-        $this->entityId = $entity_id;
-        $this->storeId = $store_id;
-        $this->entityData = $entity_data;
+        $this->entityType = $entityType;
+        $this->entityId = $entityId;
+        $this->storeId = $storeId;
+        $this->entityData = $entityData;
     }
 
     /**
