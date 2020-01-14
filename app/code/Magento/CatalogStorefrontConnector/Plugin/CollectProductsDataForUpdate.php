@@ -68,7 +68,7 @@ class CollectProductsDataForUpdate
         \Closure $proceed,
         array $dimensions,
         \Traversable $entityIds = null
-    ) {
+    ): void {
         $proceed($dimensions, $entityIds);
 
         $productIds = $entityIds instanceof \Traversable ? $entityIds->getArrayCopy() : [];

@@ -16,6 +16,9 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
  */
 class DescriptionDataProvider implements DataProviderInterface
 {
+    /**
+     * Description attribute code
+     */
     private const ATTRIBUTE = 'description';
 
     /**

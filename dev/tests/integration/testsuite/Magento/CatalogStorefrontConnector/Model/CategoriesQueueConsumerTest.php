@@ -105,7 +105,6 @@ class CategoriesQueueConsumerTest extends TestCase
         foreach ($entityData as $attributeKey => $attributeValue) {
             $this->assertEquals($expectedData[$attributeKey], $attributeValue);
         }
-
     }
 
     /**
@@ -131,8 +130,8 @@ class CategoriesQueueConsumerTest extends TestCase
                     'default_sort_by' => 'name',
                     'url_key' => 'category-1',
                     'url_path' => 'category-1',
-                    'description' => NULL,
-                    'canonical_url' => NULL,
+                    'description' => null,
+                    'canonical_url' => null,
                     'product_count' => '1',
                     'children' => []
                 ]
@@ -148,22 +147,17 @@ class CategoriesQueueConsumerTest extends TestCase
     private function waitForAsynchronousResult($queue)
     {
         $queueBody = null;
-        try {
-            $i = 0;
-            do {
-                sleep(1);
-                $queueBody = call_user_func_array(
-                    [$this, 'getMessageBody'],
-                    [$queue]
-                );
-            } while (!$queueBody && ($i++ < 180));
+        $i = 0;
+        do {
+            sleep(1);
+            $queueBody = call_user_func_array(
+                [$this, 'getMessageBody'],
+                [$queue]
+            );
+        } while (!$queueBody && ($i++ < 180));
 
-            if (!$queueBody) {
-                throw new PreconditionFailedException("No asynchronous messages were processed.");
-            }
-
-        } catch (PreconditionFailedException $e) {
-            $this->fail($e->getMessage());
+        if (!$queueBody) {
+            $this->fail('No asynchronous messages were processed.');
         }
 
         return $queueBody;
@@ -177,10 +171,10 @@ class CategoriesQueueConsumerTest extends TestCase
      */
     public function getMessageBody($queue)
     {
-       $message = $queue->dequeue();
-       $messageBody = $message ? $message->getBody() : null;
+        $message = $queue->dequeue();
+        $messageBody = $message ? $message->getBody() : null;
 
-       return $messageBody;
+        return $messageBody;
     }
 
     /**
@@ -211,5 +205,4 @@ class CategoriesQueueConsumerTest extends TestCase
             );
         }
     }
-
 }

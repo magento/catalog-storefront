@@ -135,9 +135,9 @@ class BreadcrumbsDataProvider implements DataProviderInterface
      *
      * @param array $child
      * @param array $breadcrumbAttributes
-     * @return mixed
+     * @return array
      */
-    private function getBreadcrumbs(array $child, array $breadcrumbAttributes)
+    private function getBreadcrumbs(array $child, array $breadcrumbAttributes): array
     {
         $result = [];
         foreach ($breadcrumbAttributes as $attribute) {
@@ -153,7 +153,7 @@ class BreadcrumbsDataProvider implements DataProviderInterface
      * @param array $attributes
      * @return array
      */
-    private function processAttributes(array $attributes)
+    private function processAttributes(array $attributes): array
     {
         $attributes = empty($attributes)
             ? self::ATTRIBUTES

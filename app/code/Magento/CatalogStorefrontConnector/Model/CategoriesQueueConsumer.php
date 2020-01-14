@@ -60,6 +60,7 @@ class CategoriesQueueConsumer
             $storeId = $updatedCategoriesData->getStoreId();
             $storeCategoriesIds = $updatedCategoriesData->getEntityIds();
             $result[$storeId] = isset($result[$storeId])
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 ? \array_unique(\array_merge($result[$storeId], $storeCategoriesIds))
                 : $storeCategoriesIds;
         }

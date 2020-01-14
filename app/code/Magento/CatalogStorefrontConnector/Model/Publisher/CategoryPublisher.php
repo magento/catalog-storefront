@@ -80,14 +80,13 @@ class CategoryPublisher
      */
     public function publish(array $categoryIds, int $storeId): void
     {
-
         $this->state->emulateAreaCode(
             Area::AREA_FRONTEND,
             function () use ($categoryIds, $storeId) {
                 foreach (\array_chunk($categoryIds, $this->batchSize) as $idsBunch) {
                     $messages = [];
                     $categoriesData = $this->categoriesDataProvider->fetch($idsBunch, [], ['store' => $storeId]);
-                        foreach ($categoriesData as $category) {
+                    foreach ($categoriesData as $category) {
                         $messages[] = $this->messageBuilder->build(
                             $storeId,
                             'category',

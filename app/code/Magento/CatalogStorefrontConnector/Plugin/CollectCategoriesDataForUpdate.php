@@ -10,7 +10,6 @@ namespace Magento\CatalogStorefrontConnector\Plugin;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogStorefrontConnector\Model\UpdatedEntitiesMessageBuilder;
 use Magento\Framework\MessageQueue\PublisherInterface;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
 
 /**
  * Plugin for collect category data during saving process
@@ -35,7 +34,6 @@ class CollectCategoriesDataForUpdate
     /**
      * @param PublisherInterface $queuePublisher
      * @param UpdatedEntitiesMessageBuilder $messageBuilder
-     * @param FulltextResource $fulltextResource
      */
     public function __construct(
         PublisherInterface $queuePublisher,
@@ -56,7 +54,7 @@ class CollectCategoriesDataForUpdate
     public function afterAfterSave(
         Category $subject,
         Category $category
-    ) {
+    ): void {
         $entityId = $category->getId();
         foreach ($category->getStoreIds() as $storeId) {
             $storeId = (int)$storeId;

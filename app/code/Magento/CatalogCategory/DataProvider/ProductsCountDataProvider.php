@@ -16,7 +16,7 @@ use Magento\CatalogCategory\DataProvider\Query\ProductsCountBuilder;
 class ProductsCountDataProvider implements DataProviderInterface
 {
     /**
-     * Product count attribute
+     * Product count attribute code
      */
     private const ATTRIBUTE = 'product_count';
 
@@ -54,7 +54,7 @@ class ProductsCountDataProvider implements DataProviderInterface
         foreach ($categoryIds as $categoryId) {
             $connection = $this->resourceConnection->getConnection();
             $productCount = $connection->fetchPairs(
-                $this->productsCountBuilder->getQuery($categoryIds, $scopes['store'])
+                $this->productsCountBuilder->getQuery($categoryIds, (int)$scopes['store'])
             );
 
             $output[$categoryId][$attribute] = $productCount[$categoryId] ?? 0;

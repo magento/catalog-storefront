@@ -16,6 +16,9 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
  */
 class CanonicalUrlDataProvider implements DataProviderInterface
 {
+    /**
+     * Canonical url attribute code
+     */
     private const ATTRIBUTE = 'canonical_url';
 
     /**
