@@ -205,4 +205,14 @@ class CategoriesQueueConsumerTest extends TestCase
             );
         }
     }
+
+    /**
+     * Tear down after tests
+     */
+    public function tearDown()
+    {
+        $this->publisherConsumerController->stopConsumers();
+
+        parent::tearDown();
+    }
 }
