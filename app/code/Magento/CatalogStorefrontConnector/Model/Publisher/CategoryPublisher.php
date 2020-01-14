@@ -90,7 +90,7 @@ class CategoryPublisher
                         $messages[] = $this->messageBuilder->build(
                             $storeId,
                             'category',
-                            (int)$category['entity_id'],
+                            (int)$category['id'],
                             $category
                         );
                     }

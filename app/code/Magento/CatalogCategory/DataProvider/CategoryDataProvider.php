@@ -21,7 +21,7 @@ class CategoryDataProvider implements DataProviderInterface
      * Required attributes for category entity
      */
     private const REQUIRED_ATTRIBUTES = [
-        'entity_id'
+        'id'
     ];
 
     /**
@@ -118,7 +118,7 @@ class CategoryDataProvider implements DataProviderInterface
             ? $this->getAttributes()
             : array_keys($attributes);
 
-        return array_unique($attributeCodes, SORT_REGULAR);
+        return array_unique(array_merge($attributeCodes, self::REQUIRED_ATTRIBUTES), SORT_REGULAR);
     }
 
     /**
@@ -155,7 +155,6 @@ class CategoryDataProvider implements DataProviderInterface
             foreach ($categoryAttributes->getItems() as $attribute) {
                 $this->allAttributes[] = $attribute->getAttributeCode();
             }
-            $this->allAttributes = array_merge($this->allAttributes, self::REQUIRED_ATTRIBUTES);
         }
 
         return $this->allAttributes;

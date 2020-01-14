@@ -121,7 +121,7 @@ class CategoriesQueueConsumerTest extends TestCase
                     'level' => '2',
                     'path' => '1/2/3',
                     'position' => '1',
-                    'entity_id' => '333',
+                    'id' => '333',
                     'available_sort_by' => ['position'],
                     'is_active' => '1',
                     'is_anchor' => '1',
