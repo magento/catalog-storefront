@@ -8,13 +8,13 @@ namespace Magento\CatalogStorefrontConnector\Model;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
-use Magento\CatalogStorefrontConnector\Model\Data\ReindexProductsDataInterface;
+use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Consumer processes messages with store front products data
  */
-class QueueConsumer
+class ProductsQueueConsumer
 {
     /**
      * @var Collection
@@ -49,11 +49,12 @@ class QueueConsumer
     /**
      * Process collected product IDs for update
      *
-     * Process messages from storefront.collect.reindex.products.data topic
+     * Process messages from storefront.collect.updated.products.data topic
      * and publish new messages to storefront.collect.update.entities.data topic
      *
-     * @param ReindexProductsDataInterface[] $messages
+     * @param UpdatedEntitiesDataInterface[] $messages
      * @return void
+     * @throws \Exception
      */
     public function processMessages(array $messages): void
     {
@@ -68,26 +69,27 @@ class QueueConsumer
      *
      * @param array $messages
      * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getUniqueIdsForStores(array $messages): array
     {
         $result = [];
         $storesProductIds = [];
-        /** @var \Magento\CatalogStorefrontConnector\Model\Data\ReindexProductsData $reindexProductsData */
-        foreach ($messages as $reindexProductsData) {
-            $storeId = $reindexProductsData->getStoreId();
-            if (empty($reindexProductsData->getProductIds())) {
+        /** @var \Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesData $reindexProductsData */
+        foreach ($messages as $updatedProductsData) {
+            $storeId = $updatedProductsData->getStoreId();
+            if (empty($updatedProductsData->getProductIds())) {
                 // full reindex
                 $storesProductIds[$storeId] = [];
             } elseif (isset($storesProductIds[$storeId]) && empty($storesProductIds[$storeId])) {
                 continue;
             } elseif (!isset($storesProductIds[$storeId])) {
-                $storesProductIds[$storeId] = $reindexProductsData->getProductIds();
+                $storesProductIds[$storeId] = $updatedProductsData->getEntityIds();
             } else {
                 // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $storesProductIds[$storeId] = array_merge(
                     $storesProductIds[$storeId],
-                    $reindexProductsData->getProductIds()
+                    $updatedProductsData->getEntityIds()
                 );
             }
         }
@@ -106,6 +108,7 @@ class QueueConsumer
      *
      * @param int $storeId
      * @return int[]
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getAllProductIdsForStore(int $storeId): array
     {

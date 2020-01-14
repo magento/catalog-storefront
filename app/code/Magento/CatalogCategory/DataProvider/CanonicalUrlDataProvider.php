@@ -16,6 +16,8 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
  */
 class CanonicalUrlDataProvider implements DataProviderInterface
 {
+    private const ATTRIBUTE = 'canonical_url';
+
     /**
      * @var CategoryHelper
      */
@@ -54,7 +56,7 @@ class CanonicalUrlDataProvider implements DataProviderInterface
     public function fetch(array $categoryIds, array $attributes, array $scopes): array
     {
         $output = [];
-        $attribute = key($attributes);
+        $attribute = !empty($attributes) ? key($attributes) : self::ATTRIBUTE;
 
         $categoryFilter = ['entity_id' => [$categoryIds]];
         $categoryCollection = $this->collectionFactory->create();

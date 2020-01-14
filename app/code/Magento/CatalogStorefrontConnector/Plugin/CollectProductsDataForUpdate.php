@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefrontConnector\Plugin;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
-use Magento\CatalogStorefrontConnector\Model\ReindexMessageBuilder;
+use Magento\CatalogStorefrontConnector\Model\UpdatedEntitiesMessageBuilder;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Store\Model\StoreDimensionProvider;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
@@ -16,15 +16,20 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
 /**
  * Plugin for collect products data during reindex
  */
-class CollectDataForUpdate
+class CollectProductsDataForUpdate
 {
+    /**
+     * Queue topic name
+     */
+    private const QUEUE_TOPIC = 'storefront.collect.updated.products.data';
+
     /**
      * @var PublisherInterface
      */
     private $queuePublisher;
 
     /**
-     * @var ReindexMessageBuilder
+     * @var UpdatedEntitiesMessageBuilder
      */
     private $messageBuilder;
 
@@ -34,18 +39,13 @@ class CollectDataForUpdate
     private $fulltextResource;
 
     /**
-     * @var string
-     */
-    private $topic = 'storefront.collect.reindex.products.data';
-
-    /**
      * @param PublisherInterface $queuePublisher
-     * @param ReindexMessageBuilder $messageBuilder
+     * @param UpdatedEntitiesMessageBuilder $messageBuilder
      * @param FulltextResource $fulltextResource
      */
     public function __construct(
         PublisherInterface $queuePublisher,
-        ReindexMessageBuilder $messageBuilder,
+        UpdatedEntitiesMessageBuilder $messageBuilder,
         FulltextResource $fulltextResource
     ) {
         $this->queuePublisher = $queuePublisher;
@@ -80,6 +80,6 @@ class CollectDataForUpdate
         }
         $storeId = (int)$dimensions[StoreDimensionProvider::DIMENSION_NAME]->getValue();
         $message = $this->messageBuilder->build($storeId, $productIds);
-        $this->queuePublisher->publish($this->topic, $message);
+        $this->queuePublisher->publish(self::QUEUE_TOPIC, $message);
     }
 }

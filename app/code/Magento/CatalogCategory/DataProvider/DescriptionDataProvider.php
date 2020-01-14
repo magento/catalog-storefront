@@ -16,6 +16,8 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
  */
 class DescriptionDataProvider implements DataProviderInterface
 {
+    private const ATTRIBUTE = 'description';
+
     /**
      * @var OutputHelper
      */
@@ -53,17 +55,17 @@ class DescriptionDataProvider implements DataProviderInterface
     public function fetch(array $categoryIds, array $attributes, array $scope): array
     {
         $output = [];
-        $fieldName = key($attributes);
+        $attribute = !empty($attributes) ? key($attributes) : self::ATTRIBUTE;
 
         $categoryFilter = ['entity_id' => [$categoryIds]];
-        $categoryCollection = $this->collectionFactory->create()->addAttributeToSelect($fieldName);
+        $categoryCollection = $this->collectionFactory->create()->addAttributeToSelect($attribute);
         $this->categoryFilter->applyFilters($categoryFilter, $categoryCollection, $scope);
         /** @var \Magento\Catalog\Model\Category $category */
         foreach ($categoryCollection as $category) {
             $description = $category->getDescription();
-            $renderedValue = $this->outputHelper->categoryAttribute(null, $description, $fieldName);
+            $renderedValue = $this->outputHelper->categoryAttribute(null, $description, $attribute);
 
-            $output[$category->getId()][$fieldName] = $renderedValue;
+            $output[$category->getId()][$attribute] = $renderedValue;
         }
 
         return $output;

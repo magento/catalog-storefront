@@ -15,6 +15,14 @@ use Magento\Framework\App\ResourceConnection;
  */
 class BreadcrumbsDataProvider implements DataProviderInterface
 {
+    private const ATTRIBUTES = [
+        'category_id',
+        'category_name',
+        'category_level',
+        'category_url_key',
+        'category_url_path'
+    ];
+
     /**
      * @var CategoryAttributeQueryBuilder
      */
@@ -56,6 +64,7 @@ class BreadcrumbsDataProvider implements DataProviderInterface
         $categoryPaths = $this->generalDataProvider->fetch($categoryIds, ['path'], $scopes);
         $pathMap = [];
         $output = [];
+        $attributes = $this->processAttributes($attributes);
         foreach ($categoryIds as $categoryId) {
             $categoryPath = $categoryPaths[$categoryId]['path'] ?? null;
             $entityIds = [];
@@ -71,7 +80,7 @@ class BreadcrumbsDataProvider implements DataProviderInterface
 
                 $childCategories =  $categories[$pathMap[$categoryId][$categoryPath]] ?? [];
                 foreach ($childCategories as $child) {
-                    $output[$categoryId]['breadcrumbs'][] = $this->getBreadcrumbs($child, $attributes['breadcrumbs']);
+                    $output[$categoryId]['breadcrumbs'][] = $this->getBreadcrumbs($child, $attributes);
                 }
             }
         }
@@ -136,5 +145,20 @@ class BreadcrumbsDataProvider implements DataProviderInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Process attributes.
+     *
+     * @param array $attributes
+     * @return array
+     */
+    private function processAttributes(array $attributes)
+    {
+        $attributes = empty($attributes)
+            ? self::ATTRIBUTES
+            : $attributes['breadcrumbs'];
+
+        return $attributes;
     }
 }

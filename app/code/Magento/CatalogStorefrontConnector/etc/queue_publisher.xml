@@ -6,12 +6,16 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
-    <publisher topic="storefront.collect.reindex.products.data">
-        <connection name="amqp" exchange="magento" disabled="true"/>
-        <connection name="db" exchange="magento-db" disabled="false"/>
+    <publisher topic="storefront.collect.updated.products.data">
+        <connection name="amqp" exchange="magento" disabled="false"/>
+        <connection name="db" exchange="magento-db" disabled="true"/>
+    </publisher>
+    <publisher topic="storefront.collect.updated.categories.data">
+        <connection name="amqp" exchange="magento" disabled="false"/>
+        <connection name="db" exchange="magento-db" disabled="true"/>
     </publisher>
     <publisher topic="storefront.collect.update.entities.data">
-        <connection name="amqp" exchange="magento" disabled="true"/>
-        <connection name="db" exchange="magento-db" disabled="false"/>
+        <connection name="amqp" exchange="magento" disabled="false"/>
+        <connection name="db" exchange="magento-db" disabled="true"/>
     </publisher>
 </config>

@@ -6,19 +6,28 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\CatalogStorefrontConnector\Model\Data\ReindexProductsDataInterface" type="Magento\CatalogStorefrontConnector\Model\Data\ReindexProductsData"/>
+    <preference for="Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface" type="Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesData"/>
     <preference for="Magento\CatalogStorefrontConnector\Model\Data\UpdateEntitiesDataInterface" type="Magento\CatalogStorefrontConnector\Model\Data\UpdateEntitiesData"/>
     <type name="Magento\CatalogSearch\Model\Indexer\Fulltext">
-        <plugin name="collectDataForStorefrontApplication" type="Magento\CatalogStorefrontConnector\Plugin\CollectDataForUpdate" />
+        <plugin name="collectDataForStorefrontApplication" type="Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataForUpdate" />
+    </type>
+    <type name="Magento\Catalog\Model\Category">
+        <plugin name="collectCategoryDataForStorefrontApplication" type="Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate" />
     </type>
     <type name="Magento\Framework\MessageQueue\MergerFactory">
         <arguments>
             <argument name="mergers" xsi:type="array">
                 <item name="storefront_products_consumer" xsi:type="string">Magento\CatalogStorefrontConnector\Model\Merger</item>
+                <item name="storefront_categories_consumer" xsi:type="string">Magento\CatalogStorefrontConnector\Model\Merger</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher">
+        <arguments>
+            <argument name="batchSize" xsi:type="number">500</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogStorefrontConnector\Model\Publisher\CategoryPublisher">
         <arguments>
             <argument name="batchSize" xsi:type="number">500</argument>
         </arguments>
@@ -36,6 +45,7 @@
         <arguments>
             <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
             <argument name="productPublisher" xsi:type="object">Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher\Proxy</argument>
+            <argument name="categoryPublisher" xsi:type="object">Magento\CatalogStorefrontConnector\Model\Publisher\CategoryPublisher\Proxy</argument>
         </arguments>
     </type>
 </config>

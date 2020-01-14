@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefrontConnector\Model\Data;
 
 /**
- * Data object interface for reindexed products collector
+ * Data object interface for updated entities collector
  */
-interface ReindexProductsDataInterface
+interface UpdatedEntitiesDataInterface
 {
     /**
-     * Set store ID for reindexed products
+     * Set store ID for updated entities
      *
      * @param int $storeId
      * @return void
@@ -21,24 +21,24 @@ interface ReindexProductsDataInterface
     public function setStoreId(int $storeId): void;
 
     /**
-     * Get store ID for reindexed products
+     * Get store ID for updated entities
      *
      * @return int
      */
     public function getStoreId(): int;
 
     /**
-     * Set reindexed product IDs
+     * Set updated entities IDs
      *
-     * @param int[] $productIds
+     * @param int[] $entityIds
      * @return void
      */
-    public function setProductIds(array $productIds): void;
+    public function setEntityIds(array $entityIds): void;
 
     /**
-     * Get reindexed product IDs
+     * Get updated entities IDs
      *
      * @return int[]
      */
-    public function getProductIds(): array;
+    public function getEntityIds(): array;
 }

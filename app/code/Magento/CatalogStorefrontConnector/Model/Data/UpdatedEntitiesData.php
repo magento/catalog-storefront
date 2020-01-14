@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefrontConnector\Model\Data;
 
 /**
- * Data object for reindexed products collector
+ * Data object for updated entities collector
  */
-class ReindexProductsData implements ReindexProductsDataInterface
+class UpdatedEntitiesData implements UpdatedEntitiesDataInterface
 {
     /**
      * @var int
@@ -20,7 +20,7 @@ class ReindexProductsData implements ReindexProductsDataInterface
     /**
      * @var int[]
      */
-    private $productIds;
+    private $entityIds;
 
     /**
      * @inheritdoc
@@ -41,16 +41,16 @@ class ReindexProductsData implements ReindexProductsDataInterface
     /**
      * @inheritdoc
      */
-    public function setProductIds(array $productIds): void
+    public function setEntityIds(array $entityIds): void
     {
-        $this->productIds = $productIds;
+        $this->entityIds = $entityIds;
     }
 
     /**
      * @inheritdoc
      */
-    public function getProductIds(): array
+    public function getEntityIds(): array
     {
-        return $this->productIds;
+        return $this->entityIds;
     }
 }
