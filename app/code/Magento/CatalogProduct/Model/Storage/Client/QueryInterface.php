@@ -25,14 +25,14 @@ interface QueryInterface
      *
      * Any query operations MUST work only through alias endpoint to avoid data integrity problems.
      *
-     * @param string $aliasName
+     * @param string $indexName
      * @param string $entityName
      * @param int $id
      * @param array $fields
      * @return EntryInterface
      * @throws NotFoundException
      */
-    public function getEntry(string $aliasName, string $entityName, int $id, array $fields): EntryInterface;
+    public function getEntry(string $indexName, string $entityName, int $id, array $fields): EntryInterface;
 
     /**
      * Access entries of Entity by array of unique identifier.
@@ -42,7 +42,7 @@ interface QueryInterface
      *
      * Any query operations MUST work only through alias endpoint to avoid data integrity problems.
      *
-     * @param string $aliasName
+     * @param string $indexName
      * @param string $entityName
      * @param array $ids
      * @param array $fields
@@ -50,7 +50,7 @@ interface QueryInterface
      * @throws NotFoundException
      */
     public function getEntries(
-        string $aliasName,
+        string $indexName,
         string $entityName,
         array $ids,
         array $fields
@@ -67,7 +67,7 @@ interface QueryInterface
      *
      * Any query operations MUST work only through alias endpoint to avoid data integrity problems.
      *
-     * @param string $aliasName
+     * @param string $indexName
      * @param string $entityName
      * @param int $id
      * @param array $fields
@@ -75,7 +75,7 @@ interface QueryInterface
      * @return EntryInterface
      */
     public function getCompositeEntry(
-        string $aliasName,
+        string $indexName,
         string $entityName,
         int $id,
         array $fields,
@@ -92,7 +92,7 @@ interface QueryInterface
      *
      * Any query operations MUST work only through alias endpoint to avoid data integrity problems.
      *
-     * @param string $aliasName
+     * @param string $indexName
      * @param string $entityName
      * @param array $ids
      * @param array $fields
@@ -100,7 +100,7 @@ interface QueryInterface
      * @return EntryIteratorInterface
      */
     public function getCompositeEntries(
-        string $aliasName,
+        string $indexName,
         string $entityName,
         array $ids,
         array $fields,

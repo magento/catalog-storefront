@@ -16,10 +16,14 @@ use Magento\Framework\Config\File\ConfigFilePool;
  */
 class Product implements NestedEntityConfigInterface
 {
+    /**
+     * Entity name. Used to hold configuration for specific entity type and as a part of the storage name
+     */
+    public const ENTITY_NAME = 'product';
+
     /**#@+
      * Text flags for Elasticsearch relation actions.
      */
-    private const ENTITY_NAME = 'product';
     private const CHILD_KEY = 'variant';
     private const PARENT_KEY = 'complex';
     private const JOIN_FIELD = 'parent_id';

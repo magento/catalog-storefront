@@ -36,7 +36,7 @@ class CollectDataForUpdate
     /**
      * @var string
      */
-    private $topic = 'storefront.collect.reindex.products.data';
+    private $topic = 'storefront.catalog.data.updates';
 
     /**
      * @param PublisherInterface $queuePublisher

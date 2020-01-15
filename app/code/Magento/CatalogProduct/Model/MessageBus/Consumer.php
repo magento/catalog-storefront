@@ -9,9 +9,6 @@ namespace Magento\CatalogProduct\Model\MessageBus;
 
 use Magento\CatalogProduct\Model\Storage\Client\CommandInterface;
 use Magento\CatalogProduct\Model\Storage\State;
-use Magento\Framework\EntityManager\EntityManager;
-use Magento\Framework\Bulk\OperationInterface;
-use Magento\Framework\Serialize\SerializerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -35,61 +32,81 @@ class Consumer
     private $logger;
 
     /**
-     * @var EntityManager
+     * @var CatalogItemMessageBuilder
      */
-    private $entityManager;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
+    private $catalogItemMessageBuilder;
 
     /**
      * @param CommandInterface $storage
      * @param State $storageState
-     * @param SerializerInterface $serializer
-     * @param EntityManager $entityManager
+     * @param CatalogItemMessageBuilder $catalogItemMessageBuilder
      * @param LoggerInterface $logger
      */
     public function __construct(
         CommandInterface $storage,
         State $storageState,
-        SerializerInterface $serializer,
-        EntityManager $entityManager,
+        CatalogItemMessageBuilder $catalogItemMessageBuilder,
         LoggerInterface $logger
     ) {
         $this->storage = $storage;
         $this->storageState = $storageState;
-        $this->serializer = $serializer;
-        $this->entityManager = $entityManager;
         $this->logger = $logger;
+        $this->catalogItemMessageBuilder = $catalogItemMessageBuilder;
     }
 
     /**
      * Process
      *
-     * @param \Magento\AsynchronousOperations\Api\Data\OperationInterface $operation
-     * @throws \Exception
-     *
+     * @param CatalogItemMessage[] $entities
      * @return void
      */
-    public function process(\Magento\AsynchronousOperations\Api\Data\OperationInterface $operation)
+    public function process(array $entities): void
     {
         try {
-            $serializedData = $operation->getSerializedData();
-            $data = $this->serializer->unserialize($serializedData);
-            $this->storage->bulkInsert($this->storageState->getAliasName(), 'product', $data);
+            $dataPerType = $this->collectDataByEntityTypeAnsScope($entities);
+            $this->saveToStorage($dataPerType);
         } catch (\Throwable $e) {
-            $this->logger->critical($e->getMessage());
-            $status = OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED;
-            $errorCode = $e->getCode();
-            $message = __('Sorry, something went wrong during population data storage. Please see log for details.');
+            $this->logger->critical($e);
+        }
+    }
+
+    /**
+     * Collect catalog data. Structure by entity type and scope
+     *
+     * @param array $messages
+     * @return array
+     */
+    private function collectDataByEntityTypeAnsScope(array $messages): array
+    {
+        $dataPerType = [];
+        foreach ($messages as $message) {
+            $entity = $this->catalogItemMessageBuilder->build($message);
+            $entityData = $entity->getEntityData();
+            $entityData['id'] = $entity->getEntityId();
+            $entityData['store_id'] = $entity->getStoreId();
+            $dataPerType[$entity->getEntityType()][$entity->getStoreId()][] = $entityData;
         }
 
-        $operation->setStatus($status ?? OperationInterface::STATUS_TYPE_COMPLETE)
-            ->setErrorCode($errorCode ?? null)
-            ->setResultMessage($message ?? null);
+        return $dataPerType;
+    }
 
-        $this->entityManager->save($operation);
+    /**
+     * Save catalog data to the internal storage
+     *
+     * @param array $dataPerType
+     * @throws \Magento\Framework\Exception\BulkException
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
+     */
+    private function saveToStorage(array $dataPerType): void
+    {
+        foreach ($dataPerType as $entityType => $dataPerStore) {
+            foreach ($dataPerStore as $storeId => $data) {
+                $sourceName = $this->storageState->getCurrentDataSourceName([$storeId, $entityType]);
+                // TODO: MC-30401
+                // $this->dataDefinition->createEntity($sourceName, $entityType, []);
+                $this->storage->bulkInsert($sourceName, $entityType, $data);
+            }
+        }
     }
 }

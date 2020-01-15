@@ -81,16 +81,24 @@ class DataProvider implements DataProviderInterface
 
         $dataProviders = $this->getDataProviders($attributes);
         $generalDataProviderResult = $this->getGeneralDataProviderResults($productIds, $dataProviders, $scopes);
+
+        if (!$generalDataProviderResult) {
+            return $items;
+        }
         unset($dataProviders[$this->defaultDataProvider]);
 
         $entityTypeProductIds = [];
+        $productIds = \array_combine($productIds, $productIds);
+
+        $existingProductIds = \array_keys($generalDataProviderResult);
+        $productIds = \array_intersect($productIds, $existingProductIds);
         foreach ($generalDataProviderResult as $entityId => $entityData) {
             if (!isset($entityData['type_id'])) {
+                unset($productIds[$entityId]);
                 continue;
             }
             $entityTypeProductIds[$entityData['type_id']][] = $entityId;
         }
-
         $items[] = $generalDataProviderResult;
 
         foreach ($dataProviders as $dataProviderClass => $dataAttributes) {
@@ -167,9 +175,8 @@ class DataProvider implements DataProviderInterface
         $mergedAttributes = isset($dataProviders[$this->defaultDataProvider])
             ? \array_merge(...$dataProviders[$this->defaultDataProvider])
             : [];
-        $result = $generalDataProvider->fetch($productIds, $mergedAttributes, $scopes);
 
-        return $result;
+        return $generalDataProvider->fetch($productIds, $mergedAttributes, $scopes);
     }
 
     /**

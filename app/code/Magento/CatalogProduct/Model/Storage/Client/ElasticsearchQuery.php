@@ -72,10 +72,10 @@ class ElasticsearchQuery implements QueryInterface
     /**
      * @inheritdoc
      */
-    public function getEntry(string $aliasName, string $entityName, int $id, array $fields): EntryInterface
+    public function getEntry(string $indexName, string $entityName, int $id, array $fields): EntryInterface
     {
         $query = [
-            'index' => $aliasName,
+            'index' => $indexName,
             'type' => $entityName,
             'id' => $id,
             '_source' => $fields
@@ -84,7 +84,7 @@ class ElasticsearchQuery implements QueryInterface
             $result = $this->getConnection()->get($query);
         } catch (\Throwable $throwable) {
             throw new NotFoundException(
-                __("'$entityName' type document with id '$id' not found in index '$aliasName'."),
+                __("'$entityName' type document with id '$id' not found in index '$indexName'."),
                 $throwable
             );
         }
@@ -96,14 +96,14 @@ class ElasticsearchQuery implements QueryInterface
      * @inheritdoc
      */
     public function getCompositeEntry(
-        string $aliasName,
+        string $indexName,
         string $entityName,
         int $id,
         array $fields,
         array $subEntityFields
     ): EntryInterface {
         $query = [
-            'index' => $aliasName,
+            'index' => $indexName,
             'type' => $entityName,
             'body' => [
                 'query' => ['term' => ['_id' => $id]],
@@ -133,7 +133,7 @@ class ElasticsearchQuery implements QueryInterface
             $result = $this->getConnection()->search($query);
         } catch (\Throwable $throwable) {
             throw new NotFoundException(
-                __("'$entityName' type document with id '$id' not found in index '$aliasName'."),
+                __("'$entityName' type document with id '$id' not found in index '$indexName'."),
                 $throwable
             );
         }
@@ -144,22 +144,27 @@ class ElasticsearchQuery implements QueryInterface
     /**
      * @inheritdoc
      */
-    public function getEntries(string $aliasName, string $entityName, array $ids, array $fields): EntryIteratorInterface
+    public function getEntries(string $indexName, string $entityName, array $ids, array $fields): EntryIteratorInterface
     {
         $query = [
-            'index' => $aliasName,
+            'index' => $indexName,
             'type' => $entityName,
             'body' => ['ids' => $ids],
             '_source' => $fields
         ];
         try {
             $result = $this->getConnection()->mget($query);
+
+            // TODO: MC-29513 handle error in $result['error']['root_cause'], e.g. index_not_found_exception
+            if (isset($result['docs'][0]['error'])) {
+                throw new NotFoundException(__('Error TBD'));
+            }
         } catch (\Throwable $throwable) {
             throw new NotFoundException(
                 __(
-                    "'$entityName' type documents with ids '"
+                    "Documents with ids '"
                     . json_encode($ids)
-                    . "' not found in index '$aliasName'."
+                    . "' not found in index '$indexName'."
                 ),
                 $throwable
             );
@@ -172,14 +177,14 @@ class ElasticsearchQuery implements QueryInterface
      * @inheritdoc
      */
     public function getCompositeEntries(
-        string $aliasName,
+        string $indexName,
         string $entityName,
         array $ids,
         array $fields,
         array $subEntityFields
     ): EntryIteratorInterface {
         $query = [
-            'index' => $aliasName,
+            'index' => $indexName,
             'type' => $entityName,
             'body' => [
                 'query' => ['terms' => ['_id' => $ids]],
@@ -212,7 +217,7 @@ class ElasticsearchQuery implements QueryInterface
                 __(
                     "'$entityName' type documents with ids '"
                     . json_encode($ids)
-                    . "' not found in index '$aliasName'."
+                    . "' not found in index '$indexName'."
                 ),
                 $throwable
             );

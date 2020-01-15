@@ -82,9 +82,9 @@ class ClientAdapterTest extends TestCase
         $this->documentFactory = Bootstrap::getObjectManager()->get(DocumentFactory::class);
         $this->documentIteratorFactory = Bootstrap::getObjectManager()->get(DocumentIteratorFactory::class);
 
-        $this->storageDDL->createDataSource($this->state->getCurrentDataSourceName(), []);
-        $this->storageDDL->createEntity($this->state->getCurrentDataSourceName(), 'product', []);
-        $this->storageDDL->createAlias($this->state->getAliasName(), $this->state->getCurrentDataSourceName());
+        $this->storageDDL->createDataSource($this->state->getCurrentDataSourceName(['scope']), []);
+        $this->storageDDL->createEntity($this->state->getCurrentDataSourceName(['scope']), 'product', []);
+        $this->storageDDL->createAlias($this->state->getAliasName(), $this->state->getCurrentDataSourceName(['scope']));
     }
 
     /**
@@ -92,7 +92,7 @@ class ClientAdapterTest extends TestCase
      */
     protected function tearDown()
     {
-        $this->storageDDL->deleteDataSource($this->state->getCurrentDataSourceName());
+        $this->storageDDL->deleteDataSource($this->state->getCurrentDataSourceName(['scope']));
     }
 
     /**
