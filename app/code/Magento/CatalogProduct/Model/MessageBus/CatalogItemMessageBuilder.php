@@ -43,7 +43,8 @@ class CatalogItemMessageBuilder
      * @param array $message
      * @return CatalogItemMessage
      */
-    public function build($message): CatalogItemMessage {
+    public function build($message): CatalogItemMessage
+    {
         $message = $this->serializer->unserialize($message);
         $this->validateMessage($message);
 
