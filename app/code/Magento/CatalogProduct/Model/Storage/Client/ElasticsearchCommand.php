@@ -83,7 +83,7 @@ class ElasticsearchCommand implements CommandInterface
     ): array {
         $bulkArray = [
             'index' => $indexName,
-            // 'type' => $entityName,
+            'type' => $entityName,
             'body' => [],
             'refresh' => true,
         ];

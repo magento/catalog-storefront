@@ -49,8 +49,12 @@ class ProductDataProvider
     }
 
     /**
-     * @inheritdoc
+     * Fetch product data from storage
      *
+     * @param array $productIds
+     * @param array $attributes
+     * @param array $scopes
+     * @return array
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\RuntimeException
      */
@@ -81,6 +85,7 @@ class ProductDataProvider
         }
         foreach ($entities as $entry) {
             $data = $entry->getData();
+            $data['id'] = $data['entity_id'];
             $products[$data['entity_id']] = $data;
         }
 
@@ -95,7 +100,7 @@ class ProductDataProvider
      */
     private function getFirstLevelAttributes($attributes): array
     {
-        $firstLevel = ['entity_id'];
+        $firstLevel = ['entity_id', 'sku'];
         foreach ($attributes as $name => $value) {
             $firstLevel[] = \is_array($value) ? $name : $value;
         }
