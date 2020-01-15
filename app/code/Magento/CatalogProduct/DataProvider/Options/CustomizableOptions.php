@@ -97,13 +97,11 @@ class CustomizableOptions implements DataProviderInterface
             /** @var Option\Value $value */
             foreach ($values as $valueKey => $value) {
                 $resultValues[$valueKey] = $value->getData();
-                $resultValues[$valueKey]['price_type']
-                    = $value->getPriceType() !== null ? strtoupper($value->getPriceType()) : 'DYNAMIC';
+                $resultValues[$valueKey]['price_type'] = strtoupper($value->getPriceType() ?? 'DYNAMIC');
             }
         } else {
             $resultValues = $option->getData();
-            $resultValues['price_type']
-                = $option->getPriceType() !== null ? strtoupper($option->getPriceType()) : 'DYNAMIC';
+            $resultValues['price_type'] = strtoupper($option->getPriceType() ?? 'DYNAMIC');
         }
 
         return $resultValues;
