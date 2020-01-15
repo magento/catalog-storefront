@@ -15,7 +15,7 @@ use Magento\Framework\MessageQueue\PublisherInterface;
  * Category publisher
  *
  * Push product data for given category ids and store id to the Message Bus
- * with topic storefront.collect.update.entities.data
+ * with topic storefront.catalog.data.consume
  */
 class CategoryPublisher
 {
@@ -25,7 +25,7 @@ class CategoryPublisher
     private $categoriesDataProvider;
 
     /**
-     * @var EntitiesUpdateMessageBuilder
+     * @var CatalogItemMessageBuilder
      */
     private $messageBuilder;
 
@@ -37,7 +37,7 @@ class CategoryPublisher
     /**
      * @var string
      */
-    private const TOPIC_NAME = 'storefront.collect.update.entities.data';
+    private const TOPIC_NAME = 'storefront.catalog.data.consume';
 
     /**
      * @var int
@@ -51,14 +51,14 @@ class CategoryPublisher
 
     /**
      * @param DataProviderInterface $categoriesDataProvider
-     * @param EntitiesUpdateMessageBuilder $messageBuilder
+     * @param CatalogItemMessageBuilder $messageBuilder
      * @param PublisherInterface $queuePublisher
      * @param State $state
      * @param int $batchSize
      */
     public function __construct(
         DataProviderInterface $categoriesDataProvider,
-        EntitiesUpdateMessageBuilder $messageBuilder,
+        CatalogItemMessageBuilder $messageBuilder,
         PublisherInterface $queuePublisher,
         State $state,
         int $batchSize
@@ -71,7 +71,7 @@ class CategoryPublisher
     }
 
     /**
-     * Publish new messages to storefront.collect.update.entities.data topic
+     * Publish new messages to storefront.catalog.data.consume topic
      *
      * @param array $categoryIds
      * @param int $storeId

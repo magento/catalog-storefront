@@ -70,7 +70,7 @@ class ProductPublisher
     }
 
     /**
-     * Publish new messages to storefront.collect.update.entities.data topic
+     * Publish new messages to storefront.catalog.data.consume topic
      *
      * @param array $productIds
      * @param int $storeId

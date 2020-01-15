@@ -78,7 +78,7 @@ class ProductsQueueConsumer
         /** @var \Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesData $updatedProductsData */
         foreach ($messages as $updatedProductsData) {
             $storeId = $updatedProductsData->getStoreId();
-            if (empty($updatedProductsData->getProductIds())) {
+            if (empty($updatedProductsData->getEntityIds())) {
                 // full reindex
                 $storesProductIds[$storeId] = [];
             } elseif (isset($storesProductIds[$storeId]) && empty($storesProductIds[$storeId])) {

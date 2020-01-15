@@ -49,7 +49,7 @@ class CategoriesQueueConsumerTest extends TestCase
     /**
      * @var array
      */
-    private $consumers = ['storefront_categories_consumer'];
+    private $consumers = ['storefront.catalog.category.update'];
 
     /**
      * @var array

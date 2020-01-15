@@ -21,7 +21,7 @@ class CollectProductsDataForUpdate
     /**
      * Queue topic name
      */
-    private const QUEUE_TOPIC = 'storefront.catalog.data.updates';
+    private const QUEUE_TOPIC = 'storefront.catalog.product.update';
 
     /**
      * @var PublisherInterface

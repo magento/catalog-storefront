@@ -32,7 +32,7 @@ class CategoriesQueueConsumer
      * Process collected categories IDs for update
      *
      * Process messages from storefront.collect.updated.categories.data topic
-     * and publish new messages to storefront.collect.update.entities.data topic
+     * and publish new messages to storefront.catalog.data.consume topic
      *
      * @param UpdatedEntitiesDataInterface[] $messages
      * @return void

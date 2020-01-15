@@ -93,7 +93,7 @@ class Sync extends Command
     {
         $output->writeln('<info>' . 'Start product sync' . '</info>');
 
-        // TODO: clean product ids from storefront.catalog.data.updates topic
+        // TODO: clean product ids from storefront.catalog.product.update topic
         foreach ($this->storeManager->getStores() as $store) {
             $lastProductId = 0;
             $productCollection = $this->productsCollectionFactory->create();

@@ -19,7 +19,7 @@ class CollectCategoriesDataForUpdate
     /**
      * Queue topic name
      */
-    private const QUEUE_TOPIC = 'storefront.collect.updated.categories.data';
+    private const QUEUE_TOPIC = 'storefront.catalog.category.update';
 
     /**
      * @var PublisherInterface
