@@ -49,7 +49,7 @@ class QueueConsumer
     /**
      * Process collected product IDs for update
      *
-     * Process messages from storefront.collect.reindex.products.data topic
+     * Process messages from storefront.catalog.data.updates topic
      * and publish new messages to storefront.collect.update.entities.data topic
      *
      * @param ReindexProductsDataInterface[] $messages

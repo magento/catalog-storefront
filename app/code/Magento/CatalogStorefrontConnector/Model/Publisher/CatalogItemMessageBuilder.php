@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Model\Publisher;
 
-use \Magento\CatalogStorefrontConnector\Model\Publisher\CatalogItemMessageFactory;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
@@ -21,20 +20,11 @@ class CatalogItemMessageBuilder
     private $serializer;
 
     /**
-     * @var CatalogItemMessageFactory
-     */
-    private $catalogItemFactory;
-
-    /**
-     * @param CatalogItemMessageFactory $catalogItemFactory
      * @param SerializerInterface $serializer
      */
-    public function __construct(
-        CatalogItemMessageFactory $catalogItemFactory,
-        SerializerInterface $serializer
-    ) {
+    public function __construct(SerializerInterface $serializer)
+    {
         $this->serializer = $serializer;
-        $this->catalogItemFactory = $catalogItemFactory;
     }
 
     /**
@@ -44,24 +34,21 @@ class CatalogItemMessageBuilder
      * @param string $entityType
      * @param int $entityId
      * @param array $entityData
-     * @return CatalogItemMessage
+     * @return string
      */
     public function build(
         int $storeId,
         string $entityType,
         int $entityId,
         array $entityData
-    ): CatalogItemMessage {
-        /** @var CatalogItemMessage $catalogItem */
-        $catalogItem = $this->catalogItemFactory->create(
+    ): string {
+        return $this->serializer->serialize(
             [
-                'entityType' => $entityType,
-                'entityId' => $entityId,
-                'storeId' => $storeId,
-                'entityData' => $this->serializer->serialize($entityData)
+                'entity_type' => $entityType,
+                'entity_id' => $entityId,
+                'store_id' => $storeId,
+                'entity_data' => $entityData,
             ]
         );
-
-        return $catalogItem;
     }
 }

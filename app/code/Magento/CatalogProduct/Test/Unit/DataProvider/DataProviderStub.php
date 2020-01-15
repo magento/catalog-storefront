@@ -21,6 +21,7 @@ class DataProviderStub implements DataProviderInterface
      * @param array $attributes
      * @param array $scopes
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetch(array $productIds, array $attributes, array $scopes): array
     {

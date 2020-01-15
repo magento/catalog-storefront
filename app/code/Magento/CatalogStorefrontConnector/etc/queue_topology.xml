@@ -7,6 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
     <exchange name="magento-db" type="topic" connection="db">
-        <binding id="reindexEntitiesBinding" topic="storefront.collect.reindex.products.data" destinationType="queue" destination="storefront.catalog.products.reindex"/>
+        <binding id="reindexEntitiesBinding" topic="storefront.catalog.data.updates" destinationType="queue" destination="storefront.catalog.connector"/>
     </exchange>
 </config>

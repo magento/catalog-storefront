@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
-    <consumer name="storefront.collect.reindex.products.data" queue="storefront.catalog.products.reindex" connection="db" consumerInstance="Magento\Framework\MessageQueue\BatchConsumer" handler="Magento\CatalogStorefrontConnector\Model\QueueConsumer::processMessages"/>
+    <consumer name="storefront.catalog.data.updates" queue="storefront.catalog.connector" connection="db" consumerInstance="Magento\Framework\MessageQueue\BatchConsumer" handler="Magento\CatalogStorefrontConnector\Model\QueueConsumer::processMessages"/>
 </config>

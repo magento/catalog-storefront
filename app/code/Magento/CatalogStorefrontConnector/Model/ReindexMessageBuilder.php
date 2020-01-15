@@ -29,7 +29,7 @@ class ReindexMessageBuilder
     }
 
     /**
-     * Build message for storefront.collect.reindex.products.data topic
+     * Build message for storefront.catalog.data.updates topic
      *
      * @param int $storeId
      * @param array $productIds

@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogProduct\Model\MessageBus;
 
-use Magento\CatalogProduct\Model\Storage\Client\Config\Product;
-
 /**
  * DTO represent catalog item data stored in Message Bus
  */
@@ -30,25 +28,22 @@ class CatalogItemMessage
     private $storeId;
 
     /**
-     * @var string
+     * @var array
      */
     private $entityData;
 
     /**
-     * @param string $entity_type
-     * @param int $entity_id
-     * @param int $store_id
-     * @param string $entity_data
-     * @see \Magento\Framework\Webapi\ServiceInputProcessor::process for explanation snake_case argument naming
-     * @throws \LogicException
+     * @param string $entityType
+     * @param int $entityId
+     * @param int $storeId
+     * @param array $entityData
      */
-    public function __construct(string $entity_type, int $entity_id, int $store_id, string $entity_data)
+    public function __construct(string $entityType, int $entityId, int $storeId, array $entityData)
     {
-        $this->validateEntityType($entity_type);
-        $this->entityType = $entity_type;
-        $this->entityId = $entity_id;
-        $this->storeId = $store_id;
-        $this->entityData = $entity_data;
+        $this->entityType = $entityType;
+        $this->entityId = $entityId;
+        $this->storeId = $storeId;
+        $this->entityData = $entityData;
     }
 
     /**
@@ -84,25 +79,10 @@ class CatalogItemMessage
     /**
      * Get entity data
      *
-     * @return string
+     * @return array
      */
-    public function getEntityData(): string
+    public function getEntityData(): array
     {
         return $this->entityData;
     }
-
-
-    /**
-     * Check entity type before put data to storage
-     *
-     * @param $entityType
-     * @throws \LogicException
-     */
-    private function validateEntityType($entityType): void
-    {
-        if (!\in_array($entityType, [Product::ENTITY_NAME], true)) {
-            throw new \LogicException(\sprintf('Entity type "%s" is not supported', $entityType));
-        }
-    }
-
 }

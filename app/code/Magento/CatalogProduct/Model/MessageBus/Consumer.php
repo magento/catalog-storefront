@@ -9,7 +9,6 @@ namespace Magento\CatalogProduct\Model\MessageBus;
 
 use Magento\CatalogProduct\Model\Storage\Client\CommandInterface;
 use Magento\CatalogProduct\Model\Storage\State;
-use Magento\Framework\Serialize\SerializerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -33,26 +32,26 @@ class Consumer
     private $logger;
 
     /**
-     * @var SerializerInterface
+     * @var CatalogItemMessageBuilder
      */
-    private $serializer;
+    private $catalogItemMessageBuilder;
 
     /**
      * @param CommandInterface $storage
      * @param State $storageState
-     * @param SerializerInterface $serializer
+     * @param CatalogItemMessageBuilder $catalogItemMessageBuilder
      * @param LoggerInterface $logger
      */
     public function __construct(
         CommandInterface $storage,
         State $storageState,
-        SerializerInterface $serializer,
+        CatalogItemMessageBuilder $catalogItemMessageBuilder,
         LoggerInterface $logger
     ) {
         $this->storage = $storage;
         $this->storageState = $storageState;
-        $this->serializer = $serializer;
         $this->logger = $logger;
+        $this->catalogItemMessageBuilder = $catalogItemMessageBuilder;
     }
 
     /**
@@ -74,14 +73,15 @@ class Consumer
     /**
      * Collect catalog data. Structure by entity type and scope
      *
-     * @param array $entities
+     * @param array $messages
      * @return array
      */
-    private function collectDataByEntityTypeAnsScope(array $entities): array
+    private function collectDataByEntityTypeAnsScope(array $messages): array
     {
         $dataPerType = [];
-        foreach ($entities as $entity) {
-            $entityData = $this->serializer->unserialize($entity->getEntityData());
+        foreach ($messages as $message) {
+            $entity = $this->catalogItemMessageBuilder->build($message);
+            $entityData = $entity->getEntityData();
             $entityData['id'] = $entity->getEntityId();
             $entityData['store_id'] = $entity->getStoreId();
             $dataPerType[$entity->getEntityType()][$entity->getStoreId()][] = $entityData;

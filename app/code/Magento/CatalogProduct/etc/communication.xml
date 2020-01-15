@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
-    <topic name="catalog_storefront_connector.sync" request="Magento\CatalogProduct\Model\MessageBus\CatalogItemMessage[]" />
+    <topic name="storefront.catalog.data.consume" request="string[]" />
 </config>

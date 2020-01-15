@@ -7,6 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
     <exchange name="magento-db" type="topic" connection="db">
-        <binding id="sync" topic="catalog_storefront_connector.sync" destinationType="queue" destination="catalog_storefront_connector.sync"/>
+        <binding id="sync" topic="storefront.catalog.data.consume" destinationType="queue" destination="storefront.catalog.data.consume"/>
     </exchange>
 </config>
