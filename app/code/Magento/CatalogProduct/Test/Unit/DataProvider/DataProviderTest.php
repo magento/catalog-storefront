@@ -64,6 +64,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     public function testDataProvider(array $attributes, array $expectedAttributes): void
     {
         $productId = 42;
+        $expectedAttributes['type_id'] = 'simple';
         $expectedAttributes = [$productId => $expectedAttributes];
         $this->objectManagerMock->expects($this->atLeastOnce())->method('get')->willReturn(new DataProviderStub);
         $actual = $this->dataProvider->fetch([$productId], $attributes, []);
@@ -77,7 +78,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     {
         $productId1 = 42;
         $productId2 = 24;
-        $expectedAttributes = [$productId1 => [], $productId2 => []];
+        $expectedAttributes = [$productId1 => ['type_id' => 'simple'], $productId2 => ['type_id' => 'simple']];
         $this->objectManagerMock->expects($this->atLeastOnce())->method('get')->willReturn(new DataProviderStub);
         $actual = $this->dataProvider->fetch([$productId1, $productId2], [], []);
         $this->assertEquals($expectedAttributes, $actual);

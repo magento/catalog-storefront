@@ -6,7 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
-    <topic name="storefront.collect.updated.products.data" request="Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface"/>
-    <topic name="storefront.collect.updated.categories.data" request="Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface"/>
-    <topic name="storefront.collect.update.entities.data" request="Magento\CatalogStorefrontConnector\Model\Data\UpdateEntitiesDataInterface[]"/>
+    <topic name="storefront.catalog.product.update" request="Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface"/>
+    <topic name="storefront.catalog.category.update" request="Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface"/>
 </config>

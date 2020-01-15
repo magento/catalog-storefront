@@ -5,12 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogStorefrontConnector\Model\Data;
+namespace Magento\CatalogProduct\Model\MessageBus;
 
 /**
- * Data object for collect updated entities data
+ * DTO represent catalog item data stored in Message Bus
  */
-class UpdateEntitiesData implements UpdateEntitiesDataInterface
+class CatalogItemMessage
 {
     /**
      * @var string
@@ -28,7 +28,7 @@ class UpdateEntitiesData implements UpdateEntitiesDataInterface
     private $storeId;
 
     /**
-     * @var string
+     * @var array
      */
     private $entityData;
 
@@ -36,9 +36,9 @@ class UpdateEntitiesData implements UpdateEntitiesDataInterface
      * @param string $entityType
      * @param int $entityId
      * @param int $storeId
-     * @param string $entityData
+     * @param array $entityData
      */
-    public function __construct(string $entityType, int $entityId, int $storeId, string $entityData)
+    public function __construct(string $entityType, int $entityId, int $storeId, array $entityData)
     {
         $this->entityType = $entityType;
         $this->entityId = $entityId;
@@ -47,7 +47,9 @@ class UpdateEntitiesData implements UpdateEntitiesDataInterface
     }
 
     /**
-     * @inheritdoc
+     * Get entity type
+     *
+     * @return string
      */
     public function getEntityType(): string
     {
@@ -55,7 +57,9 @@ class UpdateEntitiesData implements UpdateEntitiesDataInterface
     }
 
     /**
-     * @inheritdoc
+     * Get entity ID
+     *
+     * @return int
      */
     public function getEntityId(): int
     {
@@ -63,7 +67,9 @@ class UpdateEntitiesData implements UpdateEntitiesDataInterface
     }
 
     /**
-     * @inheritdoc
+     * Get store ID
+     *
+     * @return int
      */
     public function getStoreId(): int
     {
@@ -71,9 +77,11 @@ class UpdateEntitiesData implements UpdateEntitiesDataInterface
     }
 
     /**
-     * @inheritdoc
+     * Get entity data
+     *
+     * @return array
      */
-    public function getEntityData(): string
+    public function getEntityData(): array
     {
         return $this->entityData;
     }

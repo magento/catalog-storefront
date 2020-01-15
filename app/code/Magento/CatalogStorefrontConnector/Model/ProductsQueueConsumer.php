@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogStorefrontConnector\Model;
 
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -17,9 +17,9 @@ use Magento\Store\Model\StoreManagerInterface;
 class ProductsQueueConsumer
 {
     /**
-     * @var Collection
+     * @var CollectionFactory
      */
-    private $productsCollection;
+    private $productsCollectionFactory;
 
     /**
      * @var ProductPublisher
@@ -33,15 +33,15 @@ class ProductsQueueConsumer
 
     /**
      * @param ProductPublisher $productPublisher
-     * @param Collection $productsCollection
+     * @param CollectionFactory $productsCollectionFactory
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ProductPublisher $productPublisher,
-        Collection $productsCollection,
+        CollectionFactory $productsCollectionFactory,
         StoreManagerInterface $storeManager
     ) {
-        $this->productsCollection = $productsCollection;
+        $this->productsCollectionFactory = $productsCollectionFactory;
         $this->productPublisher = $productPublisher;
         $this->storeManager = $storeManager;
     }
@@ -49,8 +49,8 @@ class ProductsQueueConsumer
     /**
      * Process collected product IDs for update
      *
-     * Process messages from storefront.collect.updated.products.data topic
-     * and publish new messages to storefront.collect.update.entities.data topic
+     * Process messages from storefront.catalog.product.update topic
+     * and publish new messages to storefront.catalog.data.consume
      *
      * @param UpdatedEntitiesDataInterface[] $messages
      * @return void
@@ -75,7 +75,7 @@ class ProductsQueueConsumer
     {
         $result = [];
         $storesProductIds = [];
-        /** @var \Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesData $reindexProductsData */
+        /** @var \Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesData $updatedProductsData */
         foreach ($messages as $updatedProductsData) {
             $storeId = $updatedProductsData->getStoreId();
             if (empty($updatedProductsData->getProductIds())) {
@@ -112,16 +112,10 @@ class ProductsQueueConsumer
      */
     private function getAllProductIdsForStore(int $storeId): array
     {
-        $storeProductIds = [];
-        $lastProductId = 0;
         $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
-        $this->productsCollection->addWebsiteFilter($websiteId);
+        $productsCollection = $this->productsCollectionFactory->create();
+        $productsCollection->addWebsiteFilter($websiteId);
 
-        while ($productIds = $this->productsCollection->getAllIds($this->batchSize, $lastProductId)) {
-            $lastProductId = \end($productIds);
-            $storeProductIds = \array_merge($storeProductIds, $productIds);
-        }
-
-        return $storeProductIds;
+        return $productsCollection->getAllIds();
     }
 }

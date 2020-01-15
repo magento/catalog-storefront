@@ -6,14 +6,12 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
-    <exchange name="magento" type="topic" connection="amqp">
-        <binding id="updatedProductsBinding" topic="storefront.collect.updated.products.data" destinationType="queue" destination="storefront.products.updated"/>
-        <binding id="updatedCategoriesBinding" topic="storefront.collect.updated.categories.data" destinationType="queue" destination="storefront.categories.updated"/>
-        <binding id="updateEntitiesBinding" topic="storefront.collect.update.entities.data" destinationType="queue" destination="storefront.entities.update"/>
-    </exchange>
     <exchange name="magento-db" type="topic" connection="db">
-        <binding id="updatedProductsBinding" topic="storefront.collect.updated.products.data" destinationType="queue" destination="storefront.products.updated"/>
-        <binding id="updatedCategoriesBinding" topic="storefront.collect.updated.categories.data" destinationType="queue" destination="storefront.categories.updated"/>
-        <binding id="updateEntitiesBinding" topic="storefront.collect.update.entities.data" destinationType="queue" destination="storefront.entities.update"/>
+        <binding id="updatedProductsBinding" topic="storefront.catalog.product.update" destinationType="queue" destination="storefront.catalog.connector"/>
+        <binding id="updatedCategoriesBinding" topic="storefront.catalog.category.update" destinationType="queue" destination="storefront.catalog.connector"/>
+    </exchange>
+    <exchange name="magento" type="topic" connection="amqp">
+        <binding id="updatedProductsBinding" topic="storefront.catalog.product.update" destinationType="queue" destination="storefront.catalog.connector"/>
+        <binding id="updatedCategoriesBinding" topic="storefront.catalog.category.update" destinationType="queue" destination="storefront.catalog.connector"/>
     </exchange>
 </config>

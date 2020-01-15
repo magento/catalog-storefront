@@ -55,6 +55,6 @@ class Document implements EntryInterface
      */
     public function getVariants(): EntryIteratorInterface
     {
-        return $this->data['variants'];
+        return $this->data['variants'] ?? [];
     }
 }

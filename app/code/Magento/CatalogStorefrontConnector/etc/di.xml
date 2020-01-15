@@ -7,7 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface" type="Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesData"/>
-    <preference for="Magento\CatalogStorefrontConnector\Model\Data\UpdateEntitiesDataInterface" type="Magento\CatalogStorefrontConnector\Model\Data\UpdateEntitiesData"/>
     <type name="Magento\CatalogSearch\Model\Indexer\Fulltext">
         <plugin name="collectDataForStorefrontApplication" type="Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataForUpdate" />
     </type>
@@ -17,8 +16,8 @@
     <type name="Magento\Framework\MessageQueue\MergerFactory">
         <arguments>
             <argument name="mergers" xsi:type="array">
-                <item name="storefront_products_consumer" xsi:type="string">Magento\CatalogStorefrontConnector\Model\Merger</item>
-                <item name="storefront_categories_consumer" xsi:type="string">Magento\CatalogStorefrontConnector\Model\Merger</item>
+                <item name="storefront.catalog.product.update" xsi:type="string">Magento\CatalogStorefrontConnector\Model\Merger</item>
+                <item name="storefront.catalog.category.update" xsi:type="string">Magento\CatalogStorefrontConnector\Model\Merger</item>
             </argument>
         </arguments>
     </type>

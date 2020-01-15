@@ -25,11 +25,6 @@ class ElasticsearchCommand implements CommandInterface
     /**#@-*/
 
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
      * @var ConnectionPull
      */
     private $connectionPull;
@@ -37,14 +32,11 @@ class ElasticsearchCommand implements CommandInterface
     /**
      * Initialize Elasticsearch Client
      *
-     * @param Config $config
      * @param ConnectionPull $connectionPull
      */
     public function __construct(
-        Config $config,
         ConnectionPull $connectionPull
     ) {
-        $this->config = $config;
         $this->connectionPull = $connectionPull;
     }
 
@@ -108,7 +100,7 @@ class ElasticsearchCommand implements CommandInterface
             $bulkArray['body'][] = [
                 $action => $metaInfo
             ];
-            if ($action == self::BULK_ACTION_INDEX) {
+            if ($action === self::BULK_ACTION_INDEX) {
                 $bulkArray['body'][] = $document;
             }
         }
