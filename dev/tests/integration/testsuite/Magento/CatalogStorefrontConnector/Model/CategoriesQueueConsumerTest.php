@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Model;
 
+use Magento\Catalog\Model\CategoryRepository;
+use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Framework\MessageQueue\QueueRepository;
 use Magento\Indexer\Model\Indexer;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -14,6 +16,7 @@ use Magento\TestFramework\MessageQueue\EnvironmentPreconditionException;
 use Magento\TestFramework\MessageQueue\PublisherConsumerController;
 use Magento\TestFramework\MessageQueue\PreconditionFailedException;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Framework\MessageQueue\QueueInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -47,6 +50,16 @@ class CategoriesQueueConsumerTest extends TestCase
     private $queueRepository;
 
     /**
+     * @var CategoryRepository
+     */
+    private $categoryRepository;
+
+    /**
+     * @var Category
+     */
+    private $categoryResource;
+
+    /**
      * @var array
      */
     private $consumers = ['storefront.catalog.category.update'];
@@ -66,12 +79,10 @@ class CategoriesQueueConsumerTest extends TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->jsonHelper = $this->objectManager->create(JsonHelper::class);
-        $this->indexer = Bootstrap::getObjectManager()->create(
-            Indexer::class
-        );
-        $this->queueRepository = Bootstrap::getObjectManager()->create(
-            QueueRepository::class
-        );
+        $this->indexer = Bootstrap::getObjectManager()->create(Indexer::class);
+        $this->queueRepository = Bootstrap::getObjectManager()->create(QueueRepository::class);
+        $this->categoryRepository = $this->objectManager->get(CategoryRepository::class);
+        $this->categoryResource = $this->objectManager->get(Category::class);
         $this->publisherConsumerController = Bootstrap::getObjectManager()->create(
             PublisherConsumerController::class,
             [
@@ -81,6 +92,17 @@ class CategoriesQueueConsumerTest extends TestCase
                 'appInitParams' => Bootstrap::getInstance()->getAppInitParams()
             ]
         );
+        /** @var PublisherConsumerController $storefrontSyncConnector */
+        $storefrontSyncConnector = Bootstrap::getObjectManager()->create(
+            PublisherConsumerController::class,
+            [
+                'consumers' => ['storefront.catalog.data.consume'],
+                'logFilePath' => '',
+                'maxMessages' => null,
+                'appInitParams' => Bootstrap::getInstance()->getAppInitParams()
+            ]
+        );
+        $storefrontSyncConnector->stopConsumers();
         $this->initPublisherController();
     }
 
@@ -95,14 +117,16 @@ class CategoriesQueueConsumerTest extends TestCase
      */
     public function testMessageReading(array $expectedData)
     {
+        $category = $this->categoryRepository->get(333, 1);
+        $category->setName('Category New Name');
+        $this->categoryResource->save($category);
         $this->reindex();
-        $queue = $this->queueRepository->get('amqp', 'storefront.entities.update');
+        $queue = $this->queueRepository->get('amqp', 'storefront.catalog.data.consume');
         $queueBody = $this->waitForAsynchronousResult($queue);
         $parsedData = $this->jsonHelper->jsonDecode($queueBody);
-        $parsedData = array_pop($parsedData);
-        $entityData = $this->jsonHelper->jsonDecode($parsedData['entity_data']);
+        $parsedData = $this->jsonHelper->jsonDecode(array_pop($parsedData));
 
-        foreach ($entityData as $attributeKey => $attributeValue) {
+        foreach ($parsedData['entity_data'] as $attributeKey => $attributeValue) {
             $this->assertEquals($expectedData[$attributeKey], $attributeValue);
         }
     }
@@ -126,7 +150,7 @@ class CategoriesQueueConsumerTest extends TestCase
                     'is_active' => '1',
                     'is_anchor' => '1',
                     'include_in_menu' => '1',
-                    'name' => 'Category 1',
+                    'name' => 'Category New Name',
                     'default_sort_by' => 'name',
                     'url_key' => 'category-1',
                     'url_path' => 'category-1',
@@ -142,9 +166,10 @@ class CategoriesQueueConsumerTest extends TestCase
     /**
      * Wait for queue message will be available
      *
-     * \Magento\Framework\MessageQueue\QueueInterface $queue
+     * @param QueueInterface $queue
+     * @return string|null
      */
-    private function waitForAsynchronousResult($queue)
+    private function waitForAsynchronousResult(QueueInterface $queue)
     {
         $queueBody = null;
         $i = 0;
@@ -166,7 +191,7 @@ class CategoriesQueueConsumerTest extends TestCase
     /**
      * Get message body if exists
      *
-     * @param \Magento\Framework\MessageQueue\QueueInterface $queue
+     * @param QueueInterface $queue
      * @return string|null
      */
     public function getMessageBody($queue)

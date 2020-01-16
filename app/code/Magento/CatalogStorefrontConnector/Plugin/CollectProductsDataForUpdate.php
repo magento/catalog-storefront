@@ -12,6 +12,7 @@ use Magento\CatalogStorefrontConnector\Model\UpdatedEntitiesMessageBuilder;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Store\Model\StoreDimensionProvider;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
+use Psr\Log\LoggerInterface;
 
 /**
  * Plugin for collect products data during reindex
@@ -39,18 +40,26 @@ class CollectProductsDataForUpdate
     private $fulltextResource;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param PublisherInterface $queuePublisher
      * @param UpdatedEntitiesMessageBuilder $messageBuilder
      * @param FulltextResource $fulltextResource
+     * @param LoggerInterface $logger
      */
     public function __construct(
         PublisherInterface $queuePublisher,
         UpdatedEntitiesMessageBuilder $messageBuilder,
-        FulltextResource $fulltextResource
+        FulltextResource $fulltextResource,
+        LoggerInterface $logger
     ) {
         $this->queuePublisher = $queuePublisher;
         $this->messageBuilder = $messageBuilder;
         $this->fulltextResource = $fulltextResource;
+        $this->logger = $logger;
     }
 
     /**
@@ -80,6 +89,10 @@ class CollectProductsDataForUpdate
         }
         $storeId = (int)$dimensions[StoreDimensionProvider::DIMENSION_NAME]->getValue();
         $message = $this->messageBuilder->build($storeId, $productIds);
-        $this->queuePublisher->publish(self::QUEUE_TOPIC, $message);
+        try {
+            $this->queuePublisher->publish(self::QUEUE_TOPIC, $message);
+        } catch (\Throwable $e) {
+            $this->logger->critical($e->getMessage());
+        }
     }
 }

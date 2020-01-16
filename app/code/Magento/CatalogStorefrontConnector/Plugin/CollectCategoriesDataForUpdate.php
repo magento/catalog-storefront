@@ -10,6 +10,7 @@ namespace Magento\CatalogStorefrontConnector\Plugin;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogStorefrontConnector\Model\UpdatedEntitiesMessageBuilder;
 use Magento\Framework\MessageQueue\PublisherInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Plugin for collect category data during saving process
@@ -32,15 +33,23 @@ class CollectCategoriesDataForUpdate
     private $messageBuilder;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param PublisherInterface $queuePublisher
      * @param UpdatedEntitiesMessageBuilder $messageBuilder
+     * @param LoggerInterface $logger
      */
     public function __construct(
         PublisherInterface $queuePublisher,
-        UpdatedEntitiesMessageBuilder $messageBuilder
+        UpdatedEntitiesMessageBuilder $messageBuilder,
+        LoggerInterface $logger
     ) {
         $this->queuePublisher = $queuePublisher;
         $this->messageBuilder = $messageBuilder;
+        $this->logger = $logger;
     }
 
     /**
@@ -60,7 +69,11 @@ class CollectCategoriesDataForUpdate
             $storeId = (int)$storeId;
             if ($storeId !== 0) {
                 $message = $this->messageBuilder->build($storeId, [$entityId]);
-                $this->queuePublisher->publish(self::QUEUE_TOPIC, $message);
+                try {
+                    $this->queuePublisher->publish(self::QUEUE_TOPIC, $message);
+                } catch (\Throwable $e) {
+                    $this->logger->critical($e->getMessage());
+                }
             }
         }
     }
