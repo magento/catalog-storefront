@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Command;
 
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\CatalogStorefrontConnector\Model\Publisher\CategoryPublisher;
 use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 use Magento\Store\Model\StoreManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -44,7 +46,7 @@ class Sync extends Command
     private $productPublisher;
 
     /**
-     * @var CollectionFactory
+     * @var ProductCollectionFactory
      */
     private $productsCollectionFactory;
 
@@ -54,18 +56,34 @@ class Sync extends Command
     private $storeManager;
 
     /**
+     * @var CategoryPublisher
+     */
+    private $categoryPublisher;
+
+    /**
+     * @var CategoryCollectionFactory
+     */
+    private $categoryCollectionFactory;
+
+    /**
      * @param ProductPublisher $productPublisher
-     * @param CollectionFactory $productsCollectionFactory
+     * @param CategoryPublisher $categoryPublisher
+     * @param ProductCollectionFactory $productsCollectionFactory
+     * @param CategoryCollectionFactory $categoryCollectionFactory
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ProductPublisher $productPublisher,
-        CollectionFactory $productsCollectionFactory,
+        CategoryPublisher $categoryPublisher,
+        ProductCollectionFactory $productsCollectionFactory,
+        CategoryCollectionFactory $categoryCollectionFactory,
         StoreManagerInterface $storeManager
     ) {
         parent::__construct();
         $this->productPublisher = $productPublisher;
+        $this->categoryPublisher = $categoryPublisher;
         $this->productsCollectionFactory = $productsCollectionFactory;
+        $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->storeManager = $storeManager;
     }
 
@@ -91,9 +109,9 @@ class Sync extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<info>' . 'Start product sync' . '</info>');
+        $output->writeln('<info>' . 'Start catalog data sync' . '</info>');
 
-        // TODO: clean product ids from storefront.catalog.product.update topic
+        // TODO: clean product ids from storefront.catalog.category.update topic
         foreach ($this->storeManager->getStores() as $store) {
             $lastProductId = 0;
             $productCollection = $this->productsCollectionFactory->create();
@@ -103,7 +121,16 @@ class Sync extends Command
                 $lastProductId = \end($productIds);
                 $this->productPublisher->publish($productIds, (int)$store->getId());
             }
+
+            $categoryCollection = $this->categoryCollectionFactory->create();
+            $categoryCollection->setStore($store->getId());
+
+            $categoryIds = $categoryCollection->getAllIds($this->getBatchSize($input));
+            $this->categoryPublisher->publish($categoryIds, (int)$store->getId());
         }
+
+        $output->writeln('<info>' . 'End catalog data sync' . '</info>');
+
     }
 
     /**

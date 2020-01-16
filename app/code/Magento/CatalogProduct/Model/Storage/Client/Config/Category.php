@@ -12,14 +12,14 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
- * Product entity type config.
+ * Category entity type config.
  */
-class Product implements NestedEntityConfigInterface
+class Category implements NestedEntityConfigInterface
 {
     /**
      * Entity name. Used to hold configuration for specific entity type and as a part of the storage name
      */
-    public const ENTITY_NAME = 'product';
+    public const ENTITY_NAME = 'category';
 
     /**#@+
      * Text flags for Elasticsearch relation actions.

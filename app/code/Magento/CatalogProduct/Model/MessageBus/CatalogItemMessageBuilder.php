@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogProduct\Model\MessageBus;
 
+use Magento\CatalogProduct\Model\Storage\Client\Config\Category;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\CatalogProduct\Model\Storage\Client\Config\Product;
 
@@ -78,7 +79,7 @@ class CatalogItemMessageBuilder
             );
         }
 
-        if (!\in_array($message['entity_type'], [Product::ENTITY_NAME], true)) {
+        if (!\in_array($message['entity_type'], [Product::ENTITY_NAME, Category::ENTITY_NAME], true)) {
             throw new \LogicException(\sprintf('Entity type "%s" is not supported', $message['entity_type']));
         }
     }
