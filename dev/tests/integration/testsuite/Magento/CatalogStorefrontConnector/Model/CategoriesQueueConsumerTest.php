@@ -125,7 +125,7 @@ class CategoriesQueueConsumerTest extends TestCase
      */
     public function testMessageReading(array $expectedData)
     {
-        $this->catalogDataConsumer->stopConsumers();
+        $this->stopCatalogDataConsumers();
         $category = $this->categoryRepository->get(333, 1);
         $category->setName('Category New Name');
         $this->categoryResource->save($category);
@@ -237,6 +237,18 @@ class CategoriesQueueConsumerTest extends TestCase
             $this->fail(
                 $e->getMessage()
             );
+        }
+    }
+
+    /**
+     * Stop all running Catalog Data Consumers
+     *
+     * Made in loop as Magento installation and preconditions can run this consumer more that once
+     */
+    private function stopCatalogDataConsumers()
+    {
+        for ($i = 0; $i <= 3; $i++) {
+            $this->catalogDataConsumer->stopConsumers();
         }
     }
 
