@@ -35,6 +35,7 @@
                     <item name="canonical_url" xsi:type="string">canonical_url</item>
                     <item name="description" xsi:type="string">description</item>
                     <item name="short_description" xsi:type="string">short_description</item>
+                    <item name="options" xsi:type="string">options</item>
                 </item>
                 <item name="ConfigurableProduct" xsi:type="array">
                     <item name="variants" xsi:type="string">variants</item>

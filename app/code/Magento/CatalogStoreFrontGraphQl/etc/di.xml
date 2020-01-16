@@ -19,7 +19,6 @@
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\Websites" type="Magento\CatalogStoreFrontGraphQl\Resolver\Deprecated\Websites"/>
     <preference for="Magento\CatalogCmsGraphQl\Model\Resolver\Category\Block" type="Magento\CatalogStoreFrontGraphQl\Resolver\Deprecated\Category\Block"/>
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Category\Image" type="Magento\CatalogStoreFrontGraphQl\Resolver\Deprecated\Category\Image"/>
-    <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\Options" type="Magento\CatalogStoreFrontGraphQl\Resolver\Deprecated\Options"/>
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\PriceRange" type="Magento\CatalogStoreFrontGraphQl\Resolver\Deprecated\PriceRange"/>
     <preference for="Magento\RelatedProductGraphQl\Model\Resolver\Batch\RelatedProducts" type="Magento\CatalogStoreFrontGraphQl\Resolver\Deprecated\RelatedProducts\RelatedProducts"/>
     <preference for="Magento\RelatedProductGraphQl\Model\Resolver\Batch\CrossSellProducts" type="Magento\CatalogStoreFrontGraphQl\Resolver\Deprecated\RelatedProducts\CrossSellProducts"/>
