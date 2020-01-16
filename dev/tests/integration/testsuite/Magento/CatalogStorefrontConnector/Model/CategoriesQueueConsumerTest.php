@@ -21,7 +21,10 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for CategoriesQueueConsumer class
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+
 class CategoriesQueueConsumerTest extends TestCase
 {
     /**
@@ -32,7 +35,12 @@ class CategoriesQueueConsumerTest extends TestCase
     /**
      * @var PublisherConsumerController
      */
-    private $publisherConsumerController;
+    private $publisherConsumer;
+
+    /**
+     * @var PublisherConsumerController
+     */
+    private $catalogDataConsumer;
 
     /**
      * @var JsonHelper
@@ -83,7 +91,7 @@ class CategoriesQueueConsumerTest extends TestCase
         $this->queueRepository = Bootstrap::getObjectManager()->create(QueueRepository::class);
         $this->categoryRepository = $this->objectManager->get(CategoryRepository::class);
         $this->categoryResource = $this->objectManager->get(Category::class);
-        $this->publisherConsumerController = Bootstrap::getObjectManager()->create(
+        $this->publisherConsumer = Bootstrap::getObjectManager()->create(
             PublisherConsumerController::class,
             [
                 'consumers' => $this->consumers,
@@ -93,7 +101,7 @@ class CategoriesQueueConsumerTest extends TestCase
             ]
         );
         /** @var PublisherConsumerController $storefrontSyncConnector */
-        $storefrontSyncConnector = Bootstrap::getObjectManager()->create(
+        $this->catalogDataConsumer = Bootstrap::getObjectManager()->create(
             PublisherConsumerController::class,
             [
                 'consumers' => ['storefront.catalog.data.consume'],
@@ -102,12 +110,12 @@ class CategoriesQueueConsumerTest extends TestCase
                 'appInitParams' => Bootstrap::getInstance()->getAppInitParams()
             ]
         );
-        $storefrontSyncConnector->stopConsumers();
         $this->initPublisherController();
     }
 
     /**
      * @magentoAppArea adminhtml
+     * @magentoAppIsolation enabled
      * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
      * @dataProvider categoryAttributesProvider
@@ -117,6 +125,7 @@ class CategoriesQueueConsumerTest extends TestCase
      */
     public function testMessageReading(array $expectedData)
     {
+        $this->catalogDataConsumer->stopConsumers();
         $category = $this->categoryRepository->get(333, 1);
         $category->setName('Category New Name');
         $this->categoryResource->save($category);
@@ -179,7 +188,7 @@ class CategoriesQueueConsumerTest extends TestCase
                 [$this, 'getMessageBody'],
                 [$queue]
             );
-        } while (!$queueBody && ($i++ < 180));
+        } while (!$queueBody && ($i++ < 50));
 
         if (!$queueBody) {
             $this->fail('No asynchronous messages were processed.');
@@ -221,7 +230,7 @@ class CategoriesQueueConsumerTest extends TestCase
     private function initPublisherController()
     {
         try {
-            $this->publisherConsumerController->initialize();
+            $this->publisherConsumer->initialize();
         } catch (EnvironmentPreconditionException $e) {
             $this->markTestSkipped($e->getMessage());
         } catch (PreconditionFailedException $e) {
@@ -236,7 +245,7 @@ class CategoriesQueueConsumerTest extends TestCase
      */
     public function tearDown()
     {
-        $this->publisherConsumerController->stopConsumers();
+        $this->publisherConsumer->stopConsumers();
 
         parent::tearDown();
     }
