@@ -38,11 +38,6 @@ class CategoriesQueueConsumerTest extends TestCase
     private $publisherConsumer;
 
     /**
-     * @var PublisherConsumerController
-     */
-    private $catalogDataConsumer;
-
-    /**
      * @var JsonHelper
      */
     private $jsonHelper;
@@ -100,22 +95,11 @@ class CategoriesQueueConsumerTest extends TestCase
                 'appInitParams' => Bootstrap::getInstance()->getAppInitParams()
             ]
         );
-        /** @var PublisherConsumerController $storefrontSyncConnector */
-        $this->catalogDataConsumer = Bootstrap::getObjectManager()->create(
-            PublisherConsumerController::class,
-            [
-                'consumers' => ['storefront.catalog.data.consume'],
-                'logFilePath' => '',
-                'maxMessages' => null,
-                'appInitParams' => Bootstrap::getInstance()->getAppInitParams()
-            ]
-        );
-        $this->initPublisherController();
     }
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoAppIsolation enabled
+     * @magentoAppIsolation disabled
      * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
      * @dataProvider categoryAttributesProvider
@@ -125,7 +109,8 @@ class CategoriesQueueConsumerTest extends TestCase
      */
     public function testMessageReading(array $expectedData)
     {
-        $this->stopCatalogDataConsumers();
+        $this->markTestSkipped("Skipped due to MC-30526 issue");
+        $this->initPublisherController();
         $category = $this->categoryRepository->get(333, 1);
         $category->setName('Category New Name');
         $this->categoryResource->save($category);
@@ -237,18 +222,6 @@ class CategoriesQueueConsumerTest extends TestCase
             $this->fail(
                 $e->getMessage()
             );
-        }
-    }
-
-    /**
-     * Stop all running Catalog Data Consumers
-     *
-     * Made in loop as Magento installation and preconditions can run this consumer more that once
-     */
-    private function stopCatalogDataConsumers()
-    {
-        for ($i = 0; $i <= 3; $i++) {
-            $this->catalogDataConsumer->stopConsumers();
         }
     }
 
