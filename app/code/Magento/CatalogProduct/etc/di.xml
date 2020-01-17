@@ -60,6 +60,7 @@
     <type name="Magento\CatalogProduct\Model\ProductSearch">
         <arguments>
             <argument name="search" xsi:type="object">Magento\CatalogProduct\Framework\Search\Search</argument>
+            <argument name="dataProvider" xsi:type="object">\Magento\CatalogProduct\DataProvider\ProductDataProvider</argument>
         </arguments>
     </type>
 

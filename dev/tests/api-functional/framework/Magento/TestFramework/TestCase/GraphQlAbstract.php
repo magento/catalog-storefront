@@ -6,15 +6,107 @@
 namespace Magento\TestFramework\TestCase;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\App\Request\Http;
+use Magento\Framework\MessageQueue\PublisherInterface;
+use Magento\TestFramework\MessageQueue\PublisherConsumerController;
+use Magento\TestFramework\MessageQueue\EnvironmentPreconditionException;
+use Magento\TestFramework\MessageQueue\PreconditionFailedException;
 
-/**
- * Test case for Web API functional tests for Graphql.
- *
- * @SuppressWarnings(PHPMD.NumberOfChildren)
- */
+
 abstract class GraphQlAbstract extends WebapiAbstract
 {
+    /**
+     * @var string[]
+     */
+    protected $consumers = [];
+
+    /**
+     * @var PublisherInterface
+     */
+    private static $publisher;
+
+    /**
+     * @var string
+     */
+    private static $logFilePath = TESTS_TEMP_DIR . "/CatalogStorefrontMessageQueueTestLog.txt";
+
+    /**
+     * @var int|null
+     */
+    private static $maxMessages = 500;
+
+    /**
+     * @var PublisherConsumerController
+     */
+    protected static $publisherConsumerController;
+
+    /**
+     * Initialize fixture namespaces.
+     * //phpcs:disable
+     */
+    public static function setUpBeforeClass()
+    {
+        //phpcs:enable
+        parent::setUpBeforeClass();
+
+        $objectManager = Bootstrap::getObjectManager();
+        self::$publisherConsumerController = $objectManager->create(
+            PublisherConsumerController::class,
+            [
+                'consumers' => [
+                    'storefront.catalog.data.consume',
+                    'storefront.catalog.category.update',
+                    'storefront.catalog.product.update',
+                ],
+                'logFilePath' => self::$logFilePath,
+//                'maxMessages' => self::$maxMessages,
+                'appInitParams' => \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams()
+            ]
+        );
+
+        try {
+            self::$publisherConsumerController->initialize();
+        } catch (EnvironmentPreconditionException $e) {
+            self::markTestSkipped($e->getMessage());
+        } catch (PreconditionFailedException $e) {
+            self::fail(
+                $e->getMessage()
+            );
+        }
+        self::$publisher = self::$publisherConsumerController->getPublisher();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        self::$publisherConsumerController->stopConsumers();
+    }
+
+    /**
+     * Workaround for https://bugs.php.net/bug.php?id=72286
+     * phpcs:disable Magento2.Functions.StaticFunction
+     */
+    public static function tearDownAfterClass()
+    {
+        // phpcs:enable Magento2.Functions.StaticFunction
+        if (version_compare(phpversion(), '7') == -1) {
+            $closeConnection = new \ReflectionMethod(\Magento\Amqp\Model\Config::class, 'closeConnection');
+            $closeConnection->setAccessible(true);
+
+            $config = Bootstrap::getObjectManager()->get(\Magento\Amqp\Model\Config::class);
+            $closeConnection->invoke($config);
+        }
+    }
+
+    /**
+     * ============================================================================
+     * ||                                                                        ||
+     * ||  Magento\TestFramework\TestCase\GraphQlAbstract part of functionality: ||
+     * ||                                                                        ||
+     * ============================================================================
+     */
+
     /**
      * The instantiated GraphQL client.
      *
@@ -177,71 +269,6 @@ abstract class GraphQlAbstract extends WebapiAbstract
                 "Value of '{$responseField}' field in response does not match expected value: "
                 . var_export($expectedValue, true)
             );
-        }
-    }
-
-    /**
-     * Compare arrays recursively regardless of nesting.
-     *
-     * Can compare arrays that have both one level and n-level nesting.
-     * ```
-     *  [
-     * 'products' => [
-     *      'items' => [
-     *      [
-     *          'sku'       => 'bundle-product',
-     *          'type_id'   => 'bundle',
-     *          'items'     => [
-     *          [
-     *              'title'     => 'Bundle Product Items',
-     *              'sku'       => 'bundle-product',
-     *              'options'   => [
-     *              [
-     *                  'price' => 2.75,
-     *                  'label' => 'Simple Product',
-     *                  'product' => [
-     *                      'name'    => 'Simple Product',
-     *                      'sku'     => 'simple',
-     *                  ]
-     *              ]
-     *          ]
-     *      ]
-     *  ];
-     * ```
-     *
-     * @param array $actual
-     * @param array $expected
-     * @return void
-     */
-    public function compareArraysRecursively(array $actual, array $expected): void
-    {
-        $actualValues = \array_filter(
-            $actual,
-            function ($elem) {
-                return !\is_array($elem);
-            }
-        );
-        $expectedValues = \array_filter(
-            $expected,
-            function ($elem) {
-                return !\is_array($elem);
-            }
-        );
-
-        $existingActualValues = array_intersect_key($expectedValues, $actualValues);
-        $this->assertEquals($expectedValues, $existingActualValues, 'Expected value does not match actual one');
-
-        $expectedArrays = \array_filter($expected, 'is_array');
-
-        if (!empty($expectedArrays)) {
-            $actualArrays = \array_filter($actual, 'is_array');
-
-            foreach ($expectedArrays as $key => $data) {
-                if (!isset($actualArrays[$key])) {
-                    continue;
-                }
-                $this->compareArraysRecursively($actualArrays[$key], $data);
-            }
         }
     }
 }
