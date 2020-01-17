@@ -112,6 +112,12 @@ class DataProvider implements DataProviderInterface
     private function getDataProviders(array $attributes): array
     {
         $attributesProviderMap = [];
+        if (empty($attributes)) {
+            $attributesProviderMap[$this->defaultDataProvider] = [[]];
+            foreach ($this->dataProviders as $attributeName => $dataProvider) {
+                $attributesProviderMap[$dataProvider][] = [];
+            }
+        }
         foreach ($attributes as $attributeName => $attributeOutput) {
             if (false === \is_string($attributeName) && \is_string($attributeOutput)) {
                 $attributeName = $attributeOutput;

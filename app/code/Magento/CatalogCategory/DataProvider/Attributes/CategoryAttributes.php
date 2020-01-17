@@ -63,6 +63,9 @@ class CategoryAttributes
                 $this->categoryAttributeQueryBuilder->build($entityIds, $attributeCodes, $storeId)
             )
         );
+        foreach ($attributes as &$categoryAttributes) {
+            $categoryAttributes = \array_intersect_key($categoryAttributes, \array_flip($attributeCodes));
+        }
 
         return $attributes;
     }

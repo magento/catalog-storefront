@@ -9,6 +9,10 @@ namespace Magento\CatalogCategory\DataProvider\Query;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Indexer\DimensionFactory;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Build Select for product count query
@@ -24,29 +28,49 @@ class ProductsCountBuilder
      * @var ResourceConnection
      */
     private $resourceConnection;
+    /**
+     * @var IndexScopeResolverInterface
+     */
+    private $scopeResolver;
+    /**
+     * @var DimensionFactory
+     */
+    private $dimensionFactory;
 
     /**
      * @param Visibility $catalogProductVisibility
      * @param ResourceConnection $resourceConnection
+     * @param IndexScopeResolverInterface $scopeResolver
+     * @param DimensionFactory $dimensionFactory
      */
     public function __construct(
         Visibility $catalogProductVisibility,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        IndexScopeResolverInterface $scopeResolver,
+        DimensionFactory $dimensionFactory
     ) {
         $this->catalogProductVisibility = $catalogProductVisibility;
         $this->resourceConnection = $resourceConnection;
+        $this->scopeResolver = $scopeResolver;
+        $this->dimensionFactory = $dimensionFactory;
     }
 
     /**
      * Get query for retrieve count of products per category
      *
      * @param array $categoryIds
-     * @return \Magento\Framework\DB\Select
+     * @param int $storeId
+     * @return Select
      */
-    public function getQuery(array $categoryIds): \Magento\Framework\DB\Select
+    public function getQuery(array $categoryIds, int $storeId): Select
     {
         $connection = $this->resourceConnection->getConnection();
-        $categoryTable = $this->resourceConnection->getTableName('catalog_category_product_index');
+
+        $storeDimension = $this->dimensionFactory->create(
+            Store::ENTITY,
+            (string)$storeId
+        );
+        $categoryTable = $this->scopeResolver->resolve('catalog_category_product_index', [$storeDimension]);
 
         return $connection->select()
             ->from(

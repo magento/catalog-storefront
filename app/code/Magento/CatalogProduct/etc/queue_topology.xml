@@ -9,4 +9,7 @@
     <exchange name="magento-db" type="topic" connection="db">
         <binding id="sync" topic="storefront.catalog.data.consume" destinationType="queue" destination="storefront.catalog.data.consume"/>
     </exchange>
+    <exchange name="magento" type="topic" connection="amqp">
+        <binding id="sync" topic="storefront.catalog.data.consume" destinationType="queue" destination="storefront.catalog.data.consume"/>
+    </exchange>
 </config>

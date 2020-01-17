@@ -41,10 +41,15 @@ class Document implements EntryInterface
      */
     public function getData(string $field = '')
     {
+        // handle get/mget query when document was not found in index
+        if (isset($this->data['found']) && $this->data['found'] === false) {
+            return null;
+        }
+
         $result = $this->data['_source'];
 
         if ('' !== $field) {
-            $result = $result[$field];
+            $result = $result[$field] ?? null;
         }
 
         return $result;

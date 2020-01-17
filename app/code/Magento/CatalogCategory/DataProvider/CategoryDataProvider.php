@@ -9,6 +9,7 @@ namespace Magento\CatalogCategory\DataProvider;
 
 use Magento\CatalogCategory\DataProvider\Query\CategoriesBuilder;
 use Magento\CatalogCategory\DataProvider\Attributes\CategoryAttributes;
+use Magento\Catalog\Model\ResourceModel\Category\Attribute\CollectionFactory;
 use Magento\Framework\App\ResourceConnection;
 
 /**
@@ -16,6 +17,13 @@ use Magento\Framework\App\ResourceConnection;
  */
 class CategoryDataProvider implements DataProviderInterface
 {
+    /**
+     * Required attributes for category entity
+     */
+    private const REQUIRED_ATTRIBUTES = [
+        'id'
+    ];
+
     /**
      * @var CategoryAttributes
      */
@@ -32,18 +40,31 @@ class CategoryDataProvider implements DataProviderInterface
     private $categoriesBuilder;
 
     /**
+     * @var array
+     */
+    private $allAttributes;
+
+    /**
+     * @var CollectionFactory
+     */
+    private $attributeCollectionFactory;
+
+    /**
      * @param CategoryAttributes $categoryAttributes
      * @param ResourceConnection $resourceConnection
      * @param CategoriesBuilder $categoriesBuilder
+     * @param CollectionFactory $attributeCollectionFactory
      */
     public function __construct(
         CategoryAttributes $categoryAttributes,
         ResourceConnection $resourceConnection,
-        CategoriesBuilder $categoriesBuilder
+        CategoriesBuilder $categoriesBuilder,
+        CollectionFactory $attributeCollectionFactory
     ) {
         $this->categoryAttributes = $categoryAttributes;
         $this->resourceConnection = $resourceConnection;
         $this->categoriesBuilder = $categoriesBuilder;
+        $this->attributeCollectionFactory = $attributeCollectionFactory;
     }
 
     /**
@@ -93,9 +114,11 @@ class CategoryDataProvider implements DataProviderInterface
      */
     private function processAttributes(array $attributes)
     {
-        $attributes = array_keys($attributes);
+        $attributeCodes = empty($attributes)
+            ? $this->getAttributes()
+            : array_keys($attributes);
 
-        return array_unique($attributes, SORT_REGULAR);
+        return array_unique(array_merge($attributeCodes, self::REQUIRED_ATTRIBUTES), SORT_REGULAR);
     }
 
     /**
@@ -115,5 +138,25 @@ class CategoryDataProvider implements DataProviderInterface
         $categories = $connection->fetchAll($select);
 
         return $categories;
+    }
+
+    /**
+     * Get all category attributes that have to be indexed
+     *
+     * @return string[]
+     */
+    private function getAttributes(): array
+    {
+        if ($this->allAttributes === null) {
+            /** @var \Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection $categoryAttributes */
+            $categoryAttributes = $this->attributeCollectionFactory->create();
+
+            /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
+            foreach ($categoryAttributes->getItems() as $attribute) {
+                $this->allAttributes[] = $attribute->getAttributeCode();
+            }
+        }
+
+        return $this->allAttributes;
     }
 }

@@ -8,13 +8,13 @@ namespace Magento\CatalogStorefrontConnector\Model;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
-use Magento\CatalogStorefrontConnector\Model\Data\ReindexProductsDataInterface;
+use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Consumer processes messages with store front products data
  */
-class QueueConsumer
+class ProductsQueueConsumer
 {
     /**
      * @var CollectionFactory
@@ -49,10 +49,10 @@ class QueueConsumer
     /**
      * Process collected product IDs for update
      *
-     * Process messages from storefront.catalog.data.updates topic
-     * and publish new messages to storefront.collect.update.entities.data topic
+     * Process messages from storefront.catalog.product.update topic
+     * and publish new messages to storefront.catalog.data.consume
      *
-     * @param ReindexProductsDataInterface[] $messages
+     * @param UpdatedEntitiesDataInterface[] $messages
      * @return void
      * @throws \Exception
      */
@@ -75,21 +75,21 @@ class QueueConsumer
     {
         $result = [];
         $storesProductIds = [];
-        /** @var \Magento\CatalogStorefrontConnector\Model\Data\ReindexProductsData $reindexProductsData */
-        foreach ($messages as $reindexProductsData) {
-            $storeId = $reindexProductsData->getStoreId();
-            if (empty($reindexProductsData->getProductIds())) {
+        /** @var \Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesData $updatedProductsData */
+        foreach ($messages as $updatedProductsData) {
+            $storeId = $updatedProductsData->getStoreId();
+            if (empty($updatedProductsData->getEntityIds())) {
                 // full reindex
                 $storesProductIds[$storeId] = [];
             } elseif (isset($storesProductIds[$storeId]) && empty($storesProductIds[$storeId])) {
                 continue;
             } elseif (!isset($storesProductIds[$storeId])) {
-                $storesProductIds[$storeId] = $reindexProductsData->getProductIds();
+                $storesProductIds[$storeId] = $updatedProductsData->getEntityIds();
             } else {
                 // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $storesProductIds[$storeId] = array_merge(
                     $storesProductIds[$storeId],
-                    $reindexProductsData->getProductIds()
+                    $updatedProductsData->getEntityIds()
                 );
             }
         }

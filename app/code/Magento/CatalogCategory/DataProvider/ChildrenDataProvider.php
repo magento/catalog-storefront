@@ -16,6 +16,13 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 class ChildrenDataProvider implements DataProviderInterface
 {
     /**
+     * Children attributes
+     */
+    private const ATTRIBUTES = [
+        'children' => []
+    ];
+
+    /**
      * @var DataProvider
      */
     private $generalDataProvider;
@@ -56,7 +63,7 @@ class ChildrenDataProvider implements DataProviderInterface
     public function fetch(array $categoryIds, array $attributes, array $scope): array
     {
         $output = [];
-
+        $attributes = !empty($attributes) ? $attributes : self::ATTRIBUTES;
         $attributeName = key($attributes);
 
         $categoryFilter = ['entity_id' => [$categoryIds]];

@@ -6,7 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
-    <topic name="storefront.catalog.data.updates" request="Magento\CatalogStorefrontConnector\Model\Data\ReindexProductsDataInterface">
-        <handler name="storefront.catalog.data.updates" type="Magento\CatalogStorefrontConnector\Model\QueueConsumer" method="processMessages" />
-    </topic>
+    <topic name="storefront.catalog.product.update" request="Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface"/>
+    <topic name="storefront.catalog.category.update" request="Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface"/>
 </config>

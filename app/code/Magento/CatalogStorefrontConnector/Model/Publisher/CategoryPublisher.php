@@ -6,22 +6,23 @@
 
 namespace Magento\CatalogStorefrontConnector\Model\Publisher;
 
-use Magento\CatalogProduct\DataProvider\DataProviderInterface;
+use Magento\CatalogCategory\DataProvider\DataProviderInterface;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Framework\MessageQueue\PublisherInterface;
 
 /**
- * Product publisher
+ * Category publisher
  *
- * Push product data for given product ids and store id to the Message Bus
+ * Push product data for given category ids and store id to the Message Bus
  * with topic storefront.catalog.data.consume
  */
-class ProductPublisher
+class CategoryPublisher
 {
     /**
      * @var DataProviderInterface
      */
-    private $productsDataProvider;
+    private $categoriesDataProvider;
 
     /**
      * @var CatalogItemMessageBuilder
@@ -49,20 +50,20 @@ class ProductPublisher
     private $state;
 
     /**
-     * @param DataProviderInterface $productsDataProvider
+     * @param DataProviderInterface $categoriesDataProvider
      * @param CatalogItemMessageBuilder $messageBuilder
      * @param PublisherInterface $queuePublisher
      * @param State $state
      * @param int $batchSize
      */
     public function __construct(
-        DataProviderInterface $productsDataProvider,
+        DataProviderInterface $categoriesDataProvider,
         CatalogItemMessageBuilder $messageBuilder,
         PublisherInterface $queuePublisher,
         State $state,
         int $batchSize
     ) {
-        $this->productsDataProvider = $productsDataProvider;
+        $this->categoriesDataProvider = $categoriesDataProvider;
         $this->messageBuilder = $messageBuilder;
         $this->queuePublisher = $queuePublisher;
         $this->batchSize = $batchSize;
@@ -72,28 +73,30 @@ class ProductPublisher
     /**
      * Publish new messages to storefront.catalog.data.consume topic
      *
-     * @param array $productIds
+     * @param array $categoryIds
      * @param int $storeId
      * @return void
      * @throws \Exception
      */
-    public function publish(array $productIds, int $storeId): void
+    public function publish(array $categoryIds, int $storeId): void
     {
         $this->state->emulateAreaCode(
-            \Magento\Framework\App\Area::AREA_FRONTEND,
-            function () use ($productIds, $storeId) {
-                foreach (\array_chunk($productIds, $this->batchSize) as $idsBunch) {
+            Area::AREA_FRONTEND,
+            function () use ($categoryIds, $storeId) {
+                foreach (\array_chunk($categoryIds, $this->batchSize) as $idsBunch) {
                     $messages = [];
-                    $productsData = $this->productsDataProvider->fetch($idsBunch, [], ['store' => $storeId]);
-                    foreach ($productsData as $product) {
+                    $categoriesData = $this->categoriesDataProvider->fetch($idsBunch, [], ['store' => $storeId]);
+                    foreach ($categoriesData as $category) {
                         $messages[] = $this->messageBuilder->build(
                             $storeId,
-                            'product',
-                            (int)$product['entity_id'],
-                            $product
+                            'category',
+                            (int)$category['id'],
+                            $category
                         );
                     }
-                    $this->queuePublisher->publish(self::TOPIC_NAME, $messages);
+                    if (!empty($messages)) {
+                        $this->queuePublisher->publish(self::TOPIC_NAME, $messages);
+                    }
                 }
             }
         );

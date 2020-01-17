@@ -8,23 +8,29 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefrontConnector\Plugin;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
-use Magento\CatalogStorefrontConnector\Model\ReindexMessageBuilder;
+use Magento\CatalogStorefrontConnector\Model\UpdatedEntitiesMessageBuilder;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Store\Model\StoreDimensionProvider;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
+use Psr\Log\LoggerInterface;
 
 /**
  * Plugin for collect products data during reindex
  */
-class CollectDataForUpdate
+class CollectProductsDataForUpdate
 {
+    /**
+     * Queue topic name
+     */
+    private const QUEUE_TOPIC = 'storefront.catalog.product.update';
+
     /**
      * @var PublisherInterface
      */
     private $queuePublisher;
 
     /**
-     * @var ReindexMessageBuilder
+     * @var UpdatedEntitiesMessageBuilder
      */
     private $messageBuilder;
 
@@ -34,23 +40,26 @@ class CollectDataForUpdate
     private $fulltextResource;
 
     /**
-     * @var string
+     * @var LoggerInterface
      */
-    private $topic = 'storefront.catalog.data.updates';
+    private $logger;
 
     /**
      * @param PublisherInterface $queuePublisher
-     * @param ReindexMessageBuilder $messageBuilder
+     * @param UpdatedEntitiesMessageBuilder $messageBuilder
      * @param FulltextResource $fulltextResource
+     * @param LoggerInterface $logger
      */
     public function __construct(
         PublisherInterface $queuePublisher,
-        ReindexMessageBuilder $messageBuilder,
-        FulltextResource $fulltextResource
+        UpdatedEntitiesMessageBuilder $messageBuilder,
+        FulltextResource $fulltextResource,
+        LoggerInterface $logger
     ) {
         $this->queuePublisher = $queuePublisher;
         $this->messageBuilder = $messageBuilder;
         $this->fulltextResource = $fulltextResource;
+        $this->logger = $logger;
     }
 
     /**
@@ -68,7 +77,7 @@ class CollectDataForUpdate
         \Closure $proceed,
         array $dimensions,
         \Traversable $entityIds = null
-    ) {
+    ): void {
         $proceed($dimensions, $entityIds);
 
         $productIds = $entityIds instanceof \Traversable ? $entityIds->getArrayCopy() : [];
@@ -80,6 +89,10 @@ class CollectDataForUpdate
         }
         $storeId = (int)$dimensions[StoreDimensionProvider::DIMENSION_NAME]->getValue();
         $message = $this->messageBuilder->build($storeId, $productIds);
-        $this->queuePublisher->publish($this->topic, $message);
+        try {
+            $this->queuePublisher->publish(self::QUEUE_TOPIC, $message);
+        } catch (\Throwable $e) {
+            $this->logger->critical($e->getMessage());
+        }
     }
 }
