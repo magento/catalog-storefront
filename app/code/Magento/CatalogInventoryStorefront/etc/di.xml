@@ -22,4 +22,20 @@
     <type name="Magento\CatalogCategory\DataProvider\Query\ProductsCountBuilder">
         <plugin name="addStockFilter" type="Magento\CatalogInventoryStorefront\Plugin\Resolver\Category\DataProvider\ProductCountStockFilter" />
     </type>
+
+    <type name="Magento\CatalogProduct\DataProvider\LinkedEntityProvider">
+        <arguments>
+            <argument name="productDataProvider" xsi:type="object">\Magento\CatalogProduct\DataProvider\ProductDataProvider\Proxy</argument>
+            <argument name="categoryDataProvider" xsi:type="object">\Magento\CatalogProduct\DataProvider\CategoryDataProvider\Proxy</argument>
+            <argument name="linkedEntityPath" xsi:type="array">
+                <item name="product" xsi:type="array">
+                    <item xsi:type="string" name="bundle-products">items.options.product</item>
+                    <item xsi:type="string" name="configurable">variants.product</item>
+                </item>
+                <item name="category" xsi:type="array">
+                    <item xsi:type="string" name="categories">categories</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

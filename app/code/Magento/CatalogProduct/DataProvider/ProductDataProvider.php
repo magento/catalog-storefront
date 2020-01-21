@@ -34,18 +34,26 @@ class ProductDataProvider
     private $logger;
 
     /**
+     * @var LinkedEntityProvider
+     */
+    private $linkedEntityProvider;
+
+    /**
      * @param QueryInterface $query
      * @param State $storageState
      * @param LoggerInterface $logger
+     * @param LinkedEntityProvider $linkedEntityProvider
      */
     public function __construct(
         QueryInterface $query,
         State $storageState,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        LinkedEntityProvider $linkedEntityProvider
     ) {
         $this->query = $query;
         $this->storageState = $storageState;
         $this->logger = $logger;
+        $this->linkedEntityProvider = $linkedEntityProvider;
     }
 
     /**
@@ -89,6 +97,8 @@ class ProductDataProvider
             $products[$entry->getId()] = $data;
         }
 
+        $products = $this->linkedEntityProvider->fetch($products, [], $scopes);
+
         return $this->prepareItemsOutput($products, $productIds);
     }
 
@@ -100,9 +110,13 @@ class ProductDataProvider
      */
     private function getFirstLevelAttributes($attributes): array
     {
-        $firstLevel = ['entity_id', 'sku'];
+        $firstLevel = ['entity_id', 'sku', 'type_id'];
         foreach ($attributes as $name => $value) {
-            $firstLevel[] = \is_array($value) ? $name : $value;
+            if (\is_array($value)) {
+                $firstLevel[] = \strpos($name, '.') !== false ? \explode('.', $name)[1] : $name;
+            } else {
+                $firstLevel[] = $value;
+            }
         }
 
         return $firstLevel;
