@@ -59,7 +59,9 @@ class Provider implements DataProviderInterface
         $output = [];
         foreach ($productLinks as $key => $productLink) {
             $productLink['link_type'] = $linkTypes[$productLink['link_type_id']] ?? null;
-            $productLink = array_intersect_key($productLink, array_flip($attributes['product_links']));
+            if (isset($attributes['product_links'])) {
+                $productLink = array_intersect_key($productLink, array_flip($attributes['product_links']));
+            }
             $output[$productLinks[$key]['product_id']]['product_links'][] = $productLink;
         }
 
