@@ -28,10 +28,12 @@ class ProductsCountBuilder
      * @var ResourceConnection
      */
     private $resourceConnection;
+
     /**
      * @var IndexScopeResolverInterface
      */
     private $scopeResolver;
+
     /**
      * @var DimensionFactory
      */

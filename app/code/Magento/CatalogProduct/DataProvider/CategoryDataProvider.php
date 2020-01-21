@@ -51,7 +51,7 @@ class CategoryDataProvider
     /**
      * Fetch category data from storage
      *
-     * @param array $categoryIds
+     * @param int[] $categoryIds
      * @param array $attributes
      * @param array $scopes
      * @return array
