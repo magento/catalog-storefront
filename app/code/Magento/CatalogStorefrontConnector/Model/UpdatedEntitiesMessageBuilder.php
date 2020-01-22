@@ -29,17 +29,17 @@ class UpdatedEntitiesMessageBuilder
     }
 
     /**
-     * Build message for storefront.collect.reindex.products.data topic
+     * Build message for storefront.catalog.*.update topic
      *
      * @param int $storeId
-     * @param array $productIds
+     * @param int[] $entityIds
      *
      * @return UpdatedEntitiesDataInterface
      */
-    public function build(int $storeId, array $productIds): UpdatedEntitiesDataInterface
+    public function build(int $storeId, array $entityIds): UpdatedEntitiesDataInterface
     {
         $this->updatedEntitiesData->setStoreId($storeId);
-        $this->updatedEntitiesData->setEntityIds($productIds);
+        $this->updatedEntitiesData->setEntityIds($entityIds);
 
         return $this->updatedEntitiesData;
     }

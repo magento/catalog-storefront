@@ -71,4 +71,23 @@
             </argument>
         </arguments>
     </type>
+
+    <!-- Temporary solution until introducing unified schema for complex storage -->
+    <type name="Magento\CatalogProduct\DataProvider\LinkedEntityHydrator">
+        <arguments>
+            <argument name="productDataProvider" xsi:type="object">\Magento\CatalogProduct\DataProvider\ProductDataProvider\Proxy</argument>
+            <argument name="categoryDataProvider" xsi:type="object">\Magento\CatalogProduct\DataProvider\CategoryDataProvider\Proxy</argument>
+            <argument name="linkedEntityPath" xsi:type="array">
+                <item name="product" xsi:type="array">
+                    <item xsi:type="string" name="BundleProduct">BundleProduct:items.options.product</item>
+                    <item xsi:type="string" name="ConfigurableProduct">ConfigurableProduct:variants.product</item>
+                    <item xsi:type="string" name="GroupedProduct">GroupedProduct:items.product</item>
+                </item>
+                <item name="category" xsi:type="array">
+                    <item xsi:type="string" name="categories">categories</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
 </config>
