@@ -34,18 +34,26 @@ class ProductDataProvider
     private $logger;
 
     /**
+     * @var LinkedEntityHydrator
+     */
+    private $linkedEntityHydrator;
+
+    /**
      * @param QueryInterface $query
      * @param State $storageState
      * @param LoggerInterface $logger
+     * @param LinkedEntityHydrator $linkedEntityHydrator
      */
     public function __construct(
         QueryInterface $query,
         State $storageState,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        LinkedEntityHydrator $linkedEntityHydrator
     ) {
         $this->query = $query;
         $this->storageState = $storageState;
         $this->logger = $logger;
+        $this->linkedEntityHydrator = $linkedEntityHydrator;
     }
 
     /**
@@ -89,6 +97,8 @@ class ProductDataProvider
             $products[$entry->getId()] = $data;
         }
 
+        $products = $this->linkedEntityHydrator->hydrate($products, $attributes, $scopes);
+
         return $this->prepareItemsOutput($products, $productIds);
     }
 
@@ -100,9 +110,13 @@ class ProductDataProvider
      */
     private function getFirstLevelAttributes($attributes): array
     {
-        $firstLevel = ['entity_id', 'sku'];
+        $firstLevel = ['entity_id', 'sku', 'type_id'];
         foreach ($attributes as $name => $value) {
-            $firstLevel[] = \is_array($value) ? $name : $value;
+            if (\is_array($value)) {
+                $firstLevel[] = \strpos($name, '.') !== false ? \explode('.', $name)[1] : $name;
+            } else {
+                $firstLevel[] = $value;
+            }
         }
 
         return $firstLevel;

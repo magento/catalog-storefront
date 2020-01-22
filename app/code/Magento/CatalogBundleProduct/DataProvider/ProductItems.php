@@ -68,7 +68,7 @@ class ProductItems implements \Magento\CatalogProduct\DataProvider\DataProviderI
     public function fetch(array $productIds, array $attributes, array $scopes): array
     {
         $storeId = (int)$scopes['store'];
-        $attributes = $attributes['items'];
+        $attributes = $attributes['items'] ?? [];
         $bundleItemsSelect = $this->queryBuilder->build(
             $productIds,
             $attributes,

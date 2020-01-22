@@ -39,12 +39,27 @@ class BundleProductItemOptionProducts implements NestedDataProviderInterface
      */
     public function fetch(array $attributes, array $scopes, array $parentData): array
     {
-        $productIds = $this->getProductIds($parentData);
-
-        $attributesData = [];
-        if (!empty($attributes)) {
-            $attributesData = $this->generalDataProvider->fetch($productIds, $attributes, $scopes);
+        // TODO: handle ad-hoc solution MC-29791
+        if (empty($attributes)) {
+            foreach ($parentData as &$child) {
+                if (!isset($child['items'])) {
+                    continue;
+                }
+                foreach ($child['items'] as &$item) {
+                    if (!isset($item['options'])) {
+                        continue;
+                    }
+                    foreach ($item['options'] as &$option) {
+                       $option['product'] = $option['entity_id'];
+                    }
+                }
+            }
+            return $parentData;
         }
+
+        $productIds = $this->getProductIds($parentData);
+        $attributesData = $this->generalDataProvider->fetch($productIds, $attributes, $scopes);
+
         foreach ($parentData as $entityId => $child) {
             foreach ($child['items'] as $itemKey => $item) {
                 if (!isset($item['options'])) {
