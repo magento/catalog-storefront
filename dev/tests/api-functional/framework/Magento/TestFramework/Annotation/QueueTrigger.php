@@ -8,8 +8,7 @@ declare(strict_types=1);
 namespace Magento\TestFramework\Annotation;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\MessageQueue\PublisherConsumerController;
-use Magento\TestFramework\MessageQueue\PreconditionFailedException;
+use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * @inheritDoc
@@ -17,81 +16,46 @@ use Magento\TestFramework\MessageQueue\PreconditionFailedException;
 class QueueTrigger
 {
     /**
-     * @var string
-     */
-    private $logFilePath = TESTS_TEMP_DIR . "/CatalogStorefrontMessageQueueTestLog.txt";
-
-    /**
-     * @var int|null
+     * @var int
      */
     private $maxMessages = 500;
-
-    /**
-     * @var PublisherConsumerController
-     */
-    private $publisherConsumerController;
 
     /**
      * Handler for 'startTest' event.
      * Sync Magento monolith App data with Catalog Storefront Storage.
      *
      * @param \PHPUnit\Framework\TestCase $test
-     * @throws PreconditionFailedException
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function startTest(\PHPUnit\Framework\TestCase $test)
     {
-        $this->waitForAsynchronousResult(1);
+        if ($test instanceof GraphQlAbstract) {
+            $this->waitForAsynchronousResult();
+        }
     }
 
     /**
      * Wait for asynchronous handlers to log data to file.
      *
      * @param int $expectedLinesCount
-     * @throws PreconditionFailedException
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function waitForAsynchronousResult($expectedLinesCount)
+    private function waitForAsynchronousResult(): void
     {
-        sleep(5);
-        //$expectedLinesCount, $logFilePath
-//        $this->getPublisherConsumerController()->waitForAsynchronousResult(
-//            [$this, 'checkLogsExists'],
-//            [$expectedLinesCount, $this->logFilePath]
-//        );
-    }
+        $objectManager = Bootstrap::getObjectManager();
 
-    private function getPublisherConsumerController()
-    {
-        if (null == $this->publisherConsumerController) {
-            $objectManager = Bootstrap::getObjectManager();
-            $this->publisherConsumerController = $objectManager->create(
-                PublisherConsumerController::class,
-                [
-                    'consumers' => [
-                        'storefront.catalog.data.consume',
-                        'storefront.catalog.category.update',
-                        'storefront.catalog.product.update',
-                    ],
-                    'logFilePath' => $this->logFilePath,
-                    'maxMessages' => $this->maxMessages,
-                    'appInitParams' => \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams()
-                ]
-            );
+        /** @var \Magento\Framework\MessageQueue\ConsumerFactory $consumerFactory */
+        $consumerFactory = $objectManager->create(\Magento\Framework\MessageQueue\ConsumerFactory::class);
+        $consumers = [
+            'storefront.catalog.category.update',
+            'storefront.catalog.product.update',
+            'storefront.catalog.data.consume',
+        ];
+        foreach ($consumers as $consumerName) {
+            $consumer = $consumerFactory->get($consumerName, 1000);
+            $consumer->process($this->maxMessages);
         }
-
-        return $this->publisherConsumerController;
-    }
-
-    /**
-     * Checks that logs exist
-     *
-     * @param int $expectedLinesCount
-     * @return bool
-     */
-    public function checkLogsExists($expectedLinesCount)
-    {
-        //phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $actualCount = file_exists($this->logFilePath) ? count(file($this->logFilePath)) : 0;
-        return $expectedLinesCount === $actualCount;
     }
 }

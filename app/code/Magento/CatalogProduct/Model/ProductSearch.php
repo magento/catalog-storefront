@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\CatalogProduct\Model;
 
 use Magento\Catalog\Model\Layer\Resolver as LayerResolver;
+use Magento\CatalogProduct\DataProvider\ProductDataProvider;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\CatalogProduct\DataProvider\LayeredNavigation\LayerBuilder;
-use Magento\CatalogProduct\DataProvider\DataProviderInterface;
 use Magento\CatalogProductApi\Api\Data\ProductResultContainerInterfaceFactory;
 use Magento\CatalogProductApi\Api\ProductSearchInterface;
 use Magento\Search\Api\SearchInterface;
@@ -45,7 +45,7 @@ class ProductSearch implements ProductSearchInterface
     private $productResultContainerFactory;
 
     /**
-     * @var DataProviderInterface
+     * @var ProductDataProvider
      */
     private $dataProvider;
 
@@ -59,7 +59,7 @@ class ProductSearch implements ProductSearchInterface
      * @param LayerBuilder $layerBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param ProductResultContainerInterfaceFactory $productResultContainerFactory
-     * @param DataProviderInterface $dataProvider
+     * @param ProductDataProvider $dataProvider
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -67,7 +67,7 @@ class ProductSearch implements ProductSearchInterface
         LayerBuilder $layerBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         ProductResultContainerInterfaceFactory $productResultContainerFactory,
-        DataProviderInterface $dataProvider,
+        ProductDataProvider $dataProvider,
         LoggerInterface $logger
     ) {
         $this->search = $search;

@@ -60,7 +60,6 @@
     <type name="Magento\CatalogProduct\Model\ProductSearch">
         <arguments>
             <argument name="search" xsi:type="object">Magento\CatalogProduct\Framework\Search\Search</argument>
-            <argument name="dataProvider" xsi:type="object">\Magento\CatalogProduct\DataProvider\ProductDataProvider</argument>
         </arguments>
     </type>
 
@@ -89,5 +88,11 @@
             </argument>
         </arguments>
     </type>
-
+    <type name="Magento\Framework\MessageQueue\MergerFactory">
+        <arguments>
+            <argument name="mergers" xsi:type="array">
+                <item name="storefront.catalog.data.consume" xsi:type="string">Magento\CatalogProduct\Model\Merger</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

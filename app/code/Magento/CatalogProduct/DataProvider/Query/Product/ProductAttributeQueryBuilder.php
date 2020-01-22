@@ -104,7 +104,6 @@ class ProductAttributeQueryBuilder
         if ($this->allAttributes === null) {
             /** @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection $productAttributes */
             $productAttributes = $this->attributeCollectionFactory->create();
-            $productAttributes->addToIndexFilter(true);
 
             /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
             foreach ($productAttributes->getItems() as $attribute) {
