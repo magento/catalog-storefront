@@ -70,6 +70,9 @@ class LinkedEntityHydrator
             $entityIds = $entityIds ? \array_unique(\array_merge(...$entityIds)) : [];
             $linkedEntityAttributes = $linkedEntityAttributes ? \array_merge(...$linkedEntityAttributes) : [];
 
+            if (!$entityIds) {
+                continue;
+            }
             switch ($entityType) {
                 case Product::ENTITY_NAME:
                     $entities = $entityIds
@@ -83,10 +86,13 @@ class LinkedEntityHydrator
                     break;
             }
 
+            if (!$entities) {
+                continue;
+            }
             foreach ($paths as $path) {
                 $path = \explode('.', $path);
                 $this->trimEntityType($path);
-                $this->updateParentEntities($products, $entities, $path);
+                $products = $this->updateParentEntities($products, $entities, $path);
             }
         }
 
@@ -117,8 +123,8 @@ class LinkedEntityHydrator
     {
         $childIds = [];
         $nextKey = \array_shift($nestedKeys);
-        foreach ($entities as $entity) {
-            $nestedData = $entity[$nextKey] ?? null;
+        foreach ($entities as $entityKey => $entity) {
+            $nestedData = $this->getNestedData($entity, $nextKey, $entityKey);
             if ($nestedData) {
                 $childIds[] = empty($nestedKeys)
                     ? (array)$nestedData
@@ -152,29 +158,65 @@ class LinkedEntityHydrator
      * @param array $entities
      * @param array $childEntities
      * @param array $nestedKeys
+     * @return array
      */
-    private function updateParentEntities(array &$entities, array $childEntities, array $nestedKeys): void
+    private function updateParentEntities(array $entities, array $childEntities, array $nestedKeys): array
     {
-        if (!$childEntities) {
-            return;
-        }
         $nextKey = \array_shift($nestedKeys);
-        foreach ($entities as &$entity) {
-            $nestedData = &$entity[$nextKey] ?? null;
-            if ($nestedData) {
-                if (empty($nestedKeys)) {
-                    if (\is_array($nestedData)) {
-                        $entity[$nextKey] = \array_intersect_key(
+        foreach ($entities as $entityKey => &$entity) {
+            $nestedData = $this->getNestedData($entity, $nextKey, $entityKey);
+            if (!$nestedData) {
+                continue ;
+            }
+            if (empty($nestedKeys)) {
+                if (\is_array($nestedData)) {
+                    $this->updateNestedEntity(
+                        $entity,
+                        \array_intersect_key(
                             $childEntities,
                             \array_combine($nestedData, $nestedData)
-                        );
-                    } else {
-                        $entity[$nextKey] = $childEntities[$nestedData];
-                    }
+                        ),
+                        $nextKey,
+                        $entityKey
+                    );
                 } else {
-                    $this->updateParentEntities($nestedData, $childEntities, $nestedKeys);
+                    $entity[$nextKey] = $childEntities[$nestedData];
                 }
+            } else {
+                $nestedData = $this->updateParentEntities($nestedData, $childEntities, $nestedKeys);
+                $this->updateNestedEntity($entity, $nestedData, $nextKey, $entityKey);
             }
+        }
+        return $entities;
+    }
+
+    /**
+     * Get nested data
+     *
+     * @param array $entity
+     * @param string|int $nextKey
+     * @param string|int $entityKey
+     * @return mixed
+     */
+    private function getNestedData(array $entity, $nextKey, $entityKey)
+    {
+        return $entity[$nextKey] ?? ($entityKey === $nextKey ? $entity : null);
+    }
+
+    /**
+     * Update nested entity
+     *
+     * @param array $entity
+     * @param mixed $updatedEntity
+     * @param string|int $nextKey
+     * @param string|int $entityKey
+     */
+    private function updateNestedEntity(array &$entity, $updatedEntity, $nextKey, $entityKey): void
+    {
+        if (isset($entity[$nextKey])) {
+            $entity[$nextKey] = $updatedEntity;
+        } elseif ($entityKey === $nextKey) {
+            $entity = $updatedEntity;
         }
     }
 

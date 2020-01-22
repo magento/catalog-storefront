@@ -71,6 +71,7 @@
         </arguments>
     </type>
 
+    <!-- Temporary solution until introducing unified schema for complex storage -->
     <type name="Magento\CatalogProduct\DataProvider\LinkedEntityHydrator">
         <arguments>
             <argument name="productDataProvider" xsi:type="object">\Magento\CatalogProduct\DataProvider\ProductDataProvider\Proxy</argument>
