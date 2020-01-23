@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStoreFrontGraphQl\Resolver\Category;
 
+use Magento\CatalogStoreFrontGraphQl\Model\ProductSearch;
 use Magento\CatalogStoreFrontGraphQl\Resolver\Product\RequestBuilder;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface;
@@ -32,13 +33,23 @@ class Products implements BatchResolverInterface
     private $serviceInvoker;
 
     /**
+     * @var ProductSearch
+     */
+    private $productSearch;
+
+    /**
      * @param RequestBuilder $requestBuilder
      * @param ServiceInvoker $serviceInvoker
+     * @param ProductSearch $productSearch
      */
-    public function __construct(RequestBuilder $requestBuilder, ServiceInvoker $serviceInvoker)
-    {
+    public function __construct(
+        RequestBuilder $requestBuilder,
+        ServiceInvoker $serviceInvoker,
+        ProductSearch $productSearch
+    ) {
         $this->serviceInvoker = $serviceInvoker;
         $this->requestBuilder = $requestBuilder;
+        $this->productSearch = $productSearch;
     }
 
     /**
@@ -58,7 +69,8 @@ class Products implements BatchResolverInterface
                     'eq' => (int)$request->getValue()['id']
                 ]
             ];
-            $storefrontRequests[] = $this->requestBuilder->buildRequest($context, $request, $filter);
+            $request = $this->requestBuilder->buildRequest($context, $request, $filter);
+            $storefrontRequests[] = $this->productSearch->search($request);
         }
 
         return $this->serviceInvoker->invoke(

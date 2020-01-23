@@ -15,6 +15,8 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResponse;
 use Magento\CatalogProductApi\Api\ProductSearchInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResolverInterface;
+use Magento\StoreFrontGraphQl\Model\ServiceInvoker as ServiceInvokerAlias;
+use Magento\CatalogStoreFrontGraphQl\Model\ProductSearch;
 
 /**
  * Products field resolver, used for GraphQL request processing.
@@ -23,7 +25,7 @@ use Magento\Framework\GraphQl\Query\Resolver\BatchResolverInterface;
 class Products implements BatchResolverInterface
 {
     /**
-     * @var \Magento\StoreFrontGraphQl\Model\ServiceInvoker
+     * @var ServiceInvokerAlias
      */
     private $serviceInvoker;
 
@@ -33,15 +35,23 @@ class Products implements BatchResolverInterface
     private $requestBuilder;
 
     /**
-     * @param \Magento\StoreFrontGraphQl\Model\ServiceInvoker $serviceInvoker
+     * @var ProductSearch
+     */
+    private $productSearch;
+
+    /**
+     * @param ServiceInvokerAlias $serviceInvoker
      * @param RequestBuilder $requestBuilder
+     * @param ProductSearch $productSearch
      */
     public function __construct(
-        \Magento\StoreFrontGraphQl\Model\ServiceInvoker $serviceInvoker,
-        RequestBuilder $requestBuilder
+        ServiceInvokerAlias $serviceInvoker,
+        RequestBuilder $requestBuilder,
+        ProductSearch $productSearch
     ) {
         $this->serviceInvoker = $serviceInvoker;
         $this->requestBuilder = $requestBuilder;
+        $this->productSearch = $productSearch;
     }
 
     /**
@@ -56,7 +66,8 @@ class Products implements BatchResolverInterface
     {
         $storefrontRequests = [];
         foreach ($requests as $request) {
-            $storefrontRequests[] = $this->requestBuilder->buildRequest($context, $request);
+            $request = $this->requestBuilder->buildRequest($context, $request);
+            $storefrontRequests[] = $this->productSearch->search($request);
         }
         return $this->serviceInvoker->invoke(
             ProductSearchInterface::class,

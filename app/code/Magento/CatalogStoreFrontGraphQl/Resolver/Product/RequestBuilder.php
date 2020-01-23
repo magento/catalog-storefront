@@ -37,8 +37,10 @@ class RequestBuilder
      * @param FieldResolver $fieldResolver
      * @param ScopeProvider $scopeProvider
      */
-    public function __construct(FieldResolver $fieldResolver, ScopeProvider $scopeProvider)
-    {
+    public function __construct(
+        FieldResolver $fieldResolver,
+        ScopeProvider $scopeProvider
+    ) {
         $this->fieldResolver = $fieldResolver;
         $this->scopeProvider = $scopeProvider;
     }
@@ -103,7 +105,10 @@ class RequestBuilder
             'metaInfo' => $metaInfo,
         ];
 
-        return [$request, $storefrontRequest];
+        return [
+            'graphql_request' => $request,
+            'storefront_request' => $storefrontRequest,
+        ];
     }
 
     /**

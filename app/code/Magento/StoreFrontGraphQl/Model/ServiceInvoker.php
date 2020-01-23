@@ -20,12 +20,17 @@ class ServiceInvoker
     /**
      * GraphQL request identifier
      */
-    private const GRAPHQL_REQUEST = 0;
+    private const GRAPHQL_REQUEST = 'graphql_request';
 
     /**
      * StoreFront request identifier
      */
-    private const STOREFRONT_REQUEST = 1;
+    private const STOREFRONT_REQUEST = 'storefront_request';
+
+    /**
+     * Meta info error identifier
+     */
+    private const ADDITIONAL_INFO = 'additional_info';
 
     /**
      * @var ObjectManagerInterface
@@ -90,7 +95,12 @@ class ServiceInvoker
         foreach ($serviceResponse as $responseNumber => $response) {
             $batchResponse->addResponse(
                 $storefrontRequests[$responseNumber][self::GRAPHQL_REQUEST],
-                $formatter($response, $graphQlException, $storefrontRequests[$responseNumber][self::GRAPHQL_REQUEST])
+                $formatter(
+                    $response,
+                    $graphQlException,
+                    $storefrontRequests[$responseNumber][self::GRAPHQL_REQUEST],
+                    $storefrontRequests[$responseNumber][self::ADDITIONAL_INFO] ?? []
+                )
             );
         }
 

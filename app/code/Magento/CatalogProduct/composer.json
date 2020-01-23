@@ -9,7 +9,6 @@
         "magento/framework": "*",
         "magento/module-catalog-product-api": "*",
         "magento/module-catalog-category-api": "*",
-        "magento/module-search": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-url-rewrite": "*",
         "magento/module-eav": "*",
