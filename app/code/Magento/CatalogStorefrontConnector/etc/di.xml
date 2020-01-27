@@ -16,7 +16,7 @@
         <plugin name="collectCategoryDataForStorefrontApplication" type="Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate" />
     </type>
     <type name="Magento\Catalog\Model\Product">
-        <plugin name="collectCategoryDataForStorefrontApplication" type="Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataForUpdate" />
+        <plugin name="collectCategoryDataForStorefrontApplicationOnSave" type="Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataOnSave" />
     </type>
     <type name="Magento\Framework\MessageQueue\MergerFactory">
         <arguments>

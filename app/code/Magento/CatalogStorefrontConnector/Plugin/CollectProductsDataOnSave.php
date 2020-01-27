@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefrontConnector\Plugin;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
-use Magento\Store\Model\StoreDimensionProvider;
+use Magento\Store\Model\Store;
 
 /**
- * Plugin for collect products data during reindex. Handle case when indexer mode is set to "schedule"
+ * Plugin for collect products data product save. Handle case when indexer mode is set to "runtime"
  */
-class CollectProductsDataForUpdate
+class CollectProductsDataOnSave
 {
     /**
      * @var ProductUpdatesPublisher
@@ -38,29 +38,23 @@ class CollectProductsDataForUpdate
     }
 
     /**
-     * Handle product save when indexer mode is set to "schedule"
+     * Handle product save when indexer mode is set to "realtime"
      *
-     * @param Fulltext $subject
-     * @param void $result
-     * @param array $dimensions
-     * @param \Traversable|null $entityIds
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param \Magento\Catalog\Model\Product $product
      */
-    public function afterExecuteByDimensions(
-        Fulltext $subject,
-        $result,
-        array $dimensions,
-        \Traversable $entityIds = null
-    ): void {
-        if (!$this->isIndexerRunOnSchedule()) {
+    public function afterSave(\Magento\Catalog\Model\Product $product): void
+    {
+        if ($this->isIndexerRunOnSchedule()) {
             return ;
         }
-        $productIds = $entityIds instanceof \Traversable ? $entityIds->getArrayCopy() : [];
-        $this->productPublisher->publish(
-            $productIds,
-            (int)$dimensions[StoreDimensionProvider::DIMENSION_NAME]->getValue()
-        );
+
+        foreach ($product->getStoreIds() as $storeId) {
+            $storeId = (int)$storeId;
+            if ($storeId === Store::DEFAULT_STORE_ID) {
+                continue ;
+            }
+            $this->productPublisher->publish([$product->getId()], $storeId);
+        }
     }
 
     /**
