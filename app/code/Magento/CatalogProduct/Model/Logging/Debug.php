@@ -57,7 +57,6 @@ class Debug extends \Magento\Framework\Logger\Handler\Debug
     public function isHandling(array $record)
     {
         return $record['level'] === $this->level && $this->isLoggingEnabled();
-
     }
 
     /**

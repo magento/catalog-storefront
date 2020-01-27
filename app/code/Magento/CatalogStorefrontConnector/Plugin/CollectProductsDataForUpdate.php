@@ -28,6 +28,7 @@ class CollectProductsDataForUpdate
 
     /**
      * @param ProductUpdatesPublisher $productPublisher
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      */
     public function __construct(
         ProductUpdatesPublisher $productPublisher,
@@ -41,7 +42,7 @@ class CollectProductsDataForUpdate
      * Handle product save when indexer mode is set to "schedule"
      *
      * @param Fulltext $subject
-     * @param null $result
+     * @param void $result
      * @param array $dimensions
      * @param \Traversable|null $entityIds
      * @return void

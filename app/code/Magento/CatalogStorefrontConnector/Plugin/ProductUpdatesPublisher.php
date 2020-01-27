@@ -72,8 +72,10 @@ class ProductUpdatesPublisher
      *
      * @param array $productIds
      * @param int $storeId
+     * @return void
      */
-    public function publish(array $productIds, int $storeId): void {
+    public function publish(array $productIds, int $storeId): void
+    {
         if (!empty($productIds) && empty(\array_diff($productIds, $this->processedIds))) {
             return ;
         }

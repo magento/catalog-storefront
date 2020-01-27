@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Command;
 
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CategoryPublisher;
 use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 use Magento\Store\Model\StoreManagerInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -32,23 +32,22 @@ class Sync extends Command
      * Option name for batch size
      * @var string
      */
-    private const INPUT_BATCH_SIZE = 'batch_size';
+    private const INPUT_ENTITY_TYPE = 'entity';
 
     /**
-     * Default batch size
-     * @var int
+     * Product entity type
      */
-    private const DEFAULT_BATCH_SIZE = 1000;
+    private const ENTITY_TYPE_PRODUCT = 'product';
+
+    /**
+     * Category entity type
+     */
+    private const ENTITY_TYPE_CATEGORY = 'category';
 
     /**
      * @var ProductPublisher
      */
     private $productPublisher;
-
-    /**
-     * @var ProductCollectionFactory
-     */
-    private $productsCollectionFactory;
 
     /**
      * @var StoreManagerInterface
@@ -61,30 +60,27 @@ class Sync extends Command
     private $categoryPublisher;
 
     /**
-     * @var CategoryCollectionFactory
+     * @var CatalogEntityIdsProvider
      */
-    private $categoryCollectionFactory;
+    private $catalogEntityIdsProvider;
 
     /**
      * @param ProductPublisher $productPublisher
      * @param CategoryPublisher $categoryPublisher
-     * @param ProductCollectionFactory $productsCollectionFactory
-     * @param CategoryCollectionFactory $categoryCollectionFactory
      * @param StoreManagerInterface $storeManager
+     * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
      */
     public function __construct(
         ProductPublisher $productPublisher,
         CategoryPublisher $categoryPublisher,
-        ProductCollectionFactory $productsCollectionFactory,
-        CategoryCollectionFactory $categoryCollectionFactory,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        CatalogEntityIdsProvider $catalogEntityIdsProvider
     ) {
         parent::__construct();
         $this->productPublisher = $productPublisher;
         $this->categoryPublisher = $categoryPublisher;
-        $this->productsCollectionFactory = $productsCollectionFactory;
-        $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->storeManager = $storeManager;
+        $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
     }
 
     /**
@@ -95,10 +91,11 @@ class Sync extends Command
         $this->setName(self::COMMAND_NAME)
             ->setDescription('Run full reindex for Catalog Storefront service')
             ->addOption(
-                self::INPUT_BATCH_SIZE,
+                self::INPUT_ENTITY_TYPE,
                 null,
-                InputOption::VALUE_NONE,
-                'Batch size of processed amount of entities in one time'
+                InputOption::VALUE_OPTIONAL,
+                'Entity type code for process. Possible values: product, category. '
+                . 'By default all entities will be processed'
             );
 
         parent::configure();
@@ -109,38 +106,90 @@ class Sync extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<info>' . 'Start catalog data sync' . '</info>');
-
+        $entityType = $this->getEntityType($input);
         // TODO: clean product ids from storefront.catalog.category.update topic
         foreach ($this->storeManager->getStores() as $store) {
-            $lastProductId = 0;
-            $productCollection = $this->productsCollectionFactory->create();
-            $productCollection->addWebsiteFilter($store->getWebsiteId());
+            $storeId = (int)$store->getId();
 
-            while ($productIds = $productCollection->getAllIds($this->getBatchSize($input), $lastProductId)) {
-                $lastProductId = \end($productIds);
-                $this->productPublisher->publish($productIds, (int)$store->getId());
+            if (!$entityType || $entityType === self::ENTITY_TYPE_PRODUCT) {
+                $this->syncProducts($output, $storeId);
             }
-
-            $categoryCollection = $this->categoryCollectionFactory->create();
-            $categoryCollection->setStore($store->getId());
-
-            $categoryIds = $categoryCollection->getAllIds($this->getBatchSize($input));
-            $this->categoryPublisher->publish($categoryIds, (int)$store->getId());
+            if (!$entityType || $entityType === self::ENTITY_TYPE_CATEGORY) {
+                $this->syncCategories($output, $storeId);
+            }
         }
-
-        $output->writeln('<info>' . 'End catalog data sync' . '</info>');
-
     }
 
     /**
-     * Get batch size
+     * Sync products
+     *
+     * @param OutputInterface $output
+     * @param int $storeId
+     */
+    protected function syncProducts(OutputInterface $output, int $storeId): void
+    {
+        $output->writeln("<info>Sync products for store {$storeId}</info>");
+        $this->measure(
+            function () use ($output, $storeId) {
+                $processedN = 0;
+                foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $productIds) {
+                    $this->productPublisher->publish($productIds, $storeId);
+                    $output->write('.');
+                    $processedN += count($productIds);
+                }
+                return $processedN;
+            },
+            $output
+        );
+    }
+
+    /**
+     * Sync categories
+     *
+     * @param OutputInterface $output
+     * @param int $storeId
+     */
+    protected function syncCategories(OutputInterface $output, int $storeId): void
+    {
+        $output->writeln("<info>Sync categories for store {$storeId}</info>");
+        $this->measure(
+            function () use ($output, $storeId) {
+                $processedN = 0;
+                foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $categoryIds) {
+                    $this->categoryPublisher->publish($categoryIds, $storeId);
+                    $output->write('.');
+                    $processedN += count($categoryIds);
+                }
+                return $processedN;
+            },
+            $output
+        );
+    }
+
+    /**
+     * Measure sync time
+     *
+     * @param callable $func
+     * @param OutputInterface $output
+     * @return void
+     */
+    private function measure(callable $func, OutputInterface $output): void
+    {
+        $start = \time();
+        $processedN = $func();
+        $output->writeln(
+            \sprintf('Complete "%s" entities in "%s"', $processedN, Helper::formatTime(\time() - $start))
+        );
+    }
+
+    /**
+     * Get processed entity type
      *
      * @param InputInterface $input
-     * @return int
+     * @return string|null
      */
-    private function getBatchSize(InputInterface $input): int
+    public function getEntityType(InputInterface $input): ?string
     {
-        return (int) $input->getOption(self::INPUT_BATCH_SIZE) ?: self::DEFAULT_BATCH_SIZE;
+        return $input->getOption(self::INPUT_ENTITY_TYPE) ?: null;
     }
 }
