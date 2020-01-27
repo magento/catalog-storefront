@@ -8,11 +8,8 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefrontConnector\Plugin;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
-use Magento\CatalogStorefrontConnector\Model\UpdatedEntitiesMessageBuilder;
-use Magento\Framework\MessageQueue\PublisherInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreDimensionProvider;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
-use Psr\Log\LoggerInterface;
 
 /**
  * Plugin for collect products data during reindex
@@ -20,79 +17,80 @@ use Psr\Log\LoggerInterface;
 class CollectProductsDataForUpdate
 {
     /**
-     * Queue topic name
+     * @var ProductUpdatesPublisher
      */
-    private const QUEUE_TOPIC = 'storefront.catalog.product.update';
+    private $productPublisher;
 
     /**
-     * @var PublisherInterface
+     * @var \Magento\Framework\Indexer\IndexerRegistry
      */
-    private $queuePublisher;
+    private $indexerRegistry;
 
     /**
-     * @var UpdatedEntitiesMessageBuilder
-     */
-    private $messageBuilder;
-
-    /**
-     * @var FulltextResource
-     */
-    private $fulltextResource;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @param PublisherInterface $queuePublisher
-     * @param UpdatedEntitiesMessageBuilder $messageBuilder
-     * @param FulltextResource $fulltextResource
-     * @param LoggerInterface $logger
+     * @param ProductUpdatesPublisher $productPublisher
      */
     public function __construct(
-        PublisherInterface $queuePublisher,
-        UpdatedEntitiesMessageBuilder $messageBuilder,
-        FulltextResource $fulltextResource,
-        LoggerInterface $logger
+        ProductUpdatesPublisher $productPublisher,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
     ) {
-        $this->queuePublisher = $queuePublisher;
-        $this->messageBuilder = $messageBuilder;
-        $this->fulltextResource = $fulltextResource;
-        $this->logger = $logger;
+        $this->productPublisher = $productPublisher;
+        $this->indexerRegistry = $indexerRegistry;
     }
 
     /**
-     * Collect store ID and product IDs for scope of reindexed products
+     * Handle product save when indexer mode is set to "schedule"
      *
      * @param Fulltext $subject
-     * @param \Closure $proceed
+     * @param null $result
      * @param array $dimensions
      * @param \Traversable|null $entityIds
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecuteByDimensions(
+    public function afterExecuteByDimensions(
         Fulltext $subject,
-        \Closure $proceed,
+        $result,
         array $dimensions,
         \Traversable $entityIds = null
     ): void {
-        $proceed($dimensions, $entityIds);
-
+        if (!$this->isIndexerRunOnSchedule()) {
+            return ;
+        }
         $productIds = $entityIds instanceof \Traversable ? $entityIds->getArrayCopy() : [];
-        // add related products only in case of partial reindex
-        if ($productIds) {
-            $productIds = array_unique(
-                array_merge($productIds, $this->fulltextResource->getRelationsByChild($productIds))
-            );
+        $this->productPublisher->publish(
+            $productIds,
+            (int)$dimensions[StoreDimensionProvider::DIMENSION_NAME]->getValue()
+        );
+    }
+
+    /**
+     * Handle product save when indexer mode is set to "realtime"
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     */
+    public function afterSave(\Magento\Catalog\Model\Product $product): void
+    {
+        if ($this->isIndexerRunOnSchedule()) {
+            return ;
         }
-        $storeId = (int)$dimensions[StoreDimensionProvider::DIMENSION_NAME]->getValue();
-        $message = $this->messageBuilder->build($storeId, $productIds);
-        try {
-            $this->queuePublisher->publish(self::QUEUE_TOPIC, $message);
-        } catch (\Throwable $e) {
-            $this->logger->critical($e->getMessage());
+
+        foreach ($product->getStoreIds() as $storeId) {
+            $storeId = (int)$storeId;
+            if ($storeId === Store::DEFAULT_STORE_ID) {
+                continue ;
+            }
+            $this->productPublisher->publish([$product->getId()], $storeId);
         }
+    }
+
+    /**
+     * Is indexer run in "on schedule" mode
+     *
+     * @return bool
+     */
+    private function isIndexerRunOnSchedule(): bool
+    {
+        $indexer = $this->indexerRegistry->get(Fulltext::INDEXER_ID);
+        return $indexer->isScheduled();
     }
 }

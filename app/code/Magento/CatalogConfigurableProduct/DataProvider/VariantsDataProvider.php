@@ -75,7 +75,6 @@ class VariantsDataProvider implements DataProviderInterface
 
     /**
      * @inheritdoc
-     * @throws \LogicException
      * @throws \Zend_Db_Statement_Exception
      */
     public function fetch(array $parentProductIds, array $requestedAttributes, array $scopes): array
@@ -83,12 +82,7 @@ class VariantsDataProvider implements DataProviderInterface
         $select = $this->productVariantsBuilder->build($parentProductIds, $scopes);
         $products = $this->resourceConnection->getConnection()->fetchAll($select);
         if (!$products) {
-            throw new \LogicException(
-                \sprintf(
-                    'Can not find child products for the following configurable products: "%s"',
-                    \implode(', ', $parentProductIds)
-                )
-            );
+            return [];
         }
 
         [$attributesPerProduct, $childAttributeOptions] = $this->loadAttributes(
@@ -140,6 +134,10 @@ class VariantsDataProvider implements DataProviderInterface
         }
 
         foreach ($attributesPerProduct as $parentId => $configurableAttributes) {
+            // handle case when configurable product do not contains variations
+            if (!isset($parentChildMap[$parentId])) {
+                continue ;
+            }
             $attributeOptionsPerAttribute = $this->convertToOptionsPerAttribute(
                 $childProductAttributeOptions,
                 $parentChildMap[$parentId]
