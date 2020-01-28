@@ -13,6 +13,7 @@ use Magento\CatalogProduct\Model\Storage\Data\DocumentIteratorFactory;
 use Magento\CatalogProduct\Model\Storage\Data\EntryInterface;
 use Magento\CatalogProduct\Model\Storage\Data\EntryIteratorInterface;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Exception\RuntimeException;
 
 /**
  * Elasticsearch client adapter for read access operations.
@@ -154,23 +155,51 @@ class ElasticsearchQuery implements QueryInterface
         ];
         try {
             $result = $this->getConnection()->mget($query);
-
-            // TODO: MC-29513 handle error in $result['error']['root_cause'], e.g. index_not_found_exception
-            if (isset($result['docs'][0]['error'])) {
-                throw new NotFoundException(__('Error TBD'));
-            }
         } catch (\Throwable $throwable) {
-            throw new NotFoundException(
-                __(
-                    "Documents with ids '"
-                    . json_encode($ids)
-                    . "' not found in index '$indexName'."
-                ),
-                $throwable
-            );
+            throw new RuntimeException(__(
+                "Storage error: {$throwable->getMessage()}
+                Query was:" . json_encode($query)
+            ),
+                $throwable);
         }
+        $this->checkErrors($result, $indexName);
 
         return $this->documentIteratorFactory->create($result);
+    }
+
+    /**
+     * Handle the error occurrences of each returned document.
+     *
+     * @param array $result
+     * @param string $indexName
+     * @throws NotFoundException
+     */
+    private function checkErrors(array $result, string $indexName)
+    {
+        $errors = [];
+        if (isset($result['docs'])) {
+            foreach ($result['docs'] as $doc) {
+                if (isset($doc['error']) && !empty($doc['error'])) {
+                    $errors [] = "
+                    Entity id: {$doc['_id']}
+                    Reason: {$doc['error']['reason']}
+                    ";
+                } elseif (isset($doc['found']) && false === $doc['found']) {
+                    $errors [] = "
+                    Entity id: {$doc['_id']}
+                    Reason: item not found
+                    ";
+                }
+            }
+        }
+
+        if (!empty($errors)) {
+            throw new NotFoundException(__(
+                "Index name: {$indexName}
+                 List of errors: '"
+                . json_encode($errors)
+            ));
+        }
     }
 
     /**
