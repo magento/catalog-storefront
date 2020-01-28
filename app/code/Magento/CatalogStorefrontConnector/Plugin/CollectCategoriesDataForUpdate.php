@@ -10,6 +10,7 @@ namespace Magento\CatalogStorefrontConnector\Plugin;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogStorefrontConnector\Model\UpdatedEntitiesMessageBuilder;
 use Magento\Framework\MessageQueue\PublisherInterface;
+use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -55,25 +56,28 @@ class CollectCategoriesDataForUpdate
     /**
      * Collect store ID and Category IDs for updated entity
      *
-     * @param Category $subject
      * @param Category $category
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterAfterSave(
-        Category $subject,
         Category $category
     ): void {
         $entityId = $category->getId();
         foreach ($category->getStoreIds() as $storeId) {
             $storeId = (int)$storeId;
-            if ($storeId !== 0) {
-                $message = $this->messageBuilder->build($storeId, [$entityId]);
-                try {
-                    $this->queuePublisher->publish(self::QUEUE_TOPIC, $message);
-                } catch (\Throwable $e) {
-                    $this->logger->critical($e->getMessage());
-                }
+            if ($storeId === Store::DEFAULT_STORE_ID) {
+                continue ;
+            }
+            $message = $this->messageBuilder->build($storeId, [$entityId]);
+            try {
+                $this->logger->debug(\sprintf('Collect category id: "%s"', $entityId));
+                $this->queuePublisher->publish(self::QUEUE_TOPIC, $message);
+            } catch (\Throwable $e) {
+                $this->logger->critical(
+                    \sprintf('Error on collect category id "%s"', $entityId),
+                    ['exception' => $e]
+                );
             }
         }
     }

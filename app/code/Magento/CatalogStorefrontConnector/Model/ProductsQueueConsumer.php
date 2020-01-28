@@ -6,10 +6,9 @@
 
 namespace Magento\CatalogStorefrontConnector\Model;
 
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
 use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Consumer processes messages with store front products data
@@ -17,33 +16,25 @@ use Magento\Store\Model\StoreManagerInterface;
 class ProductsQueueConsumer
 {
     /**
-     * @var CollectionFactory
-     */
-    private $productsCollectionFactory;
-
-    /**
      * @var ProductPublisher
      */
     private $productPublisher;
 
     /**
-     * @var StoreManagerInterface
+     * @var CatalogEntityIdsProvider
      */
-    private $storeManager;
+    private $catalogEntityIdsProvider;
 
     /**
      * @param ProductPublisher $productPublisher
-     * @param CollectionFactory $productsCollectionFactory
-     * @param StoreManagerInterface $storeManager
+     * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
      */
     public function __construct(
         ProductPublisher $productPublisher,
-        CollectionFactory $productsCollectionFactory,
-        StoreManagerInterface $storeManager
+        CatalogEntityIdsProvider $catalogEntityIdsProvider
     ) {
-        $this->productsCollectionFactory = $productsCollectionFactory;
         $this->productPublisher = $productPublisher;
-        $this->storeManager = $storeManager;
+        $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
     }
 
     /**
@@ -60,7 +51,13 @@ class ProductsQueueConsumer
     {
         $storeProducts = $this->getUniqueIdsForStores($messages);
         foreach ($storeProducts as $storeId => $productIds) {
-            $this->productPublisher->publish($productIds, $storeId);
+            if (empty($productIds)) {
+                foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $ids) {
+                    $this->productPublisher->publish($ids, $storeId);
+                }
+            } else {
+                $this->productPublisher->publish(\array_unique($productIds), $storeId);
+            }
         }
     }
 
@@ -69,11 +66,9 @@ class ProductsQueueConsumer
      *
      * @param array $messages
      * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getUniqueIdsForStores(array $messages): array
     {
-        $result = [];
         $storesProductIds = [];
         /** @var \Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesData $updatedProductsData */
         foreach ($messages as $updatedProductsData) {
@@ -93,29 +88,7 @@ class ProductsQueueConsumer
                 );
             }
         }
-        foreach ($storesProductIds as $storeId => $productIds) {
-            $productIds = !empty($productIds)
-                ? $productIds
-                : $this->getAllProductIdsForStore($storeId);
-            $result[$storeId] = \array_unique($productIds);
-        }
 
-        return $result;
-    }
-
-    /**
-     * Get all product IDs assigned to store
-     *
-     * @param int $storeId
-     * @return int[]
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    private function getAllProductIdsForStore(int $storeId): array
-    {
-        $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
-        $productsCollection = $this->productsCollectionFactory->create();
-        $productsCollection->addWebsiteFilter($websiteId);
-
-        return $productsCollection->getAllIds();
+        return $storesProductIds;
     }
 }
