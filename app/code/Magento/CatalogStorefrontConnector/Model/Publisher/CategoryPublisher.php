@@ -113,7 +113,6 @@ class CategoryPublisher
      */
     private function publishEntities(array $categoryIds, int $storeId): void
     {
-            //TODO: batch size!
         foreach (\array_chunk($categoryIds, $this->batchSize) as $idsBunch) {
             $messages = [];
             $categoriesData = $this->categoriesDataProvider->fetch($idsBunch, [], ['store' => $storeId]);
