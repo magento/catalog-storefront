@@ -106,6 +106,12 @@ class Consumer
                 $sourceName = $this->storageState->getCurrentDataSourceName([$storeId, $entityType]);
                 // TODO: MC-30401
                 // $this->dataDefinition->createEntity($sourceName, $entityType, []);
+
+                $this->logger->debug(
+                    \sprintf('Save to storage "%s" %s record(s)', $sourceName, count($data)),
+                    ['verbose' => $data]
+                );
+
                 $this->storage->bulkInsert($sourceName, $entityType, $data);
             }
         }

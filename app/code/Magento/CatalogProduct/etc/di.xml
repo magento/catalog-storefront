@@ -88,6 +88,7 @@
             </argument>
         </arguments>
     </type>
+
     <type name="Magento\Framework\MessageQueue\MergerFactory">
         <arguments>
             <argument name="mergers" xsi:type="array">
@@ -95,4 +96,30 @@
             </argument>
         </arguments>
     </type>
+
+    <!-- Logger -->
+    <virtualType name="CatalogStorefrontLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="error" xsi:type="object">\Magento\CatalogProduct\Model\Logging\Error</item>
+                <item name="debug" xsi:type="object">Magento\CatalogProduct\Model\Logging\Debug</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\CatalogProduct\Model\MessageBus\Consumer">
+        <arguments>
+            <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogProduct\DataProvider\ProductDataProvider">
+        <arguments>
+            <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogProduct\DataProvider\CategoryDataProvider">
+        <arguments>
+            <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
+        </arguments>
+    </type>
+
 </config>

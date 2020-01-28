@@ -108,7 +108,7 @@ class Query
                 ['product_entity_table' => $catalogProductTable],
                 'links.product_id = product_entity_table.' . $productLinkField,
                 [
-                    // sku refers to the parent product?
+                    // sku refers to the parent product
                     'sku' => 'product_entity_table.sku',
                     'product_id' => 'product_entity_table.entity_id',
                 ]
