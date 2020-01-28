@@ -86,9 +86,6 @@ class LinkedEntityHydrator
                     break;
             }
 
-            if (!$entities) {
-                continue;
-            }
             foreach ($paths as $path) {
                 $path = \explode('.', $path);
                 $this->trimEntityType($path);
@@ -180,7 +177,7 @@ class LinkedEntityHydrator
                         $entityKey
                     );
                 } else {
-                    $entity[$nextKey] = $childEntities[$nestedData];
+                    $entity[$nextKey] = $childEntities[$nestedData] ?? null;
                 }
             } else {
                 $nestedData = $this->updateParentEntities($nestedData, $childEntities, $nestedKeys);

@@ -149,7 +149,8 @@ class ElasticsearchQuery implements QueryInterface
         $query = [
             'index' => $indexName,
             'type' => $entityName,
-            'body' => ['ids' => $ids],
+            // ids must be provided as indices array to avoid error on request
+            'body' => ['ids' => \array_values($ids)],
             '_source' => $fields
         ];
         try {

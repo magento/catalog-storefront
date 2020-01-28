@@ -82,17 +82,21 @@ class ProductDataProvider
                 $this->getFirstLevelAttributes($attributes)
             );
         } catch (NotFoundException $notFoundException) {
-            $this->logger->debug(
+            $this->logger->error(
                 \sprintf(
-                    'Data Provider: Cannot find products for ids "%s" in the scope "%s"',
+                    'Cannot find products for ids "%s" in the scope "%s"',
                     \implode(', ', $productIds),
                     \implode(', ', $scopes)
-                )
+                ),
+                ['exception' => $notFoundException]
             );
             return [];
         }
         foreach ($entities as $entry) {
             $data = $entry->getData();
+            if (!$data) {
+                continue;
+            }
             $data['id'] = $entry->getId();
             $products[$entry->getId()] = $data;
         }

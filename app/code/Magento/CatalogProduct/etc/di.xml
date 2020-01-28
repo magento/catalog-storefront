@@ -108,5 +108,10 @@
             <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogProduct\DataProvider\CategoryDataProvider">
+        <arguments>
+            <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
+        </arguments>
+    </type>
 
 </config>
