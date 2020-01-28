@@ -41,11 +41,12 @@ class CollectProductsDataOnSave
      * Handle product save when indexer mode is set to "realtime"
      *
      * @param \Magento\Catalog\Model\Product $product
+     * @return \Magento\Catalog\Model\Product
      */
-    public function afterSave(\Magento\Catalog\Model\Product $product): void
+    public function afterSave(\Magento\Catalog\Model\Product $product): \Magento\Catalog\Model\Product
     {
         if ($this->isIndexerRunOnSchedule()) {
-            return ;
+            return $product;
         }
 
         foreach ($product->getStoreIds() as $storeId) {
@@ -55,6 +56,8 @@ class CollectProductsDataOnSave
             }
             $this->productPublisher->publish([$product->getId()], $storeId);
         }
+
+        return $product;
     }
 
     /**

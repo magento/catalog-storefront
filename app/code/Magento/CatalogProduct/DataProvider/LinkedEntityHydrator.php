@@ -59,7 +59,6 @@ class LinkedEntityHydrator
     {
         foreach ($this->linkedEntityPath as $entityType => $paths) {
             $entityIds = [];
-            $entities = [];
 
             $linkedEntityAttributes = [];
             foreach ($paths as $path) {
@@ -67,24 +66,15 @@ class LinkedEntityHydrator
                 $entityIds[] = $this->getChildIds($products, $path);
                 $linkedEntityAttributes[] = $this->getAttributes($attributes, $path);
             }
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $entityIds = $entityIds ? \array_unique(\array_merge(...$entityIds)) : [];
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $linkedEntityAttributes = $linkedEntityAttributes ? \array_merge(...$linkedEntityAttributes) : [];
 
             if (!$entityIds) {
                 continue;
             }
-            switch ($entityType) {
-                case Product::ENTITY_NAME:
-                    $entities = $entityIds
-                        ? $this->productDataProvider->fetch($entityIds, $linkedEntityAttributes, $scopes)
-                        : [];
-                    break;
-                case Category::ENTITY_NAME:
-                    $entities = $entityIds
-                        ? $this->categoryDataProvider->fetch($entityIds, $linkedEntityAttributes, $scopes)
-                        : [];
-                    break;
-            }
+            $entities = $this->getLinkedEntities($entityType, $entityIds, $linkedEntityAttributes, $scopes);
 
             foreach ($paths as $path) {
                 $path = \explode('.', $path);
@@ -242,5 +232,35 @@ class LinkedEntityHydrator
         if (false !== ($typeDelimiterPosition = \strpos($nestedKeys[0], ':'))) {
             $nestedKeys[0] = \substr($nestedKeys[0], $typeDelimiterPosition + 1);
         }
+    }
+
+    /**
+     * Get linked entities
+     *
+     * @param string $entityType
+     * @param array $entityIds
+     * @param array $attributes
+     * @param array $scopes
+     * @return array
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
+     */
+    protected function getLinkedEntities(string $entityType, array $entityIds, array $attributes, array $scopes): array
+    {
+        $entities = [];
+        switch ($entityType) {
+            case Product::ENTITY_NAME:
+                $entities = $entityIds
+                    ? $this->productDataProvider->fetch($entityIds, $attributes, $scopes)
+                    : [];
+                break;
+            case Category::ENTITY_NAME:
+                $entities = $entityIds
+                    ? $this->categoryDataProvider->fetch($entityIds, $attributes, $scopes)
+                    : [];
+                break;
+        }
+
+        return $entities;
     }
 }
