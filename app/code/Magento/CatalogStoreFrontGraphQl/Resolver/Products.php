@@ -15,8 +15,6 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResponse;
 use Magento\CatalogProductApi\Api\ProductSearchInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResolverInterface;
-use Magento\StoreFrontGraphQl\Model\ServiceInvoker;
-use Magento\CatalogStoreFrontGraphQl\Model\ProductSearch;
 
 /**
  * Products field resolver, used for GraphQL request processing.
@@ -25,7 +23,7 @@ use Magento\CatalogStoreFrontGraphQl\Model\ProductSearch;
 class Products implements BatchResolverInterface
 {
     /**
-     * @var ServiceInvoker
+     * @var \Magento\StoreFrontGraphQl\Model\ServiceInvoker
      */
     private $serviceInvoker;
 
@@ -35,23 +33,15 @@ class Products implements BatchResolverInterface
     private $requestBuilder;
 
     /**
-     * @var ProductSearch
-     */
-    private $productSearch;
-
-    /**
-     * @param ServiceInvoker $serviceInvoker
+     * @param \Magento\StoreFrontGraphQl\Model\ServiceInvoker $serviceInvoker
      * @param RequestBuilder $requestBuilder
-     * @param ProductSearch $productSearch
      */
     public function __construct(
-        ServiceInvoker $serviceInvoker,
-        RequestBuilder $requestBuilder,
-        ProductSearch $productSearch
+        \Magento\StoreFrontGraphQl\Model\ServiceInvoker $serviceInvoker,
+        RequestBuilder $requestBuilder
     ) {
         $this->serviceInvoker = $serviceInvoker;
         $this->requestBuilder = $requestBuilder;
-        $this->productSearch = $productSearch;
     }
 
     /**
@@ -66,8 +56,7 @@ class Products implements BatchResolverInterface
     {
         $storefrontRequests = [];
         foreach ($requests as $request) {
-            $request = $this->requestBuilder->buildRequest($context, $request);
-            $storefrontRequests[] = $this->productSearch->search($request);
+            $storefrontRequests[] = $this->requestBuilder->buildRequest($context, $request);
         }
         return $this->serviceInvoker->invoke(
             ProductSearchInterface::class,

@@ -9,10 +9,13 @@ namespace Magento\CatalogStoreFrontGraphQl\Model;
 
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Catalog\Model\Layer\Resolver as LayerResolver;
-use Magento\CatalogProduct\DataProvider\LayeredNavigation\LayerBuilder;
+use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\LayerBuilder;
 
 /**
  * Products search
+ *
+ * Ad-hoc solution. Product search executed in Magento Monolith until Catalog Storefront Search service implemented.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductSearch
@@ -63,6 +66,8 @@ class ProductSearch
             $searchCriteria,
             $showLayeredNavigation
         );
+        // Ad-hoc solution.
+        // Product search executed in Magento Monolith until Catalog Storefront Search service implemented
         $request['storefront_request']['filters']['ids'] = $productIds;
 
         $currentPage = $searchCriteria->getCurrentPage();

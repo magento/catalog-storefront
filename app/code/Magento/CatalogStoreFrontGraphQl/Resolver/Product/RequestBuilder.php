@@ -15,6 +15,7 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\ResolveRequestInterface;
 use Magento\CatalogStoreFrontGraphQl\Model\FieldResolver;
 use Magento\StoreFrontGraphQl\Model\Query\ScopeProvider;
+use Magento\CatalogStoreFrontGraphQl\Model\ProductSearch;
 
 /**
  * Build request for storefront service.
@@ -34,15 +35,23 @@ class RequestBuilder
     private $scopeProvider;
 
     /**
+     * @var ProductSearch
+     */
+    private $productSearch;
+
+    /**
      * @param FieldResolver $fieldResolver
      * @param ScopeProvider $scopeProvider
+     * @param ProductSearch $productSearch
      */
     public function __construct(
         FieldResolver $fieldResolver,
-        ScopeProvider $scopeProvider
+        ScopeProvider $scopeProvider,
+        ProductSearch $productSearch
     ) {
         $this->fieldResolver = $fieldResolver;
         $this->scopeProvider = $scopeProvider;
+        $this->productSearch = $productSearch;
     }
 
     /**
@@ -105,10 +114,10 @@ class RequestBuilder
             'metaInfo' => $metaInfo,
         ];
 
-        return [
+        return $this->productSearch->search([
             'graphql_request' => $request,
             'storefront_request' => $storefrontRequest,
-        ];
+        ]);
     }
 
     /**
