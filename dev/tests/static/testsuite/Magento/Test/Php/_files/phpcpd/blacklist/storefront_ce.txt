@@ -1,4 +1,3 @@
 Magento/CatalogGraphQl/DataProvider
-Magento/CatalogProduct/Framework/Search
 Magento/CatalogProduct/Model/Storage/Client/Config
 Magento/CatalogStoreFrontGraphQl/Model/Search
