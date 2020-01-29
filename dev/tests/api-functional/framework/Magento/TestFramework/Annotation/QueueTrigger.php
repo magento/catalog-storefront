@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Annotation;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -15,11 +14,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class QueueTrigger
 {
-    /**
-     * @var int
-     */
-    private $maxMessages = 500;
-
     /**
      * Handler for 'startTest' event.
      *
@@ -39,24 +33,14 @@ class QueueTrigger
     /**
      * Wait for asynchronous handlers to log data to file.
      *
-     * @param int $expectedLinesCount
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function waitForAsynchronousResult(): void
     {
-        $objectManager = Bootstrap::getObjectManager();
-
-        /** @var \Magento\Framework\MessageQueue\ConsumerFactory $consumerFactory */
-        $consumerFactory = $objectManager->create(\Magento\Framework\MessageQueue\ConsumerFactory::class);
-        $consumers = [
-            'storefront.catalog.category.update',
-            'storefront.catalog.product.update',
-            'storefront.catalog.data.consume',
-        ];
-        foreach ($consumers as $consumerName) {
-            $consumer = $consumerFactory->get($consumerName, 1000);
-            $consumer->process($this->maxMessages);
-        }
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\StorefrontTestFixer\ConsumerInvoker $consumerInvoker */
+        $consumerInvoker = $objectManager->get(\Magento\StorefrontTestFixer\ConsumerInvoker::class);
+        $consumerInvoker->invoke();
     }
 }

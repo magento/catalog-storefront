@@ -128,7 +128,7 @@ QUERY;
             ['response_field' => 'id', 'expected_value' => $product->getId()],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
-             ['response_field' => 'weight', 'expected_value' => $product->getWeight()],
+            ['response_field' => 'weight', 'expected_value' => $product->getWeight()],
             ['response_field' => 'dynamic_price', 'expected_value' => !(bool)$product->getPriceType()],
             ['response_field' => 'dynamic_weight', 'expected_value' => !(bool)$product->getWeightType()],
             ['response_field' => 'dynamic_sku', 'expected_value' => !(bool)$product->getSkuType()]
@@ -178,7 +178,8 @@ QUERY;
                 'is_default' => (bool)$bundleProductLink->getIsDefault(),
                  'price_type' => self::KEY_PRICE_TYPE_FIXED,
                 'can_change_quantity' => $bundleProductLink->getCanChangeQuantity(),
-                'label' => $childProduct->getName()
+                // TODO: MC-30893
+                // 'label' => $childProduct->getName()
             ]
         );
         $this->assertResponseFields(
