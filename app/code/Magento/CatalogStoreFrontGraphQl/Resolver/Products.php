@@ -15,7 +15,7 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResponse;
 use Magento\CatalogProductApi\Api\ProductSearchInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResolverInterface;
-use Magento\StoreFrontGraphQl\Model\ServiceInvoker as ServiceInvokerAlias;
+use Magento\StoreFrontGraphQl\Model\ServiceInvoker;
 use Magento\CatalogStoreFrontGraphQl\Model\ProductSearch;
 
 /**
@@ -25,7 +25,7 @@ use Magento\CatalogStoreFrontGraphQl\Model\ProductSearch;
 class Products implements BatchResolverInterface
 {
     /**
-     * @var ServiceInvokerAlias
+     * @var ServiceInvoker
      */
     private $serviceInvoker;
 
@@ -40,12 +40,12 @@ class Products implements BatchResolverInterface
     private $productSearch;
 
     /**
-     * @param ServiceInvokerAlias $serviceInvoker
+     * @param ServiceInvoker $serviceInvoker
      * @param RequestBuilder $requestBuilder
      * @param ProductSearch $productSearch
      */
     public function __construct(
-        ServiceInvokerAlias $serviceInvoker,
+        ServiceInvoker $serviceInvoker,
         RequestBuilder $requestBuilder,
         ProductSearch $productSearch
     ) {
