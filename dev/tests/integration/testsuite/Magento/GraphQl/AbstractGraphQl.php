@@ -42,7 +42,7 @@ abstract class AbstractGraphQl extends TestCase
     /**
      * Process provided consumers list
      *
-     * @param $consumers
+     * @param array $consumers
      * @throws LocalizedException
      */
     protected function processCatalogQueueMessages(array $consumers): void
@@ -55,5 +55,4 @@ abstract class AbstractGraphQl extends TestCase
             $consumer->process($this->maxMessages);
         }
     }
-
 }

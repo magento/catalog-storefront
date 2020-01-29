@@ -22,6 +22,7 @@ class QueueTrigger
 
     /**
      * Handler for 'startTest' event.
+     *
      * Sync Magento monolith App data with Catalog Storefront Storage.
      *
      * @param \PHPUnit\Framework\TestCase $test
