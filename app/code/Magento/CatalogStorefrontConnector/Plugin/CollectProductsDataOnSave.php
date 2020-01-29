@@ -40,13 +40,20 @@ class CollectProductsDataOnSave
     /**
      * Handle product save when indexer mode is set to "realtime"
      *
+     * @param \Magento\Catalog\Model\ResourceModel\Product $subject
+     * @param \Magento\Catalog\Model\ResourceModel\Product $result
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product
+     *
+     * @return \Magento\Catalog\Model\ResourceModel\Product
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSave(\Magento\Catalog\Model\Product $product): \Magento\Catalog\Model\Product
-    {
+    public function afterSave(
+        \Magento\Catalog\Model\ResourceModel\Product $subject,
+        \Magento\Catalog\Model\ResourceModel\Product $result,
+        \Magento\Catalog\Model\Product $product
+    ): \Magento\Catalog\Model\ResourceModel\Product {
         if ($this->isIndexerRunOnSchedule()) {
-            return $product;
+            return $result;
         }
 
         foreach ($product->getStoreIds() as $storeId) {
@@ -57,7 +64,7 @@ class CollectProductsDataOnSave
             $this->productPublisher->publish([$product->getId()], $storeId);
         }
 
-        return $product;
+        return $result;
     }
 
     /**
