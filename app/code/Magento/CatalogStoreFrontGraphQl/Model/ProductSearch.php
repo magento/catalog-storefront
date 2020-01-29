@@ -7,9 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStoreFrontGraphQl\Model;
 
-use Magento\CatalogProduct\DataProvider\SearchCriteriaBuilder;
-use Magento\CatalogProductApi\Api\Data\ProductSearchCriteriaInterface;
-use Magento\CatalogProductApi\Api\Data\ProductSearchCriteriaInterfaceFactory as ProductSearchCriteriaFactory;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Catalog\Model\Layer\Resolver as LayerResolver;
 use Magento\CatalogProduct\DataProvider\LayeredNavigation\LayerBuilder;
@@ -20,11 +17,6 @@ use Magento\CatalogProduct\DataProvider\LayeredNavigation\LayerBuilder;
  */
 class ProductSearch
 {
-    /**
-     * @var ProductSearchCriteriaInterfaceFactory
-     */
-    private $productSearchCriteriaFactory;
-
     /**
      * @var SearchCriteriaBuilder
      */
@@ -41,18 +33,15 @@ class ProductSearch
     private $layerBuilder;
 
     /**
-     * @param ProductSearchCriteriaFactory $productSearchCriteriaFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Search $search
      * @param LayerBuilder $layerBuilder
      */
     public function __construct(
-        ProductSearchCriteriaFactory $productSearchCriteriaFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Search $search,
         LayerBuilder $layerBuilder
     ) {
-        $this->productSearchCriteriaFactory = $productSearchCriteriaFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->search = $search;
         $this->layerBuilder = $layerBuilder;
@@ -66,11 +55,10 @@ class ProductSearch
      */
     public function search(array $request): array
     {
-        /** @var ProductSearchCriteriaInterface $criteria */
-        $criteria = $this->productSearchCriteriaFactory->create($request['storefront_request']);
+        $storefrontRequest = $request['storefront_request'];
 
-        $searchCriteria = $this->searchCriteriaBuilder->build($criteria);
-        $showLayeredNavigation = !empty($criteria->getAggregations()) || $criteria->getAggregations() === null;
+        $searchCriteria = $this->searchCriteriaBuilder->build($storefrontRequest);
+        $showLayeredNavigation = !empty($storefrontRequest['aggregations']) || $storefrontRequest['aggregations'] === null;
         [$totalCount, $productIds, $aggregations] = $this->searchProducts(
             $searchCriteria,
             $showLayeredNavigation
@@ -85,7 +73,7 @@ class ProductSearch
             'total_pages' => $this->getTotalPages($searchCriteria, $totalCount),
             'total_count' => $totalCount,
             // for backward compatibility: support "filters" field
-            'layer_type' => $criteria->getSearchTerm()
+            'layer_type' => $storefrontRequest['searchTerm']
                 ? LayerResolver::CATALOG_LAYER_SEARCH
                 : LayerResolver::CATALOG_LAYER_CATEGORY
         ];
@@ -100,7 +88,7 @@ class ProductSearch
         }
         $request['additional_info']['meta_info'] = $metaInfo;
         $request['additional_info']['aggregations'] = $showLayeredNavigation
-            ? $this->layerBuilder->build($aggregations, (int)$criteria->getScopes()['store'])
+            ? $this->layerBuilder->build($aggregations, (int)$storefrontRequest['scopes']['store'])
             : [];
 
         return $request;
