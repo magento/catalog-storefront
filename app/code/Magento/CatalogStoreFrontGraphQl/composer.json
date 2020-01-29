@@ -16,7 +16,6 @@
         "magento/module-cms-graph-ql": "*",
         "magento/module-related-product-graph-ql": "*",
         "magento/module-store-front-graph-ql": "*",
-        "magento/module-search": "*",
         "magento/module-catalog-product": "*"
     },
     "type": "magento2-module",
