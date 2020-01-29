@@ -11,6 +11,7 @@
         "magento/module-catalog-category": "*",
         "magento/module-catalog-product": "*",
         "magento/module-catalog-search": "*",
+        "magento/module-config": "*",
         "magento/module-store": "*"
     },
     "type": "magento2-module",

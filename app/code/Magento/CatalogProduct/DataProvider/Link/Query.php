@@ -85,7 +85,7 @@ class Query
         $select = $connection->select()
             ->from(
                 ['e' => $catalogProductTable],
-                ['linked_product_sku' => 'e.sku']
+                ['linked_product_sku' => 'e.sku', 'e.type_id', 'linked_product_type' => 'e.type_id']
             )
             ->join(
                 ['links' => $catalogProductLinkTable],
@@ -108,9 +108,9 @@ class Query
                 ['product_entity_table' => $catalogProductTable],
                 'links.product_id = product_entity_table.' . $productLinkField,
                 [
+                    // sku refers to the parent product
                     'sku' => 'product_entity_table.sku',
                     'product_id' => 'product_entity_table.entity_id',
-                    'linked_product_type' => 'product_entity_table.type_id',
                 ]
             )
             ->where('product_entity_table.entity_id IN (?)', $productIds)
