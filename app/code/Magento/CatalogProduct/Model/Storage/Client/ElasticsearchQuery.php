@@ -156,11 +156,13 @@ class ElasticsearchQuery implements QueryInterface
         try {
             $result = $this->getConnection()->mget($query);
         } catch (\Throwable $throwable) {
-            throw new RuntimeException(__(
-                "Storage error: {$throwable->getMessage()}
+            throw new RuntimeException(
+                __(
+                    "Storage error: {$throwable->getMessage()}
                 Query was:" . json_encode($query)
-            ),
-                $throwable);
+                ),
+                $throwable
+            );
         }
         $this->checkErrors($result, $indexName);
 
@@ -180,25 +182,15 @@ class ElasticsearchQuery implements QueryInterface
         if (isset($result['docs'])) {
             foreach ($result['docs'] as $doc) {
                 if (isset($doc['error']) && !empty($doc['error'])) {
-                    $errors [] = "
-                    Entity id: {$doc['_id']}
-                    Reason: {$doc['error']['reason']}
-                    ";
+                    $errors [] = sprintf("Entity id: %d\nReason: %s", $doc['_id'], $doc['error']['reason']);
                 } elseif (isset($doc['found']) && false === $doc['found']) {
-                    $errors [] = "
-                    Entity id: {$doc['_id']}
-                    Reason: item not found
-                    ";
+                    $errors [] = sprintf("Entity id: %d\nReason: item not found", $doc['_id']);
                 }
             }
         }
 
         if (!empty($errors)) {
-            throw new NotFoundException(__(
-                "Index name: {$indexName}
-                 List of errors: '"
-                . json_encode($errors)
-            ));
+            throw new NotFoundException(__("Index name: {$indexName}\nList of errors: '" . json_encode($errors)));
         }
     }
 
