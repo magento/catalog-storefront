@@ -97,10 +97,6 @@ class ClientAdapterTest extends TestCase
 
     /**
      * @return void
-     * @throws \Magento\Framework\Exception\BulkException
-     * @throws \Magento\Framework\Exception\FileSystemException
-     * @throws \Magento\Framework\Exception\NotFoundException
-     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function testBulkInsert(): void
     {
@@ -134,11 +130,49 @@ class ClientAdapterTest extends TestCase
     }
 
     /**
+     * @expectedException \Magento\Framework\Exception\NotFoundException
+     * @expectedExceptionMessage 'product' type document with id '111' not found in index 'not_found_index'.
+     */
+    public function testNotFoundIndex()
+    {
+        $this->storageQuery->getEntry(
+            'not_found_index',
+            'product',
+            111,
+            ['sku']
+        );
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\NotFoundException
+     * @expectedExceptionMessage item not found
+     */
+    public function testNotFoundItem()
+    {
+        $this->storageQuery->getEntries(
+            $this->state->getAliasName(),
+            'product',
+            [123123123],
+            ['sku']
+        )->current();
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\RuntimeException
+     * @expectedExceptionMessage Storage error
+     */
+    public function testStorageException()
+    {
+        $this->storageQuery->getEntries(
+            $this->state->getAliasName(),
+            'product',
+            [],
+            ['sku']
+        )->current();
+    }
+
+    /**
      * @return void
-     * @throws \Magento\Framework\Exception\BulkException
-     * @throws \Magento\Framework\Exception\FileSystemException
-     * @throws \Magento\Framework\Exception\NotFoundException
-     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function testSubquery(): void
     {
@@ -195,10 +229,6 @@ class ClientAdapterTest extends TestCase
 
     /**
      * @return void
-     * @throws \Magento\Framework\Exception\BulkException
-     * @throws \Magento\Framework\Exception\FileSystemException
-     * @throws \Magento\Framework\Exception\NotFoundException
-     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function testSubqueries(): void
     {
