@@ -10,6 +10,7 @@ use Magento\CatalogCategory\DataProvider\DataProviderInterface;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Framework\MessageQueue\PublisherInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Category publisher
@@ -50,10 +51,16 @@ class CategoryPublisher
     private $state;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param DataProviderInterface $categoriesDataProvider
      * @param CatalogItemMessageBuilder $messageBuilder
      * @param PublisherInterface $queuePublisher
      * @param State $state
+     * @param LoggerInterface $logger
      * @param int $batchSize
      */
     public function __construct(
@@ -61,6 +68,7 @@ class CategoryPublisher
         CatalogItemMessageBuilder $messageBuilder,
         PublisherInterface $queuePublisher,
         State $state,
+        LoggerInterface $logger,
         int $batchSize
     ) {
         $this->categoriesDataProvider = $categoriesDataProvider;
@@ -68,6 +76,7 @@ class CategoryPublisher
         $this->queuePublisher = $queuePublisher;
         $this->batchSize = $batchSize;
         $this->state = $state;
+        $this->logger = $logger;
     }
 
     /**
@@ -83,22 +92,48 @@ class CategoryPublisher
         $this->state->emulateAreaCode(
             Area::AREA_FRONTEND,
             function () use ($categoryIds, $storeId) {
-                foreach (\array_chunk($categoryIds, $this->batchSize) as $idsBunch) {
-                    $messages = [];
-                    $categoriesData = $this->categoriesDataProvider->fetch($idsBunch, [], ['store' => $storeId]);
-                    foreach ($categoriesData as $category) {
-                        $messages[] = $this->messageBuilder->build(
-                            $storeId,
-                            'category',
-                            (int)$category['id'],
-                            $category
-                        );
-                    }
-                    if (!empty($messages)) {
-                        $this->queuePublisher->publish(self::TOPIC_NAME, $messages);
-                    }
+                try {
+                    $this->publishEntities($categoryIds, $storeId);
+                } catch (\Throwable $e) {
+                    $this->logger->critical(
+                        \sprintf('Error on publish category ids "%s"', \implode(', ', $categoryIds)),
+                        ['exception' => $e]
+                    );
                 }
             }
         );
+    }
+
+    /**
+     * Publish entities to the queue
+     *
+     * @param array $categoryIds
+     * @param int $storeId
+     * @return void
+     */
+    private function publishEntities(array $categoryIds, int $storeId): void
+    {
+        foreach (\array_chunk($categoryIds, $this->batchSize) as $idsBunch) {
+            $messages = [];
+            $categoriesData = $this->categoriesDataProvider->fetch($idsBunch, [], ['store' => $storeId]);
+            $debugMessage = empty($categoriesData) ? 'Delete category with ids:' : 'Publish category with ids';
+            $this->logger->debug(
+                \sprintf('%s: "%s"', $debugMessage, \implode(', ', $categoryIds)),
+                ['verbose' => $categoriesData]
+            );
+
+            foreach ($categoriesData as $category) {
+                $messages[] = $this->messageBuilder->build(
+                    $storeId,
+                    'category',
+                    (int)$category['id'],
+                    $category
+                );
+            }
+            // TODO: delete entity from storage MC-30781
+            if (!empty($messages)) {
+                $this->queuePublisher->publish(self::TOPIC_NAME, $messages);
+            }
+        }
     }
 }

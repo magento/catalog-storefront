@@ -74,12 +74,13 @@ class CategoryDataProvider
                 $this->getFirstLevelAttributes($attributes)
             );
         } catch (NotFoundException $notFoundException) {
-            $this->logger->notice(
+            $this->logger->error(
                 \sprintf(
-                    'Data Provider: Cannot find categories for ids "%s" in the scope "%s"',
+                    'Cannot find categories for ids "%s" in the scope "%s"',
                     \implode(', ', $categoryIds),
                     \implode(', ', $scopes)
-                )
+                ),
+                ['exception' => $notFoundException]
             );
             return [];
         }

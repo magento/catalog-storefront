@@ -9,6 +9,7 @@ namespace Magento\CatalogStorefrontConnector\Model\Publisher;
 use Magento\CatalogProduct\DataProvider\DataProviderInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\MessageQueue\PublisherInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Product publisher
@@ -49,10 +50,16 @@ class ProductPublisher
     private $state;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param DataProviderInterface $productsDataProvider
      * @param CatalogItemMessageBuilder $messageBuilder
      * @param PublisherInterface $queuePublisher
      * @param State $state
+     * @param LoggerInterface $logger
      * @param int $batchSize
      */
     public function __construct(
@@ -60,6 +67,7 @@ class ProductPublisher
         CatalogItemMessageBuilder $messageBuilder,
         PublisherInterface $queuePublisher,
         State $state,
+        LoggerInterface $logger,
         int $batchSize
     ) {
         $this->productsDataProvider = $productsDataProvider;
@@ -67,6 +75,7 @@ class ProductPublisher
         $this->queuePublisher = $queuePublisher;
         $this->batchSize = $batchSize;
         $this->state = $state;
+        $this->logger = $logger;
     }
 
     /**
@@ -82,20 +91,48 @@ class ProductPublisher
         $this->state->emulateAreaCode(
             \Magento\Framework\App\Area::AREA_FRONTEND,
             function () use ($productIds, $storeId) {
-                foreach (\array_chunk($productIds, $this->batchSize) as $idsBunch) {
-                    $messages = [];
-                    $productsData = $this->productsDataProvider->fetch($idsBunch, [], ['store' => $storeId]);
-                    foreach ($productsData as $product) {
-                        $messages[] = $this->messageBuilder->build(
-                            $storeId,
-                            'product',
-                            (int)$product['entity_id'],
-                            $product
-                        );
-                    }
-                    $this->queuePublisher->publish(self::TOPIC_NAME, $messages);
+                try {
+                    $this->publishEntities($productIds, $storeId);
+                } catch (\Throwable $e) {
+                    $this->logger->critical(
+                        \sprintf('Error on publish product ids "%s"', \implode(', ', $productIds)),
+                        ['exception' => $e]
+                    );
                 }
             }
         );
+    }
+
+    /**
+     * Publish entities to the queue
+     *
+     * @param array $productIds
+     * @param int $storeId
+     * @return void
+     */
+    private function publishEntities(array $productIds, int $storeId): void
+    {
+        foreach (\array_chunk($productIds, $this->batchSize) as $idsBunch) {
+            $messages = [];
+            $productsData = $this->productsDataProvider->fetch($idsBunch, [], ['store' => $storeId]);
+            $debugMessage = empty($productsData) ? 'Delete product with ids:' : 'Publish product with ids';
+            $this->logger->debug(
+                \sprintf('%s: "%s"', $debugMessage, \implode(', ', $productIds)),
+                ['verbose' => $productsData]
+            );
+
+            foreach ($productsData as $product) {
+                $messages[] = $this->messageBuilder->build(
+                    $storeId,
+                    'product',
+                    (int)$product['entity_id'],
+                    $product
+                );
+            }
+            // TODO: delete entity from storage MC-30781
+            if (!empty($messages)) {
+                $this->queuePublisher->publish(self::TOPIC_NAME, $messages);
+            }
+        }
     }
 }
