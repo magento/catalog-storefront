@@ -82,6 +82,9 @@ class ProductSearch implements ProductSearchInterface
             return $this->processErrors([_('Store id is not present in Search Criteria. Please add missing info.')]);
         }
         $productIds = (array)$criteria->getFilters()['ids'];
+        if (!$productIds) {
+            throw new \InvalidArgumentException(_('Currently Catalog Storefront service supports only product ids'));
+        }
 
         $productItems = $this->dataProvider->fetch(
             $productIds,
