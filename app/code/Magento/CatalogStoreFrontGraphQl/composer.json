@@ -16,7 +16,8 @@
         "magento/module-cms-graph-ql": "*",
         "magento/module-related-product-graph-ql": "*",
         "magento/module-store-front-graph-ql": "*",
-        "magento/module-catalog-product": "*"
+        "magento/module-catalog-product": "*",
+        "magento/module-store": "*"
     },
     "type": "magento2-module",
     "license": [

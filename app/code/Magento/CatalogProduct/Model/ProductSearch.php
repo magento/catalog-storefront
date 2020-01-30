@@ -81,16 +81,19 @@ class ProductSearch implements ProductSearchInterface
         if (!isset($criteria->getScopes()['store'])) {
             return $this->processErrors([_('Store id is not present in Search Criteria. Please add missing info.')]);
         }
-        $productIds = (array)$criteria->getFilters()['ids'];
-        if (!$productIds) {
+        if (!isset($criteria->getFilters()['ids'])) {
             throw new \InvalidArgumentException('Currently Catalog Storefront service supports only product ids');
         }
+        $productIds = (array)$criteria->getFilters()['ids'];
 
-        $productItems = $this->dataProvider->fetch(
-            $productIds,
-            $criteria->getAttributes(),
-            $criteria->getScopes()
-        );
+        $productItems = [];
+        if (!empty($productIds)) {
+            $productItems = $this->dataProvider->fetch(
+                $productIds,
+                $criteria->getAttributes(),
+                $criteria->getScopes()
+            );
+        }
 
         return $this->productResultContainerFactory->create(
             [

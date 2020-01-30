@@ -114,10 +114,12 @@ class RequestBuilder
             'metaInfo' => $metaInfo,
         ];
 
-        return $this->productSearch->search([
-            'graphql_request' => $request,
-            'storefront_request' => $storefrontRequest,
-        ]);
+        return $this->productSearch->search(
+            [
+                'graphql_request' => $request,
+                'storefront_request' => $storefrontRequest,
+            ]
+        );
     }
 
     /**

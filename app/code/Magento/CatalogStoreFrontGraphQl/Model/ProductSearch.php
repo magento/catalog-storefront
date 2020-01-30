@@ -61,7 +61,8 @@ class ProductSearch
         $storefrontRequest = $request['storefront_request'];
 
         $searchCriteria = $this->searchCriteriaBuilder->build($storefrontRequest);
-        $showLayeredNavigation = !empty($storefrontRequest['aggregations']) || $storefrontRequest['aggregations'] === null;
+        $showLayeredNavigation = !empty($storefrontRequest['aggregations'])
+            || $storefrontRequest['aggregations'] === null;
         [$totalCount, $productIds, $aggregations] = $this->searchProducts(
             $searchCriteria,
             $showLayeredNavigation
