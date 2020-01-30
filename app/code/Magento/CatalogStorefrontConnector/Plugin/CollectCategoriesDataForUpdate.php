@@ -76,11 +76,11 @@ class CollectCategoriesDataForUpdate
             }
             $message = $this->messageBuilder->build($storeId, [$entityId]);
             try {
-                $this->logger->debug(\sprintf('Collect category id: "%s"', $entityId));
+                $this->logger->debug(\sprintf('Collect category id: "%s" in store %s', $entityId, $storeId));
                 $this->queuePublisher->publish(self::QUEUE_TOPIC, $message);
             } catch (\Throwable $e) {
                 $this->logger->critical(
-                    \sprintf('Error on collect category id "%s"', $entityId),
+                    \sprintf('Error on collect category id "%s" in store %s', $entityId, $storeId),
                     ['exception' => $e]
                 );
             }
