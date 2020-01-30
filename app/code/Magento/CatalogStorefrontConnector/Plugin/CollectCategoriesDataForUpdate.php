@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Plugin;
 
+use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogStorefrontConnector\Model\UpdatedEntitiesMessageBuilder;
 use Magento\Framework\MessageQueue\PublisherInterface;
@@ -56,13 +57,17 @@ class CollectCategoriesDataForUpdate
     /**
      * Collect store ID and Category IDs for updated entity
      *
+     * @param CategoryResource $subject
+     * @param CategoryResource $result
      * @param Category $category
-     * @return void
+     * @return CategoryResource
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterAfterSave(
+    public function afterSave(
+        CategoryResource $subject,
+        CategoryResource $result,
         Category $category
-    ): void {
+    ): CategoryResource {
         $entityId = $category->getId();
         foreach ($category->getStoreIds() as $storeId) {
             $storeId = (int)$storeId;
@@ -80,5 +85,6 @@ class CollectCategoriesDataForUpdate
                 );
             }
         }
+        return $result;
     }
 }

@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\CatalogStoreFrontGraphQl\Model;
 
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\GraphQl\Query\FieldTranslator;
 
 /**
  * Resolve fields for query.
@@ -16,22 +15,9 @@ use Magento\Framework\GraphQl\Query\FieldTranslator;
 class FieldResolver
 {
     /**
-     * @var FieldTranslator
-     */
-    private $fieldTranslator;
-
-    /**
      * @var array
      */
     private $fieldNamesCache = [];
-
-    /**
-     * @param FieldTranslator $fieldTranslator
-     */
-    public function __construct(FieldTranslator $fieldTranslator)
-    {
-        $this->fieldTranslator = $fieldTranslator;
-    }
 
     /**
      * Get fields for schema type.
@@ -95,7 +81,7 @@ class FieldResolver
     {
         if (!isset($selection->selectionSet) && !isset($selection->selectionSet->selections)) {
             if ($selection->kind === 'Field' && $selection->name->value) {
-                $fieldNames[] = $this->fieldTranslator->translate($selection->name->value);
+                $fieldNames[] = $selection->name->value; //$this->fieldTranslator->translate($selection->name->value);
             }
             return $fieldNames;
         }
@@ -132,11 +118,11 @@ class FieldResolver
      */
     private function getNestedFields(array $fieldNames, $itemSelection, $nameType = null): array
     {
-        $itemSelectionName = $this->fieldTranslator->translate($itemSelection->name->value);
+        $itemSelectionName = $itemSelection->name->value;
         if (isset($itemSelection->selectionSet, $itemSelection->selectionSet->selections)) {
             $itemSelectionName = $nameType
-                ? $nameType . '.' . $this->fieldTranslator->translate($itemSelection->name->value)
-                : $this->fieldTranslator->translate($itemSelection->name->value);
+                ? $nameType . '.' . $itemSelection->name->value
+                : $itemSelection->name->value;
 
             $fieldNames[$itemSelectionName] = $this->getFieldNames($itemSelection, []);
         } else {

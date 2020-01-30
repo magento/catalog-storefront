@@ -81,7 +81,7 @@ class DownloadableProductItems implements DataProviderInterface
 
         $connection = $this->resourceConnection->getConnection();
 
-        $attributes = $attributes[$this->attributeName];
+        $attributes = $attributes[$this->attributeName] ?? [];
         $downloadableProductItems = $this->downloadableItemsBuilder->build(
             $productIds,
             $attributes,
@@ -92,9 +92,7 @@ class DownloadableProductItems implements DataProviderInterface
         if (empty($items)) {
             return [];
         }
-        if (\in_array('sample_url', $attributes, true)) {
-            $items = $this->addSampleUrl($items);
-        }
+        $items = $this->addSampleUrl($items);
         $itemsByEntityId = $this->indexByField($items, 'entity_id');
 
         $result = [];
@@ -136,7 +134,7 @@ class DownloadableProductItems implements DataProviderInterface
         foreach ($items as $key => $item) {
             $items[$key]['sample_url'] = $this->urlBuilder->getUrl(
                 $this->routePath,
-                [$this->tableKey => $item[$this->tableKey]]
+                [$this->tableKey => $item[$this->tableKey] ?? '']
             );
         }
 
