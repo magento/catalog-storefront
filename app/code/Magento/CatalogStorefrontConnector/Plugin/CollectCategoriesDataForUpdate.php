@@ -40,6 +40,11 @@ class CollectCategoriesDataForUpdate
     private $logger;
 
     /**
+     * @var ProductUpdatesPublisher
+     */
+    private $productUpdatesPublisher;
+
+    /**
      * @param PublisherInterface $queuePublisher
      * @param UpdatedEntitiesMessageBuilder $messageBuilder
      * @param LoggerInterface $logger
@@ -47,11 +52,13 @@ class CollectCategoriesDataForUpdate
     public function __construct(
         PublisherInterface $queuePublisher,
         UpdatedEntitiesMessageBuilder $messageBuilder,
+        \Magento\CatalogStorefrontConnector\Plugin\ProductUpdatesPublisher $productUpdatesPublisher,
         LoggerInterface $logger
     ) {
         $this->queuePublisher = $queuePublisher;
         $this->messageBuilder = $messageBuilder;
         $this->logger = $logger;
+        $this->productUpdatesPublisher = $productUpdatesPublisher;
     }
 
     /**
@@ -78,6 +85,11 @@ class CollectCategoriesDataForUpdate
             try {
                 $this->logger->debug(\sprintf('Collect category id: "%s" in store %s', $entityId, $storeId));
                 $this->queuePublisher->publish(self::QUEUE_TOPIC, $message);
+
+                if (!empty($category->getChangedProductIds())) {
+                    $this->productUpdatesPublisher->publish($category->getChangedProductIds(), $storeId);
+                }
+
             } catch (\Throwable $e) {
                 $this->logger->critical(
                     \sprintf('Error on collect category id "%s" in store %s', $entityId, $storeId),
