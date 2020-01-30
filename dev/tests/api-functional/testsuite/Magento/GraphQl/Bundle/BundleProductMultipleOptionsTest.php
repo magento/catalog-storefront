@@ -85,7 +85,8 @@ QUERY;
         $productItems = $response['products']['items'];
 
         foreach ($bundleProductDataProvider as $key => $data) {
-            $this->compareArraysRecursively($productItems[$key], $data);
+            $diff = $this->compareArraysRecursively($data, $productItems[$key]);
+            self::assertEquals([], $diff, "Actual response doesn't equal to expected data");
         }
     }
 
