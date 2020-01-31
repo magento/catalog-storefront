@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogProduct\DataProvider;
+namespace Magento\CatalogStoreFrontGraphQl\Model;
 
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
@@ -16,7 +16,6 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\CatalogProductApi\Api\Data\ProductSearchCriteriaInterface;
 
 /**
  * Build search criteria for search products
@@ -104,12 +103,12 @@ class SearchCriteriaBuilder
     /**
      * Build search criteria
      *
-     * @param ProductSearchCriteriaInterface $criteria
+     * @param array $criteria
      * @return SearchCriteriaInterface
      */
-    public function build(ProductSearchCriteriaInterface $criteria): SearchCriteriaInterface
+    public function build(array $criteria): SearchCriteriaInterface
     {
-        $includeAggregation = !empty($criteria->getAggregations()) || $criteria->getAggregations() === null;
+        $includeAggregation = !empty($criteria['aggregations']) || $criteria['aggregations'] === null;
 
         $filters = $this->collectFilters($criteria, $includeAggregation);
         $sort = $this->collectSort($criteria);
@@ -121,8 +120,8 @@ class SearchCriteriaBuilder
             ->setRequestName($requestName)
             ->setFilterGroups([$this->filterGroupBuilder->setFilters($filters)->create()])
             ->setSortOrders($sort)
-            ->setCurrentPage($criteria->getPage()['currentPage'] ?? self::DEFAULT_CURRENT_PAGE)
-            ->setPageSize($criteria->getPage()['pageSize'] ?? self::DEFAULT_PAGE_SIZE);
+            ->setCurrentPage($criteria['page']['currentPage'] ?? self::DEFAULT_CURRENT_PAGE)
+            ->setPageSize($criteria['page']['pageSize'] ?? self::DEFAULT_PAGE_SIZE);
 
         return $searchCriteria;
     }
@@ -187,22 +186,25 @@ class SearchCriteriaBuilder
     /**
      * Collect filters from Search Criteria
      *
-     * @param ProductSearchCriteriaInterface $criteria
+     * @param array $criteria
      * @param bool $includeAggregation
      * @return array
      */
-    private function collectFilters(ProductSearchCriteriaInterface $criteria, bool $includeAggregation): array
+    private function collectFilters(array $criteria, bool $includeAggregation): array
     {
         $filters = [];
-        foreach ($criteria->getFilters() as $attributeName => $conditions) {
+        foreach ($criteria['filters'] as $attributeName => $conditions) {
             foreach ((array)$conditions as $condition => $value) {
                 $filters[] = $this->buildFilter($attributeName, $value, $condition);
             }
         }
-        $filters[] = $this->getVisibilityFilter(!empty($criteria->getSearchTerm()), !empty($criteria->getFilters()));
+        $filters[] = $this->getVisibilityFilter(
+            !empty($criteria['searchTerm']),
+            !empty($criteria['filters'])
+        );
 
-        if ($criteria->getSearchTerm()) {
-            $filters[] = $this->buildFilter('search_term', $criteria->getSearchTerm());
+        if ($criteria['searchTerm']) {
+            $filters[] = $this->buildFilter('search_term', $criteria['searchTerm']);
         }
 
         if ($includeAggregation) {
@@ -215,13 +217,13 @@ class SearchCriteriaBuilder
     /**
      * Collect sort criteria from Search Criteria
      *
-     * @param ProductSearchCriteriaInterface $criteria
+     * @param array $criteria
      * @return array
      */
-    private function collectSort(ProductSearchCriteriaInterface $criteria): array
+    private function collectSort(array $criteria): array
     {
         $sort = [];
-        foreach ($criteria->getSort() as $attributeName => $sortDirection) {
+        foreach ($criteria['sort'] as $attributeName => $sortDirection) {
             $sort[] = $this->sortBuilder->setField($attributeName)->setDirection($sortDirection)->create();
         }
 

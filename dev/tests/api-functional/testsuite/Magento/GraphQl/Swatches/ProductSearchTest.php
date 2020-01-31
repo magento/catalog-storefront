@@ -25,7 +25,6 @@ class ProductSearchTest extends GraphQlAbstract
      */
     public function testFilterLn()
     {
-        $this->markTestIncomplete('not implemented yet. in MC-16995');
         $query = <<<QUERY
 {
     products (

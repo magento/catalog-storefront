@@ -11,6 +11,7 @@ namespace Magento\CatalogProduct\Model\Storage\Client;
 use Magento\CatalogProduct\Model\Storage\Data\EntryInterface;
 use Magento\CatalogProduct\Model\Storage\Data\EntryIteratorInterface;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Exception\RuntimeException;
 
 /**
  * Storage client interface for Read access operations.
@@ -48,6 +49,7 @@ interface QueryInterface
      * @param array $fields
      * @return EntryIteratorInterface
      * @throws NotFoundException
+     * @throws RuntimeException
      */
     public function getEntries(
         string $indexName,

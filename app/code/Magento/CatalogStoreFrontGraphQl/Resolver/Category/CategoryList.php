@@ -76,7 +76,10 @@ class CategoryList implements BatchResolverInterface
                 'scopes' => $this->scopeProvider->getScopes($context),
                 'attributes' => $this->fieldResolver->getSchemaTypeFields($request->getInfo(), ['categoryList']),
             ];
-            $storefrontRequests[] = [$request, $storefrontRequest];
+            $storefrontRequests[] = [
+                'graphql_request' => $request,
+                'storefront_request' => $storefrontRequest
+            ];
         }
 
         return $this->serviceInvoker->invoke(

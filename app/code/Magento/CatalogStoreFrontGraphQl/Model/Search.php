@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogProduct\Framework\Search;
+namespace Magento\CatalogStoreFrontGraphQl\Model;
 
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\App\ScopeResolverInterface;
@@ -12,10 +12,9 @@ use Magento\Framework\Search\SearchEngineInterface;
 use Magento\Framework\Search\SearchResponseBuilder;
 
 /**
- * Ad-hoc implementation to override \Magento\Framework\Search\Search to add ability to use
- * \Magento\Framework\Api\Filter::getConditionType in filters
+ * Performs search by searchCriteria in search engine.
  */
-class Search implements \Magento\Search\Api\SearchInterface
+class Search
 {
     /**
      * @var Builder
