@@ -46,23 +46,6 @@
         </arguments>
     </type>
 
-    <type name="Magento\CatalogProduct\DataProvider\LayeredNavigation\LayerBuilder">
-        <arguments>
-            <argument name="builders" xsi:type="array">
-                <item name="price_bucket" xsi:type="object">Magento\CatalogProduct\DataProvider\LayeredNavigation\Builder\Price</item>
-                <item name="category_bucket" xsi:type="object">Magento\CatalogProduct\DataProvider\LayeredNavigation\Builder\Category</item>
-                <item name="attribute_bucket" xsi:type="object">Magento\CatalogProduct\DataProvider\LayeredNavigation\Builder\Attribute</item>
-            </argument>
-        </arguments>
-    </type>
-
-    <!-- Add-hoc solution -->
-    <type name="Magento\CatalogProduct\Model\ProductSearch">
-        <arguments>
-            <argument name="search" xsi:type="object">Magento\CatalogProduct\Framework\Search\Search</argument>
-        </arguments>
-    </type>
-
     <type name="Magento\CatalogProduct\Model\Storage\Client\Config\EntityConfigPool">
         <arguments>
             <argument name="configs" xsi:type="array">

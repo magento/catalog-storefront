@@ -78,7 +78,10 @@ class CategoryTree implements BatchResolverInterface
                 'scopes' => $this->scopeProvider->getScopes($context),
                 'attributes' => $this->fieldResolver->getSchemaTypeFields($request->getInfo(), ['category']),
             ];
-            $storefrontRequests[] = [$request, $storefrontRequest];
+            $storefrontRequests[] = [
+                'graphql_request' => $request,
+                'storefront_request' => $storefrontRequest
+            ];
         }
 
         return $this->serviceInvoker->invoke(

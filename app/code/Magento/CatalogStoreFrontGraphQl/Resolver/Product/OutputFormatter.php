@@ -24,6 +24,7 @@ class OutputFormatter
      * @param ProductResultContainerInterface $result
      * @param GraphQlInputException $e
      * @param BatchRequestItemInterface $request
+     * @param array $additionalInfo
      * @return array
      * @throws GraphQlInputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -31,19 +32,21 @@ class OutputFormatter
     public function __invoke(
         ProductResultContainerInterface $result,
         GraphQlInputException $e,
-        BatchRequestItemInterface $request
+        BatchRequestItemInterface $request,
+        array $additionalInfo = []
     ) {
-        $errors = $result->getErrors();
+        $errors = $result->getErrors() ?: $additionalInfo['errors'] ?: [];
         if (!empty($errors)) {
             //ad-hoc solution with __() as GraphQlInputException accepts Phrase in construct
             //TODO: change with error holder
             throw new GraphQlInputException(__(\implode('; ', \array_map('\strval', $errors))));
         }
 
-        $metaInfo = $result->getMetaInfo();
+        $metaInfo = $result->getMetaInfo() ?: $additionalInfo['meta_info'];
+        $aggregations = $result->getAggregations() ?: $additionalInfo['aggregations'];
         return [
             'items' => $result->getItems(),
-            'aggregations' => $result->getAggregations(),
+            'aggregations' => $aggregations,
             'total_count' => $metaInfo['total_count'] ?? null,
             'page_info' => [
                 'page_size' => $metaInfo['page_size'] ?? null,
