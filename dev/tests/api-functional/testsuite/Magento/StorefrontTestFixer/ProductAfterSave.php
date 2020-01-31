@@ -15,9 +15,10 @@ use Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataOnSave;
 class ProductAfterSave extends CollectProductsDataOnSave
 {
     /**
+     * @inheritDoc
+     *
      * Ad-hoc solution. Force run consumers after product save inside test-case
      *
-     * @inheritdoc
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function afterSave(

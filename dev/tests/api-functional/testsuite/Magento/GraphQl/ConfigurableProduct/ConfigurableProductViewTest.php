@@ -31,6 +31,8 @@ class ConfigurableProductViewTest extends GraphQlAbstract
      */
     public function testQueryConfigurableProductLinks()
     {
+        //TODO: remove skip after issue fix
+        self::markTestSkipped('Unskip this test after MC-31037 issue completed');
         $productSku = 'configurable';
 
         $query

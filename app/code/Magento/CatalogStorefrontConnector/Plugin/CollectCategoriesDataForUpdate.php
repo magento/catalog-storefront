@@ -47,12 +47,13 @@ class CollectCategoriesDataForUpdate
     /**
      * @param PublisherInterface $queuePublisher
      * @param UpdatedEntitiesMessageBuilder $messageBuilder
+     * @param ProductUpdatesPublisher $productUpdatesPublisher
      * @param LoggerInterface $logger
      */
     public function __construct(
         PublisherInterface $queuePublisher,
         UpdatedEntitiesMessageBuilder $messageBuilder,
-        \Magento\CatalogStorefrontConnector\Plugin\ProductUpdatesPublisher $productUpdatesPublisher,
+        ProductUpdatesPublisher $productUpdatesPublisher,
         LoggerInterface $logger
     ) {
         $this->queuePublisher = $queuePublisher;

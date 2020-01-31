@@ -10,6 +10,8 @@ use Magento\CatalogProduct\Model\Storage\State;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
+ * Abstract class to execute GraphQL specified methods in tests
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class GraphQlAbstract extends WebapiAbstract
@@ -46,7 +48,6 @@ abstract class GraphQlAbstract extends WebapiAbstract
                 try {
                     $sourceName = $storageState->getCurrentDataSourceName([$store->getId(), $entityType]);
                     $dataDefinition->deleteDataSource($sourceName);
-
                 } catch (\Exception $e) {
                     // Do nothing if no source
                 }
@@ -227,7 +228,6 @@ abstract class GraphQlAbstract extends WebapiAbstract
             );
         }
     }
-
 
     /**
      * Compare arrays recursively regardless of nesting.

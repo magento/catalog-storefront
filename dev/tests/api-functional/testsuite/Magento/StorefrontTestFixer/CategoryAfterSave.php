@@ -16,9 +16,10 @@ use Magento\Catalog\Model\Category;
 class CategoryAfterSave extends \Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate
 {
     /**
+     * @inheritdoc
+     *
      * Ad-hoc solution. Force run consumers after category save inside test-case
      *
-     * @inheritdoc
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function afterSave(

@@ -5,6 +5,8 @@
  */
 
 return [
-    \Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate::class => \Magento\StorefrontTestFixer\CategoryAfterSave::class,
-    \Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataOnSave::class => \Magento\StorefrontTestFixer\ProductAfterSave::class
+    \Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate::class
+        => \Magento\StorefrontTestFixer\CategoryAfterSave::class,
+    \Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataOnSave::class
+        => \Magento\StorefrontTestFixer\ProductAfterSave::class
 ];
