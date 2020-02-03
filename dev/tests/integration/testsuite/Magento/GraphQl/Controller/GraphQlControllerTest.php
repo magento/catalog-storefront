@@ -42,6 +42,11 @@ class GraphQlControllerTest extends AbstractGraphQl
     /** @var Http */
     private $request;
 
+    /**
+     * @inheritdoc
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public static function setUpBeforeClass()
     {
         $db = Bootstrap::getInstance()->getBootstrap()
@@ -55,6 +60,11 @@ class GraphQlControllerTest extends AbstractGraphQl
         parent::setUpBeforeClass();
     }
 
+    /**
+     * @inheritdoc
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     protected function setUp() : void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -157,9 +167,11 @@ QUERY;
         $this->assertEquals($product->getName(), $output['data']['products']['items'][0]['name']);
     }
 
-    /** Test request is dispatched and response generated when using GET request with parameterized query string
+    /**
+     * Test request is dispatched and response generated when using GET request with parameterized query string
      *
      * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testDispatchGetWithParameterizedVariables() : void
     {

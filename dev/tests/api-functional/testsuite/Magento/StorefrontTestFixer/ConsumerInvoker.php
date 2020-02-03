@@ -20,6 +20,15 @@ class ConsumerInvoker
     private const BATCHSIZE = 1000;
 
     /**
+     * List of storefront consumers
+     */
+    private const CONSUMERS = [
+        'storefront.catalog.category.update',
+        'storefront.catalog.product.update',
+        'storefront.catalog.data.consume',
+    ];
+
+    /**
      * Invoke consumers
      *
      * @param bool $invokeInTestsOnly
@@ -32,19 +41,14 @@ class ConsumerInvoker
             $trace = (new \Exception())->getTraceAsString();
             if (false === strpos($trace, 'src/Framework/TestCase.php')
                 || false !== strpos($trace, 'ApiDataFixture->startTest')) {
-                return ;
+                return;
             }
         }
         $objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\Framework\MessageQueue\ConsumerFactory $consumerFactory */
         $consumerFactory = $objectManager->create(\Magento\Framework\MessageQueue\ConsumerFactory::class);
-        $consumers = [
-            'storefront.catalog.category.update',
-            'storefront.catalog.product.update',
-            'storefront.catalog.data.consume',
-        ];
-        foreach ($consumers as $consumerName) {
+        foreach (self::CONSUMERS as $consumerName) {
             $consumer = $consumerFactory->get($consumerName, self::BATCHSIZE);
             $consumer->process(self::BATCHSIZE);
         }

@@ -39,6 +39,9 @@ abstract class AbstractGraphqlCacheTest extends AbstractGraphQl
         parent::setUp();
     }
 
+    /**
+     * @return void
+     */
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -47,6 +50,9 @@ abstract class AbstractGraphqlCacheTest extends AbstractGraphQl
         $this->flushPageCache();
     }
 
+    /**
+     * @return void
+     */
     protected function enablePageCachePlugin(): void
     {
         /** @var  $registry Registry */
@@ -54,6 +60,9 @@ abstract class AbstractGraphqlCacheTest extends AbstractGraphQl
         $registry->register('use_page_cache_plugin', true, true);
     }
 
+    /**
+     * @return void
+     */
     protected function disablePageCachePlugin(): void
     {
         /** @var  $registry Registry */
@@ -61,6 +70,9 @@ abstract class AbstractGraphqlCacheTest extends AbstractGraphQl
         $registry->unregister('use_page_cache_plugin');
     }
 
+    /**
+     * @return void
+     */
     protected function flushPageCache(): void
     {
         /** @var PageCache $fullPageCache */
@@ -71,6 +83,7 @@ abstract class AbstractGraphqlCacheTest extends AbstractGraphQl
     /**
      * Regarding the SuppressWarnings annotation below: the nested class below triggers a false rule match.
      *
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function enableCachebleQueryTestProxy(): void
@@ -117,17 +130,27 @@ abstract class AbstractGraphqlCacheTest extends AbstractGraphQl
         $this->objectManager->addSharedInstance($cacheableQueryProxy, CacheableQuery::class);
     }
 
+    /**
+     * @return void
+     */
     private function disableCacheableQueryTestProxy(): void
     {
         $this->resetQueryCacheTags();
         $this->objectManager->removeSharedInstance(CacheableQuery::class);
     }
 
+    /**
+     * @return void
+     */
     protected function resetQueryCacheTags(): void
     {
         $this->objectManager->get(CacheableQuery::class)->reset($this->objectManager);
     }
 
+    /**
+     * @param array $queryParams
+     * @return HttpResponse
+     */
     protected function dispatchGraphQlGETRequest(array $queryParams): HttpResponse
     {
         $this->resetQueryCacheTags();

@@ -95,7 +95,7 @@ class ProductDataProvider
         foreach ($entities as $entry) {
             $data = $entry->getData();
             if (!$data) {
-                continue ;
+                continue;
             }
             $data['id'] = $entry->getId();
             $products[$entry->getId()] = $data;

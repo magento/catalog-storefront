@@ -81,7 +81,7 @@ class FieldResolver
     {
         if (!isset($selection->selectionSet) && !isset($selection->selectionSet->selections)) {
             if ($selection->kind === 'Field' && $selection->name->value) {
-                $fieldNames[] = $selection->name->value; //$this->fieldTranslator->translate($selection->name->value);
+                $fieldNames[] = $selection->name->value;
             }
             return $fieldNames;
         }

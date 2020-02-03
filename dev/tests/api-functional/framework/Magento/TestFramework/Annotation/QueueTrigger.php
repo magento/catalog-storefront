@@ -10,7 +10,7 @@ namespace Magento\TestFramework\Annotation;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * @inheritDoc
+ * Trigger queue to process storefront consumers
  */
 class QueueTrigger
 {

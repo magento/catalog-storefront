@@ -7,9 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\StorefrontTestFixer;
 
-use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
-use Magento\Catalog\Model\Category;
-
 /**
  * Plugin for collect category data during saving process
  *
