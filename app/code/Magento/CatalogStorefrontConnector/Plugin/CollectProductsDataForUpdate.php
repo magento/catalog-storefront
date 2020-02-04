@@ -53,7 +53,7 @@ class CollectProductsDataForUpdate
         array $dimensions,
         \Traversable $entityIds = null
     ): void {
-        if (!$this->isIndexerRunOnSchedule()) {
+        if (!$this->isFullReindex($entityIds) && $this->isReindexOnSave()) {
             return ;
         }
         $productIds = $entityIds instanceof \Traversable ? $entityIds->getArrayCopy() : [];
@@ -64,13 +64,24 @@ class CollectProductsDataForUpdate
     }
 
     /**
-     * Is indexer run in "on schedule" mode
+     * Is indexer run in "realtime" mode
      *
      * @return bool
      */
-    private function isIndexerRunOnSchedule(): bool
+    private function isReindexOnSave(): bool
     {
         $indexer = $this->indexerRegistry->get(Fulltext::INDEXER_ID);
-        return $indexer->isScheduled();
+        return !$indexer->isScheduled();
+    }
+
+    /**
+     * Is full reindex executed
+     *
+     * @param \Traversable|null $entitiesIds
+     * @return bool
+     */
+    private function isFullReindex(\Traversable $entitiesIds = null): bool
+    {
+        return $entitiesIds === null;
     }
 }
