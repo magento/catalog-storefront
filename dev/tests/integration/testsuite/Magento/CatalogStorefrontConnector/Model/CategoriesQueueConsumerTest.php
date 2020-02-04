@@ -9,33 +9,28 @@ namespace Magento\CatalogStorefrontConnector\Model;
 
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\ResourceModel\Category;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\MessageQueue\QueueRepository;
+use Magento\GraphQl\AbstractGraphQl;
 use Magento\Indexer\Model\Indexer;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\MessageQueue\EnvironmentPreconditionException;
-use Magento\TestFramework\MessageQueue\PublisherConsumerController;
-use Magento\TestFramework\MessageQueue\PreconditionFailedException;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\MessageQueue\QueueInterface;
-use PHPUnit\Framework\TestCase;
+use Magento\TestFramework\MessageQueue\EnvironmentPreconditionException;
+use Magento\TestFramework\MessageQueue\PreconditionFailedException;
+use Magento\TestFramework\MessageQueue\PublisherConsumerController;
 
 /**
  * Tests for CategoriesQueueConsumer class
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-
-class CategoriesQueueConsumerTest extends TestCase
+class CategoriesQueueConsumerTest extends AbstractGraphQl
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
-
-    /**
-     * @var PublisherConsumerController
-     */
-    private $publisherConsumer;
 
     /**
      * @var JsonHelper
@@ -63,22 +58,11 @@ class CategoriesQueueConsumerTest extends TestCase
     private $categoryResource;
 
     /**
-     * @var array
+     * @throws LocalizedException
+     *
+     * @return void
      */
-    private $consumers = ['storefront.catalog.category.update'];
-
-    /**
-     * @var array
-     */
-    private $indexers = [
-        'catalog_category_product',
-        'catalogsearch_fulltext'
-    ];
-
-    /**
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->jsonHelper = $this->objectManager->create(JsonHelper::class);
@@ -86,37 +70,31 @@ class CategoriesQueueConsumerTest extends TestCase
         $this->queueRepository = Bootstrap::getObjectManager()->create(QueueRepository::class);
         $this->categoryRepository = $this->objectManager->get(CategoryRepository::class);
         $this->categoryResource = $this->objectManager->get(Category::class);
-        $this->publisherConsumer = Bootstrap::getObjectManager()->create(
-            PublisherConsumerController::class,
-            [
-                'consumers' => $this->consumers,
-                'logFilePath' => '',
-                'maxMessages' => null,
-                'appInitParams' => Bootstrap::getInstance()->getAppInitParams()
-            ]
-        );
+        parent::setUp();
     }
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoAppIsolation disabled
      * @magentoDbIsolation disabled
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
      * @dataProvider categoryAttributesProvider
      * @param array $expectedData
      *
+     * @return void
      * @throws \Exception
      */
-    public function testMessageReading(array $expectedData)
+    public function testMessageReading(array $expectedData): void
     {
-        $this->markTestSkipped("Skipped due to MC-30526 issue");
-        $this->initPublisherController();
+        $this->processAllCatalogStorefrontMessages();
         $category = $this->categoryRepository->get(333, 1);
         $category->setName('Category New Name');
         $this->categoryResource->save($category);
-        $this->reindex();
+        $consumersToProcess = [
+            'storefront.catalog.category.update'
+        ];
+        $this->processCatalogQueueMessages($consumersToProcess);
         $queue = $this->queueRepository->get('amqp', 'storefront.catalog.data.consume');
-        $queueBody = $this->waitForAsynchronousResult($queue);
+        $queueBody = $this->getQueueBody($queue);
         $parsedData = $this->jsonHelper->jsonDecode($queueBody);
         $parsedData = $this->jsonHelper->jsonDecode(array_pop($parsedData));
 
@@ -130,7 +108,7 @@ class CategoriesQueueConsumerTest extends TestCase
      *
      * @return array
      */
-    public function categoryAttributesProvider()
+    public function categoryAttributesProvider(): array
     {
         return [
             'category_with_simple_product' => [
@@ -158,26 +136,38 @@ class CategoriesQueueConsumerTest extends TestCase
     }
 
     /**
-     * Wait for queue message will be available
+     * Wait for queue message will be available and get queue body
      *
      * @param QueueInterface $queue
      * @return string|null
      */
-    private function waitForAsynchronousResult(QueueInterface $queue)
+    private function getQueueBody(QueueInterface $queue): ?string
+    {
+        $queueBody = $this->getAsyncMessage($queue);
+
+        if (!$queueBody) {
+            self::fail('No asynchronous messages were processed.');
+        }
+
+        return $queueBody;
+    }
+
+    /**
+     * @param QueueInterface $queue
+     * @return string|null
+     */
+    private function getAsyncMessage(QueueInterface $queue): ?string
     {
         $queueBody = null;
+
         $i = 0;
         do {
             sleep(1);
-            $queueBody = call_user_func_array(
+            $queueBody = \call_user_func_array(
                 [$this, 'getMessageBody'],
                 [$queue]
             );
-        } while (!$queueBody && ($i++ < 50));
-
-        if (!$queueBody) {
-            $this->fail('No asynchronous messages were processed.');
-        }
+        } while (!$queueBody && ($i++ < 10));
 
         return $queueBody;
     }
@@ -188,50 +178,50 @@ class CategoriesQueueConsumerTest extends TestCase
      * @param QueueInterface $queue
      * @return string|null
      */
-    public function getMessageBody($queue)
+    public function getMessageBody($queue): ?string
     {
         $message = $queue->dequeue();
-        $messageBody = $message ? $message->getBody() : null;
 
-        return $messageBody;
+        return $message ? $message->getBody() : null;
     }
 
     /**
-     * Make reindex for indexers stored in $this->indexer var
+     * Stop all running Catalog Data Consumers
      *
-     * @throws \Exception
+     * @return void
+     * @throws LocalizedException
+     * @throws EnvironmentPreconditionException
+     * @throws PreconditionFailedException
      */
-    private function reindex()
+    private function processAllCatalogStorefrontMessages(): void
     {
-        foreach ($this->indexers as $indexer) {
-            $this->indexer->load($indexer);
-            $this->indexer->reindexAll();
+        /** @var PublisherConsumerController $catalogStorefrontConsumers */
+        $catalogStorefrontConsumers = Bootstrap::getObjectManager()->create(
+            PublisherConsumerController::class,
+            [
+                'consumers' => [
+                    'storefront.catalog.category.update',
+                    'storefront.catalog.product.update',
+                    'storefront.catalog.data.consume'
+                ],
+                'logFilePath' => '',
+                'maxMessages' => null,
+                'appInitParams' => Bootstrap::getInstance()->getAppInitParams()
+            ]
+        );
+        $catalogStorefrontConsumers->initialize();
+        $catalogQueue = $this->queueRepository->get('amqp', 'storefront.catalog.category.connector');
+        while ($this->getAsyncMessage($catalogQueue)) {
+            continue;
         }
-    }
-
-    /**
-     * Init AMQP publisher
-     */
-    private function initPublisherController()
-    {
-        try {
-            $this->publisherConsumer->initialize();
-        } catch (EnvironmentPreconditionException $e) {
-            $this->markTestSkipped($e->getMessage());
-        } catch (PreconditionFailedException $e) {
-            $this->fail(
-                $e->getMessage()
-            );
+        $productsQueue = $this->queueRepository->get('amqp', 'storefront.catalog.product.connector');
+        while ($this->getAsyncMessage($productsQueue)) {
+            continue;
         }
-    }
-
-    /**
-     * Tear down after tests
-     */
-    public function tearDown()
-    {
-        $this->publisherConsumer->stopConsumers();
-
-        parent::tearDown();
+        $catalogDataQueue = $this->queueRepository->get('amqp', 'storefront.catalog.data.consume');
+        while ($this->getAsyncMessage($catalogDataQueue)) {
+            continue;
+        }
+        $catalogStorefrontConsumers->stopConsumers();
     }
 }

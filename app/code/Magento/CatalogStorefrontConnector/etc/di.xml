@@ -12,10 +12,10 @@
     <type name="Magento\CatalogSearch\Model\Indexer\Fulltext">
         <plugin name="collectDataForStorefrontApplication" type="Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataForUpdate" />
     </type>
-    <type name="Magento\Catalog\Model\Category">
+    <type name="Magento\Catalog\Model\ResourceModel\Category">
         <plugin name="collectCategoryDataForStorefrontApplication" type="Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate" />
     </type>
-    <type name="Magento\Catalog\Model\Product">
+    <type name="Magento\Catalog\Model\ResourceModel\Product">
         <plugin name="collectCategoryDataForStorefrontApplicationOnSave" type="Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataOnSave" />
     </type>
     <type name="Magento\Framework\MessageQueue\MergerFactory">

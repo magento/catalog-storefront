@@ -23,6 +23,8 @@ class BundleProductMultipleOptionsTest extends GraphQlAbstract
      */
     public function testBundleProductWithMultipleOptions(array $bundleProductDataProvider): void
     {
+        //TODO: Unskip after MC-30893 fix
+        self::markTestSkipped('Skipped due to MC-30893: Handle Bundle products on Storefront');
         $productSku = 'bundle-product';
         $query
             = <<<QUERY
@@ -85,7 +87,8 @@ QUERY;
         $productItems = $response['products']['items'];
 
         foreach ($bundleProductDataProvider as $key => $data) {
-            $this->compareArraysRecursively($productItems[$key], $data);
+            $diff = $this->compareArraysRecursively($data, $productItems[$key]);
+            self::assertEquals([], $diff, "Actual response doesn't equal to expected data");
         }
     }
 

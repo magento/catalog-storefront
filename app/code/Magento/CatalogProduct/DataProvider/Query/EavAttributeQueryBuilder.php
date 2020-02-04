@@ -111,7 +111,6 @@ class EavAttributeQueryBuilder
             }
         }
         $eavAttributes = $this->getEavAttributeCodes($attributes, $entityTableAttributes);
-        $entityTableAttributes = \array_intersect($attributes, $entityTableAttributes);
 
         $eavAttributesMetaData = $this->getAttributesMetaData($connection, $attributeMetadataTable, $eavAttributes);
         $attributesPerTable = $this->getAttributeCodeTables($entityTableName, $eavAttributesMetaData);

@@ -72,6 +72,14 @@
         </arguments>
     </type>
 
+    <type name="Magento\Framework\MessageQueue\MergerFactory">
+        <arguments>
+            <argument name="mergers" xsi:type="array">
+                <item name="storefront.catalog.data.consume" xsi:type="string">Magento\CatalogProduct\Model\Merger</item>
+            </argument>
+        </arguments>
+    </type>
+
     <!-- Logger -->
     <virtualType name="CatalogStorefrontLogger" type="Magento\Framework\Logger\Monolog">
         <arguments>

@@ -43,13 +43,6 @@ class ProductUpdatesPublisher
     private $logger;
 
     /**
-     * Hold processed product ids to prevent creation of message duplicate
-     *
-     * @var array
-     */
-    private $processedIds = [];
-
-    /**
      * @param PublisherInterface $queuePublisher
      * @param UpdatedEntitiesMessageBuilder $messageBuilder
      * @param FulltextResource $fulltextResource
@@ -76,9 +69,6 @@ class ProductUpdatesPublisher
      */
     public function publish(array $productIds, int $storeId): void
     {
-        if (!empty($productIds) && empty(\array_diff($productIds, $this->processedIds))) {
-            return ;
-        }
         // add related products only in case of partial reindex
         if ($productIds) {
             $productIds = array_unique(
@@ -87,12 +77,13 @@ class ProductUpdatesPublisher
         }
         $message = $this->messageBuilder->build($storeId, $productIds);
         try {
-            $this->logger->debug(\sprintf('Collect product ids: "%s"', \implode(', ', $productIds)));
+            $this->logger->debug(
+                \sprintf('Collect product ids: "%s" in store %s', \implode(', ', $productIds), $storeId)
+            );
             $this->queuePublisher->publish(self::QUEUE_TOPIC, $message);
-            $this->processedIds = $productIds;
         } catch (\Throwable $e) {
             $this->logger->critical(
-                \sprintf('Error on collect product ids "%s"', \implode(', ', $productIds)),
+                \sprintf('Error on collect product ids "%s" in store %s', \implode(', ', $productIds), $storeId),
                 ['exception' => $e]
             );
         }

@@ -802,6 +802,8 @@ QUERY;
      */
     public function testProductInAllAnchoredCategories()
     {
+        //TODO: Unskip after MC-31054 issue will be fixed
+        self::markTestSkipped('Skipped due to MC-31054: Category nesting more 4 not saving');
         $query = <<<QUERY
 {
     products(filter: {sku: {in: ["12345"]}})
@@ -852,6 +854,9 @@ QUERY;
      */
     public function testProductWithNonAnchoredParentCategory()
     {
+        //TODO: Unskip after MC-30965 fix
+        $this->markTestSkipped('MC-30965: Product contains invalid categories');
+
         $query = <<<QUERY
 {
     products(filter: {sku: {in: ["12345"]}})
@@ -906,6 +911,9 @@ QUERY;
      */
     public function testProductInNonAnchoredSubCategories()
     {
+        //TODO: Unskip after MC-30965 fix
+        $this->markTestSkipped('MC-30965: Product contains invalid categories');
+
         $query = <<<QUERY
 {
     products(filter: 

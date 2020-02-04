@@ -5,16 +5,65 @@
  */
 namespace Magento\TestFramework\TestCase;
 
+use Magento\CatalogProduct\Model\Storage\Client\DataDefinitionInterface;
+use Magento\CatalogProduct\Model\Storage\State;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\App\Request\Http;
 
 /**
- * Test case for Web API functional tests for Graphql.
+ * Abstract class to execute GraphQL specified methods in tests
  *
- * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class GraphQlAbstract extends WebapiAbstract
 {
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+        $this->clearCatalogStorage();
+    }
+
+    /**
+     * Remove catalog storage to prevent data duplication in tests
+     */
+    private function clearCatalogStorage(): void
+    {
+        /** @var DataDefinitionInterface $dataDefinition */
+        $dataDefinition = Bootstrap::getObjectManager()->get(
+            DataDefinitionInterface::class
+        );
+        /** @var State $storageState */
+        $storageState = Bootstrap::getObjectManager()->get(
+            State::class
+        );
+        $entityTypes = ['category', 'product'];
+        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+        $storeManager = Bootstrap::getObjectManager()
+            ->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $availableStores = $storeManager->getStores();
+        foreach ($entityTypes as $entityType) {
+            foreach ($availableStores as $store) {
+                try {
+                    $sourceName = $storageState->getCurrentDataSourceName([$store->getId(), $entityType]);
+                    $dataDefinition->deleteDataSource($sourceName);
+                } catch (\Exception $e) {
+                    // Do nothing if no source
+                }
+            }
+
+        }
+    }
+
+    /**
+     * ============================================================================
+     * ||                                                                        ||
+     * ||  Magento\TestFramework\TestCase\GraphQlAbstract part of functionality: ||
+     * ||                                                                        ||
+     * ============================================================================
+     */
+
     /**
      * The instantiated GraphQL client.
      *
@@ -209,39 +258,28 @@ abstract class GraphQlAbstract extends WebapiAbstract
      *  ];
      * ```
      *
-     * @param array $actual
      * @param array $expected
-     * @return void
+     * @param array $actual
+     * @return array
      */
-    public function compareArraysRecursively(array $actual, array $expected): void
+    public function compareArraysRecursively(array $expected, array $actual): array
     {
-        $actualValues = \array_filter(
-            $actual,
-            function ($elem) {
-                return !\is_array($elem);
-            }
-        );
-        $expectedValues = \array_filter(
-            $expected,
-            function ($elem) {
-                return !\is_array($elem);
-            }
-        );
+        $diffResult = [];
 
-        $existingActualValues = array_intersect_key($expectedValues, $actualValues);
-        $this->assertEquals($expectedValues, $existingActualValues, 'Expected value does not match actual one');
-
-        $expectedArrays = \array_filter($expected, 'is_array');
-
-        if (!empty($expectedArrays)) {
-            $actualArrays = \array_filter($actual, 'is_array');
-
-            foreach ($expectedArrays as $key => $data) {
-                if (!isset($actualArrays[$key])) {
-                    continue;
+        foreach ($expected as $key => $value) {
+            if (array_key_exists($key, $actual)) {
+                if (is_array($value)) {
+                    $diffResult[$key] = $this->compareArraysRecursively($value, $actual[$key]);
+                } else {
+                    if (!in_array($value, $actual, true)) {
+                        $diffResult[$key] = $value;
+                    }
                 }
-                $this->compareArraysRecursively($actualArrays[$key], $data);
+            } else {
+                $diffResult[$key] = $value;
             }
         }
+
+        return $diffResult;
     }
 }

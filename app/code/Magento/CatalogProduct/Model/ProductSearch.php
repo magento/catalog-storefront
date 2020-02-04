@@ -9,7 +9,7 @@ namespace Magento\CatalogProduct\Model;
 
 use Magento\CatalogProductApi\Api\Data\ProductSearchCriteriaInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\CatalogProduct\DataProvider\DataProviderInterface;
+use Magento\CatalogProduct\DataProvider\ProductDataProvider;
 use Magento\CatalogProductApi\Api\Data\ProductResultContainerInterfaceFactory;
 use Magento\CatalogProductApi\Api\ProductSearchInterface;
 use Magento\CatalogProductApi\Api\Data\ProductResultContainerInterface;
@@ -26,7 +26,7 @@ class ProductSearch implements ProductSearchInterface
     private $productResultContainerFactory;
 
     /**
-     * @var DataProviderInterface
+     * @var ProductDataProvider
      */
     private $dataProvider;
 
@@ -37,12 +37,12 @@ class ProductSearch implements ProductSearchInterface
 
     /**
      * @param ProductResultContainerInterfaceFactory $productResultContainerFactory
-     * @param DataProviderInterface $dataProvider
+     * @param ProductDataProvider $dataProvider
      * @param LoggerInterface $logger
      */
     public function __construct(
         ProductResultContainerInterfaceFactory $productResultContainerFactory,
-        DataProviderInterface $dataProvider,
+        ProductDataProvider $dataProvider,
         LoggerInterface $logger
     ) {
         $this->productResultContainerFactory = $productResultContainerFactory;
