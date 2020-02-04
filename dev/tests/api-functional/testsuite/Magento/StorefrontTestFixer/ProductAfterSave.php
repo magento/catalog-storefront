@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\StorefrontTestFixer;
 
+use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataOnSave;
+use Magento\Framework\Model\AbstractModel;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Plugin for collect products data product save. Handle case when indexer mode is set to "runtime"
@@ -22,13 +25,13 @@ class ProductAfterSave extends CollectProductsDataOnSave
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function afterSave(
-        \Magento\Catalog\Model\ResourceModel\Product $subject,
-        \Magento\Catalog\Model\ResourceModel\Product $result,
-        \Magento\Framework\Model\AbstractModel $product
-    ): \Magento\Catalog\Model\ResourceModel\Product {
+        Product $subject,
+        Product $result,
+        AbstractModel $product
+    ): Product {
         $result = parent::afterSave($subject, $result, $product);
 
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
         /** @var ConsumerInvoker $consumerInvoker */
         $consumerInvoker = $objectManager->get(ConsumerInvoker::class);
         $consumerInvoker->invoke(true);

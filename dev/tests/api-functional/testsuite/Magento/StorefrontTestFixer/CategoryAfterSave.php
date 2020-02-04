@@ -8,12 +8,14 @@ declare(strict_types=1);
 namespace Magento\StorefrontTestFixer;
 
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
-use Magento\Catalog\Model\Category;
+use Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate;
+use Magento\Framework\Model\AbstractModel;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Plugin for collect category data during saving process
  */
-class CategoryAfterSave extends \Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate
+class CategoryAfterSave extends CollectCategoriesDataForUpdate
 {
     /**
      * @inheritdoc
@@ -25,11 +27,11 @@ class CategoryAfterSave extends \Magento\CatalogStorefrontConnector\Plugin\Colle
     public function afterSave(
         CategoryResource $subject,
         CategoryResource $result,
-        \Magento\Framework\Model\AbstractModel $category
+        AbstractModel $category
     ): CategoryResource {
         $result = parent::afterSave($subject, $result, $category);
 
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
         /** @var ConsumerInvoker $consumerInvoker */
         $consumerInvoker = $objectManager->get(ConsumerInvoker::class);
         $consumerInvoker->invoke(true);
