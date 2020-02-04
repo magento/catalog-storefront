@@ -24,7 +24,7 @@ class ProductAfterSave extends CollectProductsDataOnSave
     public function afterSave(
         \Magento\Catalog\Model\ResourceModel\Product $subject,
         \Magento\Catalog\Model\ResourceModel\Product $result,
-        \Magento\Catalog\Model\Product $product
+        \Magento\Framework\Model\AbstractModel $product
     ): \Magento\Catalog\Model\ResourceModel\Product {
         $result = parent::afterSave($subject, $result, $product);
 

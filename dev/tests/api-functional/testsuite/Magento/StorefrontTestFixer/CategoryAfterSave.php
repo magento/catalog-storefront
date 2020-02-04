@@ -25,7 +25,7 @@ class CategoryAfterSave extends \Magento\CatalogStorefrontConnector\Plugin\Colle
     public function afterSave(
         CategoryResource $subject,
         CategoryResource $result,
-        Category $category
+        \Magento\Framework\Model\AbstractModel $category
     ): CategoryResource {
         $result = parent::afterSave($subject, $result, $category);
 
