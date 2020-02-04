@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Plugin;
 
+use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\Store;
 
 /**
@@ -21,17 +24,17 @@ class CollectProductsDataOnSave
     private $productPublisher;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry
+     * @var IndexerRegistry
      */
     private $indexerRegistry;
 
     /**
      * @param ProductUpdatesPublisher $productPublisher
-     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+     * @param IndexerRegistry $indexerRegistry
      */
     public function __construct(
         ProductUpdatesPublisher $productPublisher,
-        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+        IndexerRegistry $indexerRegistry
     ) {
         $this->productPublisher = $productPublisher;
         $this->indexerRegistry = $indexerRegistry;
@@ -40,18 +43,18 @@ class CollectProductsDataOnSave
     /**
      * Handle product save when indexer mode is set to "realtime"
      *
-     * @param \Magento\Catalog\Model\ResourceModel\Product $subject
-     * @param \Magento\Catalog\Model\ResourceModel\Product $result
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $subject
+     * @param Product $result
+     * @param AbstractModel $product
      *
-     * @return \Magento\Catalog\Model\ResourceModel\Product
+     * @return Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave(
-        \Magento\Catalog\Model\ResourceModel\Product $subject,
-        \Magento\Catalog\Model\ResourceModel\Product $result,
-        \Magento\Catalog\Model\Product $product
-    ): \Magento\Catalog\Model\ResourceModel\Product {
+        Product $subject,
+        Product $result,
+        AbstractModel $product
+    ): Product {
         if ($this->isIndexerRunOnSchedule()) {
             return $result;
         }
