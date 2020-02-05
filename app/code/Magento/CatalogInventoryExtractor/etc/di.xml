@@ -7,19 +7,19 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\CatalogConfigurableProduct\DataProvider\Query\ProductVariantsBuilder">
-        <plugin name="afterGetSelect" type="Magento\CatalogInventoryStorefront\Model\Plugin\StockStatusQuery" />
+        <plugin name="afterGetSelect" type="Magento\CatalogInventoryExtractor\Model\Plugin\StockStatusQuery" />
     </type>
 
     <type name="Magento\CatalogStorefrontConnector\DataProvider\DataProvider">
         <arguments>
             <argument name="dataProviders" xsi:type="array">
-                <item name="stock_status" xsi:type="string">Magento\CatalogInventoryStorefront\DataProvider\StockStatusProvider</item>
-                <item name="only_x_left_in_stock" xsi:type="string">Magento\CatalogInventoryStorefront\DataProvider\OnlyXLeftInStockProvider</item>
+                <item name="stock_status" xsi:type="string">Magento\CatalogInventoryExtractor\DataProvider\StockStatusProvider</item>
+                <item name="only_x_left_in_stock" xsi:type="string">Magento\CatalogInventoryExtractor\DataProvider\OnlyXLeftInStockProvider</item>
             </argument>
         </arguments>
     </type>
 
     <type name="Magento\CategoryExtractor\DataProvider\Query\ProductsCountBuilder">
-        <plugin name="addStockFilter" type="Magento\CatalogInventoryStorefront\Plugin\Resolver\Category\DataProvider\ProductCountStockFilter" />
+        <plugin name="addStockFilter" type="Magento\CatalogInventoryExtractor\Plugin\Resolver\Category\DataProvider\ProductCountStockFilter" />
     </type>
 </config>

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogInventoryStorefront\Plugin\Resolver\Category\DataProvider;
+namespace Magento\CatalogInventoryExtractor\Plugin\Resolver\Category\DataProvider;
 
 use Magento\CategoryExtractor\DataProvider\Query\ProductsCountBuilder;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;

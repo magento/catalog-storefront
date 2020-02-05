@@ -8,16 +8,7 @@
         "php": "~7.1.3||~7.2.0||~7.3.0",
         "magento/framework": "*",
         "magento/module-catalog-product-api": "*",
-        "magento/module-catalog-category-api": "*",
-        "magento/module-catalog": "*",
-        "magento/module-catalog-url-rewrite": "*",
-        "magento/module-eav": "*",
-        "magento/module-store": "*",
-        "magento/module-url-rewrite": "*"
-    },
-    "suggest": {
-        "magento/module-customer": "*",
-        "magento/module-config": "*"
+        "magento/module-catalog-category-api": "*"
     },
     "type": "magento2-module",
     "license": [

@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogInventoryStorefront\Model\Plugin;
+namespace Magento\CatalogInventoryExtractor\Model\Plugin;
 
 use Magento\ConfigurableProductExtractor\DataProvider\Query\ProductVariantsBuilder;
 use Magento\CatalogInventory\Model\Configuration;

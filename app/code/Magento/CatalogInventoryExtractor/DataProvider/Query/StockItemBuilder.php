@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogInventoryStorefront\DataProvider\Query;
+namespace Magento\CatalogInventoryExtractor\DataProvider\Query;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;

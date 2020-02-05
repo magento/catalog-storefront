@@ -6,4 +6,4 @@
 
 use \Magento\Framework\Component\ComponentRegistrar;
 
-ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Magento_CatalogInventoryStorefront', __DIR__);
+ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Magento_CatalogInventoryExtractor', __DIR__);

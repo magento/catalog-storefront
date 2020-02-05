@@ -5,9 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogInventoryStorefront\DataProvider;
+namespace Magento\CatalogInventoryExtractor\DataProvider;
 
-use Magento\CatalogInventoryStorefront\DataProvider\Query\StockStatusBuilder;
+use Magento\CatalogInventoryExtractor\DataProvider\Query\StockStatusBuilder;
 use Magento\CatalogStorefrontConnector\DataProvider\DataProviderInterface;
 use Magento\Framework\App\ResourceConnection;
 

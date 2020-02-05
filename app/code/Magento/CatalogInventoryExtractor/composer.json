@@ -1,16 +1,15 @@
 {
-    "name": "magento/module-catalog-inventory-storefront",
-    "description": "Catalog Inventory StoreFront API implementation",
+    "name": "magento/module-catalog-inventory-extractor",
+    "description": "Module extracts Catalog Inventory data which consumed by Magento_CatalogStorefrontConnector module",
     "config": {
         "sort-packages": true
     },
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
         "magento/framework": "*",
-        "magento/module-catalog-category": "*",
-        "magento/module-catalog-product": "*",
         "magento/module-catalog-inventory": "*",
         "magento/module-catalog-configurable-product": "*",
+        "magento/module-catalog-storefront-connector": "*",
         "magento/module-store": "*"
 
     },
@@ -24,7 +23,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\CatalogInventoryStorefront\\": ""
+            "Magento\\CatalogInventoryExtractor\\": ""
         }
     }
 }
