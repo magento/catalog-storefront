@@ -9,7 +9,7 @@ namespace Magento\StorefrontTestFixer;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataForUpdateAfterStockUpdate;
+use Magento\CatalogInventoryStorefront\Plugin\CollectProductsDataForUpdateAfterStockUpdate;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -38,6 +38,5 @@ class StockStatusUpdate extends CollectProductsDataForUpdateAfterStockUpdate
         $objectManager = Bootstrap::getObjectManager();
         /** @var ConsumerInvoker $consumerInvoker */
         $consumerInvoker = $objectManager->get(ConsumerInvoker::class);
-        $consumerInvoker->invoke(true);
     }
 }

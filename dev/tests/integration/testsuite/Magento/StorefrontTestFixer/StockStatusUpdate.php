@@ -13,7 +13,7 @@ namespace Magento\StorefrontTestFixer;
  * Due to changes in DI (added afterUpdateStockItemBySku() plugins) for store front application
  * we added empty plugin classes to keep plugin initialization chain
  */
-class StockStatusUpdate extends \Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataForUpdateAfterStockUpdate
+class StockStatusUpdate extends \Magento\CatalogInventoryStorefront\Plugin\CollectProductsDataForUpdateAfterStockUpdate
 {
 
 }

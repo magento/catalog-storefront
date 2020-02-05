@@ -22,4 +22,7 @@
     <type name="Magento\CatalogCategory\DataProvider\Query\ProductsCountBuilder">
         <plugin name="addStockFilter" type="Magento\CatalogInventoryStorefront\Plugin\Resolver\Category\DataProvider\ProductCountStockFilter" />
     </type>
+    <type name="Magento\CatalogInventory\Api\StockRegistryInterface">
+        <plugin name="collectProductDataForStorefrontApplicationOnStockChange" type="Magento\CatalogInventoryStorefront\Plugin\CollectProductsDataForUpdateAfterStockUpdate" />
+    </type>
 </config>
