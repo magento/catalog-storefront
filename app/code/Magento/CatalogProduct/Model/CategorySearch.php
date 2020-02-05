@@ -92,15 +92,15 @@ class CategorySearch implements CategorySearchInterface
         );
 
         //TODO: Move to CategoryDataProvider
-        foreach ($categories as &$category) {
+        foreach ($categories as $n => $category) {
             if (!$category['is_active']) {
-                unset($category);
+                unset($categories[$n]);
             }
         }
         return $this->categoryResultContainerFactory->create(
             [
                 'errors' => [],
-                'categories' => []
+                'categories' => $categories
             ]
         );
     }
