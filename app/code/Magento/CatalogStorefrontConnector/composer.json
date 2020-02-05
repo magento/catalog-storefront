@@ -9,6 +9,7 @@
         "magento/framework": "*",
         "magento/module-catalog": "*",
         "magento/module-category-extractor": "*",
+        "magento/module-catalog-extractor": "*",
         "magento/module-catalog-search": "*",
         "magento/module-config": "*",
         "magento/module-store": "*"

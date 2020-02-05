@@ -5,13 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogProduct\Model\Storage;
+namespace Magento\CatalogStorefront\Model\Storage;
 
-use Magento\CatalogProduct\Model\Storage\Client\ElasticsearchCommand;
-use Magento\CatalogProduct\Model\Storage\Client\ElasticsearchDataDefinitionAdapter;
-use Magento\CatalogProduct\Model\Storage\Client\ElasticsearchQuery;
-use Magento\CatalogProduct\Model\Storage\Data\DocumentFactory;
-use Magento\CatalogProduct\Model\Storage\Data\DocumentIteratorFactory;
+use Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchCommand;
+use Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchDataDefinitionAdapter;
+use Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchQuery;
+use Magento\CatalogStorefront\Model\Storage\Data\DocumentFactory;
+use Magento\CatalogStorefront\Model\Storage\Data\DocumentIteratorFactory;
 use Magento\Integration\Api\AdminTokenServiceInterface;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;

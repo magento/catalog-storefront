@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogStoreFrontGraphQl\Resolver\Product;
 
 use Magento\Catalog\Model\Layer\Resolver;
-use Magento\CatalogProductApi\Api\Data\ProductResultContainerInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductResultContainerInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface;
 

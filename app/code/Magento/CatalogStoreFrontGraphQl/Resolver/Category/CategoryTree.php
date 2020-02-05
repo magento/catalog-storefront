@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStoreFrontGraphQl\Resolver\Category;
 
-use Magento\CatalogProductApi\Api\CategorySearchInterface;
-use Magento\CatalogProductApi\Api\Data\CategoryResultContainerInterface;
+use Magento\CatalogStorefrontApi\Api\CategorySearchInterface;
+use Magento\CatalogStorefrontApi\Api\Data\CategoryResultContainerInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Filter\DirectiveProcessor\VarDirective;
 use Magento\Framework\GraphQl\Config\Element\Field;

@@ -13,7 +13,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResponse;
-use Magento\CatalogProductApi\Api\ProductSearchInterface;
+use Magento\CatalogStorefrontApi\Api\ProductSearchInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResolverInterface;
 
 /**
