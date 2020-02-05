@@ -15,7 +15,7 @@ use Magento\Framework\Indexer\IndexerRegistry;
 /**
  * Plugin for collect products data during reindex. Handle case when indexer mode is set to "schedule"
  */
-class CollectProductsDataForUpdateAfterStockChange
+class CollectProductsDataForUpdateAfterStockUpdate
 {
     /**
      * @var ProductUpdatesPublisher

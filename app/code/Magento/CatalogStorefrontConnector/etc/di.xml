@@ -19,7 +19,7 @@
         <plugin name="collectCategoryDataForStorefrontApplicationOnSave" type="Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataOnSave" />
     </type>
     <type name="Magento\CatalogInventory\Api\StockRegistryInterface">
-        <plugin name="collectProductDataForStorefrontApplicationOnStockChange" type="Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataForUpdateAfterStockChange" />
+        <plugin name="collectProductDataForStorefrontApplicationOnStockChange" type="Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataForUpdateAfterStockUpdate" />
     </type>
     <type name="Magento\Framework\MessageQueue\MergerFactory">
         <arguments>
