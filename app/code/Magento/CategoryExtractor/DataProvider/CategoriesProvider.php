@@ -25,7 +25,6 @@ class CategoriesProvider
      */
     public function __construct(
         CollectionFactory $collectionFactory
-
     ) {
         $this->collectionFactory = $collectionFactory;
     }
@@ -34,14 +33,18 @@ class CategoriesProvider
      * Get categories by ids
      *
      * @param array $ids
+     * @param array|null $attributes
      * @return \Magento\Catalog\Model\ResourceModel\Category\Collection|\Magento\Catalog\Model\Category[]
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getCategoriesByIds(array $ids)
+    public function getCategoriesByIds(array $ids, array $attributes = null)
     {
         $categoryCollection = $this->collectionFactory->create();
         $categoryCollection->addAttributeToFilter(CategoryInterface::KEY_IS_ACTIVE, ['eq' => 1]);
         $categoryCollection->addIdFilter($ids);
+        if ($attributes) {
+            $categoryCollection->addAttributeToSelect($attributes);
+        }
 
         return $categoryCollection;
     }

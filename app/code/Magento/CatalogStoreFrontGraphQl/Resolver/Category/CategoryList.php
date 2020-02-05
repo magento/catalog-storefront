@@ -88,10 +88,17 @@ class CategoryList implements BatchResolverInterface
             if (!isset($request->getArgs()['filters'])) {
                 $rootCategoryIds[] = (int)$store->getRootCategoryId();
             } else {
-                $categoryCollection = $this->collectionFactory->create();
-                $this->categoryFilter->applyFilters($request->getArgs(), $categoryCollection, $store);
-                foreach ($categoryCollection as $category) {
-                    $rootCategoryIds[] = (int)$category->getId();
+                try {
+                    $categoryCollection = $this->collectionFactory->create();
+                    $this->categoryFilter->applyFilters($request->getArgs(), $categoryCollection, $store);
+                    foreach ($categoryCollection as $category) {
+                        $rootCategoryIds[] = (int)$category->getId();
+                    }
+                } catch (InputException $e) {
+                    // ad-hoc solution to handle case with invalid filter
+                    $batchResponse = new BatchResponse();
+                    $batchResponse->addResponse($request, []);
+                    return $batchResponse;
                 }
             }
 

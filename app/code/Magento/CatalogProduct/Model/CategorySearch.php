@@ -87,14 +87,20 @@ class CategorySearch implements CategorySearchInterface
 
         $categories = $this->dataProvider->fetch(
             $rootCategoryIds,
-            $criteria->getAttributes(),
+            \array_merge($criteria->getAttributes(), ['is_active']),
             $criteria->getScopes()
         );
 
+        //TODO: Move to CategoryDataProvider
+        foreach ($categories as &$category) {
+            if (!$category['is_active']) {
+                unset($category);
+            }
+        }
         return $this->categoryResultContainerFactory->create(
             [
                 'errors' => [],
-                'categories' => $categories
+                'categories' => []
             ]
         );
     }

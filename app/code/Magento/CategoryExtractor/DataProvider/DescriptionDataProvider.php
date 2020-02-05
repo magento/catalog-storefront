@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\CategoryExtractor\DataProvider;
 
 use Magento\Catalog\Helper\Output as OutputHelper;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 
 /**
  * Description data provider
@@ -51,7 +50,7 @@ class DescriptionDataProvider implements DataProviderInterface
         $output = [];
         $attribute = !empty($attributes) ? key($attributes) : self::ATTRIBUTE;
 
-        foreach ($this->categoriesProvider->getCategoriesByIds($categoryIds) as $category) {
+        foreach ($this->categoriesProvider->getCategoriesByIds($categoryIds, [$attribute]) as $category) {
             $description = $category->getDescription();
             $renderedValue = $this->outputHelper->categoryAttribute(null, $description, $attribute);
             $output[$category->getId()][$attribute] = $renderedValue;
