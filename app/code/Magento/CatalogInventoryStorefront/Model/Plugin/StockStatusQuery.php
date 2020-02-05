@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogInventoryStorefront\Model\Plugin;
 
-use Magento\CatalogConfigurableProduct\DataProvider\Query\ProductVariantsBuilder;
+use Magento\ConfigurableProductExtractor\DataProvider\Query\ProductVariantsBuilder;
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\App\ResourceConnection;

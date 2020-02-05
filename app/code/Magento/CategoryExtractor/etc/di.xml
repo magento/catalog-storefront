@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\CategoryExtractor\DataProvider\DataProviderInterface" type="Magento\CategoryExtractor\DataProvider\DataProvider"/>
+    <type name="Magento\CategoryExtractor\DataProvider\DataProvider">
+        <arguments>
+            <argument name="defaultDataProvider" xsi:type="string">Magento\CategoryExtractor\DataProvider\CategoryDataProvider</argument>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="breadcrumbs" xsi:type="string">Magento\CategoryExtractor\DataProvider\BreadcrumbsDataProvider</item>
+                <item name="description" xsi:type="string">Magento\CategoryExtractor\DataProvider\DescriptionDataProvider</item>
+                <item name="canonical_url" xsi:type="string">Magento\CategoryExtractor\DataProvider\CanonicalUrlDataProvider</item>
+                <item name="product_count" xsi:type="string">Magento\CategoryExtractor\DataProvider\ProductsCountDataProvider</item>
+                <item name="children" xsi:type="string">Magento\CategoryExtractor\DataProvider\ChildrenDataProvider</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

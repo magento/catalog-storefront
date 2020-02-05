@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogInventoryStorefront\DataProvider;
 
 use Magento\CatalogInventoryStorefront\DataProvider\Query\StockStatusBuilder;
-use Magento\CatalogProduct\DataProvider\DataProviderInterface;
+use Magento\CatalogStorefrontConnector\DataProvider\DataProviderInterface;
 use Magento\Framework\App\ResourceConnection;
 
 /**

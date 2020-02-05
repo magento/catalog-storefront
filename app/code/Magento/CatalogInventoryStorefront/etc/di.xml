@@ -10,7 +10,7 @@
         <plugin name="afterGetSelect" type="Magento\CatalogInventoryStorefront\Model\Plugin\StockStatusQuery" />
     </type>
 
-    <type name="Magento\CatalogProduct\DataProvider\DataProvider">
+    <type name="Magento\CatalogStorefrontConnector\DataProvider\DataProvider">
         <arguments>
             <argument name="dataProviders" xsi:type="array">
                 <item name="stock_status" xsi:type="string">Magento\CatalogInventoryStorefront\DataProvider\StockStatusProvider</item>
@@ -19,7 +19,7 @@
         </arguments>
     </type>
 
-    <type name="Magento\CatalogCategory\DataProvider\Query\ProductsCountBuilder">
+    <type name="Magento\CategoryExtractor\DataProvider\Query\ProductsCountBuilder">
         <plugin name="addStockFilter" type="Magento\CatalogInventoryStorefront\Plugin\Resolver\Category\DataProvider\ProductCountStockFilter" />
     </type>
 </config>

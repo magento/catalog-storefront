@@ -6,6 +6,8 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!-- Product search -->
     <preference for="Magento\CatalogProductApi\Api\ProductSearchInterface" type="Magento\CatalogProduct\Model\ProductSearch"/>
     <preference for="Magento\CatalogProductApi\Api\Data\ProductResultContainerInterface" type="Magento\CatalogProduct\Model\ProductSearch\ProductResultContainer"/>
     <preference for="Magento\CatalogProductApi\Api\Data\ProductSearchCriteriaInterface" type="Magento\CatalogProduct\Model\ProductSearch\ProductSearchCriteria"/>
@@ -13,38 +15,10 @@
     <preference for="Magento\CatalogProduct\Model\Storage\Client\QueryInterface" type="Magento\CatalogProduct\Model\Storage\Client\ElasticsearchQuery"/>
     <preference for="Magento\CatalogProduct\Model\Storage\Client\CommandInterface" type="Magento\CatalogProduct\Model\Storage\Client\ElasticsearchCommand"/>
 
-    <preference for="Magento\CatalogProduct\DataProvider\DataProviderInterface" type="Magento\CatalogProduct\DataProvider\DataProvider"/>
-    <type name="Magento\CatalogProduct\DataProvider\MediaGallery\ImageUrlResolver">
-        <arguments>
-            <argument name="imageHelper" xsi:type="object">\Magento\Catalog\Helper\Image\Proxy</argument>
-        </arguments>
-    </type>
-    <type name="Magento\CatalogProduct\DataProvider\DataProvider">
-        <arguments>
-            <argument name="defaultDataProvider" xsi:type="string">Magento\CatalogProduct\DataProvider\EavAttributeProvider</argument>
-            <argument name="dataProviders" xsi:type="array">
-                <item name="media_gallery" xsi:type="string">Magento\CatalogProduct\DataProvider\MediaGallery\MediaGalleryProvider</item>
-                <item name="url_rewrites" xsi:type="string">Magento\CatalogProduct\DataProvider\UrlRewrites\UrlRewritesDataProvider</item>
-                <item name="product_links" xsi:type="string">Magento\CatalogProduct\DataProvider\Link\Provider</item>
-                <item name="url_suffix" xsi:type="string">Magento\CatalogProduct\DataProvider\UrlRewrites\ProductUrlSuffix</item>
-                <item name="categories" xsi:type="string">Magento\CatalogProduct\DataProvider\Category\ProductCategoriesDataProvider</item>
-                <item name="canonical_url" xsi:type="string">Magento\CatalogProduct\DataProvider\CanonicalUrl\CanonicalUrlDataProvider</item>
-                <item name="CustomizableProductInterface.options" xsi:type="string">Magento\CatalogProduct\DataProvider\Options\CustomizableOptions</item>
-            </argument>
-        </arguments>
-    </type>
-
-    <type name="Magento\CatalogProduct\DataProvider\Transformer">
-        <arguments>
-            <argument name="map" xsi:type="array">
-                <item name="image" xsi:type="string">Magento\CatalogProduct\DataProvider\MediaGallery\ProductImageTransformer</item>
-                <item name="small_image" xsi:type="string">Magento\CatalogProduct\DataProvider\MediaGallery\ProductImageTransformer</item>
-                <item name="thumbnail" xsi:type="string">Magento\CatalogProduct\DataProvider\MediaGallery\ProductImageTransformer</item>
-                <item name="short_description" xsi:type="string">Magento\CatalogProduct\DataProvider\Transformer\DescriptionTransformer</item>
-                <item name="description" xsi:type="string">Magento\CatalogProduct\DataProvider\Transformer\DescriptionTransformer</item>
-            </argument>
-        </arguments>
-    </type>
+    <!-- Category search -->
+    <preference for="Magento\CatalogProductApi\Api\CategorySearchInterface" type="Magento\CatalogProduct\Model\CategorySearch"/>
+    <preference for="Magento\CatalogProductApi\Api\Data\CategoryResultContainerInterface" type="Magento\CatalogProduct\Model\CategorySearch\CategoryResultContainer"/>
+    <preference for="Magento\CatalogProductApi\Api\Data\CategorySearchCriteriaInterface" type="Magento\CatalogProduct\Model\CategorySearch\CategorySearchCriteria"/>
 
     <type name="Magento\CatalogProduct\Model\Storage\Client\Config\EntityConfigPool">
         <arguments>

@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStoreFrontGraphQl\Resolver\Category;
 
-use Magento\CatalogCategoryApi\Api\CategorySearchInterface;
-use Magento\CatalogCategoryApi\Api\Data\CategoryResultContainerInterface;
+use Magento\CatalogProductApi\Api\CategorySearchInterface;
+use Magento\CatalogProductApi\Api\Data\CategoryResultContainerInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface;
@@ -18,6 +18,8 @@ use Magento\StoreFrontGraphQl\Model\Query\ScopeProvider;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResponse;
 use Magento\StoreFrontGraphQl\Model\ServiceInvoker;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\CatalogGraphQl\Model\Category\CategoryFilter;
 
 /**
  * Category List resolver, used for GraphQL category data request processing.
@@ -40,6 +42,16 @@ class CategoryList implements BatchResolverInterface
     private $serviceInvoker;
 
     /**
+     * @var CategoryFilter
+     */
+    private $categoryFilter;
+
+    /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
      * @param FieldResolver $fieldResolver
      * @param ServiceInvoker $serviceInvoker
      * @param ScopeProvider $scopeProvider
@@ -47,11 +59,15 @@ class CategoryList implements BatchResolverInterface
     public function __construct(
         FieldResolver $fieldResolver,
         ServiceInvoker $serviceInvoker,
-        ScopeProvider $scopeProvider
+        ScopeProvider $scopeProvider,
+        CategoryFilter $categoryFilter,
+        CollectionFactory $collectionFactory
     ) {
         $this->fieldResolver = $fieldResolver;
         $this->scopeProvider = $scopeProvider;
         $this->serviceInvoker = $serviceInvoker;
+        $this->categoryFilter = $categoryFilter;
+        $this->collectionFactory = $collectionFactory;
     }
 
     /**
@@ -65,15 +81,24 @@ class CategoryList implements BatchResolverInterface
     {
         $storefrontRequests = [];
         foreach ($requests as $request) {
-            $filter = $request->getArgs()['filters'] ?? [];
-            if (!$filter) {
-                $store = $context->getExtensionAttributes()->getStore();
-                $filter['ids']['eq'] = (int)$store->getRootCategoryId();
+            $scopes = $this->scopeProvider->getScopes($context);
+            $rootCategoryIds = [];
+
+            $store = $context->getExtensionAttributes()->getStore();
+            if (!isset($request->getArgs()['filters'])) {
+                $rootCategoryIds[] = (int)$store->getRootCategoryId();
+            } else {
+                $categoryCollection = $this->collectionFactory->create();
+                $this->categoryFilter->applyFilters($request->getArgs(), $categoryCollection, $store);
+                foreach ($categoryCollection as $category) {
+                    $rootCategoryIds[] = (int)$category->getId();
+                }
             }
 
+            $filter['ids'] = $rootCategoryIds;
             $storefrontRequest = [
                 'filters' => $filter,
-                'scopes' => $this->scopeProvider->getScopes($context),
+                'scopes' => $scopes,
                 'attributes' => $this->fieldResolver->getSchemaTypeFields($request->getInfo(), ['categoryList']),
             ];
             $storefrontRequests[] = [

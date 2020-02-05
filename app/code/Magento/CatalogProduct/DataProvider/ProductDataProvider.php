@@ -91,7 +91,10 @@ class ProductDataProvider
                 ['exception' => $notFoundException]
             );
             return [];
+        } catch (\Throwable $e) {
+            $this->logger->error($e);
         }
+
         foreach ($entities as $entry) {
             $data = $entry->getData();
             if (!$data) {

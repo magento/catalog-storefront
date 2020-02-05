@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStoreFrontGraphQl\Resolver\Category;
 
-use Magento\CatalogCategoryApi\Api\CategorySearchInterface;
-use Magento\CatalogCategoryApi\Api\Data\CategoryResultContainerInterface;
+use Magento\CatalogProductApi\Api\CategorySearchInterface;
+use Magento\CatalogProductApi\Api\Data\CategoryResultContainerInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -72,7 +72,7 @@ class CategoryTree implements BatchResolverInterface
                 $store = $context->getExtensionAttributes()->getStore();
                 $categoryId = (int)$store->getRootCategoryId();
             }
-            $filter['ids']['eq'] = $categoryId;
+            $filter['ids'] = $categoryId;
             $storefrontRequest = [
                 'filters' => $filter,
                 'scopes' => $this->scopeProvider->getScopes($context),

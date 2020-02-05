@@ -83,7 +83,10 @@ class CategoryDataProvider
                 ['exception' => $notFoundException]
             );
             return [];
+        } catch (\Throwable $e) {
+            $this->logger->error($e);
         }
+
         foreach ($entities as $entry) {
             $data = $entry->getData();
             $categories[$entry->getId()] = $data;
