@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\DownloadableProductExtractor\DataProvider;
 
-use Magento\CatalogStorefrontConnector\DataProvider\DataProviderInterface;
+use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\UrlInterface;
 use Magento\DownloadableProductExtractor\DataProvider\Query\DownloadableItemsBuilderInterface;

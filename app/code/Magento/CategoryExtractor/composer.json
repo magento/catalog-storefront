@@ -9,7 +9,7 @@
         "magento/framework": "*",
         "magento/module-catalog": "*",
         "magento/module-eav": "*",
-        "magento/module-catalog-storefront-connector": "*",
+        "magento/module-catalog-extractor": "*",
         "magento/module-store": "*",
         "magento/module-search": "*"
     },

@@ -9,7 +9,6 @@ namespace Magento\CatalogStoreFrontGraphQl\Resolver\Product;
 
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\CatalogProductApi\Api\Data\ProductResultContainerInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface;
 

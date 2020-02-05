@@ -10,7 +10,7 @@
         <sequence>
             <module name="Magento_Bundle"/>
             <module name="Magento_Catalog" />
-            <module name="Magento_CatalogStorefrontConnector"/>
+            <module name="Magento_CatalogExtractor"/>
         </sequence>
     </module>
 </config>

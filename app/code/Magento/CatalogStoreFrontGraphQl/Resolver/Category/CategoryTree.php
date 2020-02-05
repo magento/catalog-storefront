@@ -10,6 +10,7 @@ namespace Magento\CatalogStoreFrontGraphQl\Resolver\Category;
 use Magento\CatalogProductApi\Api\CategorySearchInterface;
 use Magento\CatalogProductApi\Api\Data\CategoryResultContainerInterface;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Filter\DirectiveProcessor\VarDirective;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;

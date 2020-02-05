@@ -10,7 +10,7 @@
         <plugin name="afterGetSelect" type="Magento\CatalogInventoryExtractor\Model\Plugin\StockStatusQuery" />
     </type>
 
-    <type name="Magento\CatalogStorefrontConnector\DataProvider\DataProvider">
+    <type name="Magento\CatalogExtractor\DataProvider\DataProvider">
         <arguments>
             <argument name="dataProviders" xsi:type="array">
                 <item name="stock_status" xsi:type="string">Magento\CatalogInventoryExtractor\DataProvider\StockStatusProvider</item>

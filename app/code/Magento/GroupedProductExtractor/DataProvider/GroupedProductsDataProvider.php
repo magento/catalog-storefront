@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\GroupedProductExtractor\DataProvider;
 
 use Magento\GroupedProductExtractor\DataProvider\Query\LinkAttributesBuilder;
-use Magento\CatalogStorefrontConnector\DataProvider\DataProviderInterface;
+use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
 use Magento\Framework\App\ResourceConnection;
 
 /**

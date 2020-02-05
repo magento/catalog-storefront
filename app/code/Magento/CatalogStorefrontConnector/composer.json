@@ -9,11 +9,7 @@
         "magento/framework": "*",
         "magento/module-catalog": "*",
         "magento/module-category-extractor": "*",
-        "magento/module-catalog-product": "*",
         "magento/module-catalog-search": "*",
-        "magento/module-catalog-url-rewrite": "*",
-        "magento/module-url-rewrite": "*",
-        "magento/module-eav": "*",
         "magento/module-config": "*",
         "magento/module-store": "*"
     },

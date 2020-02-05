@@ -10,7 +10,7 @@ namespace Magento\ConfigurableProductExtractor\DataProvider\Query\Attributes;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\CatalogStorefrontConnector\DataProvider\ColumnsDataMapper;
+use Magento\CatalogExtractor\DataProvider\ColumnsDataMapper;
 
 /**
  * Build Select object to fetch product attributes used to build configurable product

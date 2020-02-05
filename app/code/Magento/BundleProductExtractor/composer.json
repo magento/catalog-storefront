@@ -9,7 +9,7 @@
         "magento/framework": "*",
         "magento/module-bundle": "*",
         "magento/module-catalog": "*",
-        "magento/module-catalog-storefront-connector": "*"
+        "magento/module-catalog-extractor": "*"
     },
     "type": "magento2-module",
     "license": [

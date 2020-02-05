@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\DownloadableProductExtractor\DataProvider\Query\Links;
 
 use Magento\DownloadableProductExtractor\DataProvider\Query\DownloadableItemsBuilderInterface;
-use Magento\CatalogStorefrontConnector\DataProvider\ColumnsDataMapper;
+use Magento\CatalogExtractor\DataProvider\ColumnsDataMapper;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;

@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\CategoryExtractor\DataProvider\Attributes;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\CatalogStorefrontConnector\DataProvider\Query\Category\CategoryAttributeQueryBuilder;
+use Magento\CatalogExtractor\DataProvider\Query\Category\CategoryAttributeQueryBuilder;
 
 /**
  * Provide category attributes for specified category ids and attributes

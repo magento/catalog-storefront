@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CategoryExtractor\DataProvider;
 
-use Magento\CatalogStorefrontConnector\DataProvider\Query\Category\CategoryAttributeQueryBuilder;
+use Magento\CatalogExtractor\DataProvider\Query\Category\CategoryAttributeQueryBuilder;
 use Magento\Framework\App\ResourceConnection;
 
 /**

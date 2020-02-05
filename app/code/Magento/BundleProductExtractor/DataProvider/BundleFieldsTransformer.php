@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\BundleProductExtractor\DataProvider;
 
 use Magento\Bundle\Model\Product\Type as BundleType;
-use Magento\CatalogStorefrontConnector\DataProvider\TransformerInterface;
+use Magento\CatalogExtractor\DataProvider\TransformerInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 /**

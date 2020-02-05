@@ -185,7 +185,7 @@ class ElasticsearchQuery implements QueryInterface
                 if (isset($doc['error']) && !empty($doc['error'])) {
                     $errors [] = sprintf("Entity id: %d\nReason: %s", $doc['_id'], $doc['error']['reason']);
                 } elseif (isset($doc['found']) && false === $doc['found']) {
-                    $errors [] = sprintf("Entity id: %d\nReason: item not found", $doc['_id']);
+                    // $errors [] = sprintf("Entity id: %d\nReason: item not found", $doc['_id']);
                 }
             }
         }

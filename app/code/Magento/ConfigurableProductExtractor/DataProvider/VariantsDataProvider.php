@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\ConfigurableProductExtractor\DataProvider;
 
 use Magento\ConfigurableProductExtractor\DataProvider\Query\ProductVariantsBuilder;
-use Magento\CatalogStorefrontConnector\DataProvider\DataProviderInterface;
+use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
 use Magento\Framework\App\ResourceConnection;
 
 /**

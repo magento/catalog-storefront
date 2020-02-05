@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\BundleProductExtractor\DataProvider\Query\Items;
 
-use Magento\CatalogStorefrontConnector\DataProvider\ColumnsDataMapper;
+use Magento\CatalogExtractor\DataProvider\ColumnsDataMapper;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 

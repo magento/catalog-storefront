@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\BundleProductExtractor\DataProvider;
 
-use Magento\CatalogStorefrontConnector\DataProvider\NestedDataProviderInterface;
+use Magento\CatalogExtractor\DataProvider\NestedDataProviderInterface;
 
 /**
  * Prepare labels for bundle item option labels.

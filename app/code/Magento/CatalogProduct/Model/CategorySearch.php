@@ -93,7 +93,7 @@ class CategorySearch implements CategorySearchInterface
 
         //TODO: Move to CategoryDataProvider
         foreach ($categories as $n => $category) {
-            if (!$category['is_active']) {
+            if (empty($category['is_active'])) {
                 unset($categories[$n]);
             }
         }

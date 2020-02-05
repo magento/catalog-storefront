@@ -9,7 +9,7 @@ namespace Magento\DownloadableProductExtractor\DataProvider\Query\Samples;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
-use Magento\CatalogStorefrontConnector\DataProvider\ColumnsDataMapper;
+use Magento\CatalogExtractor\DataProvider\ColumnsDataMapper;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\DownloadableProductExtractor\DataProvider\Query\DownloadableItemsBuilderInterface;
 

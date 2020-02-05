@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CategoryExtractor\DataProvider\Attributes;
 
-use \Magento\CatalogStorefrontConnector\DataProvider\Query\AttributesDataConverter;
+use \Magento\CatalogExtractor\DataProvider\Query\AttributesDataConverter;
 
 /**
  * Map for category attributes.

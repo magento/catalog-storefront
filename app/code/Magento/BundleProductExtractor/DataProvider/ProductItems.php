@@ -13,7 +13,7 @@ use Magento\BundleProductExtractor\DataProvider\Query\Items\BundleProductItemsBu
 /**
  * @inheritdoc
  */
-class ProductItems implements \Magento\CatalogStorefrontConnector\DataProvider\DataProviderInterface
+class ProductItems implements \Magento\CatalogExtractor\DataProvider\DataProviderInterface
 {
     /**
      * @var ResourceConnection

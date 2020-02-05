@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\CatalogStorefrontConnector\DataProvider\Transformer">
+    <type name="Magento\CatalogExtractor\DataProvider\Transformer">
         <arguments>
             <argument name="map" xsi:type="array">
                 <item name="price_view" xsi:type="string">Magento\BundleProductExtractor\DataProvider\BundleFieldsTransformer</item>
@@ -17,7 +17,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogStorefrontConnector\DataProvider\DataProvider">
+    <type name="Magento\CatalogExtractor\DataProvider\DataProvider">
         <arguments>
             <argument name="dataProviders" xsi:type="array">
                 <item name="BundleProduct.items" xsi:type="string">Magento\BundleProductExtractor\DataProvider\ProductItems</item>
@@ -27,7 +27,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogStorefrontConnector\DataProvider\Query\Product\ProductAttributeQueryBuilder">
+    <type name="Magento\CatalogExtractor\DataProvider\Query\Product\ProductAttributeQueryBuilder">
         <arguments>
             <argument name="linkedAttributes" xsi:type="array">
                 <item name="dynamic_weight" xsi:type="array">

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\BundleProductExtractor\DataProvider;
 
-use Magento\CatalogStorefrontConnector\DataProvider\NestedDataProviderInterface;
+use Magento\CatalogExtractor\DataProvider\NestedDataProviderInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\BundleProductExtractor\DataProvider\Query\Items\BundleProductItemOptionsBuilder as QueryBuilder;
 
