@@ -48,19 +48,18 @@ class CollectProductsDataForUpdateAfterStockChange
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterUpdateStockItemBySku(
-        Fulltext $subject,
+        \Magento\CatalogInventory\Api\StockRegistryInterface $subject,
         $result,
         string $productSku,
         \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem
     ): void {
-        if (!$this->isIndexerRunOnSchedule()) {
-            return ;
+        if ($this->isIndexerRunOnSchedule()) {
+            return;
         }
-//        $productIds = $entityIds instanceof \Traversable ? $entityIds->getArrayCopy() : [];
-//        $this->productPublisher->publish(
-//            $productIds,
-//            (int)$dimensions[StoreDimensionProvider::DIMENSION_NAME]->getValue()
-//        );
+        $this->productPublisher->publish(
+            [(int)$stockItem->getProductId()],
+            (int)$stockItem->getStoreId()
+        );
     }
 
     /**
