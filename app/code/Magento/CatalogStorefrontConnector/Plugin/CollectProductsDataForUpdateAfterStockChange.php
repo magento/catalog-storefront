@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Plugin;
 
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
-use Magento\Store\Model\StoreDimensionProvider;
+use Magento\Framework\Indexer\IndexerRegistry;
 
 /**
  * Plugin for collect products data during reindex. Handle case when indexer mode is set to "schedule"
@@ -21,17 +23,17 @@ class CollectProductsDataForUpdateAfterStockChange
     private $productPublisher;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry
+     * @var IndexerRegistry
      */
     private $indexerRegistry;
 
     /**
      * @param ProductUpdatesPublisher $productPublisher
-     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+     * @param IndexerRegistry $indexerRegistry
      */
     public function __construct(
         ProductUpdatesPublisher $productPublisher,
-        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+        IndexerRegistry $indexerRegistry
     ) {
         $this->productPublisher = $productPublisher;
         $this->indexerRegistry = $indexerRegistry;
@@ -40,18 +42,18 @@ class CollectProductsDataForUpdateAfterStockChange
     /**
      * Handle product save when indexer mode is set to "schedule"
      *
-     * @param Fulltext $subject
+     * @param StockRegistryInterface $subject
      * @param void $result
-     * @param array $dimensions
-     * @param \Traversable|null $entityIds
+     * @param string $productSku
+     * @param StockItemInterface $stockItem
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterUpdateStockItemBySku(
-        \Magento\CatalogInventory\Api\StockRegistryInterface $subject,
+        StockRegistryInterface $subject,
         $result,
         string $productSku,
-        \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem
+        StockItemInterface $stockItem
     ): void {
         if ($this->isIndexerRunOnSchedule()) {
             return;
