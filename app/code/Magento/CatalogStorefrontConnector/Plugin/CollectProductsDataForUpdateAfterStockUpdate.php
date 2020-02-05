@@ -55,9 +55,9 @@ class CollectProductsDataForUpdateAfterStockUpdate
         string $productSku,
         StockItemInterface $stockItem
     ): void {
-        if ($this->isIndexerRunOnSchedule()) {
-            return;
-        }
+//        if ($this->isIndexerRunOnSchedule()) {
+//            return;
+//        }
         $this->productPublisher->publish(
             [(int)$stockItem->getProductId()],
             (int)$stockItem->getStoreId()
