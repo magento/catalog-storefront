@@ -52,7 +52,6 @@ class Transformer implements TransformerInterface
                     )
                 );
             }
-            // TODO: handle ad-hoc solution MC-29791
             if (empty($attributes)) {
                 $outputAttributes = $attributeName;
             } else {

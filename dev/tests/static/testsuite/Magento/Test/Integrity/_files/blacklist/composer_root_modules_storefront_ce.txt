@@ -1,10 +1,9 @@
-magento/module-catalog-bundle-product
-magento/module-catalog-category
-magento/module-catalog-category-api
-magento/module-catalog-configurable-product
-magento/module-catalog-downloadable-product
-magento/module-catalog-grouped-product
-magento/module-catalog-inventory-storefront
+magento/module-bundle-product-extractor
+magento/module-category-extractor
+magento/module-configurable-product-extractor
+magento/module-downloadable-product-extractor
+magento/module-grouped-product-extractor
+magento/module-catalog-inventory-extractor
 magento/module-catalog-product
 magento/module-catalog-product-api
 magento/module-catalog-store-front-graph-ql

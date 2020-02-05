@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Test\Unit\DataProvider;
 
+use Magento\CatalogStorefrontConnector\DataProvider\Transformer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
@@ -25,7 +26,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     private $dataProvider;
 
     /**
-     * @var \Magento\CatalogStorefrontConnector\DataProvider\Transformer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Transformer|\PHPUnit_Framework_MockObject_MockObject
      */
     private $transformerMock;
 
@@ -36,7 +37,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMock();
-        $this->transformerMock = $this->getMockBuilder(\Magento\CatalogStorefrontConnector\DataProvider\Transformer::class)
+        $this->transformerMock = $this->getMockBuilder(Transformer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->transformerMock->expects($this->any())->method('transform')->willReturnArgument(0);

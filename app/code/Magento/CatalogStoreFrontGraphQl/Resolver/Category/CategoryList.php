@@ -55,6 +55,8 @@ class CategoryList implements BatchResolverInterface
      * @param FieldResolver $fieldResolver
      * @param ServiceInvoker $serviceInvoker
      * @param ScopeProvider $scopeProvider
+     * @param CategoryFilter $categoryFilter
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         FieldResolver $fieldResolver,

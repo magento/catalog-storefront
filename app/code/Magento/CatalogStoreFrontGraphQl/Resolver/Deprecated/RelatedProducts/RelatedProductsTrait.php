@@ -170,7 +170,7 @@ trait RelatedProductsTrait
             $products[] = $request->getValue()['model'];
         }
 
-        // TODO: handle ad-hoc solution MC-29791
+        // TODO: MC-31146 Handle related products: related, upsell, crosssell
         // TODO: determine if we need add relations to $response or return $relations
         $relations = $this->relatedProductDataProvider->getRelations($products, $this->getLinkType());
         $response = $this->batchResponseFactory->create();
