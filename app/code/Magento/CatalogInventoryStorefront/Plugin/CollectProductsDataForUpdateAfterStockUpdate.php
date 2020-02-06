@@ -43,7 +43,7 @@ class CollectProductsDataForUpdateAfterStockUpdate
      * Handle stock item save
      *
      * @param StockRegistryInterface $subject
-     * @param int $result
+     * @param int? $result
      * @param string $productSku
      * @param StockItemInterface $stockItem
      * @return void
@@ -51,10 +51,10 @@ class CollectProductsDataForUpdateAfterStockUpdate
      */
     public function afterUpdateStockItemBySku(
         StockRegistryInterface $subject,
-        int $result,
+        ?int $result,
         string $productSku,
         StockItemInterface $stockItem
-    ): int {
+    ): ?int {
         $this->productPublisher->publish(
             [(int)$stockItem->getProductId()],
             (int)$stockItem->getStoreId()
