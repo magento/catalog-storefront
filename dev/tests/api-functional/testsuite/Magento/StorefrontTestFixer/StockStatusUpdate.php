@@ -23,7 +23,7 @@ class StockStatusUpdate extends CollectProductsDataForUpdateAfterStockUpdate
      * Ad-hoc solution. Force run consumers after inventory status update inside test-case
      *
      * @param StockRegistryInterface $subject
-     * @param void $result
+     * @param $result
      * @param string $productSku
      * @param StockItemInterface $stockItem
      */
@@ -32,11 +32,13 @@ class StockStatusUpdate extends CollectProductsDataForUpdateAfterStockUpdate
         $result,
         string $productSku,
         StockItemInterface $stockItem
-    ): void {
-        $result = parent::afterUpdateStockItemBySku($subject, $result, $productSku, $stockItem);
+    ) {
+        parent::afterUpdateStockItemBySku($subject, $result, $productSku, $stockItem);
 
         $objectManager = Bootstrap::getObjectManager();
         /** @var ConsumerInvoker $consumerInvoker */
         $consumerInvoker = $objectManager->get(ConsumerInvoker::class);
+        //$consumerInvoker->invoke(true);
+        return $result;
     }
 }

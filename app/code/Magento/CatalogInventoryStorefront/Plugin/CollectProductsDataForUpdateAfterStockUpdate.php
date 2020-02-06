@@ -13,7 +13,7 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\Framework\Indexer\IndexerRegistry;
 
 /**
- * Plugin for collect products data during reindex. Handle case when indexer mode is set to "schedule"
+ * Plugin for collect products data during reindex.
  */
 class CollectProductsDataForUpdateAfterStockUpdate
 {
@@ -40,10 +40,10 @@ class CollectProductsDataForUpdateAfterStockUpdate
     }
 
     /**
-     * Handle product save when indexer mode is set to "schedule"
+     * Handle stock item save
      *
      * @param StockRegistryInterface $subject
-     * @param void $result
+     * @param $result
      * @param string $productSku
      * @param StockItemInterface $stockItem
      * @return void
@@ -54,11 +54,13 @@ class CollectProductsDataForUpdateAfterStockUpdate
         $result,
         string $productSku,
         StockItemInterface $stockItem
-    ): void {
+    ) {
         $this->productPublisher->publish(
             [(int)$stockItem->getProductId()],
             (int)$stockItem->getStoreId()
         );
+
+        return $result;
     }
 
     /**
