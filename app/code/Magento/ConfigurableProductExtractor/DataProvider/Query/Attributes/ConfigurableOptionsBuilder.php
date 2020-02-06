@@ -72,7 +72,6 @@ class ConfigurableOptionsBuilder
         $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $linkField = $metadata->getLinkField();
 
-        // TODO: handle ad-hoc solution MC-29791
         $optionColumns = $this->columnsDataMapper->filter($requestedOptions, $this->getAvailableColumns());
         $optionColumns['product_id'] = 'product.entity_id';
         $optionColumns['attribute_code'] = 'attribute.attribute_code';

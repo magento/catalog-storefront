@@ -19,7 +19,7 @@ use Magento\Framework\App\ResourceConnection;
  *            'linked_product_id' => [
  *                'qty' => float,
  *                'position' => int,
- *                'product' => product_data[]
+ *                'product' => id
  *            ]
  *        ]
  *    ]
@@ -48,23 +48,15 @@ class GroupedProductsDataProvider implements DataProviderInterface
     private $linkAttributesBuilder;
 
     /**
-     * @var DataProviderInterface
-     */
-    private $generalDataProvider;
-
-    /**
      * @param ResourceConnection $resourceConnection
      * @param Query\LinkAttributesBuilder $linkAttributesBuilder
-     * @param DataProviderInterface $generalDataProvider
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        LinkAttributesBuilder $linkAttributesBuilder,
-        DataProviderInterface $generalDataProvider
+        LinkAttributesBuilder $linkAttributesBuilder
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->linkAttributesBuilder = $linkAttributesBuilder;
-        $this->generalDataProvider = $generalDataProvider;
     }
 
     /**
@@ -73,80 +65,32 @@ class GroupedProductsDataProvider implements DataProviderInterface
      */
     public function fetch(array $productIds, array $attributes, array $scopes): array
     {
-        $groupedAttributes = $attributes['items'] ?? [];
-        // TODO: handle ad-hoc solution MC-29791
         $select = $this->linkAttributesBuilder->build(
             $productIds,
-            $groupedAttributes ?: self::ATTRIBUTES,
+            $attributes['items'] ?: self::ATTRIBUTES,
             $scopes
         );
         $linkedProducts = $this->resourceConnection->getConnection()->fetchAll($select);
-        $productsInfo = [];
-        // TODO: handle ad-hoc solution MC-29791
-        if (!empty($groupedAttributes)) {
-            $linkIds = \array_unique(\array_column($linkedProducts, 'product_id'));
-            $productsInfo = $this->getProductsInfo($linkIds, $groupedAttributes ?: self::ATTRIBUTES, $scopes);
-        }
 
-        $productLinks = $this->getLinkAttributes($linkedProducts, $productsInfo, $groupedAttributes);
-
-        return $productLinks;
+        return $this->getLinkAttributes($linkedProducts);
     }
 
     /**
      * Get formatted list of links based on array of linked product attributes, products data and requested attributes
      *
      * @param array $linkedProducts
-     * @param array $productsInfo
-     * @param array $attributes
      * @return array
      */
-    private function getLinkAttributes(array $linkedProducts, array $productsInfo, array $attributes): array
+    private function getLinkAttributes(array $linkedProducts): array
     {
         $links = [];
         foreach ($linkedProducts as $linkedProduct) {
-            $linkAttributes = [];
             $groupedProductId = $linkedProduct['parent_id'];
             $linkedProductId = $linkedProduct['product_id'];
-
-            // TODO: handle ad-hoc solution MC-29791
-            if (empty($attributes)) {
-                $linkedProduct['product'] = $linkedProductId;
-                $links[$groupedProductId]['items'][$linkedProductId] = $linkedProduct;
-                continue;
-            }
-
-            foreach ($attributes as $attributeKey => $attributeName) {
-                if (\is_string($attributeName)) {
-                    $linkAttributes[$attributeName] = $linkedProduct[$attributeName] ?? null;
-                } elseif ($attributeKey === 'product' && isset($productsInfo[$linkedProductId])) {
-                    $linkAttributes[$attributeKey] = $productsInfo[$linkedProductId];
-                }
-            }
-            $links[$groupedProductId]['items'][$linkedProductId] = $linkAttributes;
+            $linkedProduct['product'] = $linkedProductId;
+            $links[$groupedProductId]['items'][$linkedProductId] = $linkedProduct;
         }
 
         return $links;
-    }
-
-    /**
-     * Prepare product information with requested product attributes
-     *
-     * @param array $productIds
-     * @param array $attributes
-     * @param array $scopes
-     * @return array
-     */
-    private function getProductsInfo(array $productIds, array $attributes, array $scopes): array
-    {
-        $productsInfo = [];
-        if (!empty($attributes['product'])) {
-            $productAttributes = $this->generalDataProvider->fetch($productIds, $attributes['product'], $scopes);
-            foreach ($productAttributes as $productId => $productAttributesData) {
-                $productsInfo[$productId] = $productAttributesData;
-            }
-        }
-
-        return $productsInfo;
     }
 }

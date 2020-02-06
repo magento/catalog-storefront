@@ -234,39 +234,33 @@ class VariantsDataProvider implements DataProviderInterface
         array $scopes,
         array $products
     ): array {
-        $attributesPerProduct = [];
-        $childAttributeOptions = [];
-
-        // TODO: handle ad-hoc solution MC-29791
-        if (empty($requestedAttributes) || $this->isLoadAttributes($requestedAttributes)) {
-            $attributesPerProduct = $this->configurableAttributesProvider->provide(
-                $parentProductIds,
-                $requestedAttributes,
-                $scopes
+        $attributesPerProduct = $this->configurableAttributesProvider->provide(
+            $parentProductIds,
+            $requestedAttributes,
+            $scopes
+        );
+        if (!$attributesPerProduct) {
+            throw new \LogicException(
+                \sprintf(
+                    'Can not find attributes for the following configurable products: "%s"',
+                    \implode(', ', $parentProductIds)
+                )
             );
-            if (!$attributesPerProduct) {
-                throw new \LogicException(
-                    \sprintf(
-                        'Can not find attributes for the following configurable products: "%s"',
-                        \implode(', ', $parentProductIds)
-                    )
-                );
 
-            }
-            $childAttributeOptions = $this->attributeOptionsProvider->provide(
-                $products,
-                $attributesPerProduct,
-                $scopes
+        }
+        $childAttributeOptions = $this->attributeOptionsProvider->provide(
+            $products,
+            $attributesPerProduct,
+            $scopes
+        );
+        if (!$childAttributeOptions) {
+            throw new \LogicException(
+                \sprintf(
+                    'Can not find attribute options for the following configurable products: "%s"',
+                    \implode(', ', $parentProductIds)
+                )
             );
-            if (!$childAttributeOptions) {
-                throw new \LogicException(
-                    \sprintf(
-                        'Can not find attribute options for the following configurable products: "%s"',
-                        \implode(', ', $parentProductIds)
-                    )
-                );
 
-            }
         }
         return [$attributesPerProduct, $childAttributeOptions];
     }
