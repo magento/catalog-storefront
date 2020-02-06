@@ -8,5 +8,7 @@ return [
     \Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate::class
         => \Magento\StorefrontTestFixer\CategoryAfterSave::class,
     \Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataOnSave::class
-        => \Magento\StorefrontTestFixer\ProductAfterSave::class
+        => \Magento\StorefrontTestFixer\ProductAfterSave::class,
+    \Magento\CatalogInventoryStorefront\Plugin\CollectProductsDataForUpdateAfterStockUpdate::class
+        => \Magento\StorefrontTestFixer\StockStatusUpdate::class
 ];
