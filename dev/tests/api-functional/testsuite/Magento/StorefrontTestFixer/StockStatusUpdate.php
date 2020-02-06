@@ -38,7 +38,8 @@ class StockStatusUpdate extends CollectProductsDataForUpdateAfterStockUpdate
         $objectManager = Bootstrap::getObjectManager();
         /** @var ConsumerInvoker $consumerInvoker */
         $consumerInvoker = $objectManager->get(ConsumerInvoker::class);
-        //$consumerInvoker->invoke(true);
+        $consumerInvoker->invoke(true);
+
         return $result;
     }
 }
