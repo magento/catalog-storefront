@@ -107,6 +107,7 @@ class Consumer
      * @throws \Magento\Framework\Exception\BulkException
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\RuntimeException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     private function saveToStorage(array $dataPerType): void
     {
@@ -120,9 +121,12 @@ class Consumer
 
                 // TODO: MC-31204
                 // TODO: MC-31155
-                $settings['index']['mapping']['total_fields']['limit'] = 200000;
-                $this->storageSchemaManager->createDataSource($sourceName, ['settings' => $settings]);
-                $this->storageSchemaManager->createEntity($sourceName, $entityType, []);
+                if (!$this->storageSchemaManager->existsDataSource($sourceName)) {
+                    $settings['index']['mapping']['total_fields']['limit'] = 200000;
+                    $this->storageSchemaManager->createDataSource($sourceName, ['settings' => $settings]);
+                    $this->storageSchemaManager->createEntity($sourceName, $entityType, []);
+                }
+
                 $this->storageWriteSource->bulkInsert($sourceName, $entityType, $data);
             }
         }
