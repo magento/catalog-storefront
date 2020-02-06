@@ -23,13 +23,13 @@ class StockStatusUpdate extends CollectProductsDataForUpdateAfterStockUpdate
      * Ad-hoc solution. Force run consumers after inventory status update inside test-case
      *
      * @param StockRegistryInterface $subject
-     * @param $result
+     * @param int $result
      * @param string $productSku
      * @param StockItemInterface $stockItem
      */
     public function afterUpdateStockItemBySku(
         StockRegistryInterface $subject,
-        $result,
+        int $result,
         string $productSku,
         StockItemInterface $stockItem
     ): int {

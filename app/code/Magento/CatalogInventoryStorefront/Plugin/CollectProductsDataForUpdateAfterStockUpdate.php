@@ -43,7 +43,7 @@ class CollectProductsDataForUpdateAfterStockUpdate
      * Handle stock item save
      *
      * @param StockRegistryInterface $subject
-     * @param $result
+     * @param int $result
      * @param string $productSku
      * @param StockItemInterface $stockItem
      * @return void
@@ -51,7 +51,7 @@ class CollectProductsDataForUpdateAfterStockUpdate
      */
     public function afterUpdateStockItemBySku(
         StockRegistryInterface $subject,
-        $result,
+        int $result,
         string $productSku,
         StockItemInterface $stockItem
     ): int {
