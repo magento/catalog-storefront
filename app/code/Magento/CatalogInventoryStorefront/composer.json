@@ -11,8 +11,8 @@
         "magento/module-catalog-product": "*",
         "magento/module-catalog-inventory": "*",
         "magento/module-catalog-configurable-product": "*",
-        "magento/module-store": "*"
-
+        "magento/module-store": "*",
+        "magento/module-catalog-storefront-connector": "*"
     },
     "type": "magento2-module",
     "license": [

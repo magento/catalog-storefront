@@ -66,22 +66,14 @@ QUERY;
             products(filter: {sku: {eq: "{$productSku}"}})
             {
                 items {
-                    stock_status            
+                    stock_status
                 }
             }
         }
 QUERY;
         $stockItem = $this->stockRegistry->getStockItemBySku($productSku);
         $stockItem->setQty(0);
-
-        // TODO: Enable after implementation of MC-30987 (remove product saving thought repository after)
-        // $this->stockRegistry->updateStockItemBySku($productSku, $stockItem);
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = Bootstrap::getObjectManager()::getInstance()->get(ProductRepositoryInterface::class);
-        /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
-        $product = $productRepository->get($productSku, false, null, true);
-        $product->getExtensionAttributes()->setStockItem($stockItem);
-        $productRepository->save($product);
+        $this->stockRegistry->updateStockItemBySku($productSku, $stockItem);
 
         $response = $this->graphQlQuery($query);
 
