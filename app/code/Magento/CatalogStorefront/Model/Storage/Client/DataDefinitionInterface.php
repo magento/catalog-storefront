@@ -78,6 +78,14 @@ interface DataDefinitionInterface
     public function deleteDataSource($name);
 
     /**
+     * Check a data source in storage for existing.
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function existsDataSource($name);
+
+    /**
      * Create Entity with schema definition.
      *
      * Entity could be interpreted as typical 'Table' in the terms of relational DB or 'Entity type' in DOC-oriented DB.

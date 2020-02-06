@@ -89,6 +89,14 @@ class ElasticsearchDataDefinitionAdapter implements DataDefinitionInterface
     /**
      * @inheritdoc
      */
+    public function existsDataSource($name)
+    {
+        return $this->getConnection()->indices()->exists(['index' => $name]);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function createEntity(string $dataSourceName, string $entityName, array $schema)
     {
         $params = [
