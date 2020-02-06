@@ -65,9 +65,10 @@ class GroupedProductsDataProvider implements DataProviderInterface
      */
     public function fetch(array $productIds, array $attributes, array $scopes): array
     {
+        $attributes = $attributes['items'] ?? self::ATTRIBUTES;
         $select = $this->linkAttributesBuilder->build(
             $productIds,
-            $attributes['items'] ?: self::ATTRIBUTES,
+            $attributes,
             $scopes
         );
         $linkedProducts = $this->resourceConnection->getConnection()->fetchAll($select);

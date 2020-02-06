@@ -87,7 +87,7 @@ class ProductDataProvider
                 \sprintf(
                     'Cannot find products for ids "%s" in the scope "%s"',
                     \implode(', ', $productIds),
-                    \implode(', ', $scopes)
+                    \implode(', ', \array_keys($scopes))  . ':' . \implode(', ', $scopes)
                 ),
                 ['exception' => $notFoundException]
             );
