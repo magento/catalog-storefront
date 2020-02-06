@@ -32,8 +32,8 @@ class StockStatusUpdate extends CollectProductsDataForUpdateAfterStockUpdate
         $result,
         string $productSku,
         StockItemInterface $stockItem
-    ) {
-        parent::afterUpdateStockItemBySku($subject, $result, $productSku, $stockItem);
+    ): int {
+        $result = parent::afterUpdateStockItemBySku($subject, $result, $productSku, $stockItem);
 
         $objectManager = Bootstrap::getObjectManager();
         /** @var ConsumerInvoker $consumerInvoker */

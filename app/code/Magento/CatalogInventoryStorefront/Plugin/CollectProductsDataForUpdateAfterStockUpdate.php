@@ -54,12 +54,12 @@ class CollectProductsDataForUpdateAfterStockUpdate
         $result,
         string $productSku,
         StockItemInterface $stockItem
-    ) {
+    ): int {
         $this->productPublisher->publish(
             [(int)$stockItem->getProductId()],
             (int)$stockItem->getStoreId()
         );
 
-        return $result;
+        return (int)$result;
     }
 }
