@@ -10,16 +10,16 @@ namespace Magento\CatalogStorefrontApi\Api;
 use Magento\CatalogStorefrontApi\Api\Data\ProductResultContainerInterface;
 
 /**
- * Product Search StoreFront API
+ * Product Search Storefront API
  */
-interface ProductSearchInterface
+interface ProductInterface
 {
     /**
      * Search products by search criteria. The result is returned in the order of the received requests
      *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\ProductSearchCriteriaInterface[] $requests
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ProductCriteriaInterface[] $requests
      *
      * @return ProductResultContainerInterface[]
      */
-    public function search(array $requests): array;
+    public function get(array $requests): array;
 }

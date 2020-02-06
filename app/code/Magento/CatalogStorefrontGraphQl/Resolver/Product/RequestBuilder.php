@@ -20,7 +20,7 @@ use Magento\CatalogStorefrontGraphQl\Model\ProductSearch;
 /**
  * Build request for storefront service.
  *
- * Return array of request [[GraphQl request, StoreFront request], ...]
+ * Return array of request [[GraphQl request, Storefront request], ...]
  */
 class RequestBuilder
 {

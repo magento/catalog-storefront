@@ -7,18 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefront\Model;
 
-use Magento\CatalogStorefrontApi\Api\Data\ProductSearchCriteriaInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductCriteriaInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\CatalogStorefront\DataProvider\ProductDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\ProductResultContainerInterfaceFactory;
-use Magento\CatalogStorefrontApi\Api\ProductSearchInterface;
+use Magento\CatalogStorefrontApi\Api\ProductInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductResultContainerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * @inheritdoc
  */
-class ProductSearch implements ProductSearchInterface
+class ProductSearch implements ProductInterface
 {
     /**
      * @var ProductResultContainerInterfaceFactory
@@ -53,7 +53,7 @@ class ProductSearch implements ProductSearchInterface
     /**
      * @inheritdoc
      */
-    public function search(array $requests): array
+    public function get(array $requests): array
     {
         $output = [];
         $responsePosition = -1;
@@ -73,23 +73,21 @@ class ProductSearch implements ProductSearchInterface
     /**
      * Process request
      *
-     * @param ProductSearchCriteriaInterface $criteria
+     * @param ProductCriteriaInterface $criteria
      * @return ProductResultContainerInterface
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
     private function processRequest($criteria): ProductResultContainerInterface
     {
         if (!isset($criteria->getScopes()['store'])) {
             return $this->processErrors([_('Store id is not present in Search Criteria. Please add missing info.')]);
         }
-        if (!isset($criteria->getFilters()['ids'])) {
-            throw new \InvalidArgumentException('Currently Catalog Storefront service supports only product ids');
-        }
-        $productIds = (array)$criteria->getFilters()['ids'];
 
         $productItems = [];
-        if (!empty($productIds)) {
+        if (!empty($criteria->getIds())) {
             $productItems = $this->dataProvider->fetch(
-                $productIds,
+                $criteria->getIds(),
                 $criteria->getAttributes(),
                 $criteria->getScopes()
             );
@@ -98,9 +96,7 @@ class ProductSearch implements ProductSearchInterface
         return $this->productResultContainerFactory->create(
             [
                 'errors' => [],
-                'metaInfo' => [],
                 'items' => $productItems,
-                'aggregations' => [],
             ]
         );
     }
@@ -127,17 +123,14 @@ class ProductSearch implements ProductSearchInterface
      * Process errors
      *
      * @param array $errors
-     * @param array $metaInfo
      * @return ProductResultContainerInterface
      */
-    private function processErrors(array $errors, array $metaInfo = []): ProductResultContainerInterface
+    private function processErrors(array $errors): ProductResultContainerInterface
     {
         return $this->productResultContainerFactory->create(
             [
                 'errors' => $errors,
-                'metaInfo' => $metaInfo,
                 'items' => [],
-                'aggregations' => []
             ]
         );
     }

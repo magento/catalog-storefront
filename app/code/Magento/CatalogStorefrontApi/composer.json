@@ -1,6 +1,6 @@
 {
     "name": "magento/module-catalog-storefront-api",
-    "description": "Product Catalog StoreFront API",
+    "description": "Product Catalog Storefront API",
     "config": {
         "sort-packages": true
     },

@@ -11,14 +11,14 @@ use Magento\Framework\Exception\LocalizedException;
 // TODO: replace with CategoryProvider
 use Magento\CategoryExtractor\DataProvider\DataProviderInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryResultContainerInterfaceFactory;
-use Magento\CatalogStorefrontApi\Api\CategorySearchInterface;
+use Magento\CatalogStorefrontApi\Api\CategoryInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryResultContainerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * @inheritdoc
  */
-class CategorySearch implements CategorySearchInterface
+class CategorySearch implements CategoryInterface
 {
     /**
      * @var CategoryResultContainerInterfaceFactory
@@ -53,7 +53,7 @@ class CategorySearch implements CategorySearchInterface
     /**
      * @inheritdoc
      */
-    public function search(array $requests): array
+    public function get(array $requests): array
     {
         $output = [];
         $responsePosition = -1;
@@ -73,20 +73,13 @@ class CategorySearch implements CategorySearchInterface
     /**
      * Process request
      *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\CategorySearchCriteriaInterface $criteria
+     * @param \Magento\CatalogStorefrontApi\Api\Data\CategoryCriteriaInterface $criteria
      * @return CategoryResultContainerInterface
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws LocalizedException
      */
     private function processRequest($criteria): CategoryResultContainerInterface
     {
-        if (!isset($criteria->getFilters()['ids'])) {
-            throw new \InvalidArgumentException('Currently Catalog Storefront service supports only category ids');
-        }
-        $rootCategoryIds = (array)$criteria->getFilters()['ids'];
-
         $categories = $this->dataProvider->fetch(
-            $rootCategoryIds,
+            $criteria->getIds(),
             \array_merge($criteria->getAttributes(), ['is_active']),
             $criteria->getScopes()
         );

@@ -8,21 +8,21 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefrontApi\Api\Data;
 
 /**
- * Request criteria DTO for category search StoreFront API
+ * Request criteria DTO for category search Storefront API
  *
- * @see \Magento\CatalogStorefrontApi\Api\CategorySearchInterface
+ * @see \Magento\CatalogStorefrontApi\Api\CategoryInterface
  */
-interface CategorySearchCriteriaInterface
+interface CategoryCriteriaInterface
 {
     /**
-     * Provide filtration, e.g.
+     * Provide ids
      * [
-     *     'id': 3
+     *     3, 4
      * ]
      *
      * @return array
      */
-    public function getFilters(): array;
+    public function getIds(): array;
 
     /**
      * List of scopes in format, e.g ['store' => 3]

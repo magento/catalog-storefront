@@ -7,17 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefront\Model\CategorySearch;
 
-use Magento\CatalogStorefrontApi\Api\Data\CategorySearchCriteriaInterface;
+use Magento\CatalogStorefrontApi\Api\Data\CategoryCriteriaInterface;
 
 /**
  * @inheritdoc
  */
-class CategorySearchCriteria implements CategorySearchCriteriaInterface
+class CategorySearchCriteria implements CategoryCriteriaInterface
 {
     /**
      * @var array
      */
-    private $filters;
+    private $ids;
 
     /**
      * @var array
@@ -30,16 +30,16 @@ class CategorySearchCriteria implements CategorySearchCriteriaInterface
     private $attributes;
 
     /**
-     * @param array $filters
+     * @param array $ids
      * @param array $scopes
      * @param array $attributes
      */
     public function __construct(
-        array $filters,
+        array $ids,
         array $scopes,
         array $attributes
     ) {
-        $this->filters = $filters;
+        $this->ids = $ids;
         $this->scopes = $scopes;
         $this->attributes = $attributes;
     }
@@ -47,9 +47,9 @@ class CategorySearchCriteria implements CategorySearchCriteriaInterface
     /**
      * @inheritdoc
      */
-    public function getFilters(): array
+    public function getIds(): array
     {
-        return $this->filters;
+        return $this->ids;
     }
 
     /**

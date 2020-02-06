@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontGraphQl\Resolver\Category;
 
-use Magento\CatalogStorefrontApi\Api\CategorySearchInterface;
+use Magento\CatalogStorefrontApi\Api\CategoryInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryResultContainerInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -72,9 +72,8 @@ class CategoryTree implements BatchResolverInterface
                 $store = $context->getExtensionAttributes()->getStore();
                 $categoryId = (int)$store->getRootCategoryId();
             }
-            $filter['ids'] = $categoryId;
             $storefrontRequest = [
-                'filters' => $filter,
+                'ids' => [$categoryId],
                 'scopes' => $this->scopeProvider->getScopes($context),
                 'attributes' => $this->fieldResolver->getSchemaTypeFields($request->getInfo(), ['category']),
             ];
@@ -85,8 +84,8 @@ class CategoryTree implements BatchResolverInterface
         }
 
         return $this->serviceInvoker->invoke(
-            CategorySearchInterface::class,
-            'search',
+            CategoryInterface::class,
+            'get',
             $storefrontRequests,
             function (
                 CategoryResultContainerInterface $result,

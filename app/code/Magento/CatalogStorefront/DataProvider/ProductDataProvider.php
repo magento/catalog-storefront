@@ -74,6 +74,7 @@ class ProductDataProvider
         }
         $products = [];
         $storageName = $this->storageState->getCurrentDataSourceName([$scopes['store'], Product::ENTITY_NAME]);
+        $entities = [];
         try {
             $entities = $this->query->getEntries(
                 $storageName,

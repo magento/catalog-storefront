@@ -23,7 +23,7 @@ class ServiceInvoker
     private const GRAPHQL_REQUEST = 'graphql_request';
 
     /**
-     * StoreFront request identifier
+     * Storefront request identifier
      */
     private const STOREFRONT_REQUEST = 'storefront_request';
 

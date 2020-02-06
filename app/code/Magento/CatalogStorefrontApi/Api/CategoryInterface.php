@@ -10,16 +10,16 @@ namespace Magento\CatalogStorefrontApi\Api;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryResultContainerInterface;
 
 /**
- * Category Search StoreFront API
+ * Get categories by ids
  */
-interface CategorySearchInterface
+interface CategoryInterface
 {
     /**
      * Search category by search criteria
      *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\CategorySearchCriteriaInterface[] $requests
+     * @param \Magento\CatalogStorefrontApi\Api\Data\CategoryCriteriaInterface[] $requests
      *
      * @return CategoryResultContainerInterface[]
      */
-    public function search(array $requests): array;
+    public function get(array $requests): array;
 }

@@ -1,6 +1,6 @@
 {
     "name": "magento/module-storefront-graph-ql",
-    "description": "StoreFront GraphQL connector module",
+    "description": "Storefront GraphQL connector module",
     "config": {
         "sort-packages": true
     },

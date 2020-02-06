@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefrontApi\Api\Data;
 
 /**
- * Container with response for Product Search StoreFront API request
+ * Container with response for Product Search Storefront API request
  *
- * @see \Magento\CatalogStorefrontApi\Api\ProductSearchInterface
+ * @see \Magento\CatalogStorefrontApi\Api\ProductInterface
  */
 interface ProductResultContainerInterface
 {
@@ -20,20 +20,6 @@ interface ProductResultContainerInterface
      * @return string[]
      */
     public function getItems(): array;
-
-    /**
-     * Aggregations
-     *
-     * @return string[][]
-     */
-    public function getAggregations(): array;
-
-    /**
-     * Meta info, e.g. ["totalCount"]
-     *
-     * @return array
-     */
-    public function getMetaInfo(): array;
 
     /**
      * List of error messages in case of failure

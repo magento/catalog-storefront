@@ -10,14 +10,16 @@ Module Magento_CatalogStorefrontConnector has the following responsibilities:
 
 
 ## Events
-- Listen events to collect changes in product/category entities
+
+To collect product data from Magento we only need to listen "catalog search indexer" event and collect processed ids
+To collect category data from Magento we only need to listen "category save" event and collect processed ids
+
+Eventually any change on Magento side will affect catalog search indexer. But to support existing functional tests we have to listen several extra events:
   - product save 
-  - catalog search reindex
-  - category save
   - stock status save
+  - system configuration change
 
-
-Magento_*Extract modules are used to collect data
+To collect product/category data Magento_*Extract modules are used
 
 ## Internal data transfer
 

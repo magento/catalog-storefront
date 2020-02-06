@@ -8,17 +8,17 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
     <!-- Product search -->
-    <preference for="Magento\CatalogStorefrontApi\Api\ProductSearchInterface" type="Magento\CatalogStorefront\Model\ProductSearch"/>
+    <preference for="Magento\CatalogStorefrontApi\Api\ProductInterface" type="Magento\CatalogStorefront\Model\ProductSearch"/>
     <preference for="Magento\CatalogStorefrontApi\Api\Data\ProductResultContainerInterface" type="Magento\CatalogStorefront\Model\ProductSearch\ProductResultContainer"/>
-    <preference for="Magento\CatalogStorefrontApi\Api\Data\ProductSearchCriteriaInterface" type="Magento\CatalogStorefront\Model\ProductSearch\ProductSearchCriteria"/>
+    <preference for="Magento\CatalogStorefrontApi\Api\Data\ProductCriteriaInterface" type="Magento\CatalogStorefront\Model\ProductSearch\ProductSearchCriteria"/>
     <preference for="Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface" type="Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchDataDefinitionAdapter"/>
     <preference for="Magento\CatalogStorefront\Model\Storage\Client\QueryInterface" type="Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchQuery"/>
     <preference for="Magento\CatalogStorefront\Model\Storage\Client\CommandInterface" type="Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchCommand"/>
 
     <!-- Category search -->
-    <preference for="Magento\CatalogStorefrontApi\Api\CategorySearchInterface" type="Magento\CatalogStorefront\Model\CategorySearch"/>
+    <preference for="Magento\CatalogStorefrontApi\Api\CategoryInterface" type="Magento\CatalogStorefront\Model\CategorySearch"/>
     <preference for="Magento\CatalogStorefrontApi\Api\Data\CategoryResultContainerInterface" type="Magento\CatalogStorefront\Model\CategorySearch\CategoryResultContainer"/>
-    <preference for="Magento\CatalogStorefrontApi\Api\Data\CategorySearchCriteriaInterface" type="Magento\CatalogStorefront\Model\CategorySearch\CategorySearchCriteria"/>
+    <preference for="Magento\CatalogStorefrontApi\Api\Data\CategoryCriteriaInterface" type="Magento\CatalogStorefront\Model\CategorySearch\CategorySearchCriteria"/>
 
     <type name="Magento\CatalogStorefront\Model\Storage\Client\Config\EntityConfigPool">
         <arguments>

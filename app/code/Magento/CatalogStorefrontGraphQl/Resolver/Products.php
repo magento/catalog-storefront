@@ -13,7 +13,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResponse;
-use Magento\CatalogStorefrontApi\Api\ProductSearchInterface;
+use Magento\CatalogStorefrontApi\Api\ProductInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResolverInterface;
 
 /**
@@ -59,8 +59,8 @@ class Products implements BatchResolverInterface
             $storefrontRequests[] = $this->requestBuilder->buildRequest($context, $request);
         }
         return $this->serviceInvoker->invoke(
-            ProductSearchInterface::class,
-            'search',
+            ProductInterface::class,
+            'get',
             $storefrontRequests,
             new OutputFormatter
         );

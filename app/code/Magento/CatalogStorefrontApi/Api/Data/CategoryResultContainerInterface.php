@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefrontApi\Api\Data;
 
 /**
- * Container with response for Category Search StoreFront API request
+ * Container with response for Category Search Storefront API request
  *
- * @see \Magento\CatalogStorefrontApi\Api\CategorySearchInterface
+ * @see \Magento\CatalogStorefrontApi\Api\CategoryInterface
  */
 interface CategoryResultContainerInterface
 {

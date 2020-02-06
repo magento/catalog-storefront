@@ -67,9 +67,8 @@ class ProductSearch
             $searchCriteria,
             $showLayeredNavigation
         );
-        // Ad-hoc solution.
-        // Product search executed in Magento Monolith until Catalog Storefront Search service implemented
-        $request['storefront_request']['filters']['ids'] = $productIds;
+
+        $request['storefront_request']['ids'] = $productIds;
 
         $currentPage = $searchCriteria->getCurrentPage();
         $maxPages = $this->getTotalPages($searchCriteria, $totalCount);

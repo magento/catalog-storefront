@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontGraphQl\Resolver\Category;
 
-use Magento\CatalogStorefrontApi\Api\CategorySearchInterface;
+use Magento\CatalogStorefrontApi\Api\CategoryInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryResultContainerInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -104,9 +104,8 @@ class CategoryList implements BatchResolverInterface
                 }
             }
 
-            $filter['ids'] = $rootCategoryIds;
             $storefrontRequest = [
-                'filters' => $filter,
+                'ids' => $rootCategoryIds,
                 'scopes' => $scopes,
                 'attributes' => $this->fieldResolver->getSchemaTypeFields($request->getInfo(), ['categoryList']),
             ];
@@ -117,8 +116,8 @@ class CategoryList implements BatchResolverInterface
         }
 
         return $this->serviceInvoker->invoke(
-            CategorySearchInterface::class,
-            'search',
+            CategoryInterface::class,
+            'get',
             $storefrontRequests,
             function (
                 CategoryResultContainerInterface $result

@@ -41,8 +41,8 @@ class OutputFormatter
             throw new GraphQlInputException(__(\implode('; ', \array_map('\strval', $errors))));
         }
 
-        $metaInfo = $result->getMetaInfo() ?: $additionalInfo['meta_info'];
-        $aggregations = $result->getAggregations() ?: $additionalInfo['aggregations'];
+        $metaInfo = $additionalInfo['meta_info'] ?? [];
+        $aggregations = $additionalInfo['aggregations'] ?? [];
         return [
             'items' => $result->getItems(),
             'aggregations' => $aggregations,

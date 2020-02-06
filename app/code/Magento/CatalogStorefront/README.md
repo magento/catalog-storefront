@@ -1,8 +1,43 @@
 # Overview
 
-Module Magento_CatalogStorefront provide Catalog Storefront implementation and has the following responsibilities:
+Module Magento_CatalogStorefront provides Catalog Storefront service implementation and has the following responsibilities:
 
-TBD...
+- Provide product/category data by specified ids and set of attributes
+
+Here is the example of request and response to Product Service
+In case of data is not found for specified id Service doesn't return any data
+```
+// Request
+{
+    "ids": [2, 6, 20],
+    "scopes": {
+        "store": 1,
+        "customerGroupId": 1
+    },
+    "attributes": [
+        "name",
+        "price"
+    ]
+}
+
+// Response
+{
+    "items": [
+        {
+            "id": 2,
+            "name": "Car 1",
+            "price": "22"
+        },
+        {
+            "id": 6,
+            "name": "Car 2",
+            "price": "21"
+        },
+    ],
+    "errors": null
+}
+```
+
 
 ## Storage
 
