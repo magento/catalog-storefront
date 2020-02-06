@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogProduct\Model\MessageBus;
 
 use Magento\CatalogProduct\Model\Storage\Client\CommandInterface;
+use Magento\CatalogProduct\Model\Storage\Client\DataDefinitionInterface;
 use Magento\CatalogProduct\Model\Storage\State;
 use Psr\Log\LoggerInterface;
 
@@ -19,7 +20,7 @@ class Consumer
     /**
      * @var CommandInterface
      */
-    private $storage;
+    private $storageWriteSource;
 
     /**
      * @var State
@@ -37,18 +38,26 @@ class Consumer
     private $catalogItemMessageBuilder;
 
     /**
-     * @param CommandInterface $storage
+     * @var DataDefinitionInterface
+     */
+    private $storageSchemaManager;
+
+    /**
+     * @param CommandInterface $storageWriteSource
+     * @param DataDefinitionInterface $storageSchemaManager
      * @param State $storageState
      * @param CatalogItemMessageBuilder $catalogItemMessageBuilder
      * @param LoggerInterface $logger
      */
     public function __construct(
-        CommandInterface $storage,
+        CommandInterface $storageWriteSource,
+        DataDefinitionInterface $storageSchemaManager,
         State $storageState,
         CatalogItemMessageBuilder $catalogItemMessageBuilder,
         LoggerInterface $logger
     ) {
-        $this->storage = $storage;
+        $this->storageWriteSource = $storageWriteSource;
+        $this->storageSchemaManager = $storageSchemaManager;
         $this->storageState = $storageState;
         $this->logger = $logger;
         $this->catalogItemMessageBuilder = $catalogItemMessageBuilder;
@@ -104,15 +113,17 @@ class Consumer
         foreach ($dataPerType as $entityType => $dataPerStore) {
             foreach ($dataPerStore as $storeId => $data) {
                 $sourceName = $this->storageState->getCurrentDataSourceName([$storeId, $entityType]);
-                // TODO: MC-30401
-                // $this->dataDefinition->createEntity($sourceName, $entityType, []);
-
                 $this->logger->debug(
                     \sprintf('Save to storage "%s" %s record(s)', $sourceName, count($data)),
                     ['verbose' => $data]
                 );
 
-                $this->storage->bulkInsert($sourceName, $entityType, $data);
+                // TODO: MC-31204
+                // TODO: MC-31155
+                $settings['index']['mapping']['total_fields']['limit'] = 200000;
+                $this->storageSchemaManager->createDataSource($sourceName, ['settings' => $settings]);
+                $this->storageSchemaManager->createEntity($sourceName, $entityType, []);
+                $this->storageWriteSource->bulkInsert($sourceName, $entityType, $data);
             }
         }
     }
