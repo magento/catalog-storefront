@@ -7,6 +7,6 @@ magento/module-grouped-product-extractor
 magento/module-catalog-inventory-extractor
 magento/module-catalog-storefront
 magento/module-catalog-storefront-api
-magento/module-catalog-store-front-graph-ql
+magento/module-catalog-storefront-graph-ql
 magento/module-catalog-storefront-connector
-magento/module-store-front-graph-ql
+magento/module-storefront-graph-ql

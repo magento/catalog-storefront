@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\StoreFrontGraphQl\Model\Query;
+namespace Magento\StorefrontGraphQl\Model\Query;
 
 use Magento\Customer\Model\Group as CustomerGroup;
 use Magento\Customer\Model\Session;
@@ -19,7 +19,7 @@ use Magento\GraphQl\Model\Query\ContextInterface;
 class ScopeProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\StoreFrontGraphQl\Model\Query\ScopeProvider
+     * @var \Magento\StorefrontGraphQl\Model\Query\ScopeProvider
      */
     private $scopeProvider;
 
