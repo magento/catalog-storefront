@@ -82,37 +82,41 @@ class CategoryList implements BatchResolverInterface
     public function resolve(ContextInterface $context, Field $field, array $requests): BatchResponse
     {
         $storefrontRequests = [];
-        foreach ($requests as $request) {
-            $scopes = $this->scopeProvider->getScopes($context);
-            $rootCategoryIds = [];
+        $batchResponse = null;
+        try {
+            foreach ($requests as $request) {
+                $scopes = $this->scopeProvider->getScopes($context);
+                $rootCategoryIds = [];
 
-            $store = $context->getExtensionAttributes()->getStore();
-            if (!isset($request->getArgs()['filters'])) {
-                $rootCategoryIds[] = (int)$store->getRootCategoryId();
-            } else {
-                try {
+                $store = $context->getExtensionAttributes()->getStore();
+                if (!isset($request->getArgs()['filters'])) {
+                    $rootCategoryIds[] = (int)$store->getRootCategoryId();
+                } else {
                     $categoryCollection = $this->collectionFactory->create();
                     $this->categoryFilter->applyFilters($request->getArgs(), $categoryCollection, $store);
                     foreach ($categoryCollection as $category) {
                         $rootCategoryIds[] = (int)$category->getId();
                     }
-                } catch (InputException $e) {
-                    // ad-hoc solution to handle case with invalid filter
-                    $batchResponse = new BatchResponse();
-                    $batchResponse->addResponse($request, []);
-                    return $batchResponse;
                 }
-            }
 
-            $storefrontRequest = [
-                'ids' => $rootCategoryIds,
-                'scopes' => $scopes,
-                'attributes' => $this->fieldResolver->getSchemaTypeFields($request->getInfo(), ['categoryList']),
-            ];
-            $storefrontRequests[] = [
-                'graphql_request' => $request,
-                'storefront_request' => $storefrontRequest
-            ];
+                $storefrontRequest = [
+                    'ids' => $rootCategoryIds,
+                    'scopes' => $scopes,
+                    'attributes' => $this->fieldResolver->getSchemaTypeFields($request->getInfo(), ['categoryList']),
+                ];
+                $storefrontRequests[] = [
+                    'graphql_request' => $request,
+                    'storefront_request' => $storefrontRequest
+                ];
+            }
+        } catch (InputException $e) {
+            $batchResponse = $batchResponse ?? new BatchResponse();
+            $batchResponse->addResponse($request, []);
+        }
+
+        // ad-hoc solution to handle case with invalid filter
+        if (null !== $batchResponse) {
+            return $batchResponse;
         }
 
         return $this->serviceInvoker->invoke(

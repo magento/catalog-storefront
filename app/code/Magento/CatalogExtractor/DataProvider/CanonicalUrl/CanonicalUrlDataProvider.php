@@ -31,7 +31,7 @@ class CanonicalUrlDataProvider implements DataProviderInterface
      */
     private $canonicalUrlQuery;
 
-    /**Magento\CatalogExtractor\DataProvider\DataProviderInterface
+    /**
      * @var ResourceConnection
      */
     private $resourceConnection;

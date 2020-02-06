@@ -5,12 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogInventoryStorefront\Plugin;
+namespace Magento\CatalogInventoryExtractor\Plugin;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogStorefrontConnector\Plugin\ProductUpdatesPublisher;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
 
 /**
  * Plugin for collect products data during reindex.
@@ -43,23 +44,36 @@ class CollectProductsDataForUpdateAfterStockUpdate
      * Handle stock item save
      *
      * @param StockRegistryInterface $subject
-     * @param int? $result
+     * @param $result
      * @param string $productSku
      * @param StockItemInterface $stockItem
-     * @return void
+     * @return int
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterUpdateStockItemBySku(
         StockRegistryInterface $subject,
-        ?int $result,
+        $result,
         string $productSku,
         StockItemInterface $stockItem
     ): ?int {
-        $this->productPublisher->publish(
-            [(int)$stockItem->getProductId()],
-            (int)$stockItem->getStoreId()
-        );
+        if ($this->isIndexerRunOnSave()) {
+            $this->productPublisher->publish(
+                [(int)$stockItem->getProductId()],
+                (int)$stockItem->getStoreId()
+            );
+        }
 
         return (int)$result;
+    }
+
+    /**
+     * Is indexer run in "on schedule" mode
+     *
+     * @return bool
+     */
+    private function isIndexerRunOnSave(): bool
+    {
+        $indexer = $this->indexerRegistry->get(Fulltext::INDEXER_ID);
+        return !$indexer->isScheduled();
     }
 }

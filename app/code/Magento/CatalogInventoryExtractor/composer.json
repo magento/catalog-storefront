@@ -13,7 +13,6 @@
         "magento/module-catalog-extractor": "*",
         "magento/module-catalog-storefront-connector": "*",
         "magento/module-store": "*"
-
     },
     "type": "magento2-module",
     "license": [

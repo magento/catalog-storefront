@@ -102,7 +102,7 @@ class VariantsDataProvider implements DataProviderInterface
      * @param array $products
      * @return array
      */
-    public function getLinkedProductIds(array $products): array
+    private function getLinkedProductIds(array $products): array
     {
         $childrenMap = [];
         foreach ($products as $child) {
@@ -204,18 +204,6 @@ class VariantsDataProvider implements DataProviderInterface
         }
 
         return $options;
-    }
-
-    /**
-     * Is need to load attributes
-     *
-     * @param array $requestedAttributes
-     * @return bool
-     */
-    private function isLoadAttributes(array $requestedAttributes): bool
-    {
-        return isset($requestedAttributes['configurable_options'])
-            || isset($requestedAttributes['variants']['attributes']);
     }
 
     /**

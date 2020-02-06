@@ -66,7 +66,7 @@ Add storage configuration to env.php file:
 
 ## Logging
 
-In case of error log file storefront-catalog.log will be created
+In case of error occurs log file storefront-catalog.log will be created
 
 To enable debug logging add the following configuration to env.php:
 
@@ -74,7 +74,7 @@ To enable debug logging add the following configuration to env.php:
 'dev' => [
     'debug' => [
         'debug_logging' => 1,
-        'debug_extended' => 1, // extended info will be added. Be aware about log size
+        'debug_extended' => 1, // extended info will be added. Be aware of log size.
     ]
 ]
 ```
