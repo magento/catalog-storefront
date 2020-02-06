@@ -9,7 +9,7 @@ namespace Magento\CatalogInventoryStorefront\Plugin;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\CatalogStorefrontConnector\Plugin\ProductUpdatesPublisher;
 use Magento\Framework\Indexer\IndexerRegistry;
 
 /**
@@ -61,16 +61,5 @@ class CollectProductsDataForUpdateAfterStockUpdate
         );
 
         return $result;
-    }
-
-    /**
-     * Is indexer run in "on schedule" mode
-     *
-     * @return bool
-     */
-    private function isIndexerRunOnSchedule(): bool
-    {
-        $indexer = $this->indexerRegistry->get(Fulltext::INDEXER_ID);
-        return $indexer->isScheduled();
     }
 }
