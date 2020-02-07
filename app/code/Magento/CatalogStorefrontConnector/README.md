@@ -26,7 +26,7 @@ Module declares 2 queues to collect product/category changes:
 - storefront.catalog.product.connector
 - storefront.catalog.category.connector
 
-Theses queues hold changed entity id to avoid performance issue during entity save
+These queues hold changed entity id to, which will be processed later in consumer to avoid performance degradation during entity save
 Message format is described in \Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface
 
 # Logging
