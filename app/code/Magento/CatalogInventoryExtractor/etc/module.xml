@@ -9,7 +9,7 @@
     <module name="Magento_CatalogInventoryExtractor">
         <sequence>
             <module name="Magento_CatalogInventory"/>
-            <module name="Magento_CatalogConfigurableProduct"/>
+            <module name="Magento_ConfigurableProductExtractor"/>
         </sequence>
     </module>
 </config>

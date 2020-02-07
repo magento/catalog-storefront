@@ -37,8 +37,8 @@ class ColumnsDataMapper
      * ]
      * ```
      *
-     * @see \Magento\CatalogConfigurableProduct\DataProvider\Query\Attributes\ConfigurableOptionsBuilder::build
-     * @see \Magento\CatalogConfigurableProduct\DataProvider\Query\Attributes\ConfigurableOptionValuesBuilder::build
+     * @see \Magento\ConfigurableProductExtractor\DataProvider\Query\Attributes\ConfigurableOptionsBuilder::build
+     * @see \Magento\ConfigurableProductExtractor\DataProvider\Query\Attributes\ConfigurableOptionValuesBuilder::build
      *
      * @param array $requested
      * @param array $available
