@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\CatalogExtractor\DataProvider\DataProvider">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="DownloadableProduct.downloadable_product_samples" xsi:type="string">DownloadableProductSamples</item>
+                <item name="DownloadableProduct.downloadable_product_links" xsi:type="string">DownloadableProductLinks</item>
+            </argument>
+            <argument name="productTypesMap" xsi:type="array">
+                <item name="DownloadableProduct.downloadable_product_samples" xsi:type="string">downloadable</item>
+                <item name="DownloadableProduct.downloadable_product_links" xsi:type="string">downloadable</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="DownloadableProductSamples" type="Magento\DownloadableProductExtractor\DataProvider\DownloadableProductItems">
+        <arguments>
+            <argument name="downloadableItemsBuilder" xsi:type="object">Magento\DownloadableProductExtractor\DataProvider\Query\Samples\DownloadableProductSamplesBuilder</argument>
+            <argument name="requestedAttributeName" xsi:type="string">downloadable_product_samples</argument>
+            <argument name="attributeName" xsi:type="string">downloadable_product_samples</argument>
+            <argument name="routePath" xsi:type="string">downloadable/download/sample</argument>
+            <argument name="tableKey" xsi:type="string">sample_id</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="DownloadableProductLinks" type="Magento\DownloadableProductExtractor\DataProvider\DownloadableProductItems">
+        <arguments>
+            <argument name="downloadableItemsBuilder" xsi:type="object">Magento\DownloadableProductExtractor\DataProvider\Query\Links\DownloadableProductLinksBuilder</argument>
+            <argument name="requestedAttributeName" xsi:type="string">downloadable_product_links</argument>
+            <argument name="attributeName" xsi:type="string">downloadable_product_links</argument>
+            <argument name="routePath" xsi:type="string">downloadable/download/linkSample</argument>
+            <argument name="tableKey" xsi:type="string">link_id</argument>
+        </arguments>
+    </virtualType>
+</config>

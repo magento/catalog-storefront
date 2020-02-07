@@ -1,0 +1,3 @@
+# Overview
+
+Magento_ConfigurableProductExtractor module extracts Configurable Product data which consumed by Magento_CatalogStorefrontConnector module 

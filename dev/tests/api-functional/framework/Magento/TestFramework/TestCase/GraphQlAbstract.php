@@ -5,8 +5,8 @@
  */
 namespace Magento\TestFramework\TestCase;
 
-use Magento\CatalogProduct\Model\Storage\Client\DataDefinitionInterface;
-use Magento\CatalogProduct\Model\Storage\State;
+use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
+use Magento\CatalogStorefront\Model\Storage\State;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**

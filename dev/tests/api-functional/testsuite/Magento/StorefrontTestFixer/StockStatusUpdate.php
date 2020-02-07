@@ -9,7 +9,7 @@ namespace Magento\StorefrontTestFixer;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\CatalogInventoryStorefront\Plugin\CollectProductsDataForUpdateAfterStockUpdate;
+use Magento\CatalogInventoryExtractor\Plugin\CollectProductsDataForUpdateAfterStockUpdate;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -26,7 +26,7 @@ class StockStatusUpdate extends CollectProductsDataForUpdateAfterStockUpdate
      */
     public function afterUpdateStockItemBySku(
         StockRegistryInterface $subject,
-        ?int $result,
+        $result,
         string $productSku,
         StockItemInterface $stockItem
     ): int {

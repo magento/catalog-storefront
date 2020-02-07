@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!-- Product search -->
+    <preference for="Magento\CatalogStorefrontApi\Api\ProductInterface" type="Magento\CatalogStorefront\Model\ProductSearch"/>
+    <preference for="Magento\CatalogStorefrontApi\Api\Data\ProductResultContainerInterface" type="Magento\CatalogStorefront\Model\ProductSearch\ProductResultContainer"/>
+    <preference for="Magento\CatalogStorefrontApi\Api\Data\ProductCriteriaInterface" type="Magento\CatalogStorefront\Model\ProductSearch\ProductSearchCriteria"/>
+    <preference for="Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface" type="Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchDataDefinitionAdapter"/>
+    <preference for="Magento\CatalogStorefront\Model\Storage\Client\QueryInterface" type="Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchQuery"/>
+    <preference for="Magento\CatalogStorefront\Model\Storage\Client\CommandInterface" type="Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchCommand"/>
+
+    <!-- Category search -->
+    <preference for="Magento\CatalogStorefrontApi\Api\CategoryInterface" type="Magento\CatalogStorefront\Model\CategorySearch"/>
+    <preference for="Magento\CatalogStorefrontApi\Api\Data\CategoryResultContainerInterface" type="Magento\CatalogStorefront\Model\CategorySearch\CategoryResultContainer"/>
+    <preference for="Magento\CatalogStorefrontApi\Api\Data\CategoryCriteriaInterface" type="Magento\CatalogStorefront\Model\CategorySearch\CategorySearchCriteria"/>
+
+    <type name="Magento\CatalogStorefront\Model\Storage\Client\Config\EntityConfigPool">
+        <arguments>
+            <argument name="configs" xsi:type="array">
+                <item name="product" xsi:type="object">Magento\CatalogStorefront\Model\Storage\Client\Config\Product</item>
+                <item name="category" xsi:type="object">Magento\CatalogStorefront\Model\Storage\Client\Config\Category</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- Temporary solution until introducing unified schema for complex storage -->
+    <type name="Magento\CatalogStorefront\DataProvider\LinkedEntityHydrator">
+        <arguments>
+            <argument name="productDataProvider" xsi:type="object">\Magento\CatalogStorefront\DataProvider\ProductDataProvider\Proxy</argument>
+            <argument name="categoryDataProvider" xsi:type="object">\Magento\CatalogStorefront\DataProvider\CategoryDataProvider\Proxy</argument>
+            <argument name="linkedEntityPath" xsi:type="array">
+                <item name="product" xsi:type="array">
+                    <item xsi:type="string" name="BundleProduct">BundleProduct:items.options.product</item>
+                    <item xsi:type="string" name="ConfigurableProduct">ConfigurableProduct:variants.product</item>
+                    <item xsi:type="string" name="GroupedProduct">GroupedProduct:items.product</item>
+                </item>
+                <item name="category" xsi:type="array">
+                    <item xsi:type="string" name="categories">categories</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\MessageQueue\MergerFactory">
+        <arguments>
+            <argument name="mergers" xsi:type="array">
+                <item name="storefront.catalog.data.consume" xsi:type="string">Magento\CatalogStorefront\Model\Merger</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- Logger -->
+    <virtualType name="CatalogStorefrontLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="error" xsi:type="object">\Magento\CatalogStorefront\Model\Logging\Error</item>
+                <item name="debug" xsi:type="object">Magento\CatalogStorefront\Model\Logging\Debug</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\CatalogStorefront\Model\MessageBus\Consumer">
+        <arguments>
+            <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogStorefront\DataProvider\ProductDataProvider">
+        <arguments>
+            <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogStorefront\DataProvider\CategoryDataProvider">
+        <arguments>
+            <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
+        </arguments>
+    </type>
+
+</config>

@@ -1,4 +1,4 @@
-Magento/CatalogGraphQl/DataProvider
-Magento/CatalogProduct/Model/Storage/Client/Config
-Magento/CatalogProduct/Model/Logging
-Magento/CatalogStoreFrontGraphQl/Model
+Magento/CatalogStorefront/Model/Storage/Client/Config
+Magento/CatalogStorefront/Model/Logging
+Magento/CatalogStorefrontGraphQl/Model
+Magento/CatalogExtractor/DataProvider/Query

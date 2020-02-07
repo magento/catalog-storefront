@@ -10,7 +10,7 @@ namespace Magento\GraphQl\Model\DeferredQuery;
 use Magento\Framework\App\Cache\Type\Reflection as ReflectionCache;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\StoreFrontGraphQl\Model\ArgumentResolver;
+use Magento\StorefrontGraphQl\Model\ArgumentResolver;
 
 /**
  * Tests for the \Magento\GraphQl\Model\DeferredQuery\ArgumentResolver class

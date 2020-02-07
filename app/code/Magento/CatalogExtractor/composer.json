@@ -1,0 +1,30 @@
+{
+    "name": "magento/module-catalog-extractor",
+    "description": "Module responsible for extract catalog data",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~7.1.3||~7.2.0||~7.3.0",
+        "magento/framework": "*",
+        "magento/module-catalog": "*",
+        "magento/module-category-extractor": "*",
+        "magento/module-catalog-url-rewrite": "*",
+        "magento/module-url-rewrite": "*",
+        "magento/module-store": "*",
+        "magento/module-eav": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\CatalogExtractor\\": ""
+        }
+    }
+}

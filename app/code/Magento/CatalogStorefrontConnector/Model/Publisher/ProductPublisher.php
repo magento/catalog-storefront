@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogStorefrontConnector\Model\Publisher;
 
-use Magento\CatalogProduct\DataProvider\DataProviderInterface;
+use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Psr\Log\LoggerInterface;
