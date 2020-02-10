@@ -50,14 +50,12 @@ class ProductsCountDataProvider implements DataProviderInterface
     {
         $output = [];
         $attribute = !empty($attributes) ? key($attributes) : self::ATTRIBUTE;
-
+        $connection = $this->resourceConnection->getConnection();
+        $productCount = $connection->fetchPairs(
+            $this->productsCountBuilder->getQuery($categoryIds, (int)$scopes['store'])
+        );
         foreach ($categoryIds as $categoryId) {
-            $connection = $this->resourceConnection->getConnection();
-            $productCount = $connection->fetchPairs(
-                $this->productsCountBuilder->getQuery($categoryIds, (int)$scopes['store'])
-            );
-
-            $output[$categoryId][$attribute] = $productCount[$categoryId] ?? 0;
+            $output[$categoryId][$attribute] = $productCount[$categoryId] ?? '0';
         }
 
         return $output;
