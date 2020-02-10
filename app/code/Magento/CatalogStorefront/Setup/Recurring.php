@@ -55,7 +55,7 @@ class Recurring implements InstallSchemaInterface
             'connections' => [
                 'default' => [
                     'protocol' => 'http',
-                    'hostname' => 'localhost',
+                    'hostname' => 'elasticsearch',
                     'port' => '9200',
                     'username' => '',
                     'password' => '',

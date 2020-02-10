@@ -5,8 +5,12 @@
  */
 
 return [
-    \Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate::class
+    \Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataOnSave::class
         => \Magento\StorefrontTestFixer\CategoryAfterSave::class,
+    \Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate::class
+    => \Magento\StorefrontTestFixer\CategoryOnUpdate::class,
+    \Magento\CatalogStorefrontConnector\Plugin\ReindexOnConfigurationChange::class
+    => \Magento\StorefrontTestFixer\ReindexCategoryOnUpdate::class,
     \Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataOnSave::class
         => \Magento\StorefrontTestFixer\ProductAfterSave::class,
     \Magento\CatalogInventoryExtractor\Plugin\CollectProductsDataForUpdateAfterStockUpdate::class

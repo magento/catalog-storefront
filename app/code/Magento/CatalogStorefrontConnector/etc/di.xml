@@ -13,11 +13,18 @@
         <plugin name="collectDataForStorefrontApplication" type="Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataForUpdate" />
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Category">
-        <plugin name="collectCategoryDataForStorefrontApplication" type="Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate" />
+        <plugin name="collectCategoryDataForStorefrontApplicationOnSave" type="Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataOnSave" />
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Product">
-        <plugin name="collectCategoryDataForStorefrontApplicationOnSave" type="Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataOnSave" />
+        <plugin name="collectProductsDataForStorefrontApplicationOnSave" type="Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataOnSave" />
     </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Category\Action\Rows">
+        <plugin name="collectCategoriesDataForStorefrontApplicationOnUpdate" type="Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate" />
+    </type>
+    <type name="Magento\Config\Model\ResourceModel\Config">
+        <plugin name="makeCatalogCategoryReindexOnStockConfigurationChange" type="Magento\CatalogStorefrontConnector\Plugin\ReindexOnConfigurationChange" />
+    </type>
+
     <type name="Magento\Framework\MessageQueue\MergerFactory">
         <arguments>
             <argument name="mergers" xsi:type="array">
@@ -68,7 +75,7 @@
             <argument name="logger" xsi:type="object">CatalogStorefrontConnectorLogger</argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate">
+    <type name="Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataOnSave">
         <arguments>
             <argument name="logger" xsi:type="object">CatalogStorefrontConnectorLogger</argument>
         </arguments>

@@ -7,14 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Plugin;
 
+use Magento\CatalogInventory\Model\Configuration;
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\CatalogStorefrontConnector\Model\UpdatedEntitiesMessageBuilder;
-use Magento\Catalog\Model\Indexer\Product\Category\Action\Rows;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
-use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Throwable;
@@ -22,8 +21,17 @@ use Throwable;
 /**
  * Plugin for collect category data during saving process
  */
-class CollectCategoriesDataForUpdate
+class ReindexOnConfigurationChange
 {
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
+    private $indexerRegistry;
+    /**
+     * @var ReinitableConfigInterface
+     */
+    private $reinitableConfig;
+
     /**
      * Queue topic name
      */
@@ -43,22 +51,6 @@ class CollectCategoriesDataForUpdate
      * @var LoggerInterface
      */
     private $logger;
-
-    /**
-     * @var array
-     */
-    private $categoryPath;
-
-    /**
-     * @var ResourceConnection
-     */
-    private $resource;
-
-    /**
-     * @var IndexerRegistry
-     */
-    private $indexerRegistry;
-
     /**
      * @var CollectionFactory
      */
@@ -67,7 +59,6 @@ class CollectCategoriesDataForUpdate
     /**
      * @param PublisherInterface $queuePublisher
      * @param UpdatedEntitiesMessageBuilder $messageBuilder
-     * @param ResourceConnection $resource
      * @param IndexerRegistry $indexerRegistry
      * @param LoggerInterface $logger
      * @param CollectionFactory $collectionFactory
@@ -75,48 +66,41 @@ class CollectCategoriesDataForUpdate
     public function __construct(
         PublisherInterface $queuePublisher,
         UpdatedEntitiesMessageBuilder $messageBuilder,
-        ResourceConnection $resource,
         IndexerRegistry $indexerRegistry,
         LoggerInterface $logger,
-        CollectionFactory $collectionFactory
+        CollectionFactory $collectionFactory,
+        ReinitableConfigInterface $reinitableConfig
     ) {
         $this->queuePublisher = $queuePublisher;
         $this->messageBuilder = $messageBuilder;
         $this->logger = $logger;
-        $this->resource = $resource;
         $this->indexerRegistry = $indexerRegistry;
         $this->collectionFactory = $collectionFactory;
+        $this->reinitableConfig = $reinitableConfig;
     }
 
     /**
-     * Collect store ID and Category IDs for updated entity
+     * Handle product save when indexer mode is set to "schedule"
      *
-     * @param Rows $subject
-     * @param Rows $result
-     * @param array $entityIds
-     * @param bool $useTempTable
-     * @return Rows
-     * @throws NoSuchEntityException
-     *
+     * @param string $path
+     * @param string $value
+     * @param string $scope
+     * @param int $scopeId
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \Exception
      */
-    public function afterExecute(
-        Rows $subject,
-        Rows $result,
-        array $entityIds = [],
-        $useTempTable = false
-    ): Rows {
-        if ($this->isIndexerRunOnSchedule()) {
-            return $result;
+    public function afterSaveConfig(
+        $path,
+        $value,
+        $scope,
+        $scopeId
+    ): void {
+        if (Configuration::XML_PATH_SHOW_OUT_OF_STOCK !== $scope || $this->isIndexerRunOnSchedule()) {
+            return ;
         }
-        $categoryIds = $entityIds;
-        foreach ($categoryIds as $categoryId) {
-            $parentIds = explode('/', $this->getPathFromCategoryId($categoryId));
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $categoryIds = array_merge($categoryIds, $parentIds);
-        }
+        $this->reinitableConfig->reinit();
         $categoryCollection = $this->collectionFactory->create();
-        $categoryCollection->addFieldToFilter('entity_id', $categoryIds);
         /** @var \Magento\Catalog\Model\Category $category */
         foreach ($categoryCollection as $category) {
             $categoryId = $category->getId();
@@ -137,48 +121,6 @@ class CollectCategoriesDataForUpdate
                 }
             }
         }
-        return $result;
-    }
-
-    /**
-     * Return category path by id
-     *
-     * @param int $categoryId
-     * @return string
-     */
-    protected function getPathFromCategoryId($categoryId)
-    {
-        if (!isset($this->categoryPath[$categoryId])) {
-            $categoryPath = $this->getConnection()->fetchOne(
-                $this->getConnection()->select()->from(
-                    $this->getTable('catalog_category_entity'),
-                    ['path']
-                )->where(
-                    'entity_id = ?',
-                    $categoryId
-                )
-            );
-
-            $this->categoryPath[$categoryId] = $categoryPath ?: '';
-        }
-        return $this->categoryPath[$categoryId];
-    }
-
-    /**
-     * @param string|string[] $table
-     * @return string
-     */
-    private function getTable($table)
-    {
-        return $this->resource->getTableName($table);
-    }
-
-    /**
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    private function getConnection()
-    {
-        return $this->resource->getConnection();
     }
 
     /**

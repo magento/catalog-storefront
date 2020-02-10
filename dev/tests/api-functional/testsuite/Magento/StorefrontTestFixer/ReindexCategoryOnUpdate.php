@@ -7,15 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\StorefrontTestFixer;
 
-use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
-use Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataOnSave;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\CatalogStorefrontConnector\Plugin\ReindexOnConfigurationChange;
 use Magento\Framework\Model\AbstractModel;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Plugin for collect category data during saving process
  */
-class CategoryAfterSave extends CollectCategoriesDataOnSave
+class ReindexCategoryOnUpdate extends ReindexOnConfigurationChange
 {
     /**
      * @inheritdoc
@@ -24,18 +24,21 @@ class CategoryAfterSave extends CollectCategoriesDataOnSave
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function afterSave(
-        CategoryResource $subject,
-        CategoryResource $result,
-        AbstractModel $category
-    ): CategoryResource {
-        $result = parent::afterSave($subject, $result, $category);
-
+    public function afterSaveConfig(
+        $path,
+        $value,
+        $scope,
+        $scopeId
+    ): void {
+        parent::afterSaveConfig(
+            $path,
+            $value,
+            $scope,
+            $scopeId
+        );
         $objectManager = Bootstrap::getObjectManager();
         /** @var ConsumerInvoker $consumerInvoker */
         $consumerInvoker = $objectManager->get(ConsumerInvoker::class);
         $consumerInvoker->invoke(true);
-
-        return $result;
     }
 }

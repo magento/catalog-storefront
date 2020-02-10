@@ -8,8 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefront\Model;
 
 use Magento\Framework\Exception\LocalizedException;
-// TODO: replace with CategoryProvider
-use Magento\CategoryExtractor\DataProvider\DataProviderInterface;
+use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryResultContainerInterfaceFactory;
 use Magento\CatalogStorefrontApi\Api\CategoryInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryResultContainerInterface;
@@ -26,7 +25,7 @@ class CategorySearch implements CategoryInterface
     private $categoryResultContainerFactory;
 
     /**
-     * @var DataProviderInterface
+     * @var CategoryDataProvider
      */
     private $dataProvider;
 
@@ -37,12 +36,12 @@ class CategorySearch implements CategoryInterface
 
     /**
      * @param CategoryResultContainerInterfaceFactory $categoryResultContainerFactory
-     * @param DataProviderInterface $dataProvider
+     * @param CategoryDataProvider $dataProvider,
      * @param LoggerInterface $logger
      */
     public function __construct(
         CategoryResultContainerInterfaceFactory $categoryResultContainerFactory,
-        DataProviderInterface $dataProvider,
+        CategoryDataProvider $dataProvider,
         LoggerInterface $logger
     ) {
         $this->categoryResultContainerFactory = $categoryResultContainerFactory;
@@ -75,6 +74,8 @@ class CategorySearch implements CategoryInterface
      *
      * @param \Magento\CatalogStorefrontApi\Api\Data\CategoryCriteriaInterface $criteria
      * @return CategoryResultContainerInterface
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
     private function processRequest($criteria): CategoryResultContainerInterface
     {
