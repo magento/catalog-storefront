@@ -55,9 +55,13 @@ class ElasticsearchCommand implements CommandInterface
      */
     public function bulkInsert(string $dataSourceName, string $entityName, array $entries)
     {
-        $query = $this->getDocsArrayInBulkIndexFormat($dataSourceName, $entityName, $entries);
+        $query = $this->getDocsArrayInBulkIndexFormat($dataSourceName, $entityName, $entries, self::BULK_ACTION_INDEX);
         try {
-            $this->getConnection()->bulk($query);
+            $result = $this->getConnection()->bulk($query);
+            $error = $result['errors'] ?? false;
+            if ($error) {
+                $this->handleBulkError($result['items'] ?? [], self::BULK_ACTION_INDEX);
+            }
         } catch (\Throwable $throwable) {
             throw new BulkException(
                 __("Error occurred while bulk insert to '$dataSourceName' index."),
@@ -106,5 +110,31 @@ class ElasticsearchCommand implements CommandInterface
         }
 
         return $bulkArray;
+    }
+
+    /**
+     * Handle error on Bulk insert
+     *
+     * @param array $items
+     * @param string $action
+     * @return void
+     */
+    private function handleBulkError(array $items, string $action): void
+    {
+        $errors = [];
+        foreach ($items as $item) {
+            if (isset($item[$action]['error'])) {
+                $item = $item[$action];
+                $errors[] = \sprintf(
+                    'id: %s, status: %s, error: %s',
+                    $item['_id'],
+                    $item['status'],
+                    $item['error']['type'] . ': ' . $item['error']['reason']
+                );
+            }
+        }
+        if ($errors) {
+            throw new \LogicException('List of errors: ' . \json_encode($errors));
+        }
     }
 }
