@@ -42,6 +42,7 @@
                 </item>
                 <item name="category" xsi:type="array">
                     <item xsi:type="string" name="categories">categories</item>
+                    <item xsi:type="string" name="children">children</item>
                 </item>
             </argument>
         </arguments>

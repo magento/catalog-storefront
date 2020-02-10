@@ -13,16 +13,9 @@ namespace Magento\CategoryExtractor\DataProvider;
 class ChildrenDataProvider implements DataProviderInterface
 {
     /**
-     * Children attributes
+     * Children attribute
      */
-    private const ATTRIBUTES = [
-        'children' => []
-    ];
-
-    /**
-     * @var DataProvider
-     */
-    private $generalDataProvider;
+    private const ATTRIBUTE = 'children';
 
     /**
      * @var CategoriesProvider
@@ -30,14 +23,11 @@ class ChildrenDataProvider implements DataProviderInterface
     private $categoriesProvider;
 
     /**
-     * @param DataProvider $generalDataProvider
      * @param CategoriesProvider $categoriesProvider
      */
     public function __construct(
-        DataProvider $generalDataProvider,
         CategoriesProvider $categoriesProvider
     ) {
-        $this->generalDataProvider = $generalDataProvider;
         $this->categoriesProvider = $categoriesProvider;
     }
 
@@ -52,19 +42,11 @@ class ChildrenDataProvider implements DataProviderInterface
     public function fetch(array $categoryIds, array $attributes, array $scope): array
     {
         $output = [];
-        $attributes = !empty($attributes) ? $attributes : self::ATTRIBUTES;
-        $attributeName = key($attributes);
 
         foreach ($this->categoriesProvider->getCategoriesByIds($categoryIds) as $category) {
             $categoryId = $category->getId();
             $childCategories = $category->getChildrenCategories()->getAllIds();
-            if (in_array($categoryId, $categoryIds)) {
-                $output[$categoryId][$attributeName] = $this->generalDataProvider->fetch(
-                    $childCategories,
-                    $attributes[$attributeName],
-                    $scope
-                );
-            }
+            $output[$categoryId][self::ATTRIBUTE] = $childCategories;
         }
 
         return $output;
