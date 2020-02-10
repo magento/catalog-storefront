@@ -22,7 +22,7 @@
         <plugin name="collectCategoriesDataForStorefrontApplicationOnUpdate" type="Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate" />
     </type>
     <type name="Magento\Config\Model\ResourceModel\Config">
-        <plugin name="makeCatalogCategoryReindexOnStockConfigurationChange" type="Magento\CatalogStorefrontConnector\Plugin\ReindexOnConfigurationChange" />
+        <plugin name="updateCategoriesDataOnStockConfigurationChange" type="Magento\CatalogStorefrontConnector\Plugin\UpdateCategoriesOnConfigurationChange" />
     </type>
 
     <type name="Magento\Framework\MessageQueue\MergerFactory">

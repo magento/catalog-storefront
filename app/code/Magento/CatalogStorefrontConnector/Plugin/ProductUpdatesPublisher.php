@@ -10,6 +10,7 @@ namespace Magento\CatalogStorefrontConnector\Plugin;
 use Magento\CatalogStorefrontConnector\Model\UpdatedEntitiesMessageBuilder;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
+use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -69,6 +70,9 @@ class ProductUpdatesPublisher
      */
     public function publish(array $productIds, int $storeId): void
     {
+        if ($storeId === Store::DEFAULT_STORE_ID) {
+            return;
+        }
         // add related products only in case of partial reindex
         if ($productIds) {
             $productIds = array_unique(

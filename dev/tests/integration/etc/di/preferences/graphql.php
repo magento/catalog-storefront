@@ -9,8 +9,8 @@ return [
         => \Magento\StorefrontTestFixer\CategoryAfterSave::class,
     \Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate::class
     => \Magento\StorefrontTestFixer\CategoryOnUpdate::class,
-    \Magento\CatalogStorefrontConnector\Plugin\ReindexOnConfigurationChange::class
-    => \Magento\StorefrontTestFixer\ReindexCategoryOnUpdate::class,
+    \Magento\CatalogStorefrontConnector\Plugin\UpdateCategoriesOnConfigurationChange::class
+    => \Magento\StorefrontTestFixer\CategoriesOnConfigurationChange::class,
     \Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataOnSave::class
         => \Magento\StorefrontTestFixer\ProductAfterSave::class,
     \Magento\CatalogInventoryExtractor\Plugin\CollectProductsDataForUpdateAfterStockUpdate::class

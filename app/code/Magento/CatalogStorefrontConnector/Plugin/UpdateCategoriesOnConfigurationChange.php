@@ -21,7 +21,7 @@ use Throwable;
 /**
  * Plugin for collect category data during saving process
  */
-class ReindexOnConfigurationChange
+class UpdateCategoriesOnConfigurationChange
 {
     /**
      * @var \Magento\Framework\Indexer\IndexerRegistry
@@ -80,7 +80,7 @@ class ReindexOnConfigurationChange
     }
 
     /**
-     * Handle product save when indexer mode is set to "schedule"
+     * Update categories data on stock configuration change
      *
      * @param string $path
      * @param string $value

@@ -8,14 +8,14 @@ declare(strict_types=1);
 namespace Magento\StorefrontTestFixer;
 
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
-use Magento\CatalogStorefrontConnector\Plugin\ReindexOnConfigurationChange;
+use Magento\CatalogStorefrontConnector\Plugin\UpdateCategoriesOnConfigurationChange;
 use Magento\Framework\Model\AbstractModel;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Plugin for collect category data during saving process
  */
-class ReindexCategoryOnUpdate extends ReindexOnConfigurationChange
+class CategoriesOnConfigurationChange extends UpdateCategoriesOnConfigurationChange
 {
     /**
      * @inheritdoc
