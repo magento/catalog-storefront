@@ -138,6 +138,8 @@ class Config
     }
 
     /**
+     * Get alias name.
+     * 
      * @return string
      */
     public function getAliasName(): string
@@ -146,6 +148,8 @@ class Config
     }
 
     /**
+     * Get source prefix.
+     *
      * @return string
      */
     public function getSourcePrefix(): string
@@ -154,6 +158,8 @@ class Config
     }
 
     /**
+     * Get current source version.
+     *
      * @return int
      */
     public function getCurrentSourceVersion(): int
