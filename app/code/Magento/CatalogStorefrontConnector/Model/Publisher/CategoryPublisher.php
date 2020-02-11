@@ -123,6 +123,9 @@ class CategoryPublisher
             );
 
             foreach ($categoriesData as $category) {
+                if (!isset($category['id'])) {
+                    continue;
+                }
                 $messages[] = $this->messageBuilder->build(
                     $storeId,
                     'category',

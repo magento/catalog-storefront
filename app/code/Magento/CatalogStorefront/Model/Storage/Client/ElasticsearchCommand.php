@@ -89,7 +89,7 @@ class ElasticsearchCommand implements CommandInterface
             'index' => $indexName,
             'type' => $entityName,
             'body' => [],
-            'refresh' => true,
+            'refresh' => false,
         ];
 
         foreach ($documents as $document) {
