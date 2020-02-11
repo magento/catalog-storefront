@@ -8,8 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefront\Model\Storage;
 
-use Magento\Framework\App\DeploymentConfig\Reader;
-use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\CatalogStorefront\Model\Storage\Client\Config;
 
 /**
  * State represents the current metadata information of Storage.
@@ -17,29 +16,26 @@ use Magento\Framework\Config\File\ConfigFilePool;
 class State
 {
     /**
-     * @var Reader
+     * @var Config
      */
-    private $configReader;
+    private $config;
 
     /**
-     * @param Reader $configReader
+     * @param Config $config
      */
-    public function __construct(Reader $configReader)
+    public function __construct(Config $config)
     {
-        $this->configReader = $configReader;
+        $this->config = $config;
     }
 
     /**
      * Get current alias name of storage.
      *
      * @return string
-     * @throws \Magento\Framework\Exception\FileSystemException
-     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function getAliasName(): string
     {
-        $config = $this->configReader->load(ConfigFilePool::APP_ENV)['catalog-store-front'];
-        return $config['alias_name'];
+        return $this->config->getAliasName();
     }
 
     /**
@@ -47,25 +43,20 @@ class State
      *
      * @param array $scopes
      * @return string
-     * @throws \Magento\Framework\Exception\FileSystemException
-     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function getCurrentDataSourceName(array $scopes): string
     {
-        $config = $this->configReader->load(ConfigFilePool::APP_ENV)['catalog-store-front'];
-        return $config['source_prefix'] . $config['source_current_version'] . '_' . \implode('_', $scopes);
+        return $this->config->getSourcePrefix() . $this->config->getCurrentSourceVersion() . '_'
+            . \implode('_', $scopes);
     }
 
     /**
      * Generate the new version of name for data source based on the current state.
      *
      * @return string
-     * @throws \Magento\Framework\Exception\FileSystemException
-     * @throws \Magento\Framework\Exception\RuntimeException
      */
     public function generateNewDataSourceName(): string
     {
-        $config = $this->configReader->load(ConfigFilePool::APP_ENV)['catalog-store-front'];
-        return $config['source_prefix'] . (++$config['source_current_version']);
+        return $this->config->getSourcePrefix() . ($this->config->getCurrentSourceVersion() + 1);
     }
 }

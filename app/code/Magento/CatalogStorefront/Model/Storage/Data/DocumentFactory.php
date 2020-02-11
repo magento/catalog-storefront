@@ -39,24 +39,6 @@ class DocumentFactory
      */
     public function create(array $data = []): Document
     {
-        if (isset($data['hits']['hits'])) {
-            $nestedEntries = isset($data['aggregations']['nested_entries'])
-                ? $data['aggregations']['nested_entries']
-                : [];
-            $data = $data['hits']['hits'][0];
-            $subDocuments = [];
-
-            if (!empty($nestedEntries) && $nestedEntries['doc_count'] > 0) {
-                foreach ($nestedEntries['variants']['hits']['hits'] as $item) {
-                    $subDocuments[] = $this->create($item);
-                }
-                $data['variants'] = $this->objectManager->create(
-                    DocumentIterator::class,
-                    ['documents' => $subDocuments]
-                );
-            }
-        }
-
         return $this->objectManager->create(Document::class, ['data' => $data]);
     }
 }
