@@ -10,46 +10,18 @@ namespace Magento\CatalogStorefrontConnector\Plugin;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
-use Magento\CatalogStorefrontConnector\Model\UpdatedEntitiesMessageBuilder;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
-use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
-use Psr\Log\LoggerInterface;
 
 /**
  * Plugin for collect category data during saving process
  */
 class CollectCategoriesDataOnSave
 {
-    /**
-     * Queue topic name
-     */
-    private const QUEUE_TOPIC = 'storefront.catalog.category.update';
-
-    /**
-     * @var PublisherInterface
-     */
-    private $queuePublisher;
-
-    /**
-     * @var UpdatedEntitiesMessageBuilder
-     */
-    private $messageBuilder;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var ProductUpdatesPublisher
-     */
-    private $productUpdatesPublisher;
-
     /**
      * @var array
      */
@@ -71,30 +43,26 @@ class CollectCategoriesDataOnSave
     private $collectionFactory;
 
     /**
-     * @param PublisherInterface $queuePublisher
-     * @param UpdatedEntitiesMessageBuilder $messageBuilder
-     * @param ProductUpdatesPublisher $productUpdatesPublisher
+     * @var CategoryUpdatesPublisher
+     */
+    private $categoryPublisher;
+
+    /**
+     * @param CollectionFactory $collectionFactory
      * @param IndexerRegistry $indexerRegistry
      * @param ResourceConnection $resource
-     * @param CollectionFactory $collectionFactory
-     * @param LoggerInterface $logger
+     * @param CategoryUpdatesPublisher $categoryPublisher
      */
     public function __construct(
-        PublisherInterface $queuePublisher,
-        UpdatedEntitiesMessageBuilder $messageBuilder,
-        ProductUpdatesPublisher $productUpdatesPublisher,
         CollectionFactory $collectionFactory,
         IndexerRegistry $indexerRegistry,
         ResourceConnection $resource,
-        LoggerInterface $logger
+        CategoryUpdatesPublisher $categoryPublisher
     ) {
-        $this->queuePublisher = $queuePublisher;
-        $this->messageBuilder = $messageBuilder;
-        $this->productUpdatesPublisher = $productUpdatesPublisher;
         $this->collectionFactory = $collectionFactory;
-        $this->logger = $logger;
         $this->indexerRegistry = $indexerRegistry;
         $this->resource = $resource;
+        $this->categoryPublisher = $categoryPublisher;
     }
 
     /**
@@ -116,35 +84,27 @@ class CollectCategoriesDataOnSave
         $categoryIds[] = $categoryId;
         $categoryCollection = $this->collectionFactory->create();
         $categoryCollection->addFieldToFilter('entity_id', $categoryIds);
+        $categoryIdsPerStore = [];
         foreach ($categoryCollection as $category) {
             foreach ($category->getStoreIds() as $storeId) {
                 $storeId = (int)$storeId;
                 if ($storeId === Store::DEFAULT_STORE_ID) {
                     continue ;
                 }
-                try {
-                    $this->logger->debug(
-                        \sprintf('Collect category id: "%s" in store %s', $category->getId(), $storeId)
-                    );
-                    $this->publishCategoryMessage($category->getId(), $storeId);
-                    if (true === $category->dataHasChangedFor(Category::KEY_IS_ACTIVE)) {
-                        $parentCategoryIds = $category->getParentIds();
-                        foreach ($parentCategoryIds as $parentCategoryId) {
-                            $this->publishCategoryMessage($parentCategoryId, $storeId);
-                        }
-                    }
-                    if (!empty($category->getChangedProductIds())) {
-                        $this->productUpdatesPublisher->publish($category->getChangedProductIds(), $storeId);
-                    }
+                $categoryIdsPerStore[$storeId][] = [$category->getId()];
 
-                } catch (\Throwable $e) {
-                    $this->logger->critical(
-                        \sprintf('Error on collect category id "%s" in store %s', $category->getId(), $storeId),
-                        ['exception' => $e]
-                    );
+                if (true === $category->dataHasChangedFor(Category::KEY_IS_ACTIVE)) {
+                    $categoryIdsPerStore[$storeId][] = $category->getParentIds();
+                }
+                if (!empty($category->getChangedProductIds())) {
+                    $categoryIdsPerStore[$storeId][] = $category->getChangedProductIds();
                 }
             }
         }
+        foreach ($categoryIdsPerStore as $storeId => $categories) {
+            $this->categoryPublisher->publish(\array_merge(...$categories), $storeId);
+        }
+
         return $result;
     }
 
@@ -198,15 +158,5 @@ class CollectCategoriesDataOnSave
     {
         $indexer = $this->indexerRegistry->get(Fulltext::INDEXER_ID);
         return $indexer->isScheduled();
-    }
-
-    /**
-     * @param $entityId
-     * @param int $storeId
-     */
-    private function publishCategoryMessage($entityId, int $storeId): void
-    {
-        $message = $this->messageBuilder->build($storeId, [$entityId]);
-        $this->queuePublisher->publish(self::QUEUE_TOPIC, $message);
     }
 }

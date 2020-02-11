@@ -9,15 +9,11 @@ namespace Magento\CatalogStorefrontConnector\Plugin;
 
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
 use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
-use Magento\CatalogStorefrontConnector\Model\UpdatedEntitiesMessageBuilder;
-use Magento\Framework\MessageQueue\PublisherInterface;
-use Magento\Store\Model\Store;
-use Psr\Log\LoggerInterface;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
-use Throwable;
 
 /**
  * Plugin for collect category data during saving process
@@ -28,56 +24,47 @@ class UpdateCategoriesOnConfigurationChange
      * @var \Magento\Framework\Indexer\IndexerRegistry
      */
     private $indexerRegistry;
+
     /**
      * @var ReinitableConfigInterface
      */
     private $reinitableConfig;
 
     /**
-     * Queue topic name
+     * @var CategoryUpdatesPublisher
      */
-    private const QUEUE_TOPIC = 'storefront.catalog.category.update';
+    private $categoryPublisher;
 
     /**
-     * @var PublisherInterface
+     * @var CatalogEntityIdsProvider
      */
-    private $queuePublisher;
+    private $catalogEntityIdsProvider;
 
     /**
-     * @var UpdatedEntitiesMessageBuilder
+     * @var StoreManagerInterface
      */
-    private $messageBuilder;
+    private $storeManager;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-    /**
-     * @var CollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
-     * @param PublisherInterface $queuePublisher
-     * @param UpdatedEntitiesMessageBuilder $messageBuilder
+     * UpdateCategoriesOnConfigurationChange constructor.
      * @param IndexerRegistry $indexerRegistry
-     * @param LoggerInterface $logger
-     * @param CollectionFactory $collectionFactory
+     * @param ReinitableConfigInterface $reinitableConfig
+     * @param CategoryUpdatesPublisher $categoryPublisher
+     * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        PublisherInterface $queuePublisher,
-        UpdatedEntitiesMessageBuilder $messageBuilder,
         IndexerRegistry $indexerRegistry,
-        LoggerInterface $logger,
-        CollectionFactory $collectionFactory,
-        ReinitableConfigInterface $reinitableConfig
+        ReinitableConfigInterface $reinitableConfig,
+        CategoryUpdatesPublisher $categoryPublisher,
+        CatalogEntityIdsProvider $catalogEntityIdsProvider,
+        StoreManagerInterface $storeManager
     ) {
-        $this->queuePublisher = $queuePublisher;
-        $this->messageBuilder = $messageBuilder;
-        $this->logger = $logger;
         $this->indexerRegistry = $indexerRegistry;
-        $this->collectionFactory = $collectionFactory;
         $this->reinitableConfig = $reinitableConfig;
+        $this->categoryPublisher = $categoryPublisher;
+        $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -105,25 +92,11 @@ class UpdateCategoriesOnConfigurationChange
             return $result;
         }
         $this->reinitableConfig->reinit();
-        $categoryCollection = $this->collectionFactory->create();
-        /** @var \Magento\Catalog\Model\Category $category */
-        foreach ($categoryCollection as $category) {
-            $categoryId = $category->getId();
-            foreach ($category->getStoreIds() as $storeId) {
-                $storeId = (int)$storeId;
-                if ($storeId === Store::DEFAULT_STORE_ID) {
-                    continue;
-                }
-                $message = $this->messageBuilder->build($storeId, [$categoryId]);
-                try {
-                    $this->logger->debug(sprintf('Collect category id: "%s" in store %s', $categoryId, $storeId));
-                    $this->queuePublisher->publish(self::QUEUE_TOPIC, $message);
-                } catch (Throwable $e) {
-                    $this->logger->critical(
-                        sprintf('Error on collect category id "%s" in store %s', $categoryId, $storeId),
-                        ['exception' => $e]
-                    );
-                }
+
+        foreach ($this->storeManager->getStores() as $store) {
+            $storeId = $store->getId();
+            foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $categoryIds) {
+                $this->categoryPublisher->publish($categoryIds, $storeId);
             }
         }
 

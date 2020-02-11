@@ -75,6 +75,11 @@
             <argument name="logger" xsi:type="object">CatalogStorefrontConnectorLogger</argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogStorefrontConnector\Plugin\CategoryUpdatesPublisher">
+        <arguments>
+            <argument name="logger" xsi:type="object">CatalogStorefrontConnectorLogger</argument>
+        </arguments>
+    </type>
     <type name="Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataOnSave">
         <arguments>
             <argument name="logger" xsi:type="object">CatalogStorefrontConnectorLogger</argument>
