@@ -96,55 +96,6 @@ class ElasticsearchQuery implements QueryInterface
     /**
      * @inheritdoc
      */
-    public function getCompositeEntry(
-        string $indexName,
-        string $entityName,
-        int $id,
-        array $fields,
-        array $subEntityFields
-    ): EntryInterface {
-        $query = [
-            'index' => $indexName,
-            'type' => $entityName,
-            'body' => [
-                'query' => ['term' => ['_id' => $id]],
-                'aggs' => [
-                    'nested_entries' => [
-                        'children' => ['type' => $this->config->getEntityConfig($entityName)->getChildKey()],
-                        'aggs' => [
-                            'variants' => [
-                                'top_hits' => [
-                                    '_source' => [
-                                        'includes' => array_merge(
-                                            $subEntityFields,
-                                            [$this->config->getEntityConfig($entityName)->getJoinField()]
-                                        )
-                                    ],
-                                    'size' => $this->config->getEntityConfig($entityName)->getMaxChildren()
-                                ]
-                            ]
-                        ]
-                    ],
-                ]
-            ],
-            '_source' => $fields
-        ];
-
-        try {
-            $result = $this->getConnection()->search($query);
-        } catch (\Throwable $throwable) {
-            throw new NotFoundException(
-                __("'$entityName' type document with id '$id' not found in index '$indexName'."),
-                $throwable
-            );
-        }
-
-        return $this->documentFactory->create($result);
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getEntries(string $indexName, string $entityName, array $ids, array $fields): EntryIteratorInterface
     {
         $query = [
@@ -193,58 +144,5 @@ class ElasticsearchQuery implements QueryInterface
         if (!empty($errors)) {
             throw new NotFoundException(__("Index name: {$indexName}\nList of errors: '" . json_encode($errors)));
         }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getCompositeEntries(
-        string $indexName,
-        string $entityName,
-        array $ids,
-        array $fields,
-        array $subEntityFields
-    ): EntryIteratorInterface {
-        $query = [
-            'index' => $indexName,
-            'type' => $entityName,
-            'body' => [
-                'query' => ['terms' => ['_id' => $ids]],
-                'aggs' => [
-                    'nested_entries' => [
-                        'children' => ['type' => $this->config->getEntityConfig($entityName)->getChildKey()],
-                        'aggs' => [
-                            'variants' => [
-                                'top_hits' => [
-                                    '_source' => [
-                                        'includes' => array_merge(
-                                            $subEntityFields,
-                                            [$this->config->getEntityConfig($entityName)->getJoinField()]
-                                        )
-                                    ],
-                                    'size' => $this->config->getEntityConfig($entityName)->getMaxChildren()
-                                ]
-                            ]
-                        ]
-                    ],
-                ]
-            ],
-            '_source' => $fields
-        ];
-
-        try {
-            $result = $this->getConnection()->search($query);
-        } catch (\Throwable $throwable) {
-            throw new NotFoundException(
-                __(
-                    "'$entityName' type documents with ids '"
-                    . json_encode($ids)
-                    . "' not found in index '$indexName'."
-                ),
-                $throwable
-            );
-        }
-
-        return $this->documentIteratorFactory->create($result);
     }
 }
