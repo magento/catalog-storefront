@@ -15,9 +15,9 @@
     <type name="Magento\Catalog\Model\ResourceModel\Category">
         <plugin name="collectCategoryDataForStorefrontApplicationOnSave" type="Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataOnSave" />
     </type>
-<!--    <type name="Magento\Catalog\Model\Indexer\Product\Category\Action\Rows">-->
-<!--        <plugin name="collectCategoriesDataForStorefrontApplicationOnUpdate" type="Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate" />-->
-<!--    </type>-->
+    <type name="Magento\Catalog\Model\Indexer\Product\Category\Action\Rows">
+        <plugin name="collectCategoriesDataForStorefrontApplicationOnUpdate" type="Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate" />
+    </type>
     <type name="Magento\Catalog\Model\ResourceModel\Product">
         <plugin name="collectProductsDataForStorefrontApplicationOnSave" type="Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataOnSave" />
     </type>

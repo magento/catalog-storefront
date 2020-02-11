@@ -9,13 +9,8 @@ namespace Magento\CatalogStorefrontConnector\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\Catalog\Model\Category;
-use Magento\CatalogSearch\Model\Indexer\Fulltext;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\Store;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 
 /**
  * Plugin for collect category data during saving process
@@ -23,46 +18,25 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 class CollectCategoriesDataOnSave
 {
     /**
-     * @var array
-     */
-    private $categoryPath;
-
-    /**
-     * @var ResourceConnection
-     */
-    private $resource;
-
-    /**
-     * @var IndexerRegistry
-     */
-    private $indexerRegistry;
-
-    /**
-     * @var CollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
      * @var CategoryUpdatesPublisher
      */
     private $categoryPublisher;
 
     /**
-     * @param CollectionFactory $collectionFactory
-     * @param IndexerRegistry $indexerRegistry
-     * @param ResourceConnection $resource
+     * @var ProductUpdatesPublisher
+     */
+    private $productPublisher;
+
+    /**
      * @param CategoryUpdatesPublisher $categoryPublisher
+     * @param ProductUpdatesPublisher $productPublisher
      */
     public function __construct(
-        CollectionFactory $collectionFactory,
-        IndexerRegistry $indexerRegistry,
-        ResourceConnection $resource,
-        CategoryUpdatesPublisher $categoryPublisher
+        CategoryUpdatesPublisher $categoryPublisher,
+        ProductUpdatesPublisher $productPublisher
     ) {
-        $this->collectionFactory = $collectionFactory;
-        $this->indexerRegistry = $indexerRegistry;
-        $this->resource = $resource;
         $this->categoryPublisher = $categoryPublisher;
+        $this->productPublisher = $productPublisher;
     }
 
     /**
@@ -77,86 +51,29 @@ class CollectCategoriesDataOnSave
     public function afterSave(
         CategoryResource $subject,
         CategoryResource $result,
-        AbstractModel $currentCategory
+        AbstractModel $category
     ): CategoryResource {
-        $categoryId = (string)$currentCategory->getId();
-        $categoryIds = explode('/', $this->getPathFromCategoryId($categoryId));
-        $categoryIds[] = $categoryId;
-        $categoryCollection = $this->collectionFactory->create();
-        $categoryCollection->addFieldToFilter('entity_id', $categoryIds);
-        $categoryIdsPerStore = [];
-        foreach ($categoryCollection as $category) {
-            foreach ($category->getStoreIds() as $storeId) {
-                $storeId = (int)$storeId;
-                if ($storeId === Store::DEFAULT_STORE_ID) {
-                    continue ;
-                }
-                $categoryIdsPerStore[$storeId][] = [$category->getId()];
-
-                if (true === $category->dataHasChangedFor(Category::KEY_IS_ACTIVE)) {
-                    $categoryIdsPerStore[$storeId][] = $category->getParentIds();
-                }
-                if (!empty($category->getChangedProductIds())) {
-                    $categoryIdsPerStore[$storeId][] = $category->getChangedProductIds();
-                }
+        $categoryId = (string)$category->getId();
+        foreach ($category->getStoreIds() as $storeId) {
+            $storeId = (int)$storeId;
+            if ($storeId === Store::DEFAULT_STORE_ID) {
+                continue ;
             }
-        }
-        foreach ($categoryIdsPerStore as $storeId => $categories) {
-            $this->categoryPublisher->publish(\array_merge(...$categories), $storeId);
+            $categoryIds = [$categoryId];
+            $productIds = [];
+
+            if (true === $category->dataHasChangedFor(Category::KEY_IS_ACTIVE)) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                $categoryIds = array_merge($categoryIds, $category->getParentIds());
+            }
+            if (!empty($category->getChangedProductIds())) {
+                $productIds = $category->getChangedProductIds();
+            }
+            $this->categoryPublisher->publish($categoryIds, $storeId);
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+            $this->productPublisher->publish($productIds, $storeId);
         }
 
         return $result;
-    }
-
-    /**
-     * Return category path by id
-     *
-     * @param int $categoryId
-     * @return string
-     */
-    private function getPathFromCategoryId($categoryId): string
-    {
-        if (!isset($this->categoryPath[$categoryId])) {
-            $categoryPath = $this->getConnection()->fetchOne(
-                $this->getConnection()->select()->from(
-                    $this->getTable('catalog_category_entity'),
-                    ['path']
-                )->where(
-                    'entity_id = ?',
-                    $categoryId
-                )
-            );
-
-            $this->categoryPath[$categoryId] = $categoryPath ?: '';
-        }
-        return $this->categoryPath[$categoryId];
-    }
-
-    /**
-     * @param string|string[] $table
-     * @return string
-     */
-    private function getTable($table): string
-    {
-        return $this->resource->getTableName($table);
-    }
-
-    /**
-     * @return AdapterInterface
-     */
-    private function getConnection(): AdapterInterface
-    {
-        return $this->resource->getConnection();
-    }
-
-    /**
-     * Is indexer run in "on schedule" mode
-     *
-     * @return bool
-     */
-    private function isIndexerRunOnSchedule(): bool
-    {
-        $indexer = $this->indexerRegistry->get(Fulltext::INDEXER_ID);
-        return $indexer->isScheduled();
     }
 }

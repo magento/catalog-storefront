@@ -14,6 +14,7 @@ use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Plugin for collect category data during saving process
@@ -85,16 +86,16 @@ class UpdateCategoriesOnConfigurationChange
         Config $result,
         string $path,
         string $value,
-        string $scope,
-        int $scopeId
+        string $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+        int $scopeId = 0
     ): Config {
-        if (Configuration::XML_PATH_SHOW_OUT_OF_STOCK !== $scope || $this->isIndexerRunOnSchedule()) {
+        if (Configuration::XML_PATH_SHOW_OUT_OF_STOCK !== $path || $this->isIndexerRunOnSchedule()) {
             return $result;
         }
         $this->reinitableConfig->reinit();
 
         foreach ($this->storeManager->getStores() as $store) {
-            $storeId = $store->getId();
+            $storeId = (int)$store->getId();
             foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $categoryIds) {
                 $this->categoryPublisher->publish($categoryIds, $storeId);
             }

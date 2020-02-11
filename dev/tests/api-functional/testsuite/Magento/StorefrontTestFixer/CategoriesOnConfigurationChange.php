@@ -9,6 +9,7 @@ namespace Magento\StorefrontTestFixer;
 
 use Magento\CatalogStorefrontConnector\Plugin\UpdateCategoriesOnConfigurationChange;
 use Magento\Config\Model\ResourceModel\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -28,8 +29,8 @@ class CategoriesOnConfigurationChange extends UpdateCategoriesOnConfigurationCha
         Config $result,
         string $path,
         string $value,
-        string $scope,
-        int $scopeId
+        string $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+        int $scopeId = 0
     ): Config {
         $result = parent::afterSaveConfig(
             $subject,
