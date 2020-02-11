@@ -86,7 +86,10 @@ class CatalogEntityIdsProvider
         $collection->getSelect()->columns(self::PRODUCT_ENTITY_ID);
         $selects = $this->generator->generate(self::PRODUCT_ENTITY_ID, $collection->getSelect(), self::BATCH_SIZE);
         foreach ($selects as $select) {
-            yield $collection->getConnection()->fetchCol($select);
+            $products = $collection->getConnection()->fetchCol($select);
+            if ($products) {
+                yield $products;
+            }
         }
     }
 
@@ -109,7 +112,11 @@ class CatalogEntityIdsProvider
 
         $selects = $this->generator->generate(self::CATEGORY_ENTITY_ID, $collection->getSelect(), self::BATCH_SIZE);
         foreach ($selects as $select) {
-            yield $collection->getConnection()->fetchCol($select);
+            $categories = $collection->getConnection()->fetchCol($select);
+            if ($categories) {
+                yield $categories;
+            }
         }
+        yield [$rootId];
     }
 }
