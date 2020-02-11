@@ -193,27 +193,4 @@ class ClientAdapterTest extends TestCase
             ]
         ];
     }
-
-    /**
-     * Get Configurable Product Data.
-     *
-     * @return array
-     */
-    private function getConfigurableProductData()
-    {
-        return [
-            'id' => rand(),
-            'sku' => uniqid('sku-', true),
-            'name' => uniqid('name-', true),
-            'visibility' => 4,
-            'type_id' => 'configurable',
-            'price' => 3.62,
-            'status' => 1,
-            'attribute_set_id' => 4,
-            'custom_attributes' => [
-                ['attribute_code' => 'cost', 'value' => ''],
-                ['attribute_code' => 'description', 'value' => 'Description'],
-            ],
-        ];
-    }
 }
