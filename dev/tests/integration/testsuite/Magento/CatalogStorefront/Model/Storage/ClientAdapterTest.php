@@ -130,6 +130,34 @@ class ClientAdapterTest extends TestCase
     }
 
     /**
+     * @expectedException \Magento\Framework\Exception\BulkException
+     * @expectedExceptionMessage Error occurred while bulk insert
+     */
+    public function testBulkInsertWithWrongMappingType(): void
+    {
+        $productBuilder = $this->getSimpleProductData();
+        $productBuilder['sku'] = 'test-sku-default-site-123';
+        $productData = $productBuilder;
+
+        // set test mapping
+        $productData['random_mapping_type'] = 0;
+
+        $this->storageCommand->bulkInsert(
+            $this->state->getAliasName(),
+            'product',
+            [$productData]
+        );
+
+        $productData['random_mapping_type'] = 'text string';
+
+        $this->storageCommand->bulkInsert(
+            $this->state->getAliasName(),
+            'product',
+            [$productData]
+        );
+    }
+
+    /**
      * @expectedException \Magento\Framework\Exception\NotFoundException
      * @expectedExceptionMessage 'product' type document with id '111' not found in index 'not_found_index'.
      */
@@ -144,17 +172,20 @@ class ClientAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage item not found
+     * @return void
      */
     public function testNotFoundItem()
     {
-        $this->storageQuery->getEntries(
+        $nonExistingId = 123123123;
+        $item = $this->storageQuery->getEntries(
             $this->state->getAliasName(),
             'product',
-            [123123123],
+            [$nonExistingId],
             ['sku']
         )->current();
+
+        $this->assertEquals($nonExistingId, $item->getId());
+        $this->assertNull($item->getData());
     }
 
     /**
@@ -212,6 +243,10 @@ class ClientAdapterTest extends TestCase
             'product',
             [$productData, $simple1, $simple2, $simple3, $simple4]
         );
+
+        // with "refresh=false" setting changes are not visible to search immediately and need to wait some
+        // time to synchronize data
+        sleep(1);
 
         $entry = $this->storageQuery->getCompositeEntry(
             $this->state->getAliasName(),
@@ -281,6 +316,10 @@ class ClientAdapterTest extends TestCase
             'product',
             [$configurable1, $configurable2, $simple1, $simple2, $simple3, $simple4, $simple5]
         );
+
+        // with "refresh=false" setting changes are not visible to search immediately and need to wait some
+        // time to synchronize data
+        sleep(1);
 
         $entries = $this->storageQuery->getCompositeEntries(
             $this->state->getAliasName(),
