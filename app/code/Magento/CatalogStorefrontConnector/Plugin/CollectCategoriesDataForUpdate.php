@@ -93,7 +93,7 @@ class CollectCategoriesDataForUpdate
      *
      * @param Rows $subject
      * @param Rows $result
-     * @param array $entityIds
+     * @param array $categoryIds
      * @param bool $useTempTable
      * @return Rows
      * @throws NoSuchEntityException
@@ -103,13 +103,12 @@ class CollectCategoriesDataForUpdate
     public function afterExecute(
         Rows $subject,
         Rows $result,
-        array $entityIds = [],
+        array $categoryIds = [],
         $useTempTable = false
     ): Rows {
         if ($this->isIndexerRunOnSchedule()) {
             return $result;
         }
-        $categoryIds = $entityIds;
         foreach ($categoryIds as $categoryId) {
             $parentIds = explode('/', $this->getPathFromCategoryId($categoryId));
             // phpcs:ignore Magento2.Performance.ForeachArrayMerge

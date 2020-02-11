@@ -9,6 +9,7 @@ namespace Magento\CatalogStorefrontConnector\Plugin;
 
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\CatalogStorefrontConnector\Model\UpdatedEntitiesMessageBuilder;
 use Magento\Framework\MessageQueue\PublisherInterface;
@@ -82,22 +83,26 @@ class UpdateCategoriesOnConfigurationChange
     /**
      * Update categories data on stock configuration change
      *
+     * @param Config $subject
+     * @param Config $result
      * @param string $path
      * @param string $value
      * @param string $scope
      * @param int $scopeId
-     * @return void
+     * @return Config $result
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws \Exception
      */
     public function afterSaveConfig(
-        $path,
-        $value,
-        $scope,
-        $scopeId
-    ): void {
+        Config $subject,
+        Config $result,
+        string $path,
+        string $value,
+        string $scope,
+        int $scopeId
+    ): Config {
         if (Configuration::XML_PATH_SHOW_OUT_OF_STOCK !== $scope || $this->isIndexerRunOnSchedule()) {
-            return ;
+            return $result;
         }
         $this->reinitableConfig->reinit();
         $categoryCollection = $this->collectionFactory->create();
@@ -121,6 +126,8 @@ class UpdateCategoriesOnConfigurationChange
                 }
             }
         }
+
+        return $result;
     }
 
     /**

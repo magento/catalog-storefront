@@ -7,9 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\StorefrontTestFixer;
 
-use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\CatalogStorefrontConnector\Plugin\UpdateCategoriesOnConfigurationChange;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Config\Model\ResourceModel\Config;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -25,12 +24,16 @@ class CategoriesOnConfigurationChange extends UpdateCategoriesOnConfigurationCha
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function afterSaveConfig(
-        $path,
-        $value,
-        $scope,
-        $scopeId
-    ): void {
-        parent::afterSaveConfig(
+        Config $subject,
+        Config $result,
+        string $path,
+        string $value,
+        string $scope,
+        int $scopeId
+    ): Config {
+        $result = parent::afterSaveConfig(
+            $subject,
+            $result,
             $path,
             $value,
             $scope,
@@ -40,5 +43,7 @@ class CategoriesOnConfigurationChange extends UpdateCategoriesOnConfigurationCha
         /** @var ConsumerInvoker $consumerInvoker */
         $consumerInvoker = $objectManager->get(ConsumerInvoker::class);
         $consumerInvoker->invoke(true);
+
+        return $result;
     }
 }
