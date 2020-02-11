@@ -146,7 +146,7 @@ class CollectCategoriesDataForUpdate
      * @param int $categoryId
      * @return string
      */
-    protected function getPathFromCategoryId($categoryId)
+    private function getPathFromCategoryId($categoryId)
     {
         if (!isset($this->categoryPath[$categoryId])) {
             $categoryPath = $this->getConnection()->fetchOne(
