@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogExtractor\Plugin;
+namespace Magento\CatalogInventoryExtractor\Plugin;
 
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;

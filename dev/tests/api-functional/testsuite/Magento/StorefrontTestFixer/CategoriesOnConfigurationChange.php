@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\StorefrontTestFixer;
 
-use Magento\CatalogStorefrontConnector\Plugin\UpdateCategoriesOnConfigurationChange;
+use Magento\CatalogInventoryExtractor\Plugin\UpdateCategoriesOnConfigurationChange;
 use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\Helper\Bootstrap;

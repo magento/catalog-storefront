@@ -40,9 +40,4 @@
             </argument>
         </arguments>
     </type>
-
-    <type name="Magento\Config\Model\ResourceModel\Config">
-        <plugin name="updateCategoriesDataOnStockConfigurationChange" type="Magento\CatalogExtractor\Plugin\UpdateCategoriesOnConfigurationChange" />
-    </type>
-
 </config>
