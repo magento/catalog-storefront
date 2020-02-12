@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\CatalogExtractor\DataProvider\CanonicalUrl;
 
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\Framework\UrlFactory;
 use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
 use Magento\CatalogExtractor\DataProvider\CanonicalUrl\Query\CanonicalUrlQuery;
 use Magento\Framework\App\ResourceConnection;
@@ -19,13 +18,6 @@ use Magento\Catalog\Helper\Product as ProductHelper;
  */
 class CanonicalUrlDataProvider implements DataProviderInterface
 {
-    /**
-     * URL instance
-     *
-     * @var UrlFactory
-     */
-    private $urlFactory;
-
     /**
      * @var CanonicalUrlQuery
      */
@@ -42,18 +34,15 @@ class CanonicalUrlDataProvider implements DataProviderInterface
     private $productHelper;
 
     /**
-     * @param UrlFactory $urlFactory
      * @param CanonicalUrlQuery $canonicalUrlQuery
      * @param ResourceConnection $resourceConnection
      * @param ProductHelper $productHelper
      */
     public function __construct(
-        UrlFactory $urlFactory,
         CanonicalUrlQuery $canonicalUrlQuery,
         ResourceConnection $resourceConnection,
         ProductHelper $productHelper
     ) {
-        $this->urlFactory = $urlFactory;
         $this->canonicalUrlQuery = $canonicalUrlQuery;
         $this->resourceConnection = $resourceConnection;
         $this->productHelper = $productHelper;
@@ -71,27 +60,9 @@ class CanonicalUrlDataProvider implements DataProviderInterface
 
         $output = [];
         $rewrites = $this->getRewrites($productIds, $storeId);
-        $url = $this->urlFactory->create()->setScope($storeId);
 
         foreach ($productIds as $productId) {
-            $routePath = '';
-            $requestPath = '';
-            $routeParams = [
-                '_nosid' => true
-            ];
-            $rewrite = $rewrites[$productId] ?? null;
-            if ($rewrite) {
-                $requestPath = $rewrite['request_path'];
-            }
-
-            if (!empty($requestPath)) {
-                $routeParams['_direct'] = $requestPath;
-            } else {
-                $routePath = 'catalog/product/view';
-                $routeParams['id'] = $productId;
-            }
-
-            $output[$productId]['canonical_url'] = $url->getUrl($routePath, $routeParams);
+            $output[$productId]['canonical_url'] = $rewrites[$productId]['request_path'] ?? null;
         }
 
         return $output;
