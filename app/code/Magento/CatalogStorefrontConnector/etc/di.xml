@@ -60,6 +60,16 @@
             <argument name="categoryPublisher" xsi:type="object">Magento\CatalogStorefrontConnector\Model\Publisher\CategoryPublisher\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogStorefrontConnector\Plugin\ProductUpdatesPublisher">
+        <arguments>
+            <argument name="queuePublisher" xsi:type="object">\Magento\Framework\MessageQueue\PublisherInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogStorefrontConnector\Plugin\CategoryUpdatesPublisher">
+        <arguments>
+            <argument name="queuePublisher" xsi:type="object">\Magento\Framework\MessageQueue\PublisherInterface\Proxy</argument>
+        </arguments>
+    </type>
 
     <!-- Logger -->
     <virtualType name="CatalogStorefrontConnectorLogger" type="Magento\Framework\Logger\Monolog">
