@@ -5,11 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogStorefrontConnector\Plugin;
+namespace Magento\CatalogExtractor\Plugin;
 
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
+use Magento\CatalogStorefrontConnector\Plugin\CategoryUpdatesPublisher;
 use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;

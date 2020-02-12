@@ -21,9 +21,6 @@
     <type name="Magento\Catalog\Model\ResourceModel\Product">
         <plugin name="collectProductsDataForStorefrontApplicationOnSave" type="Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataOnSave" />
     </type>
-    <type name="Magento\Config\Model\ResourceModel\Config">
-        <plugin name="updateCategoriesDataOnStockConfigurationChange" type="Magento\CatalogStorefrontConnector\Plugin\UpdateCategoriesOnConfigurationChange" />
-    </type>
 
     <type name="Magento\Framework\MessageQueue\MergerFactory">
         <arguments>
