@@ -84,10 +84,10 @@ class UpdateCategoriesOnConfigurationChange
     public function afterSaveConfig(
         Config $subject,
         Config $result,
-        string $path,
-        string $value,
-        string $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-        int $scopeId = 0
+        $path,
+        $value,
+        $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+        $scopeId = 0
     ): Config {
         if (Configuration::XML_PATH_SHOW_OUT_OF_STOCK !== $path || $this->isIndexerRunOnSchedule()) {
             return $result;

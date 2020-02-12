@@ -27,10 +27,10 @@ class CategoriesOnConfigurationChange extends UpdateCategoriesOnConfigurationCha
     public function afterSaveConfig(
         Config $subject,
         Config $result,
-        string $path,
-        string $value,
-        string $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-        int $scopeId = 0
+        $path,
+        $value,
+        $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+        $scopeId = 0
     ): Config {
         $result = parent::afterSaveConfig(
             $subject,
