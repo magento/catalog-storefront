@@ -24,6 +24,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
 
 /**
+ * Override testSearchWithFilterWithPageSizeEqualTotalCount: test use wrong sort order of categories
+ *
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
