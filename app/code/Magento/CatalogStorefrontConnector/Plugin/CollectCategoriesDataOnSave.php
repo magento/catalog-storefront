@@ -44,7 +44,7 @@ class CollectCategoriesDataOnSave
      *
      * @param CategoryResource $subject
      * @param CategoryResource $result
-     * @param AbstractModel $currentCategory
+     * @param AbstractModel $category
      * @return CategoryResource
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
