@@ -18,7 +18,7 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Plugin for collect category data during saving process
+ * Plugin for update categories data after "Show Out Of Stock Products" config changed
  */
 class UpdateCategoriesOnConfigurationChange
 {

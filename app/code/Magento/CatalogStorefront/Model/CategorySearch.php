@@ -36,7 +36,7 @@ class CategorySearch implements CategoryInterface
 
     /**
      * @param CategoryResultContainerInterfaceFactory $categoryResultContainerFactory
-     * @param CategoryDataProvider $dataProvider,
+     * @param CategoryDataProvider $dataProvider
      * @param LoggerInterface $logger
      */
     public function __construct(

@@ -13,6 +13,7 @@
         "magento/module-catalog-extractor": "*",
         "magento/module-catalog-storefront-connector": "*",
         "magento/module-catalog-search": "*",
+        "magento/module-config": "*",
         "magento/module-store": "*"
     },
     "type": "magento2-module",

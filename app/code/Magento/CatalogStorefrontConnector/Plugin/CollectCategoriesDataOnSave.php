@@ -65,13 +65,14 @@ class CollectCategoriesDataOnSave
             if (true === $category->dataHasChangedFor(Category::KEY_IS_ACTIVE)) {
                 // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $categoryIds = array_merge($categoryIds, $category->getParentIds());
+                $this->categoryPublisher->publish($categoryIds, $storeId);
+
             }
             if (!empty($category->getChangedProductIds())) {
                 $productIds = $category->getChangedProductIds();
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                $this->productPublisher->publish($productIds, $storeId);
             }
-            $this->categoryPublisher->publish($categoryIds, $storeId);
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $this->productPublisher->publish($productIds, $storeId);
         }
 
         return $result;
