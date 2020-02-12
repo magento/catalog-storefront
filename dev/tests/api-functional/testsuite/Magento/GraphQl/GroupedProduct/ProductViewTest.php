@@ -9,43 +9,8 @@ namespace Magento\GraphQl\GroupedProduct;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
-class GroupedProductViewTest extends GraphQlAbstract
+class ProductViewTest extends GraphQlAbstract
 {
-
-    /**
-     * @magentoApiDataFixture Magento/GroupedProduct/_files/product_grouped.php
-     */
-    public function testAllFieldsGroupedProduct()
-    {
-        $productSku = 'grouped-product';
-        $query = $this->getQuery($productSku);
-
-        $response = $this->graphQlQuery($query);
-
-        $groupedProductLinks = [
-            [
-                'qty' => 1,
-                'position' => 1,
-                'product' => [
-                    'sku' => 'simple',
-                    'name' => 'Simple Product',
-                    'type_id' => 'simple',
-                    'url_key' => 'simple-product'
-                ]
-            ],
-            [
-                'qty' => 2,
-                'position' => 2,
-                'product' => [
-                    'sku' => 'virtual-product',
-                    'name' => 'Virtual Product',
-                    'type_id' => 'virtual',
-                    'url_key' => 'virtual-product'
-                ]
-            ]
-        ];
-        $this->assertGroupedProductItems($groupedProductLinks, $response['products']['items'][0]);
-    }
 
     /**
      * @magentoApiDataFixture Magento/Store/_files/second_website_with_two_stores.php

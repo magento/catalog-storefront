@@ -15,12 +15,92 @@ use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Bundle product view test
+ * Override: label is currently not supported
  */
 class BundleProductViewTest extends GraphQlAbstract
 {
     const KEY_PRICE_TYPE_FIXED = 'FIXED';
     const KEY_PRICE_TYPE_DYNAMIC = 'DYNAMIC';
+
+    /**
+     * @magentoApiDataFixture Magento/Bundle/_files/product_1.php
+     */
+    public function testAllFieldsBundleProducts()
+    {
+        $productSku = 'bundle-product';
+        $query
+            = <<<QUERY
+{
+   products(filter: {sku: {eq: "{$productSku}"}})
+   {
+       items{
+           sku
+           type_id
+           id
+           name
+           attribute_set_id
+           ... on PhysicalProductInterface {
+             weight
+           }
+           ... on BundleProduct {
+           dynamic_sku
+            dynamic_price
+            dynamic_weight
+            price_view
+            ship_bundle_items
+            items {
+              option_id
+              title
+              required
+              type
+              position
+              sku              
+              options {
+                id
+                quantity
+                position
+                is_default
+                price
+                price_type
+                can_change_quantity
+                label
+                product {
+                  id
+                  name
+                  sku
+                  type_id
+                   }
+                }
+            }
+           }
+       }
+   }   
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $bundleProduct = $productRepository->get($productSku, false, null, true);
+        if ((bool)$bundleProduct->getShipmentType()) {
+            $this->assertEquals('SEPARATELY', $response['products']['items'][0]['ship_bundle_items']);
+        } else {
+            $this->assertEquals('TOGETHER', $response['products']['items'][0]['ship_bundle_items']);
+        }
+        if ((bool)$bundleProduct->getPriceView()) {
+            $this->assertEquals('AS_LOW_AS', $response['products']['items'][0]['price_view']);
+        } else {
+            $this->assertEquals('PRICE_RANGE', $response['products']['items'][0]['price_view']);
+        }
+        $this->assertBundleBaseFields($bundleProduct, $response['products']['items'][0]);
+
+        $this->assertBundleProductOptions($bundleProduct, $response['products']['items'][0]);
+        $this->assertNotEmpty(
+            $response['products']['items'][0]['items'],
+            "Precondition failed: 'items' must not be empty"
+        );
+    }
 
     /**
      * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_with_not_visible_children.php
@@ -176,7 +256,7 @@ QUERY;
                 'quantity' => (int)$bundleProductLink->getQty(),
                 'position' => $bundleProductLink->getPosition(),
                 'is_default' => (bool)$bundleProductLink->getIsDefault(),
-                 'price_type' => self::KEY_PRICE_TYPE_FIXED,
+                'price_type' => self::KEY_PRICE_TYPE_FIXED,
                 'can_change_quantity' => $bundleProductLink->getCanChangeQuantity(),
                 // TODO: MC-30893
                 // 'label' => $childProduct->getName()
