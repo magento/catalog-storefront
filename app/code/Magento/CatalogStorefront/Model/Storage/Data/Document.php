@@ -24,8 +24,8 @@ class Document implements EntryInterface
      */
     public function __construct(array $data)
     {
-        $this->data['id'] = (int)$data['_id'];
         $this->data = $data['_source'];
+        $this->data['id'] = (int)$data['_id'];
     }
 
     /**
@@ -45,13 +45,5 @@ class Document implements EntryInterface
             return isset($this->data[$field]) ? $this->data[$field] : null;
         }
         return $this->data;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getVariants(): EntryIteratorInterface
-    {
-        return $this->data['variants'] ?? [];
     }
 }
