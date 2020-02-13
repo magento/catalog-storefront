@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefrontConnector\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
-use Magento\Catalog\Model\Category;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\Store;
 

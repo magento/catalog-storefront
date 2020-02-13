@@ -14,7 +14,7 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteDTO;
 
 /**
- * Test of getting URL rewrites data from products
+ * Override testProductWithOneCategoryAssigned: bad test, cms page is included to "expected results"
  */
 class UrlRewritesTest extends GraphQlAbstract
 {

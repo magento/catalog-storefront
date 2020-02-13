@@ -22,6 +22,11 @@
         <plugin name="collectProductsDataForStorefrontApplicationOnSave" type="Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataOnSave" />
     </type>
 
+    <!-- Add category cache identities -->
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Product\Identity">
+        <plugin name="addCategoriesCacheIdentities" type="\Magento\CatalogStorefrontConnector\Plugin\Resolver\CategoryCacheIdentity" />
+    </type>
+
     <type name="Magento\Framework\MessageQueue\MergerFactory">
         <arguments>
             <argument name="mergers" xsi:type="array">
