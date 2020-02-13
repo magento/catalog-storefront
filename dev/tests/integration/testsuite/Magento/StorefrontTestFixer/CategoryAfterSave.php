@@ -13,7 +13,7 @@ namespace Magento\StorefrontTestFixer;
  * Due to changes in DI (added afterSave() plugins) for store front application
  * we added empty plugin classes to keep plugin initialization chain
  */
-class CategoryAfterSave extends \Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate
+class CategoryAfterSave extends \Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataOnSave
 {
 
 }

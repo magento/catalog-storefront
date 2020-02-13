@@ -8,11 +8,16 @@
         "php": "~7.1.3||~7.2.0||~7.3.0",
         "magento/framework": "*",
         "magento/module-catalog": "*",
+        "magento/module-catalog-graph-ql": "*",
         "magento/module-category-extractor": "*",
         "magento/module-catalog-extractor": "*",
         "magento/module-catalog-search": "*",
+        "magento/module-catalog-storefront-connector": "*",
         "magento/module-config": "*",
         "magento/module-store": "*"
+    },
+    "suggest": {
+        "magento/module-catalog-inventory": "Allows use catalog inventory configuration"
     },
     "type": "magento2-module",
     "license": [

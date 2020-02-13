@@ -16,7 +16,8 @@ use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test products query for configurable products
+ * Override testQueryConfigurableProductLinks:
+ *  - remove categories from variants
  */
 class ConfigurableProductViewTest extends GraphQlAbstract
 {
@@ -31,8 +32,6 @@ class ConfigurableProductViewTest extends GraphQlAbstract
      */
     public function testQueryConfigurableProductLinks()
     {
-        //TODO: remove skip after issue fix
-        self::markTestSkipped('Unskip this test after MC-31037 issue completed');
         $productSku = 'configurable';
 
         $query
@@ -166,9 +165,6 @@ class ConfigurableProductViewTest extends GraphQlAbstract
                 }
               }
             }
-            categories {
-              id
-            }
             media_gallery_entries {
               disabled
               file
@@ -299,33 +295,11 @@ QUERY;
                 isset($variantArray['product']['id']),
                 'variant product elements don\'t contain id key'
             );
-            $variantProductId = $variantArray['product']['id'];
             $indexValue = $variantArray['product']['sku'];
             unset($variantArray['product']['id']);
-            $this->assertTrue(
-                isset($variantArray['product']['categories']),
-                'variant product doesn\'t contain categories key'
-            );
             $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
             /** @var \Magento\Catalog\Model\Product $childProduct */
             $childProduct = $productRepository->get($indexValue);
-
-            switch ($variantProductId) {
-                case 10:
-                    $this->assertEmpty(
-                        $actualResponse['variants'][$variantKey]['product']['categories'],
-                        'No category is expected for product, that not visible individually'
-                    );
-                    break;
-                case 20:
-                    $this->assertEquals(
-                        $actualResponse['variants'][$variantKey]['product']['categories'][0],
-                        ['id' => 333]
-                    );
-                    break;
-            }
-
-            unset($variantArray['product']['categories']);
 
             // assert media gallery
             $this->assertTrue(

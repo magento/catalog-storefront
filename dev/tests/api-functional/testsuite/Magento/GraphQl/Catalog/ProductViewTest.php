@@ -17,7 +17,7 @@ use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test products query output
+ * Override testProductInNonAnchoredSubCategories test: need to fix it
  */
 class ProductViewTest extends GraphQlAbstract
 {
@@ -344,11 +344,146 @@ QUERY;
             name
             new_from_date
             new_to_date
+            options_container
+            ... on CustomizableProductInterface {
+              field_options: options {
+                title
+                required
+                sort_order
+                option_id
+                ... on CustomizableFieldOption {
+                  product_sku
+                  field_option: value {
+                    sku
+                    price
+                    price_type
+                    max_characters
+                  }
+                }
+                ... on CustomizableAreaOption {
+                  product_sku
+                  area_option: value {
+                    sku
+                    price
+                    price_type
+                    max_characters
+                  }
+                }
+                ... on CustomizableDateOption {
+                  product_sku
+                  date_option: value {
+                    sku
+                    price
+                    price_type
+                  }
+                }
+                ... on CustomizableDropDownOption {
+                  drop_down_option: value {
+                    option_type_id
+                    sku
+                    price
+                    price_type
+                    title
+                  }
+                }
+                ... on CustomizableRadioOption {
+                  radio_option: value {
+                    option_type_id
+                    sku
+                    price
+                    price_type
+                    title
+                  }
+                }
+                ...on CustomizableFileOption {
+                    product_sku
+                    file_option: value {
+                      sku
+                      price
+                      price_type
+                      file_extension
+                      image_size_x
+                      image_size_y
+                    }
+                  }
+              }
+            }
+            price {
+              minimalPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+              maximalPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+              regularPrice {
+                amount {
+                  value
+                  currency
+                }
+                adjustments {
+                  amount {
+                    value
+                    currency
+                  }
+                  code
+                  description
+                }
+              }
+            }
+            product_links
+            {
+                link_type
+                linked_product_sku
+                linked_product_type
+                position
+                sku
+            }
             sku
             small_image { url, label }
             special_from_date
             special_price
             special_to_date
+            swatch_image
+            thumbnail { url, label }
+            tier_price
+            tier_prices
+            {
+                customer_group_id
+                percentage_value
+                qty
+                value
+                website_id
+            }
+            type_id
+            updated_at
+            url_key
+            url_path
+            websites { id name code sort_order default_group_id is_default }
+            ... on PhysicalProductInterface {
+                weight
+            }
         }
     }
 }
@@ -356,27 +491,18 @@ QUERY;
 
         $response = $this->graphQlQuery($query);
 
+        /**
+         * @var ProductRepositoryInterface $productRepository
+         */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get($productSku, false, null, true);
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
         $this->assertEquals(1, count($response['products']['items']));
         $this->assertArrayHasKey(0, $response['products']['items']);
-        $expectedMediaGallery = [
-            'image' => [
-                'disabled' => false,
-                'label' => 'Video Label',
-                'media_type' => 'external-video',
-                'position' => 2
-            ],
-            'video_content' => [
-                'media_type' => 'external-video',
-                'video_description' => 'Video description',
-                'video_metadata' => 'Video Metadata',
-                'video_provider' => 'youtube',
-                'video_title' => 'Video title',
-                'video_url' => 'http://www.youtube.com/v/tH_2PFNmWoga'
-            ]
-        ];
-        $this->assertMediaGalleryEntries($expectedMediaGallery, $response['products']['items'][0]);
+        $this->assertMediaGalleryEntries($product, $response['products']['items'][0]);
+        $this->assertArrayHasKey('websites', $response['products']['items'][0]);
+        $this->assertWebsites($product, $response['products']['items'][0]['websites']);
     }
 
     /**
@@ -532,23 +658,41 @@ QUERY;
     }
 
     /**
-     * @param array $expected
+     * @param ProductInterface $product
      * @param array $actualResponse
      */
-    private function assertMediaGalleryEntries($expected, $actualResponse)
+    private function assertMediaGalleryEntries($product, $actualResponse)
     {
+        $mediaGalleryEntries = $product->getMediaGalleryEntries();
+        $this->assertCount(1, $mediaGalleryEntries, "Precondition failed, incorrect number of media gallery entries.");
         $this->assertTrue(
             is_array([$actualResponse['media_gallery_entries']]),
             "Media galleries field must be of an array type."
         );
         $this->assertCount(1, $actualResponse['media_gallery_entries'], "There must be 1 record in media gallery.");
+        $mediaGalleryEntry = $mediaGalleryEntries[0];
         $this->assertResponseFields(
             $actualResponse['media_gallery_entries'][0],
-            $expected['image']
+            [
+                'disabled' => (bool)$mediaGalleryEntry->isDisabled(),
+                'file' => $mediaGalleryEntry->getFile(),
+                'id' => $mediaGalleryEntry->getId(),
+                'label' => $mediaGalleryEntry->getLabel(),
+                'media_type' => $mediaGalleryEntry->getMediaType(),
+                'position' => $mediaGalleryEntry->getPosition(),
+            ]
         );
+        $videoContent = $mediaGalleryEntry->getExtensionAttributes()->getVideoContent();
         $this->assertResponseFields(
             $actualResponse['media_gallery_entries'][0]['video_content'],
-            $expected['video_content']
+            [
+                'media_type' => $videoContent->getMediaType(),
+                'video_description' => $videoContent->getVideoDescription(),
+                'video_metadata' => $videoContent->getVideoMetadata(),
+                'video_provider' => $videoContent->getVideoProvider(),
+                'video_title' => $videoContent->getVideoTitle(),
+                'video_url' => $videoContent->getVideoUrl(),
+            ]
         );
     }
 
@@ -561,7 +705,7 @@ QUERY;
         $customAttribute = null;
         $this->assertEquals($customAttribute, $actualResponse['attribute_code_custom']);
     }
-
+    
     /**
      * @param ProductInterface $product
      * @param $actualResponse
@@ -667,6 +811,7 @@ QUERY;
      */
     private function assertBaseFields($product, $actualResponse)
     {
+
         $assertionMap = [
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
@@ -756,16 +901,13 @@ QUERY;
             'meta_description',
             'meta_keyword',
             'meta_title',
-            //TODO: [MC-15778] Attribute values which are not present in default store are not present GraphQL"
-            //'country_of_manufacture',
+            'country_of_manufacture',
             'gift_message_available',
-            // TODO: MC-18690: Introduce "is_new" attribute instead of new_from_date
-            // 'news_from_date',
+            'news_from_date',
             'options_container',
             'special_price',
-            //TODO: [MC-15778] Attribute values which are not present in default store are not present GraphQL"
-            //'special_from_date',
-            //'special_to_date',
+            'special_from_date',
+            'special_to_date',
         ];
         $assertionMap = [];
         foreach ($eavAttributes as $attributeCode) {
@@ -802,8 +944,6 @@ QUERY;
      */
     public function testProductInAllAnchoredCategories()
     {
-        //TODO: Unskip after MC-31054 issue will be fixed
-        self::markTestSkipped('Skipped due to MC-31054: Category nesting more 4 not saving');
         $query = <<<QUERY
 {
     products(filter: {sku: {in: ["12345"]}})
@@ -854,9 +994,6 @@ QUERY;
      */
     public function testProductWithNonAnchoredParentCategory()
     {
-        //TODO: Unskip after MC-30965 fix
-        $this->markTestSkipped('MC-30965: Product contains invalid categories');
-
         $query = <<<QUERY
 {
     products(filter: {sku: {in: ["12345"]}})
@@ -911,7 +1048,6 @@ QUERY;
      */
     public function testProductInNonAnchoredSubCategories()
     {
-        //TODO: Unskip after MC-30965 fix
         $this->markTestSkipped('MC-30965: Product contains invalid categories');
 
         $query = <<<QUERY

@@ -7,12 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Plugin;
 
-use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
-use Magento\CatalogStorefrontConnector\Model\UpdatedEntitiesMessageBuilder;
-use Magento\Framework\MessageQueue\PublisherInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Indexer\Product\Category\Action\Rows;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
-use Psr\Log\LoggerInterface;
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\Framework\Indexer\IndexerRegistry;
 
 /**
  * Plugin for collect category data during saving process
@@ -20,83 +21,71 @@ use Psr\Log\LoggerInterface;
 class CollectCategoriesDataForUpdate
 {
     /**
-     * Queue topic name
+     * @var IndexerRegistry
      */
-    private const QUEUE_TOPIC = 'storefront.catalog.category.update';
+    private $indexerRegistry;
 
     /**
-     * @var PublisherInterface
+     * @var CollectionFactory
      */
-    private $queuePublisher;
+    private $collectionFactory;
 
     /**
-     * @var UpdatedEntitiesMessageBuilder
+     * @var CategoryUpdatesPublisher
      */
-    private $messageBuilder;
+    private $categoryPublisher;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var ProductUpdatesPublisher
-     */
-    private $productUpdatesPublisher;
-
-    /**
-     * @param PublisherInterface $queuePublisher
-     * @param UpdatedEntitiesMessageBuilder $messageBuilder
-     * @param ProductUpdatesPublisher $productUpdatesPublisher
-     * @param LoggerInterface $logger
+     * @param CategoryUpdatesPublisher $categoryPublisher
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
-        PublisherInterface $queuePublisher,
-        UpdatedEntitiesMessageBuilder $messageBuilder,
-        ProductUpdatesPublisher $productUpdatesPublisher,
-        LoggerInterface $logger
+        CategoryUpdatesPublisher $categoryPublisher,
+        CollectionFactory $collectionFactory
     ) {
-        $this->queuePublisher = $queuePublisher;
-        $this->messageBuilder = $messageBuilder;
-        $this->logger = $logger;
-        $this->productUpdatesPublisher = $productUpdatesPublisher;
+        $this->collectionFactory = $collectionFactory;
+        $this->categoryPublisher = $categoryPublisher;
     }
 
     /**
      * Collect store ID and Category IDs for updated entity
      *
-     * @param CategoryResource $subject
-     * @param CategoryResource $result
-     * @param AbstractModel $category
-     * @return CategoryResource
+     * @param Rows $subject
+     * @param Rows $result
+     * @param array $categoryIds
+     * @param bool $useTempTable
+     * @return Rows
+     * @throws NoSuchEntityException
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSave(
-        CategoryResource $subject,
-        CategoryResource $result,
-        AbstractModel $category
-    ): CategoryResource {
-        $entityId = $category->getId();
-        foreach ($category->getStoreIds() as $storeId) {
-            $storeId = (int)$storeId;
-            if ($storeId === Store::DEFAULT_STORE_ID) {
-                continue ;
-            }
-            $message = $this->messageBuilder->build($storeId, [$entityId]);
-            try {
-                $this->logger->debug(\sprintf('Collect category id: "%s" in store %s', $entityId, $storeId));
-                $this->queuePublisher->publish(self::QUEUE_TOPIC, $message);
-
-                if (!empty($category->getChangedProductIds())) {
-                    $this->productUpdatesPublisher->publish($category->getChangedProductIds(), $storeId);
+    public function afterExecute(
+        Rows $subject,
+        Rows $result,
+        array $categoryIds = [],
+        $useTempTable = false
+    ): Rows {
+        $categoryCollection = $this->collectionFactory->create();
+        $categoryCollection->addFieldToFilter('entity_id', $categoryIds);
+        $categoryIdsByStore = [];
+        /** @var \Magento\Catalog\Model\Category $category */
+        foreach ($categoryCollection as $category) {
+            $categoryId = (string)$category->getId();
+            foreach ($category->getStoreIds() as $storeId) {
+                $storeId = (int)$storeId;
+                if ($storeId === Store::DEFAULT_STORE_ID) {
+                    continue ;
                 }
+                $categoryIdsByStore[$storeId][] = [$categoryId];
 
-            } catch (\Throwable $e) {
-                $this->logger->critical(
-                    \sprintf('Error on collect category id "%s" in store %s', $entityId, $storeId),
-                    ['exception' => $e]
-                );
+                if (true === $category->dataHasChangedFor(Category::KEY_IS_ACTIVE)) {
+                    $categoryIdsByStore[$storeId][] = $category->getParentIds();
+                }
             }
+        }
+        foreach ($categoryIdsByStore as $storeId => $storeCategoryIds) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+            $this->categoryPublisher->publish(array_unique(array_merge(...$storeCategoryIds)), $storeId);
         }
         return $result;
     }

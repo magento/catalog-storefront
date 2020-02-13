@@ -7,15 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\StorefrontTestFixer;
 
-use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
-use Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataOnSave;
-use Magento\Framework\Model\AbstractModel;
+use Magento\CatalogInventoryExtractor\Plugin\UpdateCategoriesOnConfigurationChange;
+use Magento\Config\Model\ResourceModel\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Plugin for collect category data during saving process
  */
-class CategoryAfterSave extends CollectCategoriesDataOnSave
+class CategoriesOnConfigurationChange extends UpdateCategoriesOnConfigurationChange
 {
     /**
      * @inheritdoc
@@ -24,13 +24,22 @@ class CategoryAfterSave extends CollectCategoriesDataOnSave
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function afterSave(
-        CategoryResource $subject,
-        CategoryResource $result,
-        AbstractModel $category
-    ): CategoryResource {
-        $result = parent::afterSave($subject, $result, $category);
-
+    public function afterSaveConfig(
+        Config $subject,
+        Config $result,
+        $path,
+        $value,
+        $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+        $scopeId = 0
+    ): Config {
+        $result = parent::afterSaveConfig(
+            $subject,
+            $result,
+            $path,
+            $value,
+            $scope,
+            $scopeId
+        );
         $objectManager = Bootstrap::getObjectManager();
         /** @var ConsumerInvoker $consumerInvoker */
         $consumerInvoker = $objectManager->get(ConsumerInvoker::class);

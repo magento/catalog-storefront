@@ -14,6 +14,7 @@ use Magento\CatalogStorefront\Model\Storage\Data\EntryInterface;
 use Magento\CatalogStorefront\Model\Storage\Data\EntryIteratorInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\RuntimeException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Elasticsearch client adapter for read access operations.
@@ -41,23 +42,31 @@ class ElasticsearchQuery implements QueryInterface
     private $documentIteratorFactory;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Initialize Elasticsearch Client
      *
      * @param Config $config
      * @param ConnectionPull $connectionPull
      * @param DocumentFactory $documentFactory
      * @param DocumentIteratorFactory $documentIteratorFactory
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Config $config,
         ConnectionPull $connectionPull,
         DocumentFactory $documentFactory,
-        DocumentIteratorFactory $documentIteratorFactory
+        DocumentIteratorFactory $documentIteratorFactory,
+        LoggerInterface $logger
     ) {
         $this->config = $config;
         $this->documentFactory = $documentFactory;
         $this->documentIteratorFactory = $documentIteratorFactory;
         $this->connectionPull = $connectionPull;
+        $this->logger = $logger;
     }
 
     /**
@@ -131,18 +140,22 @@ class ElasticsearchQuery implements QueryInterface
     private function checkErrors(array $result, string $indexName)
     {
         $errors = [];
+        $notFound = [];
         if (isset($result['docs'])) {
             foreach ($result['docs'] as $doc) {
                 if (isset($doc['error']) && !empty($doc['error'])) {
                     $errors [] = sprintf("Entity id: %d\nReason: %s", $doc['_id'], $doc['error']['reason']);
                 } elseif (isset($doc['found']) && false === $doc['found']) {
-                    $errors [] = sprintf("Entity id: %d\nReason: item not found", $doc['_id']);
+                    $notFound[] = $doc['_id'];
                 }
             }
         }
 
         if (!empty($errors)) {
-            throw new NotFoundException(__("Index name: {$indexName}\nList of errors: '" . json_encode($errors)));
+            throw new NotFoundException(__("Index name: {$indexName}\nList of errors: '" . \implode(', ', $errors)));
+        }
+        if (!empty($notFound)) {
+            $this->logger->notice(\sprintf('Items "%s" not found in index %s', \implode(', ', $notFound), $indexName));
         }
     }
 }

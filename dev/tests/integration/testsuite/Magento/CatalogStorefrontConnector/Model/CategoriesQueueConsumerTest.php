@@ -16,9 +16,6 @@ use Magento\Indexer\Model\Indexer;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\MessageQueue\QueueInterface;
-use Magento\TestFramework\MessageQueue\EnvironmentPreconditionException;
-use Magento\TestFramework\MessageQueue\PreconditionFailedException;
-use Magento\TestFramework\MessageQueue\PublisherConsumerController;
 
 /**
  * Tests for CategoriesQueueConsumer class
@@ -58,6 +55,20 @@ class CategoriesQueueConsumerTest extends AbstractGraphQl
     private $categoryResource;
 
     /**
+     * Batch size
+     */
+    private const BATCHSIZE = 1000;
+
+    /**
+     * List of storefront consumers
+     */
+    private const CONSUMERS = [
+        'storefront.catalog.category.update',
+        'storefront.catalog.product.update',
+        'storefront.catalog.data.consume',
+    ];
+
+    /**
      * @throws LocalizedException
      *
      * @return void
@@ -85,18 +96,18 @@ class CategoriesQueueConsumerTest extends AbstractGraphQl
      */
     public function testMessageReading(array $expectedData): void
     {
-        $this->processAllCatalogStorefrontMessages();
+        $this->invoke(self::CONSUMERS);
         $category = $this->categoryRepository->get(333, 1);
         $category->setName('Category New Name');
         $this->categoryResource->save($category);
         $consumersToProcess = [
             'storefront.catalog.category.update'
         ];
-        $this->processCatalogQueueMessages($consumersToProcess);
+        $this->invoke($consumersToProcess);
         $queue = $this->queueRepository->get('amqp', 'storefront.catalog.data.consume');
         $queueBody = $this->getQueueBody($queue);
         $parsedData = $this->jsonHelper->jsonDecode($queueBody);
-        $parsedData = $this->jsonHelper->jsonDecode(array_pop($parsedData));
+        $parsedData = $this->jsonHelper->jsonDecode(reset($parsedData));
 
         foreach ($parsedData['entity_data'] as $attributeKey => $attributeValue) {
             $this->assertEquals($expectedData[$attributeKey], $attributeValue);
@@ -186,42 +197,21 @@ class CategoriesQueueConsumerTest extends AbstractGraphQl
     }
 
     /**
-     * Stop all running Catalog Data Consumers
+     * Invoke consumers
      *
+     * @param array $consumers
      * @return void
-     * @throws LocalizedException
-     * @throws EnvironmentPreconditionException
-     * @throws PreconditionFailedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function processAllCatalogStorefrontMessages(): void
+    private function invoke(array $consumers): void
     {
-        /** @var PublisherConsumerController $catalogStorefrontConsumers */
-        $catalogStorefrontConsumers = Bootstrap::getObjectManager()->create(
-            PublisherConsumerController::class,
-            [
-                'consumers' => [
-                    'storefront.catalog.category.update',
-                    'storefront.catalog.product.update',
-                    'storefront.catalog.data.consume'
-                ],
-                'logFilePath' => '',
-                'maxMessages' => null,
-                'appInitParams' => Bootstrap::getInstance()->getAppInitParams()
-            ]
-        );
-        $catalogStorefrontConsumers->initialize();
-        $catalogQueue = $this->queueRepository->get('amqp', 'storefront.catalog.category.connector');
-        while ($this->getAsyncMessage($catalogQueue)) {
-            continue;
+        $objectManager = Bootstrap::getObjectManager();
+
+        /** @var \Magento\Framework\MessageQueue\ConsumerFactory $consumerFactory */
+        $consumerFactory = $objectManager->create(\Magento\Framework\MessageQueue\ConsumerFactory::class);
+        foreach ($consumers as $consumerName) {
+            $consumer = $consumerFactory->get($consumerName, self::BATCHSIZE);
+            $consumer->process(self::BATCHSIZE);
         }
-        $productsQueue = $this->queueRepository->get('amqp', 'storefront.catalog.product.connector');
-        while ($this->getAsyncMessage($productsQueue)) {
-            continue;
-        }
-        $catalogDataQueue = $this->queueRepository->get('amqp', 'storefront.catalog.data.consume');
-        while ($this->getAsyncMessage($catalogDataQueue)) {
-            continue;
-        }
-        $catalogStorefrontConsumers->stopConsumers();
     }
 }

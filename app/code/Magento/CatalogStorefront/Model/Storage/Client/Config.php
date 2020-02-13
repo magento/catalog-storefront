@@ -100,7 +100,7 @@ class Config
     {
         $configData = $configReader->load(ConfigFilePool::APP_ENV);
         $this->config = isset($configData['catalog-store-front'])
-            ? array_merge_recursive(self::$DEFAULT_CONFIG, $configData['catalog-store-front'])
+            ? array_replace_recursive(self::$DEFAULT_CONFIG, $configData['catalog-store-front'])
             : self::$DEFAULT_CONFIG;
         $options = $this->config['connections']['default'];
 
@@ -139,7 +139,7 @@ class Config
 
     /**
      * Get alias name.
-     * 
+     *
      * @return string
      */
     public function getAliasName(): string

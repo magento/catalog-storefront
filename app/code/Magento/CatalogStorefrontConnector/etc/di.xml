@@ -13,11 +13,20 @@
         <plugin name="collectDataForStorefrontApplication" type="Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataForUpdate" />
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Category">
-        <plugin name="collectCategoryDataForStorefrontApplication" type="Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate" />
+        <plugin name="collectCategoryDataForStorefrontApplicationOnSave" type="Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataOnSave" />
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Product\Category\Action\Rows">
+        <plugin name="collectCategoriesDataForStorefrontApplicationOnUpdate" type="Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate" />
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Product">
-        <plugin name="collectCategoryDataForStorefrontApplicationOnSave" type="Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataOnSave" />
+        <plugin name="collectProductsDataForStorefrontApplicationOnSave" type="Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataOnSave" />
     </type>
+
+    <!-- Add category cache identities -->
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Product\Identity">
+        <plugin name="addCategoriesCacheIdentities" type="\Magento\CatalogStorefrontConnector\Plugin\Resolver\CategoryCacheIdentity" />
+    </type>
+
     <type name="Magento\Framework\MessageQueue\MergerFactory">
         <arguments>
             <argument name="mergers" xsi:type="array">
@@ -65,10 +74,17 @@
     </virtualType>
     <type name="Magento\CatalogStorefrontConnector\Plugin\ProductUpdatesPublisher">
         <arguments>
+            <argument name="queuePublisher" xsi:type="object">\Magento\Framework\MessageQueue\PublisherInterface\Proxy</argument>
             <argument name="logger" xsi:type="object">CatalogStorefrontConnectorLogger</argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate">
+    <type name="Magento\CatalogStorefrontConnector\Plugin\CategoryUpdatesPublisher">
+        <arguments>
+            <argument name="queuePublisher" xsi:type="object">\Magento\Framework\MessageQueue\PublisherInterface\Proxy</argument>
+            <argument name="logger" xsi:type="object">CatalogStorefrontConnectorLogger</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataOnSave">
         <arguments>
             <argument name="logger" xsi:type="object">CatalogStorefrontConnectorLogger</argument>
         </arguments>
