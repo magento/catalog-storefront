@@ -63,8 +63,9 @@ class UpdateCategoriesUponConfigChangeObserver implements ObserverInterface
 
         if (\in_array(Configuration::XML_PATH_SHOW_OUT_OF_STOCK, $changedPaths, true)) {
             foreach ($this->storeManager->getStores() as $store) {
-                foreach ($this->catalogEntityIdsProvider->getCategoryIds((int)$store->getId()) as $categoryIds) {
-                    $this->categoryPublisher->publish($categoryIds, $store->getId());
+                $storeId = (int)$store->getId();
+                foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $categoryIds) {
+                    $this->categoryPublisher->publish($categoryIds, $storeId);
                 }
             }
         }
