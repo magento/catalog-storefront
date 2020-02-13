@@ -11,6 +11,7 @@
         "magento/module-category-extractor": "*",
         "magento/module-catalog-extractor": "*",
         "magento/module-catalog-search": "*",
+        "magento/module-catalog-storefront-connector": "*",
         "magento/module-config": "*",
         "magento/module-store": "*"
     },
