@@ -64,7 +64,7 @@ class CategoryDataProvider
         if (!$categoryIds) {
             return $items;
         }
-        $categories = [];
+        $entities = [];
         $storageName = $this->storageState->getCurrentDataSourceName([$scopes['store'], Category::ENTITY_NAME]);
         try {
             $entities = $this->query->getEntries(
@@ -87,12 +87,7 @@ class CategoryDataProvider
             $this->logger->error($e);
         }
 
-        foreach ($entities as $entry) {
-            $data = $entry->getData();
-            $categories[$entry->getId()] = $data;
-        }
-
-        return $this->prepareItemsOutput($categories, $categoryIds);
+        return $this->prepareItemsOutput($entities->toArray(), $categoryIds);
     }
 
     /**

@@ -72,9 +72,8 @@ class ProductDataProvider
         if (!$productIds) {
             return $items;
         }
-        $products = [];
-        $storageName = $this->storageState->getCurrentDataSourceName([$scopes['store'], Product::ENTITY_NAME]);
         $entities = [];
+        $storageName = $this->storageState->getCurrentDataSourceName([$scopes['store'], Product::ENTITY_NAME]);
         try {
             $entities = $this->query->getEntries(
                 $storageName,
@@ -96,16 +95,7 @@ class ProductDataProvider
             $this->logger->error($e);
         }
 
-        foreach ($entities as $entry) {
-            $data = $entry->getData();
-            if (!$data) {
-                continue;
-            }
-            $data['id'] = $entry->getId();
-            $products[$entry->getId()] = $data;
-        }
-
-        $products = $this->linkedEntityHydrator->hydrate($products, $attributes, $scopes);
+        $products = $this->linkedEntityHydrator->hydrate($entities->toArray(), $attributes, $scopes);
 
         return $this->prepareItemsOutput($products, $productIds);
     }

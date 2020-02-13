@@ -118,7 +118,7 @@ class ElasticsearchQuery implements QueryInterface
         }
         $this->checkErrors($result, $indexName);
 
-        return $this->documentIteratorFactory->create($result);
+        return $this->documentIteratorFactory->create($ids, $result);
     }
 
     /**

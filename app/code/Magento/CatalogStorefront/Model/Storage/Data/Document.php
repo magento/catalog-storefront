@@ -24,8 +24,8 @@ class Document implements EntryInterface
      */
     public function __construct(array $data)
     {
-        $data['_id'] = (int)$data['_id'];
-        $this->data = $data;
+        $this->data['id'] = (int)$data['_id'];
+        $this->data = $data['_source'];
     }
 
     /**
@@ -33,7 +33,7 @@ class Document implements EntryInterface
      */
     public function getId(): int
     {
-        return $this->data['_id'];
+        return $this->data['id'];
     }
 
     /**
@@ -41,18 +41,10 @@ class Document implements EntryInterface
      */
     public function getData(string $field = '')
     {
-        // handle get/mget query when document was not found in index
-        if (isset($this->data['found']) && $this->data['found'] === false) {
-            return null;
-        }
-
-        $result = $this->data['_source'];
-
         if ('' !== $field) {
-            $result = $result[$field] ?? null;
+            return isset($this->data[$field]) ? $this->data[$field] : null;
         }
-
-        return $result;
+        return $this->data;
     }
 
     /**
