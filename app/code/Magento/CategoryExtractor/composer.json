@@ -10,8 +10,7 @@
         "magento/module-catalog": "*",
         "magento/module-eav": "*",
         "magento/module-catalog-extractor": "*",
-        "magento/module-store": "*",
-        "magento/module-search": "*"
+        "magento/module-store": "*"
     },
     "suggest": {
         "magento/module-customer": "*",
