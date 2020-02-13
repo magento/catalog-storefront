@@ -42,6 +42,7 @@
                 </item>
                 <item name="category" xsi:type="array">
                     <item xsi:type="string" name="categories">categories</item>
+                    <item xsi:type="string" name="children">children</item>
                 </item>
             </argument>
         </arguments>
@@ -75,6 +76,12 @@
         </arguments>
     </type>
     <type name="Magento\CatalogStorefront\DataProvider\CategoryDataProvider">
+        <arguments>
+            <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchQuery">
         <arguments>
             <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
         </arguments>

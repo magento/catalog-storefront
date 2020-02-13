@@ -25,4 +25,7 @@
     <type name="Magento\CatalogInventory\Api\StockRegistryInterface">
         <plugin name="collectProductDataForStorefrontApplicationOnStockChange" type="Magento\CatalogInventoryExtractor\Plugin\CollectProductsDataForUpdateAfterStockUpdate" />
     </type>
+    <type name="Magento\Config\Model\ResourceModel\Config">
+        <plugin name="updateCategoriesDataOnStockConfigurationChange" type="Magento\CatalogInventoryExtractor\Plugin\UpdateCategoriesOnConfigurationChange" />
+    </type>
 </config>

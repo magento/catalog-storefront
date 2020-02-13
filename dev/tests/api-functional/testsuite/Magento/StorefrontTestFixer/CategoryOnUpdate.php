@@ -7,15 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\StorefrontTestFixer;
 
-use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
-use Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataOnSave;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Catalog\Model\Indexer\Product\Category\Action\Rows;
+use Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Plugin for collect category data during saving process
  */
-class CategoryAfterSave extends CollectCategoriesDataOnSave
+class CategoryOnUpdate extends CollectCategoriesDataForUpdate
 {
     /**
      * @inheritdoc
@@ -24,12 +23,13 @@ class CategoryAfterSave extends CollectCategoriesDataOnSave
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function afterSave(
-        CategoryResource $subject,
-        CategoryResource $result,
-        AbstractModel $category
-    ): CategoryResource {
-        $result = parent::afterSave($subject, $result, $category);
+    public function afterExecute(
+        Rows $subject,
+        Rows $result,
+        array $entityIds = [],
+        $useTempTable = false
+    ): Rows {
+        $result = parent::afterExecute($subject, $result, $entityIds, $useTempTable);
 
         $objectManager = Bootstrap::getObjectManager();
         /** @var ConsumerInvoker $consumerInvoker */

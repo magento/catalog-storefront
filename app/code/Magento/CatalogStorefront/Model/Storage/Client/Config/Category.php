@@ -8,9 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefront\Model\Storage\Client\Config;
 
-use Magento\Framework\App\DeploymentConfig\Reader;
-use Magento\Framework\Config\File\ConfigFilePool;
-
 /**
  * Category entity type config.
  */

@@ -9,19 +9,18 @@ namespace Magento\CatalogStorefrontConnector\Plugin;
 
 use Magento\CatalogStorefrontConnector\Model\UpdatedEntitiesMessageBuilder;
 use Magento\Framework\MessageQueue\PublisherInterface;
-use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
 use Magento\Store\Model\Store;
 use Psr\Log\LoggerInterface;
 
 /**
- * Publish product updates to the internal queue
+ * Publish category updates to the internal queue
  */
-class ProductUpdatesPublisher
+class CategoryUpdatesPublisher
 {
     /**
      * Queue topic name
      */
-    private const QUEUE_TOPIC = 'storefront.catalog.product.update';
+    private const QUEUE_TOPIC = 'storefront.catalog.category.update';
 
     /**
      * @var PublisherInterface
@@ -34,11 +33,6 @@ class ProductUpdatesPublisher
     private $messageBuilder;
 
     /**
-     * @var FulltextResource
-     */
-    private $fulltextResource;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -46,48 +40,39 @@ class ProductUpdatesPublisher
     /**
      * @param PublisherInterface $queuePublisher
      * @param UpdatedEntitiesMessageBuilder $messageBuilder
-     * @param FulltextResource $fulltextResource
      * @param LoggerInterface $logger
      */
     public function __construct(
         PublisherInterface $queuePublisher,
         UpdatedEntitiesMessageBuilder $messageBuilder,
-        FulltextResource $fulltextResource,
         LoggerInterface $logger
     ) {
         $this->queuePublisher = $queuePublisher;
         $this->messageBuilder = $messageBuilder;
-        $this->fulltextResource = $fulltextResource;
         $this->logger = $logger;
     }
 
     /**
-     * Collect store ID and product IDs for scope of reindexed products
+     * Collect store ID and category IDs for scope of reindexed categories
      *
-     * @param array $productIds
+     * @param array $categoryIds
      * @param int $storeId
      * @return void
      */
-    public function publish(array $productIds, int $storeId): void
+    public function publish(array $categoryIds, int $storeId): void
     {
         if ($storeId === Store::DEFAULT_STORE_ID) {
             return;
         }
-        // add related products only in case of partial reindex
-        if ($productIds) {
-            $productIds = array_unique(
-                array_merge($productIds, $this->fulltextResource->getRelationsByChild($productIds))
-            );
-        }
-        $message = $this->messageBuilder->build($storeId, $productIds);
+        $message = $this->messageBuilder->build($storeId, $categoryIds);
         try {
             $this->logger->debug(
-                \sprintf('Collect product ids: "%s" in store %s', \implode(', ', $productIds), $storeId)
+                \sprintf('Collect category ids: "%s" in store %s', \implode(', ', $categoryIds), $storeId)
             );
             $this->queuePublisher->publish(self::QUEUE_TOPIC, $message);
         } catch (\Throwable $e) {
             $this->logger->critical(
-                \sprintf('Error on collect product ids "%s" in store %s', \implode(', ', $productIds), $storeId),
+                \sprintf('Error on collect category ids "%s" in store %s', \implode(', ', $categoryIds), $storeId),
                 ['exception' => $e]
             );
         }

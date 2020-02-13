@@ -34,18 +34,26 @@ class CategoryDataProvider
     private $logger;
 
     /**
+     * @var LinkedEntityHydrator
+     */
+    private $linkedEntityHydrator;
+
+    /**
      * @param QueryInterface $query
      * @param State $storageState
      * @param LoggerInterface $logger
+     * @param LinkedEntityHydrator $linkedEntityHydrator
      */
     public function __construct(
         QueryInterface $query,
         State $storageState,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        LinkedEntityHydrator $linkedEntityHydrator
     ) {
         $this->query = $query;
         $this->storageState = $storageState;
         $this->logger = $logger;
+        $this->linkedEntityHydrator = $linkedEntityHydrator;
     }
 
     /**
@@ -89,8 +97,12 @@ class CategoryDataProvider
 
         foreach ($entities as $entry) {
             $data = $entry->getData();
+            if (!$data) {
+                continue;
+            }
             $categories[$entry->getId()] = $data;
         }
+        $categories = $this->linkedEntityHydrator->hydrate($categories, $attributes, $scopes);
 
         return $this->prepareItemsOutput($categories, $categoryIds);
     }
