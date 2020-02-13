@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefrontConnector\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Store\Model\Store;
 
@@ -27,15 +29,23 @@ class CollectCategoriesDataOnSave
     private $productPublisher;
 
     /**
+     * @var IndexerRegistry
+     */
+    private $indexerRegistry;
+
+    /**
      * @param CategoryUpdatesPublisher $categoryPublisher
      * @param ProductUpdatesPublisher $productPublisher
+     * @param IndexerRegistry $indexerRegistry
      */
     public function __construct(
         CategoryUpdatesPublisher $categoryPublisher,
-        ProductUpdatesPublisher $productPublisher
+        ProductUpdatesPublisher $productPublisher,
+        IndexerRegistry $indexerRegistry
     ) {
         $this->categoryPublisher = $categoryPublisher;
         $this->productPublisher = $productPublisher;
+        $this->indexerRegistry = $indexerRegistry;
     }
 
     /**
@@ -52,6 +62,9 @@ class CollectCategoriesDataOnSave
         CategoryResource $result,
         AbstractModel $category
     ): CategoryResource {
+        if ($this->isIndexerRunOnSchedule()) {
+            return $result;
+        }
         $categoryId = (string)$category->getId();
         foreach ($category->getStoreIds() as $storeId) {
             $storeId = (int)$storeId;
@@ -69,5 +82,17 @@ class CollectCategoriesDataOnSave
         }
 
         return $result;
+    }
+
+
+    /**
+     * Is indexer run in "on schedule" mode
+     *
+     * @return bool
+     */
+    private function isIndexerRunOnSchedule(): bool
+    {
+        $indexer = $this->indexerRegistry->get(Fulltext::INDEXER_ID);
+        return $indexer->isScheduled();
     }
 }

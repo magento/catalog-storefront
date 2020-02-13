@@ -37,15 +37,12 @@ class CollectCategoriesDataForUpdate
 
     /**
      * @param CategoryUpdatesPublisher $categoryPublisher
-     * @param IndexerRegistry $indexerRegistry
      * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         CategoryUpdatesPublisher $categoryPublisher,
-        IndexerRegistry $indexerRegistry,
         CollectionFactory $collectionFactory
     ) {
-        $this->indexerRegistry = $indexerRegistry;
         $this->collectionFactory = $collectionFactory;
         $this->categoryPublisher = $categoryPublisher;
     }
@@ -68,11 +65,9 @@ class CollectCategoriesDataForUpdate
         array $categoryIds = [],
         $useTempTable = false
     ): Rows {
-        if ($this->isIndexerRunOnSchedule()) {
-            return $result;
-        }
         $categoryCollection = $this->collectionFactory->create();
         $categoryCollection->addFieldToFilter('entity_id', $categoryIds);
+        $categoryIdsByStore = [];
         /** @var \Magento\Catalog\Model\Category $category */
         foreach ($categoryCollection as $category) {
             $categoryId = (string)$category->getId();
@@ -81,26 +76,17 @@ class CollectCategoriesDataForUpdate
                 if ($storeId === Store::DEFAULT_STORE_ID) {
                     continue ;
                 }
-                $categoryIds = [$categoryId];
+                $categoryIdsByStore[$storeId][] = [$categoryId];
 
                 if (true === $category->dataHasChangedFor(Category::KEY_IS_ACTIVE)) {
-                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $categoryIds = array_merge($categoryIds, $category->getParentIds());
+                    $categoryIdsByStore[$storeId][] = $category->getParentIds();
                 }
-                $this->categoryPublisher->publish($categoryIds, $storeId);
             }
         }
+        foreach ($categoryIdsByStore as $storeId => $storeCategoryIds) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+            $this->categoryPublisher->publish(array_unique(array_merge(...$storeCategoryIds)), $storeId);
+        }
         return $result;
-    }
-
-    /**
-     * Is indexer run in "on schedule" mode
-     *
-     * @return bool
-     */
-    private function isIndexerRunOnSchedule(): bool
-    {
-        $indexer = $this->indexerRegistry->get(Fulltext::INDEXER_ID);
-        return $indexer->isScheduled();
     }
 }
