@@ -47,25 +47,8 @@ class DocumentIteratorFactory
      */
     public function create(array $data = []): DocumentIterator
     {
-        $subDocuments = [];
-        $nestedEntries = $data['aggregations']['nested_entries'] ?? [];
-
-        if (!empty($nestedEntries) && $nestedEntries['doc_count'] > 0) {
-            foreach ($nestedEntries['variants']['hits']['hits'] as $item) {
-                $subDocuments[(int)$item['_routing']][] = $this->documentFactory->create($item);
-            }
-        }
-
-        $items = $data['hits']['hits'] ?? $data['docs'];
-
         $documents = [];
-        foreach ($items as $item) {
-            if (!empty($subDocuments) && isset($subDocuments[$item['_id']])) {
-                $item['variants'] = $this->objectManager->create(
-                    DocumentIterator::class,
-                    ['documents' => $subDocuments[$item['_id']]]
-                );
-            }
+        foreach ($data['docs'] as $item) {
             $documents[] = $this->documentFactory->create($item);
         }
 
