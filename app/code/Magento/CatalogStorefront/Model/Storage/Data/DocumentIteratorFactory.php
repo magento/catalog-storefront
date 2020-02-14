@@ -58,7 +58,9 @@ class DocumentIteratorFactory
         }
 
         foreach ($ids as $id) {
-            $documents[$id] = isset($tmp[$id]) ? $tmp[$id] : [];
+            if (isset($tmp[$id])) {
+                $documents[$id] = $tmp[$id];
+            }
         }
 
         return $this->objectManager->create(DocumentIterator::class, ['documents' => $documents]);

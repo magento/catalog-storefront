@@ -95,9 +95,7 @@ class ProductDataProvider
             $this->logger->error($e);
         }
 
-        $products = $this->linkedEntityHydrator->hydrate($entities->toArray(), $attributes, $scopes);
-
-        return $this->prepareItemsOutput($products, $productIds);
+        return $this->linkedEntityHydrator->hydrate($entities->toArray(), $attributes, $scopes);
     }
 
     /**
@@ -118,25 +116,5 @@ class ProductDataProvider
         }
 
         return $firstLevel;
-    }
-
-    /**
-     * Process fetched data and prepare it for output format.
-     *
-     * @param array $items
-     * @param int[] $productIds
-     * @return array
-     */
-    private function prepareItemsOutput(array $items, array $productIds): array
-    {
-        // return items in the same order as product ids
-        $sortedItems = [];
-        foreach ($productIds as $id) {
-            if (isset($items[$id])) {
-                $sortedItems[$id] = $items[$id];
-            }
-        }
-
-        return $sortedItems;
     }
 }

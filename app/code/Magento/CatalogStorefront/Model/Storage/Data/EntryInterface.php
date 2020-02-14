@@ -16,9 +16,9 @@ interface EntryInterface
     /**
      * Get identifier of entry.
      *
-     * @return int
+     * @return string
      */
-    public function getId(): int;
+    public function getId(): string;
 
     /**
      * Get data of entry.
