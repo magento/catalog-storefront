@@ -63,8 +63,12 @@ class CategoryAttributes
                 $this->categoryAttributeQueryBuilder->build($entityIds, $attributeCodes, $storeId)
             )
         );
-        foreach ($attributes as &$categoryAttributes) {
-            $categoryAttributes = \array_intersect_key($categoryAttributes, \array_flip($attributeCodes));
+        foreach ($attributes as $n => &$categoryAttributes) {
+            if (empty($category['is_active'])) {
+                unset($attributes[$n]);
+            } else {
+                $categoryAttributes = \array_intersect_key($categoryAttributes, \array_flip($attributeCodes));
+            }
         }
 
         return $attributes;

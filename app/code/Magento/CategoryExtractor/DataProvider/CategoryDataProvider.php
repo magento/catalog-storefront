@@ -21,7 +21,8 @@ class CategoryDataProvider implements DataProviderInterface
      * Required attributes for category entity
      */
     private const REQUIRED_ATTRIBUTES = [
-        'id'
+        'id',
+        'is_active',
     ];
 
     /**
