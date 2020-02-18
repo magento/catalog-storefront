@@ -85,12 +85,6 @@ class CategorySearch implements CategoryInterface
             $criteria->getScopes()
         );
 
-        //TODO: Move to CategoryDataProvider
-        foreach ($categories as $n => $category) {
-            if (empty($category['is_active'])) {
-                unset($categories[$n]);
-            }
-        }
         return $this->categoryResultContainerFactory->create(
             [
                 'errors' => [],

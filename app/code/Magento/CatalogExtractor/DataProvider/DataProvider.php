@@ -149,16 +149,7 @@ class DataProvider implements DataProviderInterface
             $items = \array_combine($productIds, \array_fill(0, \count($productIds), []));
         }
 
-        // TODO: MC-29513 - do not sort items (not needed due to data pushed to storage)
-        // return items in the same order as product ids
-        $sortedItems = [];
-        foreach ($productIds as $id) {
-            if (isset($items[$id])) {
-                $sortedItems[$id] = $items[$id];
-            }
-        }
-
-        return $sortedItems;
+        return $items;
     }
 
     /**
