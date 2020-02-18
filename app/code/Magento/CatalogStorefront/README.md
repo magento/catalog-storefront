@@ -41,10 +41,24 @@ In case of data is not found for specified id Service doesn't return any data
 
 ## Storage
 
+Storage API depicts the interface of the collaboration between Catalog Storefront application
+and the Storage service behind them. Currently, there is only Elasticsearch implementation.
+Elasticsearch was chosen as a storage service by default because it's the most reliable
+and easy scalable document oriented storage service that is fit under our performance 
+expectations from the Catalog Storefront application itself.
 
-TBD...
+Storage API split into three different piece:
+1. DataDefinitionInterface - DDL operations with storage. For more details and to see what's
+operations are required for Catalog Storefront application, please look at the interface.
+2. CommandInterface - contains write operations that is required for Catalog Storefront 
+application.
+3. QueryInterface - contains data retrieving operations from the storage.
 
-Add storage configuration to env.php file:
+To be able to replace current implementation you need to implement three interfaces
+above and override DI preferences to new implementations.
+
+Default Storage configuration:
+(You can override any options through app/etc/env.php file.)
 ```
     'catalog-store-front' => [
         'connections' => [
