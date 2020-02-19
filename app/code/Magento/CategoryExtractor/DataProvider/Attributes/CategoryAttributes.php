@@ -64,7 +64,7 @@ class CategoryAttributes
             )
         );
         foreach ($attributes as $n => &$categoryAttributes) {
-            if (empty($category['is_active'])) {
+            if (empty($categoryAttributes['is_active'])) {
                 unset($attributes[$n]);
             } else {
                 $categoryAttributes = \array_intersect_key($categoryAttributes, \array_flip($attributeCodes));
