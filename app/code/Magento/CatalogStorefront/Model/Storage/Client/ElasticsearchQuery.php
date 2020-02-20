@@ -70,16 +70,6 @@ class ElasticsearchQuery implements QueryInterface
     }
 
     /**
-     * Get Elasticsearch connection.
-     *
-     * @return \Elasticsearch\Client
-     */
-    private function getConnection()
-    {
-        return $this->connectionPull->getConnection();
-    }
-
-    /**
      * @inheritdoc
      */
     public function getEntry(string $indexName, string $entityName, int $id, array $fields): EntryInterface
@@ -91,7 +81,7 @@ class ElasticsearchQuery implements QueryInterface
             '_source' => $fields
         ];
         try {
-            $result = $this->getConnection()->get($query);
+            $result = $this->connectionPull->getConnection()->get($query);
         } catch (\Throwable $throwable) {
             throw new NotFoundException(
                 __("'$entityName' type document with id '$id' not found in index '$indexName'."),
@@ -115,7 +105,7 @@ class ElasticsearchQuery implements QueryInterface
             '_source' => $fields
         ];
         try {
-            $result = $this->getConnection()->mget($query);
+            $result = $this->connectionPull->getConnection()->mget($query);
         } catch (\Throwable $throwable) {
             throw new RuntimeException(
                 __(
@@ -127,7 +117,7 @@ class ElasticsearchQuery implements QueryInterface
         }
         $this->checkErrors($result, $indexName);
 
-        return $this->documentIteratorFactory->create($result);
+        return $this->documentIteratorFactory->create($ids, $result);
     }
 
     /**

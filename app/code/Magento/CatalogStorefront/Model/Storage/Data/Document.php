@@ -24,16 +24,16 @@ class Document implements EntryInterface
      */
     public function __construct(array $data)
     {
-        $data['_id'] = (int)$data['_id'];
-        $this->data = $data;
+        $this->data = $data['_source'] ?? [];
+        $this->data['id'] = (string)$data['_id'];
     }
 
     /**
      * @inheritdoc
      */
-    public function getId(): int
+    public function getId(): string
     {
-        return $this->data['_id'];
+        return $this->data['id'];
     }
 
     /**
@@ -41,25 +41,9 @@ class Document implements EntryInterface
      */
     public function getData(string $field = '')
     {
-        // handle get/mget query when document was not found in index
-        if (isset($this->data['found']) && $this->data['found'] === false) {
-            return null;
-        }
-
-        $result = $this->data['_source'];
-
         if ('' !== $field) {
-            $result = $result[$field] ?? null;
+            return $this->data[$field] ?? null;
         }
-
-        return $result;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getVariants(): EntryIteratorInterface
-    {
-        return $this->data['variants'] ?? [];
+        return $this->data;
     }
 }

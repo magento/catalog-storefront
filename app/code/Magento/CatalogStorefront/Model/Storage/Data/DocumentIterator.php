@@ -19,11 +19,6 @@ class DocumentIterator implements EntryIteratorInterface
     private $documents;
 
     /**
-     * @var int
-     */
-    private $position = 0;
-
-    /**
      * @param Document[] $documents
      */
     public function __construct(array $documents)
@@ -36,7 +31,7 @@ class DocumentIterator implements EntryIteratorInterface
      */
     public function next()
     {
-        $this->position++;
+        next($this->documents);
     }
 
     /**
@@ -44,7 +39,7 @@ class DocumentIterator implements EntryIteratorInterface
      */
     public function key()
     {
-        return $this->position;
+        key($this->documents);
     }
 
     /**
@@ -52,7 +47,7 @@ class DocumentIterator implements EntryIteratorInterface
      */
     public function valid()
     {
-        return isset($this->documents[$this->position]);
+        return key($this->documents) !== null;
     }
 
     /**
@@ -60,7 +55,7 @@ class DocumentIterator implements EntryIteratorInterface
      */
     public function rewind()
     {
-        $this->position = 0;
+        reset($this->documents);
     }
 
     /**
@@ -68,6 +63,19 @@ class DocumentIterator implements EntryIteratorInterface
      */
     public function current(): EntryInterface
     {
-        return $this->documents[$this->position];
+        return current($this->documents);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function toArray(): array
+    {
+        $data = [];
+        reset($this->documents);
+        foreach ($this->documents as $doc) {
+            $data[$doc->getId()] = $doc->getData();
+        }
+        return $data;
     }
 }

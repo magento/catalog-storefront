@@ -107,9 +107,17 @@ class CategoriesQueueConsumerTest extends AbstractGraphQl
         $queue = $this->queueRepository->get('amqp', 'storefront.catalog.data.consume');
         $queueBody = $this->getQueueBody($queue);
         $parsedData = $this->jsonHelper->jsonDecode($queueBody);
-        $parsedData = $this->jsonHelper->jsonDecode(reset($parsedData));
+        $categoryData = [];
+        foreach ($parsedData as $key => $item) {
+            $parsedData[$key] = $this->jsonHelper->jsonDecode($item);
+            if ($parsedData[$key]['entity_id'] == 333) {
+                $categoryData = $parsedData[$key];
+                break;
+            }
+        }
+        $this->assertNotEmpty($categoryData, 'Category is not found in a queue.');
 
-        foreach ($parsedData['entity_data'] as $attributeKey => $attributeValue) {
+        foreach ($categoryData['entity_data'] as $attributeKey => $attributeValue) {
             $this->assertEquals($expectedData[$attributeKey], $attributeValue);
         }
     }

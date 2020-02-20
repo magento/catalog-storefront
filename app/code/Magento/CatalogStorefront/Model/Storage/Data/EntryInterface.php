@@ -16,9 +16,9 @@ interface EntryInterface
     /**
      * Get identifier of entry.
      *
-     * @return int
+     * @return string
      */
-    public function getId(): int;
+    public function getId(): string;
 
     /**
      * Get data of entry.
@@ -29,11 +29,4 @@ interface EntryInterface
      * @return mixed
      */
     public function getData(string $field = '');
-
-    /**
-     * Get variants of composite entry.
-     *
-     * @return EntryIteratorInterface
-     */
-    public function getVariants(): EntryIteratorInterface;
 }

@@ -177,15 +177,14 @@ class ClientAdapterTest extends TestCase
     public function testNotFoundItem()
     {
         $nonExistingId = 123123123;
-        $item = $this->storageQuery->getEntries(
+        $isValid = $this->storageQuery->getEntries(
             $this->state->getAliasName(),
             'product',
             [$nonExistingId],
             ['sku']
-        )->current();
+        )->valid();
 
-        $this->assertEquals($nonExistingId, $item->getId());
-        $this->assertNull($item->getData());
+        $this->assertFalse($isValid);
     }
 
     /**

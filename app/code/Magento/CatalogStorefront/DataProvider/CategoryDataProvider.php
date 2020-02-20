@@ -72,7 +72,7 @@ class CategoryDataProvider
         if (!$categoryIds) {
             return $items;
         }
-        $categories = [];
+        $entities = [];
         $storageName = $this->storageState->getCurrentDataSourceName([$scopes['store'], Category::ENTITY_NAME]);
         try {
             $entities = $this->query->getEntries(
@@ -95,16 +95,7 @@ class CategoryDataProvider
             $this->logger->error($e);
         }
 
-        foreach ($entities as $entry) {
-            $data = $entry->getData();
-            if (!$data) {
-                continue;
-            }
-            $categories[$entry->getId()] = $data;
-        }
-        $categories = $this->linkedEntityHydrator->hydrate($categories, $attributes, $scopes);
-
-        return $this->prepareItemsOutput($categories, $categoryIds);
+        return $this->linkedEntityHydrator->hydrate($entities->toArray(), $attributes, $scopes);
     }
 
     /**
@@ -121,24 +112,5 @@ class CategoryDataProvider
         }
 
         return $firstLevel;
-    }
-
-    /**
-     * Process fetched data and prepare it for output format.
-     *
-     * @param array $items
-     * @param int[] $categoryIds
-     * @return array
-     */
-    private function prepareItemsOutput(array $items, array $categoryIds): array
-    {
-        // return items in the same order as category ids
-        $sortedItems = [];
-        foreach ($categoryIds as $id) {
-            if (isset($items[$id])) {
-                $sortedItems[$id] = $items[$id];
-            }
-        }
-        return $sortedItems;
     }
 }

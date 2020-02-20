@@ -19,4 +19,11 @@ interface EntryIteratorInterface extends \Iterator
      * @return EntryInterface
      */
     public function current(): EntryInterface;
+
+    /**
+     * Convert data to array.
+     *
+     * @return array
+     */
+    public function toArray(): array;
 }

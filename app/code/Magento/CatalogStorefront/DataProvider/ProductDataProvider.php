@@ -72,9 +72,8 @@ class ProductDataProvider
         if (!$productIds) {
             return $items;
         }
-        $products = [];
-        $storageName = $this->storageState->getCurrentDataSourceName([$scopes['store'], Product::ENTITY_NAME]);
         $entities = [];
+        $storageName = $this->storageState->getCurrentDataSourceName([$scopes['store'], Product::ENTITY_NAME]);
         try {
             $entities = $this->query->getEntries(
                 $storageName,
@@ -96,18 +95,7 @@ class ProductDataProvider
             $this->logger->error($e);
         }
 
-        foreach ($entities as $entry) {
-            $data = $entry->getData();
-            if (!$data) {
-                continue;
-            }
-            $data['id'] = $entry->getId();
-            $products[$entry->getId()] = $data;
-        }
-
-        $products = $this->linkedEntityHydrator->hydrate($products, $attributes, $scopes);
-
-        return $this->prepareItemsOutput($products, $productIds);
+        return $this->linkedEntityHydrator->hydrate($entities->toArray(), $attributes, $scopes);
     }
 
     /**
@@ -128,25 +116,5 @@ class ProductDataProvider
         }
 
         return $firstLevel;
-    }
-
-    /**
-     * Process fetched data and prepare it for output format.
-     *
-     * @param array $items
-     * @param int[] $productIds
-     * @return array
-     */
-    private function prepareItemsOutput(array $items, array $productIds): array
-    {
-        // return items in the same order as product ids
-        $sortedItems = [];
-        foreach ($productIds as $id) {
-            if (isset($items[$id])) {
-                $sortedItems[$id] = $items[$id];
-            }
-        }
-
-        return $sortedItems;
     }
 }

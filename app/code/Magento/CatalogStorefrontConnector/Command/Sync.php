@@ -107,7 +107,7 @@ class Sync extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $entityType = $this->getEntityType($input);
-        // TODO: clean product ids from storefront.catalog.category.update topic
+        // TODO: MC-30961 clean product ids from storefront.catalog.category.update topic
         foreach ($this->storeManager->getStores() as $store) {
             $storeId = (int)$store->getId();
 

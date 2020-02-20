@@ -42,14 +42,25 @@ class DocumentIteratorFactory
     /**
      * Create class instance with specified parameters
      *
+     * @param array $ids
      * @param array $data
      * @return DocumentIterator
      */
-    public function create(array $data = []): DocumentIterator
+    public function create(array $ids, array $data = []): DocumentIterator
     {
+        $tmp = [];
         $documents = [];
         foreach ($data['docs'] as $item) {
-            $documents[] = $this->documentFactory->create($item);
+            if (isset($item['found']) && $item['found'] === false) {
+                continue;
+            }
+            $tmp[(int)$item['_id']] = $this->documentFactory->create($item);
+        }
+
+        foreach ($ids as $id) {
+            if (isset($tmp[$id])) {
+                $documents[$id] = $tmp[$id];
+            }
         }
 
         return $this->objectManager->create(DocumentIterator::class, ['documents' => $documents]);
