@@ -49,6 +49,14 @@ class CatalogItemMessageBuilder
         $message = $this->serializer->unserialize($message);
         $this->validateMessage($message);
 
+        // TODO: MC-31164 ad-hoc fix to handle issue with mapping on configurable product creation in elasticsearch
+        $entity = &$message['entity_data'];
+        if (isset($entity['configurable_options'])) {
+            $entity['configurable_options'] = $this->serializer->serialize($entity['configurable_options']);
+        }
+        if (isset($entity['variants'])) {
+            $entity['variants'] = $this->serializer->serialize($entity['variants']);
+        }
         /** @var CatalogItemMessage $catalogItem */
         $catalogItem = $this->catalogItemFactory->create(
             [
