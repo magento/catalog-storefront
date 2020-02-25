@@ -127,6 +127,7 @@ class Consumer
                     $this->storageSchemaManager->createEntity($sourceName, $entityType, []);
                 }
 
+                // TODO: need to separate commands on insert/delete. Delete for ids, which have empty data
                 $this->storageWriteSource->bulkInsert($sourceName, $entityType, $data);
             }
         }

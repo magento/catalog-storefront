@@ -72,7 +72,7 @@ class CategoryDataProvider
         if (!$categoryIds) {
             return $items;
         }
-        $entities = [];
+
         $storageName = $this->storageState->getCurrentDataSourceName([$scopes['store'], Category::ENTITY_NAME]);
         try {
             $entities = $this->query->getEntries(
@@ -93,6 +93,7 @@ class CategoryDataProvider
             return [];
         } catch (\Throwable $e) {
             $this->logger->error($e);
+            throw $e;
         }
 
         return $this->linkedEntityHydrator->hydrate($entities->toArray(), $attributes, $scopes);

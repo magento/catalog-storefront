@@ -95,7 +95,11 @@ class ProductPublisher
                     $this->publishEntities($productIds, $storeId);
                 } catch (\Throwable $e) {
                     $this->logger->critical(
-                        \sprintf('Error on publish product ids "%s"', \implode(', ', $productIds)),
+                        \sprintf(
+                            'Error on publish product] ids "%s" in store %s',
+                            \implode(', ', $productIds),
+                            $storeId
+                        ),
                         ['exception' => $e]
                     );
                 }

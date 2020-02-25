@@ -96,7 +96,11 @@ class CategoryPublisher
                     $this->publishEntities($categoryIds, $storeId);
                 } catch (\Throwable $e) {
                     $this->logger->critical(
-                        \sprintf('Error on publish category ids "%s"', \implode(', ', $categoryIds)),
+                        \sprintf(
+                            'Error on publish category ids "%s" in store %s',
+                            \implode(', ', $categoryIds),
+                            $storeId
+                        ),
                         ['exception' => $e]
                     );
                 }
@@ -122,6 +126,7 @@ class CategoryPublisher
                 ['verbose' => $categoriesData]
             );
 
+            //TODO: iterate over category ids and send empty message with category id to be able delete it on SF side
             foreach ($categoriesData as $category) {
                 if (!isset($category['id'])) {
                     continue;

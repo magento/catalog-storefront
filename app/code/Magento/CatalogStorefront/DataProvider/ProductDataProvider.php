@@ -72,7 +72,6 @@ class ProductDataProvider
         if (!$productIds) {
             return $items;
         }
-        $entities = [];
         $storageName = $this->storageState->getCurrentDataSourceName([$scopes['store'], Product::ENTITY_NAME]);
         try {
             $entities = $this->query->getEntries(
@@ -93,6 +92,7 @@ class ProductDataProvider
             return [];
         } catch (\Throwable $e) {
             $this->logger->error($e);
+            throw $e;
         }
 
         $products = $entities->toArray();
