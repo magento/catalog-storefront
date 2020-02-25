@@ -95,7 +95,18 @@ class ProductDataProvider
             $this->logger->error($e);
         }
 
-        return $this->linkedEntityHydrator->hydrate($entities->toArray(), $attributes, $scopes);
+        $products = $entities->toArray();
+        // TODO: MC-31164 ad-hoc fix to handle issue with mapping on configurable product creation in elasticsearch
+        foreach ($products as &$product) {
+            if (isset($product['configurable_options'])) {
+                $product['configurable_options'] = \json_decode($product['configurable_options'], true);
+            }
+            if (isset($product['variants'])) {
+                $product['variants'] = \json_decode($product['variants'], true);
+            }
+        }
+
+        return $this->linkedEntityHydrator->hydrate($products, $attributes, $scopes);
     }
 
     /**

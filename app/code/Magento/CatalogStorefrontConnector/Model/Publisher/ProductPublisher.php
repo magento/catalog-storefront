@@ -117,7 +117,7 @@ class ProductPublisher
             $productsData = $this->productsDataProvider->fetch($idsBunch, [], ['store' => $storeId]);
             $debugMessage = empty($productsData) ? 'Delete product with ids:' : 'Publish product with ids';
             $this->logger->debug(
-                \sprintf('%s: "%s"', $debugMessage, \implode(', ', $productIds)),
+                \sprintf('%s: "%s"', $debugMessage, \implode(', ', $idsBunch)),
                 ['verbose' => $productsData]
             );
 
