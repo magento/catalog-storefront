@@ -9,6 +9,9 @@
     <type name="Magento\Framework\GraphQlSchemaStitching\GraphQlReader">
         <plugin name="removeResolversForFieldsProcessedOnSF" type="Magento\StorefrontGraphQl\Plugin\SchemaReader" />
     </type>
+    <type name="Magento\CatalogGraphQl\Model\Config\CategoryAttributeReader">
+        <plugin name="removeResolversForCategoryFieldsProcessedOnSF" type="Magento\StorefrontGraphQl\Plugin\CategoryAttributeReader" />
+    </type>
 
     <type name="Magento\StorefrontGraphQl\Model\Query\ScopeProvider">
         <arguments>

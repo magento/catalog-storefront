@@ -50,7 +50,7 @@ class CanonicalUrlDataProvider implements DataProviderInterface
         $output = [];
         $attribute = !empty($attributes) ? key($attributes) : self::ATTRIBUTE;
 
-        foreach ($this->categoriesProvider->getCategoriesByIds($categoryIds) as $category) {
+        foreach ($this->categoriesProvider->getCategoriesByIds($categoryIds, $scopes['store']) as $category) {
             $categoryId = $category->getId();
             $canonicalUrl = null;
             if ($this->categoryHelper->canUseCanonicalTag($scopes['store'])) {

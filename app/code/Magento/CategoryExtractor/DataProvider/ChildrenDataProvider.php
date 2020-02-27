@@ -43,7 +43,7 @@ class ChildrenDataProvider implements DataProviderInterface
     {
         $output = [];
 
-        foreach ($this->categoriesProvider->getCategoriesByIds($categoryIds) as $category) {
+        foreach ($this->categoriesProvider->getCategoriesByIds($categoryIds, $scope['store']) as $category) {
             $categoryId = $category->getId();
             $childCategories = $category->getChildrenCategories()->getAllIds();
             $output[$categoryId][self::ATTRIBUTE] = $childCategories;

@@ -18,7 +18,6 @@
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\NewFromTo" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\NewFromTo"/>
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\Websites" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\Websites"/>
     <preference for="Magento\CatalogCmsGraphQl\Model\Resolver\Category\Block" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\Category\Block"/>
-    <preference for="Magento\CatalogGraphQl\Model\Resolver\Category\Image" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\Category\Image"/>
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\PriceRange" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\PriceRange"/>
     <preference for="Magento\RelatedProductGraphQl\Model\Resolver\Batch\RelatedProducts" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\RelatedProducts\RelatedProducts"/>
     <preference for="Magento\RelatedProductGraphQl\Model\Resolver\Batch\CrossSellProducts" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\RelatedProducts\CrossSellProducts"/>
@@ -95,6 +94,15 @@
                 <item name="BundleItemOption" xsi:type="array">
                     <item name="label" xsi:type="string">label</item>
                     <item name="product" xsi:type="string">product</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\StorefrontGraphQl\Plugin\CategoryAttributeReader">
+        <arguments>
+            <argument name="resolvers" xsi:type="array">
+                <item name="CategoryTree" xsi:type="array">
+                    <item name="image" xsi:type="string">image</item>
                 </item>
             </argument>
         </arguments>

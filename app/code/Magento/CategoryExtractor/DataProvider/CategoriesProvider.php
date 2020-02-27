@@ -33,13 +33,17 @@ class CategoriesProvider
      * Get categories by ids
      *
      * @param array $ids
+     * @param int|null $store
      * @param array|null $attributes
      * @return \Magento\Catalog\Model\ResourceModel\Category\Collection|\Magento\Catalog\Model\Category[]
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getCategoriesByIds(array $ids, array $attributes = null)
+    public function getCategoriesByIds(array $ids, int $store = null, array $attributes = null)
     {
         $categoryCollection = $this->collectionFactory->create();
+        if (null !== $store) {
+            $categoryCollection->setStoreId($store);
+        }
         $categoryCollection->addAttributeToFilter(CategoryInterface::KEY_IS_ACTIVE, ['eq' => 1]);
         $categoryCollection->addIdFilter($ids);
         if ($attributes) {
