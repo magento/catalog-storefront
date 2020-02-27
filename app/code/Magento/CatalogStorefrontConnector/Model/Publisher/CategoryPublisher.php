@@ -20,6 +20,8 @@ use Psr\Log\LoggerInterface;
  */
 class CategoryPublisher
 {
+    private const ROOT_CATEGORY_ID = 1;
+
     /**
      * @var DataProviderInterface
      */
@@ -120,25 +122,22 @@ class CategoryPublisher
         foreach (\array_chunk($categoryIds, $this->batchSize) as $idsBunch) {
             $messages = [];
             $categoriesData = $this->categoriesDataProvider->fetch($idsBunch, [], ['store' => $storeId]);
-            $debugMessage = empty($categoriesData) ? 'Delete category with ids:' : 'Publish category with ids';
             $this->logger->debug(
-                \sprintf('%s: "%s"', $debugMessage, \implode(', ', $categoryIds)),
+                \sprintf('Publish category with ids "%s" in store %s', \implode(', ', $categoryIds), $storeId),
                 ['verbose' => $categoriesData]
             );
-
-            //TODO: iterate over category ids and send empty message with category id to be able delete it on SF side
-            foreach ($categoriesData as $category) {
-                if (!isset($category['id'])) {
+            foreach ($categoryIds as $categoryId) {
+                if ($categoryId === self::ROOT_CATEGORY_ID) {
                     continue;
                 }
+                $category = isset($categoriesData[$categoryId]['id']) ? $categoriesData[$categoryId] :[];
                 $messages[] = $this->messageBuilder->build(
                     $storeId,
                     'category',
-                    (int)$category['id'],
+                    $categoryId,
                     $category
                 );
             }
-            // TODO: delete entity from storage MC-30781
             if (!empty($messages)) {
                 $this->queuePublisher->publish(self::TOPIC_NAME, $messages);
             }

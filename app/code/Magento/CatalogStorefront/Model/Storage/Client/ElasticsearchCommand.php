@@ -53,7 +53,7 @@ class ElasticsearchCommand implements CommandInterface
     /**
      * @inheritdoc
      */
-    public function bulkInsert(string $dataSourceName, string $entityName, array $entries)
+    public function bulkInsert(string $dataSourceName, string $entityName, array $entries): void
     {
         $query = $this->getDocsArrayInBulkIndexFormat($dataSourceName, $entityName, $entries, self::BULK_ACTION_INDEX);
         try {
@@ -135,6 +135,32 @@ class ElasticsearchCommand implements CommandInterface
         }
         if ($errors) {
             throw new \LogicException('List of errors: ' . \json_encode($errors));
+        }
+    }
+
+    /**
+     * @inheritdoc
+     * @throws BulkException
+     */
+    public function bulkDelete(string $dataSourceName, string $entityName, array $ids): void
+    {
+        $query = [
+            'index' => $dataSourceName,
+            'type' => $entityName,
+        ];
+        foreach ($ids as $id) {
+            $query['id'] = $id;
+            try {
+                $this->getConnection()->delete($query);
+            } catch (\Elasticsearch\Common\Exceptions\Missing404Exception $notFoundException) {
+                // do nothing - document with specified id was deleted before
+                continue;
+            } catch (\Throwable $throwable) {
+                throw new BulkException(
+                    __("Error occurred while bulk delete from '$dataSourceName' index."),
+                    $throwable
+                );
+            }
         }
     }
 }
