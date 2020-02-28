@@ -7,14 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\StorefrontTestFixer;
 
-use Magento\Catalog\Model\Indexer\Product\Category\Action\Rows;
-use Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate;
+use Magento\Catalog\Model\Category;
+use Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataOnMove;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Plugin for collect category data during saving process
  */
-class CategoryOnUpdate extends CollectCategoriesDataForUpdate
+class CategoryOnMove extends CollectCategoriesDataOnMove
 {
     /**
      * @inheritdoc
@@ -23,12 +23,11 @@ class CategoryOnUpdate extends CollectCategoriesDataForUpdate
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function afterExecute(
-        Rows $subject,
-        Rows $result,
-        array $entityIds = []
-    ): Rows {
-        $result = parent::afterExecute($subject, $result, $entityIds);
+    public function afterMove(
+        Category $category,
+        Category $result
+    ): Category {
+        $result = parent::afterMove($category, $result);
 
         $objectManager = Bootstrap::getObjectManager();
         /** @var ConsumerInvoker $consumerInvoker */
