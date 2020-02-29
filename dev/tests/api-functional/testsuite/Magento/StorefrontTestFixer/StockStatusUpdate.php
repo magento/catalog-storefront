@@ -13,7 +13,7 @@ use Magento\CatalogInventoryExtractor\Plugin\CollectProductsDataForUpdateAfterSt
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Plugin for collect product data during update of stock status
+ * Override original plugin to run consumers during tests
  */
 class StockStatusUpdate extends CollectProductsDataForUpdateAfterStockUpdate
 {
