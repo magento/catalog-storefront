@@ -138,7 +138,7 @@ class Consumer
         }
         if (!$this->storageSchemaManager->existsDataSource($sourceName)) {
             $this->logger->error(
-                \sprintf('Cannot delete entities "%s": Index "%s" does not exist', $sourceName, \implode(',', $data))
+                \sprintf('Cannot delete entities "%s": Index "%s" does not exist', \implode(',', $data), $sourceName)
             );
         }
 

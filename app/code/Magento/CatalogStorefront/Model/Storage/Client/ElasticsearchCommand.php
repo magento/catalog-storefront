@@ -64,7 +64,11 @@ class ElasticsearchCommand implements CommandInterface
             }
         } catch (\Throwable $throwable) {
             throw new BulkException(
-                __("Error occurred while bulk insert to '$dataSourceName' index."),
+                __(
+                    'Error occurred while bulk insert to "%1" index. Entity ids: "%2"',
+                    $dataSourceName,
+                    \array_column($entries, 'id')
+                ),
                 $throwable
             );
         }
@@ -144,23 +148,24 @@ class ElasticsearchCommand implements CommandInterface
      */
     public function bulkDelete(string $dataSourceName, string $entityName, array $ids): void
     {
-        $query = [
-            'index' => $dataSourceName,
-            'type' => $entityName,
-        ];
-        foreach ($ids as $id) {
-            $query['id'] = $id;
-            try {
-                $this->getConnection()->delete($query);
-            } catch (\Elasticsearch\Common\Exceptions\Missing404Exception $notFoundException) {
-                // do nothing - document with specified id was deleted before
-                continue;
-            } catch (\Throwable $throwable) {
-                throw new BulkException(
-                    __("Error occurred while bulk delete from '$dataSourceName' index."),
-                    $throwable
-                );
+        $documents = \array_map(
+            function ($id) {
+                return ['id' => $id];
+            },
+            $ids
+        );
+        $query = $this->getDocsArrayInBulkIndexFormat($dataSourceName, $entityName, $documents, self::BULK_ACTION_DELETE);
+        try {
+            $result = $this->getConnection()->bulk($query);
+            $error = $result['errors'] ?? false;
+            if ($error) {
+                $this->handleBulkError($result['items'] ?? [], self::BULK_ACTION_DELETE);
             }
+        } catch (\Throwable $throwable) {
+            throw new BulkException(
+                __('Error occurred while bulk delete from "%1" index. Entity ids: "%2"', $dataSourceName, $ids),
+                $throwable
+            );
         }
     }
 }
