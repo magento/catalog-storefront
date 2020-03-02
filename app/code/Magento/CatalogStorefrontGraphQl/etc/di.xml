@@ -98,7 +98,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\StorefrontGraphQl\Plugin\CategoryAttributeReader">
+    <type name="Magento\CatalogStorefrontGraphQl\Plugin\CategoryAttributeReader">
         <arguments>
             <argument name="resolvers" xsi:type="array">
                 <item name="CategoryTree" xsi:type="array">

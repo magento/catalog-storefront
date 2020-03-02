@@ -41,7 +41,7 @@ class CategoryAttributeReader
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterRead(Reader $subject, array $schema)
+    public function afterRead(Reader $subject, array $schema): array
     {
         foreach ($this->resolvers as $typeName => $fields) {
             if (!isset($schema[$typeName]['fields'])) {
