@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\StorefrontGraphQl\Plugin;
+namespace Magento\CatalogStorefrontGraphQl\Plugin;
 
 use Magento\CatalogGraphQl\Model\Config\CategoryAttributeReader as Reader;
 

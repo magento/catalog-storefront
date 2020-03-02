@@ -147,6 +147,7 @@ class CategoriesQueueConsumerTest extends AbstractGraphQl
                     'url_path' => 'category-1',
                     'description' => null,
                     'canonical_url' => null,
+                    'image' => null,
                     'product_count' => '1',
                     'children' => []
                 ]

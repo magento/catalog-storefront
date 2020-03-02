@@ -107,5 +107,8 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogGraphQl\Model\Config\CategoryAttributeReader">
+        <plugin name="removeResolversForCategoryFieldsProcessedOnSF" type="Magento\CatalogStorefrontGraphQl\Plugin\CategoryAttributeReader" />
+    </type>
 
 </config>
