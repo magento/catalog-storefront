@@ -65,6 +65,7 @@ class CategoryDataProvider
      * @return array
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\RuntimeException
+     * @throws \Throwable
      */
     public function fetch(array $categoryIds, array $attributes, array $scopes): array
     {

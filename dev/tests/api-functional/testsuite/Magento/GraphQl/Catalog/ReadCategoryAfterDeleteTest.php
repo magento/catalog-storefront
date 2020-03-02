@@ -25,29 +25,15 @@ class ReadCategoryAfterDeleteTest extends GraphQlAbstract
      * Verify that after delete children category data category tree returns correct values for given category
      *
      * @magentoApiDataFixture Magento/Catalog/_files/category_tree.php
+     * @dataProvider categoriesDeleteDataProvider()
+     * @param int $categoryToDelete
+     * @param array $expectedResult
      * @return void
      * @throws \Exception
      */
-    public function testCategoryDelete(): void
+    public function testCategoryDelete($categoryToDelete, $expectedResult): void
     {
-        $this->deleteCategory(402);
-
-        $expectedResult = [
-            'categoryList' => [
-                [
-                    'id' => 400,
-                    'name' => 'Category 1',
-                    'children_count' => 1,
-                    'children' => [
-                        [
-                            'id' => 401,
-                            'name' => 'Category 1.1',
-                            'children_count' => 0,
-                        ]
-                    ],
-                ]
-            ],
-        ];
+        $this->deleteCategory($categoryToDelete);
 
         $query = $this->getQuery(400);
         $response = $this->graphQlQuery($query, [], '', ['store' => 'default']);
@@ -97,5 +83,33 @@ QUERY;
 
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', false);
+    }
+
+    /**
+     * @return array
+     */
+    public function categoriesDeleteDataProvider(): array
+    {
+        return [
+            [
+                'category_to_delete' => 402,
+                'expected_result' => [
+                    'categoryList' => [
+                        [
+                            'id' => 400,
+                            'name' => 'Category 1',
+                            'children_count' => 1,
+                            'children' => [
+                                [
+                                    'id' => 401,
+                                    'name' => 'Category 1.1',
+                                    'children_count' => 0,
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
     }
 }

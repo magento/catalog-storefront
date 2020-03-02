@@ -65,6 +65,7 @@ class ProductDataProvider
      * @return array
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\RuntimeException
+     * @throws \Throwable
      */
     public function fetch(array $productIds, array $attributes, array $scopes): array
     {
