@@ -24,6 +24,12 @@ class ElasticsearchCommand implements CommandInterface
     private const BULK_ACTION_UPDATE = 'update';
     /**#@-*/
 
+    /**#@+
+     * Text flags for Elasticsearch error types
+     */
+    private const ERROR_TYPE_INDEX_NOT_FOUND = 'index_not_found_exception';
+    /**#@-*/
+
     /**
      * @var ConnectionPull
      */
@@ -127,13 +133,14 @@ class ElasticsearchCommand implements CommandInterface
     {
         $errors = [];
         foreach ($items as $item) {
-            if (isset($item[$action]['error'])) {
+            $error = $item[$action]['error'] ?? null;
+            if ($error && ($item[$action]['error']['type'] ?? '') !== self::ERROR_TYPE_INDEX_NOT_FOUND) {
                 $item = $item[$action];
                 $errors[] = \sprintf(
                     'id: %s, status: %s, error: %s',
                     $item['_id'],
                     $item['status'],
-                    $item['error']['type'] . ': ' . $item['error']['reason']
+                    $error['type'] ?? '' . ': ' . $error['reason'] ?? ''
                 );
             }
         }
@@ -163,7 +170,11 @@ class ElasticsearchCommand implements CommandInterface
             }
         } catch (\Throwable $throwable) {
             throw new BulkException(
-                __('Error occurred while bulk delete from "%1" index. Entity ids: "%2"', $dataSourceName, $ids),
+                __(
+                    'Error occurred while bulk delete from "%1" index. Entity ids: "%2"',
+                    $dataSourceName,
+                    \implode(',', $ids)
+                ),
                 $throwable
             );
         }
