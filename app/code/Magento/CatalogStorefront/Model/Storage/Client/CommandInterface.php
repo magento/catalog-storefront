@@ -35,5 +35,15 @@ interface CommandInterface
      * @return void
      * @throws BulkException
      */
-    public function bulkInsert(string $dataSourceName, string $entityName, array $entries);
+    public function bulkInsert(string $dataSourceName, string $entityName, array $entries): void;
+
+    /**
+     * Performs bulk delete.
+     *
+     * @param string $dataSourceName
+     * @param string $entityName
+     * @param array $ids
+     * @return void
+     */
+    public function bulkDelete(string $dataSourceName, string $entityName, array $ids): void;
 }

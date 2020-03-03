@@ -65,6 +65,7 @@ class ProductDataProvider
      * @return array
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\RuntimeException
+     * @throws \Throwable
      */
     public function fetch(array $productIds, array $attributes, array $scopes): array
     {
@@ -72,7 +73,6 @@ class ProductDataProvider
         if (!$productIds) {
             return $items;
         }
-        $entities = [];
         $storageName = $this->storageState->getCurrentDataSourceName([$scopes['store'], Product::ENTITY_NAME]);
         try {
             $entities = $this->query->getEntries(
@@ -93,6 +93,7 @@ class ProductDataProvider
             return [];
         } catch (\Throwable $e) {
             $this->logger->error($e);
+            throw $e;
         }
 
         $products = $entities->toArray();

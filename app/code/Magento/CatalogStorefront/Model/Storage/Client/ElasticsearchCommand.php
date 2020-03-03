@@ -24,6 +24,12 @@ class ElasticsearchCommand implements CommandInterface
     private const BULK_ACTION_UPDATE = 'update';
     /**#@-*/
 
+    /**#@+
+     * Text flags for Elasticsearch error types
+     */
+    private const ERROR_TYPE_INDEX_NOT_FOUND = 'index_not_found_exception';
+    /**#@-*/
+
     /**
      * @var ConnectionPull
      */
@@ -53,7 +59,7 @@ class ElasticsearchCommand implements CommandInterface
     /**
      * @inheritdoc
      */
-    public function bulkInsert(string $dataSourceName, string $entityName, array $entries)
+    public function bulkInsert(string $dataSourceName, string $entityName, array $entries): void
     {
         $query = $this->getDocsArrayInBulkIndexFormat($dataSourceName, $entityName, $entries, self::BULK_ACTION_INDEX);
         try {
@@ -64,7 +70,11 @@ class ElasticsearchCommand implements CommandInterface
             }
         } catch (\Throwable $throwable) {
             throw new BulkException(
-                __("Error occurred while bulk insert to '$dataSourceName' index."),
+                __(
+                    'Error occurred while bulk insert to "%1" index. Entity ids: "%2"',
+                    $dataSourceName,
+                    \array_column($entries, 'id')
+                ),
                 $throwable
             );
         }
@@ -123,18 +133,50 @@ class ElasticsearchCommand implements CommandInterface
     {
         $errors = [];
         foreach ($items as $item) {
-            if (isset($item[$action]['error'])) {
+            $error = $item[$action]['error'] ?? null;
+            if ($error && ($item[$action]['error']['type'] ?? '') !== self::ERROR_TYPE_INDEX_NOT_FOUND) {
                 $item = $item[$action];
                 $errors[] = \sprintf(
                     'id: %s, status: %s, error: %s',
                     $item['_id'],
                     $item['status'],
-                    $item['error']['type'] . ': ' . $item['error']['reason']
+                    $error['type'] ?? '' . ': ' . $error['reason'] ?? ''
                 );
             }
         }
         if ($errors) {
             throw new \LogicException('List of errors: ' . \json_encode($errors));
+        }
+    }
+
+    /**
+     * @inheritdoc
+     * @throws BulkException
+     */
+    public function bulkDelete(string $dataSourceName, string $entityName, array $ids): void
+    {
+        $documents = \array_map(
+            function ($id) {
+                return ['id' => $id];
+            },
+            $ids
+        );
+        $query = $this->getDocsArrayInBulkIndexFormat($dataSourceName, $entityName, $documents, self::BULK_ACTION_DELETE);
+        try {
+            $result = $this->getConnection()->bulk($query);
+            $error = $result['errors'] ?? false;
+            if ($error) {
+                $this->handleBulkError($result['items'] ?? [], self::BULK_ACTION_DELETE);
+            }
+        } catch (\Throwable $throwable) {
+            throw new BulkException(
+                __(
+                    'Error occurred while bulk delete from "%1" index. Entity ids: "%2"',
+                    $dataSourceName,
+                    \implode(',', $ids)
+                ),
+                $throwable
+            );
         }
     }
 }

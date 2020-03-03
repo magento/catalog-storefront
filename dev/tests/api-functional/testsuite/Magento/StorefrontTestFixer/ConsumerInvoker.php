@@ -39,7 +39,8 @@ class ConsumerInvoker
     {
         if ($invokeInTestsOnly) {
             $trace = (new \Exception())->getTraceAsString();
-            if (false === strpos($trace, 'src/Framework/TestCase.php')
+            if (false === strpos($trace, 'Magento\GraphQl')
+                || false === strpos($trace, 'src/Framework/TestCase.php')
                 || false !== strpos($trace, 'ApiDataFixture->startTest')) {
                 return;
             }
