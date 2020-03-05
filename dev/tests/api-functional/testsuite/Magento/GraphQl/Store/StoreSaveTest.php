@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\CatalogSearch\Model\Indexer\Fulltext as IndexerSearch;
+use Magento\Indexer\Model\Indexer;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\MessageQueue\PublisherConsumerController;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -34,19 +36,16 @@ class StoreSaveTest extends GraphQlAbstract
      */
     public function testProductVisibleInNewStore()
     {
-
         $storeCodeFromFixture = 'test';
         $this->testProduct($storeCodeFromFixture);
         $this->testCategory($storeCodeFromFixture);
 
         $this->stopConsumers();
-        sleep(20);
         // create new store
         $newStoreCode = 'new_store';
         $this->createStore($newStoreCode);
         // stop and start consumers
         $this->startConsumers();
-        sleep(20);
         //use case for new storeCode
         $this->testCategory($newStoreCode);
         $this->testProduct($newStoreCode);
@@ -87,7 +86,6 @@ class StoreSaveTest extends GraphQlAbstract
         exec(sprintf("ps ax | grep -v grep | grep '%s' | awk '{print $1}'", $consumersAlias), $consumerProcessIds);
         if (!empty($consumerProcessIds)) {
             foreach ($consumerProcessIds as $consumerProcessId) {
-                echo 'killed process:' . $consumerProcessId;
                 exec("kill {$consumerProcessId}");
                 sleep(5);
             }
@@ -116,7 +114,6 @@ class StoreSaveTest extends GraphQlAbstract
   }
 }
 QUERY;
-        echo sprintf($productsQuery, $productSku) . "\n\n";
         $headerMap = ['Store' => $storeCodeFromFixture];
         $response = $this->graphQlQuery(
             sprintf($productsQuery, $productSku),
@@ -124,7 +121,6 @@ QUERY;
             '',
             $headerMap
         );
-        print_r($response);
         $this->assertCount(
             1,
             $response['products']['items'],
@@ -159,7 +155,6 @@ QUERY;
     }
 }
 QUERY;
-        echo sprintf($categoryQuery, $categoryName) . "\n";
         $headerMap = ['Store' => $storeCodeFromFixture];
         $response = $this->graphQlQuery(
             sprintf($categoryQuery, $categoryName),
@@ -167,7 +162,6 @@ QUERY;
             '',
             $headerMap
         );
-        print_r($response) . "\n\n";
         $this->assertCount(
             1,
             $response['categoryList'],
@@ -189,13 +183,12 @@ QUERY;
      */
     private function createStore(string $storeCode): void
     {
+        $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-        $storeManager = Bootstrap::getObjectManager()
-            ->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
 
         /** @var \Magento\Store\Model\Store $store */
-        $store = Bootstrap::getObjectManager()
-            ->create(\Magento\Store\Model\Store::class);
+        $store = $objectManager->create(\Magento\Store\Model\Store::class);
 
         if (!$store->load($storeCode)->getId()) {
             $store->setCode($storeCode)
@@ -205,6 +198,11 @@ QUERY;
                 ->setSortOrder(10)
                 ->setIsActive(1);
             $store->save();
+
+            /** @var $indexer \Magento\Framework\Indexer\IndexerInterface */
+            $indexer = $objectManager->create(Indexer::class);
+            $indexer->load(IndexerSearch::INDEXER_ID);
+            $indexer->reindexAll();
         }
     }
 
@@ -214,7 +212,7 @@ QUERY;
     protected function tearDown()
     {
         parent::tearDown();
-        //$this->removeStore('new_store');
+        $this->removeStore('new_store');
     }
 
     /**
@@ -222,6 +220,7 @@ QUERY;
      *
      * @param string $storeCode
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function removeStore(string $storeCode): void
     {
