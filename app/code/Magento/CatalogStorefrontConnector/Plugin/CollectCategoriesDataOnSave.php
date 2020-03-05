@@ -84,7 +84,6 @@ class CollectCategoriesDataOnSave
         return $result;
     }
 
-
     /**
      * Is indexer run in "on schedule" mode
      *

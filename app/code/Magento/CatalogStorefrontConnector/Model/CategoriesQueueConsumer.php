@@ -9,7 +9,6 @@ namespace Magento\CatalogStorefrontConnector\Model;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CategoryPublisher;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
-use Psr\Log\LoggerInterface;
 
 /**
  * Consumer processes messages with store front categories data
@@ -27,22 +26,15 @@ class CategoriesQueueConsumer
     private $catalogEntityIdsProvider;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @param CategoryPublisher $categoryPublisher
      * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
      */
     public function __construct(
         CategoryPublisher $categoryPublisher,
-        CatalogEntityIdsProvider $catalogEntityIdsProvider,
-        LoggerInterface $logger
+        CatalogEntityIdsProvider $catalogEntityIdsProvider
     ) {
         $this->categoryPublisher = $categoryPublisher;
         $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
-        $this->logger = $logger;
     }
 
     /**
