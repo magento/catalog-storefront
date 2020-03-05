@@ -84,17 +84,8 @@ class StoreSaveTest extends GraphQlAbstract
     {
         $consumersAlias = 'storefront.catalog';
         // kill consumers
-        $shell = Bootstrap::getObjectManager()
-            ->create(
-                \Magento\Framework\App\Shell::class
-            );
-        $consumerProcessIds = $shell->execute(
-            "ps ax | grep -v grep | grep '%s' | awk '{print $1}'",
-            [
-                $consumersAlias
-            ]
-        );
-
+        $shell = Bootstrap::getObjectManager()->create(\Magento\Framework\App\Shell::class);
+        $consumerProcessIds = $shell->execute("ps ax | grep -v grep | grep '%s' | awk '{print $1}'", [$consumersAlias]);
         if (!empty($consumerProcessIds)) {
             foreach (explode(PHP_EOL, $consumerProcessIds) as $consumerProcessId) {
                 $shell->execute("kill {$consumerProcessId}");
