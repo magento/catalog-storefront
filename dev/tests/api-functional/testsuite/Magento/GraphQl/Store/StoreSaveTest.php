@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Catalog;
+namespace Magento\GraphQl\Store;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext as IndexerSearch;
 use Magento\Indexer\Model\Indexer;
@@ -65,7 +65,8 @@ class StoreSaveTest extends GraphQlAbstract
         );
         /** @var PublisherConsumerController $publisherConsumer */
         $publisherConsumer = Bootstrap::getObjectManager()
-            ->create(PublisherConsumerController::class,
+            ->create(
+                PublisherConsumerController::class,
                 [
                     'consumers' => self::CONSUMERS,
                     'appInitParams' => $params,
@@ -83,10 +84,20 @@ class StoreSaveTest extends GraphQlAbstract
     {
         $consumersAlias = 'storefront.catalog';
         // kill consumers
-        exec(sprintf("ps ax | grep -v grep | grep '%s' | awk '{print $1}'", $consumersAlias), $consumerProcessIds);
+        $shell = Bootstrap::getObjectManager()
+            ->create(
+                \Magento\Framework\App\Shell::class
+            );
+        $consumerProcessIds = $shell->execute(
+            "ps ax | grep -v grep | grep '%s' | awk '{print $1}'",
+            [
+                $consumersAlias
+            ]
+        );
+
         if (!empty($consumerProcessIds)) {
-            foreach ($consumerProcessIds as $consumerProcessId) {
-                exec("kill {$consumerProcessId}");
+            foreach (explode(PHP_EOL, $consumerProcessIds) as $consumerProcessId) {
+                $shell->execute("kill {$consumerProcessId}");
                 sleep(5);
             }
         }
