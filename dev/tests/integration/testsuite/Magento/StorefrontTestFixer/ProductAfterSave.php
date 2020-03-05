@@ -10,10 +10,7 @@ namespace Magento\StorefrontTestFixer;
 use Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataOnSave;
 
 /**
- * Plugin for collect product data during saving process
- *
- * Due to changes in DI (added afterSave() plugins) for store front application
- * we added empty plugin classes to keep plugin initialization chain
+ * Mock for preferences in integration/etc/di/preferences/graphql.php to be able run integration tests
  */
 class ProductAfterSave extends CollectProductsDataOnSave
 {

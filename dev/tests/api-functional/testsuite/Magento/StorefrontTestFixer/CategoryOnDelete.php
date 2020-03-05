@@ -7,15 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\StorefrontTestFixer;
 
-use Magento\CatalogInventoryExtractor\Plugin\UpdateCategoriesOnConfigurationChange;
-use Magento\Config\Model\ResourceModel\Config;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
+use Magento\Framework\Model\AbstractModel;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Override original plugin to run consumers during tests
  */
-class CategoriesOnConfigurationChange extends UpdateCategoriesOnConfigurationChange
+class CategoryOnDelete extends \Magento\CatalogStorefrontConnector\Plugin\CategoryOnDelete
 {
     /**
      * @inheritdoc
@@ -24,22 +23,13 @@ class CategoriesOnConfigurationChange extends UpdateCategoriesOnConfigurationCha
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function afterSaveConfig(
-        Config $subject,
-        Config $result,
-        $path,
-        $value,
-        $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-        $scopeId = 0
-    ): Config {
-        $result = parent::afterSaveConfig(
-            $subject,
-            $result,
-            $path,
-            $value,
-            $scope,
-            $scopeId
-        );
+    public function afterDelete(
+        CategoryResource $subject,
+        CategoryResource $result,
+        AbstractModel $category
+    ): CategoryResource {
+        $result = parent::afterDelete($subject, $result, $category);
+
         $objectManager = Bootstrap::getObjectManager();
         /** @var ConsumerInvoker $consumerInvoker */
         $consumerInvoker = $objectManager->get(ConsumerInvoker::class);

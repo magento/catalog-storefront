@@ -16,5 +16,7 @@ return [
     \Magento\CatalogStorefrontConnector\Plugin\CollectProductsDataOnSave::class
         => \Magento\StorefrontTestFixer\ProductAfterSave::class,
     \Magento\CatalogInventoryExtractor\Plugin\CollectProductsDataForUpdateAfterStockUpdate::class
-        => \Magento\StorefrontTestFixer\StockStatusUpdate::class
+        => \Magento\StorefrontTestFixer\StockStatusUpdate::class,
+    \Magento\CatalogStorefrontConnector\Plugin\CategoryOnDelete::class
+    => \Magento\StorefrontTestFixer\CategoryOnDelete::class,
 ];

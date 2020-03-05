@@ -16,6 +16,7 @@
                 <item name="canonical_url" xsi:type="string">Magento\CategoryExtractor\DataProvider\CanonicalUrlDataProvider</item>
                 <item name="product_count" xsi:type="string">Magento\CategoryExtractor\DataProvider\ProductsCountDataProvider</item>
                 <item name="children" xsi:type="string">Magento\CategoryExtractor\DataProvider\ChildrenDataProvider</item>
+                <item name="image" xsi:type="string">Magento\CategoryExtractor\DataProvider\ImageDataProvider</item>
             </argument>
         </arguments>
     </type>

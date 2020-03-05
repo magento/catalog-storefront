@@ -13,7 +13,7 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Plugin for collect category data during saving process
+ * Override original plugin to run consumers during tests
  */
 class CategoryAfterSave extends CollectCategoriesDataOnSave
 {

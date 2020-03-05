@@ -8,10 +8,7 @@ declare(strict_types=1);
 namespace Magento\StorefrontTestFixer;
 
 /**
- * Plugin for collect product data during stock item update.
- *
- * Due to changes in DI (added afterUpdateStockItemBySku() plugins) for store front application
- * we added empty plugin classes to keep plugin initialization chain
+ * Mock for preferences in integration/etc/di/preferences/graphql.php to be able run integration tests
  */
 class StockStatusUpdate extends \Magento\CatalogInventoryExtractor\Plugin\CollectProductsDataForUpdateAfterStockUpdate
 {
