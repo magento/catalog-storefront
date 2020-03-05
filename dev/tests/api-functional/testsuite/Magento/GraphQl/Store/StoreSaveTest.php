@@ -7,10 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Store;
 
-use Magento\CatalogSearch\Model\Indexer\Fulltext as IndexerSearch;
-use Magento\Indexer\Model\Indexer;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\MessageQueue\PublisherConsumerController;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -19,79 +16,18 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class StoreSaveTest extends GraphQlAbstract
 {
     /**
-     * Consumers list.
-     */
-    private const CONSUMERS = [
-        'storefront.catalog.product.update',
-        'storefront.catalog.category.update',
-        'storefront.catalog.data.consume',
-    ];
-
-    /**
-     * Test a product from a specific and a default store
+     * Test a product from newly created store
      *
-     * @magentoApiDataFixture Magento/Store/_files/store.php
      * @magentoApiDataFixture Magento/Catalog/_files/category_product.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testProductVisibleInNewStore()
     {
-        $storeCodeFromFixture = 'test';
-        $this->testProduct($storeCodeFromFixture);
-        $this->testCategory($storeCodeFromFixture);
-
-        $this->stopConsumers();
-        // create new store
         $newStoreCode = 'new_store';
         $this->createStore($newStoreCode);
-        // stop and start consumers
-        $this->startConsumers();
         //use case for new storeCode
-        $this->testCategory($newStoreCode);
-        $this->testProduct($newStoreCode);
-    }
-
-    /**
-     * Restart consumers.
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function startConsumers()
-    {
-        $logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
-        $params = array_merge_recursive(
-            Bootstrap::getInstance()->getAppInitParams(),
-            ['MAGE_DIRS' => ['cache' => ['path' => TESTS_TEMP_DIR . '/cache']]]
-        );
-        /** @var PublisherConsumerController $publisherConsumer */
-        $publisherConsumer = Bootstrap::getObjectManager()
-            ->create(
-                PublisherConsumerController::class,
-                [
-                    'consumers' => self::CONSUMERS,
-                    'appInitParams' => $params,
-                    'logFilePath' => $logFilePath,
-                ]
-            );
-
-        $publisherConsumer->startConsumers();
-    }
-
-    /**
-     * Stop storefront catalog consumers.
-     */
-    private function stopConsumers(): void
-    {
-        $consumersAlias = 'storefront.catalog';
-        // kill consumers
-        $shell = Bootstrap::getObjectManager()->create(\Magento\Framework\App\Shell::class);
-        $consumerProcessIds = $shell->execute("ps ax | grep -v grep | grep '%s' | awk '{print $1}'", [$consumersAlias]);
-        if (!empty($consumerProcessIds)) {
-            foreach (explode(PHP_EOL, $consumerProcessIds) as $consumerProcessId) {
-                $shell->execute("kill {$consumerProcessId}");
-                sleep(5);
-            }
-        }
+        $this->assertCategory($newStoreCode);
+        $this->assertProduct($newStoreCode);
     }
 
     /**
@@ -100,7 +36,7 @@ class StoreSaveTest extends GraphQlAbstract
      * @param string $storeCodeFromFixture
      * @throws \Exception
      */
-    private function testProduct(string $storeCodeFromFixture)
+    private function assertProduct(string $storeCodeFromFixture)
     {
         $productSku = 'simple333';
         $productNameInFixtureStore = 'Simple Product Three';
@@ -141,7 +77,7 @@ QUERY;
      * @param string $storeCodeFromFixture
      * @throws \Exception
      */
-    private function testCategory(string $storeCodeFromFixture)
+    private function assertCategory(string $storeCodeFromFixture)
     {
         $categoryName = 'Category 1';
         $categoryQuery = <<<QUERY
@@ -202,8 +138,8 @@ QUERY;
             $store->save();
 
             /** @var $indexer \Magento\Framework\Indexer\IndexerInterface */
-            $indexer = $objectManager->create(Indexer::class);
-            $indexer->load(IndexerSearch::INDEXER_ID);
+            $indexer = $objectManager->create(\Magento\Indexer\Model\Indexer::class);
+            $indexer->load(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID);
             $indexer->reindexAll();
         }
     }

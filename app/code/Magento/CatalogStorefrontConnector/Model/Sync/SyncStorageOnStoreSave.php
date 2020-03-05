@@ -77,7 +77,7 @@ class SyncStorageOnStoreSave
     public function afterSave(
         \Magento\Store\Model\Store $subject,
         \Magento\Store\Model\Store $result
-    ) {
+    ): \Magento\Store\Model\Store {
         if ($this->isIndexerRunOnSchedule()) {
             return $result;
         }
