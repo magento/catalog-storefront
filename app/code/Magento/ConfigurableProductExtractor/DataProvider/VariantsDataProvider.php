@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\ConfigurableProductExtractor\DataProvider;
 
 use Magento\ConfigurableProductExtractor\DataProvider\Query\ProductVariantsBuilder;
+use Magento\ConfigurableProductExtractor\DataProvider\Variants\ChildProductVariants;
 use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
 use Magento\Framework\App\ResourceConnection;
 
@@ -26,6 +27,11 @@ use Magento\Framework\App\ResourceConnection;
  */
 class VariantsDataProvider implements DataProviderInterface
 {
+    /**
+     * @var ChildProductVariants
+     */
+    private $childProductVariantsProvider;
+
     /**
      * @var ResourceConnection
      */
@@ -47,17 +53,20 @@ class VariantsDataProvider implements DataProviderInterface
     private $attributeOptionsProvider;
 
     /**
+     * @param ChildProductVariants $childProductVariantsProvider
      * @param ResourceConnection $resourceConnection
      * @param ProductVariantsBuilder $productVariantsQuery
      * @param ConfigurableAttributesProvider $configurableAttributesProvider
      * @param AttributeOptionsProvider $attributeOptionsProvider
      */
     public function __construct(
+        ChildProductVariants $childProductVariantsProvider,
         ResourceConnection $resourceConnection,
         ProductVariantsBuilder $productVariantsQuery,
         ConfigurableAttributesProvider $configurableAttributesProvider,
         AttributeOptionsProvider $attributeOptionsProvider
     ) {
+        $this->childProductVariantsProvider = $childProductVariantsProvider;
         $this->resourceConnection = $resourceConnection;
         $this->productVariantsBuilder = $productVariantsQuery;
         $this->configurableAttributesProvider = $configurableAttributesProvider;
@@ -84,8 +93,15 @@ class VariantsDataProvider implements DataProviderInterface
         );
 
         $result = [];
-        $result[] = $this->getLinkedProductIds($products);
 
+        // TODO: handle ad-hoc solution MC-29791
+        if (empty($requestedAttributes) || isset($requestedAttributes['variants']['product'])) {
+            $result[] = $this->childProductVariantsProvider->getProductVariants(
+                $products,
+                $requestedAttributes['variants']['product'] ?? [],
+                $scopes
+            );
+        }
         if (empty($requestedAttributes) || isset($requestedAttributes['variants']['attributes'])) {
             $result[] = $this->buildVariantAttributes($products, $attributesPerProduct, $childAttributeOptions);
         }
@@ -94,25 +110,6 @@ class VariantsDataProvider implements DataProviderInterface
         }
 
         return !empty($result) ? array_replace_recursive(...$result) : $result;
-    }
-
-    /**
-     * Get configurable variant ids
-     *
-     * @param array $products
-     * @return array
-     */
-    private function getLinkedProductIds(array $products): array
-    {
-        $childrenMap = [];
-        foreach ($products as $child) {
-            $variantId = $child['variant_id'] ?? null;
-            if ($variantId) {
-                $childrenMap[$child['parent_id']]['variants'][$variantId]['product'] = $variantId;
-            }
-        }
-
-        return $childrenMap;
     }
 
     /**
@@ -207,6 +204,18 @@ class VariantsDataProvider implements DataProviderInterface
     }
 
     /**
+     * Is need to load attributes
+     *
+     * @param array $requestedAttributes
+     * @return bool
+     */
+    private function isLoadAttributes(array $requestedAttributes): bool
+    {
+        return isset($requestedAttributes['configurable_options'])
+            || isset($requestedAttributes['variants']['attributes']);
+    }
+
+    /**
      * Load required attributes
      *
      * @param array $parentProductIds
@@ -222,33 +231,39 @@ class VariantsDataProvider implements DataProviderInterface
         array $scopes,
         array $products
     ): array {
-        $attributesPerProduct = $this->configurableAttributesProvider->provide(
-            $parentProductIds,
-            $requestedAttributes,
-            $scopes
-        );
-        if (!$attributesPerProduct) {
-            throw new \LogicException(
-                \sprintf(
-                    'Can not find attributes for the following configurable products: "%s"',
-                    \implode(', ', $parentProductIds)
-                )
-            );
+        $attributesPerProduct = [];
+        $childAttributeOptions = [];
 
-        }
-        $childAttributeOptions = $this->attributeOptionsProvider->provide(
-            $products,
-            $attributesPerProduct,
-            $scopes
-        );
-        if (!$childAttributeOptions) {
-            throw new \LogicException(
-                \sprintf(
-                    'Can not find attribute options for the following configurable products: "%s"',
-                    \implode(', ', $parentProductIds)
-                )
+        // TODO: handle ad-hoc solution MC-29791
+        if (empty($requestedAttributes) || $this->isLoadAttributes($requestedAttributes)) {
+            $attributesPerProduct = $this->configurableAttributesProvider->provide(
+                $parentProductIds,
+                $requestedAttributes,
+                $scopes
             );
+            if (!$attributesPerProduct) {
+                throw new \LogicException(
+                    \sprintf(
+                        'Can not find attributes for the following configurable products: "%s"',
+                        \implode(', ', $parentProductIds)
+                    )
+                );
 
+            }
+            $childAttributeOptions = $this->attributeOptionsProvider->provide(
+                $products,
+                $attributesPerProduct,
+                $scopes
+            );
+            if (!$childAttributeOptions) {
+                throw new \LogicException(
+                    \sprintf(
+                        'Can not find attribute options for the following configurable products: "%s"',
+                        \implode(', ', $parentProductIds)
+                    )
+                );
+
+            }
         }
         return [$attributesPerProduct, $childAttributeOptions];
     }

@@ -23,12 +23,20 @@ class ChildrenDataProvider implements DataProviderInterface
     private $categoriesProvider;
 
     /**
+     * @var DataProvider
+     */
+    private $generalDataProvider;
+
+    /**
      * @param CategoriesProvider $categoriesProvider
+     * @param DataProvider $generalDataProvider
      */
     public function __construct(
-        CategoriesProvider $categoriesProvider
+        CategoriesProvider $categoriesProvider,
+        DataProvider $generalDataProvider
     ) {
         $this->categoriesProvider = $categoriesProvider;
+        $this->generalDataProvider = $generalDataProvider;
     }
 
     /**
@@ -43,10 +51,18 @@ class ChildrenDataProvider implements DataProviderInterface
     {
         $output = [];
 
+        $attributeName = key($attributes);
+
         foreach ($this->categoriesProvider->getCategoriesByIds($categoryIds) as $category) {
             $categoryId = $category->getId();
             $childCategories = $category->getChildrenCategories()->getAllIds();
-            $output[$categoryId][self::ATTRIBUTE] = $childCategories;
+            if (in_array($categoryId, $categoryIds)) {
+                $output[$categoryId][$attributeName] = $this->generalDataProvider->fetch(
+                    $childCategories,
+                    $attributes[$attributeName],
+                    $scope
+                );
+            }
         }
 
         return $output;

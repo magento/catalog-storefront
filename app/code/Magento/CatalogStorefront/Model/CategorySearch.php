@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefront\Model;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
+use Magento\CategoryExtractor\DataProvider\DataProvider as CategoryDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryResultContainerInterfaceFactory;
 use Magento\CatalogStorefrontApi\Api\CategoryInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryResultContainerInterface;

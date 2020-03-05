@@ -9,7 +9,7 @@ namespace Magento\CatalogStorefront\Model;
 
 use Magento\CatalogStorefrontApi\Api\Data\ProductCriteriaInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\CatalogStorefront\DataProvider\ProductDataProvider;
+use Magento\CatalogExtractor\DataProvider\DataProvider as ProductDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\ProductResultContainerInterfaceFactory;
 use Magento\CatalogStorefrontApi\Api\ProductInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductResultContainerInterface;

@@ -31,6 +31,11 @@ class ProductItems implements \Magento\CatalogExtractor\DataProvider\DataProvide
     private $bundleProductItemOptions;
 
     /**
+     * @var BundleProductItemOptionProducts
+     */
+    private $bundleProductItemOptionProducts;
+
+    /**
      * @var BundleProductItemOptionLabels
      */
     private $bundleProductItemOptionLabels;
@@ -39,17 +44,20 @@ class ProductItems implements \Magento\CatalogExtractor\DataProvider\DataProvide
      * @param ResourceConnection $resourceConnection
      * @param QueryBuilder $queryBuilder
      * @param BundleProductItemOptions $bundleProductItemOptions
+     * @param BundleProductItemOptionProducts $bundleProductItemOptionProducts
      * @param BundleProductItemOptionLabels $bundleProductItemOptionLabels
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         QueryBuilder $queryBuilder,
         BundleProductItemOptions $bundleProductItemOptions,
+        BundleProductItemOptionProducts $bundleProductItemOptionProducts,
         BundleProductItemOptionLabels $bundleProductItemOptionLabels
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->queryBuilder = $queryBuilder;
         $this->bundleProductItemOptions = $bundleProductItemOptions;
+        $this->bundleProductItemOptionProducts = $bundleProductItemOptionProducts;
         $this->bundleProductItemOptionLabels = $bundleProductItemOptionLabels;
     }
 
@@ -77,37 +85,16 @@ class ProductItems implements \Magento\CatalogExtractor\DataProvider\DataProvide
 
         $productAttributes = $attributes['options']['product'] ?? [];
         $requestOptionLabel = \in_array('label', $attributes['options'] ?? [], true);
+        if ($requestOptionLabel) {
+            $productAttributes[] = 'name';
+        }
 
-        $result = $this->getLinkedProductIds($result);
-        //  TODO: MC-30893 Option label is not returned for Bundle product
+        $result = $this->bundleProductItemOptionProducts->fetch($productAttributes, $scopes, $result);
+        // TODO: handle ad-hoc solution MC-29791 - need to add product label from product (SF application)
         if ($requestOptionLabel) {
             $result = $this->bundleProductItemOptionLabels->fetch($productAttributes, $scopes, $result);
         }
 
         return $result;
-    }
-
-    /**
-     * Get linked product ids
-     *
-     * @param array $products
-     * @return array
-     */
-    private function getLinkedProductIds(array $products): array
-    {
-        foreach ($products as &$child) {
-            if (!isset($child['items'])) {
-                continue;
-            }
-            foreach ($child['items'] as &$item) {
-                if (!isset($item['options'])) {
-                    continue;
-                }
-                foreach ($item['options'] as &$option) {
-                    $option['product'] = $option['entity_id'];
-                }
-            }
-        }
-        return $products;
     }
 }
