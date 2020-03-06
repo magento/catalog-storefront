@@ -13,7 +13,7 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Plugin for collect products data product save. Handle case when indexer mode is set to "runtime"
+ * Override original plugin to run consumers during tests
  */
 class ProductAfterSave extends CollectProductsDataOnSave
 {
@@ -30,6 +30,28 @@ class ProductAfterSave extends CollectProductsDataOnSave
         AbstractModel $product
     ): Product {
         $result = parent::afterSave($subject, $result, $product);
+
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var ConsumerInvoker $consumerInvoker */
+        $consumerInvoker = $objectManager->get(ConsumerInvoker::class);
+        $consumerInvoker->invoke(true);
+
+        return $result;
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * Ad-hoc solution. Force run consumers after product delete inside test-case
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function afterDelete(
+        Product $subject,
+        Product $result,
+        AbstractModel $product
+    ): Product {
+        $result = parent::afterDelete($subject, $result, $product);
 
         $objectManager = Bootstrap::getObjectManager();
         /** @var ConsumerInvoker $consumerInvoker */

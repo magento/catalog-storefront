@@ -65,6 +65,7 @@ class CategoryDataProvider
      * @return array
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\RuntimeException
+     * @throws \Throwable
      */
     public function fetch(array $categoryIds, array $attributes, array $scopes): array
     {
@@ -72,7 +73,7 @@ class CategoryDataProvider
         if (!$categoryIds) {
             return $items;
         }
-        $entities = [];
+
         $storageName = $this->storageState->getCurrentDataSourceName([$scopes['store'], Category::ENTITY_NAME]);
         try {
             $entities = $this->query->getEntries(
@@ -93,6 +94,7 @@ class CategoryDataProvider
             return [];
         } catch (\Throwable $e) {
             $this->logger->error($e);
+            throw $e;
         }
 
         return $this->linkedEntityHydrator->hydrate($entities->toArray(), $attributes, $scopes);

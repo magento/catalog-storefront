@@ -95,7 +95,11 @@ class ProductPublisher
                     $this->publishEntities($productIds, $storeId);
                 } catch (\Throwable $e) {
                     $this->logger->critical(
-                        \sprintf('Error on publish product ids "%s"', \implode(', ', $productIds)),
+                        \sprintf(
+                            'Error on publish product] ids "%s" in store %s',
+                            \implode(', ', $productIds),
+                            $storeId
+                        ),
                         ['exception' => $e]
                     );
                 }
@@ -115,21 +119,19 @@ class ProductPublisher
         foreach (\array_chunk($productIds, $this->batchSize) as $idsBunch) {
             $messages = [];
             $productsData = $this->productsDataProvider->fetch($idsBunch, [], ['store' => $storeId]);
-            $debugMessage = empty($productsData) ? 'Delete product with ids:' : 'Publish product with ids';
             $this->logger->debug(
-                \sprintf('%s: "%s"', $debugMessage, \implode(', ', $idsBunch)),
+                \sprintf('Publish products with ids "%s" in store %s', \implode(', ', $productIds), $storeId),
                 ['verbose' => $productsData]
             );
-
-            foreach ($productsData as $product) {
+            foreach ($productIds as $productId) {
+                $product = $productsData[$productId] ?? [];
                 $messages[] = $this->messageBuilder->build(
                     $storeId,
                     'product',
-                    (int)$product['entity_id'],
+                    $productId,
                     $product
                 );
             }
-            // TODO: delete entity from storage MC-30781
             if (!empty($messages)) {
                 $this->queuePublisher->publish(self::TOPIC_NAME, $messages);
             }

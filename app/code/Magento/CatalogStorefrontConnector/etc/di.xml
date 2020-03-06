@@ -14,6 +14,7 @@
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Category">
         <plugin name="collectCategoryDataForStorefrontApplicationOnSave" type="Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataOnSave" />
+        <plugin name="collectCategoryDataForStorefrontApplicationOnDelete" type="Magento\CatalogStorefrontConnector\Plugin\CategoryOnDelete" />
     </type>
     <type name="Magento\Catalog\Model\Indexer\Product\Category\Action\Rows">
         <plugin name="collectCategoriesDataForStorefrontApplicationOnUpdate" type="Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate" />

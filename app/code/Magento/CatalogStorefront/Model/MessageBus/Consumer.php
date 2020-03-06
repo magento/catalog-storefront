@@ -17,6 +17,9 @@ use Psr\Log\LoggerInterface;
  */
 class Consumer
 {
+    private const DELETE = 'delete';
+    private const SAVE = 'save';
+
     /**
      * @var CommandInterface
      */
@@ -92,9 +95,13 @@ class Consumer
         foreach ($messages as $message) {
             $entity = $this->catalogItemMessageBuilder->build($message);
             $entityData = $entity->getEntityData();
-            $entityData['id'] = $entity->getEntityId();
-            $entityData['store_id'] = $entity->getStoreId();
-            $dataPerType[$entity->getEntityType()][$entity->getStoreId()][] = $entityData;
+            if (empty($entityData)) {
+                $dataPerType[$entity->getEntityType()][$entity->getStoreId()][self::DELETE][] = $entity->getEntityId();
+            } else {
+                $entityData['id'] = $entity->getEntityId();
+                $entityData['store_id'] = $entity->getStoreId();
+                $dataPerType[$entity->getEntityType()][$entity->getStoreId()][self::SAVE][] = $entityData;
+            }
         }
 
         return $dataPerType;
@@ -105,8 +112,6 @@ class Consumer
      *
      * @param array $dataPerType
      * @throws \Magento\Framework\Exception\BulkException
-     * @throws \Magento\Framework\Exception\FileSystemException
-     * @throws \Magento\Framework\Exception\RuntimeException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     private function saveToStorage(array $dataPerType): void
@@ -114,21 +119,63 @@ class Consumer
         foreach ($dataPerType as $entityType => $dataPerStore) {
             foreach ($dataPerStore as $storeId => $data) {
                 $sourceName = $this->storageState->getCurrentDataSourceName([$storeId, $entityType]);
-                $this->logger->debug(
-                    \sprintf('Save to storage "%s" %s record(s)', $sourceName, count($data)),
-                    ['verbose' => $data]
-                );
-
-                // TODO: MC-31204
-                // TODO: MC-31155
-                if (!$this->storageSchemaManager->existsDataSource($sourceName)) {
-                    $settings['index']['mapping']['total_fields']['limit'] = 200000;
-                    $this->storageSchemaManager->createDataSource($sourceName, ['settings' => $settings]);
-                    $this->storageSchemaManager->createEntity($sourceName, $entityType, []);
-                }
-
-                $this->storageWriteSource->bulkInsert($sourceName, $entityType, $data);
+                $this->deleteEntities($data[self::DELETE] ?? [], $sourceName, $entityType);
+                $this->saveEntities($data[self::SAVE] ?? [], $sourceName, $entityType);
             }
         }
+    }
+
+    /**
+     * @param array $data
+     * @param string $sourceName
+     * @param string $entityType
+     * @return void
+     */
+    private function deleteEntities(array $data, string $sourceName, string $entityType): void
+    {
+        if (!$data) {
+            return;
+        }
+        if (!$this->storageSchemaManager->existsDataSource($sourceName)) {
+            $this->logger->debug(
+                \sprintf('Cannot delete entities "%s": Index "%s" does not exist', \implode(',', $data), $sourceName)
+            );
+            return;
+        }
+
+        $this->logger->debug(
+            \sprintf('Delete from storage "%s" %s record(s)', $sourceName, count($data)),
+            ['verbose' => $data]
+        );
+        $this->storageWriteSource->bulkDelete($sourceName, $entityType, $data);
+    }
+
+    /**
+     * @param array $data
+     * @param string $sourceName
+     * @param string $entityType
+     * @throws \Magento\Framework\Exception\BulkException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @return void
+     */
+    private function saveEntities(array $data, string $sourceName, string $entityType): void
+    {
+        if (!$data) {
+            return;
+        }
+        $this->logger->debug(
+            \sprintf('Save to storage "%s" %s record(s)', $sourceName, count($data)),
+            ['verbose' => $data]
+        );
+
+        // TODO: MC-31204
+        // TODO: MC-31155
+        if (!$this->storageSchemaManager->existsDataSource($sourceName)) {
+            $this->storageSchemaManager->createDataSource($sourceName, []);
+            $this->storageSchemaManager->createEntity($sourceName, $entityType, []);
+        }
+
+        //TODO batching
+        $this->storageWriteSource->bulkInsert($sourceName, $entityType, $data);
     }
 }

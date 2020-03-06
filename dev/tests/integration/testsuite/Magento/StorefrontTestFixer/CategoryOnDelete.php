@@ -7,12 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\StorefrontTestFixer;
 
-use Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate;
-
 /**
  * Mock for preferences in integration/etc/di/preferences/graphql.php to be able run integration tests
  */
-class CategoryOnUpdate extends CollectCategoriesDataForUpdate
+class CategoryOnDelete extends \Magento\CatalogStorefrontConnector\Plugin\CategoryOnDelete
 {
-
 }
