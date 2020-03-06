@@ -32,8 +32,8 @@ class CategoryOnUpdate extends CollectCategoriesDataForUpdate
         $result = parent::afterExecute($subject, $result, $entityIds, $useTempTable);
 
         $objectManager = Bootstrap::getObjectManager();
-        /** @var ConsumerInvoker $consumerInvoker */
-        $consumerInvoker = $objectManager->get(ConsumerInvoker::class);
+        /** @var \Magento\TestFramework\Workaround\ConsumerInvoker $consumerInvoker */
+        $consumerInvoker = $objectManager->get(\Magento\TestFramework\Workaround\ConsumerInvoker::class);
         $consumerInvoker->invoke(true);
 
         return $result;

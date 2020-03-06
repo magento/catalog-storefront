@@ -43,13 +43,13 @@ class CategoriesQueueConsumer
      * Process messages from storefront.collect.updated.categories.data topic
      * and publish new messages to storefront.catalog.data.consume topic
      *
-     * @param UpdatedEntitiesDataInterface[] $messages
+     * @param UpdatedEntitiesDataInterface $message
      * @return void
      * @throws \Exception
      */
-    public function processMessages(array $messages): void
+    public function processMessages(UpdatedEntitiesDataInterface $message): void
     {
-        $storeCategories = $this->getUniqueIdsForStores($messages);
+        $storeCategories = $this->getUniqueIdsForStores([$message]);
         foreach ($storeCategories as $storeId => $categoryIds) {
             if (empty($categoryIds)) {
                 foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $ids) {

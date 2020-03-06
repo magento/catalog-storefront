@@ -91,7 +91,6 @@ class Consumer
     private function collectDataByEntityTypeAnsScope(array $messages): array
     {
         $dataPerType = [];
-        $messages = array_merge(...$messages);
         foreach ($messages as $message) {
             $entity = $this->catalogItemMessageBuilder->build($message);
             $entityData = $entity->getEntityData();

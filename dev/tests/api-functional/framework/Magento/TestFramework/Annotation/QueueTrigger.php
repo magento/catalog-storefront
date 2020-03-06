@@ -39,8 +39,8 @@ class QueueTrigger
     private function waitForAsynchronousResult(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\StorefrontTestFixer\ConsumerInvoker $consumerInvoker */
-        $consumerInvoker = $objectManager->get(\Magento\StorefrontTestFixer\ConsumerInvoker::class);
+        /** @var \Magento\TestFramework\Workaround\ConsumerInvoker $consumerInvoker */
+        $consumerInvoker = $objectManager->get(\Magento\TestFramework\Workaround\ConsumerInvoker::class);
         $consumerInvoker->invoke();
     }
 }
