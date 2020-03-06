@@ -11,20 +11,13 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Indexer\Product\Category\Action\Rows;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
-use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
-use Magento\Framework\Indexer\IndexerRegistry;
 
 /**
  * Plugin for collect category data during saving process
  */
 class CollectCategoriesDataForUpdate
 {
-    /**
-     * @var IndexerRegistry
-     */
-    private $indexerRegistry;
-
     /**
      * @var CollectionFactory
      */
@@ -62,8 +55,7 @@ class CollectCategoriesDataForUpdate
     public function afterExecute(
         Rows $subject,
         Rows $result,
-        array $categoryIds = [],
-        $useTempTable = false
+        array $categoryIds = []
     ): Rows {
         $categoryCollection = $this->collectionFactory->create();
         $categoryCollection->addFieldToFilter('entity_id', $categoryIds);
