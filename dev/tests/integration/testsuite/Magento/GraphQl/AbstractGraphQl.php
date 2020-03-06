@@ -20,39 +20,25 @@ use PHPUnit\Framework\TestCase;
 abstract class AbstractGraphQl extends TestCase
 {
     /**
-     * @var int
-     */
-    private $maxMessages = 500;
-
-    /**
      * Process storefront consumers during test setup
      *
      * @throws LocalizedException
      */
     protected function setUp(): void
     {
-        $consumers = [
-            'storefront.catalog.category.update',
-            'storefront.catalog.product.update',
-            'storefront.catalog.data.consume',
-        ];
-        $this->processCatalogQueueMessages($consumers);
+        $this->processCatalogQueueMessages();
     }
 
     /**
      * Process provided consumers list
      *
-     * @param array $consumers
      * @throws LocalizedException
      */
-    protected function processCatalogQueueMessages(array $consumers): void
+    protected function processCatalogQueueMessages(): void
     {
         $objectManager = Bootstrap::getObjectManager();
-        /** @var ConsumerFactory $consumerFactory */
-        $consumerFactory = $objectManager->create(ConsumerFactory::class);
-        foreach ($consumers as $consumerName) {
-            $consumer = $consumerFactory->get($consumerName, 1000);
-            $consumer->process($this->maxMessages);
-        }
+        /** @var \Magento\TestFramework\Workaround\ConsumerInvoker $consumerInvoker */
+        $consumerInvoker = $objectManager->get(\Magento\TestFramework\Workaround\ConsumerInvoker::class);
+        $consumerInvoker->invoke();
     }
 }

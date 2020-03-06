@@ -55,20 +55,6 @@ class CategoriesQueueConsumerTest extends AbstractGraphQl
     private $categoryResource;
 
     /**
-     * Batch size
-     */
-    private const BATCHSIZE = 1000;
-
-    /**
-     * List of storefront consumers
-     */
-    private const CONSUMERS = [
-        'storefront.catalog.category.update',
-        'storefront.catalog.product.update',
-        'storefront.catalog.data.consume',
-    ];
-
-    /**
      * @throws LocalizedException
      *
      * @return void
@@ -96,22 +82,21 @@ class CategoriesQueueConsumerTest extends AbstractGraphQl
      */
     public function testMessageReading(array $expectedData): void
     {
-        $this->invoke(self::CONSUMERS);
+        $this->invokeConsumers();
         $category = $this->categoryRepository->get(333, 1);
         $category->setName('Category New Name');
         $this->categoryResource->save($category);
         $consumersToProcess = [
             'storefront.catalog.category.update'
         ];
-        $this->invoke($consumersToProcess);
+        $this->invokeConsumers($consumersToProcess);
         $queue = $this->queueRepository->get('amqp', 'storefront.catalog.data.consume');
-        $queueBody = $this->getQueueBody($queue);
-        $parsedData = $this->jsonHelper->jsonDecode($queueBody);
+        $messages = $this->getQueueBody($queue);
         $categoryData = [];
-        foreach ($parsedData as $key => $item) {
-            $parsedData[$key] = $this->jsonHelper->jsonDecode($item);
-            if ($parsedData[$key]['entity_id'] == 333) {
-                $categoryData = $parsedData[$key];
+        foreach ($messages as $key => $item) {
+            $messages[$key] = $this->jsonHelper->jsonDecode($item);
+            if ($messages[$key]['entity_id'] == 333 && $messages[$key]['entity_type'] === 'category') {
+                $categoryData = $messages[$key];
                 break;
             }
         }
@@ -155,20 +140,26 @@ class CategoriesQueueConsumerTest extends AbstractGraphQl
     }
 
     /**
-     * Wait for queue message will be available and get queue body
+     * Gel all queue messages
      *
      * @param QueueInterface $queue
-     * @return string|null
+     * @return array|null
      */
-    private function getQueueBody(QueueInterface $queue): ?string
+    private function getQueueBody(QueueInterface $queue): ?array
     {
-        $queueBody = $this->getAsyncMessage($queue);
+        $messages = [];
+        do {
+            $message = $this->getAsyncMessage($queue);
+            if ($message) {
+                $messages[] = $this->jsonHelper->jsonDecode($message);
+            }
+        } while ($message);
 
-        if (!$queueBody) {
+        if (!$messages) {
             self::fail('No asynchronous messages were processed.');
         }
 
-        return $queueBody;
+        return $messages ? \array_merge(...$messages) : [];
     }
 
     /**
@@ -181,12 +172,12 @@ class CategoriesQueueConsumerTest extends AbstractGraphQl
 
         $i = 0;
         do {
-            sleep(1);
             $queueBody = \call_user_func_array(
                 [$this, 'getMessageBody'],
                 [$queue]
             );
-        } while (!$queueBody && ($i++ < 10));
+            usleep(1000);
+        } while (!$queueBody && ($i++ < 100));
 
         return $queueBody;
     }
@@ -207,19 +198,16 @@ class CategoriesQueueConsumerTest extends AbstractGraphQl
     /**
      * Invoke consumers
      *
-     * @param array $consumers
+     * @param array $consumersToProcess
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
+     * @throws \ReflectionException
      */
-    private function invoke(array $consumers): void
+    private function invokeConsumers(array $consumersToProcess = []): void
     {
         $objectManager = Bootstrap::getObjectManager();
-
-        /** @var \Magento\Framework\MessageQueue\ConsumerFactory $consumerFactory */
-        $consumerFactory = $objectManager->create(\Magento\Framework\MessageQueue\ConsumerFactory::class);
-        foreach ($consumers as $consumerName) {
-            $consumer = $consumerFactory->get($consumerName, self::BATCHSIZE);
-            $consumer->process(self::BATCHSIZE);
-        }
+        /** @var \Magento\TestFramework\Workaround\ConsumerInvoker $consumerInvoker */
+        $consumerInvoker = $objectManager->get(\Magento\TestFramework\Workaround\ConsumerInvoker::class);
+        $consumerInvoker->invoke(false, $consumersToProcess);
     }
 }
