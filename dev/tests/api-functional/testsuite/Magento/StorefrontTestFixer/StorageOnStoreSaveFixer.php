@@ -12,7 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Plugin for store saving.
  */
-class StorageOnStoreSave extends \Magento\CatalogStorefrontConnector\Model\Sync\SyncStorageOnStoreSave
+class StorageOnStoreSaveFixer extends \Magento\CatalogStorefrontConnector\Model\Sync\SyncStorageOnStoreSave
 {
     /**
      * @inheritDoc
