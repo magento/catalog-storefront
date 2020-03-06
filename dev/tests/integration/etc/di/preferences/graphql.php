@@ -20,5 +20,5 @@ return [
     \Magento\CatalogStorefrontConnector\Plugin\CategoryOnDelete::class
         => \Magento\StorefrontTestFixer\CategoryOnDelete::class,
     \Magento\CatalogStorefrontConnector\Model\Sync\SyncStorageOnStoreSave::class
-        => \Magento\StorefrontTestFixer\StorageOnStoreSaveFixer::class
+        => \Magento\StorefrontTestFixer\StorageOnStoreSaveFixer::class,
 ];
