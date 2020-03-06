@@ -13,7 +13,7 @@ namespace Magento\StorefrontTestFixer;
  * Due to changes in DI (added afterSave() plugins) for store front application
  * we added empty plugin classes to keep plugin initialization chain
  */
-class StorageOnStoreSave extends \Magento\CatalogStorefrontConnector\Model\Sync\SyncStorageOnStoreSave
+class StorageOnStoreSaveFixer extends \Magento\CatalogStorefrontConnector\Model\Sync\SyncStorageOnStoreSave
 {
 
 }
