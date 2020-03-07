@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExtractor\DataProvider\Category;
 
+use Magento\CatalogStorefrontApi\Api\CategoryInterface as CategorySearchInterface;
+use \Magento\CatalogStorefront\Model\CategorySearch\CategorySearchCriteriaFactory;
 use Magento\CatalogExtractor\DataProvider\Query\Product\ProductCategoriesQuery;
 use Magento\Framework\App\ResourceConnection;
 use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
@@ -27,15 +29,39 @@ class ProductCategoriesDataProvider implements DataProviderInterface
     private $productCategoriesQuery;
 
     /**
+     * @var array
+     */
+    private static $requiredCategoryAttributes = [
+        'entity_id',
+        'path',
+        'level',
+    ];
+    /**
+     * @var CategorySearchInterface
+     */
+    private $categorySearch;
+
+    /**
+     * @var CategorySearchCriteriaFactory
+     */
+    private $categorySearchCriteriaFactory;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param ProductCategoriesQuery $productCategoriesQuery
+     * @param CategorySearchInterface $categorySearch
+     * @param CategorySearchCriteriaFactory $categorySearchCriteriaFactory
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        ProductCategoriesQuery $productCategoriesQuery
+        ProductCategoriesQuery $productCategoriesQuery,
+        CategorySearchInterface $categorySearch,
+        CategorySearchCriteriaFactory $categorySearchCriteriaFactory
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->productCategoriesQuery = $productCategoriesQuery;
+        $this->categorySearch = $categorySearch;
+        $this->categorySearchCriteriaFactory = $categorySearchCriteriaFactory;
     }
 
     /**
@@ -51,9 +77,49 @@ class ProductCategoriesDataProvider implements DataProviderInterface
         // get categories and product -> categories map
         $productCategories = [];
 
-        foreach ($categoryProducts as $item) {
-            $productCategories[$item['product_id']]['categories'][] = $item['category_id'];
+        // TODO: handle ad-hoc solution MC-29791
+        if (empty($attributes)) {
+            foreach ($categoryProducts as $item) {
+                $productCategories[$item['product_id']]['categories'][] = $item['category_id'];
+            }
+            return $productCategories;
         }
-        return $productCategories;
+
+        $categoryIds = [];
+
+        foreach ($categoryProducts as $item) {
+            $categoryIds[$item['category_id']] = $item['category_id'];
+            $productCategories[$item['product_id']][] = $item['category_id'];
+        }
+
+        // TODO: return only categories ids
+        // get categories attributes
+        $attributeCodes = \array_merge($attributes['categories'], self::$requiredCategoryAttributes);
+
+        $requests = $this->categorySearchCriteriaFactory->create(
+            [
+                'ids' => $categoryIds,
+                'scopes' => $scopes,
+                'attributes' => $attributeCodes
+            ]
+        );
+        $categories = $this->categorySearch->get([$requests])[0]->getCategories();
+
+        // format output
+        $output = [];
+
+        foreach ($productIds as $productId) {
+            $output[$productId] = [];
+            $output[$productId]['categories'] = [];
+            if (isset($productCategories[$productId])) {
+                foreach ($productCategories[$productId] as $categoryId) {
+                    if (!empty($categories[$categoryId])) {
+                        $output[$productId]['categories'][] = $categories[$categoryId];
+                    }
+                }
+            }
+        }
+
+        return $output;
     }
 }

@@ -32,6 +32,7 @@ class BundleFieldsTransformer implements TransformerInterface
         'weight_type' => 'dynamic_weight',
         'price_type' => 'dynamic_price',
         'sku_type' => 'dynamic_sku',
+        'shipment_type' => 'ship_bundle_items'
     ];
 
     /**
@@ -51,7 +52,7 @@ class BundleFieldsTransformer implements TransformerInterface
      * @var array
      */
     private $attributeEnumFieldsMap = [
-        'shipment_type' => [
+        'ship_bundle_items' => [
             'enumName' => 'ShipBundleItemsEnum',
             'attribute' => 'ship_bundle_items',
         ],
