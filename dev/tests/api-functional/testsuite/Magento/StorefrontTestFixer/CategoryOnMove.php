@@ -10,6 +10,7 @@ namespace Magento\StorefrontTestFixer;
 use Magento\Catalog\Model\Category;
 use Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataOnMove;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\ConsumerInvoker;
 
 /**
  * Plugin for collect category data during saving process
