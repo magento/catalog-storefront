@@ -51,14 +51,16 @@ class ProductImageTransformer implements TransformerInterface
         }
 
         foreach ($productItems as &$item) {
-            $rawValue = $item[$attributeName] ?? '';
-            $item[$attributeName] = [];
+            if (isset($item[$attributeName])) {
+                $rawValue = $item[$attributeName] ?? '';
+                $item[$attributeName] = [];
 
-            if (\in_array('url', $fields, true)) {
-                $item[$attributeName]['url'] = $this->imageUrlResolver->resolve($rawValue, $attributeName);
-            }
-            if (\in_array('label', $fields, true)) {
-                $item[$attributeName]['label'] = $item[$attributeName . '_label'] ?? $item['name'] ?? '';
+                if (\in_array('url', $fields, true)) {
+                    $item[$attributeName]['url'] = $this->imageUrlResolver->resolve($rawValue, $attributeName);
+                }
+                if (\in_array('label', $fields, true)) {
+                    $item[$attributeName]['label'] = $item[$attributeName . '_label'] ?? $item['name'] ?? '';
+                }
             }
         }
 
