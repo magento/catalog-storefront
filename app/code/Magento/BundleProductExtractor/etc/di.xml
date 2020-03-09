@@ -12,7 +12,7 @@
                 <item name="price_view" xsi:type="string">Magento\BundleProductExtractor\DataProvider\BundleFieldsTransformer</item>
                 <item name="price_type" xsi:type="string">Magento\BundleProductExtractor\DataProvider\BundleFieldsTransformer</item>
                 <item name="sku_type" xsi:type="string">Magento\BundleProductExtractor\DataProvider\BundleFieldsTransformer</item>
-                <item name="ship_bundle_items" xsi:type="string">Magento\BundleProductExtractor\DataProvider\BundleFieldsTransformer</item>
+                <item name="shipment_type" xsi:type="string">Magento\BundleProductExtractor\DataProvider\BundleFieldsTransformer</item>
                 <item name="weight_type" xsi:type="string">Magento\BundleProductExtractor\DataProvider\BundleFieldsTransformer</item>
             </argument>
         </arguments>

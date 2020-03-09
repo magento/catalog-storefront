@@ -50,7 +50,11 @@ class DescriptionDataProvider implements DataProviderInterface
         $output = [];
         $attribute = !empty($attributes) ? key($attributes) : self::ATTRIBUTE;
 
-        foreach ($this->categoriesProvider->getCategoriesByIds($categoryIds, [$attribute]) as $category) {
+        foreach ($this->categoriesProvider->getCategoriesByIds(
+            $categoryIds,
+            (int)$scope['store'],
+            [$attribute]
+        ) as $category) {
             $description = $category->getDescription();
             $renderedValue = $this->outputHelper->categoryAttribute(null, $description, $attribute);
             $output[$category->getId()][$attribute] = $renderedValue;

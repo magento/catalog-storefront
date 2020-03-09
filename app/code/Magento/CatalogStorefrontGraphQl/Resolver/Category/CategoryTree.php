@@ -102,7 +102,7 @@ class CategoryTree implements BatchResolverInterface
                 $categoryId = $request->getArgs()['id']
                     ?? $context->getExtensionAttributes()->getStore()->getRootCategoryId();
 
-                if (!isset($result->getCategories()[$categoryId])) {
+                if (!isset($result->getCategories()[$categoryId]['id'])) {
                     throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
                 }
 

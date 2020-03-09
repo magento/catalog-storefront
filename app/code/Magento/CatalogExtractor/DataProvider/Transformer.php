@@ -52,11 +52,7 @@ class Transformer implements TransformerInterface
                     )
                 );
             }
-            if (empty($attributes)) {
-                $outputAttributes = $attributeName;
-            } else {
-                $outputAttributes = $attributes[$attributeName] ?? null;
-            }
+            $outputAttributes = $attributes[$attributeName] ?? $attributeName;
             if ($outputAttributes === null) {
                 $index = \array_search($attributeName, $attributes, true);
                 $outputAttributes = $index !== false ? $attributes[$index] : null;

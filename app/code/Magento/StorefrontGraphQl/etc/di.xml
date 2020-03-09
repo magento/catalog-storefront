@@ -21,7 +21,9 @@
     <type name="Magento\CustomerGraphQl\Model\Context\AddUserInfoToContext">
         <plugin name="addCustomerGroup" type="Magento\StorefrontGraphQl\Plugin\AddCustomerGroupToContext" />
     </type>
-
+    <type name="Magento\CatalogGraphQl\Model\Config\CategoryAttributeReader">
+        <plugin name="removeResolversForCategoryFieldsProcessedOnSF" type="Magento\StorefrontGraphQl\Plugin\CategoryAttributeReader" />
+    </type>
     <type name="Magento\StorefrontGraphQl\Model\ArgumentResolver">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Reflection</argument>

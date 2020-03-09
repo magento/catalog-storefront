@@ -53,7 +53,7 @@ class ChildrenDataProvider implements DataProviderInterface
 
         $attributeName = key($attributes);
 
-        foreach ($this->categoriesProvider->getCategoriesByIds($categoryIds) as $category) {
+        foreach ($this->categoriesProvider->getCategoriesByIds($categoryIds, (int)$scope['store']) as $category) {
             $categoryId = $category->getId();
             $childCategories = $category->getChildrenCategories()->getAllIds();
             if (in_array($categoryId, $categoryIds)) {

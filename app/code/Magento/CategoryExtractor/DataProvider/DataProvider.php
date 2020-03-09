@@ -91,8 +91,15 @@ class DataProvider implements DataProviderInterface
             $items = \array_combine($categoryIds, \array_fill(0, \count($categoryIds), []));
         }
 
-        return $items;
-    }
+        // return items in the same order as category ids
+        $sortedItems = [];
+        foreach ($categoryIds as $id) {
+            if (isset($items[$id])) {
+                $sortedItems[$id] = $items[$id];
+            }
+        }
+
+        return $sortedItems;    }
 
     /**
      * Get data providers for specified attributes
