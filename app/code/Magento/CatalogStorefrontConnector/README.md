@@ -61,7 +61,7 @@ To enable existing tests work with new Storefront Storage we were forced to impl
     
     $objectManager = Bootstrap::getObjectManager();
     /** @var ConsumerInvoker $consumerInvoker */
-    $consumerInvoker = $objectManager->get(\Magento\StorefrontTestFixer\ConsumerInvoker::class);
+    $consumerInvoker = $objectManager->get(\Magento\TestFramework\Workaround\ConsumerInvoker::class);
     $consumerInvoker->invoke(true);
 
     return $result;

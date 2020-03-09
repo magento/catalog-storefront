@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\StorefrontTestFixer;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\ConsumerInvoker;
 
 /**
  * Plugin for store saving.
