@@ -69,7 +69,7 @@ class CollectCategoriesDataOnSave
         foreach ($category->getStoreIds() as $storeId) {
             $storeId = (int)$storeId;
             if ($storeId === Store::DEFAULT_STORE_ID) {
-                continue ;
+                continue;
             }
             // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $categoryIds = array_merge([$categoryId], $category->getParentIds());
@@ -83,7 +83,6 @@ class CollectCategoriesDataOnSave
 
         return $result;
     }
-
 
     /**
      * Is indexer run in "on schedule" mode

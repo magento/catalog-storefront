@@ -26,14 +26,13 @@ class CategoryOnUpdate extends CollectCategoriesDataForUpdate
     public function afterExecute(
         Rows $subject,
         Rows $result,
-        array $entityIds = [],
-        $useTempTable = false
+        array $entityIds = []
     ): Rows {
-        $result = parent::afterExecute($subject, $result, $entityIds, $useTempTable);
+        $result = parent::afterExecute($subject, $result, $entityIds);
 
         $objectManager = Bootstrap::getObjectManager();
-        /** @var ConsumerInvoker $consumerInvoker */
-        $consumerInvoker = $objectManager->get(ConsumerInvoker::class);
+        /** @var \Magento\TestFramework\Workaround\ConsumerInvoker $consumerInvoker */
+        $consumerInvoker = $objectManager->get(\Magento\TestFramework\Workaround\ConsumerInvoker::class);
         $consumerInvoker->invoke(true);
 
         return $result;

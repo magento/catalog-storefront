@@ -8,6 +8,7 @@ namespace Magento\CatalogStorefrontConnector\Model;
 
 use Magento\CatalogStorefrontConnector\Model\Publisher\CategoryPublisher;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
+use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
 
 /**
  * Consumer processes messages with store front categories data
@@ -20,12 +21,20 @@ class CategoriesQueueConsumer
     private $categoryPublisher;
 
     /**
+     * @var CatalogEntityIdsProvider
+     */
+    private $catalogEntityIdsProvider;
+
+    /**
      * @param CategoryPublisher $categoryPublisher
+     * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
      */
     public function __construct(
-        CategoryPublisher $categoryPublisher
+        CategoryPublisher $categoryPublisher,
+        CatalogEntityIdsProvider $catalogEntityIdsProvider
     ) {
         $this->categoryPublisher = $categoryPublisher;
+        $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
     }
 
     /**
@@ -34,15 +43,21 @@ class CategoriesQueueConsumer
      * Process messages from storefront.collect.updated.categories.data topic
      * and publish new messages to storefront.catalog.data.consume topic
      *
-     * @param UpdatedEntitiesDataInterface[] $messages
+     * @param UpdatedEntitiesDataInterface $message
      * @return void
      * @throws \Exception
      */
-    public function processMessages(array $messages): void
+    public function processMessages(UpdatedEntitiesDataInterface $message): void
     {
-        $storeCategories = $this->getUniqueIdsForStores($messages);
+        $storeCategories = $this->getUniqueIdsForStores([$message]);
         foreach ($storeCategories as $storeId => $categoryIds) {
-            $this->categoryPublisher->publish($categoryIds, $storeId);
+            if (empty($categoryIds)) {
+                foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $ids) {
+                    $this->categoryPublisher->publish($ids, $storeId);
+                }
+            } else {
+                $this->categoryPublisher->publish(\array_unique($categoryIds), $storeId);
+            }
         }
     }
 

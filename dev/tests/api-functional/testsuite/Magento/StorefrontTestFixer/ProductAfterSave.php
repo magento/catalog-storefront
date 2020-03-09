@@ -32,8 +32,8 @@ class ProductAfterSave extends CollectProductsDataOnSave
         $result = parent::afterSave($subject, $result, $product);
 
         $objectManager = Bootstrap::getObjectManager();
-        /** @var ConsumerInvoker $consumerInvoker */
-        $consumerInvoker = $objectManager->get(ConsumerInvoker::class);
+        /** @var \Magento\TestFramework\Workaround\ConsumerInvoker $consumerInvoker */
+        $consumerInvoker = $objectManager->get(\Magento\TestFramework\Workaround\ConsumerInvoker::class);
         $consumerInvoker->invoke(true);
 
         return $result;
@@ -54,8 +54,8 @@ class ProductAfterSave extends CollectProductsDataOnSave
         $result = parent::afterDelete($subject, $result, $product);
 
         $objectManager = Bootstrap::getObjectManager();
-        /** @var ConsumerInvoker $consumerInvoker */
-        $consumerInvoker = $objectManager->get(ConsumerInvoker::class);
+        /** @var \Magento\TestFramework\Workaround\ConsumerInvoker $consumerInvoker */
+        $consumerInvoker = $objectManager->get(\Magento\TestFramework\Workaround\ConsumerInvoker::class);
         $consumerInvoker->invoke(true);
 
         return $result;

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\StorefrontTestFixer;
+namespace Magento\TestFramework\Workaround;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -32,10 +32,12 @@ class ConsumerInvoker
      * Invoke consumers
      *
      * @param bool $invokeInTestsOnly
+     * @param array $consumersToProcess
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \ReflectionException
      */
-    public function invoke($invokeInTestsOnly = false): void
+    public function invoke($invokeInTestsOnly = false, $consumersToProcess = []): void
     {
         if ($invokeInTestsOnly) {
             $trace = (new \Exception())->getTraceAsString();
@@ -49,7 +51,9 @@ class ConsumerInvoker
 
         /** @var \Magento\Framework\MessageQueue\ConsumerFactory $consumerFactory */
         $consumerFactory = $objectManager->create(\Magento\Framework\MessageQueue\ConsumerFactory::class);
-        foreach (self::CONSUMERS as $consumerName) {
+        $consumersToProcess = $consumersToProcess ?: self::CONSUMERS;
+
+        foreach ($consumersToProcess as $consumerName) {
             $consumer = $consumerFactory->get($consumerName, self::BATCHSIZE);
             $consumer->process(self::BATCHSIZE);
         }

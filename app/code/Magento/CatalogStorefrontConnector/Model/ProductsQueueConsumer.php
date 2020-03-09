@@ -6,6 +6,7 @@
 
 namespace Magento\CatalogStorefrontConnector\Model;
 
+use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesData;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
 use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
@@ -43,13 +44,13 @@ class ProductsQueueConsumer
      * Process messages from storefront.catalog.product.update topic
      * and publish new messages to storefront.catalog.data.consume
      *
-     * @param UpdatedEntitiesDataInterface[] $messages
+     * @param UpdatedEntitiesDataInterface $message
      * @return void
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function processMessages(array $messages): void
+    public function processMessages(UpdatedEntitiesDataInterface $message): void
     {
-        $storeProducts = $this->getUniqueIdsForStores($messages);
+        $storeProducts = $this->getUniqueIdsForStores([$message]);
         foreach ($storeProducts as $storeId => $productIds) {
             if (empty($productIds)) {
                 foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $ids) {
@@ -70,7 +71,7 @@ class ProductsQueueConsumer
     private function getUniqueIdsForStores(array $messages): array
     {
         $storesProductIds = [];
-        /** @var \Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesData $updatedProductsData */
+        /** @var UpdatedEntitiesData $updatedProductsData */
         foreach ($messages as $updatedProductsData) {
             $storeId = $updatedProductsData->getStoreId();
             if (empty($updatedProductsData->getEntityIds())) {
