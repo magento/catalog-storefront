@@ -74,13 +74,18 @@ class ProductsCountBuilder
         );
         $categoryTable = $this->scopeResolver->resolve('catalog_category_product_index', [$storeDimension]);
 
-        return $connection->select()
+        $select = $connection->select()
             ->from(
                 ['cat_index' => $categoryTable],
                 ['category_id' => 'cat_index.category_id', 'count' => 'count(cat_index.product_id)']
             )
             ->where('cat_index.visibility in (?)', $this->catalogProductVisibility->getVisibleInSiteIds())
-            ->where('cat_index.category_id in (?)', \array_map('\intval', $categoryIds))
-            ->group('cat_index.category_id');
+            ->where('cat_index.category_id in (?)', \array_map('\intval', $categoryIds));
+
+        if (count($categoryIds) > 1) {
+            $select->group('cat_index.category_id');
+        }
+
+        return $select;
     }
 }
