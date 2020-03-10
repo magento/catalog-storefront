@@ -92,14 +92,14 @@ class BundleFieldsTransformer implements TransformerInterface
                 $rawValue = $item[$attributeName] ?? '';
                 $item[$outputAttribute] = [];
 
-                if (isset($this->attributeFieldsMap[$outputAttribute])) {
-                    $item[$this->attributeFieldsMap[$outputAttribute]]
-                        = isset($item[$outputAttribute]) ? !$rawValue : null;
+                if (isset($this->attributeFieldsMap[$attributeName])) {
+                    $item[$this->attributeFieldsMap[$attributeName]]
+                        = isset($item[$attributeName]) ? !$rawValue : null;
                     continue;
                 }
 
-                if (isset($this->attributeEnumFieldsMap[$outputAttribute])) {
-                    $enumName = $this->attributeEnumFieldsMap[$outputAttribute]['enumName'];
+                if (isset($this->attributeEnumFieldsMap[$attributeName])) {
+                    $enumName = $this->attributeEnumFieldsMap[$attributeName]['enumName'];
 
                     $rawValue = (int)$rawValue;
                     if (empty($this->enumValues[$enumName][$rawValue])) {
@@ -107,7 +107,7 @@ class BundleFieldsTransformer implements TransformerInterface
                             __('Enum list "%1" does not have value for "%2"', $enumName, $rawValue)
                         );
                     }
-                    $requestedAttribute = $this->attributeEnumFieldsMap[$outputAttribute]['attribute'];
+                    $requestedAttribute = $this->attributeEnumFieldsMap[$attributeName]['attribute'];
                     $item[$requestedAttribute] = $this->enumValues[$enumName][$rawValue];
                     continue;
                 }

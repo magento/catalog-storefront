@@ -25,15 +25,23 @@ class Transformer implements TransformerInterface
     private $map;
 
     /**
+     * @var array
+     */
+    private $outputAttributesMap;
+
+    /**
      * @param array $map
+     * @param array $outputAttributesMap
      * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
         array $map,
+        array $outputAttributesMap,
         ObjectManagerInterface $objectManager
     ) {
         $this->objectManager = $objectManager;
         $this->map = $map;
+        $this->outputAttributesMap = $outputAttributesMap;
     }
 
     /**
@@ -52,7 +60,11 @@ class Transformer implements TransformerInterface
                     )
                 );
             }
-            $outputAttributes = $attributes[$attributeName] ?? $attributeName;
+            if (empty($attributes)) {
+                $outputAttributes = $attributeName;
+            } else {
+                $outputAttributes = $attributes[$attributeName] ?? null;
+            }
             if ($outputAttributes === null) {
                 $index = \array_search($attributeName, $attributes, true);
                 $outputAttributes = $index !== false ? $attributes[$index] : null;
@@ -60,7 +72,8 @@ class Transformer implements TransformerInterface
             if (!$outputAttributes) {
                 continue;
             }
-            $outputAttributes = [$attributeName => $outputAttributes];
+            $sourceName = $this->outputAttributesMap[$attributeName] ?? $attributeName;
+            $outputAttributes = [$sourceName => $outputAttributes];
             $productItems = $attributeTransformer->transform($productItems, $outputAttributes);
         }
 
