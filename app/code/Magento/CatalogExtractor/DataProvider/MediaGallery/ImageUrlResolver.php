@@ -16,11 +16,6 @@ use Magento\Catalog\Model\Product\ImageFactory;
 class ImageUrlResolver
 {
     /**
-     * @var Image
-     */
-    private $imageHelper;
-
-    /**
      * @var ImageFactory
      */
     private $productImageFactory;
@@ -31,15 +26,20 @@ class ImageUrlResolver
     private $image;
 
     /**
+     * @var PlaceholderProvider
+     */
+    private $placeholderProvider;
+
+    /**
      * @param ImageFactory $productImageFactory
-     * @param Image $imageHelper
+     * @param PlaceholderProvider $placeholderProvider
      */
     public function __construct(
         ImageFactory $productImageFactory,
-        Image $imageHelper
+        PlaceholderProvider $placeholderProvider
     ) {
-        $this->imageHelper = $imageHelper;
         $this->productImageFactory = $productImageFactory;
+        $this->placeholderProvider = $placeholderProvider;
     }
 
     /**
@@ -57,7 +57,8 @@ class ImageUrlResolver
             ->setBaseFile($imagePath);
 
         if ($image->isBaseFilePlaceholder()) {
-            return $this->imageHelper->getDefaultPlaceholderUrl($imageType);
+            // TODO:: remove this class after ENGCOM-6604 issue will be fixed
+            return $this->placeholderProvider->getPlaceholder($imageType);
         }
 
         return $image->getUrl();
