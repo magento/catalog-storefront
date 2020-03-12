@@ -60,6 +60,9 @@ class ProductCountStockFilter
                 'stock_status_index.product_id = cat_index.product_id',
                 []
             )
+            ->useStraightJoin(
+                true
+            )
             ->where('stock_status_index.stock_id = ?', Stock::DEFAULT_STOCK_ID)
             ->where('stock_status_index.stock_status = ?', StockStatusInterface::STATUS_IN_STOCK);
 
