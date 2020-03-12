@@ -13,22 +13,22 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 /**
- * Provide regular prices for simple products
+ * Provide regular prices for simple products and final min, max prices for all products
  *
  * Return data in format:
  * [
  *   product_id => [
- *      regular_min_price => price,
- *      regular_max_price => price,
+ *      regular_min_price => price, //actual only for simple products
+ *      regular_max_price => price, //actual only for simple products
+ *      final_min_price => price,
+ *      final_max_price => price,
  *  ]
  * ]
  */
 class SimpleProducts
 {
-    /**
-     * Simple product type
-     */
     private const SIMPLE_PRODUCT_TYPE = ['simple', 'virtual', 'downloadable'];
+
     /**
      * @var ResourceConnection
      */
@@ -84,6 +84,13 @@ class SimpleProducts
             $customerGroupDimension
         ];
         $priceIndexTableName = $this->priceTableResolver->resolve('catalog_product_index_price', $dimensions);
+
+        $maxFinalPrice = $this->resourceConnection->getConnection()->getCheckSql(
+            'product.type_id IN ("'. implode('","', self::SIMPLE_PRODUCT_TYPE) .'")',
+            'price_index.min_price',
+            'price_index.max_price'
+        );
+
         $select = $connection->select()
             ->from(
                 ['product' => $this->resourceConnection->getTableName('catalog_product_entity')],
@@ -91,7 +98,9 @@ class SimpleProducts
             )->columns(
                 [
                     'regular_min_price' => 'price_index.price',
-                    'regular_max_price' => 'price_index.price'
+                    'regular_max_price' => 'price_index.price',
+                    'final_min_price' => 'price_index.min_price',
+                    'final_max_price' => $maxFinalPrice
                 ]
             )->joinInner(
                 ['price_index' => $priceIndexTableName],
@@ -99,7 +108,6 @@ class SimpleProducts
                 ''
             )
             ->where('product.entity_id IN (?)', $entityIds)
-            ->where('product.type_id IN (?)', self::SIMPLE_PRODUCT_TYPE)
             ->where('price_index.customer_group_id = ?', $customerGroupId)
             ->where('price_index.website_id = ?', $websiteId);
         $statement = $this->resourceConnection->getConnection()->query($select);

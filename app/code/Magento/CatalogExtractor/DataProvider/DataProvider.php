@@ -198,6 +198,10 @@ class DataProvider implements DataProviderInterface
         }
 
         foreach ($attributes as $attributeName => $outputAttributes) {
+            // ad-hoc fix for ConfigurableProduct.price_range
+            if (\is_string($attributeName) && \strpos($attributeName, '.price_range') !== false) {
+                $attributeName = 'price_range';
+            }
             $cleanAttributeName = $attributeName;
             if (\is_string($attributeName) && false !== \strpos($attributeName, '.')) {
                 $cleanAttributeName = \substr($attributeName, \strpos($attributeName, '.') + 1);
@@ -220,7 +224,6 @@ class DataProvider implements DataProviderInterface
                 $attributesProviderMap[$this->defaultDataProvider][] = [$cleanAttributeName];
             }
         }
-
         return $attributesProviderMap;
     }
 }

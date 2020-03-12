@@ -88,26 +88,20 @@ class PriceRange implements DataProviderInterface
             (int)$store->getWebsiteId()
         );
 
-        $productPrices = \array_merge($simpleProductPrices, $compositeProductPrices);
-
-        $products = $this->productCollectionFactory->create()
-            ->setStoreId($storeId)
-            ->addPriceData($customerGroupId, $store->getWebsiteId())
-            ->addIdFilter($productIds);
+        $productPrices = \array_replace_recursive($simpleProductPrices, $compositeProductPrices);
+        $currency = $store->getCurrentCurrencyCode();
 
         /** @var Product $product */
-        foreach ($products as $product) {
-            $product->setPriceCalculation(true);
-            $productId = $product->getId();
+        foreach ($productIds as $productId) {
             $output[$productId]['price_range']['minimum_price'] = $this->formatPrice(
-                (float)($productPrices[$productId]['regular_min_price'] ?? $this->getRegularPrice($product)),
-                $this->getFinalMinPrice($product),
-                $store
+                (float)($productPrices[$productId]['regular_min_price'] ?? 0),
+                (float)($productPrices[$productId]['final_min_price'] ?? 0),
+                $currency
             );
             $output[$productId]['price_range']['maximum_price'] = $this->formatPrice(
-                (float)($productPrices[$productId]['regular_max_price'] ?? $this->getRegularPrice($product)),
-                $this->getFinalMaxPrice($product),
-                $store
+                (float)($productPrices[$productId]['regular_max_price'] ?? 0),
+                (float)($productPrices[$productId]['final_max_price'] ?? 0),
+                $currency
             );
 
             // ad-hoc solution for price fixed product taxes
@@ -145,19 +139,19 @@ class PriceRange implements DataProviderInterface
      *
      * @param float $regularPrice
      * @param float $finalPrice
-     * @param StoreInterface $store
+     * @param string $currency
      * @return array
      */
-    private function formatPrice(float $regularPrice, float $finalPrice, StoreInterface $store): array
+    private function formatPrice(float $regularPrice, float $finalPrice, string $currency): array
     {
         return [
             'regular_price' => [
                 'value' => $regularPrice,
-                'currency' => $store->getCurrentCurrencyCode()
+                'currency' => $currency,
             ],
             'final_price' => [
                 'value' => $finalPrice,
-                'currency' => $store->getCurrentCurrencyCode()
+                'currency' => $currency
             ],
             'discount' => $this->discount->getDiscountByDifference($regularPrice, $finalPrice),
         ];
