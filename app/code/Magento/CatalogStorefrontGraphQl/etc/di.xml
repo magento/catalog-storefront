@@ -18,12 +18,14 @@
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\NewFromTo" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\NewFromTo"/>
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\Websites" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\Websites"/>
     <preference for="Magento\CatalogCmsGraphQl\Model\Resolver\Category\Block" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\Category\Block"/>
-    <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\PriceRange" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\PriceRange"/>
     <preference for="Magento\RelatedProductGraphQl\Model\Resolver\Batch\RelatedProducts" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\RelatedProducts\RelatedProducts"/>
     <preference for="Magento\RelatedProductGraphQl\Model\Resolver\Batch\CrossSellProducts" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\RelatedProducts\CrossSellProducts"/>
     <preference for="Magento\RelatedProductGraphQl\Model\Resolver\Batch\UpSellProducts" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\RelatedProducts\UpSellProducts"/>
     <preference for="Magento\CatalogCustomerGraphQl\Model\Resolver\PriceTiers" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\CatalogCustomer\PriceTiers"/>
     <preference for="Magento\CatalogCustomerGraphQl\Model\Resolver\TierPrices" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\CatalogCustomer\TierPrices"/>
+
+    <!-- Temporary solution -->
+    <preference for="Magento\WeeeGraphQl\Model\Resolver\FixedProductTax" type="Magento\CatalogStoreFrontGraphQl\Resolver\Deprecated\Product\FixedProductTax"/>
 
     <!-- Remove @resolver from schema.graphqls fields, which should be handled on Storefront API -->
     <type name="Magento\StorefrontGraphQl\Plugin\SchemaReader">
@@ -51,6 +53,7 @@
                     <item name="description" xsi:type="string">description</item>
                     <item name="short_description" xsi:type="string">short_description</item>
                     <item name="options" xsi:type="string">options</item>
+                    <item name="price_range" xsi:type="string">price_range</item>
                 </item>
                 <item name="ConfigurableProduct" xsi:type="array">
                     <item name="variants" xsi:type="string">variants</item>

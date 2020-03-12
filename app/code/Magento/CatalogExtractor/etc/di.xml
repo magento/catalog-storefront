@@ -25,6 +25,7 @@
                 <item name="categories" xsi:type="string">Magento\CatalogExtractor\DataProvider\Category\ProductCategoriesDataProvider</item>
                 <item name="canonical_url" xsi:type="string">Magento\CatalogExtractor\DataProvider\CanonicalUrl\CanonicalUrlDataProvider</item>
                 <item name="CustomizableProductInterface.options" xsi:type="string">Magento\CatalogExtractor\DataProvider\Options\CustomizableOptions</item>
+                <item name="price_range" xsi:type="string">Magento\CatalogExtractor\DataProvider\Product\PriceRange</item>
             </argument>
         </arguments>
     </type>
