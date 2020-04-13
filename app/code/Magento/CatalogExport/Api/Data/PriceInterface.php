@@ -10,6 +10,17 @@ namespace Magento\CatalogExport\Api\Data;
 interface PriceInterface
 {
     /**
+     * @return string
+     */
+    public function getCode() : string;
+
+    /**
+     * @param string $code
+     * @return void
+     */
+    public function setCode($code);
+
+    /**
      * @return float
      */
     public function getRegularPrice() :? float;

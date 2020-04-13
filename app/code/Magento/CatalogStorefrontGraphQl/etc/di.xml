@@ -7,23 +7,23 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <!-- Base resolvers -->
-    <preference for="Magento\CatalogGraphQl\Model\Resolver\Products" type="Magento\CatalogStorefrontGraphQl\Resolver\Products" />
-    <preference for="Magento\CatalogGraphQl\Model\Resolver\Category\Products" type="Magento\CatalogStorefrontGraphQl\Resolver\Category\Products" />
-    <preference for="Magento\CatalogGraphQl\Model\Resolver\CategoryList" type="Magento\CatalogStorefrontGraphQl\Resolver\Category\CategoryList" />
-    <preference for="Magento\CatalogGraphQl\Model\Resolver\CategoryTree" type="Magento\CatalogStorefrontGraphQl\Resolver\Category\CategoryTree" />
+    !<preference for="Magento\CatalogGraphQl\Model\Resolver\Products" type="Magento\CatalogStorefrontGraphQl\Resolver\Products" />
+    !<preference for="Magento\CatalogGraphQl\Model\Resolver\Category\Products" type="Magento\CatalogStorefrontGraphQl\Resolver\Category\Products" />
+    !<preference for="Magento\CatalogGraphQl\Model\Resolver\CategoryList" type="Magento\CatalogStorefrontGraphQl\Resolver\Category\CategoryList" />
+    !<preference for="Magento\CatalogGraphQl\Model\Resolver\CategoryTree" type="Magento\CatalogStorefrontGraphQl\Resolver\Category\CategoryTree" />
 
     <!-- Override deprecated resolvers with "model" hydration -->
-    <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGalleryEntries" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\MediaGalleryEntries"/>
-    <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\Price" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\Price"/>
-    <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\NewFromTo" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\NewFromTo"/>
-    <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\Websites" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\Websites"/>
-    <preference for="Magento\CatalogCmsGraphQl\Model\Resolver\Category\Block" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\Category\Block"/>
-    <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\PriceRange" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\PriceRange"/>
-    <preference for="Magento\RelatedProductGraphQl\Model\Resolver\Batch\RelatedProducts" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\RelatedProducts\RelatedProducts"/>
-    <preference for="Magento\RelatedProductGraphQl\Model\Resolver\Batch\CrossSellProducts" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\RelatedProducts\CrossSellProducts"/>
-    <preference for="Magento\RelatedProductGraphQl\Model\Resolver\Batch\UpSellProducts" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\RelatedProducts\UpSellProducts"/>
-    <preference for="Magento\CatalogCustomerGraphQl\Model\Resolver\PriceTiers" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\CatalogCustomer\PriceTiers"/>
-    <preference for="Magento\CatalogCustomerGraphQl\Model\Resolver\TierPrices" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\CatalogCustomer\TierPrices"/>
+    !<preference for="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGalleryEntries" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\MediaGalleryEntries"/>
+    !<preference for="Magento\CatalogGraphQl\Model\Resolver\Product\Price" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\Price"/>
+    !<preference for="Magento\CatalogGraphQl\Model\Resolver\Product\NewFromTo" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\NewFromTo"/>
+    !<preference for="Magento\CatalogGraphQl\Model\Resolver\Product\Websites" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\Websites"/>
+    !<preference for="Magento\CatalogCmsGraphQl\Model\Resolver\Category\Block" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\Category\Block"/>
+    !<preference for="Magento\CatalogGraphQl\Model\Resolver\Product\PriceRange" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\PriceRange"/>
+    !<preference for="Magento\RelatedProductGraphQl\Model\Resolver\Batch\RelatedProducts" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\RelatedProducts\RelatedProducts"/>
+    !<preference for="Magento\RelatedProductGraphQl\Model\Resolver\Batch\CrossSellProducts" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\RelatedProducts\CrossSellProducts"/>
+    !<preference for="Magento\RelatedProductGraphQl\Model\Resolver\Batch\UpSellProducts" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\RelatedProducts\UpSellProducts"/>
+    !<preference for="Magento\CatalogCustomerGraphQl\Model\Resolver\PriceTiers" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\CatalogCustomer\PriceTiers"/>
+    !<preference for="Magento\CatalogCustomerGraphQl\Model\Resolver\TierPrices" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\CatalogCustomer\TierPrices"/>
 
     <!-- Remove @resolver from schema.graphqls fields, which should be handled on Storefront API -->
     <type name="Magento\StorefrontGraphQl\Plugin\SchemaReader">

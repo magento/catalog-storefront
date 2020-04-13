@@ -79,8 +79,14 @@ class ExportTestTest extends WebapiAbstract
     public function testExport()
     {
         $this->reindex();
+
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $product = $productRepository->get('simple');
+
+        $this->createServiceInfo['rest']['resourcePath'] .= '?ids[0]=' . $product->getId();
         $result = $this->_webApiCall($this->createServiceInfo, []);
-        $this->assertProductsEquals($this->productsFeed->getFeedSince((string) time())['feed'], $result);
+        $this->assertProductsEquals($this->productsFeed->getFeedByIds([$product->getId()])['feed'], $result);
     }
 
     private function assertProductsEquals(array $expected, array $actual)

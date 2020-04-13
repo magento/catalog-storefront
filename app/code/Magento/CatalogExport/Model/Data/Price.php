@@ -16,6 +16,24 @@ class Price extends AbstractModel implements PriceInterface
 
     private const FINAL_PRICE = 'final_price';
 
+    private const CODE = 'code';
+
+    /**
+     * @inheritdoc
+     */
+    public function getCode() : string
+    {
+        return $this->getData(self::CODE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCode($code)
+    {
+        $this->setData(self::CODE, $code);
+    }
+
     /**
      * @inheritdoc
      */

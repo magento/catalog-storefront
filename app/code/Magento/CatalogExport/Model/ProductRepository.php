@@ -11,6 +11,8 @@ use Magento\CatalogExport\Api\ProductRepositoryInterface;
 
 class ProductRepository implements ProductRepositoryInterface
 {
+    private const MAX_ITEMS_IN_RESPONSE = 250;
+
     /**
      * @var \Magento\CatalogDataExporter\Model\Feed\Products
      */
@@ -44,12 +46,28 @@ class ProductRepository implements ProductRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function get()
+    public function get(array $ids)
     {
+        if (sizeof($ids) > self::MAX_ITEMS_IN_RESPONSE) {
+            throw new \InvalidArgumentException(
+                'Max items in the response can\'t exceed '
+                    . self::MAX_ITEMS_IN_RESPONSE
+                    . '.'
+            );
+        }
+
         $products = [];
-        $feedData = $this->products->getFeedSince((string) time());
+        $feedData = $this->products->getFeedByIds($ids);
         foreach ($feedData['feed'] as $feedItem) {
             $product = $this->productFactory->create();
+            if (isset($feedItem['prices'])) {
+                $prices = [];
+                foreach ($feedItem['prices'] as $code => $price) {
+                    $price['code'] = $code;
+                    $prices[] = $price;
+                }
+                $feedItem['prices'] = $prices;
+            }
             $this->dataObjectHelper->populateWithArray(
                 $product,
                 $feedItem,
