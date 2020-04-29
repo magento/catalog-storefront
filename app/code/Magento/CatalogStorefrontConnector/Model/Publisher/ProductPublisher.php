@@ -123,7 +123,7 @@ class ProductPublisher
                 \sprintf('Publish products with ids "%s" in store %s', \implode(', ', $productIds), $storeId),
                 ['verbose' => $productsData]
             );
-            foreach ($productIds as $productId) {
+            foreach ($idsBunch as $productId) {
                 $product = $productsData[$productId] ?? [];
                 $messages[] = $this->messageBuilder->build(
                     $storeId,
