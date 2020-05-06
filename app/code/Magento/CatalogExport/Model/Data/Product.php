@@ -60,8 +60,6 @@ class Product extends AbstractModel implements ProductInterface
 
     private const CATEGORIES = 'categories';
 
-    private const PRICES = 'prices';
-
     private const OPTIONS = 'options';
 
     private const IN_STOCK = 'in_stock';
@@ -83,7 +81,7 @@ class Product extends AbstractModel implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function getId() : ?string
+    public function getId()
     {
         return $this->getData(self::ID);
     }
@@ -462,22 +460,6 @@ class Product extends AbstractModel implements ProductInterface
     public function setCategories($categories)
     {
         $this->setData(self::CATEGORIES, $categories);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPrices()
-    {
-        return $this->getData(self::PRICES);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setPrices($prices)
-    {
-        $this->setData(self::PRICES, $prices);
     }
 
     /**

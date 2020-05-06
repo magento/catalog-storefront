@@ -12,7 +12,7 @@ interface ProductInterface
     /**
      * @return string|null
      */
-    public function getId() : ?string;
+    public function getId();
 
     /**
      * @param string|null $id
@@ -273,17 +273,6 @@ interface ProductInterface
      * @return void
      */
     public function setCategories($categories);
-
-    /**
-     * @return \Magento\CatalogExport\Api\Data\PriceInterface[]
-     */
-    public function getPrices();
-
-    /**
-     * @param \Magento\CatalogExport\Api\Data\PriceInterface[] $prices
-     * @return void
-     */
-    public function setPrices($prices);
 
     /**
      * @return string[]

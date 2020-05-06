@@ -60,14 +60,7 @@ class ProductRepository implements ProductRepositoryInterface
         $feedData = $this->products->getFeedByIds($ids);
         foreach ($feedData['feed'] as $feedItem) {
             $product = $this->productFactory->create();
-            if (isset($feedItem['prices'])) {
-                $prices = [];
-                foreach ($feedItem['prices'] as $code => $price) {
-                    $price['code'] = $code;
-                    $prices[] = $price;
-                }
-                $feedItem['prices'] = $prices;
-            }
+            $feedItem['id'] = $feedItem['productId'];
             $this->dataObjectHelper->populateWithArray(
                 $product,
                 $feedItem,

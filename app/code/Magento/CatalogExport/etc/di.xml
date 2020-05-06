@@ -10,4 +10,5 @@
     <preference for="Magento\CatalogExport\Api\Data\AttributeInterface" type="Magento\CatalogExport\Model\Data\Attribute"/>
     <preference for="Magento\CatalogExport\Api\Data\PriceInterface" type="Magento\CatalogExport\Model\Data\Price"/>
     <preference for="Magento\CatalogExport\Api\ProductRepositoryInterface" type="Magento\CatalogExport\Model\ProductRepository"/>
+    <preference for="Magento\CatalogDataExporter\Model\Indexer\IndexerCallbackInterface" type="Magento\CatalogExport\Model\Indexer\IndexerCallback" />
 </config>

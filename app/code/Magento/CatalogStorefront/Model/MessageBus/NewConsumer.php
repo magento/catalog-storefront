@@ -10,6 +10,7 @@ use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
 use Magento\CatalogStorefront\Model\Storage\State;
 use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
 use Magento\CatalogStorefront\Model\ProductRetrieverInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
 class NewConsumer extends Consumer
@@ -30,6 +31,11 @@ class NewConsumer extends Consumer
     private $logger;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param CommandInterface $storageWriteSource
      * @param DataDefinitionInterface $storageSchemaManager
      * @param State $storageState
@@ -37,6 +43,7 @@ class NewConsumer extends Consumer
      * @param LoggerInterface $logger
      * @param DataProviderInterface $dataProvider
      * @param ProductRetrieverInterface $productRetriever
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         CommandInterface $storageWriteSource,
@@ -45,7 +52,8 @@ class NewConsumer extends Consumer
         CatalogItemMessageBuilder $catalogItemMessageBuilder,
         LoggerInterface $logger,
         DataProviderInterface $dataProvider,
-        ProductRetrieverInterface $productRetriever
+        ProductRetrieverInterface $productRetriever,
+        StoreManagerInterface $storeManager
     ) {
         parent::__construct(
             $storageWriteSource,
@@ -57,6 +65,7 @@ class NewConsumer extends Consumer
         $this->logger = $logger;
         $this->dataProvider = $dataProvider;
         $this->productRetriever = $productRetriever;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -65,14 +74,18 @@ class NewConsumer extends Consumer
     public function processMessage(array $ids)
     {
         $dataPerType = [];
-        $products = $this->dataProvider->fetch($ids, [], ['store' => 1]);
-        $productsToOverride = $this->productRetriever->retrieve($ids);
-        $products = $this->mergeProductData($products, $productsToOverride);
-        foreach ($products as $product) {
+        $overrides = $this->productRetriever->retrieve($ids);
+        foreach ($overrides as $override) {
+            $store = $this->storeManager->getStores(false, $override['store_view_code']);
+            // @todo check if store exists
+            $storeId = array_pop($store)->getId();
+            $products = $this->dataProvider->fetch([$override['id']], [], ['store' => $storeId]);
+            $product = $this->mergeData(array_pop($products), $override);
             if (empty($product)) {
-                $dataPerType['product'][1][self::DELETE][] = $product['entity_id'];
+                $dataPerType['product'][$storeId][self::DELETE][] = $product['entity_id'];
             } else {
-                $dataPerType['product'][1][self::SAVE][] = $product;
+                $product['store_id'] = $storeId;
+                $dataPerType['product'][$storeId][self::SAVE][] = $product;
             }
         }
         try {
@@ -83,44 +96,31 @@ class NewConsumer extends Consumer
     }
 
     /**
-     * @param array $products
-     * @param array $productsToOverride
+     * @param array $product
+     * @param array $override
      * @return array
      */
-    private function mergeProductData($products, $productsToOverride)
+    private function mergeData($product, $override)
     {
-        $data = [];
-        foreach ($products as $key => $product) {
-            $productToOverride = $this->findProductById($productsToOverride, $product['entity_id']);
-            if (!empty($productToOverride)) {
-                $data[$key] = $products[$key];
-                foreach ($productToOverride as $productToOverrideKey => $productToOverrideValue) {
-                    if (array_key_exists($productToOverrideKey, $products[$key])) {
-                        $data[$key][$productToOverrideKey] = $productToOverrideValue;
-                    }
-                }
-                $data[$key]['store_id'] = 1;
-            } else {
-                $data[$key] = ['entity_id' => $product['entity_id']];
-            }
-        }
-        return $data;
-    }
-
-    /**
-     * @param array $productsToOverride
-     * @param string $id
-     * @return array
-     */
-    private function findProductById($productsToOverride, $id)
-    {
-        $data = [];
-        foreach ($productsToOverride as $productToOverride) {
-            if ($productToOverride['id'] == $id) {
-                $data = $productToOverride;
-                break;
-            }
-        }
-        return $data;
+        return array_merge(
+            $product,
+            [
+                'id' => $override['id'],
+                'sku' => $override['sku'],
+                'name' => $override['name'],
+                'meta_description' => $override['meta_description'],
+                'meta_keyword' => $override['meta_keyword'],
+                'meta_title' => $override['meta_title'],
+                'status' => $override['status'],
+                'tax_class_id' => $override['tax_class_id'],
+                'created_at' => $override['created_at'],
+                'updated_at' => $override['updated_at'],
+                'url_key' => $override['url_key'],
+                'visibility' => $override['visibility'],
+                'weight' => $override['weight'],
+                //'categories' => $override['categories'],
+                //'options' => $override['options'],
+            ]
+        );
     }
 }

@@ -52,7 +52,6 @@ class ExportTestTest extends WebapiAbstract
         'buyable',
         'attributes',
         'categories',
-        'prices',
         'options',
         'in_stock',
         'low_stock',
