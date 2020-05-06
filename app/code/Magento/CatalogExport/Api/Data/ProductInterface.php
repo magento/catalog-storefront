@@ -328,4 +328,59 @@ interface ProductInterface
      * @return void
      */
     public function setUrl($url);
+
+    /**
+     * @return bool
+     */
+    public function getAllowOpenAmount() :? bool;
+
+    /**
+     * @param bool $allowOpenAmount
+     * @return void
+     */
+    public function setAllowOpenAmount($allowOpenAmount);
+
+    /**
+     * @return bool
+     */
+    public function getGiftCardType() :? string;
+
+    /**
+     * @param bool $giftCardType
+     * @return void
+     */
+    public function setGiftCardType($giftCardType);
+
+    /**
+     * @return bool
+     */
+    public function getRedeemable() :? bool;
+
+    /**
+     * @param bool $redeemable
+     * @return void
+     */
+    public function setRedeemable($redeemable);
+
+    /**
+     * @return string
+     */
+    public function getSkuType() :? string;
+
+    /**
+     * @param string $skuType
+     * @return void
+     */
+    public function setSkuType($skuType);
+
+    /**
+     * @return string
+     */
+    public function getWeightType() :? string;
+
+    /**
+     * @param string $weightType
+     * @return void
+     */
+    public function setWeightType($weightType);
 }

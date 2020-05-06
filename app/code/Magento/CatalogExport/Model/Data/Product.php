@@ -543,4 +543,84 @@ class Product extends AbstractModel implements ProductInterface
     {
         $this->setData(self::URL, $url);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAllowOpenAmount(): ?bool
+    {
+        return $this->getData(self::ALLOW_OPEN_AMOUNT);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setAllowOpenAmount($allowOpenAmount)
+    {
+        $this->setData(self::ALLOW_OPEN_AMOUNT, $allowOpenAmount);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getGiftCardType() :? string
+    {
+        return $this->getData(self::GIFT_CARD_TYPE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setGiftCardType($giftCardType)
+    {
+        $this->setData(self::GIFT_CAR_DTYPE, $giftCardType);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRedeemable() :? bool
+    {
+        return $this->getData(self::REDEEMABLE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setRedeemable($redeemable)
+    {
+        $this->setData(self::REDEEMABLE, $redeemable);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getSkuType() :? string
+    {
+        return $this->getData(self::SKU_TYPE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setSkuType($skuType)
+    {
+        $this->setData(self::SKU_TYPE, $skuType);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWeightType() :? string
+    {
+        return $this->getData(self::WEIGHT_TYPE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setWeightType($weightType)
+    {
+        $this->setData(self::WEIGHT_TYPE, $weightType);
+    }
 }

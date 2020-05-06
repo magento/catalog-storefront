@@ -17,8 +17,8 @@ use Psr\Log\LoggerInterface;
  */
 class Consumer
 {
-    private const DELETE = 'delete';
-    private const SAVE = 'save';
+    protected const DELETE = 'delete';
+    protected const SAVE = 'save';
 
     /**
      * @var CommandInterface
@@ -113,7 +113,7 @@ class Consumer
      * @throws \Magento\Framework\Exception\BulkException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    private function saveToStorage(array $dataPerType): void
+    protected function saveToStorage(array $dataPerType): void
     {
         foreach ($dataPerType as $entityType => $dataPerStore) {
             foreach ($dataPerStore as $storeId => $data) {

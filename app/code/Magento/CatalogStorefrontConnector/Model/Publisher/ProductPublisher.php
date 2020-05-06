@@ -116,6 +116,7 @@ class ProductPublisher
      */
     private function publishEntities(array $productIds, int $storeId): void
     {
+        /*
         foreach (\array_chunk($productIds, $this->batchSize) as $idsBunch) {
             $messages = [];
             $productsData = $this->productsDataProvider->fetch($idsBunch, [], ['store' => $storeId]);
@@ -136,5 +137,6 @@ class ProductPublisher
                 $this->queuePublisher->publish(self::TOPIC_NAME, $messages);
             }
         }
+        */
     }
 }

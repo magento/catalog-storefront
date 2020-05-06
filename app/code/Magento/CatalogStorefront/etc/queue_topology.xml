@@ -12,4 +12,7 @@
     <exchange name="magento" type="topic" connection="amqp">
         <binding id="sync" topic="storefront.catalog.data.consume" destinationType="queue" destination="storefront.catalog.data.consume"/>
     </exchange>
+    <exchange name="catalog.export.exchange" type="topic" connection="amqp">
+        <binding id="catalog.export.consumer" topic="catalog.export.product.data" destinationType="queue" destination="catalog.export.queue"/>
+    </exchange>
 </config>
