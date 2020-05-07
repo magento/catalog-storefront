@@ -92,12 +92,6 @@ class ExportTestTest extends WebapiAbstract
     {
         $n = sizeof($expected);
         for ($i = 0; $i < $n; $i++) {
-            $prices = [];
-            foreach ($expected[$i]['prices'] as $code => $price) {
-                $price['code'] = $code;
-                $prices[] = $price;
-            }
-            $expected[$i]['prices'] = $prices;
             foreach ($this->attributesToCompare as $attribute) {
                 $this->compareComplexValue(
                     $expected[$i][$this->snakeToCamelCase($attribute)],
