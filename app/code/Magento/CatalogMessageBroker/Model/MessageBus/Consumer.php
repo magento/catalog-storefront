@@ -78,9 +78,10 @@ class Consumer extends OldConsumer
         $dataPerType = [];
         $overrides = $this->productRetriever->retrieve($ids);
         foreach ($overrides as $override) {
+            // @todo eliminate store manager
             $store = $this->storeManager->getStores(false, $override['store_view_code']);
-            // @todo check if store exists
             $storeId = array_pop($store)->getId();
+            // @todo eliminate calling old API when new API can provide all of the necessary data
             $products = $this->dataProvider->fetch([$override['id']], [], ['store' => $storeId]);
             $product = $this->mergeData(array_pop($products), $override);
             if (empty($product)) {

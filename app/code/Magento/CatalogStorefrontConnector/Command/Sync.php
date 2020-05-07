@@ -140,6 +140,7 @@ class Sync extends Command
         $output->writeln("<info>Sync products for store {$storeId}</info>");
         $this->measure(
             function () use ($output, $storeId) {
+                // @todo try to eliminate dependency on indexer
                 $this->productFeedIndexer->executeFull();
                 $processedN = 0;
                 foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $productIds) {
