@@ -3,17 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogStorefront\Model\MessageBus;
+namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
 use Magento\CatalogStorefront\Model\Storage\Client\CommandInterface;
 use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
 use Magento\CatalogStorefront\Model\Storage\State;
 use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
-use Magento\CatalogStorefront\Model\ProductRetrieverInterface;
+use Magento\CatalogMessageBroker\Model\ProductRetrieverInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\CatalogStorefront\Model\MessageBus\Consumer as OldConsumer;
+use Magento\CatalogStorefront\Model\MessageBus\CatalogItemMessageBuilder;
 use Psr\Log\LoggerInterface;
 
-class NewConsumer extends Consumer
+class Consumer extends OldConsumer
 {
     /**
      * @var DataProviderInterface
@@ -111,7 +113,7 @@ class NewConsumer extends Consumer
                 'meta_description' => $override['meta_description'],
                 'meta_keyword' => $override['meta_keyword'],
                 'meta_title' => $override['meta_title'],
-                'status' => $override['status'],
+                //'status' => $override['status'],
                 'tax_class_id' => $override['tax_class_id'],
                 'created_at' => $override['created_at'],
                 'updated_at' => $override['updated_at'],

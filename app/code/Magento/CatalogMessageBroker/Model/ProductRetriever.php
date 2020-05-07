@@ -3,10 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogStorefront\Model;
+namespace Magento\CatalogMessageBroker\Model;
 
-use Magento\CatalogExport\Api\Data\ProductInterface;
-use Magento\CatalogExport\Api\ProductRepositoryInterface;
+use Magento\CatalogExportApi\Api\Data\ProductInterface;
+use Magento\CatalogExportApi\Api\ProductRepositoryInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 
 class ProductRetriever implements ProductRetrieverInterface

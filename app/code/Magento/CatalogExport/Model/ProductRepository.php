@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExport\Model;
 
-use Magento\CatalogExport\Api\ProductRepositoryInterface;
+use Magento\CatalogExportApi\Api\ProductRepositoryInterface;
 
 class ProductRepository implements ProductRepositoryInterface
 {
@@ -19,7 +19,7 @@ class ProductRepository implements ProductRepositoryInterface
     private $products;
 
     /**
-     * @var \Magento\CatalogExport\Api\Data\ProductInterfaceFactory
+     * @var \Magento\CatalogExportApi\Api\Data\ProductInterfaceFactory
      */
     private $productFactory;
 
@@ -30,12 +30,12 @@ class ProductRepository implements ProductRepositoryInterface
 
     /**
      * @param \Magento\CatalogDataExporter\Model\Feed\Products $products
-     * @param \Magento\CatalogExport\Api\Data\ProductInterfaceFactory $productFactory
+     * @param \Magento\CatalogExportApi\Api\Data\ProductInterfaceFactory $productFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         \Magento\CatalogDataExporter\Model\Feed\Products $products,
-        \Magento\CatalogExport\Api\Data\ProductInterfaceFactory $productFactory,
+        \Magento\CatalogExportApi\Api\Data\ProductInterfaceFactory $productFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
         $this->products = $products;
@@ -64,7 +64,7 @@ class ProductRepository implements ProductRepositoryInterface
             $this->dataObjectHelper->populateWithArray(
                 $product,
                 $feedItem,
-                \Magento\CatalogExport\Api\Data\ProductInterface::class
+                \Magento\CatalogExportApi\Api\Data\ProductInterface::class
             );
             $products[] = $product;
         }

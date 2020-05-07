@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExport\Model\Data;
 
-use Magento\CatalogExport\Api\Data\AttributeInterface;
+use Magento\CatalogExportApi\Api\Data\AttributeInterface;
 use Magento\Framework\Model\AbstractModel;
 
 class Attribute extends AbstractModel implements AttributeInterface

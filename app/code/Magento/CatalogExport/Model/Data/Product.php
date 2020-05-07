@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExport\Model\Data;
 
-use Magento\CatalogExport\Api\Data\ProductInterface;
+use Magento\CatalogExportApi\Api\Data\ProductInterface;
 use Magento\Framework\Model\AbstractModel;
 
 class Product extends AbstractModel implements ProductInterface

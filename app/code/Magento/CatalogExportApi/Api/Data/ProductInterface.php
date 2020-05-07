@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogExport\Api\Data;
+namespace Magento\CatalogExportApi\Api\Data;
 
 interface ProductInterface
 {
@@ -253,12 +253,12 @@ interface ProductInterface
     public function setBuyable($buyable);
 
     /**
-     * @return \Magento\CatalogExport\Api\Data\AttributeInterface[]
+     * @return \Magento\CatalogExportApi\Api\Data\AttributeInterface[]
      */
     public function getAttributes();
 
     /**
-     * @param \Magento\CatalogExport\Api\Data\AttributeInterface[] $attributes
+     * @param \Magento\CatalogExportApi\Api\Data\AttributeInterface[] $attributes
      * @return void
      */
     public function setAttributes($attributes);

@@ -19,7 +19,6 @@
     <preference for="Magento\CatalogStorefrontApi\Api\CategoryInterface" type="Magento\CatalogStorefront\Model\CategorySearch"/>
     <preference for="Magento\CatalogStorefrontApi\Api\Data\CategoryResultContainerInterface" type="Magento\CatalogStorefront\Model\CategorySearch\CategoryResultContainer"/>
     <preference for="Magento\CatalogStorefrontApi\Api\Data\CategoryCriteriaInterface" type="Magento\CatalogStorefront\Model\CategorySearch\CategorySearchCriteria"/>
-    <preference for="Magento\CatalogStorefront\Model\ProductRetrieverInterface" type="Magento\CatalogStorefront\Model\ProductRetriever"/>
 
     <type name="Magento\CatalogStorefront\Model\Storage\Client\Config\EntityConfigPool">
         <arguments>

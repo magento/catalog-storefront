@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogExport\Api\Data;
+namespace Magento\CatalogExportApi\Api\Data;
 
 interface AttributeInterface
 {

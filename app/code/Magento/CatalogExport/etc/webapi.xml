@@ -8,7 +8,7 @@
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
     <route url="/V1/catalog-export/product" method="get">
-        <service class="Magento\CatalogExport\Api\ProductRepositoryInterface" method="get"/>
+        <service class="Magento\CatalogExportApi\Api\ProductRepositoryInterface" method="get"/>
         <resources>
             <resource ref="anonymous" />
         </resources>

@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogExport\Api;
+namespace Magento\CatalogExportApi\Api;
 
 interface ProductRepositoryInterface
 {
     /**
      * @param string[] $ids
-     * @return \Magento\CatalogExport\Api\Data\ProductInterface[]
+     * @return \Magento\CatalogExportApi\Api\Data\ProductInterface[]
      */
     public function get(array $ids);
 }

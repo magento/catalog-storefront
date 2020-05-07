@@ -3,9 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogStorefront\Model;
+namespace Magento\CatalogMessageBroker\Model;
 
-use Magento\CatalogExport\Api\Data\ProductInterface;
+use Magento\CatalogExportApi\Api\Data\ProductInterface;
 
 interface ProductRetrieverInterface
 {

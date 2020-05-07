@@ -1,14 +1,12 @@
 {
-    "name": "magento/module-catalog-export",
+    "name": "magento/module-catalog-message-broker",
     "description": "",
     "config": {
         "sort-packages": true
     },
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/framework": "*",
-        "magento/module-catalog-export-api": "*",
-        "magento/module-catalog-data-exporter": "*"
+        "magento/framework": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -20,7 +18,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\CatalogExport\\": ""
+            "Magento\\CatalogMessageBroker\\": ""
         }
     }
 }
