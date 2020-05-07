@@ -1,4 +1,4 @@
 # Overview
 
-Magento_CatalogExport is responsible for providing API to expose catalog data for storefront.
+Magento_CatalogExport is responsible for exposing catalog data for storefront.
 
