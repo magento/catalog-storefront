@@ -93,14 +93,17 @@ class Consumer
         $dataPerType = [];
         foreach ($messages as $message) {
             $entity = $this->catalogItemMessageBuilder->build($message);
-            $entityData = $entity->getEntityData();
-            if (empty($entityData)) {
+            $eventType = $entity->getEventType();
+
+            if (false !== strpos($eventType, 'delete')) {
                 $dataPerType[$entity->getEntityType()][$entity->getStoreId()][self::DELETE][] = $entity->getEntityId();
-            } else {
-                $entityData['id'] = $entity->getEntityId();
-                $entityData['store_id'] = $entity->getStoreId();
-                $dataPerType[$entity->getEntityType()][$entity->getStoreId()][self::SAVE][] = $entityData;
+                continue;
             }
+
+            $entityData = $entity->getEntityData();
+            $entityData['id'] = $entity->getEntityId();
+            $entityData['store_id'] = $entity->getStoreId();
+            $dataPerType[$entity->getEntityType()][$entity->getStoreId()][self::SAVE][] = $entityData;
         }
 
         return $dataPerType;

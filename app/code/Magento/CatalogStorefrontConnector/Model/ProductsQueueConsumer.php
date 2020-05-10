@@ -50,14 +50,15 @@ class ProductsQueueConsumer
      */
     public function processMessages(UpdatedEntitiesDataInterface $message): void
     {
+        $eventType = $message->getType();
         $storeProducts = $this->getUniqueIdsForStores([$message]);
         foreach ($storeProducts as $storeId => $productIds) {
             if (empty($productIds)) {
                 foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $ids) {
-                    $this->productPublisher->publish($ids, $storeId);
+                    $this->productPublisher->publish($eventType, $ids, $storeId);
                 }
             } else {
-                $this->productPublisher->publish(\array_unique($productIds), $storeId);
+                $this->productPublisher->publish($eventType, \array_unique($productIds), $storeId);
             }
         }
     }

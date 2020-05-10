@@ -31,13 +31,15 @@ class UpdatedEntitiesMessageBuilder
     /**
      * Build message for storefront.catalog.*.update topic
      *
+     * @param string $eventType
      * @param int $storeId
      * @param int[] $entityIds
      *
      * @return UpdatedEntitiesDataInterface
      */
-    public function build(int $storeId, array $entityIds): UpdatedEntitiesDataInterface
+    public function build(string $eventType, int $storeId, array $entityIds): UpdatedEntitiesDataInterface
     {
+        $this->updatedEntitiesData->setType($eventType);
         $this->updatedEntitiesData->setStoreId($storeId);
         $this->updatedEntitiesData->setEntityIds($entityIds);
 

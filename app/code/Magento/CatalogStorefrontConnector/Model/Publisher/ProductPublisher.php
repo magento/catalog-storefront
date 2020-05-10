@@ -7,6 +7,7 @@
 namespace Magento\CatalogStorefrontConnector\Model\Publisher;
 
 use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Psr\Log\LoggerInterface;
@@ -81,22 +82,23 @@ class ProductPublisher
     /**
      * Publish new messages to storefront.catalog.data.consume topic
      *
+     * @param string $eventType
      * @param array $productIds
      * @param int $storeId
      * @return void
      * @throws \Exception
      */
-    public function publish(array $productIds, int $storeId): void
+    public function publish(string $eventType, array $productIds, int $storeId): void
     {
         $this->state->emulateAreaCode(
-            \Magento\Framework\App\Area::AREA_FRONTEND,
-            function () use ($productIds, $storeId) {
+            Area::AREA_FRONTEND,
+            function () use ($eventType, $productIds, $storeId) {
                 try {
-                    $this->publishEntities($productIds, $storeId);
+                    $this->publishEntities($eventType, $productIds, $storeId);
                 } catch (\Throwable $e) {
                     $this->logger->critical(
                         \sprintf(
-                            'Error on publish product] ids "%s" in store %s',
+                            'Error on publish product ids "%s" in store %s',
                             \implode(', ', $productIds),
                             $storeId
                         ),
@@ -110,11 +112,12 @@ class ProductPublisher
     /**
      * Publish entities to the queue
      *
+     * @param string $eventType
      * @param array $productIds
      * @param int $storeId
      * @return void
      */
-    private function publishEntities(array $productIds, int $storeId): void
+    private function publishEntities(string $eventType, array $productIds, int $storeId): void
     {
         foreach (\array_chunk($productIds, $this->batchSize) as $idsBunch) {
             $messages = [];
@@ -126,6 +129,7 @@ class ProductPublisher
             foreach ($idsBunch as $productId) {
                 $product = $productsData[$productId] ?? [];
                 $messages[] = $this->messageBuilder->build(
+                    $eventType,
                     $storeId,
                     'product',
                     $productId,

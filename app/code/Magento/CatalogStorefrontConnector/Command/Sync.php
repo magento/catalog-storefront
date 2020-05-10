@@ -133,7 +133,7 @@ class Sync extends Command
             function () use ($output, $storeId) {
                 $processedN = 0;
                 foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $productIds) {
-                    $this->productPublisher->publish($productIds, $storeId);
+                    $this->productPublisher->publish('product_updated', $productIds, $storeId);
                     $output->write('.');
                     $processedN += count($productIds);
                 }
@@ -156,7 +156,7 @@ class Sync extends Command
             function () use ($output, $storeId) {
                 $processedN = 0;
                 foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $categoryIds) {
-                    $this->categoryPublisher->publish($categoryIds, $storeId);
+                    $this->categoryPublisher->publish('category_updated', $categoryIds, $storeId);
                     $output->write('.');
                     $processedN += count($categoryIds);
                 }

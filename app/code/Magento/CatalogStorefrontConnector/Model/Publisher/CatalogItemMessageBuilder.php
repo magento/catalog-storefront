@@ -30,6 +30,7 @@ class CatalogItemMessageBuilder
     /**
      * Build message for entities update publishing process
      *
+     * @param string $eventType
      * @param int $storeId
      * @param string $entityType
      * @param int $entityId
@@ -37,6 +38,7 @@ class CatalogItemMessageBuilder
      * @return string
      */
     public function build(
+        string $eventType,
         int $storeId,
         string $entityType,
         int $entityId,
@@ -44,6 +46,7 @@ class CatalogItemMessageBuilder
     ): string {
         return $this->serializer->serialize(
             [
+                'type' => $eventType,
                 'entity_type' => $entityType,
                 'entity_id' => $entityId,
                 'store_id' => $storeId,

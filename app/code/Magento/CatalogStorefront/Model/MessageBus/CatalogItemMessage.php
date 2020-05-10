@@ -15,6 +15,11 @@ class CatalogItemMessage
     /**
      * @var string
      */
+    protected $eventType;
+
+    /**
+     * @var string
+     */
     private $entityType;
 
     /**
@@ -33,17 +38,35 @@ class CatalogItemMessage
     private $entityData;
 
     /**
+     * @param string $eventType
      * @param string $entityType
      * @param int $entityId
      * @param int $storeId
      * @param array $entityData
      */
-    public function __construct(string $entityType, int $entityId, int $storeId, array $entityData)
+    public function __construct(string $eventType, string $entityType, int $entityId, int $storeId, array $entityData)
     {
+        $this->eventType = $eventType;
         $this->entityType = $entityType;
         $this->entityId = $entityId;
         $this->storeId = $storeId;
         $this->entityData = $entityData;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEventType(): string
+    {
+        return $this->eventType;
+    }
+
+    /**
+     * @param string $eventType
+     */
+    public function setEventType(string $eventType): void
+    {
+        $this->eventType = $eventType;
     }
 
     /**

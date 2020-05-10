@@ -7,11 +7,27 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Model\Data;
 
+use Magento\Tests\NamingConvention\true\string;
+
 /**
  * Data object interface for updated entities collector
  */
 interface UpdatedEntitiesDataInterface
 {
+    /**
+     * Get event type
+     *
+     * @param string $eventType
+     */
+    public function setType(string $eventType): void;
+
+    /**
+     * Get event type
+     *
+     * @return string
+     */
+    public function getType(): string;
+
     /**
      * Set store ID for updated entities
      *

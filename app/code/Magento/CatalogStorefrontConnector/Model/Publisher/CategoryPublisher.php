@@ -84,18 +84,19 @@ class CategoryPublisher
     /**
      * Publish new messages to storefront.catalog.data.consume topic
      *
+     * @param string $eventType
      * @param array $categoryIds
      * @param int $storeId
      * @return void
      * @throws \Exception
      */
-    public function publish(array $categoryIds, int $storeId): void
+    public function publish(string $eventType, array $categoryIds, int $storeId): void
     {
         $this->state->emulateAreaCode(
             Area::AREA_FRONTEND,
-            function () use ($categoryIds, $storeId) {
+            function () use ($eventType, $categoryIds, $storeId) {
                 try {
-                    $this->publishEntities($categoryIds, $storeId);
+                    $this->publishEntities($eventType, $categoryIds, $storeId);
                 } catch (\Throwable $e) {
                     $this->logger->critical(
                         \sprintf(
@@ -113,11 +114,12 @@ class CategoryPublisher
     /**
      * Publish entities to the queue
      *
+     * @param string $eventType
      * @param array $categoryIds
      * @param int $storeId
      * @return void
      */
-    private function publishEntities(array $categoryIds, int $storeId): void
+    private function publishEntities(string $eventType, array $categoryIds, int $storeId): void
     {
         foreach (\array_chunk($categoryIds, $this->batchSize) as $idsBunch) {
             $messages = [];
@@ -132,6 +134,7 @@ class CategoryPublisher
                 }
                 $category = isset($categoriesData[$categoryId]['id']) ? $categoriesData[$categoryId] :[];
                 $messages[] = $this->messageBuilder->build(
+                    $eventType,
                     $storeId,
                     'category',
                     $categoryId,

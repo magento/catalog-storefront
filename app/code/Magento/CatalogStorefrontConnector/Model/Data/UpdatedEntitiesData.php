@@ -13,6 +13,11 @@ namespace Magento\CatalogStorefrontConnector\Model\Data;
 class UpdatedEntitiesData implements UpdatedEntitiesDataInterface
 {
     /**
+     * @var string
+     */
+    private $eventType;
+
+    /**
      * @var int
      */
     private $storeId;
@@ -21,6 +26,22 @@ class UpdatedEntitiesData implements UpdatedEntitiesDataInterface
      * @var int[]
      */
     private $entityIds;
+
+    /**
+     * @inheritDoc
+     */
+    public function setType(string $eventType): void
+    {
+        $this->eventType = $eventType;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getType(): string
+    {
+        return $this->eventType;
+    }
 
     /**
      * @inheritdoc
