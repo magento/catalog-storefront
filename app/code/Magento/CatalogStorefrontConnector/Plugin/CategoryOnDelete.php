@@ -53,7 +53,7 @@ class CategoryOnDelete
             // we need to collect parent ids to update children field for parent category
             // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $categoryIds = array_merge([$categoryId], $category->getParentIds());
-            $this->categoryPublisher->publish($categoryIds, $storeId);
+            $this->categoryPublisher->publish('category_deleted', $categoryIds, $storeId);
         }
 
         return $result;

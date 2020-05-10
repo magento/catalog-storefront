@@ -73,7 +73,7 @@ class CollectCategoriesDataOnSave
             }
             // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $categoryIds = array_merge([$categoryId], $category->getParentIds());
-            $this->categoryPublisher->publish($categoryIds, $storeId);
+            $this->categoryPublisher->publish('category_updated', $categoryIds, $storeId);
             if (!empty($category->getChangedProductIds())) {
                 $productIds = $category->getChangedProductIds();
                 // phpcs:ignore Magento2.Performance.ForeachArrayMerge

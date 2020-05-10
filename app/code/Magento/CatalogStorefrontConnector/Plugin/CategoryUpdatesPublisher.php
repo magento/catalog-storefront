@@ -55,16 +55,17 @@ class CategoryUpdatesPublisher
     /**
      * Collect store ID and category IDs for scope of reindexed categories
      *
+     * @param string $eventType
      * @param array $categoryIds
      * @param int $storeId
      * @return void
      */
-    public function publish(array $categoryIds, int $storeId): void
+    public function publish(string $eventType, array $categoryIds, int $storeId): void
     {
         if ($storeId === Store::DEFAULT_STORE_ID) {
             return;
         }
-        $message = $this->messageBuilder->build($storeId, $categoryIds);
+        $message = $this->messageBuilder->build($eventType, $storeId, $categoryIds);
         try {
             $this->logger->debug(
                 \sprintf('Collect category ids: "%s" in store %s', \implode(', ', $categoryIds), $storeId)

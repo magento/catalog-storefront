@@ -77,7 +77,11 @@ class CollectCategoriesDataForUpdate
         }
         foreach ($categoryIdsByStore as $storeId => $storeCategoryIds) {
             // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $this->categoryPublisher->publish(array_unique(array_merge(...$storeCategoryIds)), $storeId);
+            $this->categoryPublisher->publish(
+                'category_updated',
+                array_unique(array_merge(...$storeCategoryIds)),
+                $storeId
+            );
         }
         return $result;
     }
