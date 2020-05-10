@@ -73,7 +73,7 @@ class CollectProductsDataOnSave
             : [$product->getStoreId()];
         foreach ($stores as $storeId) {
             $storeId = (int)$storeId;
-            $this->productPublisher->publish([$product->getId()], $storeId);
+            $this->productPublisher->publish('product_updated', [$product->getId()], $storeId);
         }
 
         return $result;
@@ -99,7 +99,7 @@ class CollectProductsDataOnSave
         }
 
         foreach ($this->storeManager->getStores() as $store) {
-            $this->productPublisher->publish([$product->getId()], (int)$store->getId());
+            $this->productPublisher->publish('product_deleted', [$product->getId()], (int)$store->getId());
         }
 
         return $result;

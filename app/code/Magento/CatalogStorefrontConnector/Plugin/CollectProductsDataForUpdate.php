@@ -58,6 +58,7 @@ class CollectProductsDataForUpdate
         }
         $productIds = $entityIds instanceof \Traversable ? $entityIds->getArrayCopy() : [];
         $this->productPublisher->publish(
+            'product_updated',
             $productIds,
             (int)$dimensions[StoreDimensionProvider::DIMENSION_NAME]->getValue()
         );

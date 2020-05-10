@@ -95,7 +95,7 @@ class Consumer
             $entity = $this->catalogItemMessageBuilder->build($message);
             $eventType = $entity->getEventType();
 
-            if (false !== strpos($eventType, 'delete')) {
+            if (false !== strpos($eventType, 'deleted')) {
                 $dataPerType[$entity->getEntityType()][$entity->getStoreId()][self::DELETE][] = $entity->getEntityId();
                 continue;
             }

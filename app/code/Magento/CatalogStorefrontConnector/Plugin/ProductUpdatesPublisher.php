@@ -64,11 +64,12 @@ class ProductUpdatesPublisher
     /**
      * Collect store ID and product IDs for scope of reindexed products
      *
+     * @param string $eventType
      * @param array $productIds
      * @param int $storeId
      * @return void
      */
-    public function publish(array $productIds, int $storeId): void
+    public function publish(string $eventType, array $productIds, int $storeId): void
     {
         if ($storeId === Store::DEFAULT_STORE_ID) {
             return;
@@ -79,7 +80,7 @@ class ProductUpdatesPublisher
                 array_merge($productIds, $this->fulltextResource->getRelationsByChild($productIds))
             );
         }
-        $message = $this->messageBuilder->build($storeId, $productIds);
+        $message = $this->messageBuilder->build($eventType, $storeId, $productIds);
         try {
             $this->logger->debug(
                 \sprintf('Collect product ids: "%s" in store %s', \implode(', ', $productIds), $storeId)
