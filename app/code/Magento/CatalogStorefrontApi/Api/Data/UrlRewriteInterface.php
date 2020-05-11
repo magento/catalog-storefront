@@ -10,28 +10,28 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontApi\Api\Data;
 
-interface AdjustmentInterface
+interface UrlRewriteInterface
 {
 
         /**
      * @return string
      */
-    public function getCode(): string;
+    public function getUrl(): string;
     
     /**
      * @param string $value
      * @return void
      */
-    public function setCode(string $value): void;
+    public function setUrl(string $value): void;
 
     /**
-     * @return float
+     * @return \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameterInterface[]
      */
-    public function getAmount(): float;
+    public function getParameters(): array;
     
     /**
-     * @param float $value
+     * @param \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameterInterface[] $value
      * @return void
      */
-    public function setAmount(float $value): void;
+    public function setParameters(array $value): void;
 }

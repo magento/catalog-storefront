@@ -248,7 +248,6 @@ class VariantsDataProvider implements DataProviderInterface
                     \implode(', ', $parentProductIds)
                 )
             );
-
         }
         return [$attributesPerProduct, $childAttributeOptions];
     }

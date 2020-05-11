@@ -14,9 +14,13 @@ use Google\Protobuf\Internal\GPBUtil;
 class ImportProductsResponse extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Product data = 1;</code>
+     * Generated from protobuf field <code>bool status = 1;</code>
      */
-    private $data;
+    protected $status = false;
+    /**
+     * Generated from protobuf field <code>string message = 2;</code>
+     */
+    protected $message = '';
 
     /**
      * Constructor.
@@ -24,7 +28,8 @@ class ImportProductsResponse extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type \Magento\CatalogStorefrontApi\Proto\Product[]|\Google\Protobuf\Internal\RepeatedField $data
+     *     @type bool $status
+     *     @type string $message
      * }
      */
     public function __construct($data = null)
@@ -34,23 +39,45 @@ class ImportProductsResponse extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Product data = 1;</code>
-     * @return \Google\Protobuf\Internal\RepeatedField
+     * Generated from protobuf field <code>bool status = 1;</code>
+     * @return bool
      */
-    public function getData()
+    public function getStatus()
     {
-        return $this->data;
+        return $this->status;
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Product data = 1;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\Product[]|\Google\Protobuf\Internal\RepeatedField $var
+     * Generated from protobuf field <code>bool status = 1;</code>
+     * @param bool $var
      * @return $this
      */
-    public function setData($var)
+    public function setStatus($var)
     {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\Product::class);
-        $this->data = $arr;
+        GPBUtil::checkBool($var);
+        $this->status = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string message = 2;</code>
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
+     * Generated from protobuf field <code>string message = 2;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setMessage($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->message = $var;
 
         return $this;
     }

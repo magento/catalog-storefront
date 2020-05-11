@@ -9,18 +9,18 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- * Generated from protobuf message <code>magento.catalogStorefrontApi.proto.Adjustment</code>
+ * Generated from protobuf message <code>magento.catalogStorefrontApi.proto.DynamicAttributeValue</code>
  */
-class Adjustment extends \Google\Protobuf\Internal\Message
+class DynamicAttributeValue extends \Google\Protobuf\Internal\Message
 {
     /**
      * Generated from protobuf field <code>string code = 1;</code>
      */
     protected $code = '';
     /**
-     * Generated from protobuf field <code>float amount = 2;</code>
+     * Generated from protobuf field <code>string value = 2;</code>
      */
-    protected $amount = 0.0;
+    protected $value = '';
 
     /**
      * Constructor.
@@ -29,7 +29,7 @@ class Adjustment extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type string $code
-     *     @type float $amount
+     *     @type string $value
      * }
      */
     public function __construct($data = null)
@@ -61,23 +61,23 @@ class Adjustment extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>float amount = 2;</code>
-     * @return float
+     * Generated from protobuf field <code>string value = 2;</code>
+     * @return string
      */
-    public function getAmount()
+    public function getValue()
     {
-        return $this->amount;
+        return $this->value;
     }
 
     /**
-     * Generated from protobuf field <code>float amount = 2;</code>
-     * @param float $var
+     * Generated from protobuf field <code>string value = 2;</code>
+     * @param string $var
      * @return $this
      */
-    public function setAmount($var)
+    public function setValue($var)
     {
-        GPBUtil::checkFloat($var);
-        $this->amount = $var;
+        GPBUtil::checkString($var, true);
+        $this->value = $var;
 
         return $this;
     }

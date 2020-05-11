@@ -16,77 +16,22 @@ interface VariantInterface
         /**
      * @return string
      */
-    public function getId(): string;
+    public function getProduct(): string;
     
     /**
      * @param string $value
      * @return void
      */
-    public function setId(string $value): void;
+    public function setProduct(string $value): void;
 
     /**
-     * @return string
+     * @return \Magento\CatalogStorefrontApi\Api\Data\VariantAttributeInterface[]
      */
-    public function getSku(): string;
+    public function getAttributes(): array;
     
     /**
-     * @param string $value
+     * @param \Magento\CatalogStorefrontApi\Api\Data\VariantAttributeInterface[] $value
      * @return void
      */
-    public function setSku(string $value): void;
-
-    /**
-     * @return \Magento\CatalogStorefrontApi\Api\Data\PriceInterface|null
-     */
-    public function getMinimumPrice(): ?\Magento\CatalogStorefrontApi\Api\Data\PriceInterface;
-    
-    /**
-     * @param \Magento\CatalogStorefrontApi\Api\Data\PriceInterface $value
-     * @return void
-     */
-    public function setMinimumPrice(\Magento\CatalogStorefrontApi\Api\Data\PriceInterface $value): void;
-
-    /**
-     * @return bool
-     */
-    public function getBuyable(): bool;
-    
-    /**
-     * @param bool $value
-     * @return void
-     */
-    public function setBuyable(bool $value): void;
-
-    /**
-     * @return bool
-     */
-    public function getInStock(): bool;
-    
-    /**
-     * @param bool $value
-     * @return void
-     */
-    public function setInStock(bool $value): void;
-
-    /**
-     * @return bool
-     */
-    public function getLowStock(): bool;
-    
-    /**
-     * @param bool $value
-     * @return void
-     */
-    public function setLowStock(bool $value): void;
-
-    /**
-     * @return \Magento\CatalogStorefrontApi\Api\Data\SingleValueAttributeInterface[]
-     */
-    public function getSelections(): array;
-    
-    /**
-     * @param \Magento\CatalogStorefrontApi\Api\Data\SingleValueAttributeInterface[] $value
-     * @return void
-     */
-    public function setSelections(array $value): void;
+    public function setAttributes(array $value): void;
 }

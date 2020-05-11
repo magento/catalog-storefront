@@ -15,149 +15,44 @@ final class Variant implements VariantInterface
     /**
      * @var string
      */
-    private $id;
-    /**
-     * @var string
-     */
-    private $sku;
-    /**
-     * @var \Magento\CatalogStorefrontApi\Api\Data\PriceInterface
-     */
-    private $minimumPrice;
-    /**
-     * @var bool
-     */
-    private $buyable;
-    /**
-     * @var bool
-     */
-    private $inStock;
-    /**
-     * @var bool
-     */
-    private $lowStock;
+    private $product;
     /**
      * @var array
      */
-    private $selections;
+    private $attributes;
 
 
     /**
      * @return string
      */
-    public function getId(): string
+    public function getProduct(): string
     {
-        return (string) $this->id;
+        return (string) $this->product;
     }
     
     /**
      * @param string $value
      * @return void
      */
-    public function setId(string $value): void
+    public function setProduct(string $value): void
     {
-        $this->id = $value;
+        $this->product = $value;
     }
 
     /**
-     * @return string
+     * @return \Magento\CatalogStorefrontApi\Api\Data\VariantAttributeInterface[]
      */
-    public function getSku(): string
+    public function getAttributes(): array
     {
-        return (string) $this->sku;
+        return (array) $this->attributes;
     }
     
     /**
-     * @param string $value
+     * @param \Magento\CatalogStorefrontApi\Api\Data\VariantAttributeInterface[] $value
      * @return void
      */
-    public function setSku(string $value): void
+    public function setAttributes(array $value): void
     {
-        $this->sku = $value;
-    }
-
-    /**
-     * @return \Magento\CatalogStorefrontApi\Api\Data\PriceInterface|null
-     */
-    public function getMinimumPrice(): ?\Magento\CatalogStorefrontApi\Api\Data\PriceInterface
-    {
-        return $this->minimumPrice;
-    }
-    
-    /**
-     * @param \Magento\CatalogStorefrontApi\Api\Data\PriceInterface $value
-     * @return void
-     */
-    public function setMinimumPrice(\Magento\CatalogStorefrontApi\Api\Data\PriceInterface $value): void
-    {
-        $this->minimumPrice = $value;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getBuyable(): bool
-    {
-        return (bool) $this->buyable;
-    }
-    
-    /**
-     * @param bool $value
-     * @return void
-     */
-    public function setBuyable(bool $value): void
-    {
-        $this->buyable = $value;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getInStock(): bool
-    {
-        return (bool) $this->inStock;
-    }
-    
-    /**
-     * @param bool $value
-     * @return void
-     */
-    public function setInStock(bool $value): void
-    {
-        $this->inStock = $value;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getLowStock(): bool
-    {
-        return (bool) $this->lowStock;
-    }
-    
-    /**
-     * @param bool $value
-     * @return void
-     */
-    public function setLowStock(bool $value): void
-    {
-        $this->lowStock = $value;
-    }
-
-    /**
-     * @return \Magento\CatalogStorefrontApi\Api\Data\SingleValueAttributeInterface[]
-     */
-    public function getSelections(): array
-    {
-        return (array) $this->selections;
-    }
-    
-    /**
-     * @param \Magento\CatalogStorefrontApi\Api\Data\SingleValueAttributeInterface[] $value
-     * @return void
-     */
-    public function setSelections(array $value): void
-    {
-        $this->selections = $value;
+        $this->attributes = $value;
     }
 }

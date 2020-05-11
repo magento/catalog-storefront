@@ -10,49 +10,49 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontApi\Api\Data;
 
-final class Adjustment implements AdjustmentInterface
+final class UrlRewriteParameter implements UrlRewriteParameterInterface
 {
     /**
      * @var string
      */
-    private $code;
+    private $name;
     /**
-     * @var float
+     * @var string
      */
-    private $amount;
+    private $value;
 
 
     /**
      * @return string
      */
-    public function getCode(): string
+    public function getName(): string
     {
-        return (string) $this->code;
+        return (string) $this->name;
     }
     
     /**
      * @param string $value
      * @return void
      */
-    public function setCode(string $value): void
+    public function setName(string $value): void
     {
-        $this->code = $value;
+        $this->name = $value;
     }
 
     /**
-     * @return float
+     * @return string
      */
-    public function getAmount(): float
+    public function getValue(): string
     {
-        return (float) $this->amount;
+        return (string) $this->value;
     }
     
     /**
-     * @param float $value
+     * @param string $value
      * @return void
      */
-    public function setAmount(float $value): void
+    public function setValue(string $value): void
     {
-        $this->amount = $value;
+        $this->value = $value;
     }
 }

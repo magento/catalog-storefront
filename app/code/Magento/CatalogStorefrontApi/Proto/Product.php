@@ -14,9 +14,9 @@ use Google\Protobuf\Internal\GPBUtil;
 class Product extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Generated from protobuf field <code>string entity_id = 1;</code>
+     * Generated from protobuf field <code>string id = 1;</code>
      */
-    protected $entity_id = '';
+    protected $id = '';
     /**
      * Generated from protobuf field <code>string attribute_set_id = 2;</code>
      */
@@ -26,17 +26,19 @@ class Product extends \Google\Protobuf\Internal\Message
      */
     protected $has_options = false;
     /**
-     * Generated from protobuf field <code>string id = 4;</code>
+     * Generated from protobuf field <code>string created_at = 5;</code>
      */
-    protected $id = '';
+    protected $created_at = '';
+    /**
+     * Generated from protobuf field <code>string updated_at = 6;</code>
+     */
+    protected $updated_at = '';
     /**
      * TODO: has_options most of the fields below are taken from DB?
      * TODO: required_options ?
-     * TODO: created_at ?
-     * TODO: updated_at ?
-     * TODO: row_id ?
-     * TODO: created_in ?
-     * TODO: updated_in ?
+     * TODO: row_id ? - should be moved to staging service
+     * TODO: created_in ? - should be moved to staging service
+     * TODO: updated_in ? - should be moved to staging service
      * TODO: entity_id vs id, id is used in elastic?
      *
      * Generated from protobuf field <code>string sku = 7;</code>
@@ -47,9 +49,6 @@ class Product extends \Google\Protobuf\Internal\Message
      */
     protected $type_id = '';
     /**
-     * TODO: status vs visibility vs quantity_and_stock_status vs stock_status
-     * TODO: status: enabled, disabled. Check why store these records
-     *
      * Generated from protobuf field <code>string status = 9;</code>
      */
     protected $status = '';
@@ -77,18 +76,6 @@ class Product extends \Google\Protobuf\Internal\Message
      * TODO: qty is missing for only-x-left-in-stock functionality
      * TODO: Why missing meta fields?
      *
-     * Generated from protobuf field <code>string meta_description = 22;</code>
-     */
-    protected $meta_description = '';
-    /**
-     * Generated from protobuf field <code>string meta_keyword = 23;</code>
-     */
-    protected $meta_keyword = '';
-    /**
-     * Generated from protobuf field <code>string meta_title = 24;</code>
-     */
-    protected $meta_title = '';
-    /**
      * Generated from protobuf field <code>string tax_class_id = 28;</code>
      */
     protected $tax_class_id = '';
@@ -111,13 +98,92 @@ class Product extends \Google\Protobuf\Internal\Message
      */
     protected $thumbnail = null;
     /**
-     *    Image swatch_image = 34;//-
+     * Generated from protobuf field <code>string swatch_image = 34;</code>
+     */
+    protected $swatch_image = '';
+    /**
      *    repeated Image media_gallery = 35;//-
      * where to display product
      *
      * Generated from protobuf field <code>string visibility = 37;</code>
      */
     protected $visibility = '';
+    /**
+     *    PriceRange prices = 44;//-
+     * TODO: Uncomment options
+     *    repeated Option options = 46;
+     *    repeated Variant variants = 47;//-
+     *
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DynamicAttributeValue dynamic_attributes = 50;</code>
+     */
+    private $dynamic_attributes;
+    /**
+     * TODO: qty is missing for only-x-left-in-stock functionality
+     * TODO: Meta fields not populated by catalog SF app
+     *
+     * Generated from protobuf field <code>string meta_description = 22;</code>
+     */
+    protected $meta_description = '';
+    /**
+     * Generated from protobuf field <code>string meta_keyword = 23;</code>
+     */
+    protected $meta_keyword = '';
+    /**
+     * Generated from protobuf field <code>string meta_title = 24;</code>
+     */
+    protected $meta_title = '';
+    /**
+     * TODO: Questionable attributes go below for compatibility with existing catalog SF branch during refactoring
+     *
+     * Generated from protobuf field <code>string required_options = 70;</code>
+     */
+    protected $required_options = '';
+    /**
+     * Generated from protobuf field <code>string created_in = 74;</code>
+     */
+    protected $created_in = '';
+    /**
+     * Generated from protobuf field <code>string updated_in = 75;</code>
+     */
+    protected $updated_in = '';
+    /**
+     * Generated from protobuf field <code>string quantity_and_stock_status = 76;</code>
+     */
+    protected $quantity_and_stock_status = '';
+    /**
+     * Generated from protobuf field <code>string options_container = 77;</code>
+     */
+    protected $options_container = '';
+    /**
+     * Generated from protobuf field <code>string msrp_display_actual_price_type = 78;</code>
+     */
+    protected $msrp_display_actual_price_type = '';
+    /**
+     * Generated from protobuf field <code>string is_returnable = 79;</code>
+     */
+    protected $is_returnable = '';
+    /**
+     * Generated from protobuf field <code>string url_suffix = 80;</code>
+     */
+    protected $url_suffix = '';
+    /**
+     * TODO: May need to be a complex type
+     *
+     * Generated from protobuf field <code>repeated string options = 81;</code>
+     */
+    private $options;
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.UrlRewrite url_rewrites = 82;</code>
+     */
+    private $url_rewrites;
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Variant variants = 83;</code>
+     */
+    private $variants;
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ConfigurableOption configurable_options = 84;</code>
+     */
+    private $configurable_options;
 
     /**
      * Constructor.
@@ -125,43 +191,61 @@ class Product extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type string $entity_id
+     *     @type string $id
      *     @type string $attribute_set_id
      *     @type bool $has_options
-     *     @type string $id
+     *     @type string $created_at
+     *     @type string $updated_at
      *     @type string $sku
      *           TODO: has_options most of the fields below are taken from DB?
      *           TODO: required_options ?
-     *           TODO: created_at ?
-     *           TODO: updated_at ?
-     *           TODO: row_id ?
-     *           TODO: created_in ?
-     *           TODO: updated_in ?
+     *           TODO: row_id ? - should be moved to staging service
+     *           TODO: created_in ? - should be moved to staging service
+     *           TODO: updated_in ? - should be moved to staging service
      *           TODO: entity_id vs id, id is used in elastic?
      *     @type string $type_id
      *     @type string $status
-     *           TODO: status vs visibility vs quantity_and_stock_status vs stock_status
-     *           TODO: status: enabled, disabled. Check why store these records
      *     @type string $stock_status
      *     @type string $name
      *     @type string $description
      *     @type string $short_description
      *     @type string $url_key
-     *     @type string $meta_description
+     *     @type string $tax_class_id
      *           TODO: qty is missing for only-x-left-in-stock functionality
      *           TODO: Why missing meta fields?
-     *     @type string $meta_keyword
-     *     @type string $meta_title
-     *     @type string $tax_class_id
      *     @type float $weight
      *     @type \Magento\CatalogStorefrontApi\Proto\Image $image
      *     @type \Magento\CatalogStorefrontApi\Proto\Image $small_image
      *     @type \Magento\CatalogStorefrontApi\Proto\Image $thumbnail
      *           TODO: Rename to thumbnail_image?
+     *     @type string $swatch_image
      *     @type string $visibility
-     *              Image swatch_image = 34;//-
      *              repeated Image media_gallery = 35;//-
      *           where to display product
+     *     @type \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue[]|\Google\Protobuf\Internal\RepeatedField $dynamic_attributes
+     *              PriceRange prices = 44;//-
+     *           TODO: Uncomment options
+     *              repeated Option options = 46;
+     *              repeated Variant variants = 47;//-
+     *     @type string $meta_description
+     *           TODO: qty is missing for only-x-left-in-stock functionality
+     *           TODO: Meta fields not populated by catalog SF app
+     *     @type string $meta_keyword
+     *     @type string $meta_title
+     *     @type string $required_options
+     *           TODO: Questionable attributes go below for compatibility with existing catalog SF branch during refactoring
+     *     @type string $created_in
+     *     @type string $updated_in
+     *     @type string $quantity_and_stock_status
+     *     @type string $options_container
+     *     @type string $msrp_display_actual_price_type
+     *     @type string $is_returnable
+     *     @type string $url_suffix
+     *     @type string[]|\Google\Protobuf\Internal\RepeatedField $options
+     *           TODO: May need to be a complex type
+     *     @type \Magento\CatalogStorefrontApi\Proto\UrlRewrite[]|\Google\Protobuf\Internal\RepeatedField $url_rewrites
+     *     @type \Magento\CatalogStorefrontApi\Proto\Variant[]|\Google\Protobuf\Internal\RepeatedField $variants
+     *     @type \Magento\CatalogStorefrontApi\Proto\ConfigurableOption[]|\Google\Protobuf\Internal\RepeatedField $configurable_options
      * }
      */
     public function __construct($data = null)
@@ -171,23 +255,23 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>string entity_id = 1;</code>
+     * Generated from protobuf field <code>string id = 1;</code>
      * @return string
      */
-    public function getEntityId()
+    public function getId()
     {
-        return $this->entity_id;
+        return $this->id;
     }
 
     /**
-     * Generated from protobuf field <code>string entity_id = 1;</code>
+     * Generated from protobuf field <code>string id = 1;</code>
      * @param string $var
      * @return $this
      */
-    public function setEntityId($var)
+    public function setId($var)
     {
         GPBUtil::checkString($var, true);
-        $this->entity_id = $var;
+        $this->id = $var;
 
         return $this;
     }
@@ -237,23 +321,45 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>string id = 4;</code>
+     * Generated from protobuf field <code>string created_at = 5;</code>
      * @return string
      */
-    public function getId()
+    public function getCreatedAt()
     {
-        return $this->id;
+        return $this->created_at;
     }
 
     /**
-     * Generated from protobuf field <code>string id = 4;</code>
+     * Generated from protobuf field <code>string created_at = 5;</code>
      * @param string $var
      * @return $this
      */
-    public function setId($var)
+    public function setCreatedAt($var)
     {
         GPBUtil::checkString($var, true);
-        $this->id = $var;
+        $this->created_at = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string updated_at = 6;</code>
+     * @return string
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updated_at;
+    }
+
+    /**
+     * Generated from protobuf field <code>string updated_at = 6;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setUpdatedAt($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->updated_at = $var;
 
         return $this;
     }
@@ -261,11 +367,9 @@ class Product extends \Google\Protobuf\Internal\Message
     /**
      * TODO: has_options most of the fields below are taken from DB?
      * TODO: required_options ?
-     * TODO: created_at ?
-     * TODO: updated_at ?
-     * TODO: row_id ?
-     * TODO: created_in ?
-     * TODO: updated_in ?
+     * TODO: row_id ? - should be moved to staging service
+     * TODO: created_in ? - should be moved to staging service
+     * TODO: updated_in ? - should be moved to staging service
      * TODO: entity_id vs id, id is used in elastic?
      *
      * Generated from protobuf field <code>string sku = 7;</code>
@@ -279,11 +383,9 @@ class Product extends \Google\Protobuf\Internal\Message
     /**
      * TODO: has_options most of the fields below are taken from DB?
      * TODO: required_options ?
-     * TODO: created_at ?
-     * TODO: updated_at ?
-     * TODO: row_id ?
-     * TODO: created_in ?
-     * TODO: updated_in ?
+     * TODO: row_id ? - should be moved to staging service
+     * TODO: created_in ? - should be moved to staging service
+     * TODO: updated_in ? - should be moved to staging service
      * TODO: entity_id vs id, id is used in elastic?
      *
      * Generated from protobuf field <code>string sku = 7;</code>
@@ -321,9 +423,6 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * TODO: status vs visibility vs quantity_and_stock_status vs stock_status
-     * TODO: status: enabled, disabled. Check why store these records
-     *
      * Generated from protobuf field <code>string status = 9;</code>
      * @return string
      */
@@ -333,9 +432,6 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * TODO: status vs visibility vs quantity_and_stock_status vs stock_status
-     * TODO: status: enabled, disabled. Check why store these records
-     *
      * Generated from protobuf field <code>string status = 9;</code>
      * @param string $var
      * @return $this
@@ -462,75 +558,6 @@ class Product extends \Google\Protobuf\Internal\Message
      * TODO: qty is missing for only-x-left-in-stock functionality
      * TODO: Why missing meta fields?
      *
-     * Generated from protobuf field <code>string meta_description = 22;</code>
-     * @return string
-     */
-    public function getMetaDescription()
-    {
-        return $this->meta_description;
-    }
-
-    /**
-     * TODO: qty is missing for only-x-left-in-stock functionality
-     * TODO: Why missing meta fields?
-     *
-     * Generated from protobuf field <code>string meta_description = 22;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setMetaDescription($var)
-    {
-        GPBUtil::checkString($var, true);
-        $this->meta_description = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>string meta_keyword = 23;</code>
-     * @return string
-     */
-    public function getMetaKeyword()
-    {
-        return $this->meta_keyword;
-    }
-
-    /**
-     * Generated from protobuf field <code>string meta_keyword = 23;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setMetaKeyword($var)
-    {
-        GPBUtil::checkString($var, true);
-        $this->meta_keyword = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>string meta_title = 24;</code>
-     * @return string
-     */
-    public function getMetaTitle()
-    {
-        return $this->meta_title;
-    }
-
-    /**
-     * Generated from protobuf field <code>string meta_title = 24;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setMetaTitle($var)
-    {
-        GPBUtil::checkString($var, true);
-        $this->meta_title = $var;
-
-        return $this;
-    }
-
-    /**
      * Generated from protobuf field <code>string tax_class_id = 28;</code>
      * @return string
      */
@@ -540,6 +567,9 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * TODO: qty is missing for only-x-left-in-stock functionality
+     * TODO: Why missing meta fields?
+     *
      * Generated from protobuf field <code>string tax_class_id = 28;</code>
      * @param string $var
      * @return $this
@@ -645,7 +675,28 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *    Image swatch_image = 34;//-
+     * Generated from protobuf field <code>string swatch_image = 34;</code>
+     * @return string
+     */
+    public function getSwatchImage()
+    {
+        return $this->swatch_image;
+    }
+
+    /**
+     * Generated from protobuf field <code>string swatch_image = 34;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setSwatchImage($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->swatch_image = $var;
+
+        return $this;
+    }
+
+    /**
      *    repeated Image media_gallery = 35;//-
      * where to display product
      *
@@ -658,7 +709,6 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *    Image swatch_image = 34;//-
      *    repeated Image media_gallery = 35;//-
      * where to display product
      *
@@ -670,6 +720,382 @@ class Product extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, true);
         $this->visibility = $var;
+
+        return $this;
+    }
+
+    /**
+     *    PriceRange prices = 44;//-
+     * TODO: Uncomment options
+     *    repeated Option options = 46;
+     *    repeated Variant variants = 47;//-
+     *
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DynamicAttributeValue dynamic_attributes = 50;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getDynamicAttributes()
+    {
+        return $this->dynamic_attributes;
+    }
+
+    /**
+     *    PriceRange prices = 44;//-
+     * TODO: Uncomment options
+     *    repeated Option options = 46;
+     *    repeated Variant variants = 47;//-
+     *
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DynamicAttributeValue dynamic_attributes = 50;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setDynamicAttributes($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue::class);
+        $this->dynamic_attributes = $arr;
+
+        return $this;
+    }
+
+    /**
+     * TODO: qty is missing for only-x-left-in-stock functionality
+     * TODO: Meta fields not populated by catalog SF app
+     *
+     * Generated from protobuf field <code>string meta_description = 22;</code>
+     * @return string
+     */
+    public function getMetaDescription()
+    {
+        return $this->meta_description;
+    }
+
+    /**
+     * TODO: qty is missing for only-x-left-in-stock functionality
+     * TODO: Meta fields not populated by catalog SF app
+     *
+     * Generated from protobuf field <code>string meta_description = 22;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setMetaDescription($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->meta_description = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string meta_keyword = 23;</code>
+     * @return string
+     */
+    public function getMetaKeyword()
+    {
+        return $this->meta_keyword;
+    }
+
+    /**
+     * Generated from protobuf field <code>string meta_keyword = 23;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setMetaKeyword($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->meta_keyword = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string meta_title = 24;</code>
+     * @return string
+     */
+    public function getMetaTitle()
+    {
+        return $this->meta_title;
+    }
+
+    /**
+     * Generated from protobuf field <code>string meta_title = 24;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setMetaTitle($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->meta_title = $var;
+
+        return $this;
+    }
+
+    /**
+     * TODO: Questionable attributes go below for compatibility with existing catalog SF branch during refactoring
+     *
+     * Generated from protobuf field <code>string required_options = 70;</code>
+     * @return string
+     */
+    public function getRequiredOptions()
+    {
+        return $this->required_options;
+    }
+
+    /**
+     * TODO: Questionable attributes go below for compatibility with existing catalog SF branch during refactoring
+     *
+     * Generated from protobuf field <code>string required_options = 70;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setRequiredOptions($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->required_options = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string created_in = 74;</code>
+     * @return string
+     */
+    public function getCreatedIn()
+    {
+        return $this->created_in;
+    }
+
+    /**
+     * Generated from protobuf field <code>string created_in = 74;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setCreatedIn($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->created_in = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string updated_in = 75;</code>
+     * @return string
+     */
+    public function getUpdatedIn()
+    {
+        return $this->updated_in;
+    }
+
+    /**
+     * Generated from protobuf field <code>string updated_in = 75;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setUpdatedIn($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->updated_in = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string quantity_and_stock_status = 76;</code>
+     * @return string
+     */
+    public function getQuantityAndStockStatus()
+    {
+        return $this->quantity_and_stock_status;
+    }
+
+    /**
+     * Generated from protobuf field <code>string quantity_and_stock_status = 76;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setQuantityAndStockStatus($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->quantity_and_stock_status = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string options_container = 77;</code>
+     * @return string
+     */
+    public function getOptionsContainer()
+    {
+        return $this->options_container;
+    }
+
+    /**
+     * Generated from protobuf field <code>string options_container = 77;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setOptionsContainer($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->options_container = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string msrp_display_actual_price_type = 78;</code>
+     * @return string
+     */
+    public function getMsrpDisplayActualPriceType()
+    {
+        return $this->msrp_display_actual_price_type;
+    }
+
+    /**
+     * Generated from protobuf field <code>string msrp_display_actual_price_type = 78;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setMsrpDisplayActualPriceType($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->msrp_display_actual_price_type = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string is_returnable = 79;</code>
+     * @return string
+     */
+    public function getIsReturnable()
+    {
+        return $this->is_returnable;
+    }
+
+    /**
+     * Generated from protobuf field <code>string is_returnable = 79;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setIsReturnable($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->is_returnable = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string url_suffix = 80;</code>
+     * @return string
+     */
+    public function getUrlSuffix()
+    {
+        return $this->url_suffix;
+    }
+
+    /**
+     * Generated from protobuf field <code>string url_suffix = 80;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setUrlSuffix($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->url_suffix = $var;
+
+        return $this;
+    }
+
+    /**
+     * TODO: May need to be a complex type
+     *
+     * Generated from protobuf field <code>repeated string options = 81;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * TODO: May need to be a complex type
+     *
+     * Generated from protobuf field <code>repeated string options = 81;</code>
+     * @param string[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setOptions($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::STRING);
+        $this->options = $arr;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.UrlRewrite url_rewrites = 82;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getUrlRewrites()
+    {
+        return $this->url_rewrites;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.UrlRewrite url_rewrites = 82;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\UrlRewrite[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setUrlRewrites($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\UrlRewrite::class);
+        $this->url_rewrites = $arr;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Variant variants = 83;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getVariants()
+    {
+        return $this->variants;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Variant variants = 83;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\Variant[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setVariants($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\Variant::class);
+        $this->variants = $arr;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ConfigurableOption configurable_options = 84;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getConfigurableOptions()
+    {
+        return $this->configurable_options;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ConfigurableOption configurable_options = 84;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\ConfigurableOption[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setConfigurableOptions($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\ConfigurableOption::class);
+        $this->configurable_options = $arr;
 
         return $this;
     }

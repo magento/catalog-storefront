@@ -10,19 +10,19 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontApi\Api\Data;
 
-interface SingleValueAttributeInterface
+interface DynamicAttributeValueInterface
 {
 
         /**
      * @return string
      */
-    public function getName(): string;
+    public function getCode(): string;
     
     /**
      * @param string $value
      * @return void
      */
-    public function setName(string $value): void;
+    public function setCode(string $value): void;
 
     /**
      * @return string

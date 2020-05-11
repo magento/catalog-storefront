@@ -42,7 +42,7 @@ class OutputFormatter
 //            throw new GraphQlInputException(__(\implode('; ', \array_map('\strval', $errors))));
 //        }
 
-        $items = array_map(function(\Magento\CatalogStorefrontApi\Api\Data\ProductInterface $item) {
+        $items = array_map(function (\Magento\CatalogStorefrontApi\Api\Data\ProductInterface $item) {
             $result = [
                 'attribute_set_id' => $item->getAttributeSetId(),
                 'created_at' => $item->getCreatedAt(),

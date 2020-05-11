@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontApi\Api\Data;
 
-interface MultiValueAttributeInterface
+interface UrlRewriteParameterInterface
 {
 
         /**
@@ -25,13 +25,13 @@ interface MultiValueAttributeInterface
     public function setName(string $value): void;
 
     /**
-     * @return string[]
+     * @return string
      */
-    public function getValues(): array;
+    public function getValue(): string;
     
     /**
-     * @param string[] $value
+     * @param string $value
      * @return void
      */
-    public function setValues(array $value): void;
+    public function setValue(string $value): void;
 }

@@ -15,7 +15,7 @@ final class Product implements ProductInterface
     /**
      * @var string
      */
-    private $entityId;
+    private $id;
     /**
      * @var string
      */
@@ -27,7 +27,11 @@ final class Product implements ProductInterface
     /**
      * @var string
      */
-    private $id;
+    private $createdAt;
+    /**
+     * @var string
+     */
+    private $updatedAt;
     /**
      * @var string
      */
@@ -63,18 +67,6 @@ final class Product implements ProductInterface
     /**
      * @var string
      */
-    private $metaDescription;
-    /**
-     * @var string
-     */
-    private $metaKeyword;
-    /**
-     * @var string
-     */
-    private $metaTitle;
-    /**
-     * @var string
-     */
     private $taxClassId;
     /**
      * @var float
@@ -95,24 +87,92 @@ final class Product implements ProductInterface
     /**
      * @var string
      */
+    private $swatchImage;
+    /**
+     * @var string
+     */
     private $visibility;
+    /**
+     * @var array
+     */
+    private $dynamicAttributes;
+    /**
+     * @var string
+     */
+    private $metaDescription;
+    /**
+     * @var string
+     */
+    private $metaKeyword;
+    /**
+     * @var string
+     */
+    private $metaTitle;
+    /**
+     * @var string
+     */
+    private $requiredOptions;
+    /**
+     * @var string
+     */
+    private $createdIn;
+    /**
+     * @var string
+     */
+    private $updatedIn;
+    /**
+     * @var string
+     */
+    private $quantityAndStockStatus;
+    /**
+     * @var string
+     */
+    private $optionsContainer;
+    /**
+     * @var string
+     */
+    private $msrpDisplayActualPriceType;
+    /**
+     * @var string
+     */
+    private $isReturnable;
+    /**
+     * @var string
+     */
+    private $urlSuffix;
+    /**
+     * @var array
+     */
+    private $options;
+    /**
+     * @var array
+     */
+    private $urlRewrites;
+    /**
+     * @var array
+     */
+    private $variants;
+    /**
+     * @var array
+     */
+    private $configurableOptions;
 
 
     /**
      * @return string
      */
-    public function getEntityId(): string
+    public function getId(): string
     {
-        return (string) $this->entityId;
+        return (string) $this->id;
     }
     
     /**
      * @param string $value
      * @return void
      */
-    public function setEntityId(string $value): void
+    public function setId(string $value): void
     {
-        $this->entityId = $value;
+        $this->id = $value;
     }
 
     /**
@@ -152,18 +212,35 @@ final class Product implements ProductInterface
     /**
      * @return string
      */
-    public function getId(): string
+    public function getCreatedAt(): string
     {
-        return (string) $this->id;
+        return (string) $this->createdAt;
     }
     
     /**
      * @param string $value
      * @return void
      */
-    public function setId(string $value): void
+    public function setCreatedAt(string $value): void
     {
-        $this->id = $value;
+        $this->createdAt = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUpdatedAt(): string
+    {
+        return (string) $this->updatedAt;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setUpdatedAt(string $value): void
+    {
+        $this->updatedAt = $value;
     }
 
     /**
@@ -305,57 +382,6 @@ final class Product implements ProductInterface
     /**
      * @return string
      */
-    public function getMetaDescription(): string
-    {
-        return (string) $this->metaDescription;
-    }
-    
-    /**
-     * @param string $value
-     * @return void
-     */
-    public function setMetaDescription(string $value): void
-    {
-        $this->metaDescription = $value;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMetaKeyword(): string
-    {
-        return (string) $this->metaKeyword;
-    }
-    
-    /**
-     * @param string $value
-     * @return void
-     */
-    public function setMetaKeyword(string $value): void
-    {
-        $this->metaKeyword = $value;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMetaTitle(): string
-    {
-        return (string) $this->metaTitle;
-    }
-    
-    /**
-     * @param string $value
-     * @return void
-     */
-    public function setMetaTitle(string $value): void
-    {
-        $this->metaTitle = $value;
-    }
-
-    /**
-     * @return string
-     */
     public function getTaxClassId(): string
     {
         return (string) $this->taxClassId;
@@ -441,6 +467,23 @@ final class Product implements ProductInterface
     /**
      * @return string
      */
+    public function getSwatchImage(): string
+    {
+        return (string) $this->swatchImage;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setSwatchImage(string $value): void
+    {
+        $this->swatchImage = $value;
+    }
+
+    /**
+     * @return string
+     */
     public function getVisibility(): string
     {
         return (string) $this->visibility;
@@ -453,5 +496,277 @@ final class Product implements ProductInterface
     public function setVisibility(string $value): void
     {
         $this->visibility = $value;
+    }
+
+    /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface[]
+     */
+    public function getDynamicAttributes(): array
+    {
+        return (array) $this->dynamicAttributes;
+    }
+    
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface[] $value
+     * @return void
+     */
+    public function setDynamicAttributes(array $value): void
+    {
+        $this->dynamicAttributes = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaDescription(): string
+    {
+        return (string) $this->metaDescription;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setMetaDescription(string $value): void
+    {
+        $this->metaDescription = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaKeyword(): string
+    {
+        return (string) $this->metaKeyword;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setMetaKeyword(string $value): void
+    {
+        $this->metaKeyword = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaTitle(): string
+    {
+        return (string) $this->metaTitle;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setMetaTitle(string $value): void
+    {
+        $this->metaTitle = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRequiredOptions(): string
+    {
+        return (string) $this->requiredOptions;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setRequiredOptions(string $value): void
+    {
+        $this->requiredOptions = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreatedIn(): string
+    {
+        return (string) $this->createdIn;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setCreatedIn(string $value): void
+    {
+        $this->createdIn = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUpdatedIn(): string
+    {
+        return (string) $this->updatedIn;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setUpdatedIn(string $value): void
+    {
+        $this->updatedIn = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getQuantityAndStockStatus(): string
+    {
+        return (string) $this->quantityAndStockStatus;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setQuantityAndStockStatus(string $value): void
+    {
+        $this->quantityAndStockStatus = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOptionsContainer(): string
+    {
+        return (string) $this->optionsContainer;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setOptionsContainer(string $value): void
+    {
+        $this->optionsContainer = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMsrpDisplayActualPriceType(): string
+    {
+        return (string) $this->msrpDisplayActualPriceType;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setMsrpDisplayActualPriceType(string $value): void
+    {
+        $this->msrpDisplayActualPriceType = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIsReturnable(): string
+    {
+        return (string) $this->isReturnable;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setIsReturnable(string $value): void
+    {
+        $this->isReturnable = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrlSuffix(): string
+    {
+        return (string) $this->urlSuffix;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setUrlSuffix(string $value): void
+    {
+        $this->urlSuffix = $value;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getOptions(): array
+    {
+        return (array) $this->options;
+    }
+    
+    /**
+     * @param string[] $value
+     * @return void
+     */
+    public function setOptions(array $value): void
+    {
+        $this->options = $value;
+    }
+
+    /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteInterface[]
+     */
+    public function getUrlRewrites(): array
+    {
+        return (array) $this->urlRewrites;
+    }
+    
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteInterface[] $value
+     * @return void
+     */
+    public function setUrlRewrites(array $value): void
+    {
+        $this->urlRewrites = $value;
+    }
+
+    /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\VariantInterface[]
+     */
+    public function getVariants(): array
+    {
+        return (array) $this->variants;
+    }
+    
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\VariantInterface[] $value
+     * @return void
+     */
+    public function setVariants(array $value): void
+    {
+        $this->variants = $value;
+    }
+
+    /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionInterface[]
+     */
+    public function getConfigurableOptions(): array
+    {
+        return (array) $this->configurableOptions;
+    }
+    
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionInterface[] $value
+     * @return void
+     */
+    public function setConfigurableOptions(array $value): void
+    {
+        $this->configurableOptions = $value;
     }
 }

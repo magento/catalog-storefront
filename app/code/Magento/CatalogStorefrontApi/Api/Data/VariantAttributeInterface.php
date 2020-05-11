@@ -10,39 +10,39 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontApi\Api\Data;
 
-interface ParentProductInterface
+interface VariantAttributeInterface
 {
 
         /**
      * @return string
      */
-    public function getId(): string;
+    public function getLabel(): string;
     
     /**
      * @param string $value
      * @return void
      */
-    public function setId(string $value): void;
+    public function setLabel(string $value): void;
 
     /**
      * @return string
      */
-    public function getSku(): string;
+    public function getCode(): string;
     
     /**
      * @param string $value
      * @return void
      */
-    public function setSku(string $value): void;
+    public function setCode(string $value): void;
 
     /**
      * @return string
      */
-    public function getType(): string;
+    public function getValueIndex(): string;
     
     /**
      * @param string $value
      * @return void
      */
-    public function setType(string $value): void;
+    public function setValueIndex(string $value): void;
 }

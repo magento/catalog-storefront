@@ -9,9 +9,9 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- * Generated from protobuf message <code>magento.catalogStorefrontApi.proto.SingleValueAttribute</code>
+ * Generated from protobuf message <code>magento.catalogStorefrontApi.proto.UrlRewriteParameter</code>
  */
-class SingleValueAttribute extends \Google\Protobuf\Internal\Message
+class UrlRewriteParameter extends \Google\Protobuf\Internal\Message
 {
     /**
      * Generated from protobuf field <code>string name = 1;</code>

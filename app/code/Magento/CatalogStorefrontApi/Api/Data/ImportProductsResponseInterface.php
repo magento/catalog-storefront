@@ -14,13 +14,24 @@ interface ImportProductsResponseInterface
 {
 
         /**
-     * @return \Magento\CatalogStorefrontApi\Api\Data\ProductInterface[]
+     * @return bool
      */
-    public function getData(): array;
+    public function getStatus(): bool;
     
     /**
-     * @param \Magento\CatalogStorefrontApi\Api\Data\ProductInterface[] $value
+     * @param bool $value
      * @return void
      */
-    public function setData(array $value): void;
+    public function setStatus(bool $value): void;
+
+    /**
+     * @return string
+     */
+    public function getMessage(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setMessage(string $value): void;
 }

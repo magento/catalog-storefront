@@ -64,10 +64,11 @@ class Catalog implements CatalogInterface
                 /** @var \Magento\CatalogStorefrontApi\Proto\Product $item **/
                 $p = function () use ($item) {
                     $r = new \Magento\CatalogStorefrontApi\Api\Data\Product();
-                    $r->setEntityId($item->getEntityId());
+                    $r->setId($item->getId());
                     $r->setAttributeSetId($item->getAttributeSetId());
                     $r->setHasOptions($item->getHasOptions());
-                    $r->setId($item->getId());
+                    $r->setCreatedAt($item->getCreatedAt());
+                    $r->setUpdatedAt($item->getUpdatedAt());
                     $r->setSku($item->getSku());
                     $r->setTypeId($item->getTypeId());
                     $r->setStatus($item->getStatus());
@@ -76,12 +77,39 @@ class Catalog implements CatalogInterface
                     $r->setDescription($item->getDescription());
                     $r->setShortDescription($item->getShortDescription());
                     $r->setUrlKey($item->getUrlKey());
-                    $r->setMetaDescription($item->getMetaDescription());
-                    $r->setMetaKeyword($item->getMetaKeyword());
-                    $r->setMetaTitle($item->getMetaTitle());
                     $r->setTaxClassId($item->getTaxClassId());
                     $r->setWeight($item->getWeight());
-                    $prop19 = $item->getImage();
+                    $prop17 = $item->getImage();
+                    if ($prop17 !== null) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\Image
+                        // to \Magento\CatalogStorefrontApi\Api\Data\Image
+                        /** @var \Magento\CatalogStorefrontApi\Proto\Image $prop17 **/
+                        $p = function () use ($prop17) {
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\Image();
+                            $r->setUrl($prop17->getUrl());
+                            $r->setLabel($prop17->getLabel());
+                            return $r;
+                        };
+                        $out = $p();
+                        $r->setImage($out);
+                    }
+
+                    $prop18 = $item->getSmallImage();
+                    if ($prop18 !== null) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\Image
+                        // to \Magento\CatalogStorefrontApi\Api\Data\Image
+                        /** @var \Magento\CatalogStorefrontApi\Proto\Image $prop18 **/
+                        $p = function () use ($prop18) {
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\Image();
+                            $r->setUrl($prop18->getUrl());
+                            $r->setLabel($prop18->getLabel());
+                            return $r;
+                        };
+                        $out = $p();
+                        $r->setSmallImage($out);
+                    }
+
+                    $prop19 = $item->getThumbnail();
                     if ($prop19 !== null) {
                         // convert data from \Magento\CatalogStorefrontApi\Proto\Image
                         // to \Magento\CatalogStorefrontApi\Api\Data\Image
@@ -93,40 +121,144 @@ class Catalog implements CatalogInterface
                             return $r;
                         };
                         $out = $p();
-                        $r->setImage($out);
-                    }
-
-                    $prop20 = $item->getSmallImage();
-                    if ($prop20 !== null) {
-                        // convert data from \Magento\CatalogStorefrontApi\Proto\Image
-                        // to \Magento\CatalogStorefrontApi\Api\Data\Image
-                        /** @var \Magento\CatalogStorefrontApi\Proto\Image $prop20 **/
-                        $p = function () use ($prop20) {
-                            $r = new \Magento\CatalogStorefrontApi\Api\Data\Image();
-                            $r->setUrl($prop20->getUrl());
-                            $r->setLabel($prop20->getLabel());
-                            return $r;
-                        };
-                        $out = $p();
-                        $r->setSmallImage($out);
-                    }
-
-                    $prop21 = $item->getThumbnail();
-                    if ($prop21 !== null) {
-                        // convert data from \Magento\CatalogStorefrontApi\Proto\Image
-                        // to \Magento\CatalogStorefrontApi\Api\Data\Image
-                        /** @var \Magento\CatalogStorefrontApi\Proto\Image $prop21 **/
-                        $p = function () use ($prop21) {
-                            $r = new \Magento\CatalogStorefrontApi\Api\Data\Image();
-                            $r->setUrl($prop21->getUrl());
-                            $r->setLabel($prop21->getLabel());
-                            return $r;
-                        };
-                        $out = $p();
                         $r->setThumbnail($out);
                     }
 
+                    $r->setSwatchImage($item->getSwatchImage());
                     $r->setVisibility($item->getVisibility());
+                    $res = [];
+                    foreach ($item->getDynamicAttributes() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue
+                        // to \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue
+                        /** @var \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue();
+                            $r->setCode($item->getCode());
+                            $r->setValue($item->getValue());
+                            return $r;
+                        };
+                        $out = $p();
+                        $res[] = $out;
+                    }
+                    $r->setDynamicAttributes($res);
+
+                    $r->setMetaDescription($item->getMetaDescription());
+                    $r->setMetaKeyword($item->getMetaKeyword());
+                    $r->setMetaTitle($item->getMetaTitle());
+                    $r->setRequiredOptions($item->getRequiredOptions());
+                    $r->setCreatedIn($item->getCreatedIn());
+                    $r->setUpdatedIn($item->getUpdatedIn());
+                    $r->setQuantityAndStockStatus($item->getQuantityAndStockStatus());
+                    $r->setOptionsContainer($item->getOptionsContainer());
+                    $r->setMsrpDisplayActualPriceType($item->getMsrpDisplayActualPriceType());
+                    $r->setIsReturnable($item->getIsReturnable());
+                    $r->setUrlSuffix($item->getUrlSuffix());
+                    $r->setOptions($item->getOptions());
+                    $res = [];
+                    foreach ($item->getUrlRewrites() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\UrlRewrite
+                        // to \Magento\CatalogStorefrontApi\Api\Data\UrlRewrite
+                        /** @var \Magento\CatalogStorefrontApi\Proto\UrlRewrite $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\UrlRewrite();
+                            $r->setUrl($item->getUrl());
+                            $res = [];
+                            foreach ($item->getParameters() as $item) {
+                                // convert data from \Magento\CatalogStorefrontApi\Proto\UrlRewriteParameter
+                                // to \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameter
+                                /** @var \Magento\CatalogStorefrontApi\Proto\UrlRewriteParameter $item **/
+                                $p = function () use ($item) {
+                                    $r = new \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameter();
+                                    $r->setName($item->getName());
+                                    $r->setValue($item->getValue());
+                                    return $r;
+                                };
+                                $out = $p();
+                                $res[] = $out;
+                            }
+                            $r->setParameters($res);
+
+                            return $r;
+                        };
+                        $out = $p();
+                        $res[] = $out;
+                    }
+                    $r->setUrlRewrites($res);
+
+                    $res = [];
+                    foreach ($item->getVariants() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\Variant
+                        // to \Magento\CatalogStorefrontApi\Api\Data\Variant
+                        /** @var \Magento\CatalogStorefrontApi\Proto\Variant $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\Variant();
+                            $r->setProduct($item->getProduct());
+                            $res = [];
+                            foreach ($item->getAttributes() as $item) {
+                                // convert data from \Magento\CatalogStorefrontApi\Proto\VariantAttribute
+                                // to \Magento\CatalogStorefrontApi\Api\Data\VariantAttribute
+                                /** @var \Magento\CatalogStorefrontApi\Proto\VariantAttribute $item **/
+                                $p = function () use ($item) {
+                                    $r = new \Magento\CatalogStorefrontApi\Api\Data\VariantAttribute();
+                                    $r->setLabel($item->getLabel());
+                                    $r->setCode($item->getCode());
+                                    $r->setValueIndex($item->getValueIndex());
+                                    return $r;
+                                };
+                                $out = $p();
+                                $res[] = $out;
+                            }
+                            $r->setAttributes($res);
+
+                            return $r;
+                        };
+                        $out = $p();
+                        $res[] = $out;
+                    }
+                    $r->setVariants($res);
+
+                    $res = [];
+                    foreach ($item->getConfigurableOptions() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\ConfigurableOption
+                        // to \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOption
+                        /** @var \Magento\CatalogStorefrontApi\Proto\ConfigurableOption $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOption();
+                            $r->setId($item->getId());
+                            $r->setLabel($item->getLabel());
+                            $r->setPosition($item->getPosition());
+                            $r->setUseDefault($item->getUseDefault());
+                            $r->setProductId($item->getProductId());
+                            $r->setAttributeCode($item->getAttributeCode());
+                            $r->setAttributeId($item->getAttributeId());
+                            $res = [];
+                            foreach ($item->getValues() as $item) {
+                                // convert data from \Magento\CatalogStorefrontApi\Proto\ConfigurableOptionValue
+                                // to \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionValue
+                                /** @var \Magento\CatalogStorefrontApi\Proto\ConfigurableOptionValue $item **/
+                                $p = function () use ($item) {
+                                    $r = new \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionValue();
+                                    $r->setValueIndex($item->getValueIndex());
+                                    $r->setLabel($item->getLabel());
+                                    $r->setDefaultLabel($item->getDefaultLabel());
+                                    $r->setStoreLabel($item->getStoreLabel());
+                                    $r->setUseDefaultValue($item->getUseDefaultValue());
+                                    $r->setAttributeId($item->getAttributeId());
+                                    $r->setProductId($item->getProductId());
+                                    return $r;
+                                };
+                                $out = $p();
+                                $res[] = $out;
+                            }
+                            $r->setValues($res);
+
+                            return $r;
+                        };
+                        $out = $p();
+                        $res[] = $out;
+                    }
+                    $r->setConfigurableOptions($res);
+
                     return $r;
                 };
                 $out = $p();
@@ -166,10 +298,11 @@ class Catalog implements CatalogInterface
                 /** @var \Magento\CatalogStorefrontApi\Api\Data\Product $item **/
                 $p = function () use ($item) {
                     $r = new \Magento\CatalogStorefrontApi\Proto\Product();
-                    $r->setEntityId($item->getEntityId());
+                    $r->setId($item->getId());
                     $r->setAttributeSetId($item->getAttributeSetId());
                     $r->setHasOptions($item->getHasOptions());
-                    $r->setId($item->getId());
+                    $r->setCreatedAt($item->getCreatedAt());
+                    $r->setUpdatedAt($item->getUpdatedAt());
                     $r->setSku($item->getSku());
                     $r->setTypeId($item->getTypeId());
                     $r->setStatus($item->getStatus());
@@ -178,12 +311,39 @@ class Catalog implements CatalogInterface
                     $r->setDescription($item->getDescription());
                     $r->setShortDescription($item->getShortDescription());
                     $r->setUrlKey($item->getUrlKey());
-                    $r->setMetaDescription($item->getMetaDescription());
-                    $r->setMetaKeyword($item->getMetaKeyword());
-                    $r->setMetaTitle($item->getMetaTitle());
                     $r->setTaxClassId($item->getTaxClassId());
                     $r->setWeight($item->getWeight());
-                    $prop19 = $item->getImage();
+                    $prop17 = $item->getImage();
+                    if ($prop17 !== null) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\Image
+                        // to \Magento\CatalogStorefrontApi\Proto\Image
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\Image $prop17 **/
+                        $p = function () use ($prop17) {
+                            $r = new \Magento\CatalogStorefrontApi\Proto\Image();
+                            $r->setUrl($prop17->getUrl());
+                            $r->setLabel($prop17->getLabel());
+                            return $r;
+                        };
+                        $proto = $p();
+                        $r->setImage($proto);
+                    }
+
+                    $prop18 = $item->getSmallImage();
+                    if ($prop18 !== null) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\Image
+                        // to \Magento\CatalogStorefrontApi\Proto\Image
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\Image $prop18 **/
+                        $p = function () use ($prop18) {
+                            $r = new \Magento\CatalogStorefrontApi\Proto\Image();
+                            $r->setUrl($prop18->getUrl());
+                            $r->setLabel($prop18->getLabel());
+                            return $r;
+                        };
+                        $proto = $p();
+                        $r->setSmallImage($proto);
+                    }
+
+                    $prop19 = $item->getThumbnail();
                     if ($prop19 !== null) {
                         // convert data from \Magento\CatalogStorefrontApi\Api\Data\Image
                         // to \Magento\CatalogStorefrontApi\Proto\Image
@@ -195,40 +355,144 @@ class Catalog implements CatalogInterface
                             return $r;
                         };
                         $proto = $p();
-                        $r->setImage($proto);
-                    }
-
-                    $prop20 = $item->getSmallImage();
-                    if ($prop20 !== null) {
-                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\Image
-                        // to \Magento\CatalogStorefrontApi\Proto\Image
-                        /** @var \Magento\CatalogStorefrontApi\Api\Data\Image $prop20 **/
-                        $p = function () use ($prop20) {
-                            $r = new \Magento\CatalogStorefrontApi\Proto\Image();
-                            $r->setUrl($prop20->getUrl());
-                            $r->setLabel($prop20->getLabel());
-                            return $r;
-                        };
-                        $proto = $p();
-                        $r->setSmallImage($proto);
-                    }
-
-                    $prop21 = $item->getThumbnail();
-                    if ($prop21 !== null) {
-                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\Image
-                        // to \Magento\CatalogStorefrontApi\Proto\Image
-                        /** @var \Magento\CatalogStorefrontApi\Api\Data\Image $prop21 **/
-                        $p = function () use ($prop21) {
-                            $r = new \Magento\CatalogStorefrontApi\Proto\Image();
-                            $r->setUrl($prop21->getUrl());
-                            $r->setLabel($prop21->getLabel());
-                            return $r;
-                        };
-                        $proto = $p();
                         $r->setThumbnail($proto);
                     }
 
+                    $r->setSwatchImage($item->getSwatchImage());
                     $r->setVisibility($item->getVisibility());
+                    $res = [];
+                    foreach ($item->getDynamicAttributes() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue
+                        // to \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue();
+                            $r->setCode($item->getCode());
+                            $r->setValue($item->getValue());
+                            return $r;
+                        };
+                        $proto = $p();
+                        $res[] = $proto;
+                    }
+                    $r->setDynamicAttributes($res);
+
+                    $r->setMetaDescription($item->getMetaDescription());
+                    $r->setMetaKeyword($item->getMetaKeyword());
+                    $r->setMetaTitle($item->getMetaTitle());
+                    $r->setRequiredOptions($item->getRequiredOptions());
+                    $r->setCreatedIn($item->getCreatedIn());
+                    $r->setUpdatedIn($item->getUpdatedIn());
+                    $r->setQuantityAndStockStatus($item->getQuantityAndStockStatus());
+                    $r->setOptionsContainer($item->getOptionsContainer());
+                    $r->setMsrpDisplayActualPriceType($item->getMsrpDisplayActualPriceType());
+                    $r->setIsReturnable($item->getIsReturnable());
+                    $r->setUrlSuffix($item->getUrlSuffix());
+                    $r->setOptions($item->getOptions());
+                    $res = [];
+                    foreach ($item->getUrlRewrites() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\UrlRewrite
+                        // to \Magento\CatalogStorefrontApi\Proto\UrlRewrite
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\UrlRewrite $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Proto\UrlRewrite();
+                            $r->setUrl($item->getUrl());
+                            $res = [];
+                            foreach ($item->getParameters() as $item) {
+                                // convert data from \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameter
+                                // to \Magento\CatalogStorefrontApi\Proto\UrlRewriteParameter
+                                /** @var \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameter $item **/
+                                $p = function () use ($item) {
+                                    $r = new \Magento\CatalogStorefrontApi\Proto\UrlRewriteParameter();
+                                    $r->setName($item->getName());
+                                    $r->setValue($item->getValue());
+                                    return $r;
+                                };
+                                $proto = $p();
+                                $res[] = $proto;
+                            }
+                            $r->setParameters($res);
+
+                            return $r;
+                        };
+                        $proto = $p();
+                        $res[] = $proto;
+                    }
+                    $r->setUrlRewrites($res);
+
+                    $res = [];
+                    foreach ($item->getVariants() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\Variant
+                        // to \Magento\CatalogStorefrontApi\Proto\Variant
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\Variant $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Proto\Variant();
+                            $r->setProduct($item->getProduct());
+                            $res = [];
+                            foreach ($item->getAttributes() as $item) {
+                                // convert data from \Magento\CatalogStorefrontApi\Api\Data\VariantAttribute
+                                // to \Magento\CatalogStorefrontApi\Proto\VariantAttribute
+                                /** @var \Magento\CatalogStorefrontApi\Api\Data\VariantAttribute $item **/
+                                $p = function () use ($item) {
+                                    $r = new \Magento\CatalogStorefrontApi\Proto\VariantAttribute();
+                                    $r->setLabel($item->getLabel());
+                                    $r->setCode($item->getCode());
+                                    $r->setValueIndex($item->getValueIndex());
+                                    return $r;
+                                };
+                                $proto = $p();
+                                $res[] = $proto;
+                            }
+                            $r->setAttributes($res);
+
+                            return $r;
+                        };
+                        $proto = $p();
+                        $res[] = $proto;
+                    }
+                    $r->setVariants($res);
+
+                    $res = [];
+                    foreach ($item->getConfigurableOptions() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOption
+                        // to \Magento\CatalogStorefrontApi\Proto\ConfigurableOption
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOption $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Proto\ConfigurableOption();
+                            $r->setId($item->getId());
+                            $r->setLabel($item->getLabel());
+                            $r->setPosition($item->getPosition());
+                            $r->setUseDefault($item->getUseDefault());
+                            $r->setProductId($item->getProductId());
+                            $r->setAttributeCode($item->getAttributeCode());
+                            $r->setAttributeId($item->getAttributeId());
+                            $res = [];
+                            foreach ($item->getValues() as $item) {
+                                // convert data from \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionValue
+                                // to \Magento\CatalogStorefrontApi\Proto\ConfigurableOptionValue
+                                /** @var \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionValue $item **/
+                                $p = function () use ($item) {
+                                    $r = new \Magento\CatalogStorefrontApi\Proto\ConfigurableOptionValue();
+                                    $r->setValueIndex($item->getValueIndex());
+                                    $r->setLabel($item->getLabel());
+                                    $r->setDefaultLabel($item->getDefaultLabel());
+                                    $r->setStoreLabel($item->getStoreLabel());
+                                    $r->setUseDefaultValue($item->getUseDefaultValue());
+                                    $r->setAttributeId($item->getAttributeId());
+                                    $r->setProductId($item->getProductId());
+                                    return $r;
+                                };
+                                $proto = $p();
+                                $res[] = $proto;
+                            }
+                            $r->setValues($res);
+
+                            return $r;
+                        };
+                        $proto = $p();
+                        $res[] = $proto;
+                    }
+                    $r->setConfigurableOptions($res);
+
                     return $r;
                 };
                 $proto = $p();
@@ -266,83 +530,8 @@ class Catalog implements CatalogInterface
         /** @var \Magento\CatalogStorefrontApi\Proto\ImportProductsResponse $value **/
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponse();
-            $res = [];
-            foreach ($value->getData() as $item) {
-                // convert data from \Magento\CatalogStorefrontApi\Proto\Product
-                // to \Magento\CatalogStorefrontApi\Api\Data\Product
-                /** @var \Magento\CatalogStorefrontApi\Proto\Product $item **/
-                $p = function () use ($item) {
-                    $r = new \Magento\CatalogStorefrontApi\Api\Data\Product();
-                    $r->setEntityId($item->getEntityId());
-                    $r->setAttributeSetId($item->getAttributeSetId());
-                    $r->setHasOptions($item->getHasOptions());
-                    $r->setId($item->getId());
-                    $r->setSku($item->getSku());
-                    $r->setTypeId($item->getTypeId());
-                    $r->setStatus($item->getStatus());
-                    $r->setStockStatus($item->getStockStatus());
-                    $r->setName($item->getName());
-                    $r->setDescription($item->getDescription());
-                    $r->setShortDescription($item->getShortDescription());
-                    $r->setUrlKey($item->getUrlKey());
-                    $r->setMetaDescription($item->getMetaDescription());
-                    $r->setMetaKeyword($item->getMetaKeyword());
-                    $r->setMetaTitle($item->getMetaTitle());
-                    $r->setTaxClassId($item->getTaxClassId());
-                    $r->setWeight($item->getWeight());
-                    $prop19 = $item->getImage();
-                    if ($prop19 !== null) {
-                        // convert data from \Magento\CatalogStorefrontApi\Proto\Image
-                        // to \Magento\CatalogStorefrontApi\Api\Data\Image
-                        /** @var \Magento\CatalogStorefrontApi\Proto\Image $prop19 **/
-                        $p = function () use ($prop19) {
-                            $r = new \Magento\CatalogStorefrontApi\Api\Data\Image();
-                            $r->setUrl($prop19->getUrl());
-                            $r->setLabel($prop19->getLabel());
-                            return $r;
-                        };
-                        $out = $p();
-                        $r->setImage($out);
-                    }
-
-                    $prop20 = $item->getSmallImage();
-                    if ($prop20 !== null) {
-                        // convert data from \Magento\CatalogStorefrontApi\Proto\Image
-                        // to \Magento\CatalogStorefrontApi\Api\Data\Image
-                        /** @var \Magento\CatalogStorefrontApi\Proto\Image $prop20 **/
-                        $p = function () use ($prop20) {
-                            $r = new \Magento\CatalogStorefrontApi\Api\Data\Image();
-                            $r->setUrl($prop20->getUrl());
-                            $r->setLabel($prop20->getLabel());
-                            return $r;
-                        };
-                        $out = $p();
-                        $r->setSmallImage($out);
-                    }
-
-                    $prop21 = $item->getThumbnail();
-                    if ($prop21 !== null) {
-                        // convert data from \Magento\CatalogStorefrontApi\Proto\Image
-                        // to \Magento\CatalogStorefrontApi\Api\Data\Image
-                        /** @var \Magento\CatalogStorefrontApi\Proto\Image $prop21 **/
-                        $p = function () use ($prop21) {
-                            $r = new \Magento\CatalogStorefrontApi\Api\Data\Image();
-                            $r->setUrl($prop21->getUrl());
-                            $r->setLabel($prop21->getLabel());
-                            return $r;
-                        };
-                        $out = $p();
-                        $r->setThumbnail($out);
-                    }
-
-                    $r->setVisibility($item->getVisibility());
-                    return $r;
-                };
-                $out = $p();
-                $res[] = $out;
-            }
-            $r->setData($res);
-
+            $r->setStatus($value->getStatus());
+            $r->setMessage($value->getMessage());
             return $r;
         };
         $out = $p();

@@ -45,7 +45,8 @@ class CatalogService implements CatalogServerInterface
         $this->dataObjectHelper = $dataObjectHelper;
     }
 
-    public function GetProducts(ProductsGetRequestInterface $request
+    public function GetProducts(
+        ProductsGetRequestInterface $request
     ): ProductsGetResultInterface {
         if (is_null($request->getStore()) || empty($request->getStore())) {
             return $this->processErrors([_('Store id is not present in Search Criteria. Please add missing info.')]);
@@ -70,7 +71,6 @@ class CatalogService implements CatalogServerInterface
 
                 $products[] = $product;
             }
-
         }
         $result->setData($products);
 
@@ -94,7 +94,8 @@ class CatalogService implements CatalogServerInterface
         return $product;
     }
 
-    public function ImportProducts(ImportProductsRequestInterface $request
+    public function ImportProducts(
+        ImportProductsRequestInterface $request
     ): ImportProductsResponseInterface {
         // TODO: Implement ImportProducts() method.
     }

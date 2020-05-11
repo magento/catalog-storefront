@@ -81,7 +81,6 @@ class ProductDataProvider
                 $productIds,
                 $this->getFirstLevelAttributes($attributes)
             );
-
         } catch (NotFoundException $notFoundException) {
             $this->logger->error(
                 \sprintf(

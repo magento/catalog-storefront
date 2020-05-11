@@ -14,33 +14,13 @@ use Google\Protobuf\Internal\GPBUtil;
 class Variant extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Generated from protobuf field <code>string id = 1;</code>
+     * Generated from protobuf field <code>string product = 1;</code>
      */
-    protected $id = '';
+    protected $product = '';
     /**
-     * Generated from protobuf field <code>string sku = 2;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.VariantAttribute attributes = 2;</code>
      */
-    protected $sku = '';
-    /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.Price minimum_price = 3;</code>
-     */
-    protected $minimum_price = null;
-    /**
-     * Generated from protobuf field <code>bool buyable = 4;</code>
-     */
-    protected $buyable = false;
-    /**
-     * Generated from protobuf field <code>bool in_stock = 5;</code>
-     */
-    protected $in_stock = false;
-    /**
-     * Generated from protobuf field <code>bool low_stock = 6;</code>
-     */
-    protected $low_stock = false;
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.SingleValueAttribute selections = 7;</code>
-     */
-    private $selections;
+    private $attributes;
 
     /**
      * Constructor.
@@ -48,13 +28,8 @@ class Variant extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type string $id
-     *     @type string $sku
-     *     @type \Magento\CatalogStorefrontApi\Proto\Price $minimum_price
-     *     @type bool $buyable
-     *     @type bool $in_stock
-     *     @type bool $low_stock
-     *     @type \Magento\CatalogStorefrontApi\Proto\SingleValueAttribute[]|\Google\Protobuf\Internal\RepeatedField $selections
+     *     @type string $product
+     *     @type \Magento\CatalogStorefrontApi\Proto\VariantAttribute[]|\Google\Protobuf\Internal\RepeatedField $attributes
      * }
      */
     public function __construct($data = null)
@@ -64,155 +39,45 @@ class Variant extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>string id = 1;</code>
+     * Generated from protobuf field <code>string product = 1;</code>
      * @return string
      */
-    public function getId()
+    public function getProduct()
     {
-        return $this->id;
+        return $this->product;
     }
 
     /**
-     * Generated from protobuf field <code>string id = 1;</code>
+     * Generated from protobuf field <code>string product = 1;</code>
      * @param string $var
      * @return $this
      */
-    public function setId($var)
+    public function setProduct($var)
     {
         GPBUtil::checkString($var, true);
-        $this->id = $var;
+        $this->product = $var;
 
         return $this;
     }
 
     /**
-     * Generated from protobuf field <code>string sku = 2;</code>
-     * @return string
-     */
-    public function getSku()
-    {
-        return $this->sku;
-    }
-
-    /**
-     * Generated from protobuf field <code>string sku = 2;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setSku($var)
-    {
-        GPBUtil::checkString($var, true);
-        $this->sku = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.Price minimum_price = 3;</code>
-     * @return \Magento\CatalogStorefrontApi\Proto\Price
-     */
-    public function getMinimumPrice()
-    {
-        return $this->minimum_price;
-    }
-
-    /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.Price minimum_price = 3;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\Price $var
-     * @return $this
-     */
-    public function setMinimumPrice($var)
-    {
-        GPBUtil::checkMessage($var, \Magento\CatalogStorefrontApi\Proto\Price::class);
-        $this->minimum_price = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>bool buyable = 4;</code>
-     * @return bool
-     */
-    public function getBuyable()
-    {
-        return $this->buyable;
-    }
-
-    /**
-     * Generated from protobuf field <code>bool buyable = 4;</code>
-     * @param bool $var
-     * @return $this
-     */
-    public function setBuyable($var)
-    {
-        GPBUtil::checkBool($var);
-        $this->buyable = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>bool in_stock = 5;</code>
-     * @return bool
-     */
-    public function getInStock()
-    {
-        return $this->in_stock;
-    }
-
-    /**
-     * Generated from protobuf field <code>bool in_stock = 5;</code>
-     * @param bool $var
-     * @return $this
-     */
-    public function setInStock($var)
-    {
-        GPBUtil::checkBool($var);
-        $this->in_stock = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>bool low_stock = 6;</code>
-     * @return bool
-     */
-    public function getLowStock()
-    {
-        return $this->low_stock;
-    }
-
-    /**
-     * Generated from protobuf field <code>bool low_stock = 6;</code>
-     * @param bool $var
-     * @return $this
-     */
-    public function setLowStock($var)
-    {
-        GPBUtil::checkBool($var);
-        $this->low_stock = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.SingleValueAttribute selections = 7;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.VariantAttribute attributes = 2;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
      */
-    public function getSelections()
+    public function getAttributes()
     {
-        return $this->selections;
+        return $this->attributes;
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.SingleValueAttribute selections = 7;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\SingleValueAttribute[]|\Google\Protobuf\Internal\RepeatedField $var
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.VariantAttribute attributes = 2;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\VariantAttribute[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
-    public function setSelections($var)
+    public function setAttributes($var)
     {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\SingleValueAttribute::class);
-        $this->selections = $arr;
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\VariantAttribute::class);
+        $this->attributes = $arr;
 
         return $this;
     }

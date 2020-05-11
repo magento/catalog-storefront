@@ -13,25 +13,46 @@ namespace Magento\CatalogStorefrontApi\Api\Data;
 final class ImportProductsResponse implements ImportProductsResponseInterface
 {
     /**
-     * @var array
+     * @var bool
      */
-    private $data;
+    private $status;
+    /**
+     * @var string
+     */
+    private $message;
 
 
     /**
-     * @return \Magento\CatalogStorefrontApi\Api\Data\ProductInterface[]
+     * @return bool
      */
-    public function getData(): array
+    public function getStatus(): bool
     {
-        return (array) $this->data;
+        return (bool) $this->status;
     }
     
     /**
-     * @param \Magento\CatalogStorefrontApi\Api\Data\ProductInterface[] $value
+     * @param bool $value
      * @return void
      */
-    public function setData(array $value): void
+    public function setStatus(bool $value): void
     {
-        $this->data = $value;
+        $this->status = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return (string) $this->message;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setMessage(string $value): void
+    {
+        $this->message = $value;
     }
 }

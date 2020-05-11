@@ -12,7 +12,14 @@ namespace Magento\CatalogStorefrontApi\Api;
 
 interface CatalogInterface
 {
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface $request
+     * @return \Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface
+     */
     public function GetProducts(\Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface $request): \Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
-
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface $request
+     * @return \Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseInterface
+     */
     public function ImportProducts(\Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface $request): \Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseInterface;
 }

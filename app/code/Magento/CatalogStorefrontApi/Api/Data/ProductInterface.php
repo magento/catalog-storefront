@@ -16,13 +16,13 @@ interface ProductInterface
         /**
      * @return string
      */
-    public function getEntityId(): string;
+    public function getId(): string;
     
     /**
      * @param string $value
      * @return void
      */
-    public function setEntityId(string $value): void;
+    public function setId(string $value): void;
 
     /**
      * @return string
@@ -49,13 +49,24 @@ interface ProductInterface
     /**
      * @return string
      */
-    public function getId(): string;
+    public function getCreatedAt(): string;
     
     /**
      * @param string $value
      * @return void
      */
-    public function setId(string $value): void;
+    public function setCreatedAt(string $value): void;
+
+    /**
+     * @return string
+     */
+    public function getUpdatedAt(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setUpdatedAt(string $value): void;
 
     /**
      * @return string
@@ -148,39 +159,6 @@ interface ProductInterface
     /**
      * @return string
      */
-    public function getMetaDescription(): string;
-    
-    /**
-     * @param string $value
-     * @return void
-     */
-    public function setMetaDescription(string $value): void;
-
-    /**
-     * @return string
-     */
-    public function getMetaKeyword(): string;
-    
-    /**
-     * @param string $value
-     * @return void
-     */
-    public function setMetaKeyword(string $value): void;
-
-    /**
-     * @return string
-     */
-    public function getMetaTitle(): string;
-    
-    /**
-     * @param string $value
-     * @return void
-     */
-    public function setMetaTitle(string $value): void;
-
-    /**
-     * @return string
-     */
     public function getTaxClassId(): string;
     
     /**
@@ -236,6 +214,17 @@ interface ProductInterface
     /**
      * @return string
      */
+    public function getSwatchImage(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setSwatchImage(string $value): void;
+
+    /**
+     * @return string
+     */
     public function getVisibility(): string;
     
     /**
@@ -243,4 +232,180 @@ interface ProductInterface
      * @return void
      */
     public function setVisibility(string $value): void;
+
+    /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface[]
+     */
+    public function getDynamicAttributes(): array;
+    
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface[] $value
+     * @return void
+     */
+    public function setDynamicAttributes(array $value): void;
+
+    /**
+     * @return string
+     */
+    public function getMetaDescription(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setMetaDescription(string $value): void;
+
+    /**
+     * @return string
+     */
+    public function getMetaKeyword(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setMetaKeyword(string $value): void;
+
+    /**
+     * @return string
+     */
+    public function getMetaTitle(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setMetaTitle(string $value): void;
+
+    /**
+     * @return string
+     */
+    public function getRequiredOptions(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setRequiredOptions(string $value): void;
+
+    /**
+     * @return string
+     */
+    public function getCreatedIn(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setCreatedIn(string $value): void;
+
+    /**
+     * @return string
+     */
+    public function getUpdatedIn(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setUpdatedIn(string $value): void;
+
+    /**
+     * @return string
+     */
+    public function getQuantityAndStockStatus(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setQuantityAndStockStatus(string $value): void;
+
+    /**
+     * @return string
+     */
+    public function getOptionsContainer(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setOptionsContainer(string $value): void;
+
+    /**
+     * @return string
+     */
+    public function getMsrpDisplayActualPriceType(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setMsrpDisplayActualPriceType(string $value): void;
+
+    /**
+     * @return string
+     */
+    public function getIsReturnable(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setIsReturnable(string $value): void;
+
+    /**
+     * @return string
+     */
+    public function getUrlSuffix(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setUrlSuffix(string $value): void;
+
+    /**
+     * @return string[]
+     */
+    public function getOptions(): array;
+    
+    /**
+     * @param string[] $value
+     * @return void
+     */
+    public function setOptions(array $value): void;
+
+    /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteInterface[]
+     */
+    public function getUrlRewrites(): array;
+    
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteInterface[] $value
+     * @return void
+     */
+    public function setUrlRewrites(array $value): void;
+
+    /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\VariantInterface[]
+     */
+    public function getVariants(): array;
+    
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\VariantInterface[] $value
+     * @return void
+     */
+    public function setVariants(array $value): void;
+
+    /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionInterface[]
+     */
+    public function getConfigurableOptions(): array;
+    
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionInterface[] $value
+     * @return void
+     */
+    public function setConfigurableOptions(array $value): void;
 }
