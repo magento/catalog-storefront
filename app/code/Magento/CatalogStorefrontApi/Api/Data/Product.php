@@ -703,7 +703,7 @@ final class Product implements ProductInterface
     }
 
     /**
-     * @return string[]
+     * @return \Magento\CatalogStorefrontApi\Api\Data\OptionInterface[]
      */
     public function getOptions(): array
     {
@@ -711,7 +711,7 @@ final class Product implements ProductInterface
     }
     
     /**
-     * @param string[] $value
+     * @param \Magento\CatalogStorefrontApi\Api\Data\OptionInterface[] $value
      * @return void
      */
     public function setOptions(array $value): void

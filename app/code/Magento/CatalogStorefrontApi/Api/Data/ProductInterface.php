@@ -366,12 +366,12 @@ interface ProductInterface
     public function setUrlSuffix(string $value): void;
 
     /**
-     * @return string[]
+     * @return \Magento\CatalogStorefrontApi\Api\Data\OptionInterface[]
      */
     public function getOptions(): array;
     
     /**
-     * @param string[] $value
+     * @param \Magento\CatalogStorefrontApi\Api\Data\OptionInterface[] $value
      * @return void
      */
     public function setOptions(array $value): void;

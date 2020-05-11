@@ -14,15 +14,15 @@ interface ProductsGetRequestInterface
 {
 
         /**
-     * @return string[]
+     * @return string
      */
-    public function getIds(): array;
+    public function getIds(): string;
     
     /**
-     * @param string[] $value
+     * @param string $value
      * @return void
      */
-    public function setIds(array $value): void;
+    public function setIds(string $value): void;
 
     /**
      * @return string
@@ -36,13 +36,13 @@ interface ProductsGetRequestInterface
     public function setStore(string $value): void;
 
     /**
-     * @return string[]
+     * @return string
      */
-    public function getAttributeCodes(): array;
+    public function getAttributeCodes(): string;
     
     /**
-     * @param string[] $value
+     * @param string $value
      * @return void
      */
-    public function setAttributeCodes(array $value): void;
+    public function setAttributeCodes(string $value): void;
 }

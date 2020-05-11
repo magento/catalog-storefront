@@ -13,7 +13,7 @@ namespace Magento\CatalogStorefrontApi\Api\Data;
 final class ProductsGetRequest implements ProductsGetRequestInterface
 {
     /**
-     * @var array
+     * @var string
      */
     private $ids;
     /**
@@ -21,24 +21,24 @@ final class ProductsGetRequest implements ProductsGetRequestInterface
      */
     private $store;
     /**
-     * @var array
+     * @var string
      */
     private $attributeCodes;
 
 
     /**
-     * @return string[]
+     * @return string
      */
-    public function getIds(): array
+    public function getIds(): string
     {
-        return (array) $this->ids;
+        return (string) $this->ids;
     }
     
     /**
-     * @param string[] $value
+     * @param string $value
      * @return void
      */
-    public function setIds(array $value): void
+    public function setIds(string $value): void
     {
         $this->ids = $value;
     }
@@ -61,18 +61,18 @@ final class ProductsGetRequest implements ProductsGetRequestInterface
     }
 
     /**
-     * @return string[]
+     * @return string
      */
-    public function getAttributeCodes(): array
+    public function getAttributeCodes(): string
     {
-        return (array) $this->attributeCodes;
+        return (string) $this->attributeCodes;
     }
     
     /**
-     * @param string[] $value
+     * @param string $value
      * @return void
      */
-    public function setAttributeCodes(array $value): void
+    public function setAttributeCodes(string $value): void
     {
         $this->attributeCodes = $value;
     }
