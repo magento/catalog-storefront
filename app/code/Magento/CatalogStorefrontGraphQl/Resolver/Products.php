@@ -7,13 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontGraphQl\Resolver;
 
+use Magento\CatalogStorefront\Model\CatalogService;
+use Magento\CatalogStorefrontApi\Api\CatalogInterface;
+use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterfaceFactory;
 use Magento\CatalogStorefrontGraphQl\Resolver\Product\OutputFormatter;
 use Magento\CatalogStorefrontGraphQl\Resolver\Product\RequestBuilder;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResponse;
-use Magento\CatalogStorefrontApi\Api\ProductInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResolverInterface;
 
 /**
@@ -31,6 +34,7 @@ class Products implements BatchResolverInterface
      * @var RequestBuilder
      */
     private $requestBuilder;
+
 
     /**
      * @param \Magento\StorefrontGraphQl\Model\ServiceInvoker $serviceInvoker
@@ -56,11 +60,18 @@ class Products implements BatchResolverInterface
     {
         $storefrontRequests = [];
         foreach ($requests as $request) {
-            $storefrontRequests[] = $this->requestBuilder->buildRequest($context, $request);
+            $searchRequest = $this->requestBuilder->buildRequest($context, $request);
+            $searchRequest['storefront_request']['attribute_codes']
+                = $searchRequest['storefront_request']['attributes'];
+            $searchRequest['storefront_request']['store']
+                = $searchRequest['storefront_request']['scopes']['store'] ?? null;
+
+            $storefrontRequests[] = $searchRequest;
         }
+
         return $this->serviceInvoker->invoke(
-            ProductInterface::class,
-            'get',
+            CatalogServerInterface::class,
+            'GetProducts',
             $storefrontRequests,
             new OutputFormatter
         );

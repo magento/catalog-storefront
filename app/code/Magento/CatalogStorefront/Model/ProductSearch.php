@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
 /**
  * @inheritdoc
  */
-class ProductSearch implements ProductInterface
+class ProductSearch
 {
     /**
      * @var ProductResultContainerInterfaceFactory

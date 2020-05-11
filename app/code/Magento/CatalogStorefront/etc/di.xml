@@ -8,6 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
     <!-- Product search -->
+    <preference for="Magento\CatalogStorefrontApi\Api\CatalogInterface" type="Magento\CatalogStorefrontApi\Api\InMemoryCatalog"/>
+    <preference for="Magento\CatalogStorefrontApi\Api\CatalogServerInterface" type="Magento\CatalogStorefront\Model\CatalogService"/>
     <preference for="Magento\CatalogStorefrontApi\Api\ProductInterface" type="Magento\CatalogStorefront\Model\ProductSearch"/>
     <preference for="Magento\CatalogStorefrontApi\Api\Data\ProductResultContainerInterface" type="Magento\CatalogStorefront\Model\ProductSearch\ProductResultContainer"/>
     <preference for="Magento\CatalogStorefrontApi\Api\Data\ProductCriteriaInterface" type="Magento\CatalogStorefront\Model\ProductSearch\ProductSearchCriteria"/>

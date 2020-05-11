@@ -97,27 +97,17 @@ class ArgumentResolver
      * @return string
      * @throws \ReflectionException
      * @throws \LogicException
+     * @throws \RuntimeException
      */
     private function getParameterClassName(string $className, string $methodName): string
     {
         $class = new \ReflectionClass($className);
         $method = $class->getMethod($methodName);
-        $docComment = $method->getDocComment();
-        if (preg_match_all('/(?:@param\s+)([\w\\\\]+)(?:\[\])/', $docComment, $matches)
-            && count($matches[1]) === 1
-        ) {
-            $parameterName = array_values($matches[1]);
-            try {
-                $parameterClass = new \ReflectionClass(current($parameterName));
-                $className = $parameterClass->getName();
-            } catch (\Exception $exception) {
-                throw new \ReflectionException($exception->getMessage());
-            }
 
-        } else {
-            throw new \RuntimeException('Class passed to resolver is not compatible with ArgumentResolver');
+        foreach ($method->getParameters() as $param) {
+            return $param->getClass()->name;
         }
 
-        return $className;
+        throw new \RuntimeException('Class passed to resolver is not compatible with ArgumentResolver');
     }
 }

@@ -9,6 +9,7 @@ namespace Magento\CatalogStorefrontGraphQl\Resolver\Product;
 
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\CatalogStorefrontApi\Api\Data\ProductResultContainerInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface;
 
@@ -29,22 +30,56 @@ class OutputFormatter
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __invoke(
-        ProductResultContainerInterface $result,
+        ProductsGetResultInterface $result,
         GraphQlInputException $e,
         BatchRequestItemInterface $request,
         array $additionalInfo = []
     ) {
-        $errors = $result->getErrors() ?: $additionalInfo['errors'] ?: [];
-        if (!empty($errors)) {
-            //ad-hoc solution with __() as GraphQlInputException accepts Phrase in construct
-            //TODO: change with error holder
-            throw new GraphQlInputException(__(\implode('; ', \array_map('\strval', $errors))));
-        }
+//        $errors = $result->getErrors() ?: $additionalInfo['errors'] ?: [];
+//        if (!empty($errors)) {
+//            //ad-hoc solution with __() as GraphQlInputException accepts Phrase in construct
+//            //TODO: change with error holder
+//            throw new GraphQlInputException(__(\implode('; ', \array_map('\strval', $errors))));
+//        }
+
+        $items = array_map(function(\Magento\CatalogStorefrontApi\Api\Data\ProductInterface $item) {
+            $result = [
+                'attribute_set_id' => $item->getAttributeSetId(),
+                'created_at' => $item->getCreatedAt(),
+                'updated_at' => $item->getUpdatedAt(),
+                'sku' => $item->getSku(),
+                'id' => $item->getId(),
+                'type_id' => $item->getTypeId(),
+                'description' => ['html' => $item->getDescription() ?? null],
+                'name' => $item->getName(),
+                'stock_status' => $item->getStockStatus(),
+                'url_key' => $item->getUrlKey(),
+                'url_suffix' => $item->getUrlSuffix(),
+                'swatch_image' => $item->getSwatchImage(),
+
+            ];
+            if ($item->getImage()) {
+                $result['image']['url'] = $item->getImage()->getUrl() ?? "";
+                $result['image']['label'] = $item->getImage()->getLabel() ?? "";
+            }
+
+            if ($item->getSmallImage()) {
+                $result['small_image']['url'] = $item->getSmallImage()->getUrl() ?? "";
+                $result['small_image']['label'] = $item->getSmallImage()->getLabel() ?? "";
+            }
+
+            if ($item->getThumbnail()) {
+                $result['thumbnail']['url'] = $item->getSmallImage()->getUrl() ?? "";
+                $result['thumbnail']['label'] = $item->getSmallImage()->getLabel() ?? "";
+            }
+
+            return $result;
+        }, $result->getData());
 
         $metaInfo = $additionalInfo['meta_info'] ?? [];
         $aggregations = $additionalInfo['aggregations'] ?? [];
         return [
-            'items' => $result->getItems(),
+            'items' => $items,
             'aggregations' => $aggregations,
             'total_count' => $metaInfo['total_count'] ?? null,
             'page_info' => [

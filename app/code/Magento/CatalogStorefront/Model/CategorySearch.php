@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
 /**
  * @inheritdoc
  */
-class CategorySearch implements CategoryInterface
+class CategorySearch
 {
     /**
      * @var CategoryResultContainerInterfaceFactory

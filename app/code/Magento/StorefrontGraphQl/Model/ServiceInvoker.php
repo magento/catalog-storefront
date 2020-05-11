@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\StorefrontGraphQl\Model;
 
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResponse;
@@ -41,17 +42,24 @@ class ServiceInvoker
      * @var ArgumentResolver
      */
     private $argumentResolver;
+    /**
+     * @var DataObjectHelper
+     */
+    private $dataObjectHelper;
 
     /**
      * @param ObjectManagerInterface $objectManager
      * @param ArgumentResolver $argumentResolver
+     * @param DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        ArgumentResolver $argumentResolver
+        ArgumentResolver $argumentResolver,
+        DataObjectHelper $dataObjectHelper
     ) {
         $this->objectManager = $objectManager;
         $this->argumentResolver = $argumentResolver;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
 
     /**
@@ -74,13 +82,21 @@ class ServiceInvoker
         $this->validateRequests($storefrontRequests);
 
         $service = $this->objectManager->get($serviceClassName);
-        $criteriaClassName = $this->argumentResolver->getArgumentClassName($serviceClassName, $serviceMethodName);
-        $serviceArguments = [];
+        $argumentClassName = $this->argumentResolver->getArgumentClassName($serviceClassName, $serviceMethodName);
+        $serviceResponses = [];
 
         foreach ($storefrontRequests as $request) {
-            $serviceArguments[] = $this->objectManager->create($criteriaClassName, $request[self::STOREFRONT_REQUEST]);
+            $serviceArgument = $this->objectManager->create($argumentClassName, $request[self::STOREFRONT_REQUEST]);
+
+            $this->dataObjectHelper->populateWithArray(
+                $serviceArgument,
+                $request[self::STOREFRONT_REQUEST],
+                $argumentClassName
+            );
+
+            $serviceResponse = $service->$serviceMethodName($serviceArgument);
+            $serviceResponses[] = $serviceResponse;
         }
-        $serviceResponse = $service->$serviceMethodName($serviceArguments);
 
         $formatter = \is_callable($formatter)
             ? $formatter
@@ -92,7 +108,7 @@ class ServiceInvoker
         $graphQlException = new GraphQlInputException(
             __('Error happened during service call "%1"', $serviceClassName . '::' . $serviceMethodName)
         );
-        foreach ($serviceResponse as $responseNumber => $response) {
+        foreach ($serviceResponses as $responseNumber => $response) {
             $batchResponse->addResponse(
                 $storefrontRequests[$responseNumber][self::GRAPHQL_REQUEST],
                 $formatter(
