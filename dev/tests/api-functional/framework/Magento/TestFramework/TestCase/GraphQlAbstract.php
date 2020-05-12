@@ -19,7 +19,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->clearCatalogStorage();

@@ -147,7 +147,7 @@ QUERY;
     /**
      * @inheritDoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->removeStore('new_store');
