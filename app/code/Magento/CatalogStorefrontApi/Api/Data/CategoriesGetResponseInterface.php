@@ -10,16 +10,16 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontApi\Api\Data;
 
-interface ProductsGetResultInterface
+interface CategoriesGetResponseInterface
 {
 
         /**
-     * @return \Magento\CatalogStorefrontApi\Api\Data\ProductInterface[]
+     * @return \Magento\CatalogStorefrontApi\Api\Data\CategoryInterface[]
      */
     public function getItems(): array;
     
     /**
-     * @param \Magento\CatalogStorefrontApi\Api\Data\ProductInterface[] $value
+     * @param \Magento\CatalogStorefrontApi\Api\Data\CategoryInterface[] $value
      * @return void
      */
     public function setItems(array $value): void;

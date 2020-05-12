@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontApi\Api\Data;
 
-final class ProductsGetResult implements ProductsGetResultInterface
+final class CategoriesGetResponse implements CategoriesGetResponseInterface
 {
     /**
      * @var array
@@ -19,7 +19,7 @@ final class ProductsGetResult implements ProductsGetResultInterface
 
 
     /**
-     * @return \Magento\CatalogStorefrontApi\Api\Data\ProductInterface[]
+     * @return \Magento\CatalogStorefrontApi\Api\Data\CategoryInterface[]
      */
     public function getItems(): array
     {
@@ -27,7 +27,7 @@ final class ProductsGetResult implements ProductsGetResultInterface
     }
     
     /**
-     * @param \Magento\CatalogStorefrontApi\Api\Data\ProductInterface[] $value
+     * @param \Magento\CatalogStorefrontApi\Api\Data\CategoryInterface[] $value
      * @return void
      */
     public function setItems(array $value): void

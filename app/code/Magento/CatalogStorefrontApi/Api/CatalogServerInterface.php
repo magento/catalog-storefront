@@ -22,4 +22,9 @@ interface CatalogServerInterface
      * @return \Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseInterface
      */
     public function ImportProducts(\Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface $request): \Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseInterface;
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface $request
+     * @return \Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface
+     */
+    public function GetCategories(\Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface $request): \Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
 }

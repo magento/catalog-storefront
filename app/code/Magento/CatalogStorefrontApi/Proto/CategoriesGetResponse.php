@@ -9,12 +9,12 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- * Generated from protobuf message <code>magento.catalogStorefrontApi.proto.ProductsGetResult</code>
+ * Generated from protobuf message <code>magento.catalogStorefrontApi.proto.CategoriesGetResponse</code>
  */
-class ProductsGetResult extends \Google\Protobuf\Internal\Message
+class CategoriesGetResponse extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Product items = 1;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Category items = 1;</code>
      */
     private $items;
 
@@ -24,7 +24,7 @@ class ProductsGetResult extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type \Magento\CatalogStorefrontApi\Proto\Product[]|\Google\Protobuf\Internal\RepeatedField $items
+     *     @type \Magento\CatalogStorefrontApi\Proto\Category[]|\Google\Protobuf\Internal\RepeatedField $items
      * }
      */
     public function __construct($data = null)
@@ -34,7 +34,7 @@ class ProductsGetResult extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Product items = 1;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Category items = 1;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
      */
     public function getItems()
@@ -43,13 +43,13 @@ class ProductsGetResult extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Product items = 1;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\Product[]|\Google\Protobuf\Internal\RepeatedField $var
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Category items = 1;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\Category[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
     public function setItems($var)
     {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\Product::class);
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\Category::class);
         $this->items = $arr;
 
         return $this;

@@ -88,7 +88,6 @@ class FieldResolver
         foreach ($selection->selectionSet->selections as $itemSelection) {
             if ($itemSelection->kind === 'InlineFragment') {
                 foreach ($itemSelection->selectionSet->selections as $inlineSelection) {
-
                     if ($itemSelection->typeCondition->kind === 'NamedType') {
                         $namedType = $itemSelection->typeCondition->name->value;
                         $fieldNames = $this->getNestedFields($fieldNames, $inlineSelection, $namedType);

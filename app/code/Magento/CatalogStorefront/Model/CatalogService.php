@@ -8,15 +8,20 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefront\Model;
 
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
+use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
+use Magento\CatalogStorefrontApi\Api\Data\CategoryInterface;
 use Magento\CatalogStorefrontApi\Api\Data\Image;
 use Magento\CatalogStorefrontApi\Api\Data\ProductInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResult;
-use \Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
-use \Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseInterface;
 use Magento\CatalogStorefront\DataProvider\ProductDataProvider;
+use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponse;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
+use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
 
 /**
  * @inheritdoc
@@ -31,18 +36,25 @@ class CatalogService implements CatalogServerInterface
      * @var DataObjectHelper
      */
     private $dataObjectHelper;
+    /**
+     * @var CategoryDataProvider
+     */
+    private $categoryDataProvider;
 
     /**
      * CatalogService constructor.
      * @param ProductDataProvider $dataProvider
      * @param DataObjectHelper $dataObjectHelper
+     * @param CategoryDataProvider $categoryDataProvider
      */
     public function __construct(
         ProductDataProvider $dataProvider,
-        DataObjectHelper $dataObjectHelper
+        DataObjectHelper $dataObjectHelper,
+        CategoryDataProvider $categoryDataProvider
     ) {
         $this->dataProvider = $dataProvider;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->categoryDataProvider = $categoryDataProvider;
     }
 
     public function GetProducts(
@@ -98,5 +110,34 @@ class CatalogService implements CatalogServerInterface
         ImportProductsRequestInterface $request
     ): ImportProductsResponseInterface {
         // TODO: Implement ImportProducts() method.
+    }
+
+    public function GetCategories(
+        CategoriesGetRequestInterface $request
+    ): CategoriesGetResponseInterface {
+        $result = new CategoriesGetResponse();
+
+        $categories = $this->categoryDataProvider->fetch(
+            $request->getIds(),
+            \array_merge($request->getAttributeCodes(), ['is_active']),
+            ['store' => $request->getStore()]
+        );
+        $items = [];
+        foreach ($categories as $category) {
+            $item = new \Magento\CatalogStorefrontApi\Api\Data\Category();
+
+            if (array_key_exists('image', $category) && !is_string($category['image'])) {
+                $category['image'] = "";
+            }
+
+            if (array_key_exists('description', $category) && !is_string($category['description'])) {
+                $category['description'] = "";
+            }
+            $this->dataObjectHelper->populateWithArray($item, $category, CategoryInterface::class);
+            $items[] = $item;
+        }
+        $result->setItems($items);
+
+        return $result;
     }
 }

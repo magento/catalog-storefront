@@ -169,7 +169,7 @@ class Product extends \Google\Protobuf\Internal\Message
     /**
      * TODO: May need to be a complex type
      *
-     * Generated from protobuf field <code>repeated string options = 81;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Option options = 81;</code>
      */
     private $options;
     /**
@@ -241,7 +241,7 @@ class Product extends \Google\Protobuf\Internal\Message
      *     @type string $msrp_display_actual_price_type
      *     @type string $is_returnable
      *     @type string $url_suffix
-     *     @type string[]|\Google\Protobuf\Internal\RepeatedField $options
+     *     @type \Magento\CatalogStorefrontApi\Proto\Option[]|\Google\Protobuf\Internal\RepeatedField $options
      *           TODO: May need to be a complex type
      *     @type \Magento\CatalogStorefrontApi\Proto\UrlRewrite[]|\Google\Protobuf\Internal\RepeatedField $url_rewrites
      *     @type \Magento\CatalogStorefrontApi\Proto\Variant[]|\Google\Protobuf\Internal\RepeatedField $variants
@@ -1011,7 +1011,7 @@ class Product extends \Google\Protobuf\Internal\Message
     /**
      * TODO: May need to be a complex type
      *
-     * Generated from protobuf field <code>repeated string options = 81;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Option options = 81;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
      */
     public function getOptions()
@@ -1022,13 +1022,13 @@ class Product extends \Google\Protobuf\Internal\Message
     /**
      * TODO: May need to be a complex type
      *
-     * Generated from protobuf field <code>repeated string options = 81;</code>
-     * @param string[]|\Google\Protobuf\Internal\RepeatedField $var
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Option options = 81;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\Option[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
     public function setOptions($var)
     {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::STRING);
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\Option::class);
         $this->options = $arr;
 
         return $this;

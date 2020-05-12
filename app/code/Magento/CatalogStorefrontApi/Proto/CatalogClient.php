@@ -61,4 +61,24 @@ class CatalogClient extends \Grpc\BaseStub
             $options
         );
     }
+
+    /**
+     * @param \Magento\CatalogStorefrontApi\Proto\CategoriesGetRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     */
+    public function GetCategories(
+        \Magento\CatalogStorefrontApi\Proto\CategoriesGetRequest $argument,
+        $metadata = [],
+        $options = []
+    )
+    {
+        return $this->_simpleRequest(
+            '/magento.catalogStorefrontApi.proto.Catalog/GetCategories',
+            $argument,
+            ['\Magento\CatalogStorefrontApi\Proto\CategoriesGetResponse', 'decode'],
+            $metadata,
+            $options
+        );
+    }
 }

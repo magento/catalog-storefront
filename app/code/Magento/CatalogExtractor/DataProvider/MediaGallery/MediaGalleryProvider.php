@@ -134,7 +134,6 @@ class MediaGalleryProvider implements DataProviderInterface
                 }
             }
             $output[$productId][$outputAttribute][] = $data;
-
         }
         return $output;
     }

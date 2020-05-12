@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * @inheritdoc
+ * @deprecated
  */
 class ProductSearch
 {

@@ -72,7 +72,6 @@ class StockStatusProvider implements DataProviderInterface
                 (int)$data['stock_status'] === self::STATUS_IN_STOCK
                     ? self::VALUE_IN_STOCK
                     : self::VALUE_OUT_OF_STOCK;
-
         }
         return $output;
     }

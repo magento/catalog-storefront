@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontGraphQl\Resolver;
 
-use Magento\CatalogStorefront\Model\CatalogService;
-use Magento\CatalogStorefrontApi\Api\CatalogInterface;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterfaceFactory;
 use Magento\CatalogStorefrontGraphQl\Resolver\Product\OutputFormatter;

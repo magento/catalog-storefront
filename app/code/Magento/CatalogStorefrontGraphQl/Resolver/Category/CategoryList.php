@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefrontGraphQl\Resolver\Category;
 
 use Magento\CatalogStorefrontApi\Api\CategoryInterface;
+use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryResultContainerInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -20,6 +21,9 @@ use Magento\Framework\GraphQl\Query\Resolver\BatchResponse;
 use Magento\StorefrontGraphQl\Model\ServiceInvoker;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\CatalogGraphQl\Model\Category\CategoryFilter;
+use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
+
+;
 
 /**
  * Category List resolver, used for GraphQL category data request processing.
@@ -86,23 +90,21 @@ class CategoryList implements BatchResolverInterface
         try {
             foreach ($requests as $request) {
                 $scopes = $this->scopeProvider->getScopes($context);
-                $rootCategoryIds = [];
+                $categoryIds = [];
 
                 $store = $context->getExtensionAttributes()->getStore();
                 if (!isset($request->getArgs()['filters'])) {
-                    $rootCategoryIds[] = (int)$store->getRootCategoryId();
+                    $categoryIds[] = (int)$store->getRootCategoryId();
                 } else {
-                    $categoryCollection = $this->collectionFactory->create();
-                    $this->categoryFilter->applyFilters($request->getArgs(), $categoryCollection, $store);
-                    foreach ($categoryCollection as $category) {
-                        $rootCategoryIds[] = (int)$category->getId();
-                    }
+                    $data = $this->categoryFilter->getResult($request->getArgs(), $store);
+                    $categoryIds = $data['category_ids'];
                 }
 
                 $storefrontRequest = [
-                    'ids' => $rootCategoryIds,
+                    'ids' => $categoryIds,
                     'scopes' => $scopes,
-                    'attributes' => $this->fieldResolver->getSchemaTypeFields($request->getInfo(), ['categoryList']),
+                    'store' => $store->getId(),
+                    'attribute_codes' => $this->fieldResolver->getSchemaTypeFields($request->getInfo(), ['categoryList']),
                 ];
                 $storefrontRequests[] = [
                     'graphql_request' => $request,
@@ -120,21 +122,26 @@ class CategoryList implements BatchResolverInterface
         }
 
         return $this->serviceInvoker->invoke(
-            CategoryInterface::class,
-            'get',
+            CatalogServerInterface::class,
+            'GetCategories',
             $storefrontRequests,
             function (
-                CategoryResultContainerInterface $result
+                CategoriesGetResponseInterface $result
             ) {
-                $errors = $result->getErrors();
-                if (!empty($errors)) {
-                    //ad-hoc solution with __() as GraphQlInputException accepts Phrase in construct
-                    throw new InputException(
-                        __(\implode('; ', \array_map('\strval', $errors)))
-                    );
+//                $errors = $result->getErrors();
+//                if (!empty($errors)) {
+//                    //ad-hoc solution with __() as GraphQlInputException accepts Phrase in construct
+//                    throw new InputException(
+//                        __(\implode('; ', \array_map('\strval', $errors)))
+//                    );
+//                }
+                $output = [];
+                foreach ($result->getItems() as $item) {
+                    $output[] = [
+                        'id' => $item->getId(),
+                    ];
                 }
-
-                return $result->getCategories();
+                return $output;
             }
         );
     }

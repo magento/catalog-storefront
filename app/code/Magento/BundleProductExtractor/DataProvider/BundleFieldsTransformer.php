@@ -88,7 +88,6 @@ class BundleFieldsTransformer implements TransformerInterface
                 continue;
             }
             foreach ($attributes as $attributeName => $outputAttribute) {
-
                 $rawValue = $item[$attributeName] ?? '';
                 $item[$outputAttribute] = [];
 

@@ -28,4 +28,13 @@ interface CatalogInterface extends GRPC\ServiceInterface
     * @throws GRPC\Exception\InvokeException
     */
     public function ImportProducts(GRPC\ContextInterface $ctx, ImportProductsRequest $in): ImportProductsResponse;
+
+    /**
+    * @param GRPC\ContextInterface $ctx
+    * @param CategoriesGetRequest $in
+    * @return CategoriesGetResponse
+    *
+    * @throws GRPC\Exception\InvokeException
+    */
+    public function GetCategories(GRPC\ContextInterface $ctx, CategoriesGetRequest $in): CategoriesGetResponse;
 }
