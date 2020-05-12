@@ -71,10 +71,11 @@ class ProductsConsumer extends OldConsumer
     }
 
     /**
-     * @param string[] $ids
+     * @param string $ids
      */
-    public function processMessage(array $ids)
+    public function processMessage(string $ids)
     {
+        $ids = json_decode($ids, true);
         $dataPerType = [];
         $overrides = $this->productRetriever->execute($ids);
         foreach ($overrides as $override) {
