@@ -9,7 +9,7 @@ use Magento\CatalogExportApi\Api\Data\ProductInterface;
 use Magento\CatalogExportApi\Api\ProductRepositoryInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 
-class ProductRetriever implements ProductRetrieverInterface
+class FetchProducts implements FetchProductsInterface
 {
     /**
      * @var ProductRepositoryInterface
@@ -32,7 +32,7 @@ class ProductRetriever implements ProductRetrieverInterface
      * @param string[]
      * @return ProductInterface[]
      */
-    public function retrieve(array $ids)
+    public function execute(array $ids)
     {
         $data = [];
         $products = $this->productRepository->get($ids);

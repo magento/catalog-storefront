@@ -66,7 +66,7 @@ class ExportTestTest extends WebapiAbstract
 
         $this->createServiceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/catalog-export/product',
+                'resourcePath' => '/V1/catalog-export/products',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
        ];

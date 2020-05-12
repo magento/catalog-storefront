@@ -9,7 +9,7 @@ use Magento\CatalogStorefront\Model\Storage\Client\CommandInterface;
 use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
 use Magento\CatalogStorefront\Model\Storage\State;
 use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
-use Magento\CatalogMessageBroker\Model\ProductRetrieverInterface;
+use Magento\CatalogMessageBroker\Model\FetchProductsInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\CatalogStorefront\Model\MessageBus\Consumer as OldConsumer;
 use Magento\CatalogStorefront\Model\MessageBus\CatalogItemMessageBuilder;
@@ -23,7 +23,7 @@ class Consumer extends OldConsumer
     private $dataProvider;
 
     /**
-     * @var ProductRetrieverInterface
+     * @var FetchProductsInterface
      */
     private $productRetriever;
 
@@ -44,7 +44,7 @@ class Consumer extends OldConsumer
      * @param CatalogItemMessageBuilder $catalogItemMessageBuilder
      * @param LoggerInterface $logger
      * @param DataProviderInterface $dataProvider
-     * @param ProductRetrieverInterface $productRetriever
+     * @param FetchProductsInterface $productRetriever
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
@@ -54,7 +54,7 @@ class Consumer extends OldConsumer
         CatalogItemMessageBuilder $catalogItemMessageBuilder,
         LoggerInterface $logger,
         DataProviderInterface $dataProvider,
-        ProductRetrieverInterface $productRetriever,
+        FetchProductsInterface $productRetriever,
         StoreManagerInterface $storeManager
     ) {
         parent::__construct(
@@ -76,7 +76,7 @@ class Consumer extends OldConsumer
     public function processMessage(array $ids)
     {
         $dataPerType = [];
-        $overrides = $this->productRetriever->retrieve($ids);
+        $overrides = $this->productRetriever->execute($ids);
         foreach ($overrides as $override) {
             // @todo eliminate store manager
             $store = $this->storeManager->getStores(false, $override['store_view_code']);
