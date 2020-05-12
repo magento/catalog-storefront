@@ -1,4 +1,3 @@
 # Overview
 
-Magento_CatalogExport is responsible for providing API to expose catalog data for storefront.
-
+Magento_CatalogMessageBroker is responsible for synchronizing catalog data from back office API to catalog storefront.

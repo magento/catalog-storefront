@@ -15,7 +15,7 @@ use Magento\CatalogStorefront\Model\MessageBus\Consumer as OldConsumer;
 use Magento\CatalogStorefront\Model\MessageBus\CatalogItemMessageBuilder;
 use Psr\Log\LoggerInterface;
 
-class Consumer extends OldConsumer
+class ProductsConsumer extends OldConsumer
 {
     /**
      * @var DataProviderInterface

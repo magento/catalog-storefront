@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\CatalogMessageBroker\Model\ProductRetrieverInterface" type="Magento\CatalogMessageBroker\Model\ProductRetriever"/>
+    <preference for="Magento\CatalogMessageBroker\Model\FetchProductsInterface" type="Magento\CatalogMessageBroker\Model\FetchProducts"/>
 </config>
