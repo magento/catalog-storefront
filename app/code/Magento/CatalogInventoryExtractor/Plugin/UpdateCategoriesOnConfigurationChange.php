@@ -98,7 +98,7 @@ class UpdateCategoriesOnConfigurationChange
         foreach ($this->storeManager->getStores() as $store) {
             $storeId = (int)$store->getId();
             foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $categoryIds) {
-                $this->categoryPublisher->publish($categoryIds, $storeId);
+                $this->categoryPublisher->publish('category_updated', $categoryIds, $storeId);
             }
         }
 
