@@ -13,6 +13,7 @@ use Magento\CatalogMessageBroker\Model\FetchProductsInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\CatalogStorefront\Model\MessageBus\Consumer as OldConsumer;
 use Magento\CatalogStorefront\Model\MessageBus\CatalogItemMessageBuilder;
+use Magento\Framework\App\State as AppState;
 use Psr\Log\LoggerInterface;
 
 class ProductsConsumer extends OldConsumer
@@ -25,7 +26,7 @@ class ProductsConsumer extends OldConsumer
     /**
      * @var FetchProductsInterface
      */
-    private $productRetriever;
+    private $fetchProducts;
 
     /**
      * @var LoggerInterface
@@ -38,14 +39,20 @@ class ProductsConsumer extends OldConsumer
     private $storeManager;
 
     /**
+     * @var AppState
+     */
+    private $appState;
+
+    /**
      * @param CommandInterface $storageWriteSource
      * @param DataDefinitionInterface $storageSchemaManager
      * @param State $storageState
      * @param CatalogItemMessageBuilder $catalogItemMessageBuilder
      * @param LoggerInterface $logger
      * @param DataProviderInterface $dataProvider
-     * @param FetchProductsInterface $productRetriever
+     * @param FetchProductsInterface $fetchProducts
      * @param StoreManagerInterface $storeManager
+     * @param AppState $appState
      */
     public function __construct(
         CommandInterface $storageWriteSource,
@@ -54,8 +61,9 @@ class ProductsConsumer extends OldConsumer
         CatalogItemMessageBuilder $catalogItemMessageBuilder,
         LoggerInterface $logger,
         DataProviderInterface $dataProvider,
-        FetchProductsInterface $productRetriever,
-        StoreManagerInterface $storeManager
+        FetchProductsInterface $fetchProducts,
+        StoreManagerInterface $storeManager,
+        AppState $appState
     ) {
         parent::__construct(
             $storageWriteSource,
@@ -66,8 +74,9 @@ class ProductsConsumer extends OldConsumer
         );
         $this->logger = $logger;
         $this->dataProvider = $dataProvider;
-        $this->productRetriever = $productRetriever;
+        $this->fetchProducts = $fetchProducts;
         $this->storeManager = $storeManager;
+        $this->appState = $appState;
     }
 
     /**
@@ -77,13 +86,24 @@ class ProductsConsumer extends OldConsumer
     {
         $ids = json_decode($ids, true);
         $dataPerType = [];
-        $overrides = $this->productRetriever->execute($ids);
+        $overrides = $this->fetchProducts->execute($ids);
         foreach ($overrides as $override) {
             // @todo eliminate store manager
             $store = $this->storeManager->getStores(false, $override['store_view_code']);
             $storeId = array_pop($store)->getId();
-            // @todo eliminate calling old API when new API can provide all of the necessary data
-            $products = $this->dataProvider->fetch([$override['id']], [], ['store' => $storeId]);
+            $products = [];
+            // @todo this is taken from old consumer, need to revise in the future
+            $this->appState->emulateAreaCode(
+                \Magento\Framework\App\Area::AREA_FRONTEND,
+                function () use ($override, $storeId, &$products) {
+                    try {
+                        // @todo eliminate calling old API when new API can provide all of the necessary data
+                        $products = $this->dataProvider->fetch([$override['id']], [], ['store' => $storeId]);
+                    } catch (\Throwable $e) {
+                        $this->logger->critical($e);
+                    }
+                }
+            );
             $product = $this->mergeData(array_pop($products), $override);
             if (empty($product)) {
                 $dataPerType['product'][$storeId][self::DELETE][] = $product['entity_id'];

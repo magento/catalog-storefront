@@ -29,8 +29,7 @@ class FetchProducts implements FetchProductsInterface
     }
 
     /**
-     * @param string[]
-     * @return ProductInterface[]
+     * @inheritdoc
      */
     public function execute(array $ids)
     {

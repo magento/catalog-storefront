@@ -5,13 +5,11 @@
  */
 namespace Magento\CatalogMessageBroker\Model;
 
-use Magento\CatalogExportApi\Api\Data\ProductInterface;
-
 interface FetchProductsInterface
 {
     /**
      * @param string[]
-     * @return ProductInterface[]
+     * @return array
      */
     public function execute(array $ids);
 }
