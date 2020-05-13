@@ -49,14 +49,15 @@ class CategoriesQueueConsumer
      */
     public function processMessages(UpdatedEntitiesDataInterface $message): void
     {
+        $eventType = $message->getType();
         $storeCategories = $this->getUniqueIdsForStores([$message]);
         foreach ($storeCategories as $storeId => $categoryIds) {
             if (empty($categoryIds)) {
                 foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $ids) {
-                    $this->categoryPublisher->publish($ids, $storeId);
+                    $this->categoryPublisher->publish($eventType, $ids, $storeId);
                 }
             } else {
-                $this->categoryPublisher->publish(\array_unique($categoryIds), $storeId);
+                $this->categoryPublisher->publish($eventType, \array_unique($categoryIds), $storeId);
             }
         }
     }

@@ -84,8 +84,8 @@ class SyncStorageOnStoreSave
 
         $storeId = (int)$result->getStoreId();
 
-        $this->productPublisher->publish([], $storeId);
-        $this->categoryPublisher->publish([], $storeId);
+        $this->productPublisher->publish('product_updated', [], $storeId);
+        $this->categoryPublisher->publish('category_updated', [], $storeId);
 
         return $result;
     }
