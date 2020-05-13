@@ -58,6 +58,7 @@ class CollectProductsDataForUpdateAfterStockUpdate
     ): ?int {
         if ($this->isIndexerRunOnSave()) {
             $this->productPublisher->publish(
+                'product_updated',
                 [(int)$stockItem->getProductId()],
                 (int)$stockItem->getStoreId()
             );
