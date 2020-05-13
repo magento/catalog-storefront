@@ -8,7 +8,9 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefront\Model;
 
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
+use Magento\CatalogStorefrontApi\Api\Data\Breadcrumb;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
+use Magento\CatalogStorefrontApi\Api\Data\Category;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryInterface;
 use Magento\CatalogStorefrontApi\Api\Data\Image;
 use Magento\CatalogStorefrontApi\Api\Data\ProductInterface;
@@ -84,7 +86,7 @@ class CatalogService implements CatalogServerInterface
                 $products[] = $product;
             }
         }
-        $result->setData($products);
+        $result->setItems($products);
 
         return $result;
     }
@@ -124,20 +126,50 @@ class CatalogService implements CatalogServerInterface
         );
         $items = [];
         foreach ($categories as $category) {
-            $item = new \Magento\CatalogStorefrontApi\Api\Data\Category();
+            $item = new Category();
 
-            if (array_key_exists('image', $category) && !is_string($category['image'])) {
-                $category['image'] = "";
-            }
+            $category = $this->convertKeyToString('image', $category);
+            $category = $this->convertKeyToString('canonical_url', $category);
+            $category = $this->convertKeyToString('description', $category);
 
-            if (array_key_exists('description', $category) && !is_string($category['description'])) {
-                $category['description'] = "";
-            }
             $this->dataObjectHelper->populateWithArray($item, $category, CategoryInterface::class);
+
+            $breadcrumbsData = $category['breadcrumbs'] ?? [];
+            if ($breadcrumbsData) {
+                $breadcrumbs = [];
+                foreach ($breadcrumbsData as $breadcrumbData) {
+                    $breadcrumb = new Breadcrumb();
+                    $breadcrumb->setCategoryId($breadcrumbData['category_id']);
+                    $breadcrumb->setCategoryLevel((int)$breadcrumbData['category_level']);
+                    $breadcrumb->setCategoryName($breadcrumbData['category_name']);
+                    $breadcrumb->setCategoryUrlKey($breadcrumbData['category_url_key']);
+                    $breadcrumb->setCategoryUrlPath($breadcrumbData['category_url_path']);
+                    $breadcrumbs[] = $breadcrumb;
+                }
+            }
             $items[] = $item;
         }
         $result->setItems($items);
 
         return $result;
+    }
+
+    /**
+     * Converts value of array to string type for provided key
+     *
+     * @param string $key
+     * @param array $data
+     * @return array
+     */
+    private function convertKeyToString(string $key, array $data): array
+    {
+        if (!array_key_exists($key, $data)) {
+            return $data;
+        }
+
+        if (!is_string($data[$key])) {
+            $data[$key] = "";
+        }
+        return $data;
     }
 }

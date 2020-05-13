@@ -49,6 +49,7 @@ class OutputFormatter
                 'updated_at' => $item->getUpdatedAt(),
                 'sku' => $item->getSku(),
                 'id' => $item->getId(),
+                'entity_id' => $item->getId(),
                 'type_id' => $item->getTypeId(),
                 'description' => ['html' => $item->getDescription() ?? null],
                 'name' => $item->getName(),
@@ -63,18 +64,19 @@ class OutputFormatter
                 $result['image']['label'] = $item->getImage()->getLabel() ?? "";
             }
 
+
             if ($item->getSmallImage()) {
                 $result['small_image']['url'] = $item->getSmallImage()->getUrl() ?? "";
                 $result['small_image']['label'] = $item->getSmallImage()->getLabel() ?? "";
             }
 
             if ($item->getThumbnail()) {
-                $result['thumbnail']['url'] = $item->getSmallImage()->getUrl() ?? "";
-                $result['thumbnail']['label'] = $item->getSmallImage()->getLabel() ?? "";
+                $result['thumbnail']['url'] = $item->getThumbnail()->getUrl() ?? "";
+                $result['thumbnail']['label'] = $item->getThumbnail()->getLabel() ?? "";
             }
 
             return $result;
-        }, $result->getData());
+        }, $result->getItems());
 
         $metaInfo = $additionalInfo['meta_info'] ?? [];
         $aggregations = $additionalInfo['aggregations'] ?? [];
