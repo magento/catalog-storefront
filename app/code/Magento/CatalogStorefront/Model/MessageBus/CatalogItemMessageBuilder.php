@@ -60,7 +60,7 @@ class CatalogItemMessageBuilder
         /** @var CatalogItemMessage $catalogItem */
         $catalogItem = $this->catalogItemFactory->create(
             [
-                'event_type' => $message['event_type'],
+                'eventType' => $message['event_type'],
                 'entityType' => $message['entity_type'],
                 'entityId' => (int)$message['entity_id'],
                 'storeId' => (int)$message['store_id'],

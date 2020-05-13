@@ -46,7 +46,7 @@ class CatalogItemMessageBuilder
     ): string {
         return $this->serializer->serialize(
             [
-                'type' => $eventType,
+                'event_type' => $eventType,
                 'entity_type' => $entityType,
                 'entity_id' => $entityId,
                 'store_id' => $storeId,
