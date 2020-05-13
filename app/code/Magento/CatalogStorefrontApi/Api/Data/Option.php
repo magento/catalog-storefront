@@ -35,19 +35,19 @@ final class Option implements OptionInterface
     /**
      * @var string
      */
-    private $maxCharactersstring;
+    private $maxCharacters;
     /**
      * @var string
      */
-    private $fileExtensionstring;
+    private $fileExtension;
     /**
      * @var string
      */
-    private $imageSizeXstring;
+    private $imageSizeX;
     /**
      * @var string
      */
-    private $imageSizeYstring;
+    private $imageSizeY;
     /**
      * @var string
      */
@@ -75,11 +75,11 @@ final class Option implements OptionInterface
     /**
      * @var string
      */
-    private $storePricestring;
+    private $storePrice;
     /**
      * @var string
      */
-    private $storePriceTypestring;
+    private $storePriceType;
     /**
      * @var string
      */
@@ -190,69 +190,69 @@ final class Option implements OptionInterface
     /**
      * @return string
      */
-    public function getMaxCharactersstring(): string
+    public function getMaxCharacters(): string
     {
-        return (string) $this->maxCharactersstring;
+        return (string) $this->maxCharacters;
     }
     
     /**
      * @param string $value
      * @return void
      */
-    public function setMaxCharactersstring(string $value): void
+    public function setMaxCharacters(string $value): void
     {
-        $this->maxCharactersstring = $value;
+        $this->maxCharacters = $value;
     }
 
     /**
      * @return string
      */
-    public function getFileExtensionstring(): string
+    public function getFileExtension(): string
     {
-        return (string) $this->fileExtensionstring;
+        return (string) $this->fileExtension;
     }
     
     /**
      * @param string $value
      * @return void
      */
-    public function setFileExtensionstring(string $value): void
+    public function setFileExtension(string $value): void
     {
-        $this->fileExtensionstring = $value;
+        $this->fileExtension = $value;
     }
 
     /**
      * @return string
      */
-    public function getImageSizeXstring(): string
+    public function getImageSizeX(): string
     {
-        return (string) $this->imageSizeXstring;
+        return (string) $this->imageSizeX;
     }
     
     /**
      * @param string $value
      * @return void
      */
-    public function setImageSizeXstring(string $value): void
+    public function setImageSizeX(string $value): void
     {
-        $this->imageSizeXstring = $value;
+        $this->imageSizeX = $value;
     }
 
     /**
      * @return string
      */
-    public function getImageSizeYstring(): string
+    public function getImageSizeY(): string
     {
-        return (string) $this->imageSizeYstring;
+        return (string) $this->imageSizeY;
     }
     
     /**
      * @param string $value
      * @return void
      */
-    public function setImageSizeYstring(string $value): void
+    public function setImageSizeY(string $value): void
     {
-        $this->imageSizeYstring = $value;
+        $this->imageSizeY = $value;
     }
 
     /**
@@ -360,35 +360,35 @@ final class Option implements OptionInterface
     /**
      * @return string
      */
-    public function getStorePricestring(): string
+    public function getStorePrice(): string
     {
-        return (string) $this->storePricestring;
+        return (string) $this->storePrice;
     }
     
     /**
      * @param string $value
      * @return void
      */
-    public function setStorePricestring(string $value): void
+    public function setStorePrice(string $value): void
     {
-        $this->storePricestring = $value;
+        $this->storePrice = $value;
     }
 
     /**
      * @return string
      */
-    public function getStorePriceTypestring(): string
+    public function getStorePriceType(): string
     {
-        return (string) $this->storePriceTypestring;
+        return (string) $this->storePriceType;
     }
     
     /**
      * @param string $value
      * @return void
      */
-    public function setStorePriceTypestring(string $value): void
+    public function setStorePriceType(string $value): void
     {
-        $this->storePriceTypestring = $value;
+        $this->storePriceType = $value;
     }
 
     /**

@@ -71,46 +71,46 @@ interface OptionInterface
     /**
      * @return string
      */
-    public function getMaxCharactersstring(): string;
+    public function getMaxCharacters(): string;
     
     /**
      * @param string $value
      * @return void
      */
-    public function setMaxCharactersstring(string $value): void;
+    public function setMaxCharacters(string $value): void;
 
     /**
      * @return string
      */
-    public function getFileExtensionstring(): string;
+    public function getFileExtension(): string;
     
     /**
      * @param string $value
      * @return void
      */
-    public function setFileExtensionstring(string $value): void;
+    public function setFileExtension(string $value): void;
 
     /**
      * @return string
      */
-    public function getImageSizeXstring(): string;
+    public function getImageSizeX(): string;
     
     /**
      * @param string $value
      * @return void
      */
-    public function setImageSizeXstring(string $value): void;
+    public function setImageSizeX(string $value): void;
 
     /**
      * @return string
      */
-    public function getImageSizeYstring(): string;
+    public function getImageSizeY(): string;
     
     /**
      * @param string $value
      * @return void
      */
-    public function setImageSizeYstring(string $value): void;
+    public function setImageSizeY(string $value): void;
 
     /**
      * @return string
@@ -181,24 +181,24 @@ interface OptionInterface
     /**
      * @return string
      */
-    public function getStorePricestring(): string;
+    public function getStorePrice(): string;
     
     /**
      * @param string $value
      * @return void
      */
-    public function setStorePricestring(string $value): void;
+    public function setStorePrice(string $value): void;
 
     /**
      * @return string
      */
-    public function getStorePriceTypestring(): string;
+    public function getStorePriceType(): string;
     
     /**
      * @param string $value
      * @return void
      */
-    public function setStorePriceTypestring(string $value): void;
+    public function setStorePriceType(string $value): void;
 
     /**
      * @return string

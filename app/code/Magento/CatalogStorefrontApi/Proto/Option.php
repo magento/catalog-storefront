@@ -34,21 +34,21 @@ class Option extends \Google\Protobuf\Internal\Message
      */
     protected $sku = '';
     /**
-     * Generated from protobuf field <code>string max_charactersstring = 6;</code>
+     * Generated from protobuf field <code>string max_characters = 6;</code>
      */
-    protected $max_charactersstring = '';
+    protected $max_characters = '';
     /**
-     * Generated from protobuf field <code>string file_extensionstring = 7;</code>
+     * Generated from protobuf field <code>string file_extension = 7;</code>
      */
-    protected $file_extensionstring = '';
+    protected $file_extension = '';
     /**
-     * Generated from protobuf field <code>string image_size_xstring = 8;</code>
+     * Generated from protobuf field <code>string image_size_x = 8;</code>
      */
-    protected $image_size_xstring = '';
+    protected $image_size_x = '';
     /**
-     * Generated from protobuf field <code>string image_size_ystring = 9;</code>
+     * Generated from protobuf field <code>string image_size_y = 9;</code>
      */
-    protected $image_size_ystring = '';
+    protected $image_size_y = '';
     /**
      * Generated from protobuf field <code>string sort_order = 10;</code>
      */
@@ -74,13 +74,13 @@ class Option extends \Google\Protobuf\Internal\Message
      */
     protected $default_price_type = '';
     /**
-     * Generated from protobuf field <code>string store_pricestring = 16;</code>
+     * Generated from protobuf field <code>string store_price = 16;</code>
      */
-    protected $store_pricestring = '';
+    protected $store_price = '';
     /**
-     * Generated from protobuf field <code>string store_price_typestring = 17;</code>
+     * Generated from protobuf field <code>string store_price_type = 17;</code>
      */
-    protected $store_price_typestring = '';
+    protected $store_price_type = '';
     /**
      * Generated from protobuf field <code>string price = 18;</code>
      */
@@ -115,18 +115,18 @@ class Option extends \Google\Protobuf\Internal\Message
      *     @type string $type
      *     @type string $is_require
      *     @type string $sku
-     *     @type string $max_charactersstring
-     *     @type string $file_extensionstring
-     *     @type string $image_size_xstring
-     *     @type string $image_size_ystring
+     *     @type string $max_characters
+     *     @type string $file_extension
+     *     @type string $image_size_x
+     *     @type string $image_size_y
      *     @type string $sort_order
      *     @type string $default_title
      *     @type string $store_title
      *     @type string $title
      *     @type string $default_price
      *     @type string $default_price_type
-     *     @type string $store_pricestring
-     *     @type string $store_price_typestring
+     *     @type string $store_price
+     *     @type string $store_price_type
      *     @type string $price
      *     @type string $price_type
      *     @type string $required
@@ -252,89 +252,89 @@ class Option extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>string max_charactersstring = 6;</code>
+     * Generated from protobuf field <code>string max_characters = 6;</code>
      * @return string
      */
-    public function getMaxCharactersstring()
+    public function getMaxCharacters()
     {
-        return $this->max_charactersstring;
+        return $this->max_characters;
     }
 
     /**
-     * Generated from protobuf field <code>string max_charactersstring = 6;</code>
+     * Generated from protobuf field <code>string max_characters = 6;</code>
      * @param string $var
      * @return $this
      */
-    public function setMaxCharactersstring($var)
+    public function setMaxCharacters($var)
     {
         GPBUtil::checkString($var, true);
-        $this->max_charactersstring = $var;
+        $this->max_characters = $var;
 
         return $this;
     }
 
     /**
-     * Generated from protobuf field <code>string file_extensionstring = 7;</code>
+     * Generated from protobuf field <code>string file_extension = 7;</code>
      * @return string
      */
-    public function getFileExtensionstring()
+    public function getFileExtension()
     {
-        return $this->file_extensionstring;
+        return $this->file_extension;
     }
 
     /**
-     * Generated from protobuf field <code>string file_extensionstring = 7;</code>
+     * Generated from protobuf field <code>string file_extension = 7;</code>
      * @param string $var
      * @return $this
      */
-    public function setFileExtensionstring($var)
+    public function setFileExtension($var)
     {
         GPBUtil::checkString($var, true);
-        $this->file_extensionstring = $var;
+        $this->file_extension = $var;
 
         return $this;
     }
 
     /**
-     * Generated from protobuf field <code>string image_size_xstring = 8;</code>
+     * Generated from protobuf field <code>string image_size_x = 8;</code>
      * @return string
      */
-    public function getImageSizeXstring()
+    public function getImageSizeX()
     {
-        return $this->image_size_xstring;
+        return $this->image_size_x;
     }
 
     /**
-     * Generated from protobuf field <code>string image_size_xstring = 8;</code>
+     * Generated from protobuf field <code>string image_size_x = 8;</code>
      * @param string $var
      * @return $this
      */
-    public function setImageSizeXstring($var)
+    public function setImageSizeX($var)
     {
         GPBUtil::checkString($var, true);
-        $this->image_size_xstring = $var;
+        $this->image_size_x = $var;
 
         return $this;
     }
 
     /**
-     * Generated from protobuf field <code>string image_size_ystring = 9;</code>
+     * Generated from protobuf field <code>string image_size_y = 9;</code>
      * @return string
      */
-    public function getImageSizeYstring()
+    public function getImageSizeY()
     {
-        return $this->image_size_ystring;
+        return $this->image_size_y;
     }
 
     /**
-     * Generated from protobuf field <code>string image_size_ystring = 9;</code>
+     * Generated from protobuf field <code>string image_size_y = 9;</code>
      * @param string $var
      * @return $this
      */
-    public function setImageSizeYstring($var)
+    public function setImageSizeY($var)
     {
         GPBUtil::checkString($var, true);
-        $this->image_size_ystring = $var;
+        $this->image_size_y = $var;
 
         return $this;
     }
@@ -472,45 +472,45 @@ class Option extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>string store_pricestring = 16;</code>
+     * Generated from protobuf field <code>string store_price = 16;</code>
      * @return string
      */
-    public function getStorePricestring()
+    public function getStorePrice()
     {
-        return $this->store_pricestring;
+        return $this->store_price;
     }
 
     /**
-     * Generated from protobuf field <code>string store_pricestring = 16;</code>
+     * Generated from protobuf field <code>string store_price = 16;</code>
      * @param string $var
      * @return $this
      */
-    public function setStorePricestring($var)
+    public function setStorePrice($var)
     {
         GPBUtil::checkString($var, true);
-        $this->store_pricestring = $var;
+        $this->store_price = $var;
 
         return $this;
     }
 
     /**
-     * Generated from protobuf field <code>string store_price_typestring = 17;</code>
+     * Generated from protobuf field <code>string store_price_type = 17;</code>
      * @return string
      */
-    public function getStorePriceTypestring()
+    public function getStorePriceType()
     {
-        return $this->store_price_typestring;
+        return $this->store_price_type;
     }
 
     /**
-     * Generated from protobuf field <code>string store_price_typestring = 17;</code>
+     * Generated from protobuf field <code>string store_price_type = 17;</code>
      * @param string $var
      * @return $this
      */
-    public function setStorePriceTypestring($var)
+    public function setStorePriceType($var)
     {
         GPBUtil::checkString($var, true);
-        $this->store_price_typestring = $var;
+        $this->store_price_type = $var;
 
         return $this;
     }
