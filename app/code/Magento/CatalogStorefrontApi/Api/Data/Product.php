@@ -109,6 +109,10 @@ final class Product implements ProductInterface
      */
     private $metaTitle;
     /**
+     * @var array
+     */
+    private $categories;
+    /**
      * @var string
      */
     private $requiredOptions;
@@ -156,6 +160,26 @@ final class Product implements ProductInterface
      * @var array
      */
     private $configurableOptions;
+    /**
+     * @var string
+     */
+    private $countryOfManufacture;
+    /**
+     * @var bool
+     */
+    private $giftMessageAvailable;
+    /**
+     * @var float
+     */
+    private $specialPrice;
+    /**
+     * @var string
+     */
+    private $specialFromDate;
+    /**
+     * @var string
+     */
+    private $specialToDate;
 
 
     /**
@@ -567,6 +591,23 @@ final class Product implements ProductInterface
     }
 
     /**
+     * @return string[]
+     */
+    public function getCategories(): array
+    {
+        return (array) $this->categories;
+    }
+    
+    /**
+     * @param string[] $value
+     * @return void
+     */
+    public function setCategories(array $value): void
+    {
+        $this->categories = $value;
+    }
+
+    /**
      * @return string
      */
     public function getRequiredOptions(): string
@@ -768,5 +809,90 @@ final class Product implements ProductInterface
     public function setConfigurableOptions(array $value): void
     {
         $this->configurableOptions = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCountryOfManufacture(): string
+    {
+        return (string) $this->countryOfManufacture;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setCountryOfManufacture(string $value): void
+    {
+        $this->countryOfManufacture = $value;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getGiftMessageAvailable(): bool
+    {
+        return (bool) $this->giftMessageAvailable;
+    }
+    
+    /**
+     * @param bool $value
+     * @return void
+     */
+    public function setGiftMessageAvailable(bool $value): void
+    {
+        $this->giftMessageAvailable = $value;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSpecialPrice(): float
+    {
+        return (float) $this->specialPrice;
+    }
+    
+    /**
+     * @param float $value
+     * @return void
+     */
+    public function setSpecialPrice(float $value): void
+    {
+        $this->specialPrice = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSpecialFromDate(): string
+    {
+        return (string) $this->specialFromDate;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setSpecialFromDate(string $value): void
+    {
+        $this->specialFromDate = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSpecialToDate(): string
+    {
+        return (string) $this->specialToDate;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setSpecialToDate(string $value): void
+    {
+        $this->specialToDate = $value;
     }
 }

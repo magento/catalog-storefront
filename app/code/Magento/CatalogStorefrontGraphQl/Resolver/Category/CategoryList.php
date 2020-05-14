@@ -137,9 +137,38 @@ class CategoryList implements BatchResolverInterface
 //                }
                 $output = [];
                 foreach ($result->getItems() as $item) {
-                    $output[] = [
+                    $itemOutput = [
                         'id' => $item->getId(),
+                        'entity_id' => $item->getId(),
+                        'path' => $item->getPath(),
+                        'url_key' => $item->getUrlKey(),
+                        'image' => $item->getImage(),
+                        'description' => $item->getDescription(),
+                        'name' => $item->getName(),
+                        'available_sort_by' => $item->getAvailableSortBy(),
+                        'canonical_url' => $item->getCanonicalUrl(),
+                        'children_count' => $item->getChildrenCount(),
+                        'default_sort_by' => $item->getDefaultSortBy(),
+                        'include_in_menu' => $item->getIncludeInMenu(),
+                        'is_active' => $item->getIsActive(),
+                        'is_anchor' => $item->getIsAnchor(),
+                        'level' => $item->getLevel(),
+                        'position' => $item->getPosition(),
+                        'url_path' => $item->getUrlPath(),
+                        'display_mode' => $item->getDisplayMode(),
                     ];
+
+                    foreach ($item->getBreadcrumbs() as $offset => $breadcrumb) {
+                        $itemOutput['breadcrumbs'][$offset] = [
+                            "category_id" => $breadcrumb->getCategoryId(),
+                            "category_url_key" => $breadcrumb->getCategoryUrlKey(),
+                            "category_url_path" => $breadcrumb->getCategoryUrlPath(),
+                            "category_level" => $breadcrumb->getCategoryLevel(),
+                            "category_name" => $breadcrumb->getCategoryName(),
+                        ];
+                    }
+
+                    $output[] = $itemOutput;
                 }
                 return $output;
             }

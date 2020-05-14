@@ -75,9 +75,19 @@ class CatalogService implements CatalogServerInterface
             );
 
             foreach ($rawItems as $item) {
-                $product = new \Magento\CatalogStorefrontApi\Api\Data\Product();
+                $item = $this->cleanUpNullValues($item);
                 $item['description'] = $item['description']['html'] ?? "";
-
+                //Convert option values to unified array format
+                if (!empty($item['options'])) {
+                    foreach ($item['options'] as &$option) {
+                        $firstValue = reset($option['value']);
+                        if (!is_array($firstValue)) {
+                            $option['value'] = [0 => $option['value']];
+                            continue;
+                        }
+                    }
+                }
+                $product = new \Magento\CatalogStorefrontApi\Api\Data\Product();
                 $this->dataObjectHelper->populateWithArray($product, $item, ProductInterface::class);
                 $product = $this->setImage('image', $item, $product);
                 $product = $this->setImage('small_image', $item, $product);
@@ -88,6 +98,25 @@ class CatalogService implements CatalogServerInterface
         }
         $result->setItems($products);
 
+        return $result;
+    }
+
+    /**
+     * Unset null values in provided array recursively
+     *
+     * @param array $array
+     * @return array
+     */
+    private function cleanUpNullValues(array $array): array
+    {
+        $result = [];
+        foreach ($array as $key => $value) {
+            if (is_null($value)) {
+                continue;
+            }
+
+            $result[$key] = is_array($value) ? $this->cleanUpNullValues($value) : $value;
+        }
         return $result;
     }
 

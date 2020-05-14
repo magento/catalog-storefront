@@ -17,7 +17,7 @@ interface OptionValueInterface
      * @return string
      */
     public function getOptionId(): string;
-
+    
     /**
      * @param string $value
      * @return void
@@ -28,7 +28,7 @@ interface OptionValueInterface
      * @return string
      */
     public function getProductId(): string;
-
+    
     /**
      * @param string $value
      * @return void
@@ -39,7 +39,7 @@ interface OptionValueInterface
      * @return string
      */
     public function getType(): string;
-
+    
     /**
      * @param string $value
      * @return void
@@ -50,7 +50,7 @@ interface OptionValueInterface
      * @return string
      */
     public function getIsRequire(): string;
-
+    
     /**
      * @param string $value
      * @return void
@@ -61,7 +61,7 @@ interface OptionValueInterface
      * @return string
      */
     public function getSku(): string;
-
+    
     /**
      * @param string $value
      * @return void
@@ -72,7 +72,7 @@ interface OptionValueInterface
      * @return string
      */
     public function getMaxCharacters(): string;
-
+    
     /**
      * @param string $value
      * @return void
@@ -83,7 +83,7 @@ interface OptionValueInterface
      * @return string
      */
     public function getFileExtension(): string;
-
+    
     /**
      * @param string $value
      * @return void
@@ -94,7 +94,7 @@ interface OptionValueInterface
      * @return string
      */
     public function getImageSizeX(): string;
-
+    
     /**
      * @param string $value
      * @return void
@@ -105,7 +105,7 @@ interface OptionValueInterface
      * @return string
      */
     public function getImageSizeY(): string;
-
+    
     /**
      * @param string $value
      * @return void
@@ -116,7 +116,7 @@ interface OptionValueInterface
      * @return string
      */
     public function getSortOrder(): string;
-
+    
     /**
      * @param string $value
      * @return void
@@ -127,7 +127,7 @@ interface OptionValueInterface
      * @return string
      */
     public function getDefaultTitle(): string;
-
+    
     /**
      * @param string $value
      * @return void
@@ -138,7 +138,7 @@ interface OptionValueInterface
      * @return string
      */
     public function getStoreTitle(): string;
-
+    
     /**
      * @param string $value
      * @return void
@@ -149,7 +149,7 @@ interface OptionValueInterface
      * @return string
      */
     public function getTitle(): string;
-
+    
     /**
      * @param string $value
      * @return void
@@ -160,7 +160,7 @@ interface OptionValueInterface
      * @return string
      */
     public function getDefaultPrice(): string;
-
+    
     /**
      * @param string $value
      * @return void
@@ -171,7 +171,7 @@ interface OptionValueInterface
      * @return string
      */
     public function getDefaultPriceType(): string;
-
+    
     /**
      * @param string $value
      * @return void
@@ -182,7 +182,7 @@ interface OptionValueInterface
      * @return string
      */
     public function getStorePrice(): string;
-
+    
     /**
      * @param string $value
      * @return void
@@ -193,7 +193,7 @@ interface OptionValueInterface
      * @return string
      */
     public function getStorePriceType(): string;
-
+    
     /**
      * @param string $value
      * @return void
@@ -204,7 +204,7 @@ interface OptionValueInterface
      * @return string
      */
     public function getPrice(): string;
-
+    
     /**
      * @param string $value
      * @return void
@@ -215,7 +215,7 @@ interface OptionValueInterface
      * @return string
      */
     public function getPriceType(): string;
-
+    
     /**
      * @param string $value
      * @return void
@@ -226,7 +226,7 @@ interface OptionValueInterface
      * @return string
      */
     public function getOptionTypeId(): string;
-
+    
     /**
      * @param string $value
      * @return void

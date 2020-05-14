@@ -133,6 +133,10 @@ class Product extends \Google\Protobuf\Internal\Message
      */
     protected $meta_title = '';
     /**
+     * Generated from protobuf field <code>repeated string categories = 25;</code>
+     */
+    private $categories;
+    /**
      * TODO: Questionable attributes go below for compatibility with existing catalog SF branch during refactoring
      *
      * Generated from protobuf field <code>string required_options = 70;</code>
@@ -184,6 +188,26 @@ class Product extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ConfigurableOption configurable_options = 84;</code>
      */
     private $configurable_options;
+    /**
+     * Generated from protobuf field <code>string country_of_manufacture = 85;</code>
+     */
+    protected $country_of_manufacture = '';
+    /**
+     * Generated from protobuf field <code>bool gift_message_available = 86;</code>
+     */
+    protected $gift_message_available = false;
+    /**
+     * Generated from protobuf field <code>float special_price = 87;</code>
+     */
+    protected $special_price = 0.0;
+    /**
+     * Generated from protobuf field <code>string special_from_date = 88;</code>
+     */
+    protected $special_from_date = '';
+    /**
+     * Generated from protobuf field <code>string special_to_date = 89;</code>
+     */
+    protected $special_to_date = '';
 
     /**
      * Constructor.
@@ -232,6 +256,7 @@ class Product extends \Google\Protobuf\Internal\Message
      *           TODO: Meta fields not populated by catalog SF app
      *     @type string $meta_keyword
      *     @type string $meta_title
+     *     @type string[]|\Google\Protobuf\Internal\RepeatedField $categories
      *     @type string $required_options
      *           TODO: Questionable attributes go below for compatibility with existing catalog SF branch during refactoring
      *     @type string $created_in
@@ -246,6 +271,11 @@ class Product extends \Google\Protobuf\Internal\Message
      *     @type \Magento\CatalogStorefrontApi\Proto\UrlRewrite[]|\Google\Protobuf\Internal\RepeatedField $url_rewrites
      *     @type \Magento\CatalogStorefrontApi\Proto\Variant[]|\Google\Protobuf\Internal\RepeatedField $variants
      *     @type \Magento\CatalogStorefrontApi\Proto\ConfigurableOption[]|\Google\Protobuf\Internal\RepeatedField $configurable_options
+     *     @type string $country_of_manufacture
+     *     @type bool $gift_message_available
+     *     @type float $special_price
+     *     @type string $special_from_date
+     *     @type string $special_to_date
      * }
      */
     public function __construct($data = null)
@@ -829,6 +859,28 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     * Generated from protobuf field <code>repeated string categories = 25;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated string categories = 25;</code>
+     * @param string[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setCategories($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::STRING);
+        $this->categories = $arr;
+
+        return $this;
+    }
+
+    /**
      * TODO: Questionable attributes go below for compatibility with existing catalog SF branch during refactoring
      *
      * Generated from protobuf field <code>string required_options = 70;</code>
@@ -1096,6 +1148,116 @@ class Product extends \Google\Protobuf\Internal\Message
     {
         $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\ConfigurableOption::class);
         $this->configurable_options = $arr;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string country_of_manufacture = 85;</code>
+     * @return string
+     */
+    public function getCountryOfManufacture()
+    {
+        return $this->country_of_manufacture;
+    }
+
+    /**
+     * Generated from protobuf field <code>string country_of_manufacture = 85;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setCountryOfManufacture($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->country_of_manufacture = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>bool gift_message_available = 86;</code>
+     * @return bool
+     */
+    public function getGiftMessageAvailable()
+    {
+        return $this->gift_message_available;
+    }
+
+    /**
+     * Generated from protobuf field <code>bool gift_message_available = 86;</code>
+     * @param bool $var
+     * @return $this
+     */
+    public function setGiftMessageAvailable($var)
+    {
+        GPBUtil::checkBool($var);
+        $this->gift_message_available = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>float special_price = 87;</code>
+     * @return float
+     */
+    public function getSpecialPrice()
+    {
+        return $this->special_price;
+    }
+
+    /**
+     * Generated from protobuf field <code>float special_price = 87;</code>
+     * @param float $var
+     * @return $this
+     */
+    public function setSpecialPrice($var)
+    {
+        GPBUtil::checkFloat($var);
+        $this->special_price = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string special_from_date = 88;</code>
+     * @return string
+     */
+    public function getSpecialFromDate()
+    {
+        return $this->special_from_date;
+    }
+
+    /**
+     * Generated from protobuf field <code>string special_from_date = 88;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setSpecialFromDate($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->special_from_date = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string special_to_date = 89;</code>
+     * @return string
+     */
+    public function getSpecialToDate()
+    {
+        return $this->special_to_date;
+    }
+
+    /**
+     * Generated from protobuf field <code>string special_to_date = 89;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setSpecialToDate($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->special_to_date = $var;
 
         return $this;
     }

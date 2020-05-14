@@ -278,6 +278,17 @@ interface ProductInterface
     public function setMetaTitle(string $value): void;
 
     /**
+     * @return string[]
+     */
+    public function getCategories(): array;
+    
+    /**
+     * @param string[] $value
+     * @return void
+     */
+    public function setCategories(array $value): void;
+
+    /**
      * @return string
      */
     public function getRequiredOptions(): string;
@@ -408,4 +419,59 @@ interface ProductInterface
      * @return void
      */
     public function setConfigurableOptions(array $value): void;
+
+    /**
+     * @return string
+     */
+    public function getCountryOfManufacture(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setCountryOfManufacture(string $value): void;
+
+    /**
+     * @return bool
+     */
+    public function getGiftMessageAvailable(): bool;
+    
+    /**
+     * @param bool $value
+     * @return void
+     */
+    public function setGiftMessageAvailable(bool $value): void;
+
+    /**
+     * @return float
+     */
+    public function getSpecialPrice(): float;
+    
+    /**
+     * @param float $value
+     * @return void
+     */
+    public function setSpecialPrice(float $value): void;
+
+    /**
+     * @return string
+     */
+    public function getSpecialFromDate(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setSpecialFromDate(string $value): void;
+
+    /**
+     * @return string
+     */
+    public function getSpecialToDate(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setSpecialToDate(string $value): void;
 }

@@ -145,6 +145,7 @@ class Catalog implements CatalogInterface
                     $r->setMetaDescription($item->getMetaDescription());
                     $r->setMetaKeyword($item->getMetaKeyword());
                     $r->setMetaTitle($item->getMetaTitle());
+                    $r->setCategories($item->getCategories());
                     $r->setRequiredOptions($item->getRequiredOptions());
                     $r->setCreatedIn($item->getCreatedIn());
                     $r->setUpdatedIn($item->getUpdatedIn());
@@ -327,6 +328,11 @@ class Catalog implements CatalogInterface
                     }
                     $r->setConfigurableOptions($res);
 
+                    $r->setCountryOfManufacture($item->getCountryOfManufacture());
+                    $r->setGiftMessageAvailable($item->getGiftMessageAvailable());
+                    $r->setSpecialPrice($item->getSpecialPrice());
+                    $r->setSpecialFromDate($item->getSpecialFromDate());
+                    $r->setSpecialToDate($item->getSpecialToDate());
                     return $r;
                 };
                 $out = $p();
@@ -447,6 +453,7 @@ class Catalog implements CatalogInterface
                     $r->setMetaDescription($item->getMetaDescription());
                     $r->setMetaKeyword($item->getMetaKeyword());
                     $r->setMetaTitle($item->getMetaTitle());
+                    $r->setCategories($item->getCategories());
                     $r->setRequiredOptions($item->getRequiredOptions());
                     $r->setCreatedIn($item->getCreatedIn());
                     $r->setUpdatedIn($item->getUpdatedIn());
@@ -629,6 +636,11 @@ class Catalog implements CatalogInterface
                     }
                     $r->setConfigurableOptions($res);
 
+                    $r->setCountryOfManufacture($item->getCountryOfManufacture());
+                    $r->setGiftMessageAvailable($item->getGiftMessageAvailable());
+                    $r->setSpecialPrice($item->getSpecialPrice());
+                    $r->setSpecialFromDate($item->getSpecialFromDate());
+                    $r->setSpecialToDate($item->getSpecialToDate());
                     return $r;
                 };
                 $proto = $p();

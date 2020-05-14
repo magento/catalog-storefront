@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefrontGraphQl\Resolver\Product;
 
 use Magento\Catalog\Model\Layer\Resolver;
+use Magento\CatalogStorefrontApi\Api\Data\OptionInterface;
+use Magento\CatalogStorefrontApi\Api\Data\OptionValueInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductResultContainerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -45,6 +47,7 @@ class OutputFormatter
         $items = array_map(function (\Magento\CatalogStorefrontApi\Api\Data\ProductInterface $item) {
             $result = [
                 'attribute_set_id' => $item->getAttributeSetId(),
+                'categories' => $item->getCategories(),
                 'created_at' => $item->getCreatedAt(),
                 'updated_at' => $item->getUpdatedAt(),
                 'sku' => $item->getSku(),
@@ -57,8 +60,18 @@ class OutputFormatter
                 'url_key' => $item->getUrlKey(),
                 'url_suffix' => $item->getUrlSuffix(),
                 'swatch_image' => $item->getSwatchImage(),
-
+                'weight' => $item->getWeight(),
+                'meta_description' => $item->getMetaDescription(),
+                'meta_keyword' => $item->getMetaKeyword(),
+                'meta_title' => $item->getMetaTitle(),
+                'country_of_manufacture' => $item->getCountryOfManufacture(),
+                'gift_message_available' => (int)$item->getGiftMessageAvailable(),
+                'options_container' => $item->getOptionsContainer(),
+                'special_price' => $item->getSpecialPrice(),
+                'special_from_date' => $item->getSpecialFromDate(),
+                'special_to_date' => $item->getSpecialToDate(),
             ];
+
             if ($item->getImage()) {
                 $result['image']['url'] = $item->getImage()->getUrl() ?? "";
                 $result['image']['label'] = $item->getImage()->getLabel() ?? "";
@@ -75,8 +88,72 @@ class OutputFormatter
                 $result['thumbnail']['label'] = $item->getThumbnail()->getLabel() ?? "";
             }
 
+            //TODO: Revise options structure and remove free form structure from index/api
+            if ($item->getOptions()) {
+                $result['options'] = array_map(function (OptionInterface $option) {
+                    $output = [
+                        'option_id' => $option->getOptionId(),
+                        'product_id' => $option->getProductId(),
+                        'type' => $option->getType(),
+                        'is_require' => $option->getIsRequire(),
+                        'sku' => $option->getSku(),
+                        'max_characters' => $option->getMaxCharacters(),
+                        'file_extension' => $option->getFileExtension(),
+                        'image_size_x' => $option->getImageSizeX(),
+                        'image_size_y' => $option->getImageSizeY(),
+                        'sort_order' => $option->getSortOrder(),
+                        'default_title' => $option->getDefaultTitle(),
+                        'store_title' => $option->getStoreTitle(),
+                        'title' => $option->getTitle(),
+                        'default_price' => $option->getDefaultPrice(),
+                        'default_price_type' => $option->getDefaultPriceType(),
+                        'store_price' => $option->getStorePrice(),
+                        'store_price_type' => $option->getStorePriceType(),
+                        'price' => $option->getPrice(),
+                        'price_type' => $option->getPriceType(),
+                        'required' => $option->getRequired(),
+                        'product_sku' => $option->getProductSku(),
+
+                    ];
+                    $output['value'] = array_map(function (OptionValueInterface $value) {
+                        return [
+                            'option_id' => $value->getOptionId(),
+                            'option_type_id' => $value->getOptionTypeId(),
+                            'product_id' => $value->getProductId(),
+                            'type' => $value->getType(),
+                            'is_require' => $value->getIsRequire(),
+                            'sku' => $value->getSku(),
+                            'max_characters' => $value->getMaxCharacters(),
+                            'file_extension' => $value->getFileExtension(),
+                            'image_size_x' => $value->getImageSizeX(),
+                            'image_size_y' => $value->getImageSizeY(),
+                            'sort_order' => $value->getSortOrder(),
+                            'default_title' => $value->getDefaultTitle(),
+                            'store_title' => $value->getStoreTitle(),
+                            'title' => $value->getTitle(),
+                            'default_price' => $value->getDefaultPrice(),
+                            'default_price_type' => $value->getDefaultPriceType(),
+                            'store_price' => $value->getStorePrice(),
+                            'store_price_type' => $value->getStorePriceType(),
+                            'price' => $value->getPrice(),
+                            'price_type' => $value->getPriceType(),
+
+                        ];
+                    }, $option->getValue());
+
+                    //Convert simple option types from arrays
+                    $simpleOptionTypes = ['date_time', 'field', 'area', 'file'];
+                    if (isset($output['type']) && in_array($output['type'], $simpleOptionTypes)) {
+                        $output['value'] = reset($output['value']);
+                    }
+
+                    return $output;
+                }, $item->getOptions());
+            }
+
             return $result;
         }, $result->getItems());
+
 
         $metaInfo = $additionalInfo['meta_info'] ?? [];
         $aggregations = $additionalInfo['aggregations'] ?? [];
