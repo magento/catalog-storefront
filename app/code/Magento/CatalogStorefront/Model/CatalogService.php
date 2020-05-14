@@ -19,9 +19,12 @@ use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResult;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseFactory;
 use Magento\CatalogStorefront\DataProvider\ProductDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponse;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Webapi\ServiceOutputProcessor;
+use Magento\CatalogStorefront\Model\MessageBus\Consumer as ElasticAdapter;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
 
@@ -38,6 +41,22 @@ class CatalogService implements CatalogServerInterface
      * @var DataObjectHelper
      */
     private $dataObjectHelper;
+
+    /**
+     * @var ImportProductsResponseFactory
+     */
+    private $importProductsResponseFactory;
+
+    /**
+     * @var ServiceOutputProcessor
+     */
+    private $serviceOutputProcessor;
+
+    /**
+     * @var ElasticAdapter
+     */
+    private $elasticAdapter;
+
     /**
      * @var CategoryDataProvider
      */
@@ -45,17 +64,27 @@ class CatalogService implements CatalogServerInterface
 
     /**
      * CatalogService constructor.
+     *
      * @param ProductDataProvider $dataProvider
      * @param DataObjectHelper $dataObjectHelper
+     * @param ImportProductsResponseFactory $importProductsResponseFactory
+     * @param ServiceOutputProcessor $serviceOutputProcessor
+     * @param ElasticAdapter $elasticAdapter
      * @param CategoryDataProvider $categoryDataProvider
      */
     public function __construct(
         ProductDataProvider $dataProvider,
         DataObjectHelper $dataObjectHelper,
+        ImportProductsResponseFactory $importProductsResponseFactory,
+        ServiceOutputProcessor $serviceOutputProcessor,
+        ElasticAdapter $elasticAdapter,
         CategoryDataProvider $categoryDataProvider
     ) {
         $this->dataProvider = $dataProvider;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->importProductsResponseFactory = $importProductsResponseFactory;
+        $this->serviceOutputProcessor = $serviceOutputProcessor;
+        $this->elasticAdapter = $elasticAdapter;
         $this->categoryDataProvider = $categoryDataProvider;
     }
 
@@ -137,10 +166,50 @@ class CatalogService implements CatalogServerInterface
         return $product;
     }
 
-    public function ImportProducts(
-        ImportProductsRequestInterface $request
-    ): ImportProductsResponseInterface {
-        // TODO: Implement ImportProducts() method.
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface $request
+     * @return \Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseInterface
+     */
+    public function ImportProducts(ImportProductsRequestInterface $request): ImportProductsResponseInterface
+    {
+        try {
+            $convertedRequest = $this->serviceOutputProcessor->convertValue(
+                $request,
+                ImportProductsRequestInterface::class
+            );
+            $products = $convertedRequest['products'];
+            $storeId = $convertedRequest['store'];
+            $productsInElasticFormat = [];
+            foreach ($products as $product) {
+                $productInElasticFormat = $product;
+                if (empty($productInElasticFormat)) {
+                    // TODO: Implemente Delete
+                    // $dataPerType[$entity->getEntityType()][$entity->getStoreId()][self::DELETE][] = $entity->getEntityId();
+                } else {
+                    $productInElasticFormat['store_id'] = $storeId;
+                    foreach ($productInElasticFormat['dynamic_attributes'] as $dynamicAttribute) {
+                        $productInElasticFormat[$dynamicAttribute['code']] = $dynamicAttribute['value'];
+                    }
+                    $productInElasticFormat['short_description'] = ['html' => $productInElasticFormat['short_description']];
+                    $productInElasticFormat['description'] = ['html' => $productInElasticFormat['description']];
+                    unset($productInElasticFormat['dynamic_attributes']);
+
+                    $productsInElasticFormat['product'][$storeId]['save'][] = $productInElasticFormat;
+                }
+            }
+            $this->elasticAdapter->saveToStorage($productsInElasticFormat);
+
+            $importProductsResponse = $this->importProductsResponseFactory->create();
+            $importProductsResponse->setMessage('Records imported successfully');
+            $importProductsResponse->setStatus(true);
+            return $importProductsResponse;
+        } catch (\Exception $e) {
+            // TODO: Hide real message in production
+            $importProductsResponse = $this->importProductsResponseFactory->create();
+            $importProductsResponse->setMessage($e->getMessage());
+            $importProductsResponse->setStatus(false);
+            return $importProductsResponse;
+        }
     }
 
     public function GetCategories(

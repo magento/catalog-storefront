@@ -7,6 +7,7 @@
 namespace Magento\CatalogStorefrontConnector\Model\Publisher;
 
 use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
+use Magento\CatalogStorefrontConnector\Model\Publisher\RestClient;
 use Magento\Framework\App\State;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Psr\Log\LoggerInterface;
@@ -53,6 +54,10 @@ class ProductPublisher
      * @var LoggerInterface
      */
     private $logger;
+    /**
+     * @var RestClient
+     */
+    private $restClient;
 
     /**
      * @param DataProviderInterface $productsDataProvider
@@ -68,6 +73,7 @@ class ProductPublisher
         PublisherInterface $queuePublisher,
         State $state,
         LoggerInterface $logger,
+        RestClient $restClient,
         int $batchSize
     ) {
         $this->productsDataProvider = $productsDataProvider;
@@ -76,6 +82,7 @@ class ProductPublisher
         $this->batchSize = $batchSize;
         $this->state = $state;
         $this->logger = $logger;
+        $this->restClient = $restClient;
     }
 
     /**
@@ -96,7 +103,7 @@ class ProductPublisher
                 } catch (\Throwable $e) {
                     $this->logger->critical(
                         \sprintf(
-                            'Error on publish product] ids "%s" in store %s',
+                            'Error on publish product ids "%s" in store %s',
                             \implode(', ', $productIds),
                             $storeId
                         ),
@@ -117,24 +124,129 @@ class ProductPublisher
     private function publishEntities(array $productIds, int $storeId): void
     {
         foreach (\array_chunk($productIds, $this->batchSize) as $idsBunch) {
-            $messages = [];
             $productsData = $this->productsDataProvider->fetch($idsBunch, [], ['store' => $storeId]);
+            $this->unsetNullRecursively($productsData);
             $this->logger->debug(
                 \sprintf('Publish products with ids "%s" in store %s', \implode(', ', $productIds), $storeId),
                 ['verbose' => $productsData]
             );
-            foreach ($idsBunch as $productId) {
-                $product = $productsData[$productId] ?? [];
-                $messages[] = $this->messageBuilder->build(
-                    $storeId,
-                    'product',
-                    $productId,
-                    $product
-                );
+            if (count($productsData)) {
+                $this->importProducts($storeId, array_values($productsData));
             }
-            if (!empty($messages)) {
-                $this->queuePublisher->publish(self::TOPIC_NAME, $messages);
+        }
+    }
+
+    /**
+     * Recursively unset array elements equal to NULL.
+     *
+     * @param array $haystack
+     * @return void
+     */
+    private function unsetNullRecursively(&$haystack)
+    {
+        foreach ($haystack as $key => $value) {
+            if (is_array($value)) {
+                $this->unsetNullRecursively($haystack[$key]);
             }
+            if ($haystack[$key] === null) {
+                unset($haystack[$key]);
+            }
+        }
+    }
+
+    /**
+     * TODO: this method is temporary. We should adjust what data is imported after import APIs are finalized
+     *
+     * @param int $storeId
+     * @param array $product
+     */
+    private function temporaryProductTransformation(array &$product): void
+    {
+        // TODO: This array needs to be reviewed. Temporary, for prototyping purposes
+        $unnecessaryAttributeNames = [
+            'entity_id',
+            'row_id',
+            'categories',
+            'store_id',
+            'swatch_image'
+        ];
+
+        $nonCustomAttribtues = [
+            'attribute_set_id',
+            'has_options',
+            'id',
+            'type_id',
+            'sku',
+            'id',
+            'status',
+            'stock_status',
+            'name',
+            'description',
+            'short_description',
+            'visibility',
+            'url_key',
+            'meta_description',
+            'meta_keyword',
+            'meta_title',
+            'tax_class_id',
+            'weight',
+            'image',
+            'small_image',
+            'thumbnail',
+            'dynamic_attributes',
+
+            // TODO: Questionable attributes below, needed to preserve backward compatibility with current Catalog SF branch during refactoring
+            'required_options',
+            'created_at',
+            'updated_at',
+            'created_in',
+            'updated_in',
+            'quantity_and_stock_status',
+            'options_container',
+            'msrp_display_actual_price_type',
+            'is_returnable',
+            'url_suffix',
+            'url_rewrites',
+            'variants',
+            'options',
+            'configurable_options',
+        ];
+        $product['dynamic_attributes'] = [];
+        foreach ($product as $attributeCode => $attributeValue) {
+            if (in_array($attributeCode, $unnecessaryAttributeNames)) {
+                unset($product[$attributeCode]);
+                continue;
+            }
+            if (!in_array($attributeCode, $nonCustomAttribtues)) {
+                $product['dynamic_attributes'][] = ['code' => $attributeCode, 'value' => $attributeValue];
+                unset($product[$attributeCode]);
+                continue;
+            }
+        }
+
+        $product['short_description'] = $product['short_description'][0]['html'] ?? '';
+        $product['description'] = $product['description'][0]['html'] ?? '';
+    }
+
+    /**
+     * @param int $storeId
+     * @param array $products
+     */
+    private function importProducts($storeId, array $products): void
+    {
+        foreach ($products as &$product) {
+            $this->temporaryProductTransformation($product);
+        }
+
+        try {
+            $this->restClient->post(
+                '/V1/storefront-products',
+                ['request' => ['products' => $products, 'store' => $storeId]],
+                ["Content-Type: application/json"]
+            );
+        } catch (\Exception $e) {
+            // TODO: Implement logging
+            die($e->getMessage());
         }
     }
 }

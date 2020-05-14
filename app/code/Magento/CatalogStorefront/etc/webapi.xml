@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+
+    <!--TODO: Autogenerate as part of API-module-->
+    <route url="/V1/storefront-products" method="POST">
+        <service class="Magento\CatalogStorefrontApi\Api\CatalogServerInterface" method="ImportProducts"/>
+        <resources>
+            <!--TODO: Restrict permissions-->
+            <resource ref="anonymous" />
+            <!--<resource ref="Magento_Catalog::products" />-->
+        </resources>
+    </route>
+</routes>

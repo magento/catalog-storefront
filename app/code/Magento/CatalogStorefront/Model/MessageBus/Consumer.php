@@ -109,11 +109,13 @@ class Consumer
     /**
      * Save catalog data to the internal storage
      *
+     * TODO: Refactor public usages and eliminate this consumer
+     *
      * @param array $dataPerType
      * @throws \Magento\Framework\Exception\BulkException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    private function saveToStorage(array $dataPerType): void
+    public function saveToStorage(array $dataPerType): void
     {
         foreach ($dataPerType as $entityType => $dataPerStore) {
             foreach ($dataPerStore as $storeId => $data) {
