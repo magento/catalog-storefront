@@ -69,6 +69,11 @@ class ExportTestTest extends WebapiAbstract
                 'resourcePath' => '/V1/catalog-export/products',
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
+            'soap' => [
+                'service' => 'catalogExportApiProductRepositoryV1',
+                'serviceVersion' => 'V1',
+                'operation' => 'catalogExportApiProductRepositoryV1Get',
+            ],
        ];
     }
 
