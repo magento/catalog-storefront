@@ -207,6 +207,7 @@ class Catalog implements CatalogInterface
                                     $r->setStorePriceType($item->getStorePriceType());
                                     $r->setPrice($item->getPrice());
                                     $r->setPriceType($item->getPriceType());
+                                    $r->setOptionTypeId($item->getOptionTypeId());
                                     return $r;
                                 };
                                 $out = $p();
@@ -508,6 +509,7 @@ class Catalog implements CatalogInterface
                                     $r->setStorePriceType($item->getStorePriceType());
                                     $r->setPrice($item->getPrice());
                                     $r->setPriceType($item->getPriceType());
+                                    $r->setOptionTypeId($item->getOptionTypeId());
                                     return $r;
                                 };
                                 $proto = $p();

@@ -89,6 +89,10 @@ class OptionValue extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string price_type = 19;</code>
      */
     protected $price_type = '';
+    /**
+     * Generated from protobuf field <code>string option_type_id = 20;</code>
+     */
+    protected $option_type_id = '';
 
     /**
      * Constructor.
@@ -115,6 +119,7 @@ class OptionValue extends \Google\Protobuf\Internal\Message
      *     @type string $store_price_type
      *     @type string $price
      *     @type string $price_type
+     *     @type string $option_type_id
      * }
      */
     public function __construct($data = null)
@@ -537,6 +542,28 @@ class OptionValue extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, true);
         $this->price_type = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string option_type_id = 20;</code>
+     * @return string
+     */
+    public function getOptionTypeId()
+    {
+        return $this->option_type_id;
+    }
+
+    /**
+     * Generated from protobuf field <code>string option_type_id = 20;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setOptionTypeId($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->option_type_id = $var;
 
         return $this;
     }

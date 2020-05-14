@@ -88,6 +88,10 @@ final class OptionValue implements OptionValueInterface
      * @var string
      */
     private $priceType;
+    /**
+     * @var string
+     */
+    private $optionTypeId;
 
 
     /**
@@ -97,7 +101,7 @@ final class OptionValue implements OptionValueInterface
     {
         return (string) $this->optionId;
     }
-    
+
     /**
      * @param string $value
      * @return void
@@ -114,7 +118,7 @@ final class OptionValue implements OptionValueInterface
     {
         return (string) $this->productId;
     }
-    
+
     /**
      * @param string $value
      * @return void
@@ -131,7 +135,7 @@ final class OptionValue implements OptionValueInterface
     {
         return (string) $this->type;
     }
-    
+
     /**
      * @param string $value
      * @return void
@@ -148,7 +152,7 @@ final class OptionValue implements OptionValueInterface
     {
         return (string) $this->isRequire;
     }
-    
+
     /**
      * @param string $value
      * @return void
@@ -165,7 +169,7 @@ final class OptionValue implements OptionValueInterface
     {
         return (string) $this->sku;
     }
-    
+
     /**
      * @param string $value
      * @return void
@@ -182,7 +186,7 @@ final class OptionValue implements OptionValueInterface
     {
         return (string) $this->maxCharacters;
     }
-    
+
     /**
      * @param string $value
      * @return void
@@ -199,7 +203,7 @@ final class OptionValue implements OptionValueInterface
     {
         return (string) $this->fileExtension;
     }
-    
+
     /**
      * @param string $value
      * @return void
@@ -216,7 +220,7 @@ final class OptionValue implements OptionValueInterface
     {
         return (string) $this->imageSizeX;
     }
-    
+
     /**
      * @param string $value
      * @return void
@@ -233,7 +237,7 @@ final class OptionValue implements OptionValueInterface
     {
         return (string) $this->imageSizeY;
     }
-    
+
     /**
      * @param string $value
      * @return void
@@ -250,7 +254,7 @@ final class OptionValue implements OptionValueInterface
     {
         return (string) $this->sortOrder;
     }
-    
+
     /**
      * @param string $value
      * @return void
@@ -267,7 +271,7 @@ final class OptionValue implements OptionValueInterface
     {
         return (string) $this->defaultTitle;
     }
-    
+
     /**
      * @param string $value
      * @return void
@@ -284,7 +288,7 @@ final class OptionValue implements OptionValueInterface
     {
         return (string) $this->storeTitle;
     }
-    
+
     /**
      * @param string $value
      * @return void
@@ -301,7 +305,7 @@ final class OptionValue implements OptionValueInterface
     {
         return (string) $this->title;
     }
-    
+
     /**
      * @param string $value
      * @return void
@@ -318,7 +322,7 @@ final class OptionValue implements OptionValueInterface
     {
         return (string) $this->defaultPrice;
     }
-    
+
     /**
      * @param string $value
      * @return void
@@ -335,7 +339,7 @@ final class OptionValue implements OptionValueInterface
     {
         return (string) $this->defaultPriceType;
     }
-    
+
     /**
      * @param string $value
      * @return void
@@ -352,7 +356,7 @@ final class OptionValue implements OptionValueInterface
     {
         return (string) $this->storePrice;
     }
-    
+
     /**
      * @param string $value
      * @return void
@@ -369,7 +373,7 @@ final class OptionValue implements OptionValueInterface
     {
         return (string) $this->storePriceType;
     }
-    
+
     /**
      * @param string $value
      * @return void
@@ -386,7 +390,7 @@ final class OptionValue implements OptionValueInterface
     {
         return (string) $this->price;
     }
-    
+
     /**
      * @param string $value
      * @return void
@@ -403,7 +407,7 @@ final class OptionValue implements OptionValueInterface
     {
         return (string) $this->priceType;
     }
-    
+
     /**
      * @param string $value
      * @return void
@@ -411,5 +415,22 @@ final class OptionValue implements OptionValueInterface
     public function setPriceType(string $value): void
     {
         $this->priceType = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOptionTypeId(): string
+    {
+        return (string) $this->optionTypeId;
+    }
+
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setOptionTypeId(string $value): void
+    {
+        $this->optionTypeId = $value;
     }
 }
