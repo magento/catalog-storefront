@@ -113,7 +113,7 @@ class CatalogService implements CatalogServerInterface
     {
         $result = [];
         foreach ($array as $key => $value) {
-            if (is_null($value)) {
+            if (is_null($value) || $value === "") {
                 continue;
             }
 
