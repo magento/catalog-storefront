@@ -232,7 +232,7 @@ class ProductViewTest extends GraphQlAbstract
             special_from_date
             special_price
             special_to_date
-            swatch_image            
+            swatch_image
             tier_price
             tier_prices
             {
@@ -288,6 +288,54 @@ QUERY;
         );
         //canonical_url will be null unless the admin setting catalog/seo/product_canonical_tag is turned ON
         self::assertNull($responseObject->getData('products/items/0/canonical_url'));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_all_fields.php
+     */
+    public function testQuerySimpleProductAfterDelete()
+    {
+        $productSku = 'simple';
+
+        $query = <<<QUERY
+{
+    products(filter: {sku: {eq: "{$productSku}"}})
+    {
+        items {
+            attribute_set_id
+        }
+    }
+}
+QUERY;
+        // get customer ID token
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
+        );
+        $customerToken = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+
+        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+        $this->assertArrayHasKey('products', $response);
+        $this->assertArrayHasKey('items', $response['products']);
+        $this->assertEquals(1, count($response['products']['items']));
+
+        // Delete the product and verify it is actually not accessible via the storefront anymore
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+
+        $registry = ObjectManager::getInstance()->get(\Magento\Framework\Registry::class);
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+        $productRepository->deleteById($productSku);
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
+
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+        $this->assertArrayHasKey('products', $response);
+        $this->assertArrayHasKey('items', $response['products']);
+        $this->assertEquals(0, count($response['products']['items']));
     }
 
     /**
@@ -705,7 +753,7 @@ QUERY;
         $customAttribute = null;
         $this->assertEquals($customAttribute, $actualResponse['attribute_code_custom']);
     }
-    
+
     /**
      * @param ProductInterface $product
      * @param $actualResponse
