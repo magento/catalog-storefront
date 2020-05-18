@@ -208,6 +208,10 @@ class Product extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string special_to_date = 89;</code>
      */
     protected $special_to_date = '';
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductLink product_links = 90;</code>
+     */
+    private $product_links;
 
     /**
      * Constructor.
@@ -276,6 +280,7 @@ class Product extends \Google\Protobuf\Internal\Message
      *     @type float $special_price
      *     @type string $special_from_date
      *     @type string $special_to_date
+     *     @type \Magento\CatalogStorefrontApi\Proto\ProductLink[]|\Google\Protobuf\Internal\RepeatedField $product_links
      * }
      */
     public function __construct($data = null)
@@ -1258,6 +1263,28 @@ class Product extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, true);
         $this->special_to_date = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductLink product_links = 90;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getProductLinks()
+    {
+        return $this->product_links;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductLink product_links = 90;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\ProductLink[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setProductLinks($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\ProductLink::class);
+        $this->product_links = $arr;
 
         return $this;
     }

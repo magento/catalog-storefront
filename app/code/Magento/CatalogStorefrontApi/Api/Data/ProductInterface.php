@@ -474,4 +474,15 @@ interface ProductInterface
      * @return void
      */
     public function setSpecialToDate(string $value): void;
+
+    /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\ProductLinkInterface[]
+     */
+    public function getProductLinks(): array;
+    
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ProductLinkInterface[] $value
+     * @return void
+     */
+    public function setProductLinks(array $value): void;
 }

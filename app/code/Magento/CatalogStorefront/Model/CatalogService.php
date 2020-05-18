@@ -63,7 +63,9 @@ class CatalogService implements CatalogServerInterface
         ProductsGetRequestInterface $request
     ): ProductsGetResultInterface {
         if (is_null($request->getStore()) || empty($request->getStore())) {
-            return $this->processErrors([_('Store id is not present in Search Criteria. Please add missing info.')]);
+            throw new \InvalidArgumentException(
+                __('Store id is not present in Search Criteria. Please add missing info.')
+            );
         }
         $result = new ProductsGetResult();
         $products = [];

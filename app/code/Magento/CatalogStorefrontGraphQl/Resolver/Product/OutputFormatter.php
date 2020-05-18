@@ -10,6 +10,7 @@ namespace Magento\CatalogStorefrontGraphQl\Resolver\Product;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\CatalogStorefrontApi\Api\Data\OptionInterface;
 use Magento\CatalogStorefrontApi\Api\Data\OptionValueInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductLinkInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductResultContainerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -150,6 +151,17 @@ class OutputFormatter
                     return $output;
                 }, $item->getOptions());
             }
+
+            $result['product_links'] = array_map(function (ProductLinkInterface $item) {
+                return [
+                    "linked_product_sku" => $item->getLinkedProductSku(),
+                    "linked_product_type" => $item->getLinkedProductType(),
+                    "link_type_id" => $item->getLinkTypeId(),
+                    "position" => $item->getPosition(),
+                    "sku" => $item->getSku(),
+                    "link_type" => $item->getLinkType(),
+                ];
+            }, $item->getProductLinks());
 
             return $result;
         }, $result->getItems());

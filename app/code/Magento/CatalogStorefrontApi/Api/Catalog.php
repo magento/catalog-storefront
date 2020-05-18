@@ -333,6 +333,28 @@ class Catalog implements CatalogInterface
                     $r->setSpecialPrice($item->getSpecialPrice());
                     $r->setSpecialFromDate($item->getSpecialFromDate());
                     $r->setSpecialToDate($item->getSpecialToDate());
+                    $res = [];
+                    foreach ($item->getProductLinks() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\ProductLink
+                        // to \Magento\CatalogStorefrontApi\Api\Data\ProductLink
+                        /** @var \Magento\CatalogStorefrontApi\Proto\ProductLink $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\ProductLink();
+                            $r->setLinkedProductSku($item->getLinkedProductSku());
+                            $r->setTypeId($item->getTypeId());
+                            $r->setLinkedProductType($item->getLinkedProductType());
+                            $r->setLinkTypeId($item->getLinkTypeId());
+                            $r->setPosition($item->getPosition());
+                            $r->setSku($item->getSku());
+                            $r->setProductId($item->getProductId());
+                            $r->setLinkType($item->getLinkType());
+                            return $r;
+                        };
+                        $out = $p();
+                        $res[] = $out;
+                    }
+                    $r->setProductLinks($res);
+
                     return $r;
                 };
                 $out = $p();
@@ -641,6 +663,28 @@ class Catalog implements CatalogInterface
                     $r->setSpecialPrice($item->getSpecialPrice());
                     $r->setSpecialFromDate($item->getSpecialFromDate());
                     $r->setSpecialToDate($item->getSpecialToDate());
+                    $res = [];
+                    foreach ($item->getProductLinks() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\ProductLink
+                        // to \Magento\CatalogStorefrontApi\Proto\ProductLink
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\ProductLink $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Proto\ProductLink();
+                            $r->setLinkedProductSku($item->getLinkedProductSku());
+                            $r->setTypeId($item->getTypeId());
+                            $r->setLinkedProductType($item->getLinkedProductType());
+                            $r->setLinkTypeId($item->getLinkTypeId());
+                            $r->setPosition($item->getPosition());
+                            $r->setSku($item->getSku());
+                            $r->setProductId($item->getProductId());
+                            $r->setLinkType($item->getLinkType());
+                            return $r;
+                        };
+                        $proto = $p();
+                        $res[] = $proto;
+                    }
+                    $r->setProductLinks($res);
+
                     return $r;
                 };
                 $proto = $p();
