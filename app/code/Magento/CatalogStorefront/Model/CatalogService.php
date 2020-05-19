@@ -24,7 +24,7 @@ use Magento\CatalogStorefront\DataProvider\ProductDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponse;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
-use Magento\CatalogStorefront\Model\MessageBus\Consumer as ElasticAdapter;
+use Magento\CatalogStorefront\Model\CatalogRepository as ElasticAdapter;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
 

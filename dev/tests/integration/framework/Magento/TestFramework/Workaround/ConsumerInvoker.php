@@ -25,7 +25,6 @@ class ConsumerInvoker
     private const CONSUMERS = [
         'storefront.catalog.category.update',
         'storefront.catalog.product.update',
-        'storefront.catalog.data.consume',
     ];
 
     /**

@@ -67,7 +67,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\CatalogStorefront\Model\MessageBus\Consumer">
+    <type name="Magento\CatalogStorefront\Model\MessageBus\CatalogRepository">
         <arguments>
             <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
         </arguments>

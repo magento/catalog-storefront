@@ -224,6 +224,20 @@ class ProductPublisher
             }
         }
 
+        if (isset($product['options']) && is_array($product['options'])) {
+            foreach ($product['options'] as &$option) {
+                if (isset($option['value'])) {
+                    if (isset($option['value']['sku'])) {
+                        // TODO: Temporary fix: Option values structure needs to be always an array of objects
+                        $option['value'] = [$option['value']];
+                    } else {
+                        // TODO: Temporary fix: Convert associative array to indexed to make it compatible with REST
+                        $option['value'] = array_values($option['value']);
+                    }
+                }
+            }
+        }
+
         $product['short_description'] = $product['short_description'][0]['html'] ?? '';
         $product['description'] = $product['description'][0]['html'] ?? '';
     }
