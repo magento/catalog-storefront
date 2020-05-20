@@ -65,6 +65,7 @@ class ProductPublisher
      * @param PublisherInterface $queuePublisher
      * @param State $state
      * @param LoggerInterface $logger
+     * @param RestClient $restClient
      * @param int $batchSize
      */
     public function __construct(
