@@ -24,7 +24,7 @@ use Magento\CatalogStorefront\DataProvider\ProductDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponse;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
-use Magento\CatalogStorefront\Model\CatalogRepository as ElasticAdapter;
+use Magento\CatalogStorefront\Model\CatalogRepository;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
 
@@ -53,9 +53,9 @@ class CatalogService implements CatalogServerInterface
     private $serviceOutputProcessor;
 
     /**
-     * @var ElasticAdapter
+     * @var CatalogRepository
      */
-    private $elasticAdapter;
+    private $catalogRepository;
 
     /**
      * @var CategoryDataProvider
@@ -69,7 +69,7 @@ class CatalogService implements CatalogServerInterface
      * @param DataObjectHelper $dataObjectHelper
      * @param ImportProductsResponseFactory $importProductsResponseFactory
      * @param ServiceOutputProcessor $serviceOutputProcessor
-     * @param ElasticAdapter $elasticAdapter
+     * @param CatalogRepository $catalogRepository
      * @param CategoryDataProvider $categoryDataProvider
      */
     public function __construct(
@@ -77,14 +77,14 @@ class CatalogService implements CatalogServerInterface
         DataObjectHelper $dataObjectHelper,
         ImportProductsResponseFactory $importProductsResponseFactory,
         ServiceOutputProcessor $serviceOutputProcessor,
-        ElasticAdapter $elasticAdapter,
+        CatalogRepository $catalogRepository,
         CategoryDataProvider $categoryDataProvider
     ) {
         $this->dataProvider = $dataProvider;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->importProductsResponseFactory = $importProductsResponseFactory;
         $this->serviceOutputProcessor = $serviceOutputProcessor;
-        $this->elasticAdapter = $elasticAdapter;
+        $this->catalogRepository = $catalogRepository;
         $this->categoryDataProvider = $categoryDataProvider;
     }
 
@@ -199,7 +199,7 @@ class CatalogService implements CatalogServerInterface
                     $productsInElasticFormat['product'][$storeId]['save'][] = $productInElasticFormat;
                 }
             }
-            $this->elasticAdapter->saveToStorage($productsInElasticFormat);
+            $this->catalogRepository->saveToStorage($productsInElasticFormat);
 
             $importProductsResponse = $this->importProductsResponseFactory->create();
             $importProductsResponse->setMessage('Records imported successfully');
