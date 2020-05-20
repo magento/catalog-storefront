@@ -180,6 +180,10 @@ final class Product implements ProductInterface
      * @var string
      */
     private $specialToDate;
+    /**
+     * @var array
+     */
+    private $productLinks;
 
 
     /**
@@ -894,5 +898,22 @@ final class Product implements ProductInterface
     public function setSpecialToDate(string $value): void
     {
         $this->specialToDate = $value;
+    }
+
+    /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\ProductLinkInterface[]
+     */
+    public function getProductLinks(): array
+    {
+        return (array) $this->productLinks;
+    }
+    
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ProductLinkInterface[] $value
+     * @return void
+     */
+    public function setProductLinks(array $value): void
+    {
+        $this->productLinks = $value;
     }
 }

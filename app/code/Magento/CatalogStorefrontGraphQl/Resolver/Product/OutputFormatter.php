@@ -10,6 +10,7 @@ namespace Magento\CatalogStorefrontGraphQl\Resolver\Product;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\CatalogStorefrontApi\Api\Data\OptionInterface;
 use Magento\CatalogStorefrontApi\Api\Data\OptionValueInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductLinkInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductResultContainerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -97,10 +98,10 @@ class OutputFormatter
                         'type' => $option->getType(),
                         'is_require' => $option->getIsRequire(),
                         'sku' => $option->getSku(),
-                        'max_characters' => $option->getMaxCharacters(),
+                        'max_characters' => (int)$option->getMaxCharacters(),
                         'file_extension' => $option->getFileExtension(),
-                        'image_size_x' => $option->getImageSizeX(),
-                        'image_size_y' => $option->getImageSizeY(),
+                        'image_size_x' => (int)$option->getImageSizeX(),
+                        'image_size_y' => (int)$option->getImageSizeY(),
                         'sort_order' => $option->getSortOrder(),
                         'default_title' => $option->getDefaultTitle(),
                         'store_title' => $option->getStoreTitle(),
@@ -109,8 +110,8 @@ class OutputFormatter
                         'default_price_type' => $option->getDefaultPriceType(),
                         'store_price' => $option->getStorePrice(),
                         'store_price_type' => $option->getStorePriceType(),
-                        'price' => $option->getPrice(),
-                        'price_type' => $option->getPriceType(),
+                        'price' => (float)$option->getPrice(),
+                        'price_type' => empty($option->getPriceType()) ? "FIXED" : $option->getPriceType(),
                         'required' => $option->getRequired(),
                         'product_sku' => $option->getProductSku(),
 
@@ -123,10 +124,10 @@ class OutputFormatter
                             'type' => $value->getType(),
                             'is_require' => $value->getIsRequire(),
                             'sku' => $value->getSku(),
-                            'max_characters' => $value->getMaxCharacters(),
+                            'max_characters' => (int)$value->getMaxCharacters(),
                             'file_extension' => $value->getFileExtension(),
-                            'image_size_x' => $value->getImageSizeX(),
-                            'image_size_y' => $value->getImageSizeY(),
+                            'image_size_x' => (int)$value->getImageSizeX(),
+                            'image_size_y' => (int)$value->getImageSizeY(),
                             'sort_order' => $value->getSortOrder(),
                             'default_title' => $value->getDefaultTitle(),
                             'store_title' => $value->getStoreTitle(),
@@ -135,8 +136,8 @@ class OutputFormatter
                             'default_price_type' => $value->getDefaultPriceType(),
                             'store_price' => $value->getStorePrice(),
                             'store_price_type' => $value->getStorePriceType(),
-                            'price' => $value->getPrice(),
-                            'price_type' => $value->getPriceType(),
+                            'price' => (float)$value->getPrice(),
+                            'price_type' => empty($value->getPriceType()) ? "FIXED" : $value->getPriceType(),
 
                         ];
                     }, $option->getValue());
@@ -150,6 +151,17 @@ class OutputFormatter
                     return $output;
                 }, $item->getOptions());
             }
+
+            $result['product_links'] = array_map(function (ProductLinkInterface $item) {
+                return [
+                    "linked_product_sku" => $item->getLinkedProductSku(),
+                    "linked_product_type" => $item->getLinkedProductType(),
+                    "link_type_id" => $item->getLinkTypeId(),
+                    "position" => $item->getPosition(),
+                    "sku" => $item->getSku(),
+                    "link_type" => $item->getLinkType(),
+                ];
+            }, $item->getProductLinks());
 
             return $result;
         }, $result->getItems());
