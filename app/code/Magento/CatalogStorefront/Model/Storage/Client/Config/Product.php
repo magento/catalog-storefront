@@ -27,17 +27,9 @@ class Product implements EntityConfigInterface
     public function getSettings() : array
     {
         return [
-            'dynamic_templates' => [
-                [
-                    'default_mapping' => [
-                        'match' => '*',
-                        'match_mapping_type' => '*',
-                        'mapping' => [
-                            'index' => false,
-                        ],
-                    ],
-                ]
-            ],
+            'mappings' => [
+                'dynamic' => false
+            ]
         ];
     }
 }
