@@ -28,7 +28,9 @@ class Product implements EntityConfigInterface
     {
         return [
             'mappings' => [
-                'dynamic' => false
+                'product' => [
+                    'dynamic' => false
+                ]
             ]
         ];
     }
