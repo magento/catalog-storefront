@@ -17,7 +17,7 @@ interface CategoryInterface
      * @return string
      */
     public function getId(): string;
-    
+
     /**
      * @param string $value
      * @return void
@@ -28,7 +28,7 @@ interface CategoryInterface
      * @return string
      */
     public function getPath(): string;
-    
+
     /**
      * @param string $value
      * @return void
@@ -39,7 +39,7 @@ interface CategoryInterface
      * @return int
      */
     public function getPosition(): int;
-    
+
     /**
      * @param int $value
      * @return void
@@ -50,7 +50,7 @@ interface CategoryInterface
      * @return int
      */
     public function getLevel(): int;
-    
+
     /**
      * @param int $value
      * @return void
@@ -61,7 +61,7 @@ interface CategoryInterface
      * @return int
      */
     public function getChildrenCount(): int;
-    
+
     /**
      * @param int $value
      * @return void
@@ -72,7 +72,7 @@ interface CategoryInterface
      * @return string
      */
     public function getName(): string;
-    
+
     /**
      * @param string $value
      * @return void
@@ -83,7 +83,7 @@ interface CategoryInterface
      * @return string
      */
     public function getDisplayMode(): string;
-    
+
     /**
      * @param string $value
      * @return void
@@ -94,7 +94,7 @@ interface CategoryInterface
      * @return string
      */
     public function getDefaultSortBy(): string;
-    
+
     /**
      * @param string $value
      * @return void
@@ -105,7 +105,7 @@ interface CategoryInterface
      * @return string
      */
     public function getUrlKey(): string;
-    
+
     /**
      * @param string $value
      * @return void
@@ -116,7 +116,7 @@ interface CategoryInterface
      * @return string
      */
     public function getUrlPath(): string;
-    
+
     /**
      * @param string $value
      * @return void
@@ -127,7 +127,7 @@ interface CategoryInterface
      * @return bool
      */
     public function getIsActive(): bool;
-    
+
     /**
      * @param bool $value
      * @return void
@@ -138,7 +138,7 @@ interface CategoryInterface
      * @return bool
      */
     public function getIsAnchor(): bool;
-    
+
     /**
      * @param bool $value
      * @return void
@@ -149,7 +149,7 @@ interface CategoryInterface
      * @return bool
      */
     public function getIncludeInMenu(): bool;
-    
+
     /**
      * @param bool $value
      * @return void
@@ -160,7 +160,7 @@ interface CategoryInterface
      * @return string[]
      */
     public function getAvailableSortBy(): array;
-    
+
     /**
      * @param string[] $value
      * @return void
@@ -171,7 +171,7 @@ interface CategoryInterface
      * @return \Magento\CatalogStorefrontApi\Api\Data\BreadcrumbInterface[]
      */
     public function getBreadcrumbs(): array;
-    
+
     /**
      * @param \Magento\CatalogStorefrontApi\Api\Data\BreadcrumbInterface[] $value
      * @return void
@@ -182,7 +182,7 @@ interface CategoryInterface
      * @return string
      */
     public function getDescription(): string;
-    
+
     /**
      * @param string $value
      * @return void
@@ -193,7 +193,7 @@ interface CategoryInterface
      * @return string
      */
     public function getCanonicalUrl(): string;
-    
+
     /**
      * @param string $value
      * @return void
@@ -204,7 +204,7 @@ interface CategoryInterface
      * @return int
      */
     public function getProductCount(): int;
-    
+
     /**
      * @param int $value
      * @return void
@@ -215,7 +215,7 @@ interface CategoryInterface
      * @return string[]
      */
     public function getChildren(): array;
-    
+
     /**
      * @param string[] $value
      * @return void
@@ -226,7 +226,7 @@ interface CategoryInterface
      * @return string
      */
     public function getImage(): string;
-    
+
     /**
      * @param string $value
      * @return void
@@ -237,10 +237,21 @@ interface CategoryInterface
      * @return string
      */
     public function getParentId(): string;
-    
+
     /**
      * @param string $value
      * @return void
      */
     public function setParentId(string $value): void;
+
+    /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface[]
+     */
+    public function getDynamicAttributes(): array;
+
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface[] $value
+     * @return void
+     */
+    public function setDynamicAttributes(array $value): void;
 }

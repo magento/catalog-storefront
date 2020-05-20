@@ -63,6 +63,26 @@ class CatalogClient extends \Grpc\BaseStub
     }
 
     /**
+     * @param \Magento\CatalogStorefrontApi\Proto\ImportCategoriesRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     */
+    public function ImportCategories(
+        \Magento\CatalogStorefrontApi\Proto\ImportCategoriesRequest $argument,
+        $metadata = [],
+        $options = []
+    )
+    {
+        return $this->_simpleRequest(
+            '/magento.catalogStorefrontApi.proto.Catalog/ImportCategories',
+            $argument,
+            ['\Magento\CatalogStorefrontApi\Proto\ImportCategoriesResponse', 'decode'],
+            $metadata,
+            $options
+        );
+    }
+
+    /**
      * @param \Magento\CatalogStorefrontApi\Proto\CategoriesGetRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options

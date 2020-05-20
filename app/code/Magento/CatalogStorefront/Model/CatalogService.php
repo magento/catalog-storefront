@@ -24,6 +24,9 @@ use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponse;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
+use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseFactory;
 
 /**
  * @inheritdoc
@@ -139,10 +142,23 @@ class CatalogService implements CatalogServerInterface
         return $product;
     }
 
+    /**
+     * @param ImportProductsRequestInterface $request
+     * @return ImportProductsResponseInterface
+     */
     public function ImportProducts(
         ImportProductsRequestInterface $request
     ): ImportProductsResponseInterface {
         // TODO: Implement ImportProducts() method.
+    }
+
+    /**
+     * @param ImportCategoriesRequestInterface $request
+     * @return ImportCategoriesResponseInterface
+     */
+    public function ImportCategories(ImportCategoriesRequestInterface $request): ImportCategoriesResponseInterface
+    {
+        // TODO: Implement ImportCategories() method.
     }
 
     public function GetCategories(

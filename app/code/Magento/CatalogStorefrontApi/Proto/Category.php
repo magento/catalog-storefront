@@ -97,6 +97,10 @@ class Category extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string parent_id = 21;</code>
      */
     protected $parent_id = '';
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DynamicAttributeValue dynamic_attributes = 50;</code>
+     */
+    private $dynamic_attributes;
 
     /**
      * Constructor.
@@ -125,6 +129,7 @@ class Category extends \Google\Protobuf\Internal\Message
      *     @type string[]|\Google\Protobuf\Internal\RepeatedField $children
      *     @type string $image
      *     @type string $parent_id
+     *     @type \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue[]|\Google\Protobuf\Internal\RepeatedField $dynamic_attributes
      * }
      */
     public function __construct($data = null)
@@ -591,6 +596,28 @@ class Category extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, true);
         $this->parent_id = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DynamicAttributeValue dynamic_attributes = 50;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getDynamicAttributes()
+    {
+        return $this->dynamic_attributes;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DynamicAttributeValue dynamic_attributes = 50;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setDynamicAttributes($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue::class);
+        $this->dynamic_attributes = $arr;
 
         return $this;
     }
