@@ -9,6 +9,9 @@ namespace Magento\CatalogExport\Model;
 
 use Magento\CatalogExportApi\Api\ProductRepositoryInterface;
 
+/**
+ * @inheritdoc
+ */
 class ProductRepository implements ProductRepositoryInterface
 {
     private const MAX_ITEMS_IN_RESPONSE = 250;
@@ -56,7 +59,7 @@ class ProductRepository implements ProductRepositoryInterface
      */
     public function get(array $ids)
     {
-        if (sizeof($ids) > $this->getMaxItemsInResponse()) {
+        if (count($ids) > $this->getMaxItemsInResponse()) {
             throw new \InvalidArgumentException(
                 'Max items in the response can\'t exceed '
                     . $this->getMaxItemsInResponse()

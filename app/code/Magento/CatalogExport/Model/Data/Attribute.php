@@ -10,6 +10,9 @@ namespace Magento\CatalogExport\Model\Data;
 use Magento\CatalogExportApi\Api\Data\AttributeInterface;
 use Magento\Framework\Model\AbstractModel;
 
+/**
+ * Product attribute entity
+ */
 class Attribute extends AbstractModel implements AttributeInterface
 {
     private const ATTRIBUTE_CODE = 'attribute_code';

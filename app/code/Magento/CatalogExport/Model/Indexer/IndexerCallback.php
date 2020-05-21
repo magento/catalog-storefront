@@ -10,6 +10,9 @@ namespace Magento\CatalogExport\Model\Indexer;
 use Magento\CatalogDataExporter\Model\Indexer\IndexerCallbackInterface;
 use Magento\Framework\MessageQueue\PublisherInterface;
 
+/**
+ * Publishes ids of updated products in queue
+ */
 class IndexerCallback implements IndexerCallbackInterface
 {
     private const BATCH_SIZE = 100;

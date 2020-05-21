@@ -5,10 +5,13 @@
  */
 namespace Magento\CatalogMessageBroker\Model;
 
+/**
+ * Fetch product data
+ */
 interface FetchProductsInterface
 {
     /**
-     * @param string[]
+     * @param string[] $ids
      * @return array
      */
     public function execute(array $ids);

@@ -30,5 +30,4 @@ interface AttributeInterface
      * @return void
      */
     public function setValue($value);
-
 }

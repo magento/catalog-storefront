@@ -6,9 +6,14 @@
 
 namespace Magento\CatalogExportApi\Api;
 
+/**
+ * Product entity repository
+ */
 interface ProductRepositoryInterface
 {
     /**
+     * Get products by ids
+     *
      * @param string[] $ids
      * @return \Magento\CatalogExportApi\Api\Data\ProductInterface[]
      */

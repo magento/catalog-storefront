@@ -9,6 +9,9 @@ use Magento\CatalogExportApi\Api\Data\ProductInterface;
 use Magento\CatalogExportApi\Api\ProductRepositoryInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 
+/**
+ * @inheritdoc
+ */
 class FetchProducts implements FetchProductsInterface
 {
     /**

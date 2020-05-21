@@ -16,6 +16,9 @@ use Magento\CatalogStorefront\Model\MessageBus\CatalogItemMessageBuilder;
 use Magento\Framework\App\State as AppState;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Process product update messages and update storefront app
+ */
 class ProductsConsumer extends OldConsumer
 {
     /**
@@ -80,6 +83,8 @@ class ProductsConsumer extends OldConsumer
     }
 
     /**
+     * Process message
+     *
      * @param string $ids
      */
     public function processMessage(string $ids)
@@ -113,6 +118,7 @@ class ProductsConsumer extends OldConsumer
             }
         }
         try {
+            print_r($dataPerType);
             $this->saveToStorage($dataPerType);
         } catch (\Throwable $e) {
             $this->logger->critical($e);
@@ -135,15 +141,12 @@ class ProductsConsumer extends OldConsumer
                 'meta_description' => $override['meta_description'],
                 'meta_keyword' => $override['meta_keyword'],
                 'meta_title' => $override['meta_title'],
-                //'status' => $override['status'],
                 'tax_class_id' => $override['tax_class_id'],
                 'created_at' => $override['created_at'],
                 'updated_at' => $override['updated_at'],
                 'url_key' => $override['url_key'],
                 'visibility' => $override['visibility'],
                 'weight' => $override['weight'],
-                //'categories' => $override['categories'],
-                //'options' => $override['options'],
             ]
         );
     }

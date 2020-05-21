@@ -10,6 +10,9 @@ namespace Magento\CatalogExport\Model\Data;
 use Magento\CatalogExportApi\Api\Data\ProductInterface;
 use Magento\Framework\Model\AbstractModel;
 
+/**
+ * Product entity
+ */
 class Product extends AbstractModel implements ProductInterface
 {
     private const ID = 'id';
