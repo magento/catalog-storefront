@@ -126,7 +126,7 @@ class ProductPublisher
             foreach ($productIds as $productId) {
                 // We want to use export API for delivering product updates,
                 // thus handle only deletions here. See \Magento\CatalogMessageBroker\Model\MessageBus\Consumer.
-                if (!$productsData[$productId]) {
+                if (!isset($productsData[$productId])) {
                     $messages[] = $this->messageBuilder->build(
                         $storeId,
                         'product',
