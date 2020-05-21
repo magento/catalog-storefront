@@ -243,4 +243,15 @@ interface CategoryInterface
      * @return void
      */
     public function setParentId(string $value): void;
+
+    /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface[]
+     */
+    public function getDynamicAttributes(): array;
+    
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface[] $value
+     * @return void
+     */
+    public function setDynamicAttributes(array $value): void;
 }

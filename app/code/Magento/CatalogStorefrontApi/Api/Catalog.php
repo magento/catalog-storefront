@@ -731,6 +731,132 @@ class Catalog implements CatalogInterface
         return $out;
     }
 
+    public function ImportCategories(\Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface $request): \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface
+    {
+        $protoRequest = $this->ImportCategoriesToProto($request);
+        [$protoResult, $status] = $this->protoClient->ImportCategories($protoRequest)->wait();
+        if ($status->code !== 0) {
+            throw new \RuntimeException($status->details, $status->code);
+        }
+        $result = $this->ImportCategoriesFromProto($protoResult);
+        return $result;
+    }
+
+    private function ImportCategoriesToProto(\Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface $value): \Magento\CatalogStorefrontApi\Proto\ImportCategoriesRequest
+    {
+        // convert data from \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequest
+        // to \Magento\CatalogStorefrontApi\Proto\ImportCategoriesRequest
+        /** @var \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequest $value **/
+        $p = function () use ($value) {
+            $r = new \Magento\CatalogStorefrontApi\Proto\ImportCategoriesRequest();
+            $res = [];
+            foreach ($value->getCategories() as $item) {
+                // convert data from \Magento\CatalogStorefrontApi\Api\Data\Category
+                // to \Magento\CatalogStorefrontApi\Proto\Category
+                /** @var \Magento\CatalogStorefrontApi\Api\Data\Category $item **/
+                $p = function () use ($item) {
+                    $r = new \Magento\CatalogStorefrontApi\Proto\Category();
+                    $r->setId($item->getId());
+                    $r->setPath($item->getPath());
+                    $r->setPosition($item->getPosition());
+                    $r->setLevel($item->getLevel());
+                    $r->setChildrenCount($item->getChildrenCount());
+                    $r->setName($item->getName());
+                    $r->setDisplayMode($item->getDisplayMode());
+                    $r->setDefaultSortBy($item->getDefaultSortBy());
+                    $r->setUrlKey($item->getUrlKey());
+                    $r->setUrlPath($item->getUrlPath());
+                    $r->setIsActive($item->getIsActive());
+                    $r->setIsAnchor($item->getIsAnchor());
+                    $r->setIncludeInMenu($item->getIncludeInMenu());
+                    $r->setAvailableSortBy($item->getAvailableSortBy());
+                    $res = [];
+                    foreach ($item->getBreadcrumbs() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\Breadcrumb
+                        // to \Magento\CatalogStorefrontApi\Proto\Breadcrumb
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\Breadcrumb $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Proto\Breadcrumb();
+                            $r->setCategoryId($item->getCategoryId());
+                            $r->setCategoryName($item->getCategoryName());
+                            $r->setCategoryLevel($item->getCategoryLevel());
+                            $r->setCategoryUrlKey($item->getCategoryUrlKey());
+                            $r->setCategoryUrlPath($item->getCategoryUrlPath());
+                            return $r;
+                        };
+                        $proto = $p();
+                        $res[] = $proto;
+                    }
+                    $r->setBreadcrumbs($res);
+
+                    $r->setDescription($item->getDescription());
+                    $r->setCanonicalUrl($item->getCanonicalUrl());
+                    $r->setProductCount($item->getProductCount());
+                    $r->setChildren($item->getChildren());
+                    $r->setImage($item->getImage());
+                    $r->setParentId($item->getParentId());
+                    $res = [];
+                    foreach ($item->getDynamicAttributes() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue
+                        // to \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue();
+                            $r->setCode($item->getCode());
+                            $r->setValue($item->getValue());
+                            return $r;
+                        };
+                        $proto = $p();
+                        $res[] = $proto;
+                    }
+                    $r->setDynamicAttributes($res);
+
+                    return $r;
+                };
+                $proto = $p();
+                $res[] = $proto;
+            }
+            $r->setCategories($res);
+
+            $r->setStore($value->getStore());
+            $prop3 = $value->getParams();
+            if ($prop3 !== null) {
+                // convert data from \Magento\CatalogStorefrontApi\Api\Data\KeyValue
+                // to \Magento\CatalogStorefrontApi\Proto\KeyValue
+                /** @var \Magento\CatalogStorefrontApi\Api\Data\KeyValue $prop3 **/
+                $p = function () use ($prop3) {
+                    $r = new \Magento\CatalogStorefrontApi\Proto\KeyValue();
+                    $r->setKey($prop3->getKey());
+                    $r->setValue($prop3->getValue());
+                    return $r;
+                };
+                $proto = $p();
+                $r->setParams($proto);
+            }
+
+            return $r;
+        };
+        $proto = $p();
+
+        return $proto;
+    }
+
+    private function ImportCategoriesFromProto(\Magento\CatalogStorefrontApi\Proto\ImportCategoriesResponse $value): \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface
+    {
+        // convert data from \Magento\CatalogStorefrontApi\Proto\ImportCategoriesResponse
+        // to \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponse
+        /** @var \Magento\CatalogStorefrontApi\Proto\ImportCategoriesResponse $value **/
+        $p = function () use ($value) {
+            $r = new \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponse();
+            $r->setStatus($value->getStatus());
+            $r->setMessage($value->getMessage());
+            return $r;
+        };
+        $out = $p();
+
+        return $out;
+    }
+
     public function GetCategories(\Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface $request): \Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface
     {
         $protoRequest = $this->GetCategoriesToProto($request);
@@ -813,6 +939,22 @@ class Catalog implements CatalogInterface
                     $r->setChildren($item->getChildren());
                     $r->setImage($item->getImage());
                     $r->setParentId($item->getParentId());
+                    $res = [];
+                    foreach ($item->getDynamicAttributes() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue
+                        // to \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue
+                        /** @var \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue();
+                            $r->setCode($item->getCode());
+                            $r->setValue($item->getValue());
+                            return $r;
+                        };
+                        $out = $p();
+                        $res[] = $out;
+                    }
+                    $r->setDynamicAttributes($res);
+
                     return $r;
                 };
                 $out = $p();

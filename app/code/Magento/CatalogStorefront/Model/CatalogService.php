@@ -27,6 +27,9 @@ use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\CatalogStorefront\Model\CatalogRepository;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
+use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseFactory;
 
 /**
  * @inheritdoc
@@ -212,6 +215,15 @@ class CatalogService implements CatalogServerInterface
             $importProductsResponse->setStatus(false);
             return $importProductsResponse;
         }
+    }
+
+    /**
+     * @param ImportCategoriesRequestInterface $request
+     * @return ImportCategoriesResponseInterface
+     */
+    public function ImportCategories(ImportCategoriesRequestInterface $request): ImportCategoriesResponseInterface
+    {
+        // TODO: Implement ImportCategories() method.
     }
 
     public function GetCategories(
