@@ -13,6 +13,8 @@
     <preference for="Magento\CatalogGraphQl\Model\Resolver\CategoryTree" type="Magento\CatalogStorefrontGraphQl\Resolver\Category\CategoryTree" />
 
     <!-- Override deprecated resolvers with "model" hydration -->
+    <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\MediaGallery"/>
+    <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGalleryEntries" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\MediaGallery"/>
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGalleryEntries" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\MediaGalleryEntries"/>
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\Price" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\Price"/>
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\NewFromTo" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\NewFromTo"/>
@@ -34,6 +36,7 @@
                     <item name="product_count" xsi:type="string">product_count</item>
                     <item name="canonical_url" xsi:type="string">canonical_url</item>
                     <item name="description" xsi:type="string">description</item>
+                    <item name="path" xsi:type="string">path</item>
                 </item>
                 <item name="ProductInterface" xsi:type="array">
                     <item name="id" xsi:type="string">id</item>
@@ -77,9 +80,9 @@
                 <item name="Products" xsi:type="array">
                     <item name="aggregations" xsi:type="string">aggregations</item>
                 </item>
-                <item name="CategoryTree" xsi:type="array">
-                    <item name="children" xsi:type="string">children</item>
-                </item>
+<!--                <item name="CategoryTree" xsi:type="array">-->
+<!--                    <item name="children" xsi:type="string">children</item>-->
+<!--                </item>-->
                 <item name="BundleProduct" xsi:type="array">
                     <item name="price_view" xsi:type="string">price_view</item>
                     <item name="dynamic_price" xsi:type="string">dynamic_price</item>

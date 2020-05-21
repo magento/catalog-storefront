@@ -89,6 +89,10 @@ final class Product implements ProductInterface
      */
     private $swatchImage;
     /**
+     * @var array
+     */
+    private $mediaGallery;
+    /**
      * @var string
      */
     private $visibility;
@@ -184,6 +188,10 @@ final class Product implements ProductInterface
      * @var array
      */
     private $productLinks;
+    /**
+     * @var string
+     */
+    private $canonicalUrl;
 
 
     /**
@@ -507,6 +515,23 @@ final class Product implements ProductInterface
     public function setSwatchImage(string $value): void
     {
         $this->swatchImage = $value;
+    }
+
+    /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemInterface[]
+     */
+    public function getMediaGallery(): array
+    {
+        return (array) $this->mediaGallery;
+    }
+    
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemInterface[] $value
+     * @return void
+     */
+    public function setMediaGallery(array $value): void
+    {
+        $this->mediaGallery = $value;
     }
 
     /**
@@ -915,5 +940,22 @@ final class Product implements ProductInterface
     public function setProductLinks(array $value): void
     {
         $this->productLinks = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCanonicalUrl(): string
+    {
+        return (string) $this->canonicalUrl;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setCanonicalUrl(string $value): void
+    {
+        $this->canonicalUrl = $value;
     }
 }

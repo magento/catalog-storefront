@@ -75,11 +75,11 @@ class ProductSearch
      * Process request
      *
      * @param ProductCriteriaInterface $criteria
-     * @return ProductResultContainerInterface
+     * @return array
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\RuntimeException
      */
-    private function processRequest($criteria): ProductResultContainerInterface
+    private function processRequest($criteria): array
     {
         if (!isset($criteria->getScopes()['store'])) {
             return $this->processErrors([_('Store id is not present in Search Criteria. Please add missing info.')]);

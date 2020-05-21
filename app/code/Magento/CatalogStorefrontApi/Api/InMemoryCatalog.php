@@ -30,6 +30,11 @@ class InMemoryCatalog implements CatalogInterface
         return $this->service->ImportProducts($request);
     }
 
+    public function ImportCategories(\Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface $request): \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface
+    {
+        return $this->service->ImportCategories($request);
+    }
+
     public function GetCategories(\Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface $request): \Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface
     {
         return $this->service->GetCategories($request);

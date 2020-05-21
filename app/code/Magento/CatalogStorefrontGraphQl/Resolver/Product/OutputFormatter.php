@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefrontGraphQl\Resolver\Product;
 
 use Magento\Catalog\Model\Layer\Resolver;
+use Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemInterface;
 use Magento\CatalogStorefrontApi\Api\Data\OptionInterface;
 use Magento\CatalogStorefrontApi\Api\Data\OptionValueInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductLinkInterface;
@@ -71,13 +72,13 @@ class OutputFormatter
                 'special_price' => $item->getSpecialPrice(),
                 'special_from_date' => $item->getSpecialFromDate(),
                 'special_to_date' => $item->getSpecialToDate(),
+                'canonical_url' => empty($item->getCanonicalUrl()) ? null : $item->getCanonicalUrl(),
             ];
 
             if ($item->getImage()) {
                 $result['image']['url'] = $item->getImage()->getUrl() ?? "";
                 $result['image']['label'] = $item->getImage()->getLabel() ?? "";
             }
-
 
             if ($item->getSmallImage()) {
                 $result['small_image']['url'] = $item->getSmallImage()->getUrl() ?? "";
@@ -87,6 +88,27 @@ class OutputFormatter
             if ($item->getThumbnail()) {
                 $result['thumbnail']['url'] = $item->getThumbnail()->getUrl() ?? "";
                 $result['thumbnail']['label'] = $item->getThumbnail()->getLabel() ?? "";
+            }
+
+            foreach ($item->getMediaGallery() as $offset => $galleryItem) {
+                $galleryItemOutput = [
+                    'position' => $galleryItem->getPosition(),
+                    'url' => $galleryItem->getUrl(),
+                    'label' => $galleryItem->getLabel(),
+                    'media_type' => $galleryItem->getMediaType(),
+                    'disabled' => false
+                ];
+                if ($galleryItem->getVideoContent()) {
+                    $galleryItemOutput['video_content'] = [
+                        'media_type' => $galleryItem->getVideoContent()->getMediaType(),
+                        'video_description' => $galleryItem->getVideoContent()->getVideoDescription(),
+                        'video_metadata' => $galleryItem->getVideoContent()->getVideoMetadata(),
+                        'video_provider' => $galleryItem->getVideoContent()->getVideoProvider(),
+                        'video_title' => $galleryItem->getVideoContent()->getVideoTitle(),
+                        'video_url' => $galleryItem->getVideoContent()->getVideoUrl(),
+                    ];
+                }
+                $result['media_gallery'][] = $galleryItemOutput;
             }
 
             //TODO: Revise options structure and remove free form structure from index/api
@@ -114,7 +136,6 @@ class OutputFormatter
                         'price_type' => empty($option->getPriceType()) ? "FIXED" : $option->getPriceType(),
                         'required' => $option->getRequired(),
                         'product_sku' => $option->getProductSku(),
-
                     ];
                     $output['value'] = array_map(function (OptionValueInterface $value) {
                         return [

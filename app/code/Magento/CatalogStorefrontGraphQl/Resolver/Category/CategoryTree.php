@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontGraphQl\Resolver\Category;
 
+use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
 use Magento\CatalogStorefrontApi\Api\CategoryInterface;
+use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryResultContainerInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -65,23 +67,97 @@ class CategoryTree implements BatchResolverInterface
      */
     public function resolve(ContextInterface $context, Field $field, array $requests): BatchResponse
     {
+        $scopes = $this->scopeProvider->getScopes($context);
         $storefrontRequests = [];
         foreach ($requests as $request) {
-            $categoryId = $request->getArgs()['id'] ?? null;
-            if (!$categoryId) {
-                $store = $context->getExtensionAttributes()->getStore();
-                $categoryId = (int)$store->getRootCategoryId();
+            $storefrontRequest = ['scopes' => $scopes, 'store' => $scopes['store']];
+
+            if ($field->getName() == 'category') {
+                $categoryId = $request->getArgs()['id'] ?? null;
+                if (!$categoryId) {
+                    $store = $context->getExtensionAttributes()->getStore();
+                    $categoryId = (int)$store->getRootCategoryId();
+                }
+
+                $storefrontRequest['ids'] = [$categoryId];
+                $storefrontRequest['attribute_codes'] = $this->fieldResolver->getSchemaTypeFields(
+                    $request->getInfo(),
+                    ['category']
+                );
+                $type = 'category';
+            } elseif ($field->getName() == 'children') {
+                $categoryIds = $request->getValue()['children'] ?? [];
+
+                $storefrontRequest['ids'] = $categoryIds;
+                $storefrontRequest['attribute_codes'] = $this->fieldResolver->getSchemaTypeFields(
+                    $request->getInfo(),
+                    ['children']
+                );
+                $type = 'children';
+            } else {
+                throw new \InvalidArgumentException(
+                    'Category tree resolver support only category and children fields'
+                );
             }
-            $storefrontRequest = [
-                'ids' => [$categoryId],
-                'scopes' => $this->scopeProvider->getScopes($context),
-                'attributes' => $this->fieldResolver->getSchemaTypeFields($request->getInfo(), ['category']),
-            ];
+
             $storefrontRequests[] = [
                 'graphql_request' => $request,
-                'storefront_request' => $storefrontRequest
+                'storefront_request' => $storefrontRequest,
+                'additional_info' => ['type' => $type]
             ];
         }
+
+        return $this->serviceInvoker->invoke(
+            CatalogServerInterface::class,
+            'GetCategories',
+            $storefrontRequests,
+            function (
+                CategoriesGetResponseInterface $result,
+                GraphQlInputException $e,
+                BatchRequestItemInterface $request,
+                array $additionalInfo
+            ) use ($context) {
+                $output = [];
+
+                foreach ($result->getItems() as $item) {
+                    $itemOutput = [
+                        'id' => $item->getId(),
+                        'path' => $item->getPath(),
+                        'url_key' => $item->getUrlKey(),
+                        'image' => $item->getImage(),
+                        'description' => $item->getDescription(),
+                        'name' => $item->getName(),
+                        'available_sort_by' => $item->getAvailableSortBy(),
+                        'canonical_url' => $item->getCanonicalUrl(),
+                        'children_count' => $item->getChildrenCount(),
+                        'default_sort_by' => $item->getDefaultSortBy(),
+                        'include_in_menu' => $item->getIncludeInMenu(),
+                        'is_active' => $item->getIsActive(),
+                        'is_anchor' => $item->getIsAnchor(),
+                        'level' => $item->getLevel(),
+                        'position' => $item->getPosition(),
+                        'url_path' => $item->getUrlPath(),
+                        'display_mode' => $item->getDisplayMode(),
+                        'children' => $item->getChildren(),
+                    ];
+
+                    foreach ($item->getBreadcrumbs() as $offset => $breadcrumb) {
+                        $itemOutput['breadcrumbs'][$offset] = [
+                            "category_id" => $breadcrumb->getCategoryId(),
+                            "category_url_key" => $breadcrumb->getCategoryUrlKey(),
+                            "category_url_path" => $breadcrumb->getCategoryUrlPath(),
+                            "category_level" => $breadcrumb->getCategoryLevel(),
+                            "category_name" => $breadcrumb->getCategoryName(),
+                        ];
+                    }
+                    if ($additionalInfo['type'] == 'category') {
+                        return $itemOutput;
+                    }
+                    $output[] = $itemOutput;
+                }
+                return $output;
+            }
+        );
 
         return $this->serviceInvoker->invoke(
             CategoryInterface::class,

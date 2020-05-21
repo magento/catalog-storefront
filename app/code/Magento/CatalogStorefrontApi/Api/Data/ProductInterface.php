@@ -223,6 +223,17 @@ interface ProductInterface
     public function setSwatchImage(string $value): void;
 
     /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemInterface[]
+     */
+    public function getMediaGallery(): array;
+    
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemInterface[] $value
+     * @return void
+     */
+    public function setMediaGallery(array $value): void;
+
+    /**
      * @return string
      */
     public function getVisibility(): string;
@@ -485,4 +496,15 @@ interface ProductInterface
      * @return void
      */
     public function setProductLinks(array $value): void;
+
+    /**
+     * @return string
+     */
+    public function getCanonicalUrl(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setCanonicalUrl(string $value): void;
 }

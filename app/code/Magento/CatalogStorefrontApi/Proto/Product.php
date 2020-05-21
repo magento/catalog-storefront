@@ -102,7 +102,10 @@ class Product extends \Google\Protobuf\Internal\Message
      */
     protected $swatch_image = '';
     /**
-     *    repeated Image media_gallery = 35;//-
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.MediaGalleryItem media_gallery = 35;</code>
+     */
+    private $media_gallery;
+    /**
      * where to display product
      *
      * Generated from protobuf field <code>string visibility = 37;</code>
@@ -212,6 +215,10 @@ class Product extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductLink product_links = 90;</code>
      */
     private $product_links;
+    /**
+     * Generated from protobuf field <code>string canonical_url = 91;</code>
+     */
+    protected $canonical_url = '';
 
     /**
      * Constructor.
@@ -247,8 +254,8 @@ class Product extends \Google\Protobuf\Internal\Message
      *     @type \Magento\CatalogStorefrontApi\Proto\Image $thumbnail
      *           TODO: Rename to thumbnail_image?
      *     @type string $swatch_image
+     *     @type \Magento\CatalogStorefrontApi\Proto\MediaGalleryItem[]|\Google\Protobuf\Internal\RepeatedField $media_gallery
      *     @type string $visibility
-     *              repeated Image media_gallery = 35;//-
      *           where to display product
      *     @type \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue[]|\Google\Protobuf\Internal\RepeatedField $dynamic_attributes
      *              PriceRange prices = 44;//-
@@ -281,6 +288,7 @@ class Product extends \Google\Protobuf\Internal\Message
      *     @type string $special_from_date
      *     @type string $special_to_date
      *     @type \Magento\CatalogStorefrontApi\Proto\ProductLink[]|\Google\Protobuf\Internal\RepeatedField $product_links
+     *     @type string $canonical_url
      * }
      */
     public function __construct($data = null)
@@ -732,7 +740,28 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *    repeated Image media_gallery = 35;//-
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.MediaGalleryItem media_gallery = 35;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getMediaGallery()
+    {
+        return $this->media_gallery;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.MediaGalleryItem media_gallery = 35;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\MediaGalleryItem[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setMediaGallery($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\MediaGalleryItem::class);
+        $this->media_gallery = $arr;
+
+        return $this;
+    }
+
+    /**
      * where to display product
      *
      * Generated from protobuf field <code>string visibility = 37;</code>
@@ -744,7 +773,6 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *    repeated Image media_gallery = 35;//-
      * where to display product
      *
      * Generated from protobuf field <code>string visibility = 37;</code>
@@ -1285,6 +1313,28 @@ class Product extends \Google\Protobuf\Internal\Message
     {
         $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\ProductLink::class);
         $this->product_links = $arr;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string canonical_url = 91;</code>
+     * @return string
+     */
+    public function getCanonicalUrl()
+    {
+        return $this->canonical_url;
+    }
+
+    /**
+     * Generated from protobuf field <code>string canonical_url = 91;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setCanonicalUrl($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->canonical_url = $var;
 
         return $this;
     }

@@ -128,6 +128,43 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     }
 
                     $r->setSwatchImage($item->getSwatchImage());
+                    $res = [];
+                    foreach ($item->getMediaGallery() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItem
+                        // to \Magento\CatalogStorefrontApi\Proto\MediaGalleryItem
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItem $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Proto\MediaGalleryItem();
+                            $r->setUrl($item->getUrl());
+                            $r->setLabel($item->getLabel());
+                            $r->setMediaType($item->getMediaType());
+                            $r->setPosition($item->getPosition());
+                            $prop26 = $item->getVideoContent();
+                            if ($prop26 !== null) {
+                                // convert data from \Magento\CatalogStorefrontApi\Api\Data\Video
+                                // to \Magento\CatalogStorefrontApi\Proto\Video
+                                /** @var \Magento\CatalogStorefrontApi\Api\Data\Video $prop26 **/
+                                $p = function () use ($prop26) {
+                                    $r = new \Magento\CatalogStorefrontApi\Proto\Video();
+                                    $r->setVideoProvider($prop26->getVideoProvider());
+                                    $r->setVideoUrl($prop26->getVideoUrl());
+                                    $r->setVideoTitle($prop26->getVideoTitle());
+                                    $r->setVideoDescription($prop26->getVideoDescription());
+                                    $r->setVideoMetadata($prop26->getVideoMetadata());
+                                    $r->setMediaType($prop26->getMediaType());
+                                    return $r;
+                                };
+                                $proto = $p();
+                                $r->setVideoContent($proto);
+                            }
+
+                            return $r;
+                        };
+                        $proto = $p();
+                        $res[] = $proto;
+                    }
+                    $r->setMediaGallery($res);
+
                     $r->setVisibility($item->getVisibility());
                     $res = [];
                     foreach ($item->getDynamicAttributes() as $item) {
@@ -358,6 +395,7 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     }
                     $r->setProductLinks($res);
 
+                    $r->setCanonicalUrl($item->getCanonicalUrl());
                     return $r;
                 };
                 $proto = $p();
@@ -464,6 +502,43 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     }
 
                     $r->setSwatchImage($item->getSwatchImage());
+                    $res = [];
+                    foreach ($item->getMediaGallery() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\MediaGalleryItem
+                        // to \Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItem
+                        /** @var \Magento\CatalogStorefrontApi\Proto\MediaGalleryItem $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItem();
+                            $r->setUrl($item->getUrl());
+                            $r->setLabel($item->getLabel());
+                            $r->setMediaType($item->getMediaType());
+                            $r->setPosition($item->getPosition());
+                            $prop26 = $item->getVideoContent();
+                            if ($prop26 !== null) {
+                                // convert data from \Magento\CatalogStorefrontApi\Proto\Video
+                                // to \Magento\CatalogStorefrontApi\Api\Data\Video
+                                /** @var \Magento\CatalogStorefrontApi\Proto\Video $prop26 **/
+                                $p = function () use ($prop26) {
+                                    $r = new \Magento\CatalogStorefrontApi\Api\Data\Video();
+                                    $r->setVideoProvider($prop26->getVideoProvider());
+                                    $r->setVideoUrl($prop26->getVideoUrl());
+                                    $r->setVideoTitle($prop26->getVideoTitle());
+                                    $r->setVideoDescription($prop26->getVideoDescription());
+                                    $r->setVideoMetadata($prop26->getVideoMetadata());
+                                    $r->setMediaType($prop26->getMediaType());
+                                    return $r;
+                                };
+                                $out = $p();
+                                $r->setVideoContent($out);
+                            }
+
+                            return $r;
+                        };
+                        $out = $p();
+                        $res[] = $out;
+                    }
+                    $r->setMediaGallery($res);
+
                     $r->setVisibility($item->getVisibility());
                     $res = [];
                     foreach ($item->getDynamicAttributes() as $item) {
@@ -694,6 +769,7 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     }
                     $r->setProductLinks($res);
 
+                    $r->setCanonicalUrl($item->getCanonicalUrl());
                     return $r;
                 };
                 $out = $p();
@@ -731,6 +807,138 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
         /** @var \Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponse $value **/
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Proto\ImportProductsResponse();
+            $r->setStatus($value->getStatus());
+            $r->setMessage($value->getMessage());
+            return $r;
+        };
+        $proto = $p();
+
+        return $proto;
+    }
+
+
+    public function ImportCategories(\Spiral\GRPC\ContextInterface $ctx, \Magento\CatalogStorefrontApi\Proto\ImportCategoriesRequest $in): \Magento\CatalogStorefrontApi\Proto\ImportCategoriesResponse
+    {
+        try {
+            $magentoDtoRequest = $this->ImportCategoriesFromProto($in);
+            $magentoDtoResponse = $this->service->ImportCategories($magentoDtoRequest);
+            return $this->ImportCategoriesToProto($magentoDtoResponse);
+        } catch (\Exception $e) {
+            throw new \Spiral\GRPC\Exception\InvokeException(
+                $e->getMessage(),
+                \Spiral\GRPC\StatusCode::UNKNOWN,
+                [],
+                $e
+            );
+        }
+    }
+
+    private function ImportCategoriesFromProto(\Magento\CatalogStorefrontApi\Proto\ImportCategoriesRequest $value): \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface
+    {
+        // convert data from \Magento\CatalogStorefrontApi\Proto\ImportCategoriesRequest
+        // to \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequest
+        /** @var \Magento\CatalogStorefrontApi\Proto\ImportCategoriesRequest $value **/
+        $p = function () use ($value) {
+            $r = new \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequest();
+            $res = [];
+            foreach ($value->getCategories() as $item) {
+                // convert data from \Magento\CatalogStorefrontApi\Proto\Category
+                // to \Magento\CatalogStorefrontApi\Api\Data\Category
+                /** @var \Magento\CatalogStorefrontApi\Proto\Category $item **/
+                $p = function () use ($item) {
+                    $r = new \Magento\CatalogStorefrontApi\Api\Data\Category();
+                    $r->setId($item->getId());
+                    $r->setPath($item->getPath());
+                    $r->setPosition($item->getPosition());
+                    $r->setLevel($item->getLevel());
+                    $r->setChildrenCount($item->getChildrenCount());
+                    $r->setName($item->getName());
+                    $r->setDisplayMode($item->getDisplayMode());
+                    $r->setDefaultSortBy($item->getDefaultSortBy());
+                    $r->setUrlKey($item->getUrlKey());
+                    $r->setUrlPath($item->getUrlPath());
+                    $r->setIsActive($item->getIsActive());
+                    $r->setIsAnchor($item->getIsAnchor());
+                    $r->setIncludeInMenu($item->getIncludeInMenu());
+                    $r->setAvailableSortBy($item->getAvailableSortBy());
+                    $res = [];
+                    foreach ($item->getBreadcrumbs() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\Breadcrumb
+                        // to \Magento\CatalogStorefrontApi\Api\Data\Breadcrumb
+                        /** @var \Magento\CatalogStorefrontApi\Proto\Breadcrumb $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\Breadcrumb();
+                            $r->setCategoryId($item->getCategoryId());
+                            $r->setCategoryName($item->getCategoryName());
+                            $r->setCategoryLevel($item->getCategoryLevel());
+                            $r->setCategoryUrlKey($item->getCategoryUrlKey());
+                            $r->setCategoryUrlPath($item->getCategoryUrlPath());
+                            return $r;
+                        };
+                        $out = $p();
+                        $res[] = $out;
+                    }
+                    $r->setBreadcrumbs($res);
+
+                    $r->setDescription($item->getDescription());
+                    $r->setCanonicalUrl($item->getCanonicalUrl());
+                    $r->setProductCount($item->getProductCount());
+                    $r->setChildren($item->getChildren());
+                    $r->setImage($item->getImage());
+                    $r->setParentId($item->getParentId());
+                    $res = [];
+                    foreach ($item->getDynamicAttributes() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue
+                        // to \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue
+                        /** @var \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue();
+                            $r->setCode($item->getCode());
+                            $r->setValue($item->getValue());
+                            return $r;
+                        };
+                        $out = $p();
+                        $res[] = $out;
+                    }
+                    $r->setDynamicAttributes($res);
+
+                    return $r;
+                };
+                $out = $p();
+                $res[] = $out;
+            }
+            $r->setCategories($res);
+
+            $r->setStore($value->getStore());
+            $prop3 = $value->getParams();
+            if ($prop3 !== null) {
+                // convert data from \Magento\CatalogStorefrontApi\Proto\KeyValue
+                // to \Magento\CatalogStorefrontApi\Api\Data\KeyValue
+                /** @var \Magento\CatalogStorefrontApi\Proto\KeyValue $prop3 **/
+                $p = function () use ($prop3) {
+                    $r = new \Magento\CatalogStorefrontApi\Api\Data\KeyValue();
+                    $r->setKey($prop3->getKey());
+                    $r->setValue($prop3->getValue());
+                    return $r;
+                };
+                $out = $p();
+                $r->setParams($out);
+            }
+
+            return $r;
+        };
+        $out = $p();
+
+        return $out;
+    }
+
+    private function ImportCategoriesToProto(\Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface $value): \Magento\CatalogStorefrontApi\Proto\ImportCategoriesResponse
+    {
+        // convert data from \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponse
+        // to \Magento\CatalogStorefrontApi\Proto\ImportCategoriesResponse
+        /** @var \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponse $value **/
+        $p = function () use ($value) {
+            $r = new \Magento\CatalogStorefrontApi\Proto\ImportCategoriesResponse();
             $r->setStatus($value->getStatus());
             $r->setMessage($value->getMessage());
             return $r;
@@ -828,6 +1036,22 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     $r->setChildren($item->getChildren());
                     $r->setImage($item->getImage());
                     $r->setParentId($item->getParentId());
+                    $res = [];
+                    foreach ($item->getDynamicAttributes() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue
+                        // to \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue();
+                            $r->setCode($item->getCode());
+                            $r->setValue($item->getValue());
+                            return $r;
+                        };
+                        $proto = $p();
+                        $res[] = $proto;
+                    }
+                    $r->setDynamicAttributes($res);
+
                     return $r;
                 };
                 $proto = $p();

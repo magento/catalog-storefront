@@ -106,6 +106,7 @@ class CategoryList implements BatchResolverInterface
                     'store' => $store->getId(),
                     'attribute_codes' => $this->fieldResolver->getSchemaTypeFields($request->getInfo(), ['categoryList']),
                 ];
+
                 $storefrontRequests[] = [
                     'graphql_request' => $request,
                     'storefront_request' => $storefrontRequest

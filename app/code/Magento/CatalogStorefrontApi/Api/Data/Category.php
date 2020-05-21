@@ -96,6 +96,10 @@ final class Category implements CategoryInterface
      * @var string
      */
     private $parentId;
+    /**
+     * @var array
+     */
+    private $dynamicAttributes;
 
 
     /**
@@ -453,5 +457,22 @@ final class Category implements CategoryInterface
     public function setParentId(string $value): void
     {
         $this->parentId = $value;
+    }
+
+    /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface[]
+     */
+    public function getDynamicAttributes(): array
+    {
+        return (array) $this->dynamicAttributes;
+    }
+    
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface[] $value
+     * @return void
+     */
+    public function setDynamicAttributes(array $value): void
+    {
+        $this->dynamicAttributes = $value;
     }
 }

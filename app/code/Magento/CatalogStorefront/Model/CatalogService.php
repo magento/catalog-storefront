@@ -13,6 +13,8 @@ use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\Category;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryInterface;
 use Magento\CatalogStorefrontApi\Api\Data\Image;
+use Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItem;
+use Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface;
@@ -21,6 +23,7 @@ use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseInterface;
 use Magento\CatalogStorefront\DataProvider\ProductDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponse;
+use Magento\CatalogStorefrontApi\Api\Data\Video;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
@@ -69,35 +72,73 @@ class CatalogService implements CatalogServerInterface
         }
         $result = new ProductsGetResult();
         $products = [];
-        if (!empty($request->getIds())) {
-            $rawItems = $this->dataProvider->fetch(
-                $request->getIds(),
-                $request->getAttributeCodes(),
-                ['store' => $request->getStore()]
-            );
+        if (empty($request->getIds())) {
+            return $result;
+        }
 
-            foreach ($rawItems as $item) {
-                $item = $this->cleanUpNullValues($item);
-                $item['description'] = $item['description']['html'] ?? "";
-                //Convert option values to unified array format
-                if (!empty($item['options'])) {
-                    foreach ($item['options'] as &$option) {
-                        $firstValue = reset($option['value']);
-                        if (!is_array($firstValue)) {
-                            $option['value'] = [0 => $option['value']];
-                            continue;
-                        }
+        $rawItems = $this->dataProvider->fetch(
+            $request->getIds(),
+            $request->getAttributeCodes(),
+            ['store' => $request->getStore()]
+        );
+
+        foreach ($rawItems as $item) {
+            $item = $this->cleanUpNullValues($item);
+            $item['description'] = $item['description']['html'] ?? "";
+            //Convert option values to unified array format
+            if (!empty($item['options'])) {
+                foreach ($item['options'] as &$option) {
+                    $firstValue = reset($option['value']);
+                    if (!is_array($firstValue)) {
+                        $option['value'] = [0 => $option['value']];
+                        continue;
                     }
                 }
-                $product = new \Magento\CatalogStorefrontApi\Api\Data\Product();
-                $this->dataObjectHelper->populateWithArray($product, $item, ProductInterface::class);
-                $product = $this->setImage('image', $item, $product);
-                $product = $this->setImage('small_image', $item, $product);
-                $product = $this->setImage('thumbnail', $item, $product);
-
-                $products[] = $product;
             }
+
+            $product = new \Magento\CatalogStorefrontApi\Api\Data\Product();
+            $this->dataObjectHelper->populateWithArray($product, $item, ProductInterface::class);
+            $product = $this->setImage('image', $item, $product);
+            $product = $this->setImage('small_image', $item, $product);
+            $product = $this->setImage('thumbnail', $item, $product);
+
+            //PopulateWithArray doesn't work with non-array sub-objects which don't set properties using constructor
+            $mediaGalleryData = $item['media_gallery'] ?? [];
+            $mediaGallery = [];
+            foreach ($mediaGalleryData as $mediaGalleryDataItem) {
+                $mediaGalleryItem = new MediaGalleryItem;
+                $this->dataObjectHelper->populateWithArray(
+                    $mediaGalleryItem,
+                    $mediaGalleryDataItem,
+                    MediaGalleryItemInterface::class
+                );
+                if (!empty($mediaGalleryDataItem['video_content'])) {
+                    $videoContent = new Video;
+                    $videoContent->setMediaType($mediaGalleryDataItem['video_content']['media_type'] ?? "");
+                    $videoContent->setVideoDescription(
+                        $mediaGalleryDataItem['video_content']['video_description'] ?? ""
+                    );
+                    $videoContent->setVideoMetadata(
+                        $mediaGalleryDataItem['video_content']['video_metadata'] ?? ""
+                    );
+                    $videoContent->setVideoProvider(
+                        $mediaGalleryDataItem['video_content']['video_provider'] ?? ""
+                    );
+                    $videoContent->setVideoTitle(
+                        $mediaGalleryDataItem['video_content']['video_title'] ?? ""
+                    );
+                    $videoContent->setVideoUrl(
+                        $mediaGalleryDataItem['video_content']['video_url'] ?? ""
+                    );
+                    $mediaGalleryItem->setVideoContent($videoContent);
+                }
+
+                $mediaGallery[] = $mediaGalleryItem;
+            }
+            $product->setMediaGallery($mediaGallery);
+            $products[] = $product;
         }
+
         $result->setItems($products);
 
         return $result;
@@ -149,16 +190,16 @@ class CatalogService implements CatalogServerInterface
         CategoriesGetRequestInterface $request
     ): CategoriesGetResponseInterface {
         $result = new CategoriesGetResponse();
-
         $categories = $this->categoryDataProvider->fetch(
             $request->getIds(),
             \array_merge($request->getAttributeCodes(), ['is_active']),
             ['store' => $request->getStore()]
         );
+
         $items = [];
         foreach ($categories as $category) {
             $item = new Category();
-
+            $category = $this->cleanUpNullValues($category);
             $category = $this->convertKeyToString('image', $category);
             $category = $this->convertKeyToString('canonical_url', $category);
             $category = $this->convertKeyToString('description', $category);
@@ -178,6 +219,12 @@ class CatalogService implements CatalogServerInterface
                     $breadcrumbs[] = $breadcrumb;
                 }
             }
+            $categories = [];
+            foreach ($category['children'] ?? [] as $categoryId) {
+                $categories[$categoryId] = $categoryId;
+            }
+            $item->setChildren($categories);
+            //$item->setChildren($category['children'] ?? []);
             $items[] = $item;
         }
         $result->setItems($items);
