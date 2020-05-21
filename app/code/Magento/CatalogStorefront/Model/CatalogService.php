@@ -233,24 +233,11 @@ class CatalogService implements CatalogServerInterface
      */
     public function ImportCategories(ImportCategoriesRequestInterface $request): ImportCategoriesResponseInterface
     {
-        //TODO: REMOVE
-//        file_put_contents(
-//            '/Users/oleksandrpaliarush/Projects/kube-travis/first/import-log.txt',
-//            'ENTERED ImportCategories: ' . var_export($request, true),
-//            FILE_APPEND
-//        );
         try {
             $convertedRequest = $this->serviceOutputProcessor->convertValue(
                 $request,
                 ImportCategoriesRequestInterface::class
             );
-            //TODO: REMOVE
-
-//            file_put_contents(
-//                '/Users/oleksandrpaliarush/Projects/kube-travis/first/import-log.txt',
-//                'CONVERTED REQUEST ImportCategories: ' . var_export($convertedRequest, true),
-//                FILE_APPEND
-//            );
             $categories = $convertedRequest['categories'];
             $storeId = $convertedRequest['store'];
             $categoriesInElasticFormat = [];
@@ -276,10 +263,12 @@ class CatalogService implements CatalogServerInterface
                     $categoryInElasticFormat['is_anchor'] = $categoryInElasticFormat['is_anchor'] ? '1' : '0';
                     $categoryInElasticFormat['include_in_menu'] = $categoryInElasticFormat['include_in_menu'] ? '1' : '0';
                     $categoryInElasticFormat['store_id'] = (int)$categoryInElasticFormat['store_id'];
-                    $categoryInElasticFormat['url_path'] = !empty($categoryInElasticFormat['url_path']) ?? null;
-                    $categoryInElasticFormat['image'] = !empty($categoryInElasticFormat['image']) ?? null;
-                    $categoryInElasticFormat['description'] = !empty($categoryInElasticFormat['description']) ?? null;
-                    $categoryInElasticFormat['canonical_url'] = !empty($categoryInElasticFormat['canonical_url']) ?? null;
+
+                    $categoryInElasticFormat['url_path'] = !empty($categoryInElasticFormat['url_path']) ? $categoryInElasticFormat['url_path'] :  null;
+                    $categoryInElasticFormat['image'] = !empty($categoryInElasticFormat['image']) ? $categoryInElasticFormat['image'] : null;
+                    $categoryInElasticFormat['description'] = !empty($categoryInElasticFormat['description']) ? $categoryInElasticFormat['description'] : null;
+                    $categoryInElasticFormat['canonical_url'] = !empty($categoryInElasticFormat['canonical_url']) ? $categoryInElasticFormat['canonical_url'] : null;
+
                     $categoryInElasticFormat['product_count'] = (string)$categoryInElasticFormat['product_count'];
                     $categoryInElasticFormat['children_count'] = (string)$categoryInElasticFormat['children_count'];
                     $categoryInElasticFormat['level'] = (string)$categoryInElasticFormat['level'];
@@ -298,12 +287,6 @@ class CatalogService implements CatalogServerInterface
                     $categoriesInElasticFormat['category'][$storeId]['save'][] = $categoryInElasticFormat;
                 }
             }
-            //TODO: REMOVE
-            file_put_contents(
-                '/Users/oleksandrpaliarush/Projects/kube-travis/first/import-log.txt',
-                'BEFORE SAVE TO STORAGE ImportCategories: ' . var_export($categoriesInElasticFormat, true),
-                FILE_APPEND
-            );
             $this->catalogRepository->saveToStorage($categoriesInElasticFormat);
 
             $importCategoriesResponse = $this->importCategoriesResponseFactory->create();

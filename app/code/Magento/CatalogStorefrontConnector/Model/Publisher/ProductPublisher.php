@@ -167,7 +167,6 @@ class ProductPublisher
         $unnecessaryAttributeNames = [
             'entity_id',
             'row_id',
-            'categories',
             'store_id',
             'swatch_image'
         ];
@@ -195,6 +194,7 @@ class ProductPublisher
             'small_image',
             'thumbnail',
             'dynamic_attributes',
+            'categories',
 
             // TODO: Questionable attributes below, needed to preserve backward compatibility with current Catalog SF branch during refactoring
             'required_options',
