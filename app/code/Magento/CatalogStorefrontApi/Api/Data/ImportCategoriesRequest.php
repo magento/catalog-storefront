@@ -33,7 +33,7 @@ final class ImportCategoriesRequest implements ImportCategoriesRequestInterface
     {
         return (array) $this->categories;
     }
-
+    
     /**
      * @param \Magento\CatalogStorefrontApi\Api\Data\CategoryInterface[] $value
      * @return void
@@ -50,7 +50,7 @@ final class ImportCategoriesRequest implements ImportCategoriesRequestInterface
     {
         return (string) $this->store;
     }
-
+    
     /**
      * @param string $value
      * @return void
@@ -67,7 +67,7 @@ final class ImportCategoriesRequest implements ImportCategoriesRequestInterface
     {
         return $this->params;
     }
-
+    
     /**
      * @param \Magento\CatalogStorefrontApi\Api\Data\KeyValueInterface $value
      * @return void

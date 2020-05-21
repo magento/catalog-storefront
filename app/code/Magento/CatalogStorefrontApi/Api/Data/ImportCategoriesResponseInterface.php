@@ -17,7 +17,7 @@ interface ImportCategoriesResponseInterface
      * @return bool
      */
     public function getStatus(): bool;
-
+    
     /**
      * @param bool $value
      * @return void
@@ -28,7 +28,7 @@ interface ImportCategoriesResponseInterface
      * @return string
      */
     public function getMessage(): string;
-
+    
     /**
      * @param string $value
      * @return void

@@ -29,7 +29,7 @@ final class ImportCategoriesResponse implements ImportCategoriesResponseInterfac
     {
         return (bool) $this->status;
     }
-
+    
     /**
      * @param bool $value
      * @return void
@@ -46,7 +46,7 @@ final class ImportCategoriesResponse implements ImportCategoriesResponseInterfac
     {
         return (string) $this->message;
     }
-
+    
     /**
      * @param string $value
      * @return void

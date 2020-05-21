@@ -17,7 +17,7 @@ interface ImportCategoriesRequestInterface
      * @return \Magento\CatalogStorefrontApi\Api\Data\CategoryInterface[]
      */
     public function getCategories(): array;
-
+    
     /**
      * @param \Magento\CatalogStorefrontApi\Api\Data\CategoryInterface[] $value
      * @return void
@@ -28,7 +28,7 @@ interface ImportCategoriesRequestInterface
      * @return string
      */
     public function getStore(): string;
-
+    
     /**
      * @param string $value
      * @return void
@@ -39,7 +39,7 @@ interface ImportCategoriesRequestInterface
      * @return \Magento\CatalogStorefrontApi\Api\Data\KeyValueInterface|null
      */
     public function getParams(): ?\Magento\CatalogStorefrontApi\Api\Data\KeyValueInterface;
-
+    
     /**
      * @param \Magento\CatalogStorefrontApi\Api\Data\KeyValueInterface $value
      * @return void

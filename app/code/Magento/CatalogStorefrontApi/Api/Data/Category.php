@@ -109,7 +109,7 @@ final class Category implements CategoryInterface
     {
         return (string) $this->id;
     }
-
+    
     /**
      * @param string $value
      * @return void
@@ -126,7 +126,7 @@ final class Category implements CategoryInterface
     {
         return (string) $this->path;
     }
-
+    
     /**
      * @param string $value
      * @return void
@@ -143,7 +143,7 @@ final class Category implements CategoryInterface
     {
         return (int) $this->position;
     }
-
+    
     /**
      * @param int $value
      * @return void
@@ -160,7 +160,7 @@ final class Category implements CategoryInterface
     {
         return (int) $this->level;
     }
-
+    
     /**
      * @param int $value
      * @return void
@@ -177,7 +177,7 @@ final class Category implements CategoryInterface
     {
         return (int) $this->childrenCount;
     }
-
+    
     /**
      * @param int $value
      * @return void
@@ -194,7 +194,7 @@ final class Category implements CategoryInterface
     {
         return (string) $this->name;
     }
-
+    
     /**
      * @param string $value
      * @return void
@@ -211,7 +211,7 @@ final class Category implements CategoryInterface
     {
         return (string) $this->displayMode;
     }
-
+    
     /**
      * @param string $value
      * @return void
@@ -228,7 +228,7 @@ final class Category implements CategoryInterface
     {
         return (string) $this->defaultSortBy;
     }
-
+    
     /**
      * @param string $value
      * @return void
@@ -245,7 +245,7 @@ final class Category implements CategoryInterface
     {
         return (string) $this->urlKey;
     }
-
+    
     /**
      * @param string $value
      * @return void
@@ -262,7 +262,7 @@ final class Category implements CategoryInterface
     {
         return (string) $this->urlPath;
     }
-
+    
     /**
      * @param string $value
      * @return void
@@ -279,7 +279,7 @@ final class Category implements CategoryInterface
     {
         return (bool) $this->isActive;
     }
-
+    
     /**
      * @param bool $value
      * @return void
@@ -296,7 +296,7 @@ final class Category implements CategoryInterface
     {
         return (bool) $this->isAnchor;
     }
-
+    
     /**
      * @param bool $value
      * @return void
@@ -313,7 +313,7 @@ final class Category implements CategoryInterface
     {
         return (bool) $this->includeInMenu;
     }
-
+    
     /**
      * @param bool $value
      * @return void
@@ -330,7 +330,7 @@ final class Category implements CategoryInterface
     {
         return (array) $this->availableSortBy;
     }
-
+    
     /**
      * @param string[] $value
      * @return void
@@ -347,7 +347,7 @@ final class Category implements CategoryInterface
     {
         return (array) $this->breadcrumbs;
     }
-
+    
     /**
      * @param \Magento\CatalogStorefrontApi\Api\Data\BreadcrumbInterface[] $value
      * @return void
@@ -364,7 +364,7 @@ final class Category implements CategoryInterface
     {
         return (string) $this->description;
     }
-
+    
     /**
      * @param string $value
      * @return void
@@ -381,7 +381,7 @@ final class Category implements CategoryInterface
     {
         return (string) $this->canonicalUrl;
     }
-
+    
     /**
      * @param string $value
      * @return void
@@ -398,7 +398,7 @@ final class Category implements CategoryInterface
     {
         return (int) $this->productCount;
     }
-
+    
     /**
      * @param int $value
      * @return void
@@ -415,7 +415,7 @@ final class Category implements CategoryInterface
     {
         return (array) $this->children;
     }
-
+    
     /**
      * @param string[] $value
      * @return void
@@ -432,7 +432,7 @@ final class Category implements CategoryInterface
     {
         return (string) $this->image;
     }
-
+    
     /**
      * @param string $value
      * @return void
@@ -449,7 +449,7 @@ final class Category implements CategoryInterface
     {
         return (string) $this->parentId;
     }
-
+    
     /**
      * @param string $value
      * @return void
@@ -466,7 +466,7 @@ final class Category implements CategoryInterface
     {
         return (array) $this->dynamicAttributes;
     }
-
+    
     /**
      * @param \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface[] $value
      * @return void
