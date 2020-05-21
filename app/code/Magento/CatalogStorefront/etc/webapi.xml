@@ -17,4 +17,12 @@
             <!--<resource ref="Magento_Catalog::products" />-->
         </resources>
     </route>
+    <route url="/V1/storefront-categories" method="POST">
+        <service class="Magento\CatalogStorefrontApi\Api\CatalogServerInterface" method="ImportCategories"/>
+        <resources>
+            <!--TODO: Restrict permissions-->
+            <resource ref="anonymous" />
+            <!--<resource ref="Magento_Catalog::products" />-->
+        </resources>
+    </route>
 </routes>

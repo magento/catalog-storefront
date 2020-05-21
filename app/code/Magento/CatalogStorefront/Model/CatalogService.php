@@ -36,6 +36,8 @@ use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseFactory;
  */
 class CatalogService implements CatalogServerInterface
 {
+    private const ROOT_CATEGORY_ID = 1;
+
     /**
      * @var ProductDataProvider
      */
@@ -49,6 +51,11 @@ class CatalogService implements CatalogServerInterface
      * @var ImportProductsResponseFactory
      */
     private $importProductsResponseFactory;
+
+    /**
+     * @var ImportCategoriesResponseFactory
+     */
+    private $importCategoriesResponseFactory;
 
     /**
      * @var ServiceOutputProcessor
@@ -71,6 +78,7 @@ class CatalogService implements CatalogServerInterface
      * @param ProductDataProvider $dataProvider
      * @param DataObjectHelper $dataObjectHelper
      * @param ImportProductsResponseFactory $importProductsResponseFactory
+     * @param ImportCategoriesResponseFactory $importCategoriesResponseFactory
      * @param ServiceOutputProcessor $serviceOutputProcessor
      * @param CatalogRepository $catalogRepository
      * @param CategoryDataProvider $categoryDataProvider
@@ -79,6 +87,7 @@ class CatalogService implements CatalogServerInterface
         ProductDataProvider $dataProvider,
         DataObjectHelper $dataObjectHelper,
         ImportProductsResponseFactory $importProductsResponseFactory,
+        ImportCategoriesResponseFactory $importCategoriesResponseFactory,
         ServiceOutputProcessor $serviceOutputProcessor,
         CatalogRepository $catalogRepository,
         CategoryDataProvider $categoryDataProvider
@@ -86,6 +95,7 @@ class CatalogService implements CatalogServerInterface
         $this->dataProvider = $dataProvider;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->importProductsResponseFactory = $importProductsResponseFactory;
+        $this->importCategoriesResponseFactory = $importCategoriesResponseFactory;
         $this->serviceOutputProcessor = $serviceOutputProcessor;
         $this->catalogRepository = $catalogRepository;
         $this->categoryDataProvider = $categoryDataProvider;
@@ -218,12 +228,95 @@ class CatalogService implements CatalogServerInterface
     }
 
     /**
-     * @param ImportCategoriesRequestInterface $request
-     * @return ImportCategoriesResponseInterface
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface $request
+     * @return \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface
      */
     public function ImportCategories(ImportCategoriesRequestInterface $request): ImportCategoriesResponseInterface
     {
-        // TODO: Implement ImportCategories() method.
+        //TODO: REMOVE
+//        file_put_contents(
+//            '/Users/oleksandrpaliarush/Projects/kube-travis/first/import-log.txt',
+//            'ENTERED ImportCategories: ' . var_export($request, true),
+//            FILE_APPEND
+//        );
+        try {
+            $convertedRequest = $this->serviceOutputProcessor->convertValue(
+                $request,
+                ImportCategoriesRequestInterface::class
+            );
+            //TODO: REMOVE
+
+//            file_put_contents(
+//                '/Users/oleksandrpaliarush/Projects/kube-travis/first/import-log.txt',
+//                'CONVERTED REQUEST ImportCategories: ' . var_export($convertedRequest, true),
+//                FILE_APPEND
+//            );
+            $categories = $convertedRequest['categories'];
+            $storeId = $convertedRequest['store'];
+            $categoriesInElasticFormat = [];
+
+            foreach ($categories as $category) {
+                if (isset($category['id']) && ($category['id'] === self::ROOT_CATEGORY_ID)) {
+                    // Protect root category from modifications
+                    continue;
+                }
+                $categoryInElasticFormat = $category;
+                if (empty($categoryInElasticFormat)) {
+                    // TODO: Implemente Delete
+                    // $dataPerType[$entity->getEntityType()][$entity->getStoreId()][self::DELETE][] = $entity->getEntityId();
+                } else {
+                    $categoryInElasticFormat['store_id'] = $storeId;
+                    foreach ($categoryInElasticFormat['dynamic_attributes'] as $dynamicAttribute) {
+                        $categoryInElasticFormat[$dynamicAttribute['code']] = $dynamicAttribute['value'];
+                    }
+                    unset($categoryInElasticFormat['dynamic_attributes']);
+
+                    // TODO: Check if any of the following is required
+                    $categoryInElasticFormat['is_active'] = $categoryInElasticFormat['is_active'] ? '1' : '0';
+                    $categoryInElasticFormat['is_anchor'] = $categoryInElasticFormat['is_anchor'] ? '1' : '0';
+                    $categoryInElasticFormat['include_in_menu'] = $categoryInElasticFormat['include_in_menu'] ? '1' : '0';
+                    $categoryInElasticFormat['store_id'] = (int)$categoryInElasticFormat['store_id'];
+                    $categoryInElasticFormat['url_path'] = !empty($categoryInElasticFormat['url_path']) ?? null;
+                    $categoryInElasticFormat['image'] = !empty($categoryInElasticFormat['image']) ?? null;
+                    $categoryInElasticFormat['description'] = !empty($categoryInElasticFormat['description']) ?? null;
+                    $categoryInElasticFormat['canonical_url'] = !empty($categoryInElasticFormat['canonical_url']) ?? null;
+                    $categoryInElasticFormat['product_count'] = (string)$categoryInElasticFormat['product_count'];
+                    $categoryInElasticFormat['children_count'] = (string)$categoryInElasticFormat['children_count'];
+                    $categoryInElasticFormat['level'] = (string)$categoryInElasticFormat['level'];
+                    $categoryInElasticFormat['position'] = (string)$categoryInElasticFormat['position'];
+                    $categoryInElasticFormat['id'] = (int)$categoryInElasticFormat['id'];
+                    if (isset($categoryInElasticFormat['parent_id']) && empty($categoryInElasticFormat['parent_id'])) {
+                        unset($categoryInElasticFormat['parent_id']);
+                    }
+                    if (isset($categoryInElasticFormat['display_mode']) && empty($categoryInElasticFormat['display_mode'])) {
+                        unset($categoryInElasticFormat['display_mode']);
+                    }
+                    if (isset($categoryInElasticFormat['default_sort_by']) && empty($categoryInElasticFormat['default_sort_by'])) {
+                        unset($categoryInElasticFormat['default_sort_by']);
+                    }
+
+                    $categoriesInElasticFormat['category'][$storeId]['save'][] = $categoryInElasticFormat;
+                }
+            }
+            //TODO: REMOVE
+            file_put_contents(
+                '/Users/oleksandrpaliarush/Projects/kube-travis/first/import-log.txt',
+                'BEFORE SAVE TO STORAGE ImportCategories: ' . var_export($categoriesInElasticFormat, true),
+                FILE_APPEND
+            );
+            $this->catalogRepository->saveToStorage($categoriesInElasticFormat);
+
+            $importCategoriesResponse = $this->importCategoriesResponseFactory->create();
+            $importCategoriesResponse->setMessage('Records imported successfully');
+            $importCategoriesResponse->setStatus(true);
+            return $importCategoriesResponse;
+        } catch (\Exception $e) {
+            // TODO: Hide real message in production
+            $importCategoriesResponse = $this->importCategoriesResponseFactory->create();
+            $importCategoriesResponse->setMessage($e->getMessage());
+            $importCategoriesResponse->setStatus(false);
+            return $importCategoriesResponse;
+        }
     }
 
     public function GetCategories(

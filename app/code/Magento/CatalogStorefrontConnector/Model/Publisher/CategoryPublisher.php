@@ -249,18 +249,18 @@ class CategoryPublisher
 
     /**
      * @param int $storeId
-     * @param array $products
+     * @param array $categories
      */
-    private function importProducts($storeId, array $products): void
+    private function importCategories($storeId, array $categories): void
     {
-        foreach ($products as &$product) {
-//            $this->temporaryProductTransformation($product);
+        foreach ($categories as &$category) {
+//            $this->temporaryProductTransformation($category);
         }
 
         try {
             $this->restClient->post(
                 '/V1/storefront-categories',
-                ['request' => ['categories' => $products, 'store' => $storeId]],
+                ['request' => ['categories' => $categories, 'store' => $storeId]],
                 ["Content-Type: application/json"]
             );
         } catch (\Exception $e) {
