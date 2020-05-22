@@ -11,6 +11,8 @@ namespace Magento\CatalogMessageBroker\Model;
 interface FetchProductsInterface
 {
     /**
+     * Fetch product data
+     *
      * @param string[] $ids
      * @return array
      */

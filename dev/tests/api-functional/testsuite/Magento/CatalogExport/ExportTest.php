@@ -58,7 +58,6 @@ class ExportTestTest extends WebapiAbstract
         'url',
     ];
 
-
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -74,7 +73,7 @@ class ExportTestTest extends WebapiAbstract
                 'serviceVersion' => 'V1',
                 'operation' => 'catalogExportApiProductRepositoryV1Get',
             ],
-       ];
+        ];
     }
 
     /**
@@ -82,6 +81,8 @@ class ExportTestTest extends WebapiAbstract
      */
     public function testExport()
     {
+        $this->_markTestAsRestOnly('SOAP will be covered in another test');
+
         $this->reindex();
 
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
@@ -99,7 +100,7 @@ class ExportTestTest extends WebapiAbstract
         for ($i = 0; $i < $n; $i++) {
             foreach ($this->attributesToCompare as $attribute) {
                 $this->compareComplexValue(
-                    $expected[$i][$this->snakeToCamelCase($attribute)],
+                    $expected[$i][$attribute],
                     $actual[$i][$attribute]
                 );
             }
@@ -113,33 +114,26 @@ class ExportTestTest extends WebapiAbstract
                 sizeof($expected),
                 sizeof($actual),
                 'Expected and actual are of different size, expected '
-                    . json_encode($expected)
-                    . ', actual '
-                    . json_encode($actual)
-                    . '.'
+                . json_encode($expected)
+                . ', actual '
+                . json_encode($actual)
+                . '.'
             );
             foreach (array_keys($expected) as $key) {
                 $snakeCaseKey = $this->camelToSnakeCase($key);
                 $this->assertTrue(
                     isset($actual[$snakeCaseKey]),
                     $snakeCaseKey . 'doesn\'t exist, '
-                        . json_encode($expected)
-                        . ', actual '
-                        . json_encode($actual)
-                        . '.'
+                    . json_encode($expected)
+                    . ', actual '
+                    . json_encode($actual)
+                    . '.'
                 );
                 $this->compareComplexValue($expected[$key], $actual[$snakeCaseKey]);
             }
         } else {
             $this->assertEquals($expected, $actual);
         }
-    }
-
-    private function snakeToCamelCase($string)
-    {
-        $string = str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
-        $string[0] = strtolower($string[0]);
-        return $string;
     }
 
     private function camelToSnakeCase($string)

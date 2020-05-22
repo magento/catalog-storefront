@@ -125,6 +125,8 @@ class ProductsConsumer extends OldConsumer
     }
 
     /**
+     * Override data returned from old API with data returned from new API
+     *
      * @param array $product
      * @param array $override
      * @return array

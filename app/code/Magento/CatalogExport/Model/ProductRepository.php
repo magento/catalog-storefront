@@ -14,6 +14,9 @@ use Magento\CatalogExportApi\Api\ProductRepositoryInterface;
  */
 class ProductRepository implements ProductRepositoryInterface
 {
+    /**
+     * Max items in response
+     */
     private const MAX_ITEMS_IN_RESPONSE = 250;
 
     /**
@@ -93,3 +96,4 @@ class ProductRepository implements ProductRepositoryInterface
         return $maxItemsInResponse ?: self::MAX_ITEMS_IN_RESPONSE;
     }
 }
+
