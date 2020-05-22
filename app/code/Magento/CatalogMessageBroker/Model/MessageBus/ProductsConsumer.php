@@ -118,7 +118,6 @@ class ProductsConsumer extends OldConsumer
             }
         }
         try {
-            print_r($dataPerType);
             $this->saveToStorage($dataPerType);
         } catch (\Throwable $e) {
             $this->logger->critical($e);
