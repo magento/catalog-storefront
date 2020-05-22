@@ -37,16 +37,16 @@ class ExportTestTest extends WebapiAbstract
         'sku',
         'name',
         'type',
-        'meta_description',
-        'meta_keyword',
-        'meta_title',
+        //'meta_description',
+        //'meta_keyword',
+        //'meta_title',
         'status',
         'tax_class_id',
         'created_at',
         'updated_at',
         'url_key',
         'visibility',
-        'weight',
+        //'weight',
         'currency',
         'displayable',
         'buyable',
@@ -57,6 +57,7 @@ class ExportTestTest extends WebapiAbstract
         'low_stock',
         'url',
     ];
+
 
     protected function setUp()
     {
@@ -100,7 +101,7 @@ class ExportTestTest extends WebapiAbstract
         for ($i = 0; $i < $n; $i++) {
             foreach ($this->attributesToCompare as $attribute) {
                 $this->compareComplexValue(
-                    $expected[$i][$attribute],
+                    $expected[$i][$this->snakeToCamelCase($attribute)],
                     $actual[$i][$attribute]
                 );
             }
@@ -134,6 +135,13 @@ class ExportTestTest extends WebapiAbstract
         } else {
             $this->assertEquals($expected, $actual);
         }
+    }
+
+    private function snakeToCamelCase($string)
+    {
+        $string = str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
+        $string[0] = strtolower($string[0]);
+        return $string;
     }
 
     private function camelToSnakeCase($string)
