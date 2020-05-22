@@ -109,10 +109,11 @@ class ProductsConsumer extends OldConsumer
                     }
                 }
             );
-            $product = $this->mergeData(array_pop($products), $override);
+            $product = array_pop($products);
             if (empty($product)) {
                 $dataPerType['product'][$storeId][self::DELETE][] = $product['entity_id'];
             } else {
+                $product = $this->mergeData(array_pop($products), $override);
                 $product['store_id'] = $storeId;
                 $dataPerType['product'][$storeId][self::SAVE][] = $product;
             }
@@ -142,12 +143,12 @@ class ProductsConsumer extends OldConsumer
                 'meta_description' => $override['meta_description'],
                 'meta_keyword' => $override['meta_keyword'],
                 'meta_title' => $override['meta_title'],
-                'tax_class_id' => $override['tax_class_id'],
+                //'tax_class_id' => $override['tax_class_id'],
                 'created_at' => $override['created_at'],
                 'updated_at' => $override['updated_at'],
                 'url_key' => $override['url_key'],
-                'visibility' => $override['visibility'],
-                'weight' => $override['weight'],
+                //'visibility' => $override['visibility'],
+                //'weight' => $override['weight'],
             ]
         );
     }
