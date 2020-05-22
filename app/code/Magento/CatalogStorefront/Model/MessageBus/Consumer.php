@@ -76,7 +76,6 @@ class Consumer
     {
         try {
             $dataPerType = $this->collectDataByEntityTypeAnsScope($entities);
-            //print_r($dataPerType);
             $this->saveToStorage($dataPerType);
         } catch (\Throwable $e) {
             $this->logger->critical($e);
