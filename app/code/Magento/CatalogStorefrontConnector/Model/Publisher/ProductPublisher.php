@@ -123,15 +123,15 @@ class ProductPublisher
                 \sprintf('Publish products with ids "%s" in store %s', \implode(', ', $productIds), $storeId),
                 ['verbose' => $productsData]
             );
-            foreach ($idsBunch as $productId) {
-                $product = $productsData[$productId] ?? [];
-                $messages[] = $this->messageBuilder->build(
-                    $storeId,
-                    'product',
-                    $productId,
-                    $product
-                );
-            }
+            foreach ($productIds as $productId) {
+                if (!isset($productsData[$productId])) {
+                    $messages[] = $this->messageBuilder->build(
+                        $storeId,
+                        'product',
+                        $productId,
+                        []
+                    );
+                }            }
             if (!empty($messages)) {
                 $this->queuePublisher->publish(self::TOPIC_NAME, $messages);
             }

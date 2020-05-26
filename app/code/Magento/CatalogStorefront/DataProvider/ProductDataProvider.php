@@ -102,7 +102,7 @@ class ProductDataProvider
             if (isset($product['configurable_options'])) {
                 $product['configurable_options'] = \json_decode($product['configurable_options'], true);
             }
-            if (isset($product['variants'])) {
+            if (isset($product['variants']) && is_string($product['variants'])) {
                 $product['variants'] = \json_decode($product['variants'], true);
             }
         }

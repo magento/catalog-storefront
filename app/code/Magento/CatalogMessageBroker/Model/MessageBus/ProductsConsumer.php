@@ -131,7 +131,6 @@ class ProductsConsumer extends OldConsumer
      */
     private function mergeData($product, $override)
     {
-        return $product;
         return array_merge(
             $product,
             [
