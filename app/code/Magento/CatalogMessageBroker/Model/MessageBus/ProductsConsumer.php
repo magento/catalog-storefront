@@ -92,10 +92,16 @@ class ProductsConsumer extends OldConsumer
         $ids = json_decode($ids, true);
         $dataPerType = [];
         $overrides = $this->fetchProducts->execute($ids);
+
+        // @todo eliminate store manager
+        $stores = $this->storeManager->getStores(true);
+        $storesToIds = [];
+        foreach ($stores as $store) {
+            $storesToIds[$store->getCode()] = $store->getId();
+        }
+
         foreach ($overrides as $override) {
-            // @todo eliminate store manager
-            $store = $this->storeManager->getStores(false, $override['store_view_code']);
-            $storeId = array_pop($store)->getId();
+            $storeId = $storesToIds[$override['store_view_code']];
             $products = [];
             // @todo this is taken from old consumer, need to revise in the future
             $this->appState->emulateAreaCode(
