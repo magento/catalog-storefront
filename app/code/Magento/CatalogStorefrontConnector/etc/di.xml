@@ -41,6 +41,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogStorefrontConnector\Command\Sync">
+        <arguments>
+            <argument name="productFeedIndexer" xsi:type="object">Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher">
         <arguments>
             <argument name="batchSize" xsi:type="number">500</argument>
