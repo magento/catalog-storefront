@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Class StoreSaveTest
+ * Class StoreSaveTest covers product and category verification in newly created store
  */
 class StoreSaveTest extends GraphQlAbstract
 {
