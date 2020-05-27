@@ -113,6 +113,7 @@ QUERY;
      */
     public function testCategoryWithOutOfStockProductManageStockEnabled()
     {
+        self::markTestSkipped("Skip test due to 'MC-31166: Update aggregation data on SF service' task");
         $categoryId = 2;
         $sku = 'simple-out-of-stock';
         $manageStock = $this->scopeConfig->getValue(Configuration::XML_PATH_MANAGE_STOCK);
@@ -204,6 +205,7 @@ QUERY;
      */
     public function testCategoryWithOutOfStockProductShowOutOfStockProduct()
     {
+        self::markTestSkipped("Skip test due to 'MC-31166: Update aggregation data on SF service' task");
         $showOutOfStock = $this->scopeConfig->getValue(Configuration::XML_PATH_SHOW_OUT_OF_STOCK);
 
         $this->resourceConfig->saveConfig(Configuration::XML_PATH_SHOW_OUT_OF_STOCK, 1);
@@ -232,6 +234,7 @@ QUERY;
      */
     public function testCategoryWithConfigurableChildrenOutOfStock()
     {
+        self::markTestSkipped("Skip test due to 'MC-31166: Update aggregation data on SF service' task");
         $categoryId = 2;
 
         $this->categoryLinkManagement->assignProductToCategories('configurable', [$categoryId]);

@@ -85,6 +85,7 @@ class RequestBuilder
 
         $attributes = $this->fieldResolver->getSchemaTypeFields($info, ['products'], 'items');
         $aggregations = $this->fieldResolver->getSchemaTypeFields($info, ['products'], 'aggregations');
+        $filters = $this->fieldResolver->getSchemaTypeFields($info, ['products'], 'filters');
         $totalCount = $this->fieldResolver->getSchemaTypeFields($info, ['products'], 'totalCount');
 
         $metaInfo = [];
@@ -92,7 +93,7 @@ class RequestBuilder
             $metaInfo['totalCount'] = true;
         }
         // null - retrieve all aggregations, [] - do not return aggregations
-        $aggregations = !empty($aggregations) ? null : [];
+        $aggregations = (!empty($aggregations) || !empty($filters)) ? null : [];
 
         $page = [
             'currentPage' => $args['currentPage'],

@@ -98,6 +98,18 @@ class Category extends \Google\Protobuf\Internal\Message
      */
     protected $parent_id = '';
     /**
+     * Generated from protobuf field <code>string meta_title = 22;</code>
+     */
+    protected $meta_title = '';
+    /**
+     * Generated from protobuf field <code>string meta_description = 23;</code>
+     */
+    protected $meta_description = '';
+    /**
+     * Generated from protobuf field <code>string meta_keywords = 24;</code>
+     */
+    protected $meta_keywords = '';
+    /**
      * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DynamicAttributeValue dynamic_attributes = 50;</code>
      */
     private $dynamic_attributes;
@@ -129,6 +141,9 @@ class Category extends \Google\Protobuf\Internal\Message
      *     @type string[]|\Google\Protobuf\Internal\RepeatedField $children
      *     @type string $image
      *     @type string $parent_id
+     *     @type string $meta_title
+     *     @type string $meta_description
+     *     @type string $meta_keywords
      *     @type \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue[]|\Google\Protobuf\Internal\RepeatedField $dynamic_attributes
      * }
      */
@@ -596,6 +611,72 @@ class Category extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, true);
         $this->parent_id = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string meta_title = 22;</code>
+     * @return string
+     */
+    public function getMetaTitle()
+    {
+        return $this->meta_title;
+    }
+
+    /**
+     * Generated from protobuf field <code>string meta_title = 22;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setMetaTitle($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->meta_title = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string meta_description = 23;</code>
+     * @return string
+     */
+    public function getMetaDescription()
+    {
+        return $this->meta_description;
+    }
+
+    /**
+     * Generated from protobuf field <code>string meta_description = 23;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setMetaDescription($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->meta_description = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string meta_keywords = 24;</code>
+     * @return string
+     */
+    public function getMetaKeywords()
+    {
+        return $this->meta_keywords;
+    }
+
+    /**
+     * Generated from protobuf field <code>string meta_keywords = 24;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setMetaKeywords($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->meta_keywords = $var;
 
         return $this;
     }

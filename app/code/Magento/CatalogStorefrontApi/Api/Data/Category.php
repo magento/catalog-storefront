@@ -97,6 +97,18 @@ final class Category implements CategoryInterface
      */
     private $parentId;
     /**
+     * @var string
+     */
+    private $metaTitle;
+    /**
+     * @var string
+     */
+    private $metaDescription;
+    /**
+     * @var string
+     */
+    private $metaKeywords;
+    /**
      * @var array
      */
     private $dynamicAttributes;
@@ -457,6 +469,57 @@ final class Category implements CategoryInterface
     public function setParentId(string $value): void
     {
         $this->parentId = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaTitle(): string
+    {
+        return (string) $this->metaTitle;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setMetaTitle(string $value): void
+    {
+        $this->metaTitle = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaDescription(): string
+    {
+        return (string) $this->metaDescription;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setMetaDescription(string $value): void
+    {
+        $this->metaDescription = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaKeywords(): string
+    {
+        return (string) $this->metaKeywords;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setMetaKeywords(string $value): void
+    {
+        $this->metaKeywords = $value;
     }
 
     /**

@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <!-- Base resolvers -->
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Products" type="Magento\CatalogStorefrontGraphQl\Resolver\Products" />
+    <preference for="Magento\CatalogGraphQl\Model\Resolver\Product" type="Magento\CatalogStorefrontGraphQl\Resolver\Product" />
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Category\Products" type="Magento\CatalogStorefrontGraphQl\Resolver\Category\Products" />
     <preference for="Magento\CatalogGraphQl\Model\Resolver\CategoryList" type="Magento\CatalogStorefrontGraphQl\Resolver\Category\CategoryList" />
     <preference for="Magento\CatalogGraphQl\Model\Resolver\CategoryTree" type="Magento\CatalogStorefrontGraphQl\Resolver\Category\CategoryTree" />
@@ -61,7 +62,7 @@
                 </item>
                 <item name="ConfigurableVariant" xsi:type="array">
                     <item name="attributes" xsi:type="string">attributes</item>
-                    <item name="product" xsi:type="string">product</item>
+<!--                    <item name="product" xsi:type="string">product</item>-->
                 </item>
                 <item name="DownloadableProduct" xsi:type="array">
                     <item name="downloadable_product_samples" xsi:type="string">downloadable_product_samples</item>

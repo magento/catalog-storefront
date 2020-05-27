@@ -96,6 +96,28 @@ class ProductSearch
             ? $this->layerBuilder->build($aggregations, (int)$storefrontRequest['scopes']['store'])
             : [];
 
+        //TODO: Remove dependency on CatalogGraphQl module
+        $buckets = [];
+        foreach ($request['additional_info']['aggregations'] as $bucket) {
+            $values = [];
+            foreach ($bucket['options'] as $option) {
+                $values[] = new \Magento\Framework\Search\Response\Aggregation\Value($option['label'], [
+                    'count' => $option['count'],
+                    'value' => $option['value']
+                ]);
+            }
+            $attributeCode = $bucket['attribute_code'] == 'category_id'
+                ? 'category'
+                : $bucket['attribute_code'];
+            $bucket = new \Magento\Framework\Search\Response\Bucket($attributeCode, $values);
+            $buckets[$attributeCode] = $bucket;
+
+        }
+        $searchResult = new \Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult([
+            'searchAggregation' => new \Magento\Framework\Search\Response\Aggregation($buckets)
+        ]);
+        $request['additional_info']['search_result'] = $searchResult;
+
         return $request;
     }
 

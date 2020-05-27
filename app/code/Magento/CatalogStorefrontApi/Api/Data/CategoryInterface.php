@@ -245,6 +245,39 @@ interface CategoryInterface
     public function setParentId(string $value): void;
 
     /**
+     * @return string
+     */
+    public function getMetaTitle(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setMetaTitle(string $value): void;
+
+    /**
+     * @return string
+     */
+    public function getMetaDescription(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setMetaDescription(string $value): void;
+
+    /**
+     * @return string
+     */
+    public function getMetaKeywords(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setMetaKeywords(string $value): void;
+
+    /**
      * @return \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface[]
      */
     public function getDynamicAttributes(): array;

@@ -65,11 +65,9 @@ class Products implements BatchResolverInterface
                 = $storefrontRequest['storefront_request']['attributes'];
             $storefrontRequest['storefront_request']['store']
                 = $storefrontRequest['storefront_request']['scopes']['store'] ?? null;
-
             $storefrontRequests[] = $storefrontRequest;
-            //var_dump($storefrontRequest['storefront_request']);
+
         }
-        //exit;
 
         return $this->serviceInvoker->invoke(
             CatalogServerInterface::class,

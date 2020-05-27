@@ -21,7 +21,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\GroupedProduct\\": ""
+            "Magento\\GroupedProductExtractor\\": ""
         }
     }
 }

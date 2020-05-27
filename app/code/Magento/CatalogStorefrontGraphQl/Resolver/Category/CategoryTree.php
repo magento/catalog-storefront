@@ -8,9 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefrontGraphQl\Resolver\Category;
 
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
-use Magento\CatalogStorefrontApi\Api\CategoryInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
-use Magento\CatalogStorefrontApi\Api\Data\CategoryResultContainerInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -69,12 +67,13 @@ class CategoryTree implements BatchResolverInterface
     {
         $scopes = $this->scopeProvider->getScopes($context);
         $storefrontRequests = [];
+
         foreach ($requests as $request) {
             $storefrontRequest = ['scopes' => $scopes, 'store' => $scopes['store']];
 
             if ($field->getName() == 'category') {
                 $categoryId = $request->getArgs()['id'] ?? null;
-                if (!$categoryId) {
+                if (is_null($categoryId)) {
                     $store = $context->getExtensionAttributes()->getStore();
                     $categoryId = (int)$store->getRootCategoryId();
                 }
@@ -103,7 +102,10 @@ class CategoryTree implements BatchResolverInterface
             $storefrontRequests[] = [
                 'graphql_request' => $request,
                 'storefront_request' => $storefrontRequest,
-                'additional_info' => ['type' => $type]
+                'additional_info' => [
+                    'type' => $type,
+                    'category_ids' => $storefrontRequest['ids']
+                ]
             ];
         }
 
@@ -119,16 +121,23 @@ class CategoryTree implements BatchResolverInterface
             ) use ($context) {
                 $output = [];
 
+                if (count($result->getItems()) != count($additionalInfo['category_ids'])) {
+                    throw new GraphQlNoSuchEntityException(
+                        __('Category doesn\'t exist')
+                    );
+                }
+
                 foreach ($result->getItems() as $item) {
                     $itemOutput = [
                         'id' => $item->getId(),
+                        'entity_id' => $item->getId(),
                         'path' => $item->getPath(),
                         'url_key' => $item->getUrlKey(),
                         'image' => $item->getImage(),
                         'description' => $item->getDescription(),
                         'name' => $item->getName(),
                         'available_sort_by' => $item->getAvailableSortBy(),
-                        'canonical_url' => $item->getCanonicalUrl(),
+                        'canonical_url' => empty($item->getCanonicalUrl()) ? null : $item->getCanonicalUrl(),
                         'children_count' => $item->getChildrenCount(),
                         'default_sort_by' => $item->getDefaultSortBy(),
                         'include_in_menu' => $item->getIncludeInMenu(),
@@ -139,6 +148,10 @@ class CategoryTree implements BatchResolverInterface
                         'url_path' => $item->getUrlPath(),
                         'display_mode' => $item->getDisplayMode(),
                         'children' => $item->getChildren(),
+                        'meta_title' => $item->getMetaTitle(),
+                        'meta_description' => $item->getMetaDescription(),
+                        'meta_keywords' => $item->getMetaKeywords(),
+                        'product_count' => $item->getProductCount(),
                     ];
 
                     foreach ($item->getBreadcrumbs() as $offset => $breadcrumb) {

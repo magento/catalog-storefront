@@ -29,7 +29,7 @@ use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface;
-use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseFactory;
+use Magento\Framework\Exception\NotFoundException;
 
 /**
  * @inheritdoc
@@ -85,9 +85,28 @@ class CatalogService implements CatalogServerInterface
             ['store' => $request->getStore()]
         );
 
+        if (count($rawItems) != count($request->getIds())) {
+            var_dump($request->getIds(), array_keys($rawItems));
+            throw new NotFoundException(__(
+                'Products with the following ids are not found in catalog: %1',
+                implode(', ', array_diff($request->getIds(), array_keys($rawItems)))
+            ));
+        }
+
         foreach ($rawItems as $item) {
             $item = $this->cleanUpNullValues($item);
+            $variants = [];
+            foreach ($item['variants'] ?? [] as $productId => $variantData) {
+                $variant = [
+                    'product' => $productId,
+                    'attributes' => $variantData['attributes']
+                ];
+                $variants[] = $variant;
+            }
+            $item['variants'] = $variants;
+
             $item['description'] = $item['description']['html'] ?? "";
+            $item['short_description'] = $item['short_description']['html'] ?? "";
             //Convert option values to unified array format
             if (!empty($item['options'])) {
                 foreach ($item['options'] as &$option) {

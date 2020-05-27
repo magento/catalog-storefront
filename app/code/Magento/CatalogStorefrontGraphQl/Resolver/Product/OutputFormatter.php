@@ -39,12 +39,12 @@ class OutputFormatter
         BatchRequestItemInterface $request,
         array $additionalInfo = []
     ) {
-//        $errors = $result->getErrors() ?: $additionalInfo['errors'] ?: [];
-//        if (!empty($errors)) {
-//            //ad-hoc solution with __() as GraphQlInputException accepts Phrase in construct
-//            //TODO: change with error holder
-//            throw new GraphQlInputException(__(\implode('; ', \array_map('\strval', $errors))));
-//        }
+        $errors = $additionalInfo['errors'] ?: [];
+        if (!empty($errors)) {
+            //ad-hoc solution with __() as GraphQlInputException accepts Phrase in construct
+            //TODO: change with error holder
+            throw new GraphQlInputException(__(\implode('; ', \array_map('\strval', $errors))));
+        }
 
         $items = array_map(function (\Magento\CatalogStorefrontApi\Api\Data\ProductInterface $item) {
             $result = [
@@ -72,7 +72,7 @@ class OutputFormatter
                 'special_price' => $item->getSpecialPrice(),
                 'special_from_date' => $item->getSpecialFromDate(),
                 'special_to_date' => $item->getSpecialToDate(),
-                'canonical_url' => empty($item->getCanonicalUrl()) ? null : $item->getCanonicalUrl(),
+                'canonical_url' => empty($item->getCanonicalUrl()) ? null : $item->getCanonicalUrl()
             ];
 
             if ($item->getImage()) {
@@ -183,6 +183,21 @@ class OutputFormatter
                     "link_type" => $item->getLinkType(),
                 ];
             }, $item->getProductLinks());
+            if (!empty($item->getVariants())) {
+                $result['variants'] = array_map(function($item) {
+                    $output = [
+                        'product' => $item->getProduct(),
+                        'attributes' => array_map(function($item) {
+                            return [
+                                'label' => $item->getLabel(),
+                                'code' => $item->getCode(),
+                                'value_index' => $item->getValueIndex()
+                            ];
+                        }, $item->getAttributes())
+                    ];
+                    return $output;
+                }, $item->getVariants());
+            }
 
             return $result;
         }, $result->getItems());
@@ -190,6 +205,7 @@ class OutputFormatter
 
         $metaInfo = $additionalInfo['meta_info'] ?? [];
         $aggregations = $additionalInfo['aggregations'] ?? [];
+
         return [
             'items' => $items,
             'aggregations' => $aggregations,
@@ -199,6 +215,7 @@ class OutputFormatter
                 'current_page' => $metaInfo['current_page'] ?? null,
                 'total_pages' => $metaInfo['total_pages'] ?? null,
             ],
+            'search_result' => $additionalInfo['search_result'] ?? null,
             // for backward compatibility: support "filters" field
             'layer_type' => isset($request->getArgs()['search'])
                 ? Resolver::CATALOG_LAYER_SEARCH

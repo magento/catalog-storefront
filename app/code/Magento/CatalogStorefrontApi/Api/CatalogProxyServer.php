@@ -886,6 +886,9 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     $r->setChildren($item->getChildren());
                     $r->setImage($item->getImage());
                     $r->setParentId($item->getParentId());
+                    $r->setMetaTitle($item->getMetaTitle());
+                    $r->setMetaDescription($item->getMetaDescription());
+                    $r->setMetaKeywords($item->getMetaKeywords());
                     $res = [];
                     foreach ($item->getDynamicAttributes() as $item) {
                         // convert data from \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue
@@ -1036,6 +1039,9 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     $r->setChildren($item->getChildren());
                     $r->setImage($item->getImage());
                     $r->setParentId($item->getParentId());
+                    $r->setMetaTitle($item->getMetaTitle());
+                    $r->setMetaDescription($item->getMetaDescription());
+                    $r->setMetaKeywords($item->getMetaKeywords());
                     $res = [];
                     foreach ($item->getDynamicAttributes() as $item) {
                         // convert data from \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue

@@ -93,6 +93,7 @@ class CategoryList implements BatchResolverInterface
                 $categoryIds = [];
 
                 $store = $context->getExtensionAttributes()->getStore();
+
                 if (!isset($request->getArgs()['filters'])) {
                     $categoryIds[] = (int)$store->getRootCategoryId();
                 } else {
@@ -113,6 +114,7 @@ class CategoryList implements BatchResolverInterface
                 ];
             }
         } catch (InputException $e) {
+            throw $e;
             $batchResponse = $batchResponse ?? new BatchResponse();
             $batchResponse->addResponse($request, []);
         }
@@ -147,7 +149,7 @@ class CategoryList implements BatchResolverInterface
                         'description' => $item->getDescription(),
                         'name' => $item->getName(),
                         'available_sort_by' => $item->getAvailableSortBy(),
-                        'canonical_url' => $item->getCanonicalUrl(),
+                        'canonical_url' => empty($item->getCanonicalUrl()) ? null : $item->getCanonicalUrl(),
                         'children_count' => $item->getChildrenCount(),
                         'default_sort_by' => $item->getDefaultSortBy(),
                         'include_in_menu' => $item->getIncludeInMenu(),
@@ -157,6 +159,11 @@ class CategoryList implements BatchResolverInterface
                         'position' => $item->getPosition(),
                         'url_path' => $item->getUrlPath(),
                         'display_mode' => $item->getDisplayMode(),
+                        'children' => $item->getChildren(),
+                        'meta_title' => $item->getMetaTitle(),
+                        'meta_description' => $item->getMetaDescription(),
+                        'meta_keywords' => $item->getMetaKeywords(),
+                        'product_count' => $item->getProductCount()
                     ];
 
                     foreach ($item->getBreadcrumbs() as $offset => $breadcrumb) {
