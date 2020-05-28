@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="services_connector" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="0" showInStore="0">
+            <label>Magento Services</label>
+            <tab>service</tab>
+            <resource>Magento_ServicesConnector::config_integration</resource>
+            <group id="services_connector_integration" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Api Keys</label>
+                <field id="production_api_key" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Production Api Key</label>
+                    <comment>Production API Key is a value passed in by Magento calling Magento Services in Production environment.</comment>
+                </field>
+                <field id="sandbox_api_key" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Sandbox Api Key</label>
+                    <comment>Sandbox API Key is a value passed in by Magento calling Magento Services in Sandbox environment.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
