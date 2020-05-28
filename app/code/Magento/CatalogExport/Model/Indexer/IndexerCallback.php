@@ -37,8 +37,12 @@ class IndexerCallback implements IndexerCallbackInterface
     {
         foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
             if (!empty($idsChunk)) {
-                // @todo understand why string[] doesn't work
-                $this->queuePublisher->publish(self::TOPIC_NAME, json_encode($idsChunk));
+                try {
+                    // @todo understand why string[] doesn't work
+                    $this->queuePublisher->publish(self::TOPIC_NAME, json_encode($idsChunk));
+                } catch (\Exception $e) {
+
+                }
             }
         }
     }
