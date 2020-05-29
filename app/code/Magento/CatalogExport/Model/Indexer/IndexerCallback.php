@@ -9,6 +9,7 @@ namespace Magento\CatalogExport\Model\Indexer;
 
 use Magento\CatalogDataExporter\Model\Indexer\IndexerCallbackInterface;
 use Magento\Framework\MessageQueue\PublisherInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Publishes ids of updated products in queue
@@ -19,15 +20,26 @@ class IndexerCallback implements IndexerCallbackInterface
 
     private const TOPIC_NAME = 'catalog.export.product.data';
 
+    /**
+     * @var PublisherInterface
+     */
     private $queuePublisher;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * @param PublisherInterface $queuePublisher
      */
     public function __construct(
-        PublisherInterface $queuePublisher
+        PublisherInterface $queuePublisher,
+        LoggerInterface $logger
+
     ) {
         $this->queuePublisher = $queuePublisher;
+        $this->logger = $logger;
     }
 
     /**
@@ -41,7 +53,7 @@ class IndexerCallback implements IndexerCallbackInterface
                     // @todo understand why string[] doesn't work
                     $this->queuePublisher->publish(self::TOPIC_NAME, json_encode($idsChunk));
                 } catch (\Exception $e) {
-
+                    $this->logger->critical($e);
                 }
             }
         }

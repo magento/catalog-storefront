@@ -13,7 +13,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 /**
  * @magentoAppIsolation enabled
  */
-class ExportTestTest extends WebapiAbstract
+class ExportTest extends WebapiAbstract
 {
     /**
      * @var array
