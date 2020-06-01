@@ -58,7 +58,6 @@ class ExportTest extends WebapiAbstract
         'url',
     ];
 
-
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

@@ -125,6 +125,8 @@ class Consumer
     }
 
     /**
+     * Delete bulk of entities by data, source name and entity type
+     *
      * @param array $data
      * @param string $sourceName
      * @param string $entityType
@@ -150,6 +152,8 @@ class Consumer
     }
 
     /**
+     * Save bulk of entities by data, source name and entity type
+     *
      * @param array $data
      * @param string $sourceName
      * @param string $entityType

@@ -32,11 +32,11 @@ class IndexerCallback implements IndexerCallbackInterface
 
     /**
      * @param PublisherInterface $queuePublisher
+     * @param LoggerInterface $logger
      */
     public function __construct(
         PublisherInterface $queuePublisher,
         LoggerInterface $logger
-
     ) {
         $this->queuePublisher = $queuePublisher;
         $this->logger = $logger;
