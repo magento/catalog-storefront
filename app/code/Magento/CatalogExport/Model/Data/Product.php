@@ -12,6 +12,8 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * Product entity
+ *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class Product extends AbstractModel implements ProductInterface
 {
