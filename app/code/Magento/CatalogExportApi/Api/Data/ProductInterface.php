@@ -12,14 +12,14 @@ interface ProductInterface
     /**
      * Get product ID
      *
-     * @return string|null
+     * @return ?int
      */
-    public function getId(): ?string;
+    public function getId(): ?int;
 
     /**
      * Set product ID
      *
-     * @param string|null $id
+     * @param ?int $id
      * @return void
      */
     public function setId($id);

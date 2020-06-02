@@ -86,7 +86,7 @@ class Product extends AbstractModel implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function getId(): ?string
+    public function getId(): ?int
     {
         return $this->getData(self::ID);
     }
