@@ -86,7 +86,7 @@ class Product extends AbstractModel implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function getId()
+    public function getId(): ?string
     {
         return $this->getData(self::ID);
     }
@@ -110,7 +110,7 @@ class Product extends AbstractModel implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function setSku($sku)
+    public function setSku(string $sku)
     {
         $this->setData(self::SKU, $sku);
     }
@@ -118,7 +118,7 @@ class Product extends AbstractModel implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function getParents()
+    public function getParents(): array
     {
         return $this->getData(self::PARENTS);
     }
@@ -126,7 +126,7 @@ class Product extends AbstractModel implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function setParents($parents)
+    public function setParents(array $parents): void
     {
         $this->setData(self::PARENTS, $parents);
     }
