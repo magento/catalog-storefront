@@ -116,7 +116,7 @@ class Product extends AbstractModel implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function getParents(): array
+    public function getParents(): ?array
     {
         return $this->getData(self::PARENTS);
     }
@@ -124,7 +124,7 @@ class Product extends AbstractModel implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function setParents(array $parents): void
+    public function setParents(?array $parents): void
     {
         $this->setData(self::PARENTS, $parents);
     }

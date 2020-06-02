@@ -42,17 +42,17 @@ interface ProductInterface
     /**
      * Get parent products
      *
-     * @return int[]
+     * @return int[]|null
      */
-    public function getParents(): array;
+    public function getParents(): ?array;
 
     /**
      * Set parent products
      *
-     * @param int[] $parents
+     * @param int[]|null $parents
      * @return void
      */
-    public function setParents(array $parents): void;
+    public function setParents(?array $parents): void;
 
     /**
      * Get product store view code
