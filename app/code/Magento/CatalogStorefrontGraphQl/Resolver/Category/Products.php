@@ -60,11 +60,18 @@ class Products implements BatchResolverInterface
                     'eq' => (int)$request->getValue()['id']
                 ]
             ];
-            $storefrontRequest = $this->requestBuilder->buildRequest($context, $request, $filter);
+            $positionField = 'position_category_' . (int)$request->getValue()['id'];
+
+            $storefrontRequest = $this->requestBuilder->buildRequest($context, $request, $filter, [
+                $positionField => 'ASC',
+                '_id' => 'DESC',
+            ]);
+
             $storefrontRequest['storefront_request']['attribute_codes']
                 = $storefrontRequest['storefront_request']['attributes'];
             $storefrontRequest['storefront_request']['store']
                 = $storefrontRequest['storefront_request']['scopes']['store'] ?? null;
+
             $storefrontRequests[] = $storefrontRequest;
 
         }
@@ -74,12 +81,6 @@ class Products implements BatchResolverInterface
             'GetProducts',
             $storefrontRequests,
             new OutputFormatter
-        );
-        return $this->serviceInvoker->invoke(
-            ProductInterface::class,
-            'get',
-            $storefrontRequests,
-            new \Magento\CatalogStorefrontGraphQl\Resolver\Product\OutputFormatter
         );
     }
 }

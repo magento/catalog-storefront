@@ -64,7 +64,7 @@ class RequestBuilder
      * @throws GraphQlInputException
      * @throws \Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException
      */
-    public function buildRequest(ContextInterface $context, $request, array $filter = []): array
+    public function buildRequest(ContextInterface $context, $request, array $filter = [], array $sort =[]): array
     {
         $args = $request->getArgs();
         $info = $request->getInfo();
@@ -82,6 +82,8 @@ class RequestBuilder
                 __("'search' or 'filter' input argument is required.")
             );
         }
+
+        $sort = \array_merge($args['sort'] ?? [], $sort);
 
         $attributes = $this->fieldResolver->getSchemaTypeFields($info, ['products'], 'items');
         $aggregations = $this->fieldResolver->getSchemaTypeFields($info, ['products'], 'aggregations');
@@ -110,7 +112,7 @@ class RequestBuilder
             'page' => $page,
             'scopes' => $this->scopeProvider->getScopes($context),
             'attributes' => $attributes,
-            'sort' => $args['sort'] ?? [],
+            'sort' => $sort,
             'aggregations' => $aggregations,
             'metaInfo' => $metaInfo,
         ];

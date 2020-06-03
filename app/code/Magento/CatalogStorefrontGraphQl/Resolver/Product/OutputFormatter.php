@@ -14,6 +14,8 @@ use Magento\CatalogStorefrontApi\Api\Data\OptionValueInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductLinkInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductResultContainerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
+use Magento\CatalogStorefrontApi\Api\Data\UrlRewriteInterface;
+use Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameterInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface;
 
@@ -39,7 +41,7 @@ class OutputFormatter
         BatchRequestItemInterface $request,
         array $additionalInfo = []
     ) {
-        $errors = $additionalInfo['errors'] ?: [];
+        $errors = $additionalInfo['errors'] ?? [];
         if (!empty($errors)) {
             //ad-hoc solution with __() as GraphQlInputException accepts Phrase in construct
             //TODO: change with error holder
@@ -57,6 +59,7 @@ class OutputFormatter
                 'entity_id' => $item->getId(),
                 'type_id' => $item->getTypeId(),
                 'description' => ['html' => $item->getDescription() ?? null],
+                'short_description' => ['html' => $item->getShortDescription() ?? null],
                 'name' => $item->getName(),
                 'stock_status' => $item->getStockStatus(),
                 'url_key' => $item->getUrlKey(),
@@ -198,6 +201,19 @@ class OutputFormatter
                     return $output;
                 }, $item->getVariants());
             }
+
+            $result['url_rewrites'] = array_map(function (UrlRewriteInterface $item) {
+                $parameters = array_map(function (UrlRewriteParameterInterface $item) {
+                    return [
+                        'name' => $item->getName(),
+                        'value' => $item->getValue(),
+                    ];
+                }, $item->getParameters());
+                return [
+                    'url' => $item->getUrl(),
+                    'parameters' => $parameters
+                ];
+            }, $item->getUrlRewrites());
 
             return $result;
         }, $result->getItems());

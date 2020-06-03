@@ -86,7 +86,6 @@ class CategoryTree implements BatchResolverInterface
                 $type = 'category';
             } elseif ($field->getName() == 'children') {
                 $categoryIds = $request->getValue()['children'] ?? [];
-
                 $storefrontRequest['ids'] = $categoryIds;
                 $storefrontRequest['attribute_codes'] = $this->fieldResolver->getSchemaTypeFields(
                     $request->getInfo(),

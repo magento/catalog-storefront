@@ -12,6 +12,8 @@
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Category\Products" type="Magento\CatalogStorefrontGraphQl\Resolver\Category\Products" />
     <preference for="Magento\CatalogGraphQl\Model\Resolver\CategoryList" type="Magento\CatalogStorefrontGraphQl\Resolver\Category\CategoryList" />
     <preference for="Magento\CatalogGraphQl\Model\Resolver\CategoryTree" type="Magento\CatalogStorefrontGraphQl\Resolver\Category\CategoryTree" />
+    <preference for="Magento\CatalogGraphQl\Model\Resolver\CategoriesQuery" type="Magento\CatalogStorefrontGraphQl\Resolver\Category\CategoryList" />
+
 
     <!-- Override deprecated resolvers with "model" hydration -->
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\MediaGallery"/>

@@ -12,6 +12,7 @@ use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryResultContainerInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResolverInterface;
 use Magento\CatalogStorefrontGraphQl\Model\FieldResolver;
@@ -89,6 +90,13 @@ class CategoryList implements BatchResolverInterface
         $batchResponse = null;
         try {
             foreach ($requests as $request) {
+                if (isset($request->getArgs()['pageSize']) && $request->getArgs()['pageSize'] < 1) {
+                    throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
+                }
+
+                if (isset($request->getArgs()['currentPage']) && $request->getArgs()['currentPage'] < 1) {
+                    throw new GraphQlInputException(__('currentPage value must be greater than 0.'));
+                }
                 $scopes = $this->scopeProvider->getScopes($context);
                 $categoryIds = [];
 
@@ -101,16 +109,24 @@ class CategoryList implements BatchResolverInterface
                     $categoryIds = $data['category_ids'];
                 }
 
+                $attributeCodes = $field->getName() == 'categoryList'
+                    ? $this->fieldResolver->getSchemaTypeFields($request->getInfo(), ['categoryList'])
+                    : $this->fieldResolver->getSchemaTypeFields($request->getInfo(), ['categories'], 'items');
+
                 $storefrontRequest = [
                     'ids' => $categoryIds,
                     'scopes' => $scopes,
                     'store' => $store->getId(),
-                    'attribute_codes' => $this->fieldResolver->getSchemaTypeFields($request->getInfo(), ['categoryList']),
+                    'attribute_codes' => $attributeCodes,
                 ];
-
                 $storefrontRequests[] = [
                     'graphql_request' => $request,
-                    'storefront_request' => $storefrontRequest
+                    'storefront_request' => $storefrontRequest,
+                    'additional_info' => [
+                        'type' => $field->getName() == 'categoryList' ? 'categoryList' : 'categories',
+                        'page_info' => $data['page_info'] ?? [],
+                        'total_count' => $data['total_count'] ?? 0,
+                    ]
                 ];
             }
         } catch (InputException $e) {
@@ -129,7 +145,10 @@ class CategoryList implements BatchResolverInterface
             'GetCategories',
             $storefrontRequests,
             function (
-                CategoriesGetResponseInterface $result
+                CategoriesGetResponseInterface $result,
+                $graphQlException,
+                $graphQlRequest,
+                $additionalInfo
             ) {
 //                $errors = $result->getErrors();
 //                if (!empty($errors)) {
@@ -177,6 +196,13 @@ class CategoryList implements BatchResolverInterface
                     }
 
                     $output[] = $itemOutput;
+                }
+                if ($additionalInfo['type'] == 'categories') {
+                    $output = [
+                        'items' => $output,
+                        'total_count' => $additionalInfo['total_count'] ?? count($output),
+                        'page_info' => $additionalInfo['page_info'] ?? []
+                    ];
                 }
                 return $output;
             }

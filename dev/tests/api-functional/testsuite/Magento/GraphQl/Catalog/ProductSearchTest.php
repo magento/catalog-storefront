@@ -321,14 +321,25 @@ QUERY;
         $this->assertTrue(count($response['products']['filters']) > 0, 'Product filters is not empty');
         $this->assertCount(3, $response['products']['aggregations'], 'Incorrect count of aggregations');
 
-        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
-        for ($itemIndex = 0; $itemIndex < $countOfFilteredProducts; $itemIndex++) {
-            $this->assertNotEmpty($productItemsInResponse[$itemIndex]);
+        foreach($filteredProducts as $filteredProduct) {
+            $found = false;
+            $currentResponseItem = null;
+            foreach ($response['products']['items'] as $item) {
+                if ($item['sku'] == $filteredProduct->getSku()) {
+                    $found = true;
+                    $currentResponseItem = $item;
+                }
+            }
+            $this->assertTrue(
+                $found,
+                "Product with sku {$filteredProduct->getSku()} is not found in response"
+            );
+
             //validate that correct products are returned
             $this->assertResponseFields(
-                $productItemsInResponse[$itemIndex][0],
-                [ 'name' => $filteredProducts[$itemIndex]->getName(),
-                    'sku' => $filteredProducts[$itemIndex]->getSku()
+                $currentResponseItem,
+                [ 'name' => $filteredProduct->getName(),
+                    'sku' => $filteredProduct->getSku()
                 ]
             );
         }
@@ -673,16 +684,27 @@ QUERY;
         $product1 = $productRepository->get('simple');
         $product2 = $productRepository->get('simple-4');
         $filteredProducts = [$product2, $product1];
-        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+
         //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
-        for ($itemIndex = 0; $itemIndex < count($filteredProducts); $itemIndex++) {
-            $this->assertNotEmpty($productItemsInResponse[$itemIndex]);
+        foreach ($filteredProducts as $filteredProduct) {
+            $found = false;
+            $currentResponseItem = null;
+            foreach ($response['products']['items'] as $item) {
+                if ($item['sku'] == $filteredProduct->getSku()) {
+                    $found = true;
+                    $currentResponseItem = $item;
+                }
+            }
+            $this->assertTrue(
+                $found,
+                "Product with sku {$filteredProduct->getSku()} is not found in response"
+            );
             //validate that correct products are returned
             $this->assertResponseFields(
-                $productItemsInResponse[$itemIndex][0],
+                $currentResponseItem,
                 [
-                    'name' => $filteredProducts[$itemIndex]->getName(),
-                    'sku' => $filteredProducts[$itemIndex]->getSku()
+                    'name' => $filteredProduct->getName(),
+                    'sku' => $filteredProduct->getSku()
                 ]
             );
         }
@@ -949,16 +971,28 @@ QUERY;
         $this->assertEquals(3, $response['products']['total_count'], 'Total count is incorrect');
         $this->assertCount(2, $response['products']['aggregations']);
 
-        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
-        for ($itemIndex = 0; $itemIndex < count($filteredProducts); $itemIndex++) {
-            $this->assertNotEmpty($productItemsInResponse[$itemIndex]);
+        foreach ($filteredProducts as $filteredProduct) {
+            $found = false;
+            $currentResponseItem = null;
+            foreach ($response['products']['items'] as $item) {
+                if ($item['sku'] == $filteredProduct->getSku()) {
+                    $found = true;
+                    $currentResponseItem = $item;
+                    break;
+                }
+            }
+            $this->assertTrue(
+                $found,
+                "Product with sku {$filteredProduct->getSku()} is not found in response"
+            );
+
             //validate that correct products are returned
             $this->assertResponseFields(
-                $productItemsInResponse[$itemIndex][0],
-                [ 'name' => $filteredProducts[$itemIndex]->getName(),
-                    'sku' => $filteredProducts[$itemIndex]->getSku(),
-                    'url_key'=> $filteredProducts[$itemIndex]->getUrlKey()
+                $currentResponseItem,
+                [ 'name' => $filteredProduct->getName(),
+                    'sku' => $filteredProduct->getSku(),
+                    'url_key'=> $filteredProduct->getUrlKey()
                 ]
             );
         }
@@ -1498,6 +1532,7 @@ QUERY;
      */
     public function testFilterProductsBySingleCategoryId()
     {
+        $this->reIndexAndCleanCache();
         $queryCategoryId = 333;
         $query
             = <<<QUERY
@@ -1791,6 +1826,279 @@ QUERY;
                         'minimalPrice' => [
                             'amount' => [
                                 'value' => $filteredProducts[$itemIndex]->getPrice(),
+                                'currency' => 'USD'
+                            ]
+                        ]
+                    ]
+                ]
+            );
+        }
+    }
+
+    /**
+     * Partial search filtered for price and sorted by price and name
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     */
+    public function testProductPartialNameFullTextSearchQuery()
+    {
+        $this->reIndexAndCleanCache();
+        $textToSearch = 'Sim';
+        $query
+            =<<<QUERY
+{
+    products(
+      search: "{$textToSearch}"
+      filter:{
+                price:{to:"25"}
+             }
+            sort:{
+            price:DESC
+            name:ASC
+            }
+    )
+    {
+        total_count
+        items {
+          name
+          sku
+          price {
+            minimalPrice {
+              amount {
+                value
+                currency
+              }
+            }
+          }
+        }
+        page_info {
+          page_size
+          current_page
+        }
+          filters{
+        filter_items {
+          items_count
+          label
+          value_string
+        }
+      }
+      aggregations{
+        attribute_code
+        count
+        label
+        options{
+          count
+          label
+          value
+        }
+      }
+      }
+}
+QUERY;
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+
+        $prod1 = $productRepository->get('simple1');
+        $prod2 = $productRepository->get('simple2');
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(2, $response['products']['total_count']);
+
+        $filteredProducts = [$prod1, $prod2];
+        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
+            $this->assertNotEmpty($itemArray);
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                [
+                    'sku' => $filteredProducts[$itemIndex]->getSku(),
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                    'price' => [
+                        'minimalPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
+                                'currency' => 'USD'
+                            ]
+                        ]
+                    ]
+                ]
+            );
+        }
+    }
+
+    /**
+     * Partial search on sku filtered for price and sorted by price and sku
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products_with_different_sku_and_name.php
+     */
+    public function testProductPartialSkuFullTextSearchQuery()
+    {
+        $this->reIndexAndCleanCache();
+        $textToSearch = 'prd';
+        $query
+            =<<<QUERY
+{
+    products(
+      search: "{$textToSearch}"
+      filter:{
+                price:{to:"25"}
+             }
+            sort:{
+            price:DESC
+            name:ASC
+            }
+    )
+    {
+        total_count
+        items {
+          name
+          sku
+          price {
+            minimalPrice {
+              amount {
+                value
+                currency
+              }
+            }
+          }
+        }
+        page_info {
+          page_size
+          current_page
+        }
+          filters{
+        filter_items {
+          items_count
+          label
+          value_string
+        }
+      }
+      aggregations{
+        attribute_code
+        count
+        label
+        options{
+          count
+          label
+          value
+        }
+      }
+      }
+}
+QUERY;
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+
+        $prod1 = $productRepository->get('prd1sku');
+        $prod2 = $productRepository->get('prd2-sku2');
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(2, $response['products']['total_count']);
+
+        $filteredProducts = [$prod1, $prod2];
+        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
+            $this->assertNotEmpty($itemArray);
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                [
+                    'sku' => $filteredProducts[$itemIndex]->getSku(),
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                    'price' => [
+                        'minimalPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
+                                'currency' => 'USD'
+                            ]
+                        ]
+                    ]
+                ]
+            );
+        }
+    }
+
+    /**
+     * Partial search on hyphenated sku filtered for price and sorted by price and sku
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products_with_different_sku_and_name.php
+     */
+    public function testProductPartialSkuHyphenatedFullTextSearchQuery()
+    {
+        $this->reIndexAndCleanCache();
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+
+        $prod2 = $productRepository->get('prd2-sku2');
+        $textToSearch = 'sku2';
+        $query
+            =<<<QUERY
+{
+    products(
+      search: "{$textToSearch}"
+      filter:{
+                price:{to:"25"}
+             }
+            sort:{
+            price:DESC
+            name:ASC
+            }
+    )
+    {
+        total_count
+        items {
+          name
+          sku
+          price {
+            minimalPrice {
+              amount {
+                value
+                currency
+              }
+            }
+          }
+        }
+        page_info {
+          page_size
+          current_page
+        }
+          filters{
+        filter_items {
+          items_count
+          label
+          value_string
+        }
+      }
+      aggregations{
+        attribute_code
+        count
+        label
+        options{
+          count
+          label
+          value
+        }
+      }
+      }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(1, $response['products']['total_count']);
+
+        $filteredProducts = [$prod2];
+        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
+            $this->assertNotEmpty($itemArray);
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                [
+                    'sku' => $filteredProducts[$itemIndex]->getSku(),
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                    'price' => [
+                        'minimalPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
                                 'currency' => 'USD'
                             ]
                         ]

@@ -86,7 +86,6 @@ class CatalogService implements CatalogServerInterface
         );
 
         if (count($rawItems) != count($request->getIds())) {
-            var_dump($request->getIds(), array_keys($rawItems));
             throw new NotFoundException(__(
                 'Products with the following ids are not found in catalog: %1',
                 implode(', ', array_diff($request->getIds(), array_keys($rawItems)))
@@ -158,6 +157,23 @@ class CatalogService implements CatalogServerInterface
                 $mediaGallery[] = $mediaGalleryItem;
             }
             $product->setMediaGallery($mediaGallery);
+
+            $urlRewritesData = $item['url_rewrites'] ?? [];
+            $urlRewrites = [];
+            foreach ($urlRewritesData as $urlRewriteData) {
+                $rewrite = new \Magento\CatalogStorefrontApi\Api\Data\UrlRewrite;
+                $rewrite->setUrl($urlRewriteData['url'] ?? '');
+                $parameters = [];
+                foreach ($urlRewriteData['parameters'] ?? [] as $parameterData) {
+                    $parameter = new \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameter;
+                    $parameter->setName($parameterData['name'] ?? '');
+                    $parameter->setValue($parameterData['value'] ?? '');
+                    $parameters[] = $parameter;
+                }
+                $rewrite->setParameters($parameters);
+                $urlRewrites[] = $rewrite;
+            }
+            $product->setUrlRewrites($urlRewrites);
             $products[] = $product;
         }
 
@@ -225,6 +241,7 @@ class CatalogService implements CatalogServerInterface
         CategoriesGetRequestInterface $request
     ): CategoriesGetResponseInterface {
         $result = new CategoriesGetResponse();
+
         $categories = $this->categoryDataProvider->fetch(
             $request->getIds(),
             \array_merge($request->getAttributeCodes(), ['is_active']),
@@ -259,11 +276,9 @@ class CatalogService implements CatalogServerInterface
                 $categories[$categoryId] = $categoryId;
             }
             $item->setChildren($categories);
-            //$item->setChildren($category['children'] ?? []);
             $items[] = $item;
         }
         $result->setItems($items);
-
         return $result;
     }
 
