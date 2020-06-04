@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefrontGraphQl\Resolver\Product;
 
 use Magento\Catalog\Model\Layer\Resolver;
+use Magento\CatalogStorefrontApi\Api\Data\BundleItemInterface;
+use Magento\CatalogStorefrontApi\Api\Data\BundleItemOptionInterface;
 use Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemInterface;
 use Magento\CatalogStorefrontApi\Api\Data\OptionInterface;
 use Magento\CatalogStorefrontApi\Api\Data\OptionValueInterface;
@@ -75,7 +77,12 @@ class OutputFormatter
                 'special_price' => $item->getSpecialPrice(),
                 'special_from_date' => $item->getSpecialFromDate(),
                 'special_to_date' => $item->getSpecialToDate(),
-                'canonical_url' => empty($item->getCanonicalUrl()) ? null : $item->getCanonicalUrl()
+                'canonical_url' => empty($item->getCanonicalUrl()) ? null : $item->getCanonicalUrl(),
+                'ship_bundle_items' => $item->getShipBundleItems(),
+                'dynamic_weight' => $item->getDynamicWeight(),
+                'dynamic_sku' => $item->getDynamicSku(),
+                'dynamic_price' => $item->getDynamicPrice(),
+                'price_view' => $item->getPriceView(),
             ];
 
             if ($item->getImage()) {
@@ -187,10 +194,10 @@ class OutputFormatter
                 ];
             }, $item->getProductLinks());
             if (!empty($item->getVariants())) {
-                $result['variants'] = array_map(function($item) {
+                $result['variants'] = array_map(function ($item) {
                     $output = [
                         'product' => $item->getProduct(),
-                        'attributes' => array_map(function($item) {
+                        'attributes' => array_map(function ($item) {
                             return [
                                 'label' => $item->getLabel(),
                                 'code' => $item->getCode(),
@@ -214,6 +221,34 @@ class OutputFormatter
                     'parameters' => $parameters
                 ];
             }, $item->getUrlRewrites());
+
+            if ($item->getItems()) {
+                $result['items'] = array_map(function (BundleItemInterface $item) {
+                    $options = array_map(function (BundleItemOptionInterface $item) {
+                        return [
+                            'id' =>$item->getId(),
+                            'label' => $item->getLabel(),
+                            //'product' => ['id' => $item->getEntityId(), 'type_id' => 'simple'],
+                            'product' => $item->getEntityId(),
+                            'can_change_quantity' => $item->getCanChangeQuantity(),
+                            'is_default' => $item->getIsDefault(),
+                            'price' => $item->getPrice(),
+                            'price_type' => $item->getPriceType(),
+                            'quantity' => $item->getQuantity(),
+                            'position' => $item->getPosition(),
+                        ];
+                    }, $item->getOptions());
+                    return [
+                        'position' => $item->getPosition(),
+                        'sku' => $item->getSku(),
+                        'type' => $item->getType(),
+                        'option_id' => $item->getOptionId(),
+                        'required' => $item->getRequired(),
+                        'title' => $item->getTitle(),
+                        'options' => $options
+                    ];
+                }, $item->getItems());
+            }
 
             return $result;
         }, $result->getItems());

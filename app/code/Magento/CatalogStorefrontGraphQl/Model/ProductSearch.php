@@ -112,7 +112,6 @@ class ProductSearch
                 : $bucket['attribute_code'];
             $bucket = new \Magento\Framework\Search\Response\Bucket($attributeCode, $values);
             $buckets[$attributeCode] = $bucket;
-
         }
         $searchResult = new \Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult([
             'searchAggregation' => new \Magento\Framework\Search\Response\Aggregation($buckets)

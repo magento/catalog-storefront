@@ -80,7 +80,8 @@ class Product implements BatchResolverInterface
                 throw new \InvalidArgumentException('Product is missing in request');
             }
             $attributes = $this->fieldResolver->getSchemaTypeFields(
-                $request->getInfo(), ['product']
+                $request->getInfo(),
+                ['product']
             );
 
             $searchRequest = ['graphql_request' => $request];
@@ -107,7 +108,6 @@ class Product implements BatchResolverInterface
                 $result = $formatter($result, $e, $request, $additionalInfo);
                 return $result['items'][0] ?? [];
             }
-
         );
     }
 }

@@ -192,6 +192,30 @@ final class Product implements ProductInterface
      * @var string
      */
     private $canonicalUrl;
+    /**
+     * @var string
+     */
+    private $shipBundleItems;
+    /**
+     * @var bool
+     */
+    private $dynamicWeight;
+    /**
+     * @var bool
+     */
+    private $dynamicSku;
+    /**
+     * @var bool
+     */
+    private $dynamicPrice;
+    /**
+     * @var string
+     */
+    private $priceView;
+    /**
+     * @var array
+     */
+    private $items;
 
 
     /**
@@ -957,5 +981,107 @@ final class Product implements ProductInterface
     public function setCanonicalUrl(string $value): void
     {
         $this->canonicalUrl = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShipBundleItems(): string
+    {
+        return (string) $this->shipBundleItems;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setShipBundleItems(string $value): void
+    {
+        $this->shipBundleItems = $value;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDynamicWeight(): bool
+    {
+        return (bool) $this->dynamicWeight;
+    }
+    
+    /**
+     * @param bool $value
+     * @return void
+     */
+    public function setDynamicWeight(bool $value): void
+    {
+        $this->dynamicWeight = $value;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDynamicSku(): bool
+    {
+        return (bool) $this->dynamicSku;
+    }
+    
+    /**
+     * @param bool $value
+     * @return void
+     */
+    public function setDynamicSku(bool $value): void
+    {
+        $this->dynamicSku = $value;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getDynamicPrice(): bool
+    {
+        return (bool) $this->dynamicPrice;
+    }
+    
+    /**
+     * @param bool $value
+     * @return void
+     */
+    public function setDynamicPrice(bool $value): void
+    {
+        $this->dynamicPrice = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPriceView(): string
+    {
+        return (string) $this->priceView;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setPriceView(string $value): void
+    {
+        $this->priceView = $value;
+    }
+
+    /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\BundleItemInterface[]
+     */
+    public function getItems(): array
+    {
+        return (array) $this->items;
+    }
+    
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\BundleItemInterface[] $value
+     * @return void
+     */
+    public function setItems(array $value): void
+    {
+        $this->items = $value;
     }
 }

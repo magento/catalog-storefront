@@ -99,7 +99,7 @@
                 </item>
                 <item name="BundleItemOption" xsi:type="array">
                     <item name="label" xsi:type="string">label</item>
-                    <item name="product" xsi:type="string">product</item>
+<!--                    <item name="product" xsi:type="string">product</item>-->
                 </item>
             </argument>
         </arguments>

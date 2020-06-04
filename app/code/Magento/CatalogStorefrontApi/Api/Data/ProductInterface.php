@@ -507,4 +507,70 @@ interface ProductInterface
      * @return void
      */
     public function setCanonicalUrl(string $value): void;
+
+    /**
+     * @return string
+     */
+    public function getShipBundleItems(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setShipBundleItems(string $value): void;
+
+    /**
+     * @return bool
+     */
+    public function getDynamicWeight(): bool;
+    
+    /**
+     * @param bool $value
+     * @return void
+     */
+    public function setDynamicWeight(bool $value): void;
+
+    /**
+     * @return bool
+     */
+    public function getDynamicSku(): bool;
+    
+    /**
+     * @param bool $value
+     * @return void
+     */
+    public function setDynamicSku(bool $value): void;
+
+    /**
+     * @return bool
+     */
+    public function getDynamicPrice(): bool;
+    
+    /**
+     * @param bool $value
+     * @return void
+     */
+    public function setDynamicPrice(bool $value): void;
+
+    /**
+     * @return string
+     */
+    public function getPriceView(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setPriceView(string $value): void;
+
+    /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\BundleItemInterface[]
+     */
+    public function getItems(): array;
+    
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\BundleItemInterface[] $value
+     * @return void
+     */
+    public function setItems(array $value): void;
 }

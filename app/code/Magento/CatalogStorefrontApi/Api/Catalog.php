@@ -393,6 +393,54 @@ class Catalog implements CatalogInterface
                     $r->setProductLinks($res);
 
                     $r->setCanonicalUrl($item->getCanonicalUrl());
+                    $r->setShipBundleItems($item->getShipBundleItems());
+                    $r->setDynamicWeight($item->getDynamicWeight());
+                    $r->setDynamicSku($item->getDynamicSku());
+                    $r->setDynamicPrice($item->getDynamicPrice());
+                    $r->setPriceView($item->getPriceView());
+                    $res = [];
+                    foreach ($item->getItems() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\BundleItem
+                        // to \Magento\CatalogStorefrontApi\Api\Data\BundleItem
+                        /** @var \Magento\CatalogStorefrontApi\Proto\BundleItem $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\BundleItem();
+                            $r->setOptionId($item->getOptionId());
+                            $r->setTitle($item->getTitle());
+                            $r->setRequired($item->getRequired());
+                            $r->setType($item->getType());
+                            $r->setPosition($item->getPosition());
+                            $r->setSku($item->getSku());
+                            $res = [];
+                            foreach ($item->getOptions() as $item) {
+                                // convert data from \Magento\CatalogStorefrontApi\Proto\BundleItemOption
+                                // to \Magento\CatalogStorefrontApi\Api\Data\BundleItemOption
+                                /** @var \Magento\CatalogStorefrontApi\Proto\BundleItemOption $item **/
+                                $p = function () use ($item) {
+                                    $r = new \Magento\CatalogStorefrontApi\Api\Data\BundleItemOption();
+                                    $r->setId($item->getId());
+                                    $r->setQuantity($item->getQuantity());
+                                    $r->setIsDefault($item->getIsDefault());
+                                    $r->setPrice($item->getPrice());
+                                    $r->setPriceType($item->getPriceType());
+                                    $r->setCanChangeQuantity($item->getCanChangeQuantity());
+                                    $r->setLabel($item->getLabel());
+                                    $r->setEntityId($item->getEntityId());
+                                    $r->setPosition($item->getPosition());
+                                    return $r;
+                                };
+                                $out = $p();
+                                $res[] = $out;
+                            }
+                            $r->setOptions($res);
+
+                            return $r;
+                        };
+                        $out = $p();
+                        $res[] = $out;
+                    }
+                    $r->setItems($res);
+
                     return $r;
                 };
                 $out = $p();
@@ -761,6 +809,54 @@ class Catalog implements CatalogInterface
                     $r->setProductLinks($res);
 
                     $r->setCanonicalUrl($item->getCanonicalUrl());
+                    $r->setShipBundleItems($item->getShipBundleItems());
+                    $r->setDynamicWeight($item->getDynamicWeight());
+                    $r->setDynamicSku($item->getDynamicSku());
+                    $r->setDynamicPrice($item->getDynamicPrice());
+                    $r->setPriceView($item->getPriceView());
+                    $res = [];
+                    foreach ($item->getItems() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\BundleItem
+                        // to \Magento\CatalogStorefrontApi\Proto\BundleItem
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\BundleItem $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Proto\BundleItem();
+                            $r->setOptionId($item->getOptionId());
+                            $r->setTitle($item->getTitle());
+                            $r->setRequired($item->getRequired());
+                            $r->setType($item->getType());
+                            $r->setPosition($item->getPosition());
+                            $r->setSku($item->getSku());
+                            $res = [];
+                            foreach ($item->getOptions() as $item) {
+                                // convert data from \Magento\CatalogStorefrontApi\Api\Data\BundleItemOption
+                                // to \Magento\CatalogStorefrontApi\Proto\BundleItemOption
+                                /** @var \Magento\CatalogStorefrontApi\Api\Data\BundleItemOption $item **/
+                                $p = function () use ($item) {
+                                    $r = new \Magento\CatalogStorefrontApi\Proto\BundleItemOption();
+                                    $r->setId($item->getId());
+                                    $r->setQuantity($item->getQuantity());
+                                    $r->setIsDefault($item->getIsDefault());
+                                    $r->setPrice($item->getPrice());
+                                    $r->setPriceType($item->getPriceType());
+                                    $r->setCanChangeQuantity($item->getCanChangeQuantity());
+                                    $r->setLabel($item->getLabel());
+                                    $r->setEntityId($item->getEntityId());
+                                    $r->setPosition($item->getPosition());
+                                    return $r;
+                                };
+                                $proto = $p();
+                                $res[] = $proto;
+                            }
+                            $r->setOptions($res);
+
+                            return $r;
+                        };
+                        $proto = $p();
+                        $res[] = $proto;
+                    }
+                    $r->setItems($res);
+
                     return $r;
                 };
                 $proto = $p();
