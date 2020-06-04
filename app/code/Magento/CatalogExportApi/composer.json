@@ -1,6 +1,6 @@
 {
     "name": "magento/module-catalog-export-api",
-    "description": "",
+    "description": "Catalog export API module for catalog storefront",
     "config": {
         "sort-packages": true
     },

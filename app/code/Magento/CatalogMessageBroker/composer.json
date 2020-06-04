@@ -1,6 +1,6 @@
 {
     "name": "magento/module-catalog-message-broker",
-    "description": "",
+    "description": "Catalog Message Broker or catalog storefront",
     "config": {
         "sort-packages": true
     },
