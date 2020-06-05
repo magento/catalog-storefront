@@ -10,6 +10,8 @@ namespace Magento\CatalogStorefrontGraphQl\Resolver\Product;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\CatalogStorefrontApi\Api\Data\BundleItemInterface;
 use Magento\CatalogStorefrontApi\Api\Data\BundleItemOptionInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionValueInterface;
 use Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemInterface;
 use Magento\CatalogStorefrontApi\Api\Data\OptionInterface;
 use Magento\CatalogStorefrontApi\Api\Data\OptionValueInterface;
@@ -18,6 +20,8 @@ use Magento\CatalogStorefrontApi\Api\Data\ProductResultContainerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
 use Magento\CatalogStorefrontApi\Api\Data\UrlRewriteInterface;
 use Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameterInterface;
+use Magento\CatalogStorefrontApi\Api\Data\VariantAttributeInterface;
+use Magento\CatalogStorefrontApi\Api\Data\VariantInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface;
 
@@ -226,7 +230,7 @@ class OutputFormatter
                 $result['items'] = array_map(function (BundleItemInterface $item) {
                     $options = array_map(function (BundleItemOptionInterface $item) {
                         return [
-                            'id' =>$item->getId(),
+                            'id' => $item->getId(),
                             'label' => $item->getLabel(),
                             //'product' => ['id' => $item->getEntityId(), 'type_id' => 'simple'],
                             'product' => $item->getEntityId(),
@@ -248,6 +252,48 @@ class OutputFormatter
                         'options' => $options
                     ];
                 }, $item->getItems());
+            }
+
+            if ($item->getConfigurableOptions()) {
+                $result['configurable_options'] = array_map(function(ConfigurableOptionInterface $item) {
+                    $values = array_map(function (ConfigurableOptionValueInterface $item) {
+                        return [
+                            'attribute_id' => $item->getAttributeId(),
+                            'product_id' => $item->getProductId(),
+                            'label' => $item->getLabel(),
+                            'value_index' => $item->getValueIndex(),
+                            'default_label' => $item->getDefaultLabel(),
+                            'store_label' => $item->getStoreLabel(),
+                            'use_default_value' => $item->getUseDefaultValue(),
+                        ];
+                    }, $item->getValues());
+                    return [
+                        'label' => $item->getLabel(),
+                        'id' => $item->getId(),
+                        'position' => $item->getPosition(),
+                        'product_id' => $item->getProductId(),
+                        'attribute_code' => $item->getAttributeCode(),
+                        'attribute_id' => $item->getAttributeId(),
+                        'use_default' => $item->getUseDefault(),
+                        'values' => $values
+                    ];
+                }, $item->getConfigurableOptions());
+            }
+
+            if ($item->getVariants()) {
+                $result['variants'] = array_map(function (VariantInterface $item) {
+                    $attributes = array_map(function (VariantAttributeInterface $item) {
+                        return [
+                            'value_index' => $item->getValueIndex(),
+                            'label' => $item->getLabel(),
+                            'code' => $item->getCode(),
+                        ];
+                    }, $item->getAttributes());
+                    return [
+                        'product' => $item->getProduct(),
+                        'attributes' => $attributes
+                    ];
+                }, $item->getVariants());
             }
 
             return $result;

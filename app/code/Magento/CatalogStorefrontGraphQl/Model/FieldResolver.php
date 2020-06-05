@@ -46,6 +46,9 @@ class FieldResolver
             }
 
             foreach ($node->selectionSet->selections as $selection) {
+                if ($selection instanceof \GraphQL\Language\AST\InlineFragmentNode) {
+                    continue;
+                }
                 if (null !== $requestedField && $selection->name->value !== $requestedField) {
                     continue;
                 }
