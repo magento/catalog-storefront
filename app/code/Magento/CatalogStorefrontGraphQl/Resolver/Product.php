@@ -76,8 +76,9 @@ class Product implements BatchResolverInterface
     {
         $storefrontRequests = [];
         foreach ($requests as $request) {
-            if (!$productId = $request->getValue()['product']) {
-                throw new \InvalidArgumentException('Product is missing in request');
+            $productId = $request->getValue()['product'] ?? $request->getValue()['entity_id'] ?? null;
+            if (!$productId) {
+                throw new \InvalidArgumentException('Product id is missing in request');
             }
             $attributes = $this->fieldResolver->getSchemaTypeFields(
                 $request->getInfo(),
