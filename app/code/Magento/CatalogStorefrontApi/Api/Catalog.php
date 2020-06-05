@@ -441,6 +441,53 @@ class Catalog implements CatalogInterface
                     }
                     $r->setItems($res);
 
+                    $r->setLinksPurchasedSeparately($item->getLinksPurchasedSeparately());
+                    $r->setLinksTitle($item->getLinksTitle());
+                    $res = [];
+                    foreach ($item->getDownloadableProductLinks() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\DownloadableLink
+                        // to \Magento\CatalogStorefrontApi\Api\Data\DownloadableLink
+                        /** @var \Magento\CatalogStorefrontApi\Proto\DownloadableLink $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\DownloadableLink();
+                            $r->setSampleUrl($item->getSampleUrl());
+                            $r->setTitle($item->getTitle());
+                            $r->setSortOrder($item->getSortOrder());
+                            $r->setSampleType($item->getSampleType());
+                            $r->setSampleFile($item->getSampleFile());
+                            $r->setLinkId($item->getLinkId());
+                            $r->setPrice($item->getPrice());
+                            $r->setLinkType($item->getLinkType());
+                            $r->setIsShareable($item->getIsShareable());
+                            $r->setNumberOfDownloads($item->getNumberOfDownloads());
+                            $r->setEntityId($item->getEntityId());
+                            return $r;
+                        };
+                        $out = $p();
+                        $res[] = $out;
+                    }
+                    $r->setDownloadableProductLinks($res);
+
+                    $res = [];
+                    foreach ($item->getDownloadableProductSamples() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\DownloadableSample
+                        // to \Magento\CatalogStorefrontApi\Api\Data\DownloadableSample
+                        /** @var \Magento\CatalogStorefrontApi\Proto\DownloadableSample $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\DownloadableSample();
+                            $r->setSampleUrl($item->getSampleUrl());
+                            $r->setTitle($item->getTitle());
+                            $r->setSortOrder($item->getSortOrder());
+                            $r->setSampleType($item->getSampleType());
+                            $r->setSampleFile($item->getSampleFile());
+                            $r->setEntityId($item->getEntityId());
+                            return $r;
+                        };
+                        $out = $p();
+                        $res[] = $out;
+                    }
+                    $r->setDownloadableProductSamples($res);
+
                     return $r;
                 };
                 $out = $p();
@@ -856,6 +903,53 @@ class Catalog implements CatalogInterface
                         $res[] = $proto;
                     }
                     $r->setItems($res);
+
+                    $r->setLinksPurchasedSeparately($item->getLinksPurchasedSeparately());
+                    $r->setLinksTitle($item->getLinksTitle());
+                    $res = [];
+                    foreach ($item->getDownloadableProductLinks() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\DownloadableLink
+                        // to \Magento\CatalogStorefrontApi\Proto\DownloadableLink
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\DownloadableLink $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Proto\DownloadableLink();
+                            $r->setSampleUrl($item->getSampleUrl());
+                            $r->setTitle($item->getTitle());
+                            $r->setSortOrder($item->getSortOrder());
+                            $r->setSampleType($item->getSampleType());
+                            $r->setSampleFile($item->getSampleFile());
+                            $r->setLinkId($item->getLinkId());
+                            $r->setPrice($item->getPrice());
+                            $r->setLinkType($item->getLinkType());
+                            $r->setIsShareable($item->getIsShareable());
+                            $r->setNumberOfDownloads($item->getNumberOfDownloads());
+                            $r->setEntityId($item->getEntityId());
+                            return $r;
+                        };
+                        $proto = $p();
+                        $res[] = $proto;
+                    }
+                    $r->setDownloadableProductLinks($res);
+
+                    $res = [];
+                    foreach ($item->getDownloadableProductSamples() as $item) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\DownloadableSample
+                        // to \Magento\CatalogStorefrontApi\Proto\DownloadableSample
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\DownloadableSample $item **/
+                        $p = function () use ($item) {
+                            $r = new \Magento\CatalogStorefrontApi\Proto\DownloadableSample();
+                            $r->setSampleUrl($item->getSampleUrl());
+                            $r->setTitle($item->getTitle());
+                            $r->setSortOrder($item->getSortOrder());
+                            $r->setSampleType($item->getSampleType());
+                            $r->setSampleFile($item->getSampleFile());
+                            $r->setEntityId($item->getEntityId());
+                            return $r;
+                        };
+                        $proto = $p();
+                        $res[] = $proto;
+                    }
+                    $r->setDownloadableProductSamples($res);
 
                     return $r;
                 };

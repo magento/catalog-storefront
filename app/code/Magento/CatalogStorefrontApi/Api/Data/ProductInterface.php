@@ -573,4 +573,48 @@ interface ProductInterface
      * @return void
      */
     public function setItems(array $value): void;
+
+    /**
+     * @return bool
+     */
+    public function getLinksPurchasedSeparately(): bool;
+    
+    /**
+     * @param bool $value
+     * @return void
+     */
+    public function setLinksPurchasedSeparately(bool $value): void;
+
+    /**
+     * @return string
+     */
+    public function getLinksTitle(): string;
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setLinksTitle(string $value): void;
+
+    /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\DownloadableLinkInterface[]
+     */
+    public function getDownloadableProductLinks(): array;
+    
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\DownloadableLinkInterface[] $value
+     * @return void
+     */
+    public function setDownloadableProductLinks(array $value): void;
+
+    /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\DownloadableSampleInterface[]
+     */
+    public function getDownloadableProductSamples(): array;
+    
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\DownloadableSampleInterface[] $value
+     * @return void
+     */
+    public function setDownloadableProductSamples(array $value): void;
 }

@@ -216,6 +216,22 @@ final class Product implements ProductInterface
      * @var array
      */
     private $items;
+    /**
+     * @var bool
+     */
+    private $linksPurchasedSeparately;
+    /**
+     * @var string
+     */
+    private $linksTitle;
+    /**
+     * @var array
+     */
+    private $downloadableProductLinks;
+    /**
+     * @var array
+     */
+    private $downloadableProductSamples;
 
 
     /**
@@ -1083,5 +1099,73 @@ final class Product implements ProductInterface
     public function setItems(array $value): void
     {
         $this->items = $value;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getLinksPurchasedSeparately(): bool
+    {
+        return (bool) $this->linksPurchasedSeparately;
+    }
+    
+    /**
+     * @param bool $value
+     * @return void
+     */
+    public function setLinksPurchasedSeparately(bool $value): void
+    {
+        $this->linksPurchasedSeparately = $value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLinksTitle(): string
+    {
+        return (string) $this->linksTitle;
+    }
+    
+    /**
+     * @param string $value
+     * @return void
+     */
+    public function setLinksTitle(string $value): void
+    {
+        $this->linksTitle = $value;
+    }
+
+    /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\DownloadableLinkInterface[]
+     */
+    public function getDownloadableProductLinks(): array
+    {
+        return (array) $this->downloadableProductLinks;
+    }
+    
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\DownloadableLinkInterface[] $value
+     * @return void
+     */
+    public function setDownloadableProductLinks(array $value): void
+    {
+        $this->downloadableProductLinks = $value;
+    }
+
+    /**
+     * @return \Magento\CatalogStorefrontApi\Api\Data\DownloadableSampleInterface[]
+     */
+    public function getDownloadableProductSamples(): array
+    {
+        return (array) $this->downloadableProductSamples;
+    }
+    
+    /**
+     * @param \Magento\CatalogStorefrontApi\Api\Data\DownloadableSampleInterface[] $value
+     * @return void
+     */
+    public function setDownloadableProductSamples(array $value): void
+    {
+        $this->downloadableProductSamples = $value;
     }
 }
