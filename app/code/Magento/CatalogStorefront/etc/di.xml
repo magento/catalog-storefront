@@ -97,5 +97,9 @@
             <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
         </arguments>
     </type>
-
+    <type name="Magento\CatalogStorefront\Model\CatalogService">
+        <arguments>
+            <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
+        </arguments>
+    </type>
 </config>

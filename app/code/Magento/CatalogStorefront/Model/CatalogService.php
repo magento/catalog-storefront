@@ -29,7 +29,7 @@ use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface;
-use Magento\Framework\Exception\NotFoundException;
+use Psr\Log\LoggerInterface;
 
 /**
  * @inheritdoc
@@ -40,14 +40,21 @@ class CatalogService implements CatalogServerInterface
      * @var ProductDataProvider
      */
     private $dataProvider;
+
     /**
      * @var DataObjectHelper
      */
     private $dataObjectHelper;
+
     /**
      * @var CategoryDataProvider
      */
     private $categoryDataProvider;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * CatalogService constructor.
@@ -58,22 +65,26 @@ class CatalogService implements CatalogServerInterface
     public function __construct(
         ProductDataProvider $dataProvider,
         DataObjectHelper $dataObjectHelper,
-        CategoryDataProvider $categoryDataProvider
+        CategoryDataProvider $categoryDataProvider,
+        LoggerInterface $logger
     ) {
         $this->dataProvider = $dataProvider;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->categoryDataProvider = $categoryDataProvider;
+        $this->logger = $logger;
     }
 
     public function GetProducts(
         ProductsGetRequestInterface $request
     ): ProductsGetResultInterface {
-        if (is_null($request->getStore()) || empty($request->getStore())) {
-            throw new \InvalidArgumentException(
+        $result = new ProductsGetResult();
+
+        if (empty($request->getStore()) || $request->getStore() === null) {
+            $this->logger->error(
                 __('Store id is not present in Search Criteria. Please add missing info.')
             );
+            return $result;
         }
-        $result = new ProductsGetResult();
         $products = [];
         if (empty($request->getIds())) {
             return $result;
@@ -85,11 +96,14 @@ class CatalogService implements CatalogServerInterface
             ['store' => $request->getStore()]
         );
 
-        if (count($rawItems) != count($request->getIds())) {
-            throw new NotFoundException(__(
-                'Products with the following ids are not found in catalog: %1',
-                implode(', ', array_diff($request->getIds(), array_keys($rawItems)))
-            ));
+        if (count($rawItems) !== count($request->getIds())) {
+            $this->logger->error(
+                __(
+                    'Products with the following ids are not found in catalog: %1',
+                    implode(', ', array_diff($request->getIds(), array_keys($rawItems)))
+                )
+            );
+            return $result;
         }
 
         foreach ($rawItems as $item) {
@@ -104,8 +118,8 @@ class CatalogService implements CatalogServerInterface
             }
             $item['variants'] = $variants;
 
-            $item['description'] = $item['description']['html'] ?? "";
-            $item['short_description'] = $item['short_description']['html'] ?? "";
+            $item['description'] = $item['description']['html'] ?? '';
+            $item['short_description'] = $item['short_description']['html'] ?? '';
             //Convert option values to unified array format
             if (!empty($item['options'])) {
                 foreach ($item['options'] as &$option) {
@@ -135,21 +149,21 @@ class CatalogService implements CatalogServerInterface
                 );
                 if (!empty($mediaGalleryDataItem['video_content'])) {
                     $videoContent = new Video;
-                    $videoContent->setMediaType($mediaGalleryDataItem['video_content']['media_type'] ?? "");
+                    $videoContent->setMediaType($mediaGalleryDataItem['video_content']['media_type'] ?? '');
                     $videoContent->setVideoDescription(
-                        $mediaGalleryDataItem['video_content']['video_description'] ?? ""
+                        $mediaGalleryDataItem['video_content']['video_description'] ?? ''
                     );
                     $videoContent->setVideoMetadata(
-                        $mediaGalleryDataItem['video_content']['video_metadata'] ?? ""
+                        $mediaGalleryDataItem['video_content']['video_metadata'] ?? ''
                     );
                     $videoContent->setVideoProvider(
-                        $mediaGalleryDataItem['video_content']['video_provider'] ?? ""
+                        $mediaGalleryDataItem['video_content']['video_provider'] ?? ''
                     );
                     $videoContent->setVideoTitle(
-                        $mediaGalleryDataItem['video_content']['video_title'] ?? ""
+                        $mediaGalleryDataItem['video_content']['video_title'] ?? ''
                     );
                     $videoContent->setVideoUrl(
-                        $mediaGalleryDataItem['video_content']['video_url'] ?? ""
+                        $mediaGalleryDataItem['video_content']['video_url'] ?? ''
                     );
                     $mediaGalleryItem->setVideoContent($videoContent);
                 }
@@ -192,7 +206,7 @@ class CatalogService implements CatalogServerInterface
     {
         $result = [];
         foreach ($array as $key => $value) {
-            if (is_null($value) || $value === "") {
+            if ($value === null || $value === '') {
                 continue;
             }
 
@@ -208,8 +222,8 @@ class CatalogService implements CatalogServerInterface
         }
 
         $image = new Image();
-        $image->setUrl($rawData[$key]['url'] ?? "");
-        $image->setLabel($rawData[$key]['label'] ?? "");
+        $image->setUrl($rawData[$key]['url'] ?? '');
+        $image->setLabel($rawData[$key]['label'] ?? '');
         $parts = explode('_', $key);
         $parts = array_map("ucfirst", $parts);
         $methodName = 'set' . implode('', $parts);
@@ -296,7 +310,7 @@ class CatalogService implements CatalogServerInterface
         }
 
         if (!is_string($data[$key])) {
-            $data[$key] = "";
+            $data[$key] = '';
         }
         return $data;
     }
