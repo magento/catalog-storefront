@@ -1,17 +1,16 @@
 {
-    "name": "magento/module-configurable-product-extractor",
-    "description": "Module extracts Configurable Product data which consumed by Magento_CatalogStorefrontConnector module",
+    "name": "magento/module-catalog-message-broker",
+    "description": "Catalog Message Broker or catalog storefront",
     "config": {
         "sort-packages": true
     },
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
         "magento/framework": "*",
-        "magento/module-catalog": "*",
+        "magento/module-catalog-export-api": "*",
+        "magento/module-catalog-storefront": "*",
         "magento/module-catalog-extractor": "*",
-        "magento/module-configurable-product": "*",
-        "magento/module-store": "*",
-        "magento/module-eav": "*"
+        "magento/module-store": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -23,7 +22,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\ConfigurableProductExtractor\\": ""
+            "Magento\\CatalogMessageBroker\\": ""
         }
     }
 }
