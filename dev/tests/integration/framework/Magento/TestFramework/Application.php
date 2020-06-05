@@ -13,9 +13,8 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\Filesystem\Glob;
 
 /**
- * Override \Magento\TestFramework\Application to be able provide install configuration with empty values
+ * Encapsulates application installation, initialization and uninstall.
  *
- * Should be eliminated after resolving MC-32269 for 2.4
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
@@ -420,9 +419,19 @@ class Application
             $sequence = $objectManager->get(\Magento\TestFramework\Db\Sequence::class);
             $sequence->generateSequences();
         }
-
+        $this->createDynamicTables();
         $objectManager->create(\Magento\TestFramework\Config::class, ['configPath' => $this->globalConfigFile])
             ->rewriteAdditionalConfig();
+    }
+
+    /**
+     * Create dynamic tables
+     */
+    protected function createDynamicTables()
+    {
+        /** @var \Magento\TestFramework\Db\DynamicTables $dynamicTables */
+        $dynamicTables = Helper\Bootstrap::getObjectManager()->get(\Magento\TestFramework\Db\DynamicTables::class);
+        $dynamicTables->createTables();
     }
 
     /**
@@ -586,7 +595,9 @@ class Application
         $params['magento-init-params'] = $this->getInitParamsQuery();
         $result = [];
         foreach ($params as $key => $value) {
-            $result["--{$key}=%s"] = $value;
+            if (!empty($value)) {
+                $result["--{$key}=%s"] = $value;
+            }
         }
         return $result;
     }

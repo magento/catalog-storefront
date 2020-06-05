@@ -124,13 +124,14 @@ class ProductPublisher
                 ['verbose' => $productsData]
             );
             foreach ($idsBunch as $productId) {
-                $product = $productsData[$productId] ?? [];
-                $messages[] = $this->messageBuilder->build(
-                    $storeId,
-                    'product',
-                    $productId,
-                    $product
-                );
+                if (!isset($productsData[$productId])) {
+                    $messages[] = $this->messageBuilder->build(
+                        $storeId,
+                        'product',
+                        $productId,
+                        []
+                    );
+                }
             }
             if (!empty($messages)) {
                 $this->queuePublisher->publish(self::TOPIC_NAME, $messages);

@@ -106,6 +106,7 @@ class ElasticsearchDataDefinitionAdapter implements DataDefinitionInterface
             'body' => [
                 $entityName => $this->config->getEntityConfig($entityName)->getSettings()
             ],
+            'include_type_name' => true
         ];
 
         foreach ($schema as $field => $fieldInfo) {
