@@ -31,7 +31,7 @@ class ScopeProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->scopeProvider = $this->objectManager->get(ScopeProvider::class);

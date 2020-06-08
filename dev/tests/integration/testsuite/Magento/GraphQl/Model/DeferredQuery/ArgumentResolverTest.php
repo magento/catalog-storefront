@@ -35,7 +35,7 @@ class ArgumentResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->serializer = $this->objectManager->get(SerializerInterface::class);
@@ -148,7 +148,7 @@ class ArgumentResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         /** @var  \Magento\Framework\App\Cache\StateInterface $cacheState */
         $cacheState = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

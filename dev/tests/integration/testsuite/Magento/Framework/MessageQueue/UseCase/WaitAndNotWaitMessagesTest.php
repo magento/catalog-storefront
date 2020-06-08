@@ -55,7 +55,7 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->msgObject = $this->objectManager->create(AsyncTestData::class);
