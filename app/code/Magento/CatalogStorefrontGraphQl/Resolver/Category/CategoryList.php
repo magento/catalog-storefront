@@ -130,9 +130,7 @@ class CategoryList implements BatchResolverInterface
                 ];
             }
         } catch (InputException $e) {
-            throw $e;
-            $batchResponse = $batchResponse ?? new BatchResponse();
-            $batchResponse->addResponse($request, []);
+            throw new GraphQlInputException(__($e->getMessage()));
         }
 
         // ad-hoc solution to handle case with invalid filter
