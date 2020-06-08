@@ -7,9 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontGraphQl\Resolver\Category;
 
-use Magento\CatalogStorefrontApi\Api\CategoryInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
-use Magento\CatalogStorefrontApi\Api\Data\CategoryResultContainerInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -20,7 +18,6 @@ use Magento\StorefrontGraphQl\Model\Query\ScopeProvider;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResponse;
 use Magento\StorefrontGraphQl\Model\ServiceInvoker;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\CatalogGraphQl\Model\Category\CategoryFilter;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
 
@@ -52,29 +49,21 @@ class CategoryList implements BatchResolverInterface
     private $categoryFilter;
 
     /**
-     * @var CollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
      * @param FieldResolver $fieldResolver
      * @param ServiceInvoker $serviceInvoker
      * @param ScopeProvider $scopeProvider
      * @param CategoryFilter $categoryFilter
-     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
         FieldResolver $fieldResolver,
         ServiceInvoker $serviceInvoker,
         ScopeProvider $scopeProvider,
-        CategoryFilter $categoryFilter,
-        CollectionFactory $collectionFactory
+        CategoryFilter $categoryFilter
     ) {
         $this->fieldResolver = $fieldResolver;
         $this->scopeProvider = $scopeProvider;
         $this->serviceInvoker = $serviceInvoker;
         $this->categoryFilter = $categoryFilter;
-        $this->collectionFactory = $collectionFactory;
     }
 
     /**
