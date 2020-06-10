@@ -32,7 +32,9 @@ use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * @inheritdoc
+ * Class for retrieving catalog data
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CatalogService implements CatalogServerInterface
 {
@@ -57,10 +59,10 @@ class CatalogService implements CatalogServerInterface
     private $logger;
 
     /**
-     * CatalogService constructor.
      * @param ProductDataProvider $dataProvider
      * @param DataObjectHelper $dataObjectHelper
      * @param CategoryDataProvider $categoryDataProvider
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ProductDataProvider $dataProvider,
@@ -74,7 +76,16 @@ class CatalogService implements CatalogServerInterface
         $this->logger = $logger;
     }
 
-    public function GetProducts(
+    /**
+     * Get requested products
+     *
+     * @param ProductsGetRequestInterface $request
+     * @return ProductsGetResultInterface
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
+     * @throws \Throwable
+     */
+    public function getProducts(
         ProductsGetRequestInterface $request
     ): ProductsGetResultInterface {
         $result = new ProductsGetResult();
@@ -107,88 +118,7 @@ class CatalogService implements CatalogServerInterface
         }
 
         foreach ($rawItems as $item) {
-            $item = $this->cleanUpNullValues($item);
-            $variants = [];
-            foreach ($item['variants'] ?? [] as $productId => $variantData) {
-                $variant = [
-                    'product' => $productId,
-                    'attributes' => $variantData['attributes']
-                ];
-                $variants[] = $variant;
-            }
-            $item['variants'] = $variants;
-
-            $item['description'] = $item['description']['html'] ?? '';
-            $item['short_description'] = $item['short_description']['html'] ?? '';
-            //Convert option values to unified array format
-            if (!empty($item['options'])) {
-                foreach ($item['options'] as &$option) {
-                    $firstValue = reset($option['value']);
-                    if (!is_array($firstValue)) {
-                        $option['value'] = [0 => $option['value']];
-                        continue;
-                    }
-                }
-            }
-
-            $product = new \Magento\CatalogStorefrontApi\Api\Data\Product();
-            $this->dataObjectHelper->populateWithArray($product, $item, ProductInterface::class);
-            $product = $this->setImage('image', $item, $product);
-            $product = $this->setImage('small_image', $item, $product);
-            $product = $this->setImage('thumbnail', $item, $product);
-
-            //PopulateWithArray doesn't work with non-array sub-objects which don't set properties using constructor
-            $mediaGalleryData = $item['media_gallery'] ?? [];
-            $mediaGallery = [];
-            foreach ($mediaGalleryData as $mediaGalleryDataItem) {
-                $mediaGalleryItem = new MediaGalleryItem;
-                $this->dataObjectHelper->populateWithArray(
-                    $mediaGalleryItem,
-                    $mediaGalleryDataItem,
-                    MediaGalleryItemInterface::class
-                );
-                if (!empty($mediaGalleryDataItem['video_content'])) {
-                    $videoContent = new Video;
-                    $videoContent->setMediaType($mediaGalleryDataItem['video_content']['media_type'] ?? '');
-                    $videoContent->setVideoDescription(
-                        $mediaGalleryDataItem['video_content']['video_description'] ?? ''
-                    );
-                    $videoContent->setVideoMetadata(
-                        $mediaGalleryDataItem['video_content']['video_metadata'] ?? ''
-                    );
-                    $videoContent->setVideoProvider(
-                        $mediaGalleryDataItem['video_content']['video_provider'] ?? ''
-                    );
-                    $videoContent->setVideoTitle(
-                        $mediaGalleryDataItem['video_content']['video_title'] ?? ''
-                    );
-                    $videoContent->setVideoUrl(
-                        $mediaGalleryDataItem['video_content']['video_url'] ?? ''
-                    );
-                    $mediaGalleryItem->setVideoContent($videoContent);
-                }
-
-                $mediaGallery[] = $mediaGalleryItem;
-            }
-            $product->setMediaGallery($mediaGallery);
-
-            $urlRewritesData = $item['url_rewrites'] ?? [];
-            $urlRewrites = [];
-            foreach ($urlRewritesData as $urlRewriteData) {
-                $rewrite = new \Magento\CatalogStorefrontApi\Api\Data\UrlRewrite;
-                $rewrite->setUrl($urlRewriteData['url'] ?? '');
-                $parameters = [];
-                foreach ($urlRewriteData['parameters'] ?? [] as $parameterData) {
-                    $parameter = new \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameter;
-                    $parameter->setName($parameterData['name'] ?? '');
-                    $parameter->setValue($parameterData['value'] ?? '');
-                    $parameters[] = $parameter;
-                }
-                $rewrite->setParameters($parameters);
-                $urlRewrites[] = $rewrite;
-            }
-            $product->setUrlRewrites($urlRewrites);
-            $products[] = $product;
+            $products[] = $this->prepareProduct($item);
         }
 
         $result->setItems($products);
@@ -215,6 +145,14 @@ class CatalogService implements CatalogServerInterface
         return $result;
     }
 
+    /**
+     * Set product image
+     *
+     * @param string $key
+     * @param array $rawData
+     * @param ProductInterface $product
+     * @return ProductInterface
+     */
     private function setImage(string $key, array $rawData, ProductInterface $product): ProductInterface
     {
         if (empty($rawData[$key])) {
@@ -233,25 +171,44 @@ class CatalogService implements CatalogServerInterface
     }
 
     /**
+     * Import requested products
+     *
      * @param ImportProductsRequestInterface $request
      * @return ImportProductsResponseInterface
+     * phpcs:disable Generic.CodeAnalysis.EmptyStatement
      */
-    public function ImportProducts(
+    public function importProducts(
         ImportProductsRequestInterface $request
     ): ImportProductsResponseInterface {
         // TODO: Implement ImportProducts() method.
+
+        return $request;
     }
 
     /**
+     * Import requested categories
+     *
      * @param ImportCategoriesRequestInterface $request
      * @return ImportCategoriesResponseInterface
+     * phpcs:disable Generic.CodeAnalysis.EmptyStatement
      */
-    public function ImportCategories(ImportCategoriesRequestInterface $request): ImportCategoriesResponseInterface
+    public function importCategories(ImportCategoriesRequestInterface $request): ImportCategoriesResponseInterface
     {
         // TODO: Implement ImportCategories() method.
+
+        return $request;
     }
 
-    public function GetCategories(
+    /**
+     * Get requested categories
+     *
+     * @param CategoriesGetRequestInterface $request
+     * @return CategoriesGetResponseInterface
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
+     * @throws \Throwable
+     */
+    public function getCategories(
         CategoriesGetRequestInterface $request
     ): CategoriesGetResponseInterface {
         $result = new CategoriesGetResponse();
@@ -313,5 +270,111 @@ class CatalogService implements CatalogServerInterface
             $data[$key] = '';
         }
         return $data;
+    }
+
+    /**
+     * Get video content for media gallery
+     *
+     * @param array $mediaGalleryItemVideo
+     * @return Video
+     */
+    private function getMediaGalleryVideo(array $mediaGalleryItemVideo): Video
+    {
+        $videoContent = new Video;
+        $videoContent->setMediaType($mediaGalleryItemVideo['media_type'] ?? '');
+        $videoContent->setVideoDescription(
+            $mediaGalleryItemVideo['video_description'] ?? ''
+        );
+        $videoContent->setVideoMetadata(
+            $mediaGalleryItemVideo['video_metadata'] ?? ''
+        );
+        $videoContent->setVideoProvider(
+            $mediaGalleryItemVideo['video_provider'] ?? ''
+        );
+        $videoContent->setVideoTitle(
+            $mediaGalleryItemVideo['video_title'] ?? ''
+        );
+        $videoContent->setVideoUrl(
+            $mediaGalleryItemVideo['video_url'] ?? ''
+        );
+
+        return $videoContent;
+    }
+
+    /**
+     * Prepare product from raw data
+     *
+     * @param array $item
+     * @return ProductInterface
+     */
+    private function prepareProduct(array $item): ProductInterface
+    {
+        $item = $this->cleanUpNullValues($item);
+        $variants = [];
+        foreach ($item['variants'] ?? [] as $productId => $variantData) {
+            $variant = [
+                'product' => $productId,
+                'attributes' => $variantData['attributes']
+            ];
+            $variants[] = $variant;
+        }
+        $item['variants'] = $variants;
+
+        $item['description'] = $item['description']['html'] ?? '';
+        $item['short_description'] = $item['short_description']['html'] ?? '';
+        //Convert option values to unified array format
+        if (!empty($item['options'])) {
+            foreach ($item['options'] as &$option) {
+                $firstValue = reset($option['value']);
+                if (!is_array($firstValue)) {
+                    $option['value'] = [0 => $option['value']];
+                    continue;
+                }
+            }
+        }
+
+        $product = new \Magento\CatalogStorefrontApi\Api\Data\Product();
+        $this->dataObjectHelper->populateWithArray($product, $item, ProductInterface::class);
+        $product = $this->setImage('image', $item, $product);
+        $product = $this->setImage('small_image', $item, $product);
+        $product = $this->setImage('thumbnail', $item, $product);
+
+        //PopulateWithArray doesn't work with non-array sub-objects which don't set properties using constructor
+        $mediaGalleryData = $item['media_gallery'] ?? [];
+        $mediaGallery = [];
+        foreach ($mediaGalleryData as $mediaGalleryDataItem) {
+            $mediaGalleryItem = new MediaGalleryItem;
+            $this->dataObjectHelper->populateWithArray(
+                $mediaGalleryItem,
+                $mediaGalleryDataItem,
+                MediaGalleryItemInterface::class
+            );
+            if (!empty($mediaGalleryDataItem['video_content'])) {
+                $videoContent = $this->getMediaGalleryVideo($mediaGalleryDataItem['video_content']);
+                $mediaGalleryItem->setVideoContent($videoContent);
+            }
+
+            $mediaGallery[] = $mediaGalleryItem;
+        }
+        $product->setMediaGallery($mediaGallery);
+
+        $urlRewritesData = $item['url_rewrites'] ?? [];
+        $urlRewrites = [];
+        foreach ($urlRewritesData as $urlRewriteData) {
+            $rewrite = new \Magento\CatalogStorefrontApi\Api\Data\UrlRewrite;
+            $rewrite->setUrl($urlRewriteData['url'] ?? '');
+            $parameters = [];
+            foreach ($urlRewriteData['parameters'] ?? [] as $parameterData) {
+                $parameter = new \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameter;
+                $parameter->setName($parameterData['name'] ?? '');
+                $parameter->setValue($parameterData['value'] ?? '');
+                $parameters[] = $parameter;
+            }
+            $rewrite->setParameters($parameters);
+            $urlRewrites[] = $rewrite;
+        }
+        $product->setUrlRewrites($urlRewrites);
+
+        return $product;
     }
 }

@@ -19,6 +19,8 @@ class Metadata
      *
      * @param array $metadata
      * @return array
+     * phpcs:disable Magento2.Functions.StaticFunction
+     * phpcs:disable Magento2.Functions.DiscouragedFunction
      */
     public static function update(array $metadata): array
     {

@@ -45,7 +45,6 @@ class Product implements BatchResolverInterface
      */
     private $scopeProvider;
 
-
     /**
      * @param \Magento\StorefrontGraphQl\Model\ServiceInvoker $serviceInvoker
      * @param RequestBuilder $requestBuilder
