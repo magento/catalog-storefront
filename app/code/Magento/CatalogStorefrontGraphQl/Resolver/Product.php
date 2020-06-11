@@ -77,6 +77,9 @@ class Product implements BatchResolverInterface
         $storefrontRequests = [];
         foreach ($requests as $request) {
             $productId = $request->getValue()['product'] ?? $request->getValue()['entity_id'] ?? null;
+            $productId = \is_array($productId)
+                ? $productId['entity_id'] ?? $productId
+                : $productId;
             if (!$productId) {
                 throw new \InvalidArgumentException('Product id is missing in request');
             }
