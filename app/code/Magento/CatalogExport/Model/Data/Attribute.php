@@ -17,6 +17,8 @@ class Attribute extends AbstractModel implements AttributeInterface
 {
     private const ATTRIBUTE_CODE = 'attribute_code';
 
+    private const TYPE = 'type';
+
     private const VALUE = 'value';
 
     /**
@@ -33,6 +35,22 @@ class Attribute extends AbstractModel implements AttributeInterface
     public function setAttributeCode($attributeCode)
     {
         $this->setData(self::ATTRIBUTE_CODE, $attributeCode);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getType() : string
+    {
+        return $this->getData(self::TYPE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setType($type)
+    {
+        $this->setData(self::TYPE, $type);
     }
 
     /**

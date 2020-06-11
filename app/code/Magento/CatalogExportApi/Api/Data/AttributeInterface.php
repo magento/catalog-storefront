@@ -28,16 +28,31 @@ interface AttributeInterface
     public function setAttributeCode($attributeCode);
 
     /**
+     * Get attribute type
+     *
+     * @return string
+     */
+    public function getType() : string;
+
+    /**
+     * Set attribute type
+     *
+     * @param string $type
+     * @return void
+     */
+    public function setType($type);
+
+    /**
      * Get entity attribute value
      *
-     * @return string[]
+     * @return \Magento\CatalogExportApi\Api\Data\AttributeValueInterface[]
      */
     public function getValue();
 
     /**
      * Set entity attribute value
      *
-     * @param string $value
+     * @param \Magento\CatalogExportApi\Api\Data\AttributeValueInterface[] $value
      * @return void
      */
     public function setValue($value);
