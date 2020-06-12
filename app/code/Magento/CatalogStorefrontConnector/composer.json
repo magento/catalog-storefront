@@ -14,7 +14,8 @@
         "magento/module-catalog-extractor": "*",
         "magento/module-catalog-search": "*",
         "magento/module-config": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-catalog-data-exporter": "*"
     },
     "suggest": {
         "magento/module-catalog-inventory": "Allows use catalog inventory configuration"

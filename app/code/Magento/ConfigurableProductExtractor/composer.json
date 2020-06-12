@@ -9,7 +9,9 @@
         "magento/framework": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-extractor": "*",
-        "magento/module-store": "*"
+        "magento/module-configurable-product": "*",
+        "magento/module-store": "*",
+        "magento/module-eav": "*"
     },
     "type": "magento2-module",
     "license": [

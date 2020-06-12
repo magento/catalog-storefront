@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Store save tests
+ * Class StoreSaveTest
  */
 class StoreSaveTest extends GraphQlAbstract
 {
@@ -19,13 +19,13 @@ class StoreSaveTest extends GraphQlAbstract
      * Test a product from newly created store
      *
      * @magentoApiDataFixture Magento/Catalog/_files/category_product.php
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     * @magentoApiDataFixture Magento/Indexer/_files/reindex.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testProductVisibleInNewStore()
     {
-        $newStoreCode = 'new_store';
-        $this->createStore($newStoreCode);
-        //use case for new storeCode
+        $newStoreCode = 'fixture_second_store';
         $this->assertCategory($newStoreCode);
         $this->assertProduct($newStoreCode);
     }
@@ -110,73 +110,5 @@ QUERY;
             $response['categoryList'][0]['name'],
             'Category name in fixture store is invalid.'
         );
-    }
-
-    /**
-     * Creates store by store code.
-     *
-     * @param string $storeCode
-     * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function createStore(string $storeCode): void
-    {
-        $objectManager = Bootstrap::getObjectManager();
-        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-        $storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
-
-        /** @var \Magento\Store\Model\Store $store */
-        $store = $objectManager->create(\Magento\Store\Model\Store::class);
-
-        if (!$store->load($storeCode)->getId()) {
-            $store->setCode($storeCode)
-                ->setWebsiteId($storeManager->getWebsite()->getId())
-                ->setGroupId($storeManager->getWebsite()->getDefaultGroupId())
-                ->setName($storeCode)
-                ->setSortOrder(10)
-                ->setIsActive(1);
-            $store->save();
-
-            /** @var $indexer \Magento\Framework\Indexer\IndexerInterface */
-            $indexer = $objectManager->create(\Magento\Indexer\Model\Indexer::class);
-            $indexer->load(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID);
-            $indexer->reindexAll();
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->removeStore('new_store');
-    }
-
-    /**
-     * Deletes store by store code.
-     *
-     * @param string $storeCode
-     * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function removeStore(string $storeCode): void
-    {
-        $objectManager = Bootstrap::getObjectManager();
-
-        /** @var \Magento\Framework\Registry $registry */
-        $registry = $objectManager->get(\Magento\Framework\Registry::class);
-        $registry->unregister('isSecureArea');
-        $registry->register('isSecureArea', true);
-
-        /** @var \Magento\Store\Model\Store $store */
-        $store = $objectManager->get(\Magento\Store\Model\Store::class);
-        $store->load($storeCode, 'code');
-        if ($store->getId()) {
-            $store->delete();
-        }
-
-        $registry->unregister('isSecureArea');
-        $registry->register('isSecureArea', false);
     }
 }
