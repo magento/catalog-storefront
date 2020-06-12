@@ -59,12 +59,13 @@ class RequestBuilder
      *
      * @param ContextInterface $context
      * @param BatchRequestItemInterface|ResolveRequestInterface $request
-     * @param array|null $filter
+     * @param array $filter
+     * @param array $sort
      * @return array
      * @throws GraphQlInputException
      * @throws \Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException
      */
-    public function buildRequest(ContextInterface $context, $request, array $filter = [], array $sort =[]): array
+    public function buildRequest(ContextInterface $context, $request, array $filter = [], array $sort = []): array
     {
         $args = $request->getArgs();
         $info = $request->getInfo();

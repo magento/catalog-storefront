@@ -9,16 +9,15 @@ namespace Magento\CatalogStorefrontGraphQl\Resolver\Category;
 
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
-use Magento\Framework\Exception\InputException;
+use Magento\CatalogStorefrontGraphQl\Model\FieldResolver;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResolverInterface;
-use Magento\CatalogStorefrontGraphQl\Model\FieldResolver;
-use Magento\StorefrontGraphQl\Model\Query\ScopeProvider;
-use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResponse;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\StorefrontGraphQl\Model\Query\ScopeProvider;
 use Magento\StorefrontGraphQl\Model\ServiceInvoker;
 
 /**
@@ -65,47 +64,10 @@ class CategoryTree implements BatchResolverInterface
      */
     public function resolve(ContextInterface $context, Field $field, array $requests): BatchResponse
     {
-        $scopes = $this->scopeProvider->getScopes($context);
         $storefrontRequests = [];
 
         foreach ($requests as $request) {
-            $storefrontRequest = ['scopes' => $scopes, 'store' => $scopes['store']];
-
-            if ($field->getName() == 'category') {
-                $categoryId = $request->getArgs()['id'] ?? null;
-                if (is_null($categoryId)) {
-                    $store = $context->getExtensionAttributes()->getStore();
-                    $categoryId = (int)$store->getRootCategoryId();
-                }
-
-                $storefrontRequest['ids'] = [$categoryId];
-                $storefrontRequest['attribute_codes'] = $this->fieldResolver->getSchemaTypeFields(
-                    $request->getInfo(),
-                    ['category']
-                );
-                $type = 'category';
-            } elseif ($field->getName() == 'children') {
-                $categoryIds = $request->getValue()['children'] ?? [];
-                $storefrontRequest['ids'] = $categoryIds;
-                $storefrontRequest['attribute_codes'] = $this->fieldResolver->getSchemaTypeFields(
-                    $request->getInfo(),
-                    ['children']
-                );
-                $type = 'children';
-            } else {
-                throw new \InvalidArgumentException(
-                    'Category tree resolver support only category and children fields'
-                );
-            }
-
-            $storefrontRequests[] = [
-                'graphql_request' => $request,
-                'storefront_request' => $storefrontRequest,
-                'additional_info' => [
-                    'type' => $type,
-                    'category_ids' => $storefrontRequest['ids']
-                ]
-            ];
+            $storefrontRequests[] = $this->prepareStorefrontRequest($request, $context, $field);
         }
 
         return $this->serviceInvoker->invoke(
@@ -114,10 +76,8 @@ class CategoryTree implements BatchResolverInterface
             $storefrontRequests,
             function (
                 CategoriesGetResponseInterface $result,
-                GraphQlInputException $e,
-                BatchRequestItemInterface $request,
                 array $additionalInfo
-            ) use ($context) {
+            ) {
                 $output = [];
 
                 if (count($result->getItems()) != count($additionalInfo['category_ids'])) {
@@ -162,7 +122,7 @@ class CategoryTree implements BatchResolverInterface
                             "category_name" => $breadcrumb->getCategoryName(),
                         ];
                     }
-                    if ($additionalInfo['type'] == 'category') {
+                    if ($additionalInfo['type'] === 'category') {
                         return $itemOutput;
                     }
                     $output[] = $itemOutput;
@@ -170,32 +130,59 @@ class CategoryTree implements BatchResolverInterface
                 return $output;
             }
         );
+    }
 
-        return $this->serviceInvoker->invoke(
-            CategoryInterface::class,
-            'get',
-            $storefrontRequests,
-            function (
-                CategoryResultContainerInterface $result,
-                GraphQlInputException $e,
-                BatchRequestItemInterface $request
-            ) use ($context) {
-                $errors = $result->getErrors() ?? $e->getErrors();
-                if (!empty($errors)) {
-                    //ad-hoc solution with __() as GraphQlInputException accepts Phrase in construct
-                    throw new InputException(
-                        __(\implode('; ', \array_map('\strval', $errors)))
-                    );
-                }
-                $categoryId = $request->getArgs()['id']
-                    ?? $context->getExtensionAttributes()->getStore()->getRootCategoryId();
+    /**
+     * Prepare storefront request based on requested category arguments and field
+     *
+     * @param BatchRequestItemInterface $request
+     * @param ContextInterface $context
+     * @param Field $field
+     * @return array
+     * @throws GraphQlNoSuchEntityException
+     */
+    private function prepareStorefrontRequest(
+        BatchRequestItemInterface $request,
+        ContextInterface $context,
+        Field $field
+    ): array {
+        if ($field->getName() === 'category') {
+            $scopes = $this->scopeProvider->getScopes($context);
 
-                if (!isset($result->getCategories()[$categoryId])) {
-                    throw new GraphQlNoSuchEntityException(__('Category doesn\'t exist'));
-                }
-
-                return $result->getCategories()[$categoryId];
+            $storefrontRequest = ['scopes' => $scopes, 'store' => $scopes['store']];
+            $categoryId = $request->getArgs()['id'] ?? null;
+            if ($categoryId === null) {
+                $store = $context->getExtensionAttributes()->getStore();
+                $categoryId = (int)$store->getRootCategoryId();
             }
-        );
+
+            $storefrontRequest['ids'] = [$categoryId];
+            $storefrontRequest['attribute_codes'] = $this->fieldResolver->getSchemaTypeFields(
+                $request->getInfo(),
+                ['category']
+            );
+            $type = 'category';
+        } elseif ($field->getName() === 'children') {
+            $categoryIds = $request->getValue()['children'] ?? [];
+            $storefrontRequest['ids'] = $categoryIds;
+            $storefrontRequest['attribute_codes'] = $this->fieldResolver->getSchemaTypeFields(
+                $request->getInfo(),
+                ['children']
+            );
+            $type = 'children';
+        } else {
+            throw new \InvalidArgumentException(
+                'Category tree resolver support only category and children fields'
+            );
+        }
+
+        return [
+            'graphql_request' => $request,
+            'storefront_request' => $storefrontRequest,
+            'additional_info' => [
+                'type' => $type,
+                'category_ids' => $storefrontRequest['ids']
+            ]
+        ];
     }
 }

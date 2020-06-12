@@ -23,13 +23,14 @@ class ObjectToArray
 
     /**
      * Extract data from provided object and convert it to a new array
+     *
      * Optional map argument allows to map specific methods to array keys
      *
-     * @param $object - php object
+     * @param object $object
      * @param array $map
      * @return array
      */
-    public function getArray($object, array $map = []): array
+    public function getArray(object $object, array $map = []): array
     {
         if (!is_object($object)) {
             throw new \InvalidArgumentException('First argument must be an object');
@@ -56,12 +57,14 @@ class ObjectToArray
 
     /**
      * Extracts default mapping from the object using reflection
+     *
      * Method also applies overrides specified in the map.
      *
-     * @param $object
+     * @param object $object
+     * @param array $mapOverride
      * @return array [method => array key]
      */
-    private function fetchMap($object, array $mapOverride = []): array
+    private function fetchMap(object $object, array $mapOverride = []): array
     {
         if (isset($this->reflectionCache[get_class($object)])) {
             return $this->reflectionCache[get_class($object)];
@@ -95,5 +98,4 @@ class ObjectToArray
         $this->reflectionCache[get_class($object)] = $result;
         return $result;
     }
-
 }

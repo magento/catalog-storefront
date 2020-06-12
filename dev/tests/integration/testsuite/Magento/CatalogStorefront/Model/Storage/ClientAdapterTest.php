@@ -18,7 +18,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use \Magento\Framework\ObjectManagerInterface;
 
 /**
- * Class ClientAdapterTest
+ * Test class for the search client adapter
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
