@@ -97,6 +97,8 @@ class CategoryList implements BatchResolverInterface
             $storefrontRequests,
             function (
                 CategoriesGetResponseInterface $result,
+                $graphQlException,
+                $graphQlRequest,
                 $additionalInfo
             ) {
                 $output = [];

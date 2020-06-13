@@ -76,6 +76,8 @@ class CategoryTree implements BatchResolverInterface
             $storefrontRequests,
             function (
                 CategoriesGetResponseInterface $result,
+                $graphQlException,
+                $graphQlRequest,
                 array $additionalInfo
             ) {
                 $output = [];
