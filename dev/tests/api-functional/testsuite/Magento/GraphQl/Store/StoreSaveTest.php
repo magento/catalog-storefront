@@ -11,7 +11,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Class StoreSaveTest
+ * Store save tests
  */
 class StoreSaveTest extends GraphQlAbstract
 {
