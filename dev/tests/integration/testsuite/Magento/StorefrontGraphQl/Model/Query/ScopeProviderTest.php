@@ -31,7 +31,7 @@ class ScopeProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->scopeProvider = $this->objectManager->get(ScopeProvider::class);
@@ -84,6 +84,8 @@ class ScopeProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetScopesWithoutStore()
     {
+        $this->expectException(\Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException::class);
+        $this->expectExceptionMessage('There is no store in extension attributes');
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
         $customerRepository = $this->objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $customer = $customerRepository->get('customer@example.com');
@@ -115,6 +117,8 @@ class ScopeProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetScopesWithoutGroupId()
     {
+        $this->expectException(\Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException::class);
+        $this->expectExceptionMessage('Customer group id wasn\'t found');
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
         $customerRepository = $this->objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $customer = $customerRepository->get('customer@example.com');
