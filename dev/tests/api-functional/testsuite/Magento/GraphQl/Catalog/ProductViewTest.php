@@ -232,7 +232,7 @@ class ProductViewTest extends GraphQlAbstract
             special_from_date
             special_price
             special_to_date
-            swatch_image            
+            swatch_image
             tier_price
             tier_prices
             {
@@ -653,8 +653,22 @@ QUERY;
         $secondProduct = $productRepository->get($secondProductSku, false, null, true);
         self::assertNotNull($response['products']['items'][0]['price'], "price must be not null");
         self::assertCount(2, $response['products']['items']);
-        $this->assertBaseFields($firstProduct, $response['products']['items'][0]);
-        $this->assertBaseFields($secondProduct, $response['products']['items'][1]);
+
+        foreach ([$firstProduct, $secondProduct] as $filteredProduct) {
+            $found = false;
+            $responseProduct = null;
+
+            foreach ($response['products']['items'] as $item) {
+                if ($item['sku'] === $filteredProduct->getSku()) {
+                    $found = true;
+                    $responseProduct = $item;
+                    break;
+                }
+            }
+
+            $this->assertTrue($found, "Product with sku {$filteredProduct->getSku()} is not found in response");
+            $this->assertBaseFields($filteredProduct, $responseProduct);
+        }
     }
 
     /**
@@ -705,7 +719,7 @@ QUERY;
         $customAttribute = null;
         $this->assertEquals($customAttribute, $actualResponse['attribute_code_custom']);
     }
-    
+
     /**
      * @param ProductInterface $product
      * @param $actualResponse
