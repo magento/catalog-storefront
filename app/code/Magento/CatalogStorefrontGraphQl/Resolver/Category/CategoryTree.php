@@ -148,10 +148,10 @@ class CategoryTree implements BatchResolverInterface
         ContextInterface $context,
         Field $field
     ): array {
-        if ($field->getName() === 'category') {
-            $scopes = $this->scopeProvider->getScopes($context);
+        $scopes = $this->scopeProvider->getScopes($context);
+        $storefrontRequest = ['scopes' => $scopes, 'store' => $scopes['store']];
 
-            $storefrontRequest = ['scopes' => $scopes, 'store' => $scopes['store']];
+        if ($field->getName() === 'category') {
             $categoryId = $request->getArgs()['id'] ?? null;
             if ($categoryId === null) {
                 $store = $context->getExtensionAttributes()->getStore();
