@@ -73,6 +73,7 @@ class CategoryList implements BatchResolverInterface
      * @param Field $field Field metadata.
      * @param BatchRequestItemInterface[] $requests Requests to the field.
      * @return BatchResponse Aggregated response.
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function resolve(ContextInterface $context, Field $field, array $requests): BatchResponse
     {
