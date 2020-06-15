@@ -316,7 +316,10 @@
         "magento/module-catalog-storefront-api": "*",
         "magento/module-catalog-storefront-graph-ql": "*",
         "magento/module-catalog-storefront-connector": "*",
-        "magento/module-storefront-graph-ql": "*"
+        "magento/module-storefront-graph-ql": "*",
+        "magento/module-catalog-export" : "*",
+        "magento/module-catalog-export-api" : "*",
+        "magento/module-catalog-message-broker": "*"
     },
     "conflict": {
         "gene/bluefoot": "*"
