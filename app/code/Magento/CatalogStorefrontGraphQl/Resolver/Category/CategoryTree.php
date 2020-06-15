@@ -61,6 +61,7 @@ class CategoryTree implements BatchResolverInterface
      * @param Field $field Field metadata.
      * @param BatchRequestItemInterface[] $requests Requests to the field.
      * @return BatchResponse Aggregated response.
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function resolve(ContextInterface $context, Field $field, array $requests): BatchResponse
     {
@@ -76,10 +77,11 @@ class CategoryTree implements BatchResolverInterface
             $storefrontRequests,
             function (
                 CategoriesGetResponseInterface $result,
+                $graphQlException,
+                $graphQlRequest,
                 array $additionalInfo
             ) {
                 $output = [];
-
                 if (count($result->getItems()) != count($additionalInfo['category_ids'])) {
                     throw new GraphQlNoSuchEntityException(
                         __('Category doesn\'t exist')
@@ -146,10 +148,11 @@ class CategoryTree implements BatchResolverInterface
         ContextInterface $context,
         Field $field
     ): array {
-        if ($field->getName() === 'category') {
-            $scopes = $this->scopeProvider->getScopes($context);
+        $scopes = $this->scopeProvider->getScopes($context);
 
-            $storefrontRequest = ['scopes' => $scopes, 'store' => $scopes['store']];
+        $storefrontRequest = ['scopes' => $scopes, 'store' => $scopes['store']];
+
+        if ($field->getName() === 'category') {
             $categoryId = $request->getArgs()['id'] ?? null;
             if ($categoryId === null) {
                 $store = $context->getExtensionAttributes()->getStore();
