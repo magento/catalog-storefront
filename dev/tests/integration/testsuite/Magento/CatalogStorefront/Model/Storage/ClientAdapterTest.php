@@ -69,7 +69,7 @@ class ClientAdapterTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -90,7 +90,7 @@ class ClientAdapterTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->storageDDL->deleteDataSource($this->state->getCurrentDataSourceName(['scope']));
     }
@@ -135,6 +135,8 @@ class ClientAdapterTest extends TestCase
      */
     public function testBulkInsertWithWrongMappingType(): void
     {
+        $this->expectExceptionMessage('Error occurred while bulk insert');
+        $this->expectException(\Magento\Framework\Exception\BulkException::class);
         $productBuilder = $this->getSimpleProductData();
         $productBuilder['sku'] = 'test-sku-default-site-123';
         $productData = $productBuilder;
@@ -163,6 +165,8 @@ class ClientAdapterTest extends TestCase
      */
     public function testNotFoundIndex()
     {
+        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
+        $this->expectExceptionMessage('\'product\' type document with id \'111\' not found in index \'not_found_index\'.');
         $this->storageQuery->getEntry(
             'not_found_index',
             'product',
@@ -193,6 +197,8 @@ class ClientAdapterTest extends TestCase
      */
     public function testStorageException()
     {
+        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
+        $this->expectExceptionMessage('Storage error');
         $this->storageQuery->getEntries(
             $this->state->getAliasName(),
             'product',
