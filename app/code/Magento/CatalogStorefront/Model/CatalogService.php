@@ -23,6 +23,8 @@ use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseInterface;
 use Magento\CatalogStorefront\DataProvider\ProductDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponse;
+use Magento\CatalogStorefrontApi\Api\Data\UrlRewrite;
+use Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameter;
 use Magento\CatalogStorefrontApi\Api\Data\Video;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
@@ -361,17 +363,7 @@ class CatalogService implements CatalogServerInterface
         $urlRewritesData = $item['url_rewrites'] ?? [];
         $urlRewrites = [];
         foreach ($urlRewritesData as $urlRewriteData) {
-            $rewrite = new \Magento\CatalogStorefrontApi\Api\Data\UrlRewrite;
-            $rewrite->setUrl($urlRewriteData['url'] ?? '');
-            $parameters = [];
-            foreach ($urlRewriteData['parameters'] ?? [] as $parameterData) {
-                $parameter = new \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameter;
-                $parameter->setName($parameterData['name'] ?? '');
-                $parameter->setValue($parameterData['value'] ?? '');
-                $parameters[] = $parameter;
-            }
-            $rewrite->setParameters($parameters);
-            $urlRewrites[] = $rewrite;
+            $urlRewrites[] = $this->prepareUrlRewrite($urlRewriteData);
         }
         $product->setUrlRewrites($urlRewrites);
         /**
@@ -410,5 +402,27 @@ class CatalogService implements CatalogServerInterface
             $items[] = $groupedItem;
         }
         $product->setItems($items);
+    }
+
+    /**
+     * Prepare Url Rewrite data
+     *
+     * @param array $urlRewriteData
+     * @return UrlRewrite $urlRewriteData
+     */
+    private function prepareUrlRewrite(array $urlRewriteData): UrlRewrite
+    {
+        $rewrite = new UrlRewrite;
+        $rewrite->setUrl($urlRewriteData['url'] ?? '');
+        $parameters = [];
+        foreach ($urlRewriteData['parameters'] ?? [] as $parameterData) {
+            $parameter = new UrlRewriteParameter;
+            $parameter->setName($parameterData['name'] ?? '');
+            $parameter->setValue($parameterData['value'] ?? '');
+            $parameters[] = $parameter;
+        }
+        $rewrite->setParameters($parameters);
+
+        return $rewrite;
     }
 }

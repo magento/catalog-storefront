@@ -1,0 +1,7 @@
+# Format: path to directory or path to file
+#
+# Example:
+# app/code/Magento/Catalog
+# dev/tests/static/framework/bootstrap.php
+app/code/Magento/CatalogStorefrontApi/Proto
+app/code/Magento/CatalogStorefrontApi/Metadata/Catalog.php
