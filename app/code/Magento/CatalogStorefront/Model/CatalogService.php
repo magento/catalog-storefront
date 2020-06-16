@@ -400,7 +400,7 @@ class CatalogService implements CatalogServerInterface
         foreach ($data['items'] as $item) {
             $groupedItem = new \Magento\CatalogStorefrontApi\Api\Data\GroupedItem();
             $groupedItem->setPosition((int)$item['position']);
-            $groupedItem->setQty($item['qty']);
+            $groupedItem->setQty((float)$item['qty']);
             $groupedItemInfo = new \Magento\CatalogStorefrontApi\Api\Data\GroupedItemProductInfo();
             $groupedItemInfo->setName($item['product']['name']);
             $groupedItemInfo->setSku($item['product']['sku']);
