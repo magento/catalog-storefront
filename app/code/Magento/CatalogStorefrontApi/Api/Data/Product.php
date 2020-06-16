@@ -90,6 +90,11 @@ final class Product implements ProductInterface
     private $urlKey;
 
     /**
+     * @var float
+     */
+    private $qty;
+
+    /**
      * @var string
      */
     private $taxClassId;
@@ -570,6 +575,27 @@ final class Product implements ProductInterface
     public function setUrlKey(string $value): void
     {
         $this->urlKey = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return float
+     */
+    public function getQty(): float
+    {
+        return (float) $this->qty;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param float $value
+     * @return void
+     */
+    public function setQty(float $value): void
+    {
+        $this->qty = $value;
     }
     
     /**

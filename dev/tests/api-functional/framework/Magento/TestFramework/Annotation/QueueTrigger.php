@@ -25,6 +25,13 @@ class QueueTrigger
      */
     public function startTest(\PHPUnit\Framework\TestCase $test)
     {
+        exec("ps ax | grep -v grep | grep 'queue:consumers' | awk '{print $1}'", $output);
+        if ($output) {
+            echo "stop consumers\n";
+            print_r($output);
+            exec('kill ' . implode(' ', $output));
+        }
+
         if ($test instanceof GraphQlAbstract) {
             $this->waitForAsynchronousResult();
         }
