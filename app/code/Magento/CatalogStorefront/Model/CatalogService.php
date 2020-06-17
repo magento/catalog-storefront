@@ -374,7 +374,41 @@ class CatalogService implements CatalogServerInterface
             $urlRewrites[] = $rewrite;
         }
         $product->setUrlRewrites($urlRewrites);
+        /**
+         * FIXME: Ugly way to populate child items for Grouped product.
+         * It should be refactored to general approach how to work with variations. Probably, in scope of MC-31164.
+         */
+        if ($product->getTypeId() == 'grouped') {
+            $this->setGroupedItems($product, $item);
+        }
 
         return $product;
+    }
+
+    /**
+     * Temporary fix for nested items of Grouped product.
+     *
+     * @param \Magento\CatalogStorefrontApi\Api\Data\Product $product
+     * @param array $data
+     */
+    private function setGroupedItems(\Magento\CatalogStorefrontApi\Api\Data\Product $product, array $data)
+    {
+        if (!isset($data['items'])) {
+            return;
+        }
+        $items = [];
+        foreach ($data['items'] as $item) {
+            $groupedItem = new \Magento\CatalogStorefrontApi\Api\Data\GroupedItem();
+            $groupedItem->setPosition((int)$item['position']);
+            $groupedItem->setQty((float)$item['qty']);
+            $groupedItemInfo = new \Magento\CatalogStorefrontApi\Api\Data\GroupedItemProductInfo();
+            $groupedItemInfo->setName($item['product']['name']);
+            $groupedItemInfo->setSku($item['product']['sku']);
+            $groupedItemInfo->setTypeId($item['product']['type_id']);
+            $groupedItemInfo->setUrlKey($item['product']['url_key']);
+            $groupedItem->setProduct($groupedItemInfo);
+            $items[] = $groupedItem;
+        }
+        $product->setItems($items);
     }
 }
