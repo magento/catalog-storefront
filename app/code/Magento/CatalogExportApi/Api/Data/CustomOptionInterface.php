@@ -7,9 +7,9 @@
 namespace Magento\CatalogExportApi\Api\Data;
 
 /**
- * CustomOption interface.
+ * CustomOption entity interface.
  */
-interface CustomOptionsInterface
+interface CustomOptionInterface
 {
     /**
      * Get product SKU

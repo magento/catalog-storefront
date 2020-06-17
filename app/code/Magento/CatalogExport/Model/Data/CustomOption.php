@@ -7,14 +7,14 @@
 namespace Magento\CatalogExport\Model\Data;
 
 use Magento\Framework\Model\AbstractModel;
-use Magento\CatalogExportApi\Api\Data\CustomOptionsInterface;
+use Magento\CatalogExportApi\Api\Data\CustomOptionInterface;
 
 /**
  * Custom option entity
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class CustomOption extends AbstractModel implements CustomOptionsInterface
+class CustomOption extends AbstractModel implements CustomOptionInterface
 {
     /**#@+
      * Constants
@@ -50,38 +50,6 @@ class CustomOption extends AbstractModel implements CustomOptionsInterface
     /**
      * @inheritDoc
      */
-    public function getType()
-    {
-        return $this->getData(self::KEY_TYPE);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setType($type)
-    {
-        return $this->setData(self::KEY_TYPE, $type);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getRenderType(): string
-    {
-        return $this->getData(self::KEY_RENDER_TYPE);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setRenderType(string $renderType)
-    {
-        return $this->setData(self::KEY_RENDER_TYPE, $renderType);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getRequired()
     {
         return $this->getData(self::KEY_REQUIRED);
@@ -109,6 +77,22 @@ class CustomOption extends AbstractModel implements CustomOptionsInterface
     public function setIsMulti(bool $multi)
     {
         return $this->setData(self::KEY_MULTI, $multi);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRenderType(): string
+    {
+        return $this->getData(self::KEY_RENDER_TYPE);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setRenderType(string $renderType)
+    {
+        return $this->setData(self::KEY_RENDER_TYPE, $renderType);
     }
 
     /**
@@ -165,6 +149,22 @@ class CustomOption extends AbstractModel implements CustomOptionsInterface
     public function getProductSku()
     {
         return $this->getData(self::KEY_PRODUCT_SKU);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getType()
+    {
+        return $this->getData(self::KEY_TYPE);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setType($type)
+    {
+        return $this->setData(self::KEY_TYPE, $type);
     }
 
     /**
