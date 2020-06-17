@@ -42,21 +42,6 @@ interface CustomOptionInterface
     public function setProductSku($sku);
 
     /**
-     * Get option id
-     *
-     * @return int|null
-     */
-    public function getOptionId();
-
-    /**
-     * Set option id
-     *
-     * @param int $optionId
-     * @return void
-     */
-    public function setOptionId($optionId);
-
-    /**
      * Get option title
      *
      * @return string

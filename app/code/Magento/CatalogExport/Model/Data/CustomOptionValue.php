@@ -24,7 +24,6 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
     const KEY_PRICE = 'price';
     const KEY_PRICE_TYPE = 'price_type';
     const KEY_SKU = 'sku';
-    const KEY_OPTION_TYPE_ID = 'option_type_id';
     const KEY_VALUE = 'value';
     /**#@-*/
 
@@ -74,22 +73,6 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
     public function setPriceType($priceType)
     {
         $this->setData(self::KEY_PRICE_TYPE, $priceType);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setOptionTypeId($optionTypeId)
-    {
-        $this->setData(self::KEY_OPTION_TYPE_ID, $optionTypeId);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getOptionTypeId()
-    {
-        return $this->getData(self::KEY_OPTION_TYPE_ID);
     }
 
     /**

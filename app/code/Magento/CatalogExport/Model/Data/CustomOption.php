@@ -21,7 +21,6 @@ class CustomOption extends AbstractModel implements CustomOptionInterface
      */
     const KEY_ID = 'id';
     const KEY_PRODUCT_SKU = 'product_sku';
-    const KEY_OPTION_ID = 'option_id';
     const KEY_TITLE = 'title';
     const KEY_TYPE = 'type';
     const KEY_SORT_ORDER = 'sort_order';
@@ -125,22 +124,6 @@ class CustomOption extends AbstractModel implements CustomOptionInterface
     public function setSortOrder($sortOrder)
     {
         $this->setData(self::KEY_SORT_ORDER, $sortOrder);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getOptionId()
-    {
-        return $this->getData(self::KEY_OPTION_ID);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setOptionId($optionId)
-    {
-        $this->setData(self::KEY_OPTION_ID, $optionId);
     }
 
     /**

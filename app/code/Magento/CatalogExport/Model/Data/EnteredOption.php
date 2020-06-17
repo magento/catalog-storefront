@@ -19,12 +19,12 @@ class EnteredOption extends AbstractModel implements EnteredOptionInterface
     /**#@+
      * Constants
      */
+    const KEY_ID = 'id';
     const KEY_VALUE = 'value';
     const KEY_REQUIRED = 'required';
     const KEY_SORT_ORDER = 'sort_order';
     const KEY_TYPE = 'type';
     const KEY_RENDER_TYPE = 'render_type';
-    const KEY_OPTION_ID = 'option_id';
     const KEY_PRODUCT_SKU = 'product_sku';
     const KEY_SKU = 'sku';
     const KEY_PRICE = 'price';
@@ -70,6 +70,22 @@ class EnteredOption extends AbstractModel implements EnteredOptionInterface
     /**
      * @inheritDoc
      */
+    public function getId(): ?int
+    {
+        return $this->getData(self::KEY_ID);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setId($value)
+    {
+        $this->setData(self::KEY_ID, $value);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getRequired()
     {
         return $this->getData(self::KEY_REQUIRED);
@@ -97,22 +113,6 @@ class EnteredOption extends AbstractModel implements EnteredOptionInterface
     public function setSortOrder($sortOrder)
     {
         $this->setData(self::KEY_SORT_ORDER, $sortOrder);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getOptionId()
-    {
-        return $this->getData(self::KEY_OPTION_ID);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setOptionId($optionId)
-    {
-        $this->setData(self::KEY_OPTION_ID, $optionId);
     }
 
     /**

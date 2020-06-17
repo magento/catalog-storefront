@@ -27,6 +27,21 @@ interface EnteredOptionInterface
     public function setType($type);
 
     /**
+     * Get option ID
+     *
+     * @return ?int
+     */
+    public function getId(): ?int;
+
+    /**
+     * Set option ID
+     *
+     * @param ?int $id
+     * @return void
+     */
+    public function setId($id);
+
+    /**
      * Return render type
      *
      * @return string
@@ -71,21 +86,6 @@ interface EnteredOptionInterface
      * @return void
      */
     public function setSortOrder($sortOrder);
-
-    /**
-     * Get option id
-     *
-     * @return int
-     */
-    public function getOptionId();
-
-    /**
-     * Set option id
-     *
-     * @param int $optionId
-     * @return void
-     */
-    public function setOptionId($optionId);
 
     /**
      * Get product SKU

@@ -100,19 +100,4 @@ interface CustomOptionValueInterface
      * @return void
      */
     public function setSku($sku);
-
-    /**
-     * Get Option type id
-     *
-     * @return int
-     */
-    public function getOptionTypeId();
-
-    /**
-     * Set Option type id
-     *
-     * @param int $optionTypeId
-     * @return int
-     */
-    public function setOptionTypeId($optionTypeId);
 }

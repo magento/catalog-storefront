@@ -38,6 +38,8 @@ class ProductDataProcessor
      * @param array $override
      * @param array $product
      * @return array
+     * @deprecated this is a temporary solution that will be replaced
+     * with declarative schema of mapping saas-export data format to storefront format
      */
     public function merge(array $override, array $product): array
     {
