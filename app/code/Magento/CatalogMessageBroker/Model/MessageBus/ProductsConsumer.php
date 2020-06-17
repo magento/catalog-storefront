@@ -63,6 +63,7 @@ class ProductsConsumer extends OldConsumer
      * @param StoreManagerInterface $storeManager
      * @param AppState $appState
      * @param ProductDataProcessor $productDataProcessor
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         CommandInterface $storageWriteSource,

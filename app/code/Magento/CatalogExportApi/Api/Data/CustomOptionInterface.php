@@ -22,7 +22,7 @@ interface CustomOptionInterface
      * Set product SKU
      *
      * @param string $sku
-     * @return $this
+     * @return void
      */
     public function setProductSku($sku);
 
@@ -37,7 +37,7 @@ interface CustomOptionInterface
      * Set option id
      *
      * @param int $optionId
-     * @return $this
+     * @return void
      */
     public function setOptionId($optionId);
 
@@ -52,7 +52,7 @@ interface CustomOptionInterface
      * Set option title
      *
      * @param string $title
-     * @return $this
+     * @return void
      */
     public function setTitle($title);
 
@@ -67,7 +67,7 @@ interface CustomOptionInterface
      * Set option type
      *
      * @param string $type
-     * @return $this
+     * @return void
      */
     public function setType($type);
 
@@ -82,7 +82,7 @@ interface CustomOptionInterface
      * Set sort order
      *
      * @param int $sortOrder
-     * @return $this
+     * @return void
      */
     public function setSortOrder($sortOrder);
 
@@ -98,7 +98,7 @@ interface CustomOptionInterface
      * Set is require
      *
      * @param bool $isRequired
-     * @return $this
+     * @return void
      */
     public function setRequired($isRequired);
 
@@ -113,7 +113,7 @@ interface CustomOptionInterface
      * Set option values
      *
      * @param \Magento\CatalogExportApi\Api\Data\CustomOptionValueInterface[] $values
-     * @return $this
+     * @return void
      */
     public function setValues(array $values = null);
 
@@ -128,7 +128,7 @@ interface CustomOptionInterface
      * Set render type
      *
      * @param string $renderType
-     * @return $this
+     * @return void
      */
     public function setRenderType(string $renderType);
 
@@ -144,7 +144,7 @@ interface CustomOptionInterface
      * Set multi
      *
      * @param bool $multi
-     * @return $this
+     * @return void
      */
     public function setIsMulti(bool $multi);
 }

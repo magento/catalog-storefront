@@ -22,7 +22,7 @@ interface EnteredOptionInterface
      * Set option type
      *
      * @param string $type
-     * @return $this
+     * @return void
      */
     public function setType($type);
 
@@ -37,7 +37,7 @@ interface EnteredOptionInterface
      * Set render type
      *
      * @param string $renderType
-     * @return $this
+     * @return void
      */
     public function setRenderType(string $renderType);
 
@@ -53,7 +53,7 @@ interface EnteredOptionInterface
      * Set is require
      *
      * @param bool $isRequired
-     * @return $this
+     * @return void
      */
     public function setRequired($isRequired);
 
@@ -68,7 +68,7 @@ interface EnteredOptionInterface
      * Set sort order
      *
      * @param int $sortOrder
-     * @return $this
+     * @return void
      */
     public function setSortOrder($sortOrder);
 
@@ -83,7 +83,7 @@ interface EnteredOptionInterface
      * Set option id
      *
      * @param int $optionId
-     * @return $this
+     * @return void
      */
     public function setOptionId($optionId);
 
@@ -98,7 +98,7 @@ interface EnteredOptionInterface
      * Set product SKU
      *
      * @param string $productSku
-     * @return $this
+     * @return void
      */
     public function setProductSku($productSku);
 
@@ -113,7 +113,7 @@ interface EnteredOptionInterface
      * Set option value price
      *
      * @param array $price
-     * @return $this
+     * @return void
      */
     public function setPrice($price);
 
@@ -128,7 +128,7 @@ interface EnteredOptionInterface
      * Set price type
      *
      * @param string $priceType
-     * @return $this
+     * @return void
      */
     public function setPriceType($priceType);
 
@@ -143,7 +143,7 @@ interface EnteredOptionInterface
      * Set option value
      *
      * @param string $value
-     * @return $this
+     * @return void
      */
     public function setValue($value);
 
@@ -186,7 +186,7 @@ interface EnteredOptionInterface
      * Set Sku
      *
      * @param string $sku
-     * @return $this
+     * @return void
      */
     public function setSku($sku);
 
@@ -194,7 +194,7 @@ interface EnteredOptionInterface
      * Set File Extension
      *
      * @param string $fileExtension
-     * @return $this
+     * @return void
      */
     public function setFileExtension($fileExtension);
 
@@ -202,7 +202,7 @@ interface EnteredOptionInterface
      * Set Max Characters
      *
      * @param int $maxCharacters
-     * @return $this
+     * @return void
      */
     public function setMaxCharacters($maxCharacters);
 
@@ -210,7 +210,7 @@ interface EnteredOptionInterface
      * Set Image Size X
      *
      * @param int $imageSizeX
-     * @return $this
+     * @return void
      */
     public function setImageSizeX($imageSizeX);
 
@@ -218,7 +218,7 @@ interface EnteredOptionInterface
      * Set Image Size Y
      *
      * @param int $imageSizeY
-     * @return $this
+     * @return void
      */
     public function setImageSizeY($imageSizeY);
 }

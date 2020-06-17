@@ -22,7 +22,7 @@ interface CustomOptionValueInterface
      * Set option value title
      *
      * @param string $value
-     * @return $this
+     * @return void
      */
     public function setValue(string $value);
 
@@ -37,7 +37,7 @@ interface CustomOptionValueInterface
      * Set sort order
      *
      * @param int $sortOrder
-     * @return $this
+     * @return void
      */
     public function setSortOrder($sortOrder);
 
@@ -52,7 +52,7 @@ interface CustomOptionValueInterface
      * Set option value price
      *
      * @param array $price
-     * @return $this
+     * @return void
      */
     public function setPrice($price);
 
@@ -67,7 +67,7 @@ interface CustomOptionValueInterface
      * Set price type
      *
      * @param string $priceType
-     * @return $this
+     * @return void
      */
     public function setPriceType($priceType);
 
@@ -82,7 +82,7 @@ interface CustomOptionValueInterface
      * Set Sku
      *
      * @param string $sku
-     * @return $this
+     * @return void
      */
     public function setSku($sku);
 

@@ -21,10 +21,6 @@
                 <item name="meta_title" xsi:type="string">meta_title</item>
                 <item name="created_at" xsi:type="string">created_at</item>
                 <item name="updated_at" xsi:type="string">updated_at</item>
-<!--                <item name="tax_class_id" xsi:type="string">tax_class_id</item>-->
-<!--                <item name="url_key" xsi:type="string">url_key</item>-->
-<!--                <item name="visibility" xsi:type="string">visibility</item>-->
-<!--                <item name="weight" xsi:type="string">weight</item>-->
             </argument>
         </arguments>
     </type>

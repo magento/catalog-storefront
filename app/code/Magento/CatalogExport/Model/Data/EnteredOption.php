@@ -48,7 +48,7 @@ class EnteredOption extends AbstractModel implements EnteredOptionInterface
      */
     public function setType($type)
     {
-        return $this->setData(self::KEY_TYPE, $type);
+        $this->setData(self::KEY_TYPE, $type);
     }
 
     /**
@@ -64,7 +64,7 @@ class EnteredOption extends AbstractModel implements EnteredOptionInterface
      */
     public function setRenderType(string $renderType)
     {
-        return $this->setData(self::KEY_RENDER_TYPE, $renderType);
+        $this->setData(self::KEY_RENDER_TYPE, $renderType);
     }
 
     /**
@@ -80,7 +80,7 @@ class EnteredOption extends AbstractModel implements EnteredOptionInterface
      */
     public function setRequired($isRequired)
     {
-        return $this->setData(self::KEY_REQUIRED, $isRequired);
+        $this->setData(self::KEY_REQUIRED, $isRequired);
     }
 
     /**
@@ -96,7 +96,7 @@ class EnteredOption extends AbstractModel implements EnteredOptionInterface
      */
     public function setSortOrder($sortOrder)
     {
-        return $this->setData(self::KEY_SORT_ORDER, $sortOrder);
+        $this->setData(self::KEY_SORT_ORDER, $sortOrder);
     }
 
     /**
@@ -112,7 +112,7 @@ class EnteredOption extends AbstractModel implements EnteredOptionInterface
      */
     public function setOptionId($optionId)
     {
-        return $this->setData(self::KEY_OPTION_ID, $optionId);
+        $this->setData(self::KEY_OPTION_ID, $optionId);
     }
 
     /**
@@ -128,7 +128,7 @@ class EnteredOption extends AbstractModel implements EnteredOptionInterface
      */
     public function setProductSku($productSku)
     {
-        return $this->setData(self::KEY_PRODUCT_SKU, $productSku);
+        $this->setData(self::KEY_PRODUCT_SKU, $productSku);
     }
 
     /**
@@ -144,7 +144,7 @@ class EnteredOption extends AbstractModel implements EnteredOptionInterface
      */
     public function setPrice($price)
     {
-        return $this->setData(self::KEY_PRICE, $price);
+        $this->setData(self::KEY_PRICE, $price);
     }
 
     /**
@@ -160,7 +160,7 @@ class EnteredOption extends AbstractModel implements EnteredOptionInterface
      */
     public function setPriceType($priceType)
     {
-        return $this->setData(self::KEY_PRICE_TYPE, $priceType);
+        $this->setData(self::KEY_PRICE_TYPE, $priceType);
     }
 
     /**
@@ -176,7 +176,7 @@ class EnteredOption extends AbstractModel implements EnteredOptionInterface
      */
     public function setValue($value)
     {
-        return $this->setData(self::KEY_VALUE, $value);
+        $this->setData(self::KEY_VALUE, $value);
     }
 
     /**
@@ -224,7 +224,7 @@ class EnteredOption extends AbstractModel implements EnteredOptionInterface
      */
     public function setSku($sku)
     {
-        return $this->setData(self::KEY_SKU, $sku);
+        $this->setData(self::KEY_SKU, $sku);
     }
 
     /**
@@ -232,7 +232,7 @@ class EnteredOption extends AbstractModel implements EnteredOptionInterface
      */
     public function setFileExtension($fileExtension)
     {
-        return $this->setData(self::KEY_FILE_EXTENSION, $fileExtension);
+        $this->setData(self::KEY_FILE_EXTENSION, $fileExtension);
     }
 
     /**
@@ -240,7 +240,7 @@ class EnteredOption extends AbstractModel implements EnteredOptionInterface
      */
     public function setMaxCharacters($maxCharacters)
     {
-        return $this->setData(self::KEY_MAX_CHARACTERS, $maxCharacters);
+        $this->setData(self::KEY_MAX_CHARACTERS, $maxCharacters);
     }
 
     /**
@@ -248,7 +248,7 @@ class EnteredOption extends AbstractModel implements EnteredOptionInterface
      */
     public function setImageSizeX($imageSizeX)
     {
-        return $this->setData(self::KEY_IMAGE_SIZE_X, $imageSizeX);
+        $this->setData(self::KEY_IMAGE_SIZE_X, $imageSizeX);
     }
 
     /**
@@ -256,6 +256,6 @@ class EnteredOption extends AbstractModel implements EnteredOptionInterface
      */
     public function setImageSizeY($imageSizeY)
     {
-        return $this->setData(self::KEY_IMAGE_SIZE_Y, $imageSizeY);
+        $this->setData(self::KEY_IMAGE_SIZE_Y, $imageSizeY);
     }
 }

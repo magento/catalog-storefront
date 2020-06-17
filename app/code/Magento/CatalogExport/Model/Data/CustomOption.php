@@ -44,7 +44,7 @@ class CustomOption extends AbstractModel implements CustomOptionInterface
      */
     public function setId($value)
     {
-        return $this->setData(self::KEY_ID, $value);
+        $this->setData(self::KEY_ID, $value);
     }
 
     /**
@@ -60,7 +60,7 @@ class CustomOption extends AbstractModel implements CustomOptionInterface
      */
     public function setRequired($isRequired)
     {
-        return $this->setData(self::KEY_REQUIRED, $isRequired);
+        $this->setData(self::KEY_REQUIRED, $isRequired);
     }
 
     /**
@@ -76,7 +76,7 @@ class CustomOption extends AbstractModel implements CustomOptionInterface
      */
     public function setIsMulti(bool $multi)
     {
-        return $this->setData(self::KEY_MULTI, $multi);
+        $this->setData(self::KEY_MULTI, $multi);
     }
 
     /**
@@ -92,7 +92,7 @@ class CustomOption extends AbstractModel implements CustomOptionInterface
      */
     public function setRenderType(string $renderType)
     {
-        return $this->setData(self::KEY_RENDER_TYPE, $renderType);
+        $this->setData(self::KEY_RENDER_TYPE, $renderType);
     }
 
     /**
@@ -108,7 +108,7 @@ class CustomOption extends AbstractModel implements CustomOptionInterface
      */
     public function setTitle($title)
     {
-        return $this->setData(self::KEY_TITLE, $title);
+        $this->setData(self::KEY_TITLE, $title);
     }
 
     /**
@@ -124,7 +124,7 @@ class CustomOption extends AbstractModel implements CustomOptionInterface
      */
     public function setSortOrder($sortOrder)
     {
-        return $this->setData(self::KEY_SORT_ORDER, $sortOrder);
+        $this->setData(self::KEY_SORT_ORDER, $sortOrder);
     }
 
     /**
@@ -140,7 +140,7 @@ class CustomOption extends AbstractModel implements CustomOptionInterface
      */
     public function setOptionId($optionId)
     {
-        return $this->setData(self::KEY_OPTION_ID, $optionId);
+        $this->setData(self::KEY_OPTION_ID, $optionId);
     }
 
     /**
@@ -164,7 +164,7 @@ class CustomOption extends AbstractModel implements CustomOptionInterface
      */
     public function setType($type)
     {
-        return $this->setData(self::KEY_TYPE, $type);
+        $this->setData(self::KEY_TYPE, $type);
     }
 
     /**
@@ -172,7 +172,7 @@ class CustomOption extends AbstractModel implements CustomOptionInterface
      */
     public function setProductSku($productSku)
     {
-        return $this->setData(self::KEY_PRODUCT_SKU, $productSku);
+        $this->setData(self::KEY_PRODUCT_SKU, $productSku);
     }
 
     /**
@@ -188,6 +188,6 @@ class CustomOption extends AbstractModel implements CustomOptionInterface
      */
     public function setValues(array $values = null)
     {
-        return $this->setData(self::KEY_VALUES, $values);
+        $this->setData(self::KEY_VALUES, $values);
     }
 }

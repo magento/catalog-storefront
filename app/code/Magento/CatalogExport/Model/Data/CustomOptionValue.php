@@ -41,7 +41,7 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
      */
     public function setId($value)
     {
-        return $this->setData(self::KEY_ID, $value);
+        $this->setData(self::KEY_ID, $value);
     }
 
     /**
@@ -57,7 +57,7 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
      */
     public function setPrice($price)
     {
-        return $this->setData(self::KEY_PRICE, $price);
+        $this->setData(self::KEY_PRICE, $price);
     }
 
     /**
@@ -73,7 +73,7 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
      */
     public function setPriceType($priceType)
     {
-        return $this->setData(self::KEY_PRICE_TYPE, $priceType);
+        $this->setData(self::KEY_PRICE_TYPE, $priceType);
     }
 
     /**
@@ -81,7 +81,7 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
      */
     public function setOptionTypeId($optionTypeId)
     {
-        return $this->setData(self::KEY_OPTION_TYPE_ID, $optionTypeId);
+        $this->setData(self::KEY_OPTION_TYPE_ID, $optionTypeId);
     }
 
     /**
@@ -105,7 +105,7 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
      */
     public function setValue(string $value)
     {
-        return $this->setData(self::KEY_VALUE, $value);
+        $this->setData(self::KEY_VALUE, $value);
     }
 
     /**
@@ -121,7 +121,7 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
      */
     public function setSortOrder($sortOrder)
     {
-        return $this->setData(self::KEY_SORT_ORDER, $sortOrder);
+        $this->setData(self::KEY_SORT_ORDER, $sortOrder);
     }
 
     /**
@@ -137,6 +137,6 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
      */
     public function setSku($sku)
     {
-        return $this->setData(self::KEY_SKU, $sku);
+        $this->setData(self::KEY_SKU, $sku);
     }
 }
