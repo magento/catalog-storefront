@@ -136,6 +136,7 @@ interface CustomOptionsInterface
      * Get is multi
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsMulti(): bool;
 

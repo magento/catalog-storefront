@@ -45,6 +45,7 @@ interface EnteredOptionInterface
      * Get is require
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getRequired();
 

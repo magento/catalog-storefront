@@ -19,12 +19,15 @@ class CustomOptions implements DataMapperInterface
 
         if (!empty($override['options'])) {
             $productSelectableOptions = $override['options'];
-            $customOptions = array_filter($productSelectableOptions, function ($value) {
-                return $value['type'] == 'custom_option';
-            });
+            $customOptions = array_filter(
+                $productSelectableOptions,
+                function ($value) {
+                    return $value['type'] == 'custom_option';
+                }
+            );
             foreach ($customOptions as $customOption) {
                 $customOptionValues = [];
-                foreach ($customOption['values'] as $key => $value) {
+                foreach ($customOption['values'] as $value) {
                     $customOptionValue = $value;
                     $customOptionValue['price'] = current($value['price']);
                     $customOptionValue['title'] = $value['value'];
