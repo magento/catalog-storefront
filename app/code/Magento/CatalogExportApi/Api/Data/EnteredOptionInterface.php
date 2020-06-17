@@ -7,7 +7,7 @@
 namespace Magento\CatalogExportApi\Api\Data;
 
 /**
- *
+ * EnteredOptions interface.
  */
 interface EnteredOptionInterface
 {
@@ -45,7 +45,6 @@ interface EnteredOptionInterface
      * Get is require
      *
      * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getRequired();
 
@@ -75,8 +74,7 @@ interface EnteredOptionInterface
     /**
      * Get option id
      *
-     * @return int|null
-     * @codeCoverageIgnoreStart
+     * @return int
      */
     public function getOptionId();
 
@@ -134,11 +132,15 @@ interface EnteredOptionInterface
     public function setPriceType($priceType);
 
     /**
+     * Get option value
+     *
      * @return string
      */
     public function getValue();
 
     /**
+     * Set option value
+     *
      * @param string $value
      * @return $this
      */
@@ -147,14 +149,14 @@ interface EnteredOptionInterface
     /**
      * Get Sku
      *
-     * @return string|null
+     * @return string
      */
     public function getSku();
 
     /**
      * Get file extension
      *
-     * @return string|null
+     * @return string
      */
     public function getFileExtension();
 

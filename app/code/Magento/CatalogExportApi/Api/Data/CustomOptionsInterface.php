@@ -7,7 +7,7 @@
 namespace Magento\CatalogExportApi\Api\Data;
 
 /**
- *
+ * CustomOption interface.
  */
 interface CustomOptionsInterface
 {
@@ -103,11 +103,15 @@ interface CustomOptionsInterface
     public function setRequired($isRequired);
 
     /**
+     * Get option values
+     *
      * @return \Magento\CatalogExportApi\Api\Data\CustomOptionValueInterface[]|null
      */
     public function getValues();
 
     /**
+     * Set option values
+     *
      * @param \Magento\CatalogExportApi\Api\Data\CustomOptionValueInterface[] $values
      * @return $this
      */
@@ -129,6 +133,8 @@ interface CustomOptionsInterface
     public function setRenderType(string $renderType);
 
     /**
+     * Get is multi
+     *
      * @return bool
      */
     public function getIsMulti(): bool;

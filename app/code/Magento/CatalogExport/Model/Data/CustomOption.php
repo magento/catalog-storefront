@@ -10,7 +10,9 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\CatalogExportApi\Api\Data\CustomOptionsInterface;
 
 /**
+ * Custom option entity
  *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class CustomOption extends AbstractExtensibleModel implements CustomOptionsInterface
 {
@@ -27,24 +29,10 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionsInter
     const KEY_RENDER_TYPE = 'render_type';
     const KEY_MULTI = 'multi';
     const KEY_VALUES = 'values';
-
-    // option value
-    //const KEY_PRICE = 'price';
-    //const KEY_PRICE_TYPE = 'price_type';
-    //const KEY_SKU = 'sku';
-
-    //
-//    const KEY_FILE_EXTENSION = 'file_extension';
-//    const KEY_MAX_CHARACTERS = 'max_characters';
-//    const KEY_IMAGE_SIZE_Y = 'image_size_y';
-//    const KEY_IMAGE_SIZE_X = 'image_size_x';
     /**#@-*/
 
-
     /**
-     * Get product option id
-     *
-     * @return int
+     * @inheritDoc
      */
     public function getId()
     {
@@ -52,10 +40,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionsInter
     }
 
     /**
-     * Set product option id
-     *
-     * @param int $value
-     * @return $this
+     * @inheritDoc
      */
     public function setId($value)
     {
@@ -63,9 +48,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionsInter
     }
 
     /**
-     * Get option type
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getType()
     {
@@ -73,10 +56,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionsInter
     }
 
     /**
-     * Set option type
-     *
-     * @param string $type
-     * @return $this
+     * @inheritDoc
      */
     public function setType($type)
     {
@@ -84,9 +64,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionsInter
     }
 
     /**
-     * Return render type
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getRenderType(): string
     {
@@ -94,10 +72,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionsInter
     }
 
     /**
-     * Set render type
-     *
-     * @param string $renderType
-     * @return $this
+     * @inheritDoc
      */
     public function setRenderType(string $renderType)
     {
@@ -105,10 +80,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionsInter
     }
 
     /**
-     * Get is require
-     *
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @inheritDoc
      */
     public function getRequired()
     {
@@ -116,10 +88,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionsInter
     }
 
     /**
-     * Set is require
-     *
-     * @param bool $isRequired
-     * @return $this
+     * @inheritDoc
      */
     public function setRequired($isRequired)
     {
@@ -127,7 +96,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionsInter
     }
 
     /**
-     * @return bool
+     * @inheritDoc
      */
     public function getIsMulti(): bool
     {
@@ -135,10 +104,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionsInter
     }
 
     /**
-     * Set multi
-     *
-     * @param bool $multi
-     * @return $this
+     * @inheritDoc
      */
     public function setIsMulti(bool $multi)
     {
@@ -146,9 +112,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionsInter
     }
 
     /**
-     * Get option title
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getTitle()
     {
@@ -156,10 +120,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionsInter
     }
 
     /**
-     * Set option title
-     *
-     * @param string $title
-     * @return $this
+     * @inheritDoc
      */
     public function setTitle($title)
     {
@@ -167,9 +128,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionsInter
     }
 
     /**
-     * Get sort order
-     *
-     * @return int
+     * @inheritDoc
      */
     public function getSortOrder()
     {
@@ -177,10 +136,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionsInter
     }
 
     /**
-     * Set sort order
-     *
-     * @param int $sortOrder
-     * @return $this
+     * @inheritDoc
      */
     public function setSortOrder($sortOrder)
     {
@@ -188,10 +144,7 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionsInter
     }
 
     /**
-     * Get option id
-     *
-     * @return int|null
-     * @codeCoverageIgnoreStart
+     * @inheritDoc
      */
     public function getOptionId()
     {
@@ -199,21 +152,15 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionsInter
     }
 
     /**
-     * Set option id
-     *
-     * @param int $optionId
-     * @return $this
+     * @inheritDoc
      */
     public function setOptionId($optionId)
     {
         return $this->setData(self::KEY_OPTION_ID, $optionId);
     }
 
-
     /**
-     * Get product SKU
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getProductSku()
     {
@@ -221,16 +168,12 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionsInter
     }
 
     /**
-     * Set product SKU
-     *
-     * @param string $productSku
-     * @return $this
+     * @inheritDoc
      */
     public function setProductSku($productSku)
     {
         return $this->setData(self::KEY_PRODUCT_SKU, $productSku);
     }
-
 
     /**
      * @inheritDoc
@@ -247,157 +190,4 @@ class CustomOption extends AbstractExtensibleModel implements CustomOptionsInter
     {
         return $this->setData(self::KEY_VALUES, $values);
     }
-
-
-    /**
-     * Get price type
-     *
-     * @return string|null
-     */
-//    public function getPriceType()
-//    {
-//        return $this->getData(self::KEY_PRICE_TYPE);
-//    }
-
-    /**
-     * Get Sku
-     *
-     * @return string|null
-     */
-//    public function getSku()
-//    {
-//        return $this->getData(self::KEY_SKU);
-//    }
-
-    /**
-     * Get file extension
-     *
-     * @return string|null
-     */
-//    public function getFileExtension()
-//    {
-//        return $this->getData(self::KEY_FILE_EXTENSION);
-//    }
-
-    /**
-     * Get Max Characters
-     *
-     * @return int|null
-     */
-//    public function getMaxCharacters()
-//    {
-//        return $this->getData(self::KEY_MAX_CHARACTERS);
-//    }
-
-    /**
-     * Get image size X
-     *
-     * @return int|null
-     */
-//    public function getImageSizeX()
-//    {
-//        return $this->getData(self::KEY_IMAGE_SIZE_X);
-//    }
-
-    /**
-     * Get image size Y
-     *
-     * @return int|null
-     */
-//    public function getImageSizeY()
-//    {
-//        return $this->getData(self::KEY_IMAGE_SIZE_Y);
-//    }
-
-
-    /**
-     * Return price. If $flag is true and price is percent
-     *
-     * Return converted percent to price
-     *
-     * @param bool $flag
-     * @return float
-     */
-//    public function getPrice()
-//    {
-//        return $this->getData(self::KEY_PRICE);
-//    }
-
-    /**
-     * Set price
-     *
-     * @param float $price
-     * @return $this
-     */
-//    public function setPrice($price)
-//    {
-//        return $this->setData(self::KEY_PRICE, $price);
-//    }
-
-
-    /**
-     * Set price type
-     *
-     * @param string $priceType
-     * @return $this
-     */
-//    public function setPriceType($priceType)
-//    {
-//        return $this->setData(self::KEY_PRICE_TYPE, $priceType);
-//    }
-
-    /**
-     * Set Sku
-     *
-     * @param string $sku
-     * @return $this
-     */
-//    public function setSku($sku)
-//    {
-//        return $this->setData(self::KEY_SKU, $sku);
-//    }
-
-    /**
-     * Set File Extension
-     *
-     * @param string $fileExtension
-     * @return $this
-     */
-//    public function setFileExtension($fileExtension)
-//    {
-//        return $this->setData(self::KEY_FILE_EXTENSION, $fileExtension);
-//    }
-
-    /**
-     * Set Max Characters
-     *
-     * @param int $maxCharacters
-     * @return $this
-     */
-//    public function setMaxCharacters($maxCharacters)
-//    {
-//        return $this->setData(self::KEY_MAX_CHARACTERS, $maxCharacters);
-//    }
-
-    /**
-     * Set Image Size X
-     *
-     * @param int $imageSizeX
-     * @return $this
-     */
-//    public function setImageSizeX($imageSizeX)
-//    {
-//        return $this->setData(self::KEY_IMAGE_SIZE_X, $imageSizeX);
-//    }
-
-    /**
-     * Set Image Size Y
-     *
-     * @param int $imageSizeY
-     * @return $this
-     */
-//    public function setImageSizeY($imageSizeY)
-//    {
-//        return $this->setData(self::KEY_IMAGE_SIZE_Y, $imageSizeY);
-//    }
 }

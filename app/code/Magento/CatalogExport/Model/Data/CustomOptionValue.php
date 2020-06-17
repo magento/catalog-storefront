@@ -10,7 +10,9 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\CatalogExportApi\Api\Data\CustomOptionValueInterface;
 
 /**
+ * Custom option value entity
  *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class CustomOptionValue extends AbstractModel implements CustomOptionValueInterface
 {
@@ -27,9 +29,7 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
     /**#@-*/
 
     /**
-     * Get product option id
-     *
-     * @return int
+     * @inheritDoc
      */
     public function getId()
     {
@@ -37,10 +37,7 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
     }
 
     /**
-     * Set product option id
-     *
-     * @param int $value
-     * @return $this
+     * @inheritDoc
      */
     public function setId($value)
     {
@@ -64,9 +61,7 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
     }
 
     /**
-     * Get price type
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getPriceType()
     {
@@ -74,10 +69,7 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
     }
 
     /**
-     * Set price type
-     *
-     * @param string $priceType
-     * @return $this
+     * @inheritDoc
      */
     public function setPriceType($priceType)
     {
@@ -85,10 +77,7 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
     }
 
     /**
-     * Set Option type id
-     *
-     * @param int|null $optionTypeId
-     * @return int
+     * @inheritDoc
      */
     public function setOptionTypeId($optionTypeId)
     {
@@ -96,9 +85,7 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
     }
 
     /**
-     * Get Sku
-     *
-     * @return string|null
+     * @inheritDoc
      */
     public function getOptionTypeId()
     {
@@ -106,7 +93,7 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     public function getValue(): string
     {
@@ -114,8 +101,7 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
     }
 
     /**
-     * @param string $value
-     * @return $this
+     * @inheritDoc
      */
     public function setValue(string $value)
     {
@@ -123,9 +109,7 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
     }
 
     /**
-     * Get sort order
-     *
-     * @return int
+     * @inheritDoc
      */
     public function getSortOrder()
     {
@@ -133,10 +117,7 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
     }
 
     /**
-     * Set sort order
-     *
-     * @param int $sortOrder
-     * @return $this
+     * @inheritDoc
      */
     public function setSortOrder($sortOrder)
     {
@@ -144,9 +125,7 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
     }
 
     /**
-     * Get Sku
-     *
-     * @return string|null
+     * @inheritDoc
      */
     public function getSku()
     {
@@ -154,10 +133,7 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
     }
 
     /**
-     * Set Sku
-     *
-     * @param string $sku
-     * @return $this
+     * @inheritDoc
      */
     public function setSku($sku)
     {

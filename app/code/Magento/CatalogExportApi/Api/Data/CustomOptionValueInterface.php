@@ -7,16 +7,20 @@
 namespace Magento\CatalogExportApi\Api\Data;
 
 /**
- *
+ * Custom Option Value interface
  */
 interface CustomOptionValueInterface
 {
     /**
+     * Get option value title
+     *
      * @return string
      */
     public function getValue(): string;
 
     /**
+     * Set option value title
+     *
      * @param string $value
      * @return $this
      */
@@ -70,7 +74,7 @@ interface CustomOptionValueInterface
     /**
      * Get Sku
      *
-     * @return string|null
+     * @return string
      */
     public function getSku();
 
@@ -85,7 +89,7 @@ interface CustomOptionValueInterface
     /**
      * Get Option type id
      *
-     * @return int|null
+     * @return int
      */
     public function getOptionTypeId();
 
@@ -93,7 +97,7 @@ interface CustomOptionValueInterface
      * Set Option type id
      *
      * @param int $optionTypeId
-     * @return int|null
+     * @return int
      */
     public function setOptionTypeId($optionTypeId);
 }

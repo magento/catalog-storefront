@@ -6,13 +6,15 @@
 
 namespace Magento\CatalogExport\Model\Data;
 
-use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\AbstractModel;
 use Magento\CatalogExportApi\Api\Data\EnteredOptionInterface;
 
 /**
+ * Entered option entity
  *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInterface
+class EnteredOption extends AbstractModel implements EnteredOptionInterface
 {
     /**#@+
      * Constants
@@ -34,9 +36,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     /**#@-*/
 
     /**
-     * Get option type
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getType()
     {
@@ -44,10 +44,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Set option type
-     *
-     * @param string $type
-     * @return $this
+     * @inheritDoc
      */
     public function setType($type)
     {
@@ -55,9 +52,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Return render type
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getRenderType(): string
     {
@@ -65,10 +60,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Set render type
-     *
-     * @param string $renderType
-     * @return $this
+     * @inheritDoc
      */
     public function setRenderType(string $renderType)
     {
@@ -76,10 +68,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Get is require
-     *
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @inheritDoc
      */
     public function getRequired()
     {
@@ -87,10 +76,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Set is require
-     *
-     * @param bool $isRequired
-     * @return $this
+     * @inheritDoc
      */
     public function setRequired($isRequired)
     {
@@ -98,9 +84,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Get sort order
-     *
-     * @return int
+     * @inheritDoc
      */
     public function getSortOrder()
     {
@@ -108,10 +92,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Set sort order
-     *
-     * @param int $sortOrder
-     * @return $this
+     * @inheritDoc
      */
     public function setSortOrder($sortOrder)
     {
@@ -119,10 +100,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Get option id
-     *
-     * @return int|null
-     * @codeCoverageIgnoreStart
+     * @inheritDoc
      */
     public function getOptionId()
     {
@@ -130,10 +108,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Set option id
-     *
-     * @param int $optionId
-     * @return $this
+     * @inheritDoc
      */
     public function setOptionId($optionId)
     {
@@ -141,9 +116,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Get product SKU
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getProductSku()
     {
@@ -151,10 +124,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Set product SKU
-     *
-     * @param string $productSku
-     * @return $this
+     * @inheritDoc
      */
     public function setProductSku($productSku)
     {
@@ -178,9 +148,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Get price type
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getPriceType()
     {
@@ -188,10 +156,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Set price type
-     *
-     * @param string $priceType
-     * @return $this
+     * @inheritDoc
      */
     public function setPriceType($priceType)
     {
@@ -215,9 +180,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Get Sku
-     *
-     * @return string|null
+     * @inheritDoc
      */
     public function getSku()
     {
@@ -225,9 +188,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Get file extension
-     *
-     * @return string|null
+     * @inheritDoc
      */
     public function getFileExtension()
     {
@@ -235,9 +196,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Get Max Characters
-     *
-     * @return int|null
+     * @inheritDoc
      */
     public function getMaxCharacters()
     {
@@ -245,9 +204,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Get image size X
-     *
-     * @return int|null
+     * @inheritDoc
      */
     public function getImageSizeX()
     {
@@ -255,9 +212,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Get image size Y
-     *
-     * @return int|null
+     * @inheritDoc
      */
     public function getImageSizeY()
     {
@@ -265,10 +220,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Set Sku
-     *
-     * @param string $sku
-     * @return $this
+     * @inheritDoc
      */
     public function setSku($sku)
     {
@@ -276,10 +228,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Set File Extension
-     *
-     * @param string $fileExtension
-     * @return $this
+     * @inheritDoc
      */
     public function setFileExtension($fileExtension)
     {
@@ -287,10 +236,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Set Max Characters
-     *
-     * @param int $maxCharacters
-     * @return $this
+     * @inheritDoc
      */
     public function setMaxCharacters($maxCharacters)
     {
@@ -298,10 +244,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Set Image Size X
-     *
-     * @param int $imageSizeX
-     * @return $this
+     * @inheritDoc
      */
     public function setImageSizeX($imageSizeX)
     {
@@ -309,10 +252,7 @@ class EnteredOption extends AbstractExtensibleModel implements EnteredOptionInte
     }
 
     /**
-     * Set Image Size Y
-     *
-     * @param int $imageSizeY
-     * @return $this
+     * @inheritDoc
      */
     public function setImageSizeY($imageSizeY)
     {
