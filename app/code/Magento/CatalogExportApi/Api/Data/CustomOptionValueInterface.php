@@ -12,6 +12,21 @@ namespace Magento\CatalogExportApi\Api\Data;
 interface CustomOptionValueInterface
 {
     /**
+     * Get option value ID
+     *
+     * @return ?int
+     */
+    public function getId(): ?int;
+
+    /**
+     * Set option value ID
+     *
+     * @param ?int $id
+     * @return void
+     */
+    public function setId($id);
+
+    /**
      * Get option value title
      *
      * @return string

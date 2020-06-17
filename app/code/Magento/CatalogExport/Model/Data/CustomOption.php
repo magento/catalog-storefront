@@ -34,7 +34,7 @@ class CustomOption extends AbstractModel implements CustomOptionInterface
     /**
      * @inheritDoc
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->getData(self::KEY_ID);
     }

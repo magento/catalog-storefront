@@ -31,7 +31,7 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
     /**
      * @inheritDoc
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->getData(self::KEY_ID);
     }
