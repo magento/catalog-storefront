@@ -90,6 +90,11 @@ final class Product implements ProductInterface
     private $urlKey;
 
     /**
+     * @var float
+     */
+    private $qty;
+
+    /**
      * @var string
      */
     private $taxClassId;
@@ -298,6 +303,11 @@ final class Product implements ProductInterface
      * @var array
      */
     private $downloadableProductSamples;
+
+    /**
+     * @var float
+     */
+    private $onlyXLeftInStock;
     
     /**
      * @inheritdoc
@@ -570,6 +580,27 @@ final class Product implements ProductInterface
     public function setUrlKey(string $value): void
     {
         $this->urlKey = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return float
+     */
+    public function getQty(): float
+    {
+        return (float) $this->qty;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param float $value
+     * @return void
+     */
+    public function setQty(float $value): void
+    {
+        $this->qty = $value;
     }
     
     /**
@@ -1452,5 +1483,26 @@ final class Product implements ProductInterface
     public function setDownloadableProductSamples(array $value): void
     {
         $this->downloadableProductSamples = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return float
+     */
+    public function getOnlyXLeftInStock(): float
+    {
+        return (float) $this->onlyXLeftInStock;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param float $value
+     * @return void
+     */
+    public function setOnlyXLeftInStock(float $value): void
+    {
+        $this->onlyXLeftInStock = $value;
     }
 }

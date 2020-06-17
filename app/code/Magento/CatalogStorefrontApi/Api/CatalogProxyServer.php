@@ -132,24 +132,10 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     $r->setDescription($item->getDescription());
                     $r->setShortDescription($item->getShortDescription());
                     $r->setUrlKey($item->getUrlKey());
+                    $r->setQty($item->getQty());
                     $r->setTaxClassId($item->getTaxClassId());
                     $r->setWeight($item->getWeight());
-                    $prop17 = $item->getImage();
-                    if ($prop17 !== null) {
-                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\Image
-                        // to \Magento\CatalogStorefrontApi\Proto\Image
-                        /** @var \Magento\CatalogStorefrontApi\Api\Data\Image $prop17 **/
-                        $p = function () use ($prop17) {
-                            $r = new \Magento\CatalogStorefrontApi\Proto\Image();
-                            $r->setUrl($prop17->getUrl());
-                            $r->setLabel($prop17->getLabel());
-                            return $r;
-                        };
-                        $proto = $p();
-                        $r->setImage($proto);
-                    }
-
-                    $prop18 = $item->getSmallImage();
+                    $prop18 = $item->getImage();
                     if ($prop18 !== null) {
                         // convert data from \Magento\CatalogStorefrontApi\Api\Data\Image
                         // to \Magento\CatalogStorefrontApi\Proto\Image
@@ -161,10 +147,10 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                             return $r;
                         };
                         $proto = $p();
-                        $r->setSmallImage($proto);
+                        $r->setImage($proto);
                     }
 
-                    $prop19 = $item->getThumbnail();
+                    $prop19 = $item->getSmallImage();
                     if ($prop19 !== null) {
                         // convert data from \Magento\CatalogStorefrontApi\Api\Data\Image
                         // to \Magento\CatalogStorefrontApi\Proto\Image
@@ -173,6 +159,21 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                             $r = new \Magento\CatalogStorefrontApi\Proto\Image();
                             $r->setUrl($prop19->getUrl());
                             $r->setLabel($prop19->getLabel());
+                            return $r;
+                        };
+                        $proto = $p();
+                        $r->setSmallImage($proto);
+                    }
+
+                    $prop20 = $item->getThumbnail();
+                    if ($prop20 !== null) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\Image
+                        // to \Magento\CatalogStorefrontApi\Proto\Image
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\Image $prop20 **/
+                        $p = function () use ($prop20) {
+                            $r = new \Magento\CatalogStorefrontApi\Proto\Image();
+                            $r->setUrl($prop20->getUrl());
+                            $r->setLabel($prop20->getLabel());
                             return $r;
                         };
                         $proto = $p();
@@ -191,19 +192,19 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                             $r->setLabel($item->getLabel());
                             $r->setMediaType($item->getMediaType());
                             $r->setPosition($item->getPosition());
-                            $prop26 = $item->getVideoContent();
-                            if ($prop26 !== null) {
+                            $prop27 = $item->getVideoContent();
+                            if ($prop27 !== null) {
                                 // convert data from \Magento\CatalogStorefrontApi\Api\Data\Video
                                 // to \Magento\CatalogStorefrontApi\Proto\Video
-                                /** @var \Magento\CatalogStorefrontApi\Api\Data\Video $prop26 **/
-                                $p = function () use ($prop26) {
+                                /** @var \Magento\CatalogStorefrontApi\Api\Data\Video $prop27 **/
+                                $p = function () use ($prop27) {
                                     $r = new \Magento\CatalogStorefrontApi\Proto\Video();
-                                    $r->setVideoProvider($prop26->getVideoProvider());
-                                    $r->setVideoUrl($prop26->getVideoUrl());
-                                    $r->setVideoTitle($prop26->getVideoTitle());
-                                    $r->setVideoDescription($prop26->getVideoDescription());
-                                    $r->setVideoMetadata($prop26->getVideoMetadata());
-                                    $r->setMediaType($prop26->getMediaType());
+                                    $r->setVideoProvider($prop27->getVideoProvider());
+                                    $r->setVideoUrl($prop27->getVideoUrl());
+                                    $r->setVideoTitle($prop27->getVideoTitle());
+                                    $r->setVideoDescription($prop27->getVideoDescription());
+                                    $r->setVideoMetadata($prop27->getVideoMetadata());
+                                    $r->setMediaType($prop27->getMediaType());
                                     return $r;
                                 };
                                 $proto = $p();
@@ -543,6 +544,7 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     }
                     $r->setDownloadableProductSamples($res);
 
+                    $r->setOnlyXLeftInStock($item->getOnlyXLeftInStock());
                     return $r;
                 };
                 $proto = $p();
@@ -614,24 +616,10 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     $r->setDescription($item->getDescription());
                     $r->setShortDescription($item->getShortDescription());
                     $r->setUrlKey($item->getUrlKey());
+                    $r->setQty($item->getQty());
                     $r->setTaxClassId($item->getTaxClassId());
                     $r->setWeight($item->getWeight());
-                    $prop17 = $item->getImage();
-                    if ($prop17 !== null) {
-                        // convert data from \Magento\CatalogStorefrontApi\Proto\Image
-                        // to \Magento\CatalogStorefrontApi\Api\Data\Image
-                        /** @var \Magento\CatalogStorefrontApi\Proto\Image $prop17 **/
-                        $p = function () use ($prop17) {
-                            $r = new \Magento\CatalogStorefrontApi\Api\Data\Image();
-                            $r->setUrl($prop17->getUrl());
-                            $r->setLabel($prop17->getLabel());
-                            return $r;
-                        };
-                        $out = $p();
-                        $r->setImage($out);
-                    }
-
-                    $prop18 = $item->getSmallImage();
+                    $prop18 = $item->getImage();
                     if ($prop18 !== null) {
                         // convert data from \Magento\CatalogStorefrontApi\Proto\Image
                         // to \Magento\CatalogStorefrontApi\Api\Data\Image
@@ -643,10 +631,10 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                             return $r;
                         };
                         $out = $p();
-                        $r->setSmallImage($out);
+                        $r->setImage($out);
                     }
 
-                    $prop19 = $item->getThumbnail();
+                    $prop19 = $item->getSmallImage();
                     if ($prop19 !== null) {
                         // convert data from \Magento\CatalogStorefrontApi\Proto\Image
                         // to \Magento\CatalogStorefrontApi\Api\Data\Image
@@ -655,6 +643,21 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                             $r = new \Magento\CatalogStorefrontApi\Api\Data\Image();
                             $r->setUrl($prop19->getUrl());
                             $r->setLabel($prop19->getLabel());
+                            return $r;
+                        };
+                        $out = $p();
+                        $r->setSmallImage($out);
+                    }
+
+                    $prop20 = $item->getThumbnail();
+                    if ($prop20 !== null) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\Image
+                        // to \Magento\CatalogStorefrontApi\Api\Data\Image
+                        /** @var \Magento\CatalogStorefrontApi\Proto\Image $prop20 **/
+                        $p = function () use ($prop20) {
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\Image();
+                            $r->setUrl($prop20->getUrl());
+                            $r->setLabel($prop20->getLabel());
                             return $r;
                         };
                         $out = $p();
@@ -673,19 +676,19 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                             $r->setLabel($item->getLabel());
                             $r->setMediaType($item->getMediaType());
                             $r->setPosition($item->getPosition());
-                            $prop26 = $item->getVideoContent();
-                            if ($prop26 !== null) {
+                            $prop27 = $item->getVideoContent();
+                            if ($prop27 !== null) {
                                 // convert data from \Magento\CatalogStorefrontApi\Proto\Video
                                 // to \Magento\CatalogStorefrontApi\Api\Data\Video
-                                /** @var \Magento\CatalogStorefrontApi\Proto\Video $prop26 **/
-                                $p = function () use ($prop26) {
+                                /** @var \Magento\CatalogStorefrontApi\Proto\Video $prop27 **/
+                                $p = function () use ($prop27) {
                                     $r = new \Magento\CatalogStorefrontApi\Api\Data\Video();
-                                    $r->setVideoProvider($prop26->getVideoProvider());
-                                    $r->setVideoUrl($prop26->getVideoUrl());
-                                    $r->setVideoTitle($prop26->getVideoTitle());
-                                    $r->setVideoDescription($prop26->getVideoDescription());
-                                    $r->setVideoMetadata($prop26->getVideoMetadata());
-                                    $r->setMediaType($prop26->getMediaType());
+                                    $r->setVideoProvider($prop27->getVideoProvider());
+                                    $r->setVideoUrl($prop27->getVideoUrl());
+                                    $r->setVideoTitle($prop27->getVideoTitle());
+                                    $r->setVideoDescription($prop27->getVideoDescription());
+                                    $r->setVideoMetadata($prop27->getVideoMetadata());
+                                    $r->setMediaType($prop27->getMediaType());
                                     return $r;
                                 };
                                 $out = $p();
@@ -1025,6 +1028,7 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     }
                     $r->setDownloadableProductSamples($res);
 
+                    $r->setOnlyXLeftInStock($item->getOnlyXLeftInStock());
                     return $r;
                 };
                 $out = $p();
