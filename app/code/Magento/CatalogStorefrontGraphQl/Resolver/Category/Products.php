@@ -64,7 +64,7 @@ class Products implements BatchResolverInterface
 
             $storefrontRequest = $this->requestBuilder->buildRequest($context, $request, $filter, [
                 $positionField => 'ASC',
-                '_id' => 'DESC',
+                '_id' => 'ASC',
             ]);
 
             $storefrontRequest['storefront_request']['attribute_codes']

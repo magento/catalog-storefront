@@ -228,7 +228,7 @@ class SearchCriteriaBuilder
         }
 
         // add sort by document id for repeatability
-        $sort['_id'] = $this->sortBuilder->setField('_id')->setDirection(SortOrder::SORT_DESC)->create();
+        $sort['_id'] = $this->sortBuilder->setField('_id')->setDirection(SortOrder::SORT_ASC)->create();
 
         return $sort;
     }
