@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogExport\Model\Data;
 
-use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\AbstractModel;
 use Magento\CatalogExportApi\Api\Data\CustomOptionsInterface;
 
 /**
@@ -14,7 +14,7 @@ use Magento\CatalogExportApi\Api\Data\CustomOptionsInterface;
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class CustomOption extends AbstractExtensibleModel implements CustomOptionsInterface
+class CustomOption extends AbstractModel implements CustomOptionsInterface
 {
     /**#@+
      * Constants

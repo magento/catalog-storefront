@@ -111,7 +111,7 @@ interface EnteredOptionInterface
     /**
      * Set option value price
      *
-     * @param $price
+     * @param array $price
      * @return $this
      */
     public function setPrice($price);
