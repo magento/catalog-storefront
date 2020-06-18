@@ -13,6 +13,7 @@ use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 use Magento\Store\Model\StoreManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Helper;
+use Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -65,22 +66,30 @@ class Sync extends Command
     private $catalogEntityIdsProvider;
 
     /**
+     * @var ProductFeedIndexer
+     */
+    private $productFeedIndexer;
+
+    /**
      * @param ProductPublisher $productPublisher
      * @param CategoryPublisher $categoryPublisher
      * @param StoreManagerInterface $storeManager
      * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
+     * @param ProductFeedIndexer $productFeedIndexer
      */
     public function __construct(
         ProductPublisher $productPublisher,
         CategoryPublisher $categoryPublisher,
         StoreManagerInterface $storeManager,
-        CatalogEntityIdsProvider $catalogEntityIdsProvider
+        CatalogEntityIdsProvider $catalogEntityIdsProvider,
+        ProductFeedIndexer $productFeedIndexer
     ) {
         parent::__construct();
         $this->productPublisher = $productPublisher;
         $this->categoryPublisher = $categoryPublisher;
         $this->storeManager = $storeManager;
         $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
+        $this->productFeedIndexer = $productFeedIndexer;
     }
 
     /**
@@ -131,6 +140,8 @@ class Sync extends Command
         $output->writeln("<info>Sync products for store {$storeId}</info>");
         $this->measure(
             function () use ($output, $storeId) {
+                // @todo try to eliminate dependency on indexer
+                $this->productFeedIndexer->executeFull();
                 $processedN = 0;
                 foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $productIds) {
                     $this->productPublisher->publish($productIds, $storeId);

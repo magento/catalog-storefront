@@ -17,8 +17,8 @@ use Psr\Log\LoggerInterface;
  */
 class Consumer
 {
-    private const DELETE = 'delete';
-    private const SAVE = 'save';
+    protected const DELETE = 'delete';
+    protected const SAVE = 'save';
 
     /**
      * @var CommandInterface
@@ -113,7 +113,7 @@ class Consumer
      * @throws \Magento\Framework\Exception\BulkException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    private function saveToStorage(array $dataPerType): void
+    protected function saveToStorage(array $dataPerType): void
     {
         foreach ($dataPerType as $entityType => $dataPerStore) {
             foreach ($dataPerStore as $storeId => $data) {
@@ -125,6 +125,8 @@ class Consumer
     }
 
     /**
+     * Delete bulk of entities by data, source name and entity type
+     *
      * @param array $data
      * @param string $sourceName
      * @param string $entityType
@@ -150,6 +152,8 @@ class Consumer
     }
 
     /**
+     * Save bulk of entities by data, source name and entity type
+     *
      * @param array $data
      * @param string $sourceName
      * @param string $entityType

@@ -34,6 +34,7 @@ use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  * @SuppressWarnings(PHPMD.NPathComplexity)
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogInterface
 {
