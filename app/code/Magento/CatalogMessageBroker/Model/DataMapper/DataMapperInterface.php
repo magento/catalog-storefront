@@ -16,7 +16,7 @@ interface DataMapperInterface
      * @param array $productData
      * @return array
      * @deprecated this is a temporary solution that will be replaced
-     * with declarative schema of mapping saas-export data format to storefront format
+     * with declarative schema of mapping exported data format to storefront format
      */
     public function map(array $productData): array;
 }
