@@ -62,6 +62,13 @@ class OutputFormatter
             $currentResult['description'] = ['html' => $currentResult['description']];
             $currentResult['short_description'] = ['html' => $currentResult['short_description']];
             $currentResult['gift_message_available'] = (int)$currentResult['gift_message_available'];
+            if (
+                isset($currentResult['only_x_left_in_stock'])
+                && (string)$currentResult['only_x_left_in_stock'] == "0"
+            ) {
+                $currentResult['only_x_left_in_stock'] = null;
+            }
+
             $currentResult['canonical_url'] = empty($currentResult['canonical_url'])
                 ? null
                 : $currentResult['canonical_url'];
