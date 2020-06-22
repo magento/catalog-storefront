@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogExport\Model\Data;
+namespace Magento\CatalogExportApi\Api\Data;
 
 /**
  * Custom option value entity
@@ -13,17 +13,6 @@ namespace Magento\CatalogExport\Model\Data;
  */
 class CustomOptionValue
 {
-    /**#@+
-     * Constants
-     */
-    const KEY_ID = 'id';
-    const KEY_SORT_ORDER = 'sort_order';
-    const KEY_PRICE = 'price';
-    const KEY_PRICE_TYPE = 'price_type';
-    const KEY_SKU = 'sku';
-    const KEY_VALUE = 'value';
-    /**#@-*/
-
     /**
      * @var int
      */
@@ -32,17 +21,17 @@ class CustomOptionValue
     /**
      * @var int|null
      */
-    private $sort_order;
+    private $sortOrder;
 
     /**
-     * @var float[]
+     * @var \Magento\CatalogExportApi\Api\Data\Price
      */
     private $price;
 
     /**
      * @var string
      */
-    private $price_type;
+    private $priceType;
 
     /**
      * @var string
@@ -103,7 +92,7 @@ class CustomOptionValue
      */
     public function getSortOrder(): ?int
     {
-        return $this->sort_order;
+        return $this->sortOrder;
     }
 
     /**
@@ -114,15 +103,15 @@ class CustomOptionValue
      */
     public function setSortOrder($sortOrder): void
     {
-        $this->sort_order = $sortOrder;
+        $this->sortOrder = $sortOrder;
     }
 
     /**
      * Get option value price
      *
-     * @return float[]
+     * @return \Magento\CatalogExportApi\Api\Data\Price|null
      */
-    public function getPrice(): array
+    public function getPrice()
     {
         return $this->price;
     }
@@ -130,7 +119,7 @@ class CustomOptionValue
     /**
      * Set option value price
      *
-     * @param array $price
+     * @param \Magento\CatalogExportApi\Api\Data\Price $price
      * @return void
      */
     public function setPrice($price): void
@@ -145,7 +134,7 @@ class CustomOptionValue
      */
     public function getPriceType(): string
     {
-        return $this->price_type;
+        return $this->priceType;
     }
 
     /**
@@ -156,7 +145,7 @@ class CustomOptionValue
      */
     public function setPriceType($priceType): void
     {
-        $this->price_type = $priceType;
+        $this->priceType = $priceType;
     }
 
     /**

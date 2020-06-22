@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogExport\Model\Data;
+namespace Magento\CatalogExportApi\Api\Data;
 
 /**
  * Custom option entity
@@ -26,7 +26,7 @@ class CustomOption
     /**
      * @var string
      */
-    private $product_sku;
+    private $productSku;
 
     /**
      * @var bool
@@ -36,17 +36,17 @@ class CustomOption
     /**
      * @var bool
      */
-    private $multi;
+    private $isMulti;
 
     /**
      * @var string
      */
-    private $render_type;
+    private $renderType;
 
     /***
      * @var int
      */
-    private $sort_order;
+    private $sortOrder;
 
     /**
      * @var string
@@ -54,7 +54,7 @@ class CustomOption
     private $type;
 
     /**
-     * @var \Magento\CatalogExport\Model\Data\CustomOptionValue[]|null
+     * @var \Magento\CatalogExportApi\Api\Data\CustomOptionValue[]|null
      */
     private $values;
 
@@ -107,7 +107,7 @@ class CustomOption
      */
     public function getProductSku()
     {
-        return $this->product_sku;
+        return $this->productSku;
     }
 
     /**
@@ -118,7 +118,7 @@ class CustomOption
      */
     public function setProductSku(string $productSku)
     {
-        $this->product_sku = $productSku;
+        $this->productSku = $productSku;
     }
 
     /**
@@ -151,7 +151,7 @@ class CustomOption
      */
     public function getIsMulti(): bool
     {
-        return (bool)$this->multi;
+        return (bool)$this->isMulti;
     }
 
     /**
@@ -162,7 +162,7 @@ class CustomOption
      */
     public function setIsMulti(bool $multi): void
     {
-        $this->multi = $multi;
+        $this->isMulti = $multi;
     }
 
     /**
@@ -172,7 +172,7 @@ class CustomOption
      */
     public function getRenderType(): string
     {
-        return $this->render_type;
+        return $this->renderType;
     }
 
     /**
@@ -183,7 +183,7 @@ class CustomOption
      */
     public function setRenderType(string $renderType): void
     {
-        $this->render_type = $renderType;
+        $this->renderType = $renderType;
     }
 
     /**
@@ -193,7 +193,7 @@ class CustomOption
      */
     public function getSortOrder(): ?int
     {
-        return $this->sort_order;
+        return $this->sortOrder;
     }
 
     /**
@@ -204,7 +204,7 @@ class CustomOption
      */
     public function setSortOrder(?int $sortOrder): void
     {
-        $this->sort_order = $sortOrder;
+        $this->sortOrder = $sortOrder;
     }
 
     /**
@@ -231,7 +231,7 @@ class CustomOption
     /**
      * Get option values
      *
-     * @return \Magento\CatalogExport\Model\Data\CustomOptionValue[]|null
+     * @return \Magento\CatalogExportApi\Api\Data\CustomOptionValue[]|null
      */
     public function getValues(): ?array
     {
@@ -241,10 +241,10 @@ class CustomOption
     /**
      * Set option values
      *
-     * @param \Magento\CatalogExport\Model\Data\CustomOptionValue[] $values
+     * @param \Magento\CatalogExportApi\Api\Data\CustomOptionValue[] $values
      * @return void
      */
-    public function setValues(array $values = null)
+    public function setValues(array $values = null): void
     {
         $this->values = $values;
     }

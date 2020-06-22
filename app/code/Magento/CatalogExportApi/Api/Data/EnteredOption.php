@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogExport\Model\Data;
+namespace Magento\CatalogExportApi\Api\Data;
 
 /**
  * Entered option entity
@@ -21,7 +21,7 @@ class EnteredOption
     /**
      * @var string
      */
-    private $product_sku;
+    private $productSku;
 
     /**
      * @var bool
@@ -31,12 +31,12 @@ class EnteredOption
     /**
      * @var string
      */
-    private $render_type;
+    private $renderType;
 
     /***
      * @var int
      */
-    private $sort_order;
+    private $sortOrder;
 
     /**
      * @var string
@@ -56,7 +56,7 @@ class EnteredOption
     /**
      * @var string
      */
-    private $price_type;
+    private $priceType;
 
     /**
      * @var ?string
@@ -66,22 +66,22 @@ class EnteredOption
     /**
      * @var ?string
      */
-    private $file_extension;
+    private $fileExtension;
 
     /**
      * @var ?int
      */
-    private $max_characters;
+    private $maxCharacters;
 
     /**
      * @var ?int
      */
-    private $image_size_y;
+    private $imageSizeX;
 
     /**
      * @var ?int
      */
-    private $image_size_x;
+    private $imageSizeY;
 
     /**
      * Get option id
@@ -111,7 +111,7 @@ class EnteredOption
      */
     public function getProductSku()
     {
-        return $this->product_sku;
+        return $this->productSku;
     }
 
     /**
@@ -122,13 +122,13 @@ class EnteredOption
      */
     public function setProductSku(string $productSku)
     {
-        $this->product_sku = $productSku;
+        $this->productSku = $productSku;
     }
 
     /**
      * Get option value price
      *
-     * @return float[]
+     * @return \Magento\CatalogExportApi\Api\Data\Price
      */
     public function getPrice()
     {
@@ -138,7 +138,7 @@ class EnteredOption
     /**
      * Set option value price
      *
-     * @param array $price
+     * @param \Magento\CatalogExportApi\Api\Data\Price $price
      * @return void
      */
     public function setPrice($price)
@@ -153,7 +153,7 @@ class EnteredOption
      */
     public function getPriceType()
     {
-        return $this->price_type;
+        return $this->priceType;
     }
 
     /**
@@ -164,7 +164,7 @@ class EnteredOption
      */
     public function setPriceType($priceType)
     {
-        $this->price_type = $priceType;
+        $this->priceType = $priceType;
     }
 
     /**
@@ -259,7 +259,7 @@ class EnteredOption
      */
     public function getRenderType(): string
     {
-        return $this->render_type;
+        return $this->renderType;
     }
 
     /**
@@ -270,9 +270,8 @@ class EnteredOption
      */
     public function setRenderType(string $renderType): void
     {
-        $this->render_type = $renderType;
+        $this->renderType = $renderType;
     }
-
 
     /**
      * Get sort order
@@ -281,7 +280,7 @@ class EnteredOption
      */
     public function getSortOrder(): ?int
     {
-        return $this->sort_order;
+        return $this->sortOrder;
     }
 
     /**
@@ -292,7 +291,7 @@ class EnteredOption
      */
     public function setSortOrder(?int $sortOrder): void
     {
-        $this->sort_order = $sortOrder;
+        $this->sortOrder = $sortOrder;
     }
 
     /**
@@ -302,7 +301,7 @@ class EnteredOption
      */
     public function getFileExtension(): ?string
     {
-        return $this->file_extension;
+        return $this->fileExtension;
     }
 
     /**
@@ -313,7 +312,7 @@ class EnteredOption
      */
     public function setFileExtension(?string $fileExtension)
     {
-        $this->file_extension = $fileExtension;
+        $this->fileExtension = $fileExtension;
     }
 
     /**
@@ -323,7 +322,7 @@ class EnteredOption
      */
     public function getMaxCharacters(): ?int
     {
-        return $this->max_characters;
+        return $this->maxCharacters;
     }
 
     /**
@@ -334,7 +333,7 @@ class EnteredOption
      */
     public function setMaxCharacters(?int $maxCharacters): void
     {
-        $this->max_characters = $maxCharacters;
+        $this->maxCharacters = $maxCharacters;
     }
 
     /**
@@ -344,7 +343,7 @@ class EnteredOption
      */
     public function getImageSizeX(): ?int
     {
-        return $this->image_size_x;
+        return $this->imageSizeX;
     }
 
     /**
@@ -355,7 +354,7 @@ class EnteredOption
      */
     public function setImageSizeX(?int $imageSizeX): void
     {
-        $this->image_size_x = $imageSizeX;
+        $this->imageSizeX = $imageSizeX;
     }
 
     /**
@@ -365,7 +364,7 @@ class EnteredOption
      */
     public function getImageSizeY(): ?int
     {
-        return $this->image_size_y;
+        return $this->imageSizeY;
     }
 
     /**
@@ -376,6 +375,6 @@ class EnteredOption
      */
     public function setImageSizeY(?int $imageSizeY): void
     {
-        $this->image_size_y = $imageSizeY;
+        $this->imageSizeY = $imageSizeY;
     }
 }
