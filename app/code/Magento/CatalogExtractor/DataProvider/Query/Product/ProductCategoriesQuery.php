@@ -68,7 +68,8 @@ class ProductCategoriesQuery
                 'store.group_id = store_group.group_id AND cat_index.category_id != store_group.root_category_id',
                 []
             )
-            ->where('product_id IN (?)', $productIds);
+            ->where('product_id IN (?)', $productIds)
+            ->order('category_id DESC');
 
         return $select;
     }
