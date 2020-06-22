@@ -130,11 +130,13 @@ class ClientAdapterTest extends TestCase
     }
 
     /**
+     * @return void
      */
     public function testBulkInsertWithWrongMappingType(): void
     {
+        $this->expectException('\Magento\Framework\Exception\BulkException');
         $this->expectExceptionMessage('Error occurred while bulk insert');
-        $this->expectException(\Magento\Framework\Exception\BulkException::class);
+
         $productBuilder = $this->getSimpleProductData();
         $productBuilder['sku'] = 'test-sku-default-site-123';
         $productData = $productBuilder;
@@ -158,13 +160,12 @@ class ClientAdapterTest extends TestCase
     }
 
     /**
+     * @return void
      */
-    public function testNotFoundIndex()
+    public function testNotFoundIndex(): void
     {
-        $this->expectExceptionMessage(
-            "'product' type document with id '111' not found in index 'not_found_index'."
-        );
-        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
+        $this->expectException('\Magento\Framework\Exception\NotFoundException');
+        $this->expectExceptionMessage("'product' type document with id '111' not found in index 'not_found_index'.");
         $this->storageQuery->getEntry(
             'not_found_index',
             'product',
@@ -190,11 +191,13 @@ class ClientAdapterTest extends TestCase
     }
 
     /**
+     * @return void
+     * @throws \Magento\Framework\Exception\NotFoundException
      */
-    public function testStorageException()
+    public function testStorageException(): void
     {
+        $this->expectException('\Magento\Framework\Exception\RuntimeException');
         $this->expectExceptionMessage('Storage error');
-        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
         $this->storageQuery->getEntries(
             $this->state->getAliasName(),
             'product',
