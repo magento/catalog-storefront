@@ -15,11 +15,6 @@ use Magento\CatalogExportApi\Api\ProductRepositoryInterface;
 class ProductRepository implements ProductRepositoryInterface
 {
     /**
-     * Constant value for setting max items in response
-     */
-    private const MAX_ITEMS_IN_RESPONSE = 250;
-
-    /**
      * @var \Magento\CatalogDataExporter\Model\Feed\Products
      */
     private $products;
@@ -35,26 +30,26 @@ class ProductRepository implements ProductRepositoryInterface
     private $dataObjectHelper;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig
+     * @var ExportConfiguration
      */
-    private $deploymentConfig;
+    private $exportConfiguration;
 
     /**
      * @param \Magento\CatalogDataExporter\Model\Feed\Products $products
      * @param \Magento\CatalogExportApi\Api\Data\ProductInterfaceFactory $productFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
+     * @param ExportConfiguration $exportConfiguration
      */
     public function __construct(
         \Magento\CatalogDataExporter\Model\Feed\Products $products,
         \Magento\CatalogExportApi\Api\Data\ProductInterfaceFactory $productFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Framework\App\DeploymentConfig $deploymentConfig
+        ExportConfiguration $exportConfiguration
     ) {
         $this->products = $products;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->productFactory = $productFactory;
-        $this->deploymentConfig = $deploymentConfig;
+        $this->exportConfiguration = $exportConfiguration;
     }
 
     /**
@@ -62,10 +57,10 @@ class ProductRepository implements ProductRepositoryInterface
      */
     public function get(array $ids)
     {
-        if (count($ids) > $this->getMaxItemsInResponse()) {
+        if (count($ids) > $this->exportConfiguration->getMaxItemsInResponse()) {
             throw new \InvalidArgumentException(
                 'Max items in the response can\'t exceed '
-                    . $this->getMaxItemsInResponse()
+                    . $this->exportConfiguration->getMaxItemsInResponse()
                     . '.'
             );
         }
@@ -83,16 +78,5 @@ class ProductRepository implements ProductRepositoryInterface
             $products[] = $product;
         }
         return $products;
-    }
-
-    /**
-     * Get max items in response
-     *
-     * @return int
-     */
-    private function getMaxItemsInResponse()
-    {
-        $maxItemsInResponse = (int) $this->deploymentConfig->get('catalog_export/max_items_in_response');
-        return $maxItemsInResponse ?: self::MAX_ITEMS_IN_RESPONSE;
     }
 }
