@@ -6,256 +6,376 @@
 
 namespace Magento\CatalogExport\Model\Data;
 
-use Magento\Framework\Model\AbstractModel;
-use Magento\CatalogExportApi\Api\Data\EnteredOptionInterface;
-
 /**
  * Entered option entity
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class EnteredOption extends AbstractModel implements EnteredOptionInterface
+class EnteredOption
 {
-    /**#@+
-     * Constants
+    /**
+     * @var int
      */
-    const KEY_ID = 'id';
-    const KEY_VALUE = 'value';
-    const KEY_REQUIRED = 'required';
-    const KEY_SORT_ORDER = 'sort_order';
-    const KEY_TYPE = 'type';
-    const KEY_RENDER_TYPE = 'render_type';
-    const KEY_PRODUCT_SKU = 'product_sku';
-    const KEY_SKU = 'sku';
-    const KEY_PRICE = 'price';
-    const KEY_PRICE_TYPE = 'price_type';
-    const KEY_FILE_EXTENSION = 'file_extension';
-    const KEY_MAX_CHARACTERS = 'max_characters';
-    const KEY_IMAGE_SIZE_Y = 'image_size_y';
-    const KEY_IMAGE_SIZE_X = 'image_size_x';
-    /**#@-*/
+    private $id;
 
     /**
-     * @inheritDoc
+     * @var string
      */
-    public function getType()
+    private $product_sku;
+
+    /**
+     * @var bool
+     */
+    private $required;
+
+    /**
+     * @var string
+     */
+    private $render_type;
+
+    /***
+     * @var int
+     */
+    private $sort_order;
+
+    /**
+     * @var string
+     */
+    private $type;
+
+    /**
+     * @var string
+     */
+    private $sku;
+
+    /**
+     * @var float[]
+     */
+    private $price;
+
+    /**
+     * @var string
+     */
+    private $price_type;
+
+    /**
+     * @var ?string
+     */
+    private $value;
+
+    /**
+     * @var ?string
+     */
+    private $file_extension;
+
+    /**
+     * @var ?int
+     */
+    private $max_characters;
+
+    /**
+     * @var ?int
+     */
+    private $image_size_y;
+
+    /**
+     * @var ?int
+     */
+    private $image_size_x;
+
+    /**
+     * Get option id
+     *
+     * @return int
+     */
+    public function getId(): int
     {
-        return $this->getData(self::KEY_TYPE);
+        return $this->id;
     }
 
     /**
-     * @inheritDoc
+     * Set option id
+     *
+     * @param int $id
+     * @return void
      */
-    public function setType($type)
+    public function setId(int $id): void
     {
-        $this->setData(self::KEY_TYPE, $type);
+        $this->id = $id;
     }
 
     /**
-     * @inheritDoc
-     */
-    public function getRenderType(): string
-    {
-        return $this->getData(self::KEY_RENDER_TYPE);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setRenderType(string $renderType)
-    {
-        $this->setData(self::KEY_RENDER_TYPE, $renderType);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getId(): ?int
-    {
-        return $this->getData(self::KEY_ID);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setId($value)
-    {
-        $this->setData(self::KEY_ID, $value);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getRequired()
-    {
-        return $this->getData(self::KEY_REQUIRED);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setRequired($isRequired)
-    {
-        $this->setData(self::KEY_REQUIRED, $isRequired);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getSortOrder()
-    {
-        return $this->getData(self::KEY_SORT_ORDER);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setSortOrder($sortOrder)
-    {
-        $this->setData(self::KEY_SORT_ORDER, $sortOrder);
-    }
-
-    /**
-     * @inheritDoc
+     * Get sku of the product
+     *
+     * @return string
      */
     public function getProductSku()
     {
-        return $this->getData(self::KEY_PRODUCT_SKU);
+        return $this->product_sku;
     }
 
     /**
-     * @inheritDoc
+     * Set product sku
+     *
+     * @param string $productSku
+     * @return void
      */
-    public function setProductSku($productSku)
+    public function setProductSku(string $productSku)
     {
-        $this->setData(self::KEY_PRODUCT_SKU, $productSku);
+        $this->product_sku = $productSku;
     }
 
     /**
-     * @inheritDoc
+     * Get option value price
+     *
+     * @return float[]
      */
     public function getPrice()
     {
-        return $this->getData(self::KEY_PRICE);
+        return $this->price;
     }
 
     /**
-     * @inheritDoc
+     * Set option value price
+     *
+     * @param array $price
+     * @return void
      */
     public function setPrice($price)
     {
-        $this->setData(self::KEY_PRICE, $price);
+        $this->price = $price;
     }
 
     /**
-     * @inheritDoc
+     * Get price type
+     *
+     * @return string
      */
     public function getPriceType()
     {
-        return $this->getData(self::KEY_PRICE_TYPE);
+        return $this->price_type;
     }
 
     /**
-     * @inheritDoc
+     * Set price type
+     *
+     * @param string $priceType
+     * @return void
      */
     public function setPriceType($priceType)
     {
-        $this->setData(self::KEY_PRICE_TYPE, $priceType);
+        $this->price_type = $priceType;
     }
 
     /**
-     * @inheritDoc
+     * Get option value
+     *
+     * @return string|null
      */
-    public function getValue()
+    public function getValue(): ?string
     {
-        return $this->getData(self::KEY_VALUE);
+        return $this->value;
     }
 
     /**
-     * @inheritDoc
+     * Set option value
+     *
+     * @param string|null $value
+     * @return void
      */
-    public function setValue($value)
+    public function setValue(?string $value): void
     {
-        $this->setData(self::KEY_VALUE, $value);
+        $this->value = $value;
     }
 
     /**
-     * @inheritDoc
+     * Get Sku
+     *
+     * @return string
      */
-    public function getSku()
+    public function getSku(): string
     {
-        return $this->getData(self::KEY_SKU);
+        return $this->sku;
     }
 
     /**
-     * @inheritDoc
+     * Set Sku
+     *
+     * @param string $sku
+     * @return void
      */
-    public function getFileExtension()
+    public function setSku(string $sku): void
     {
-        return $this->getData(self::KEY_FILE_EXTENSION);
+        $this->sku = $sku;
     }
 
     /**
-     * @inheritDoc
+     * Get is require
+     *
+     * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getMaxCharacters()
+    public function getRequired(): bool
     {
-        return $this->getData(self::KEY_MAX_CHARACTERS);
+        return $this->required;
     }
 
     /**
-     * @inheritDoc
+     * Set is require
+     *
+     * @param bool $isRequired
+     * @return void
      */
-    public function getImageSizeX()
+    public function setRequired($isRequired): void
     {
-        return $this->getData(self::KEY_IMAGE_SIZE_X);
+        $this->required = $isRequired;
     }
 
     /**
-     * @inheritDoc
+     * Get option type
+     *
+     * @return string
      */
-    public function getImageSizeY()
+    public function getType(): string
     {
-        return $this->getData(self::KEY_IMAGE_SIZE_Y);
+        return $this->type;
     }
 
     /**
-     * @inheritDoc
+     * Set option type
+     *
+     * @param string $type
+     * @return void
      */
-    public function setSku($sku)
+    public function setType(string $type): void
     {
-        $this->setData(self::KEY_SKU, $sku);
+        $this->type = $type;
     }
 
     /**
-     * @inheritDoc
+     * Return render type
+     *
+     * @return string
      */
-    public function setFileExtension($fileExtension)
+    public function getRenderType(): string
     {
-        $this->setData(self::KEY_FILE_EXTENSION, $fileExtension);
+        return $this->render_type;
     }
 
     /**
-     * @inheritDoc
+     * Set render type
+     *
+     * @param string $renderType
+     * @return void
      */
-    public function setMaxCharacters($maxCharacters)
+    public function setRenderType(string $renderType): void
     {
-        $this->setData(self::KEY_MAX_CHARACTERS, $maxCharacters);
+        $this->render_type = $renderType;
+    }
+
+
+    /**
+     * Get sort order
+     *
+     * @return int|null
+     */
+    public function getSortOrder(): ?int
+    {
+        return $this->sort_order;
     }
 
     /**
-     * @inheritDoc
+     * Set sort order
+     *
+     * @param int|null $sortOrder
+     * @return void
      */
-    public function setImageSizeX($imageSizeX)
+    public function setSortOrder(?int $sortOrder): void
     {
-        $this->setData(self::KEY_IMAGE_SIZE_X, $imageSizeX);
+        $this->sort_order = $sortOrder;
     }
 
     /**
-     * @inheritDoc
+     * Get file extension
+     *
+     * @return string|null
      */
-    public function setImageSizeY($imageSizeY)
+    public function getFileExtension(): ?string
     {
-        $this->setData(self::KEY_IMAGE_SIZE_Y, $imageSizeY);
+        return $this->file_extension;
+    }
+
+    /**
+     * Set File Extension
+     *
+     * @param string|null $fileExtension
+     * @return void
+     */
+    public function setFileExtension(?string $fileExtension)
+    {
+        $this->file_extension = $fileExtension;
+    }
+
+    /**
+     * Get Max Characters
+     *
+     * @return int|null
+     */
+    public function getMaxCharacters(): ?int
+    {
+        return $this->max_characters;
+    }
+
+    /**
+     * Set Max Characters
+     *
+     * @param int|null $maxCharacters
+     * @return void
+     */
+    public function setMaxCharacters(?int $maxCharacters): void
+    {
+        $this->max_characters = $maxCharacters;
+    }
+
+    /**
+     * Get image size X
+     *
+     * @return int|null
+     */
+    public function getImageSizeX(): ?int
+    {
+        return $this->image_size_x;
+    }
+
+    /**
+     * Set Image Size X
+     *
+     * @param int|null $imageSizeX
+     * @return void
+     */
+    public function setImageSizeX(?int $imageSizeX): void
+    {
+        $this->image_size_x = $imageSizeX;
+    }
+
+    /**
+     * Get image size Y
+     *
+     * @return int|null
+     */
+    public function getImageSizeY(): ?int
+    {
+        return $this->image_size_y;
+    }
+
+    /**
+     * Set Image Size Y
+     *
+     * @param int|null $imageSizeY
+     * @return void
+     */
+    public function setImageSizeY(?int $imageSizeY): void
+    {
+        $this->image_size_y = $imageSizeY;
     }
 }

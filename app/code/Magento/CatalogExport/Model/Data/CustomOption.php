@@ -6,171 +6,246 @@
 
 namespace Magento\CatalogExport\Model\Data;
 
-use Magento\Framework\Model\AbstractModel;
-use Magento\CatalogExportApi\Api\Data\CustomOptionInterface;
-
 /**
  * Custom option entity
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class CustomOption extends AbstractModel implements CustomOptionInterface
+class CustomOption
 {
-    /**#@+
-     * Constants
+    /**
+     * @var int
      */
-    const KEY_ID = 'id';
-    const KEY_PRODUCT_SKU = 'product_sku';
-    const KEY_TITLE = 'title';
-    const KEY_TYPE = 'type';
-    const KEY_SORT_ORDER = 'sort_order';
-    const KEY_REQUIRED = 'required';
-    const KEY_RENDER_TYPE = 'render_type';
-    const KEY_MULTI = 'multi';
-    const KEY_VALUES = 'values';
-    /**#@-*/
+    private $id;
 
     /**
-     * @inheritDoc
+     * @var string
      */
-    public function getId(): ?int
+    private $title;
+
+    /**
+     * @var string
+     */
+    private $product_sku;
+
+    /**
+     * @var bool
+     */
+    private $required;
+
+    /**
+     * @var bool
+     */
+    private $multi;
+
+    /**
+     * @var string
+     */
+    private $render_type;
+
+    /***
+     * @var int
+     */
+    private $sort_order;
+
+    /**
+     * @var string
+     */
+    private $type;
+
+    /**
+     * @var \Magento\CatalogExport\Model\Data\CustomOptionValue[]|null
+     */
+    private $values;
+
+    /**
+     * Get option id
+     *
+     * @return int
+     */
+    public function getId(): int
     {
-        return $this->getData(self::KEY_ID);
+        return $this->id;
     }
 
     /**
-     * @inheritDoc
+     * Set option id
+     *
+     * @param int $id
+     * @return void
      */
-    public function setId($value)
+    public function setId(int $id): void
     {
-        $this->setData(self::KEY_ID, $value);
+        $this->id = $id;
     }
 
     /**
-     * @inheritDoc
+     * Get option title
+     *
+     * @return string
      */
-    public function getRequired()
+    public function getTitle(): string
     {
-        return $this->getData(self::KEY_REQUIRED);
+        return $this->title;
     }
 
     /**
-     * @inheritDoc
+     * Set option title
+     *
+     * @param string $title
+     * @return void
      */
-    public function setRequired($isRequired)
+    public function setTitle(string $title)
     {
-        $this->setData(self::KEY_REQUIRED, $isRequired);
+        $this->title = $title;
     }
 
     /**
-     * @inheritDoc
-     */
-    public function getIsMulti(): bool
-    {
-        return (bool)$this->getData(self::KEY_MULTI);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setIsMulti(bool $multi)
-    {
-        $this->setData(self::KEY_MULTI, $multi);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getRenderType(): string
-    {
-        return $this->getData(self::KEY_RENDER_TYPE);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setRenderType(string $renderType)
-    {
-        $this->setData(self::KEY_RENDER_TYPE, $renderType);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getTitle()
-    {
-        return $this->getData(self::KEY_TITLE);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setTitle($title)
-    {
-        $this->setData(self::KEY_TITLE, $title);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getSortOrder()
-    {
-        return $this->getData(self::KEY_SORT_ORDER);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setSortOrder($sortOrder)
-    {
-        $this->setData(self::KEY_SORT_ORDER, $sortOrder);
-    }
-
-    /**
-     * @inheritDoc
+     * Get sku of the product
+     *
+     * @return string
      */
     public function getProductSku()
     {
-        return $this->getData(self::KEY_PRODUCT_SKU);
+        return $this->product_sku;
     }
 
     /**
-     * @inheritDoc
+     * Set product sku
+     *
+     * @param string $productSku
+     * @return void
      */
-    public function getType()
+    public function setProductSku(string $productSku)
     {
-        return $this->getData(self::KEY_TYPE);
+        $this->product_sku = $productSku;
     }
 
     /**
-     * @inheritDoc
+     * Get is require
+     *
+     * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function setType($type)
+    public function getRequired(): bool
     {
-        $this->setData(self::KEY_TYPE, $type);
+        return $this->required;
     }
 
     /**
-     * @inheritDoc
+     * Set is require
+     *
+     * @param bool $isRequired
+     * @return void
      */
-    public function setProductSku($productSku)
+    public function setRequired($isRequired): void
     {
-        $this->setData(self::KEY_PRODUCT_SKU, $productSku);
+        $this->required = $isRequired;
     }
 
     /**
-     * @inheritDoc
+     * Get is multi
+     *
+     * @return bool
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getValues()
+    public function getIsMulti(): bool
     {
-        return $this->getData(self::KEY_VALUES);
+        return (bool)$this->multi;
     }
 
     /**
-     * @inheritDoc
+     * Set multi
+     *
+     * @param bool $multi
+     * @return void
+     */
+    public function setIsMulti(bool $multi): void
+    {
+        $this->multi = $multi;
+    }
+
+    /**
+     * Return render type
+     *
+     * @return string
+     */
+    public function getRenderType(): string
+    {
+        return $this->render_type;
+    }
+
+    /**
+     * Set render type
+     *
+     * @param string $renderType
+     * @return void
+     */
+    public function setRenderType(string $renderType): void
+    {
+        $this->render_type = $renderType;
+    }
+
+    /**
+     * Get sort order
+     *
+     * @return int|null
+     */
+    public function getSortOrder(): ?int
+    {
+        return $this->sort_order;
+    }
+
+    /**
+     * Set sort order
+     *
+     * @param int|null $sortOrder
+     * @return void
+     */
+    public function setSortOrder(?int $sortOrder): void
+    {
+        $this->sort_order = $sortOrder;
+    }
+
+    /**
+     * Get option type
+     *
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set option type
+     *
+     * @param string $type
+     * @return void
+     */
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * Get option values
+     *
+     * @return \Magento\CatalogExport\Model\Data\CustomOptionValue[]|null
+     */
+    public function getValues(): ?array
+    {
+        return $this->values;
+    }
+
+    /**
+     * Set option values
+     *
+     * @param \Magento\CatalogExport\Model\Data\CustomOptionValue[] $values
+     * @return void
      */
     public function setValues(array $values = null)
     {
-        $this->setData(self::KEY_VALUES, $values);
+        $this->values = $values;
     }
 }

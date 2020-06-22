@@ -6,15 +6,12 @@
 
 namespace Magento\CatalogExport\Model\Data;
 
-use Magento\Framework\Model\AbstractModel;
-use Magento\CatalogExportApi\Api\Data\CustomOptionValueInterface;
-
 /**
  * Custom option value entity
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class CustomOptionValue extends AbstractModel implements CustomOptionValueInterface
+class CustomOptionValue
 {
     /**#@+
      * Constants
@@ -28,98 +25,158 @@ class CustomOptionValue extends AbstractModel implements CustomOptionValueInterf
     /**#@-*/
 
     /**
-     * @inheritDoc
+     * @var int
      */
-    public function getId(): ?int
+    private $id;
+
+    /**
+     * @var int|null
+     */
+    private $sort_order;
+
+    /**
+     * @var float[]
+     */
+    private $price;
+
+    /**
+     * @var string
+     */
+    private $price_type;
+
+    /**
+     * @var string
+     */
+    private $sku;
+
+    /**
+     * @var string
+     */
+    private $value;
+
+    /**
+     * Get option value ID
+     *
+     * @return int
+     */
+    public function getId(): int
     {
-        return $this->getData(self::KEY_ID);
+        return $this->id;
     }
 
     /**
-     * @inheritDoc
+     * Set option value ID
+     *
+     * @param int $id
+     * @return void
      */
-    public function setId($value)
+    public function setId(int $id): void
     {
-        $this->setData(self::KEY_ID, $value);
+        $this->id = $id;
     }
 
     /**
-     * @inheritDoc
-     */
-    public function getPrice()
-    {
-        return $this->getData(self::KEY_PRICE);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setPrice($price)
-    {
-        $this->setData(self::KEY_PRICE, $price);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getPriceType()
-    {
-        return $this->getData(self::KEY_PRICE_TYPE);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setPriceType($priceType)
-    {
-        $this->setData(self::KEY_PRICE_TYPE, $priceType);
-    }
-
-    /**
-     * @inheritDoc
+     * Get option value title
+     *
+     * @return string
      */
     public function getValue(): string
     {
-        return $this->getData(self::KEY_VALUE);
+        return $this->value;
     }
 
     /**
-     * @inheritDoc
+     * Set option value title
+     *
+     * @param string $value
+     * @return void
      */
-    public function setValue(string $value)
+    public function setValue(string $value): void
     {
-        $this->setData(self::KEY_VALUE, $value);
+        $this->value = $value;
     }
 
     /**
-     * @inheritDoc
+     * Get sort order
+     *
+     * @return int|null
      */
-    public function getSortOrder()
+    public function getSortOrder(): ?int
     {
-        return $this->getData(self::KEY_SORT_ORDER);
+        return $this->sort_order;
     }
 
     /**
-     * @inheritDoc
+     * Set sort order
+     *
+     * @param int $sortOrder
+     * @return void
      */
-    public function setSortOrder($sortOrder)
+    public function setSortOrder($sortOrder): void
     {
-        $this->setData(self::KEY_SORT_ORDER, $sortOrder);
+        $this->sort_order = $sortOrder;
     }
 
     /**
-     * @inheritDoc
+     * Get option value price
+     *
+     * @return float[]
      */
-    public function getSku()
+    public function getPrice(): array
     {
-        return $this->getData(self::KEY_SKU);
+        return $this->price;
     }
 
     /**
-     * @inheritDoc
+     * Set option value price
+     *
+     * @param array $price
+     * @return void
      */
-    public function setSku($sku)
+    public function setPrice($price): void
     {
-        $this->setData(self::KEY_SKU, $sku);
+        $this->price = $price;
+    }
+
+    /**
+     * Get price type
+     *
+     * @return string
+     */
+    public function getPriceType(): string
+    {
+        return $this->price_type;
+    }
+
+    /**
+     * Set price type
+     *
+     * @param string $priceType
+     * @return void
+     */
+    public function setPriceType($priceType): void
+    {
+        $this->price_type = $priceType;
+    }
+
+    /**
+     * Get Sku
+     *
+     * @return string
+     */
+    public function getSku(): string
+    {
+        return $this->sku;
+    }
+
+    /**
+     * Set Sku
+     *
+     * @param string $sku
+     * @return void
+     */
+    public function setSku($sku): void
+    {
+        $this->sku = $sku;
     }
 }

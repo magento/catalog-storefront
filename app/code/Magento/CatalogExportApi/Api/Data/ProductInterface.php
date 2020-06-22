@@ -375,14 +375,14 @@ interface ProductInterface
     /**
      * Get product options
      *
-     * @return \Magento\CatalogExportApi\Api\Data\CustomOptionInterface[]
+     * @return \Magento\CatalogExport\Model\Data\CustomOption[]
      */
     public function getOptions();
 
     /**
      * Set product options
      *
-     * @param \Magento\CatalogExportApi\Api\Data\CustomOptionInterface[] $options
+     * @param \Magento\CatalogExport\Model\Data\CustomOption[] $options
      * @return void
      */
     public function setOptions($options);
@@ -390,14 +390,14 @@ interface ProductInterface
     /**
      * Get product options
      *
-     * @return \Magento\CatalogExportApi\Api\Data\EnteredOptionInterface[]
+     * @return \Magento\CatalogExport\Model\Data\EnteredOption[]
      */
     public function getEnteredOptions();
 
     /**
      * Set product options
      *
-     * @param \Magento\CatalogExportApi\Api\Data\EnteredOptionInterface[] $options
+     * @param \Magento\CatalogExport\Model\Data\EnteredOption[] $options
      * @return void
      */
     public function setEnteredOptions($options);
