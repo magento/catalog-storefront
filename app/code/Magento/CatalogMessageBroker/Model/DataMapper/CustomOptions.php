@@ -13,12 +13,12 @@ class CustomOptions implements DataMapperInterface
     /**
      * @inheritDoc
      */
-    public function map(array $override): array
+    public function map(array $data): array
     {
         $productCustomOptions = [];
 
-        if (!empty($override['options'])) {
-            $productSelectableOptions = $override['options'];
+        if (!empty($data['options'])) {
+            $productSelectableOptions = $data['options'];
             $customOptions = array_filter(
                 $productSelectableOptions,
                 function ($value) {
@@ -29,7 +29,7 @@ class CustomOptions implements DataMapperInterface
                 $customOptionValues = [];
                 foreach ($customOption['values'] as $value) {
                     $customOptionValue = $value;
-                    $customOptionValue['price'] = current($value['price']);
+                    $customOptionValue['price'] = $value['price']['final_price'];
                     $customOptionValue['title'] = $value['value'];
                     $customOptionValue['option_type_id'] = $value['id'];
                     unset($value['value']);
@@ -43,10 +43,10 @@ class CustomOptions implements DataMapperInterface
             }
         }
 
-        if (!empty($override['entered_options'])) {
-            $productEnteredOptions = $override['entered_options'];
+        if (!empty($data['entered_options'])) {
+            $productEnteredOptions = $data['entered_options'];
             foreach ($productEnteredOptions as $customOption) {
-                $customOption['price'] = current($customOption['price']);
+                $customOption['price'] = $customOption['price']['final_price'];
                 $customOption['title'] = $customOption['value'];
                 $customOption['type'] = $customOption['render_type'];
                 $customOption['option_id'] = $customOption['id'];
