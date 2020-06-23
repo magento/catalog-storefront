@@ -191,9 +191,9 @@ class EnteredOption
     /**
      * Get Sku
      *
-     * @return string
+     * @return ?string
      */
-    public function getSku(): string
+    public function getSku(): ?string
     {
         return $this->sku;
     }
@@ -234,9 +234,9 @@ class EnteredOption
     /**
      * Get option type
      *
-     * @return string
+     * @return ?string
      */
-    public function getType(): string
+    public function getType(): ?string
     {
         return $this->type;
     }

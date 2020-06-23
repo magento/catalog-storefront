@@ -67,9 +67,9 @@ class CustomOptionValue
     /**
      * Get option value title
      *
-     * @return string
+     * @return ?string
      */
-    public function getValue(): string
+    public function getValue(): ?string
     {
         return $this->value;
     }
@@ -151,9 +151,9 @@ class CustomOptionValue
     /**
      * Get Sku
      *
-     * @return string
+     * @return ?string
      */
-    public function getSku(): string
+    public function getSku(): ?string
     {
         return $this->sku;
     }
