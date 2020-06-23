@@ -34,11 +34,6 @@ class CustomOption
     private $required;
 
     /**
-     * @var bool
-     */
-    private $isMulti;
-
-    /**
      * @var string
      */
     private $renderType;
@@ -74,9 +69,9 @@ class CustomOption
      * @param int $id
      * @return void
      */
-    public function setId(int $id): void
+    public function setId($id): void
     {
-        $this->id = $id;
+        $this->id = (int)$id;
     }
 
     /**
@@ -141,28 +136,6 @@ class CustomOption
     public function setRequired($isRequired): void
     {
         $this->required = $isRequired;
-    }
-
-    /**
-     * Get is multi
-     *
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     */
-    public function getIsMulti(): bool
-    {
-        return (bool)$this->isMulti;
-    }
-
-    /**
-     * Set multi
-     *
-     * @param bool $multi
-     * @return void
-     */
-    public function setIsMulti(bool $multi): void
-    {
-        $this->isMulti = $multi;
     }
 
     /**

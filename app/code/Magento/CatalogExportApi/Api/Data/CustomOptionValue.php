@@ -59,9 +59,9 @@ class CustomOptionValue
      * @param int $id
      * @return void
      */
-    public function setId(int $id): void
+    public function setId($id): void
     {
-        $this->id = $id;
+        $this->id = (int)$id;
     }
 
     /**
@@ -109,7 +109,7 @@ class CustomOptionValue
     /**
      * Get option value price
      *
-     * @return \Magento\CatalogExportApi\Api\Data\Price|null
+     * @return \Magento\CatalogExportApi\Api\Data\Price
      */
     public function getPrice()
     {
