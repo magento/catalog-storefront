@@ -173,6 +173,14 @@ class CategoryTree implements BatchResolverInterface
                 ['children']
             );
             $type = 'children';
+        } elseif ($field->getName() === 'categories') {
+            $categoryIds = $request->getValue()['categories'] ?? [];
+            $storefrontRequest['ids'] = $categoryIds;
+            $storefrontRequest['attribute_codes'] = $this->fieldResolver->getSchemaTypeFields(
+                $request->getInfo(),
+                ['categories']
+            );
+            $type = 'categories';
         } else {
             throw new \InvalidArgumentException(
                 'Category tree resolver support only category and children fields'
