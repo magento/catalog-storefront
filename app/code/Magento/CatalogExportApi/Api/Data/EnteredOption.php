@@ -149,9 +149,9 @@ class EnteredOption
     /**
      * Get price type
      *
-     * @return string
+     * @return string|null
      */
-    public function getPriceType()
+    public function getPriceType(): ?string
     {
         return $this->priceType;
     }

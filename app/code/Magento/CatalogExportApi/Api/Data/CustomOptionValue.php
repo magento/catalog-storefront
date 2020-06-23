@@ -130,9 +130,9 @@ class CustomOptionValue
     /**
      * Get price type
      *
-     * @return string
+     * @return string|null
      */
-    public function getPriceType(): string
+    public function getPriceType(): ?string
     {
         return $this->priceType;
     }
