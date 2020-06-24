@@ -61,7 +61,7 @@ class CategoryTree implements BatchResolverInterface
      * @param Field $field Field metadata.
      * @param BatchRequestItemInterface[] $requests Requests to the field.
      * @return BatchResponse Aggregated response.
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function resolve(ContextInterface $context, Field $field, array $requests): BatchResponse
     {
@@ -173,6 +173,14 @@ class CategoryTree implements BatchResolverInterface
                 ['children']
             );
             $type = 'children';
+        } elseif ($field->getName() === 'categories') {
+            $categoryIds = $request->getValue()['categories'] ?? [];
+            $storefrontRequest['ids'] = $categoryIds;
+            $storefrontRequest['attribute_codes'] = $this->fieldResolver->getSchemaTypeFields(
+                $request->getInfo(),
+                ['categories']
+            );
+            $type = 'categories';
         } else {
             throw new \InvalidArgumentException(
                 'Category tree resolver support only category and children fields'

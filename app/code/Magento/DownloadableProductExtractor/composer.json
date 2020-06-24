@@ -9,6 +9,7 @@
         "magento/framework": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-extractor": "*",
+        "magento/module-downloadable": "*",
         "magento/module-store": "*"
     },
     "suggest": {

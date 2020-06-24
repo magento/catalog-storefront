@@ -34,6 +34,7 @@ use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  * @SuppressWarnings(PHPMD.NPathComplexity)
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogInterface
 {
@@ -544,6 +545,7 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     }
                     $r->setDownloadableProductSamples($res);
 
+                    $r->setOnlyXLeftInStock($item->getOnlyXLeftInStock());
                     return $r;
                 };
                 $proto = $p();
@@ -1027,6 +1029,7 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     }
                     $r->setDownloadableProductSamples($res);
 
+                    $r->setOnlyXLeftInStock($item->getOnlyXLeftInStock());
                     return $r;
                 };
                 $out = $p();

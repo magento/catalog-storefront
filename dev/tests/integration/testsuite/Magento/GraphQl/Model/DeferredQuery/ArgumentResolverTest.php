@@ -50,7 +50,7 @@ class ArgumentResolverTest extends \PHPUnit\Framework\TestCase
         $queryClassName = \Magento\GraphQl\Model\DeferredQuery\TestClass\ArgumentResolverClassInterface::class;
         $serviceMethodName = 'methodName';
         $this->assertEquals(
-            'Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface',
+            'Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface',
             $this->argumentResolver->getArgumentClassName($queryClassName, $serviceMethodName)
         );
     }
@@ -77,17 +77,20 @@ class ArgumentResolverTest extends \PHPUnit\Framework\TestCase
         $cacheKey = 'arguments_' . $queryClassName . '_' . $serviceMethodName;
         $cache = $cache->load($cacheKey);
 
-        $this->assertEquals('Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface', $cache);
+        $this->assertEquals('Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface', $cache);
     }
 
     /**
      * Test for getArgumentClass() without params in method
      *
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Class passed to resolver is not compatible with ArgumentResolver
+     * @return void
+     * @throws \ReflectionException
      */
-    public function testGetArgumentClassNameWithoutParams()
+    public function testGetArgumentClassNameWithoutParams(): void
     {
+        $this->expectException('\RuntimeException');
+        $this->expectExceptionMessage('Class passed to resolver is not compatible with ArgumentResolver');
+
         $queryClassName = \Magento\GraphQl\Model\DeferredQuery\TestClass\ArgumentResolverClassInterface::class;
         $serviceMethodName = 'methodNameWithoutParameters';
         $this->argumentResolver->getArgumentClassName($queryClassName, $serviceMethodName);
@@ -96,11 +99,13 @@ class ArgumentResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for getArgumentClass() with not existing class
      *
-     * @expectedException \ReflectionException
-     * @expectedExceptionMessage Class \Magento\NotExistingNamespace\NotExistingClass does not exist
+     * @return void
      */
-    public function testGetArgumentClassNameWithNotExistingClass()
+    public function testGetArgumentClassNameWithNotExistingClass(): void
     {
+        $this->expectException('\ReflectionException');
+        $this->expectExceptionMessage('Class \Magento\NotExistingNamespace\NotExistingClass does not exist');
+
         $queryClassName = '\Magento\NotExistingNamespace\NotExistingClass';
         $serviceMethodName = 'create';
         $this->argumentResolver->getArgumentClassName($queryClassName, $serviceMethodName);
@@ -109,12 +114,14 @@ class ArgumentResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for getArgumentClass() with not existing method
      *
-     * @expectedException \ReflectionException
-     * @expectedExceptionMessage Method notExistingMethodName does not exist
+     * @return void
      */
-    public function testGetArgumentClassNameWithNotExistingMethod()
+    public function testGetArgumentClassNameWithNotExistingMethod(): void
     {
-        $queryClassName = \Magento\GraphQl\Model\DeferredQuery\TestClass\ArgumentResolverClassInterface::class;
+        $this->expectException('\ReflectionException');
+        $this->expectExceptionMessage('Method notExistingMethodName does not exist');
+
+        $queryClassName = \Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface::class;
         $serviceMethodName = 'notExistingMethodName';
         $this->argumentResolver->getArgumentClassName($queryClassName, $serviceMethodName);
     }
@@ -122,11 +129,14 @@ class ArgumentResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for getArgumentClass() with not correct class
      *
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Class passed to resolver is not compatible
+     * @return void
+     * @throws \ReflectionException
      */
     public function testGetArgumentClassNameWithNotCorrectClass()
     {
+        $this->expectException('\RuntimeException');
+        $this->expectExceptionMessage('Class passed to resolver is not compatible');
+
         $queryClassName = \Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface::class;
         $serviceMethodName = 'create';
         $this->argumentResolver->getArgumentClassName($queryClassName, $serviceMethodName);
@@ -135,11 +145,13 @@ class ArgumentResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for getArgumentClass() with more than one parameter
      *
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Class passed to resolver is not compatible
+     * @return void
      */
-    public function testGetArgumentClassNameWithMoreThanOneParametersMethod()
+    public function testGetArgumentClassNameWithMoreThanOneParametersMethod(): void
     {
+        $this->expectException('\RuntimeException');
+        $this->expectExceptionMessage('Class passed to resolver is not compatible');
+
         $queryClassName = \Magento\GraphQl\Model\DeferredQuery\TestClass\ArgumentResolverClassInterface::class;
         $serviceMethodName = 'methodNameMoreOneParameters';
         $this->argumentResolver->getArgumentClassName($queryClassName, $serviceMethodName);

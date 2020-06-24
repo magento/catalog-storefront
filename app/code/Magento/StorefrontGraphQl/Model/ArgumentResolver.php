@@ -103,11 +103,19 @@ class ArgumentResolver
     {
         $class = new \ReflectionClass($className);
         $method = $class->getMethod($methodName);
-
-        foreach ($method->getParameters() as $param) {
-            return $param->getClass()->name;
+        $params = $method->getParameters();
+        try {
+            $exceptionMessage = 'Class passed to resolver is not compatible with ArgumentResolver';
+            if (count($params) !== 1) {
+                throw new \RuntimeException($exceptionMessage);
+            }
+            $param = current($params);
+            $class = $param->getClass();
+            $className = $class->name;
+        } catch (\Exception $exception) {
+            throw new \RuntimeException($exceptionMessage);
         }
 
-        throw new \RuntimeException('Class passed to resolver is not compatible with ArgumentResolver');
+        return $className;
     }
 }

@@ -268,6 +268,10 @@ class Product extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DownloadableSample downloadable_product_samples = 101;</code>
      */
     private $downloadable_product_samples;
+    /**
+     * Generated from protobuf field <code>float only_x_left_in_stock = 102;</code>
+     */
+    protected $only_x_left_in_stock = 0.0;
 
     /**
      * Constructor.
@@ -351,6 +355,7 @@ class Product extends \Google\Protobuf\Internal\Message
      *     @type string $links_title
      *     @type \Magento\CatalogStorefrontApi\Proto\DownloadableLink[]|\Google\Protobuf\Internal\RepeatedField $downloadable_product_links
      *     @type \Magento\CatalogStorefrontApi\Proto\DownloadableSample[]|\Google\Protobuf\Internal\RepeatedField $downloadable_product_samples
+     *     @type float $only_x_left_in_stock
      * }
      */
     public function __construct($data = null)
@@ -1649,6 +1654,28 @@ class Product extends \Google\Protobuf\Internal\Message
     {
         $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\DownloadableSample::class);
         $this->downloadable_product_samples = $arr;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>float only_x_left_in_stock = 102;</code>
+     * @return float
+     */
+    public function getOnlyXLeftInStock()
+    {
+        return $this->only_x_left_in_stock;
+    }
+
+    /**
+     * Generated from protobuf field <code>float only_x_left_in_stock = 102;</code>
+     * @param float $var
+     * @return $this
+     */
+    public function setOnlyXLeftInStock($var)
+    {
+        GPBUtil::checkFloat($var);
+        $this->only_x_left_in_stock = $var;
 
         return $this;
     }

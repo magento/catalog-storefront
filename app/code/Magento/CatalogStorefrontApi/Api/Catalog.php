@@ -541,6 +541,7 @@ class Catalog implements CatalogInterface
                     }
                     $r->setDownloadableProductSamples($res);
 
+                    $r->setOnlyXLeftInStock($item->getOnlyXLeftInStock());
                     return $r;
                 };
                 $out = $p();
@@ -1016,6 +1017,7 @@ class Catalog implements CatalogInterface
                     }
                     $r->setDownloadableProductSamples($res);
 
+                    $r->setOnlyXLeftInStock($item->getOnlyXLeftInStock());
                     return $r;
                 };
                 $proto = $p();
