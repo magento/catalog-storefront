@@ -19,11 +19,6 @@ use Magento\Framework\View\DesignInterface;
 class ImageUrlResolver
 {
     /**
-     * @var Image
-     */
-    private $imageHelper;
-
-    /**
      * @var ImageFactory
      */
     private $productImageFactory;
@@ -45,15 +40,14 @@ class ImageUrlResolver
 
     /**
      * @param ImageFactory $productImageFactory
-     * @param Image $imageHelper
+     * @param AssetRepository $assetRepository
+     * @param DesignInterface $themeDesign
      */
     public function __construct(
         ImageFactory $productImageFactory,
-        Image $imageHelper,
         AssetRepository $assetRepository,
         DesignInterface $themeDesign
     ) {
-        $this->imageHelper = $imageHelper;
         $this->productImageFactory = $productImageFactory;
         $this->assetRepository = $assetRepository;
         $this->themeDesign = $themeDesign;
