@@ -234,11 +234,11 @@ class CatalogService implements CatalogServerInterface
                     $breadcrumbs[] = $breadcrumb;
                 }
             }
-            $categories = [];
+            $children = [];
             foreach ($category['children'] ?? [] as $categoryId) {
-                $categories[$categoryId] = $categoryId;
+                $children[$categoryId] = $categoryId;
             }
-            $item->setChildren($categories);
+            $item->setChildren($children);
             $items[] = $item;
         }
         $result->setItems($items);
