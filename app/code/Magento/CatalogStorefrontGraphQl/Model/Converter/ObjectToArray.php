@@ -7,10 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontGraphQl\Model\Converter;
 
-use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
-
 /**
  * Provides array based on provided object
  *
@@ -19,6 +15,11 @@ use Magento\Framework\Exception\NoSuchEntityException;
  */
 class ObjectToArray
 {
+    /**
+     * Holds object structures
+     *
+     * @var array
+     */
     private $reflectionCache = [];
 
     /**
