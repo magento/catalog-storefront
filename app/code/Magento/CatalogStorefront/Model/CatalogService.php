@@ -218,9 +218,6 @@ class CatalogService implements CatalogServerInterface
         foreach ($categories as $category) {
             $item = new Category();
             $category = $this->cleanUpNullValues($category);
-            $category = $this->convertKeyToString('image', $category);
-            $category = $this->convertKeyToString('canonical_url', $category);
-            $category = $this->convertKeyToString('description', $category);
 
             $this->dataObjectHelper->populateWithArray($item, $category, CategoryInterface::class);
 
