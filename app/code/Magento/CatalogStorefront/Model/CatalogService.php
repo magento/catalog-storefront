@@ -152,8 +152,9 @@ class CatalogService implements CatalogServerInterface
         $parts = explode('_', $key);
         $parts = array_map("ucfirst", $parts);
         $methodName = 'set' . implode('', $parts);
-
-        $product->$methodName($image);
+        if (method_exists($product, $methodName)) {
+            $product->$methodName($image);
+        }
         return $product;
     }
 
