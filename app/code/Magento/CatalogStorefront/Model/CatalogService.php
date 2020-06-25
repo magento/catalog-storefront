@@ -56,26 +56,18 @@ class CatalogService implements CatalogServerInterface
     private $categoryDataProvider;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @param ProductDataProvider $dataProvider
      * @param DataObjectHelper $dataObjectHelper
      * @param CategoryDataProvider $categoryDataProvider
-     * @param LoggerInterface $logger
      */
     public function __construct(
         ProductDataProvider $dataProvider,
         DataObjectHelper $dataObjectHelper,
-        CategoryDataProvider $categoryDataProvider,
-        LoggerInterface $logger
+        CategoryDataProvider $categoryDataProvider
     ) {
         $this->dataProvider = $dataProvider;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->categoryDataProvider = $categoryDataProvider;
-        $this->logger = $logger;
     }
 
     /**
@@ -221,19 +213,6 @@ class CatalogService implements CatalogServerInterface
 
             $this->dataObjectHelper->populateWithArray($item, $category, CategoryInterface::class);
 
-            $breadcrumbsData = $category['breadcrumbs'] ?? [];
-            if ($breadcrumbsData) {
-                $breadcrumbs = [];
-                foreach ($breadcrumbsData as $breadcrumbData) {
-                    $breadcrumb = new Breadcrumb();
-                    $breadcrumb->setCategoryId($breadcrumbData['category_id']);
-                    $breadcrumb->setCategoryLevel((int)$breadcrumbData['category_level']);
-                    $breadcrumb->setCategoryName($breadcrumbData['category_name']);
-                    $breadcrumb->setCategoryUrlKey($breadcrumbData['category_url_key']);
-                    $breadcrumb->setCategoryUrlPath($breadcrumbData['category_url_path']);
-                    $breadcrumbs[] = $breadcrumb;
-                }
-            }
             $children = [];
             foreach ($category['children'] ?? [] as $categoryId) {
                 $children[$categoryId] = $categoryId;
@@ -243,25 +222,6 @@ class CatalogService implements CatalogServerInterface
         }
         $result->setItems($items);
         return $result;
-    }
-
-    /**
-     * Converts value of array to string type for provided key
-     *
-     * @param string $key
-     * @param array $data
-     * @return array
-     */
-    private function convertKeyToString(string $key, array $data): array
-    {
-        if (!array_key_exists($key, $data)) {
-            return $data;
-        }
-
-        if (!is_string($data[$key])) {
-            $data[$key] = '';
-        }
-        return $data;
     }
 
     /**

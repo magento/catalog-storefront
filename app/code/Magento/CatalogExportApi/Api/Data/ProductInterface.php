@@ -375,17 +375,32 @@ interface ProductInterface
     /**
      * Get product options
      *
-     * @return string[]
+     * @return \Magento\CatalogExportApi\Api\Data\CustomOption[]
      */
     public function getOptions();
 
     /**
      * Set product options
      *
-     * @param string[] $options
+     * @param \Magento\CatalogExportApi\Api\Data\CustomOption[] $options
      * @return void
      */
     public function setOptions($options);
+
+    /**
+     * Get product options
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\EnteredOption[]
+     */
+    public function getEnteredOptions();
+
+    /**
+     * Set product options
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\EnteredOption[] $options
+     * @return void
+     */
+    public function setEnteredOptions($options);
 
     /**
      * Get is product in stock

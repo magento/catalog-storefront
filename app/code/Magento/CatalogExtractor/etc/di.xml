@@ -24,7 +24,6 @@
                 <item name="url_suffix" xsi:type="string">Magento\CatalogExtractor\DataProvider\UrlRewrites\ProductUrlSuffix</item>
                 <item name="categories" xsi:type="string">Magento\CatalogExtractor\DataProvider\Category\ProductCategoriesDataProvider</item>
                 <item name="canonical_url" xsi:type="string">Magento\CatalogExtractor\DataProvider\CanonicalUrl\CanonicalUrlDataProvider</item>
-                <item name="CustomizableProductInterface.options" xsi:type="string">Magento\CatalogExtractor\DataProvider\Options\CustomizableOptions</item>
             </argument>
         </arguments>
     </type>
