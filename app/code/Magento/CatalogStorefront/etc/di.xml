@@ -30,13 +30,10 @@
             <argument name="categoryDataProvider" xsi:type="object">\Magento\CatalogStorefront\DataProvider\CategoryDataProvider\Proxy</argument>
             <argument name="linkedEntityPath" xsi:type="array">
                 <item name="product" xsi:type="array">
-<!--                    <item xsi:type="string" name="BundleProduct">BundleProduct:items.options.product</item>-->
                     <item xsi:type="string" name="ConfigurableProduct">ConfigurableProduct:variants.product</item>
                     <item xsi:type="string" name="GroupedProduct">GroupedProduct:items.product</item>
                 </item>
                 <item name="category" xsi:type="array">
-                    <!--<item xsi:type="string" name="categories">categories</item>-->
-<!--                    <item xsi:type="string" name="children">children</item>-->
                 </item>
             </argument>
         </arguments>
