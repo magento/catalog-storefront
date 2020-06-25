@@ -73,7 +73,6 @@ class Products implements BatchResolverInterface
                 = $storefrontRequest['storefront_request']['scopes']['store'] ?? null;
 
             $storefrontRequests[] = $storefrontRequest;
-
         }
 
         return $this->serviceInvoker->invoke(

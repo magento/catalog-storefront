@@ -61,6 +61,7 @@ class Catalog implements CatalogInterface
      *
      * @param ProductsGetRequestInterface $request
      * @return ProductsGetResultInterface
+     * @throws \Throwable
      */
     public function getProducts(ProductsGetRequestInterface $request): ProductsGetResultInterface
     {
@@ -553,6 +554,7 @@ class Catalog implements CatalogInterface
      *
      * @param ImportProductsRequestInterface $request
      * @return ImportProductsResponseInterface
+     * @throws \Throwable
      */
     public function importProducts(ImportProductsRequestInterface $request): ImportProductsResponseInterface
     {
@@ -1051,6 +1053,7 @@ class Catalog implements CatalogInterface
      *
      * @param ImportCategoriesRequestInterface $request
      * @return ImportCategoriesResponseInterface
+     * @throws \Throwable
      */
     public function importCategories(ImportCategoriesRequestInterface $request): ImportCategoriesResponseInterface
     {
@@ -1202,6 +1205,7 @@ class Catalog implements CatalogInterface
      *
      * @param CategoriesGetRequestInterface $request
      * @return CategoriesGetResponseInterface
+     * @throws \Throwable
      */
     public function getCategories(CategoriesGetRequestInterface $request): CategoriesGetResponseInterface
     {
