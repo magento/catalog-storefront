@@ -99,8 +99,6 @@ class Product extends AbstractModel implements ProductInterface
     public function setId($id)
     {
         $this->setData(self::ID, $id);
-
-        return $this;
     }
 
     /**
