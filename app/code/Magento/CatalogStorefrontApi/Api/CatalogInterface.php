@@ -29,6 +29,7 @@ interface CatalogInterface
      *
      * @param ProductsGetRequestInterface $request
      * @return ProductsGetResultInterface
+     * @throws \Throwable
      */
     public function getProducts(ProductsGetRequestInterface $request): ProductsGetResultInterface;
 
@@ -37,6 +38,7 @@ interface CatalogInterface
      *
      * @param ImportProductsRequestInterface $request
      * @return ImportProductsResponseInterface
+     * @throws \Throwable
      */
     public function importProducts(ImportProductsRequestInterface $request): ImportProductsResponseInterface;
 
@@ -45,6 +47,7 @@ interface CatalogInterface
      *
      * @param ImportCategoriesRequestInterface $request
      * @return ImportCategoriesResponseInterface
+     * @throws \Throwable
      */
     public function importCategories(ImportCategoriesRequestInterface $request): ImportCategoriesResponseInterface;
 
@@ -53,6 +56,7 @@ interface CatalogInterface
      *
      * @param CategoriesGetRequestInterface $request
      * @return CategoriesGetResponseInterface
+     * @throws \Throwable
      */
     public function getCategories(CategoriesGetRequestInterface $request): CategoriesGetResponseInterface;
 }

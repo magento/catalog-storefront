@@ -83,8 +83,6 @@ class CatalogService implements CatalogServerInterface
      *
      * @param ProductsGetRequestInterface $request
      * @return ProductsGetResultInterface
-     * @throws \Magento\Framework\Exception\FileSystemException
-     * @throws \Magento\Framework\Exception\RuntimeException
      * @throws \Throwable
      */
     public function getProducts(
@@ -93,12 +91,9 @@ class CatalogService implements CatalogServerInterface
         $result = new ProductsGetResult();
 
         if (empty($request->getStore()) || $request->getStore() === null) {
-            $this->logger->error(
-                __('Store id is not present in Search Criteria. Please add missing info.')
-            );
-            return $result;
+            throw new \InvalidArgumentException('Store id is not present in request.');
         }
-        $products = [];
+
         if (empty($request->getIds())) {
             return $result;
         }
@@ -110,15 +105,13 @@ class CatalogService implements CatalogServerInterface
         );
 
         if (count($rawItems) !== count($request->getIds())) {
-            $this->logger->error(
-                __(
-                    'Products with the following ids are not found in catalog: %1',
-                    implode(', ', array_diff($request->getIds(), array_keys($rawItems)))
-                )
+            throw new \InvalidArgumentException(
+                'Products with the following ids are not found in catalog: %1',
+                implode(', ', array_diff($request->getIds(), array_keys($rawItems)))
             );
-            return $result;
         }
 
+        $products = [];
         foreach ($rawItems as $item) {
             $products[] = $this->prepareProduct($item);
         }
@@ -184,7 +177,7 @@ class CatalogService implements CatalogServerInterface
     ): ImportProductsResponseInterface {
         // TODO: Implement ImportProducts() method.
 
-        return $request;
+        return new \Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponse();
     }
 
     /**
@@ -198,7 +191,7 @@ class CatalogService implements CatalogServerInterface
     {
         // TODO: Implement ImportCategories() method.
 
-        return $request;
+        return new \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponse();
     }
 
     /**
@@ -366,6 +359,7 @@ class CatalogService implements CatalogServerInterface
             $urlRewrites[] = $this->prepareUrlRewrite($urlRewriteData);
         }
         $product->setUrlRewrites($urlRewrites);
+
         /**
          * FIXME: Ugly way to populate child items for Grouped product.
          * It should be refactored to general approach how to work with variations. Probably, in scope of MC-31164.

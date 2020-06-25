@@ -63,7 +63,6 @@
                 </item>
                 <item name="ConfigurableVariant" xsi:type="array">
                     <item name="attributes" xsi:type="string">attributes</item>
-<!--                    <item name="product" xsi:type="string">product</item>-->
                 </item>
                 <item name="DownloadableProduct" xsi:type="array">
                     <item name="downloadable_product_samples" xsi:type="string">downloadable_product_samples</item>
@@ -82,9 +81,6 @@
                 <item name="Products" xsi:type="array">
                     <item name="aggregations" xsi:type="string">aggregations</item>
                 </item>
-<!--                <item name="CategoryTree" xsi:type="array">-->
-<!--                    <item name="children" xsi:type="string">children</item>-->
-<!--                </item>-->
                 <item name="BundleProduct" xsi:type="array">
                     <item name="price_view" xsi:type="string">price_view</item>
                     <item name="dynamic_price" xsi:type="string">dynamic_price</item>
@@ -98,7 +94,6 @@
                 </item>
                 <item name="BundleItemOption" xsi:type="array">
                     <item name="label" xsi:type="string">label</item>
-<!--                    <item name="product" xsi:type="string">product</item>-->
                 </item>
             </argument>
         </arguments>
