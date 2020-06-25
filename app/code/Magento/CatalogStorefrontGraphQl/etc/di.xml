@@ -51,7 +51,6 @@
                     <item name="url_rewrites" xsi:type="string">url_rewrites</item>
                     <item name="product_links" xsi:type="string">product_links</item>
                     <item name="url_suffix" xsi:type="string">url_suffix</item>
-                    <!--<item name="categories" xsi:type="string">categories</item>--> <!-- overridden with Magento\CatalogStorefrontGraphQl\Resolver\Category\CategoryTree -->
                     <item name="canonical_url" xsi:type="string">canonical_url</item>
                     <item name="description" xsi:type="string">description</item>
                     <item name="short_description" xsi:type="string">short_description</item>
