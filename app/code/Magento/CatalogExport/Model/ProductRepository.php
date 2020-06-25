@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogExport\Model;
 
 use Magento\CatalogExportApi\Api\ProductRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * @inheritdoc
@@ -40,21 +41,29 @@ class ProductRepository implements ProductRepositoryInterface
     private $deploymentConfig;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\CatalogDataExporter\Model\Feed\Products $products
      * @param \Magento\CatalogExportApi\Api\Data\ProductInterfaceFactory $productFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
+     * @param LoggerInterface $logger
      */
     public function __construct(
         \Magento\CatalogDataExporter\Model\Feed\Products $products,
         \Magento\CatalogExportApi\Api\Data\ProductInterfaceFactory $productFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Framework\App\DeploymentConfig $deploymentConfig
+        \Magento\Framework\App\DeploymentConfig $deploymentConfig,
+        LoggerInterface $logger
     ) {
         $this->products = $products;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->productFactory = $productFactory;
         $this->deploymentConfig = $deploymentConfig;
+        $this->logger = $logger;
     }
 
     /**
@@ -72,6 +81,13 @@ class ProductRepository implements ProductRepositoryInterface
 
         $products = [];
         $feedData = $this->products->getFeedByIds($ids);
+        if (empty($feedData['feed'])) {
+            $this->logger->error(
+                \sprintf('Cannot find products data in catalog feed with ids "%s"', $ids)
+            );
+            return $products;
+        }
+
         foreach ($feedData['feed'] as $feedItem) {
             $product = $this->productFactory->create();
             $feedItem['id'] = $feedItem['productId'];
