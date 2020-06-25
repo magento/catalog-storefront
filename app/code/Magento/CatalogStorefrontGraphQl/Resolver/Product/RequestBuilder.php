@@ -59,12 +59,13 @@ class RequestBuilder
      *
      * @param ContextInterface $context
      * @param BatchRequestItemInterface|ResolveRequestInterface $request
-     * @param array|null $filter
+     * @param array $filter
+     * @param array $sort
      * @return array
      * @throws GraphQlInputException
      * @throws \Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException
      */
-    public function buildRequest(ContextInterface $context, $request, array $filter = []): array
+    public function buildRequest(ContextInterface $context, $request, array $filter = [], array $sort = []): array
     {
         $args = $request->getArgs();
         $info = $request->getInfo();
@@ -83,8 +84,11 @@ class RequestBuilder
             );
         }
 
+        $sort = \array_merge($args['sort'] ?? [], $sort);
+
         $attributes = $this->fieldResolver->getSchemaTypeFields($info, ['products'], 'items');
         $aggregations = $this->fieldResolver->getSchemaTypeFields($info, ['products'], 'aggregations');
+        $filters = $this->fieldResolver->getSchemaTypeFields($info, ['products'], 'filters');
         $totalCount = $this->fieldResolver->getSchemaTypeFields($info, ['products'], 'totalCount');
 
         $metaInfo = [];
@@ -92,7 +96,7 @@ class RequestBuilder
             $metaInfo['totalCount'] = true;
         }
         // null - retrieve all aggregations, [] - do not return aggregations
-        $aggregations = !empty($aggregations) ? null : [];
+        $aggregations = (!empty($aggregations) || !empty($filters)) ? null : [];
 
         $page = [
             'currentPage' => $args['currentPage'],
@@ -109,7 +113,7 @@ class RequestBuilder
             'page' => $page,
             'scopes' => $this->scopeProvider->getScopes($context),
             'attributes' => $attributes,
-            'sort' => $args['sort'] ?? [],
+            'sort' => $sort,
             'aggregations' => $aggregations,
             'metaInfo' => $metaInfo,
         ];

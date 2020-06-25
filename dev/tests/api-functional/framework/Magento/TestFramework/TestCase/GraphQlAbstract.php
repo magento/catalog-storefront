@@ -13,13 +13,14 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Abstract class to execute GraphQL specified methods in tests
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class GraphQlAbstract extends WebapiAbstract
 {
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->clearCatalogStorage();

@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontGraphQl\Resolver\Category;
 
+use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
+use Magento\CatalogStorefrontGraphQl\Resolver\Product\OutputFormatter;
 use Magento\CatalogStorefrontGraphQl\Resolver\Product\RequestBuilder;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface;
@@ -58,14 +60,27 @@ class Products implements BatchResolverInterface
                     'eq' => (int)$request->getValue()['id']
                 ]
             ];
-            $storefrontRequests[] = $this->requestBuilder->buildRequest($context, $request, $filter);
+            $positionField = 'position_category_' . (int)$request->getValue()['id'];
+
+            $storefrontRequest = $this->requestBuilder->buildRequest($context, $request, $filter, [
+                $positionField => 'ASC',
+                '_id' => 'DESC',
+            ]);
+
+            $storefrontRequest['storefront_request']['attribute_codes']
+                = $storefrontRequest['storefront_request']['attributes'];
+            $storefrontRequest['storefront_request']['store']
+                = $storefrontRequest['storefront_request']['scopes']['store'] ?? null;
+
+            $storefrontRequests[] = $storefrontRequest;
+
         }
 
         return $this->serviceInvoker->invoke(
-            ProductInterface::class,
-            'get',
+            CatalogServerInterface::class,
+            'GetProducts',
             $storefrontRequests,
-            new \Magento\CatalogStorefrontGraphQl\Resolver\Product\OutputFormatter
+            new OutputFormatter
         );
     }
 }

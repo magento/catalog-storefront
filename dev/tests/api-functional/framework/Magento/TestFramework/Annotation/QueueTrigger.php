@@ -25,6 +25,16 @@ class QueueTrigger
      */
     public function startTest(\PHPUnit\Framework\TestCase $test)
     {
+        //phpcs:disable Magento2.Security.InsecureFunction
+        exec("ps ax | grep -v grep | grep 'queue:consumers' | awk '{print $1}'", $output);
+        if ($output) {
+            //phpcs:disable Magento2.Security.LanguageConstruct
+            echo "stop consumers\n";
+            print_r($output);
+            //phpcs:disable Magento2.Security.InsecureFunction
+            exec('kill ' . implode(' ', $output));
+        }
+
         if ($test instanceof GraphQlAbstract) {
             $this->waitForAsynchronousResult();
         }

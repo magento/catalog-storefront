@@ -97,6 +97,8 @@ class Product extends AbstractModel implements ProductInterface
     public function setId($id)
     {
         $this->setData(self::ID, $id);
+
+        return $this;
     }
 
     /**
@@ -560,7 +562,7 @@ class Product extends AbstractModel implements ProductInterface
      */
     public function setGiftCardType($giftCardType)
     {
-        $this->setData(self::GIFT_CAR_DTYPE, $giftCardType);
+        $this->setData(self::GIFT_CARD_TYPE, $giftCardType);
     }
 
     /**

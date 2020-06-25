@@ -58,7 +58,7 @@ class ExportTest extends WebapiAbstract
         'url',
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->productsFeed = $this->objectManager->get(\Magento\CatalogDataExporter\Model\Feed\Products::class);

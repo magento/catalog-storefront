@@ -28,10 +28,6 @@
     <type name="Magento\Store\Model\Store">
         <plugin name="syncStorageOnStoreSave" type="Magento\CatalogStorefrontConnector\Model\Sync\SyncStorageOnStoreSave"/>
     </type>
-    <!-- Add category cache identities -->
-    <type name="Magento\CatalogGraphQl\Model\Resolver\Product\Identity">
-        <plugin name="addCategoriesCacheIdentities" type="\Magento\CatalogStorefrontConnector\Plugin\Resolver\CategoryCacheIdentity" />
-    </type>
 
     <type name="Magento\Framework\MessageQueue\MergerFactory">
         <arguments>

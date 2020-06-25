@@ -9,6 +9,9 @@ namespace Magento\CatalogExtractor\DataProvider\MediaGallery;
 
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Model\Product\ImageFactory;
+use Magento\Framework\App\Area;
+use Magento\Framework\View\Asset\Repository as AssetRepository;
+use Magento\Framework\View\DesignInterface;
 
 /**
  * Get image URL
@@ -31,15 +34,29 @@ class ImageUrlResolver
     private $image;
 
     /**
+     * @var AssetRepository
+     */
+    private $assetRepository;
+
+    /**
+     * @var DesignInterface
+     */
+    private $themeDesign;
+
+    /**
      * @param ImageFactory $productImageFactory
      * @param Image $imageHelper
      */
     public function __construct(
         ImageFactory $productImageFactory,
-        Image $imageHelper
+        Image $imageHelper,
+        AssetRepository $assetRepository,
+        DesignInterface $themeDesign
     ) {
         $this->imageHelper = $imageHelper;
         $this->productImageFactory = $productImageFactory;
+        $this->assetRepository = $assetRepository;
+        $this->themeDesign = $themeDesign;
     }
 
     /**
@@ -57,7 +74,15 @@ class ImageUrlResolver
             ->setBaseFile($imagePath);
 
         if ($image->isBaseFilePlaceholder()) {
-            return $this->imageHelper->getDefaultPlaceholderUrl($imageType);
+            $params = [
+                'area' => Area::AREA_FRONTEND,
+                'themeId' => $this->themeDesign->getConfigurationDesignTheme(Area::AREA_FRONTEND),
+            ];
+
+            return $this->assetRepository->getUrlWithParams(
+                "Magento_Catalog::images/product/placeholder/{$imageType}.jpg",
+                $params
+            );
         }
 
         return $image->getUrl();

@@ -234,7 +234,6 @@ class VariantsDataProvider implements DataProviderInterface
                     \implode(', ', $parentProductIds)
                 )
             );
-
         }
         $childAttributeOptions = $this->attributeOptionsProvider->provide(
             $products,
@@ -248,7 +247,6 @@ class VariantsDataProvider implements DataProviderInterface
                     \implode(', ', $parentProductIds)
                 )
             );
-
         }
         return [$attributesPerProduct, $childAttributeOptions];
     }

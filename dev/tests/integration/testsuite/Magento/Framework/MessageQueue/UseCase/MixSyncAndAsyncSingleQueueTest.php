@@ -5,19 +5,17 @@
  */
 namespace Magento\Framework\MessageQueue\UseCase;
 
-use Magento\Framework\App\DeploymentConfig\FileReader;
-use Magento\Framework\App\DeploymentConfig\Writer;
-use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\Filesystem;
+use Magento\TestModuleAsyncAmqp\Model\AsyncTestData;
 
 /**
- * Override \Magento\Framework\MessageQueue\UseCase\MixSyncAndAsyncSingleQueueTest
- * Should be eliminated after resolving MC-32269 for 2.4
+ * Test sync and async message processing.
+ *
+ * @magentoConfigFixture default_store queue/consumers_wait_for_messages 1
  */
 class MixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
 {
     /**
-     * @var \Magento\TestModuleAsyncAmqp\Model\AsyncTestData
+     * @var AsyncTestData
      */
     protected $msgObject;
 
@@ -36,44 +34,13 @@ class MixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
      */
     protected $maxMessages = 4;
 
-    /**
-     * @var FileReader
-     */
-    private $reader;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var array
-     */
-    private $config;
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->reader = $this->objectManager->get(FileReader::class);
-        $this->filesystem = $this->objectManager->get(Filesystem::class);
-        $this->config = $this->loadConfig();
-    }
-
     public function testMixSyncAndAsyncSingleQueue()
     {
-        $this->publisherConsumerController->stopConsumers();
+        $this->markTestSkipped('This test requires consumers_wait_for_messages to be set to 1.
+            That is contradict with Catalog Store front initial configuration fro integration test.
+            And impossible to change on a fly.');
 
-        $config = $this->config;
-        $config['queue']['consumers_wait_for_messages'] = 1;
-        $this->writeConfig($config);
-        $this->assertArraySubset(['queue' => ['consumers_wait_for_messages' => 1]], $this->loadConfig());
-
-        $this->msgObject = $this->objectManager->create(\Magento\TestModuleAsyncAmqp\Model\AsyncTestData::class);
-
-        $this->publisherConsumerController->startConsumers();
+        $this->msgObject = $this->objectManager->create(AsyncTestData::class); // @phpstan-ignore-line
 
         // Publish asynchronous messages
         foreach ($this->messages as $item) {
@@ -91,34 +58,7 @@ class MixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
 
         // Verify that asynchronous messages were processed
         foreach ($this->messages as $item) {
-            $this->assertContains($item, file_get_contents($this->logFilePath));
+            $this->assertStringContainsString($item, file_get_contents($this->logFilePath));
         }
-
-        $this->rollbackConsumerWaitConfig();
-    }
-
-    /**
-     * To prevent failure \Magento\TestFramework\Isolation\DeploymentConfig::endTest which executed before tearDown
-     */
-    private function rollbackConsumerWaitConfig()
-    {
-        $this->writeConfig($this->config);
-    }
-
-    /**
-     * @return array
-     */
-    private function loadConfig(): array
-    {
-        return $this->reader->load(ConfigFilePool::APP_ENV);
-    }
-
-    /**
-     * @param array $config
-     */
-    private function writeConfig(array $config): void
-    {
-        $writer = $this->objectManager->get(Writer::class);
-        $writer->saveConfig([ConfigFilePool::APP_ENV => $config], true);
     }
 }

@@ -7,6 +7,9 @@
  */
 namespace Magento\GraphQl\Model\DeferredQuery\TestClass;
 
+use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
+
 /**
  * Class  ArgumentResolverClassInterface
  */
@@ -15,12 +18,10 @@ interface ArgumentResolverClassInterface
     /**
      * Method with correct params
      *
-     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[] $entry
-     * @return void
+     * @param ProductsGetRequestInterface $request
+     * @return ProductsGetResultInterface
      */
-    public function methodName(
-        array $entry
-    );
+    public function methodName(ProductsGetRequestInterface $request): ProductsGetResultInterface;
 
     /**
      * Method without parameters
@@ -32,12 +33,12 @@ interface ArgumentResolverClassInterface
     /**
      * Method with more that one parameter
      *
-     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[] $entry
-     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[] $anotherEntry
+     * @param ProductsGetRequestInterface $requestFirst
+     * @param ProductsGetRequestInterface $requestSecond
      * @return void
      */
     public function methodNameMoreOneParameters(
-        array $entry,
-        array $anotherEntry
+        ProductsGetRequestInterface $requestFirst,
+        ProductsGetRequestInterface $requestSecond
     );
 }
