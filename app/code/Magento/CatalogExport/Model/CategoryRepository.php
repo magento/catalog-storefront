@@ -53,6 +53,12 @@ class CategoryRepository implements CategoryRepositoryInterface
         $this->exportConfiguration = $exportConfiguration;
     }
 
+    /**
+     * Retrieve DTO`s search result based on provided IDs
+     *
+     * @param array $ids
+     * @return array|\Magento\CatalogExportApi\Api\Data\Category[]
+     */
     public function get(array $ids)
     {
         if (count($ids) > $this->exportConfiguration->getMaxItemsInResponse()) {
