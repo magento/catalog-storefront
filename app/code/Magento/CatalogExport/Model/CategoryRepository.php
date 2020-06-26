@@ -47,7 +47,6 @@ class CategoryRepository implements CategoryRepositoryInterface
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         ExportConfiguration $exportConfiguration
     ) {
-
         $this->categoriesFeed = $categoriesFeed;
         $this->categoryFactory = $categoryFactory;
         $this->dataObjectHelper = $dataObjectHelper;
