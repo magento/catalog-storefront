@@ -67,8 +67,6 @@ class Product extends AbstractModel implements ProductInterface
 
     private const OPTIONS = 'options';
 
-    private const ENTERED_OPTIONS = 'entered_options';
-
     private const IN_STOCK = 'in_stock';
 
     private const LOW_STOCK = 'low_stock';
@@ -483,22 +481,6 @@ class Product extends AbstractModel implements ProductInterface
     public function setOptions($options)
     {
         $this->setData(self::OPTIONS, $options);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getEnteredOptions()
-    {
-        return $this->getData(self::ENTERED_OPTIONS);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setEnteredOptions($options)
-    {
-        $this->setData(self::ENTERED_OPTIONS, $options);
     }
 
     /**
