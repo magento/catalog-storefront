@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogExport\Model\Data;
+namespace Magento\CatalogExportApi\Api\Data;
 
 use Magento\Framework\Model\AbstractModel;
 
@@ -14,7 +14,7 @@ use Magento\Framework\Model\AbstractModel;
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Category extends AbstractModel implements \Magento\CatalogExportApi\Api\Data\CategoryInterface
+class Category extends AbstractModel
 {
     private const ID = 'id';
 

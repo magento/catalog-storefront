@@ -15,7 +15,7 @@ interface CategoryRepositoryInterface
      * Get products by ids
      *
      * @param string[] $ids
-     * @return \Magento\CatalogExportApi\Api\Data\CategoryInterface[]
+     * @return \Magento\CatalogExportApi\Api\Data\Category[]
      */
     public function get(array $ids);
 }

@@ -20,7 +20,7 @@ class CategoryRepository implements CategoryRepositoryInterface
     private $categoriesFeed;
 
     /**
-     * @var \Magento\CatalogExportApi\Api\Data\CategoryInterfaceFactory
+     * @var \Magento\CatalogExportApi\Api\Data\CategoryFactory
      */
     private $categoryFactory;
 
@@ -37,13 +37,13 @@ class CategoryRepository implements CategoryRepositoryInterface
     /**
      * CategoryRepository constructor.
      * @param \Magento\CatalogDataExporter\Model\Feed\Categories $categoriesFeed
-     * @param \Magento\CatalogExportApi\Api\Data\CategoryInterfaceFactory $categoryFactory
+     * @param \Magento\CatalogExportApi\Api\Data\CategoryFactory $categoryFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param ExportConfiguration $exportConfiguration
      */
     public function __construct(
         \Magento\CatalogDataExporter\Model\Feed\Categories $categoriesFeed,
-        \Magento\CatalogExportApi\Api\Data\CategoryInterfaceFactory $categoryFactory,
+        \Magento\CatalogExportApi\Api\Data\CategoryFactory $categoryFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         ExportConfiguration $exportConfiguration
     ) {
@@ -67,13 +67,13 @@ class CategoryRepository implements CategoryRepositoryInterface
         $categories = [];
         $feedData = $this->categoriesFeed->getFeedByIds($ids);
 
-        foreach ($feedData['feed_data'] as $feedItem) {
+        foreach ($feedData['feed'] as $feedItem) {
             $category = $this->categoryFactory->create();
             $feedItem['id'] = $feedItem['categoryId'];
             $this->dataObjectHelper->populateWithArray(
                 $category,
                 $feedItem,
-                \Magento\CatalogExportApi\Api\Data\CategoryInterface::class
+                \Magento\CatalogExportApi\Api\Data\Category::class
             );
             $categories[] = $category;
         }
