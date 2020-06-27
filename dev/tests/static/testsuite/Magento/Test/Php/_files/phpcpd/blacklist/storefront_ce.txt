@@ -1,4 +1,7 @@
 Magento/CatalogStorefront/Model/Storage/Client/Config
 Magento/CatalogStorefront/Model/Logging
 Magento/CatalogStorefrontGraphQl/Model
+Magento/CatalogStorefrontGraphQl/Resolver/Category/
 Magento/CatalogExtractor/DataProvider/Query
+Magento/CatalogStorefrontApi/Api
+Magento/CatalogStorefrontApi/Proto

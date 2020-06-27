@@ -18,7 +18,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use \Magento\Framework\ObjectManagerInterface;
 
 /**
- * Class ClientAdapterTest
+ * Test class for the search client adapter
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -69,7 +69,7 @@ class ClientAdapterTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -90,7 +90,7 @@ class ClientAdapterTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->storageDDL->deleteDataSource($this->state->getCurrentDataSourceName(['scope']));
     }
@@ -130,11 +130,13 @@ class ClientAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\BulkException
-     * @expectedExceptionMessage Error occurred while bulk insert
+     * @return void
      */
     public function testBulkInsertWithWrongMappingType(): void
     {
+        $this->expectException('\Magento\Framework\Exception\BulkException');
+        $this->expectExceptionMessage('Error occurred while bulk insert');
+
         $productBuilder = $this->getSimpleProductData();
         $productBuilder['sku'] = 'test-sku-default-site-123';
         $productData = $productBuilder;
@@ -158,11 +160,12 @@ class ClientAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage 'product' type document with id '111' not found in index 'not_found_index'.
+     * @return void
      */
-    public function testNotFoundIndex()
+    public function testNotFoundIndex(): void
     {
+        $this->expectException('\Magento\Framework\Exception\NotFoundException');
+        $this->expectExceptionMessage("'product' type document with id '111' not found in index 'not_found_index'.");
         $this->storageQuery->getEntry(
             'not_found_index',
             'product',
@@ -188,11 +191,13 @@ class ClientAdapterTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage Storage error
+     * @return void
+     * @throws \Magento\Framework\Exception\NotFoundException
      */
-    public function testStorageException()
+    public function testStorageException(): void
     {
+        $this->expectException('\Magento\Framework\Exception\RuntimeException');
+        $this->expectExceptionMessage('Storage error');
         $this->storageQuery->getEntries(
             $this->state->getAliasName(),
             'product',

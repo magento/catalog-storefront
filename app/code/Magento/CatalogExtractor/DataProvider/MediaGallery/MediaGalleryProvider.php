@@ -106,6 +106,7 @@ class MediaGalleryProvider implements DataProviderInterface
             return $this->imageUrlResolver->resolve($item['file'] ?? '', $attributeName);
         };
         $attributesMapping[$attributeName]['label'] = 'label';
+        $attributesMapping[$attributeName]['position'] = 'position';
         $attributesMapping[$attributeName]['video_content'] = function ($item) {
             return $this->getVideoContent($item);
         };
@@ -134,7 +135,6 @@ class MediaGalleryProvider implements DataProviderInterface
                 }
             }
             $output[$productId][$outputAttribute][] = $data;
-
         }
         return $output;
     }

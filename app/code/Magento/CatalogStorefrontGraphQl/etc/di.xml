@@ -8,11 +8,15 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <!-- Base resolvers -->
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Products" type="Magento\CatalogStorefrontGraphQl\Resolver\Products" />
+    <preference for="Magento\CatalogGraphQl\Model\Resolver\Product" type="Magento\CatalogStorefrontGraphQl\Resolver\Product" />
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Category\Products" type="Magento\CatalogStorefrontGraphQl\Resolver\Category\Products" />
     <preference for="Magento\CatalogGraphQl\Model\Resolver\CategoryList" type="Magento\CatalogStorefrontGraphQl\Resolver\Category\CategoryList" />
     <preference for="Magento\CatalogGraphQl\Model\Resolver\CategoryTree" type="Magento\CatalogStorefrontGraphQl\Resolver\Category\CategoryTree" />
+    <preference for="Magento\CatalogGraphQl\Model\Resolver\CategoriesQuery" type="Magento\CatalogStorefrontGraphQl\Resolver\Category\CategoryList" />
+    <preference for="Magento\CatalogGraphQl\Model\Resolver\Categories" type="Magento\CatalogStorefrontGraphQl\Resolver\Category\CategoryTree" />
 
     <!-- Override deprecated resolvers with "model" hydration -->
+    <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\MediaGallery"/>
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGalleryEntries" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\MediaGalleryEntries"/>
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\Price" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\Price"/>
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\NewFromTo" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\NewFromTo"/>
@@ -34,6 +38,7 @@
                     <item name="product_count" xsi:type="string">product_count</item>
                     <item name="canonical_url" xsi:type="string">canonical_url</item>
                     <item name="description" xsi:type="string">description</item>
+                    <item name="path" xsi:type="string">path</item>
                 </item>
                 <item name="ProductInterface" xsi:type="array">
                     <item name="id" xsi:type="string">id</item>
@@ -46,7 +51,6 @@
                     <item name="url_rewrites" xsi:type="string">url_rewrites</item>
                     <item name="product_links" xsi:type="string">product_links</item>
                     <item name="url_suffix" xsi:type="string">url_suffix</item>
-                    <item name="categories" xsi:type="string">categories</item>
                     <item name="canonical_url" xsi:type="string">canonical_url</item>
                     <item name="description" xsi:type="string">description</item>
                     <item name="short_description" xsi:type="string">short_description</item>
@@ -58,7 +62,6 @@
                 </item>
                 <item name="ConfigurableVariant" xsi:type="array">
                     <item name="attributes" xsi:type="string">attributes</item>
-                    <item name="product" xsi:type="string">product</item>
                 </item>
                 <item name="DownloadableProduct" xsi:type="array">
                     <item name="downloadable_product_samples" xsi:type="string">downloadable_product_samples</item>
@@ -77,9 +80,6 @@
                 <item name="Products" xsi:type="array">
                     <item name="aggregations" xsi:type="string">aggregations</item>
                 </item>
-                <item name="CategoryTree" xsi:type="array">
-                    <item name="children" xsi:type="string">children</item>
-                </item>
                 <item name="BundleProduct" xsi:type="array">
                     <item name="price_view" xsi:type="string">price_view</item>
                     <item name="dynamic_price" xsi:type="string">dynamic_price</item>
@@ -93,7 +93,6 @@
                 </item>
                 <item name="BundleItemOption" xsi:type="array">
                     <item name="label" xsi:type="string">label</item>
-                    <item name="product" xsi:type="string">product</item>
                 </item>
             </argument>
         </arguments>
