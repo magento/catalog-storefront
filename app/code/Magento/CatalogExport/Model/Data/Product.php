@@ -69,6 +69,8 @@ class Product extends AbstractModel implements ProductInterface
 
     private const ENTERED_OPTIONS = 'entered_options';
 
+    private const MEDIA_GALLERY = 'media_gallery';
+
     private const IN_STOCK = 'in_stock';
 
     private const LOW_STOCK = 'low_stock';
@@ -499,6 +501,22 @@ class Product extends AbstractModel implements ProductInterface
     public function setEnteredOptions($options)
     {
         $this->setData(self::ENTERED_OPTIONS, $options);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getMediaGallery()
+    {
+        return $this->getData(self::MEDIA_GALLERY);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setMediaGallery($mediaGallery)
+    {
+        $this->setData(self::MEDIA_GALLERY, $mediaGallery);
     }
 
     /**

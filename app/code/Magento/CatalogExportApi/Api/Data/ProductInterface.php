@@ -403,6 +403,22 @@ interface ProductInterface
     public function setEnteredOptions($options);
 
     /**
+     * Get media gallery
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\GalleryItem[]
+     */
+    public function getMediaGallery();
+
+    /**
+     * Set media gallery
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\GalleryItem[] $mediaGallery
+     *
+     * @return void
+     */
+    public function setMediaGallery($mediaGallery);
+
+    /**
      * Get is product in stock
      *
      * @return bool
