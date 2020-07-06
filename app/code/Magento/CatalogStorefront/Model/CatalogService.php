@@ -98,8 +98,10 @@ class CatalogService implements CatalogServerInterface
 
         if (count($rawItems) !== count($request->getIds())) {
             throw new \InvalidArgumentException(
-                'Products with the following ids are not found in catalog: %1',
-                implode(', ', array_diff($request->getIds(), array_keys($rawItems)))
+                \sprintf(
+                    'Products with the following ids are not found in catalog: %s',
+                    \implode(', ', \array_diff($request->getIds(), \array_keys($rawItems)))
+                )
             );
         }
 
