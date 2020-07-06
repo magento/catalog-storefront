@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogExport;
+namespace Magento\CatalogExport\Api;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -156,5 +156,25 @@ class ExportTest extends WebapiAbstract
         $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
         // phpcs:ignore Magento2.Security.InsecureFunction
         exec("php -f {$appDir}/bin/magento indexer:reindex");
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/simple_products_eav.php
+     */
+    public function testEavAttributes()
+    {
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $product = $productRepository->get('simple1');
+
+        $this->createServiceInfo['rest']['resourcePath'] .= '?ids[0]=' . $product->getId();
+        $result = $this->_webApiCall($this->createServiceInfo, []);
+
+        $productFeed = $this->productsFeed->getFeedByIds([$product->getId()])['feed'];
+        var_dump($productFeed);
+
+        $name = $product->getName();
+//        echo  $name;
+
     }
 }
