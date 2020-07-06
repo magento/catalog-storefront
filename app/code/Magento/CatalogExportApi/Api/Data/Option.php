@@ -39,7 +39,7 @@ class Option
     private $isRequired;
 
     /**
-     * @var \Magento\CatalogExportApi\Api\Data\OptionValue[]|null
+     * @var \Magento\CatalogExportApi\Api\Data\OptionValue[]
      */
     private $values;
 
@@ -67,9 +67,9 @@ class Option
     /**
      * Get option id
      *
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -77,20 +77,20 @@ class Option
     /**
      * Set option id
      *
-     * @param int $id
+     * @param int|null $id
      * @return void
      */
-    public function setId($id): void
+    public function setId(?int $id): void
     {
-        $this->id = (int)$id;
+        $this->id = $id;
     }
 
     /**
      * Get option label
      *
-     * @return string
+     * @return string|null
      */
-    public function getLabel(): string
+    public function getLabel(): ?string
     {
         return $this->label;
     }
@@ -98,10 +98,10 @@ class Option
     /**
      * Set option label
      *
-     * @param string $label
+     * @param string|null $label
      * @return void
      */
-    public function setLabel(string $label)
+    public function setLabel(?string $label)
     {
         $this->label = $label;
     }
@@ -141,10 +141,10 @@ class Option
     /**
      * Set is required
      *
-     * @param bool $isRequired
+     * @param bool|null $isRequired
      * @return void
      */
-    public function setIsRequired($isRequired): void
+    public function setIsRequired(?bool $isRequired): void
     {
         $this->isRequired = $isRequired;
     }
@@ -162,10 +162,10 @@ class Option
     /**
      * Set option values
      *
-     * @param \Magento\CatalogExportApi\Api\Data\OptionValue[] $values
+     * @param \Magento\CatalogExportApi\Api\Data\OptionValue[]|null $values
      * @return void
      */
-    public function setValues(array $values = null): void
+    public function setValues(?array $values = null): void
     {
         $this->values = $values;
     }

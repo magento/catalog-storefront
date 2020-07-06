@@ -11,7 +11,6 @@ namespace Magento\CatalogExportApi\Api\Data;
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-//TODO: Change name to OptionValue..
 class OptionValue
 {
     /**
@@ -25,12 +24,12 @@ class OptionValue
     private $label;
 
     /**
-     * @var int|null
+     * @var int
      */
     private $sortOrder;
 
     /**
-     * @var \Magento\CatalogExportApi\Api\Data\Price
+     * @var Price
      */
     private $price;
 
@@ -43,6 +42,11 @@ class OptionValue
      * @var int
      */
     private $value;
+
+    /**
+     * @var string
+     */
+    private $sample;
 
     /**
      * Get option value ID
@@ -68,7 +72,7 @@ class OptionValue
     /**
      * Get Label
      *
-     * @return ?string
+     * @return string|null
      */
     public function getLabel(): ?string
     {
@@ -78,10 +82,10 @@ class OptionValue
     /**
      * Set Label
      *
-     * @param string $label
+     * @param string|null $label
      * @return void
      */
-    public function setLabel($label): void
+    public function setLabel(?string $label): void
     {
         $this->label = $label;
     }
@@ -99,10 +103,10 @@ class OptionValue
     /**
      * Set sort order
      *
-     * @param int $sortOrder
+     * @param int|null $sortOrder
      * @return void
      */
-    public function setSortOrder($sortOrder): void
+    public function setSortOrder(?int $sortOrder): void
     {
         $this->sortOrder = $sortOrder;
     }
@@ -110,9 +114,9 @@ class OptionValue
     /**
      * Get option value price
      *
-     * @return \Magento\CatalogExportApi\Api\Data\Price
+     * @return Price|null
      */
-    public function getPrice()
+    public function getPrice(): ?Price
     {
         return $this->price;
     }
@@ -120,10 +124,10 @@ class OptionValue
     /**
      * Set option value price
      *
-     * @param \Magento\CatalogExportApi\Api\Data\Price $price
+     * @param Price|null $price
      * @return void
      */
-    public function setPrice($price): void
+    public function setPrice(?Price $price): void
     {
         $this->price = $price;
     }
@@ -131,9 +135,9 @@ class OptionValue
     /**
      * Get option is default
      *
-     * @return bool
+     * @return bool|null
      */
-    public function getIsDefault()
+    public function getIsDefault(): ?bool
     {
         return $this->isDefault;
     }
@@ -141,10 +145,10 @@ class OptionValue
     /**
      * Set option is default
      *
-     * @param bool $isDefault
+     * @param bool|null $isDefault
      * @return void
      */
-    public function setIsDefault($isDefault): void
+    public function setIsDefault(?bool $isDefault): void
     {
         $this->isDefault = $isDefault;
     }
@@ -152,7 +156,7 @@ class OptionValue
     /**
      * Get option value
      *
-     * @return ?int
+     * @return int|null
      */
     public function getValue(): ?int
     {
@@ -162,11 +166,32 @@ class OptionValue
     /**
      * Set option value
      *
-     * @param int $value
+     * @param int|null $value
      * @return void
      */
-    public function setValue($value): void
+    public function setValue(?int $value): void
     {
         $this->value = $value;
+    }
+
+    /**
+     * Get option sample
+     *
+     * @return string|null
+     */
+    public function getSample(): ?string
+    {
+        return $this->sample;
+    }
+
+    /**
+     * Set option sample
+     *
+     * @param string|null $sample
+     * @return void
+     */
+    public function setSample(?string $sample): void
+    {
+        $this->sample = $sample;
     }
 }
