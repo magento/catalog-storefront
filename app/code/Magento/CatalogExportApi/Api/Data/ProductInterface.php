@@ -375,14 +375,14 @@ interface ProductInterface
     /**
      * Get product options
      *
-     * @return \Magento\CatalogExportApi\Api\Data\CustomOption[]
+     * @return \Magento\CatalogExportApi\Api\Data\Option[]
      */
     public function getOptions();
 
     /**
      * Set product options
      *
-     * @param \Magento\CatalogExportApi\Api\Data\CustomOption[] $options
+     * @param \Magento\CatalogExportApi\Api\Data\Option[] $options
      * @return void
      */
     public function setOptions($options);
