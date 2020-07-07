@@ -18,7 +18,7 @@ interface CatalogInterface extends GRPC\ServiceInterface
     *
     * @throws GRPC\Exception\InvokeException
     */
-    public function GetProducts(GRPC\ContextInterface $ctx, ProductsGetRequest $in): ProductsGetResult;
+    public function getProducts(GRPC\ContextInterface $ctx, ProductsGetRequest $in): ProductsGetResult;
 
     /**
     * @param GRPC\ContextInterface $ctx
@@ -27,7 +27,7 @@ interface CatalogInterface extends GRPC\ServiceInterface
     *
     * @throws GRPC\Exception\InvokeException
     */
-    public function ImportProducts(GRPC\ContextInterface $ctx, ImportProductsRequest $in): ImportProductsResponse;
+    public function importProducts(GRPC\ContextInterface $ctx, ImportProductsRequest $in): ImportProductsResponse;
 
     /**
     * @param GRPC\ContextInterface $ctx
@@ -36,7 +36,7 @@ interface CatalogInterface extends GRPC\ServiceInterface
     *
     * @throws GRPC\Exception\InvokeException
     */
-    public function ImportCategories(GRPC\ContextInterface $ctx, ImportCategoriesRequest $in): ImportCategoriesResponse;
+    public function importCategories(GRPC\ContextInterface $ctx, ImportCategoriesRequest $in): ImportCategoriesResponse;
 
     /**
     * @param GRPC\ContextInterface $ctx
@@ -45,5 +45,5 @@ interface CatalogInterface extends GRPC\ServiceInterface
     *
     * @throws GRPC\Exception\InvokeException
     */
-    public function GetCategories(GRPC\ContextInterface $ctx, CategoriesGetRequest $in): CategoriesGetResponse;
+    public function getCategories(GRPC\ContextInterface $ctx, CategoriesGetRequest $in): CategoriesGetResponse;
 }

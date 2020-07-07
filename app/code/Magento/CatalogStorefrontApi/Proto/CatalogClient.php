@@ -27,14 +27,14 @@ class CatalogClient extends \Grpc\BaseStub
      * @param array $metadata metadata
      * @param array $options call options
      */
-    public function GetProducts(
+    public function getProducts(
         \Magento\CatalogStorefrontApi\Proto\ProductsGetRequest $argument,
         $metadata = [],
         $options = []
     )
     {
         return $this->_simpleRequest(
-            '/magento.catalogStorefrontApi.proto.Catalog/GetProducts',
+            '/magento.catalogStorefrontApi.proto.Catalog/getProducts',
             $argument,
             ['\Magento\CatalogStorefrontApi\Proto\ProductsGetResult', 'decode'],
             $metadata,
@@ -47,14 +47,14 @@ class CatalogClient extends \Grpc\BaseStub
      * @param array $metadata metadata
      * @param array $options call options
      */
-    public function ImportProducts(
+    public function importProducts(
         \Magento\CatalogStorefrontApi\Proto\ImportProductsRequest $argument,
         $metadata = [],
         $options = []
     )
     {
         return $this->_simpleRequest(
-            '/magento.catalogStorefrontApi.proto.Catalog/ImportProducts',
+            '/magento.catalogStorefrontApi.proto.Catalog/importProducts',
             $argument,
             ['\Magento\CatalogStorefrontApi\Proto\ImportProductsResponse', 'decode'],
             $metadata,
@@ -67,14 +67,14 @@ class CatalogClient extends \Grpc\BaseStub
      * @param array $metadata metadata
      * @param array $options call options
      */
-    public function ImportCategories(
+    public function importCategories(
         \Magento\CatalogStorefrontApi\Proto\ImportCategoriesRequest $argument,
         $metadata = [],
         $options = []
     )
     {
         return $this->_simpleRequest(
-            '/magento.catalogStorefrontApi.proto.Catalog/ImportCategories',
+            '/magento.catalogStorefrontApi.proto.Catalog/importCategories',
             $argument,
             ['\Magento\CatalogStorefrontApi\Proto\ImportCategoriesResponse', 'decode'],
             $metadata,
@@ -87,14 +87,14 @@ class CatalogClient extends \Grpc\BaseStub
      * @param array $metadata metadata
      * @param array $options call options
      */
-    public function GetCategories(
+    public function getCategories(
         \Magento\CatalogStorefrontApi\Proto\CategoriesGetRequest $argument,
         $metadata = [],
         $options = []
     )
     {
         return $this->_simpleRequest(
-            '/magento.catalogStorefrontApi.proto.Catalog/GetCategories',
+            '/magento.catalogStorefrontApi.proto.Catalog/getCategories',
             $argument,
             ['\Magento\CatalogStorefrontApi\Proto\CategoriesGetResponse', 'decode'],
             $metadata,

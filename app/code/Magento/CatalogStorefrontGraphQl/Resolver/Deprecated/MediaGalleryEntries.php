@@ -15,7 +15,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 /**
  * Override resolver of deprecated field. Add 'model' to output
  */
-class MediaGalleryEntries extends \Magento\CatalogGraphQl\Model\Resolver\Product\MediaGalleryEntries
+class MediaGalleryEntries extends \Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery
 {
     /**
      * @var ProductModelHydrator

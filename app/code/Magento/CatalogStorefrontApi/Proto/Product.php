@@ -74,6 +74,11 @@ class Product extends \Google\Protobuf\Internal\Message
     protected $url_key = '';
     /**
      * TODO: qty is missing for only-x-left-in-stock functionality
+     *
+     * Generated from protobuf field <code>float qty = 27;</code>
+     */
+    protected $qty = 0.0;
+    /**
      * TODO: Why missing meta fields?
      *
      * Generated from protobuf field <code>string tax_class_id = 28;</code>
@@ -102,7 +107,10 @@ class Product extends \Google\Protobuf\Internal\Message
      */
     protected $swatch_image = '';
     /**
-     *    repeated Image media_gallery = 35;//-
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.MediaGalleryItem media_gallery = 35;</code>
+     */
+    private $media_gallery;
+    /**
      * where to display product
      *
      * Generated from protobuf field <code>string visibility = 37;</code>
@@ -212,6 +220,58 @@ class Product extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductLink product_links = 90;</code>
      */
     private $product_links;
+    /**
+     * Generated from protobuf field <code>string canonical_url = 91;</code>
+     */
+    protected $canonical_url = '';
+    /**
+     *BUNDLE
+     *
+     * Generated from protobuf field <code>string ship_bundle_items = 92;</code>
+     */
+    protected $ship_bundle_items = '';
+    /**
+     * Generated from protobuf field <code>bool dynamic_weight = 93;</code>
+     */
+    protected $dynamic_weight = false;
+    /**
+     * Generated from protobuf field <code>bool dynamic_sku = 94;</code>
+     */
+    protected $dynamic_sku = false;
+    /**
+     * Generated from protobuf field <code>bool dynamic_price = 95;</code>
+     */
+    protected $dynamic_price = false;
+    /**
+     * Generated from protobuf field <code>string price_view = 96;</code>
+     */
+    protected $price_view = '';
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.BundleItem items = 97;</code>
+     */
+    private $items;
+    /**
+     *DOWNLOADABLE
+     *
+     * Generated from protobuf field <code>bool links_purchased_separately = 98;</code>
+     */
+    protected $links_purchased_separately = false;
+    /**
+     * Generated from protobuf field <code>string links_title = 99;</code>
+     */
+    protected $links_title = '';
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DownloadableLink downloadable_product_links = 100;</code>
+     */
+    private $downloadable_product_links;
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DownloadableSample downloadable_product_samples = 101;</code>
+     */
+    private $downloadable_product_samples;
+    /**
+     * Generated from protobuf field <code>float only_x_left_in_stock = 102;</code>
+     */
+    protected $only_x_left_in_stock = 0.0;
 
     /**
      * Constructor.
@@ -238,8 +298,9 @@ class Product extends \Google\Protobuf\Internal\Message
      *     @type string $description
      *     @type string $short_description
      *     @type string $url_key
-     *     @type string $tax_class_id
+     *     @type float $qty
      *           TODO: qty is missing for only-x-left-in-stock functionality
+     *     @type string $tax_class_id
      *           TODO: Why missing meta fields?
      *     @type float $weight
      *     @type \Magento\CatalogStorefrontApi\Proto\Image $image
@@ -247,8 +308,8 @@ class Product extends \Google\Protobuf\Internal\Message
      *     @type \Magento\CatalogStorefrontApi\Proto\Image $thumbnail
      *           TODO: Rename to thumbnail_image?
      *     @type string $swatch_image
+     *     @type \Magento\CatalogStorefrontApi\Proto\MediaGalleryItem[]|\Google\Protobuf\Internal\RepeatedField $media_gallery
      *     @type string $visibility
-     *              repeated Image media_gallery = 35;//-
      *           where to display product
      *     @type \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue[]|\Google\Protobuf\Internal\RepeatedField $dynamic_attributes
      *              PriceRange prices = 44;//-
@@ -281,6 +342,20 @@ class Product extends \Google\Protobuf\Internal\Message
      *     @type string $special_from_date
      *     @type string $special_to_date
      *     @type \Magento\CatalogStorefrontApi\Proto\ProductLink[]|\Google\Protobuf\Internal\RepeatedField $product_links
+     *     @type string $canonical_url
+     *     @type string $ship_bundle_items
+     *          BUNDLE
+     *     @type bool $dynamic_weight
+     *     @type bool $dynamic_sku
+     *     @type bool $dynamic_price
+     *     @type string $price_view
+     *     @type \Magento\CatalogStorefrontApi\Proto\BundleItem[]|\Google\Protobuf\Internal\RepeatedField $items
+     *     @type bool $links_purchased_separately
+     *          DOWNLOADABLE
+     *     @type string $links_title
+     *     @type \Magento\CatalogStorefrontApi\Proto\DownloadableLink[]|\Google\Protobuf\Internal\RepeatedField $downloadable_product_links
+     *     @type \Magento\CatalogStorefrontApi\Proto\DownloadableSample[]|\Google\Protobuf\Internal\RepeatedField $downloadable_product_samples
+     *     @type float $only_x_left_in_stock
      * }
      */
     public function __construct($data = null)
@@ -591,6 +666,31 @@ class Product extends \Google\Protobuf\Internal\Message
 
     /**
      * TODO: qty is missing for only-x-left-in-stock functionality
+     *
+     * Generated from protobuf field <code>float qty = 27;</code>
+     * @return float
+     */
+    public function getQty()
+    {
+        return $this->qty;
+    }
+
+    /**
+     * TODO: qty is missing for only-x-left-in-stock functionality
+     *
+     * Generated from protobuf field <code>float qty = 27;</code>
+     * @param float $var
+     * @return $this
+     */
+    public function setQty($var)
+    {
+        GPBUtil::checkFloat($var);
+        $this->qty = $var;
+
+        return $this;
+    }
+
+    /**
      * TODO: Why missing meta fields?
      *
      * Generated from protobuf field <code>string tax_class_id = 28;</code>
@@ -602,7 +702,6 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * TODO: qty is missing for only-x-left-in-stock functionality
      * TODO: Why missing meta fields?
      *
      * Generated from protobuf field <code>string tax_class_id = 28;</code>
@@ -732,7 +831,28 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *    repeated Image media_gallery = 35;//-
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.MediaGalleryItem media_gallery = 35;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getMediaGallery()
+    {
+        return $this->media_gallery;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.MediaGalleryItem media_gallery = 35;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\MediaGalleryItem[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setMediaGallery($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\MediaGalleryItem::class);
+        $this->media_gallery = $arr;
+
+        return $this;
+    }
+
+    /**
      * where to display product
      *
      * Generated from protobuf field <code>string visibility = 37;</code>
@@ -744,7 +864,6 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *    repeated Image media_gallery = 35;//-
      * where to display product
      *
      * Generated from protobuf field <code>string visibility = 37;</code>
@@ -1285,6 +1404,278 @@ class Product extends \Google\Protobuf\Internal\Message
     {
         $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\ProductLink::class);
         $this->product_links = $arr;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string canonical_url = 91;</code>
+     * @return string
+     */
+    public function getCanonicalUrl()
+    {
+        return $this->canonical_url;
+    }
+
+    /**
+     * Generated from protobuf field <code>string canonical_url = 91;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setCanonicalUrl($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->canonical_url = $var;
+
+        return $this;
+    }
+
+    /**
+     *BUNDLE
+     *
+     * Generated from protobuf field <code>string ship_bundle_items = 92;</code>
+     * @return string
+     */
+    public function getShipBundleItems()
+    {
+        return $this->ship_bundle_items;
+    }
+
+    /**
+     *BUNDLE
+     *
+     * Generated from protobuf field <code>string ship_bundle_items = 92;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setShipBundleItems($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->ship_bundle_items = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>bool dynamic_weight = 93;</code>
+     * @return bool
+     */
+    public function getDynamicWeight()
+    {
+        return $this->dynamic_weight;
+    }
+
+    /**
+     * Generated from protobuf field <code>bool dynamic_weight = 93;</code>
+     * @param bool $var
+     * @return $this
+     */
+    public function setDynamicWeight($var)
+    {
+        GPBUtil::checkBool($var);
+        $this->dynamic_weight = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>bool dynamic_sku = 94;</code>
+     * @return bool
+     */
+    public function getDynamicSku()
+    {
+        return $this->dynamic_sku;
+    }
+
+    /**
+     * Generated from protobuf field <code>bool dynamic_sku = 94;</code>
+     * @param bool $var
+     * @return $this
+     */
+    public function setDynamicSku($var)
+    {
+        GPBUtil::checkBool($var);
+        $this->dynamic_sku = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>bool dynamic_price = 95;</code>
+     * @return bool
+     */
+    public function getDynamicPrice()
+    {
+        return $this->dynamic_price;
+    }
+
+    /**
+     * Generated from protobuf field <code>bool dynamic_price = 95;</code>
+     * @param bool $var
+     * @return $this
+     */
+    public function setDynamicPrice($var)
+    {
+        GPBUtil::checkBool($var);
+        $this->dynamic_price = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string price_view = 96;</code>
+     * @return string
+     */
+    public function getPriceView()
+    {
+        return $this->price_view;
+    }
+
+    /**
+     * Generated from protobuf field <code>string price_view = 96;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setPriceView($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->price_view = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.BundleItem items = 97;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.BundleItem items = 97;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\BundleItem[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setItems($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\BundleItem::class);
+        $this->items = $arr;
+
+        return $this;
+    }
+
+    /**
+     *DOWNLOADABLE
+     *
+     * Generated from protobuf field <code>bool links_purchased_separately = 98;</code>
+     * @return bool
+     */
+    public function getLinksPurchasedSeparately()
+    {
+        return $this->links_purchased_separately;
+    }
+
+    /**
+     *DOWNLOADABLE
+     *
+     * Generated from protobuf field <code>bool links_purchased_separately = 98;</code>
+     * @param bool $var
+     * @return $this
+     */
+    public function setLinksPurchasedSeparately($var)
+    {
+        GPBUtil::checkBool($var);
+        $this->links_purchased_separately = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string links_title = 99;</code>
+     * @return string
+     */
+    public function getLinksTitle()
+    {
+        return $this->links_title;
+    }
+
+    /**
+     * Generated from protobuf field <code>string links_title = 99;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setLinksTitle($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->links_title = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DownloadableLink downloadable_product_links = 100;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getDownloadableProductLinks()
+    {
+        return $this->downloadable_product_links;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DownloadableLink downloadable_product_links = 100;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\DownloadableLink[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setDownloadableProductLinks($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\DownloadableLink::class);
+        $this->downloadable_product_links = $arr;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DownloadableSample downloadable_product_samples = 101;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getDownloadableProductSamples()
+    {
+        return $this->downloadable_product_samples;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DownloadableSample downloadable_product_samples = 101;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\DownloadableSample[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setDownloadableProductSamples($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\DownloadableSample::class);
+        $this->downloadable_product_samples = $arr;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>float only_x_left_in_stock = 102;</code>
+     * @return float
+     */
+    public function getOnlyXLeftInStock()
+    {
+        return $this->only_x_left_in_stock;
+    }
+
+    /**
+     * Generated from protobuf field <code>float only_x_left_in_stock = 102;</code>
+     * @param float $var
+     * @return $this
+     */
+    public function setOnlyXLeftInStock($var)
+    {
+        GPBUtil::checkFloat($var);
+        $this->only_x_left_in_stock = $var;
 
         return $this;
     }

@@ -25,6 +25,7 @@ class ConsumerInvoker
     private const CONSUMERS = [
         'storefront.catalog.category.update',
         'storefront.catalog.product.update',
+        'catalog.export.consumer',
     ];
 
     /**

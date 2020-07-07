@@ -33,7 +33,6 @@ class Products implements BatchResolverInterface
      */
     private $requestBuilder;
 
-
     /**
      * @param \Magento\StorefrontGraphQl\Model\ServiceInvoker $serviceInvoker
      * @param RequestBuilder $requestBuilder
@@ -63,7 +62,6 @@ class Products implements BatchResolverInterface
                 = $searchRequest['storefront_request']['attributes'];
             $searchRequest['storefront_request']['store']
                 = $searchRequest['storefront_request']['scopes']['store'] ?? null;
-
             $storefrontRequests[] = $searchRequest;
         }
 

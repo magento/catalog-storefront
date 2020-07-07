@@ -8,11 +8,9 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefrontGraphQl\Resolver\Product;
 
 use Magento\Catalog\Model\Layer\Resolver;
-use Magento\CatalogStorefrontApi\Api\Data\OptionInterface;
-use Magento\CatalogStorefrontApi\Api\Data\OptionValueInterface;
-use Magento\CatalogStorefrontApi\Api\Data\ProductLinkInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductResultContainerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
+use Magento\CatalogStorefrontGraphQl\Model\Converter\ObjectToArray;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface;
 
@@ -38,137 +36,48 @@ class OutputFormatter
         BatchRequestItemInterface $request,
         array $additionalInfo = []
     ) {
-//        $errors = $result->getErrors() ?: $additionalInfo['errors'] ?: [];
-//        if (!empty($errors)) {
-//            //ad-hoc solution with __() as GraphQlInputException accepts Phrase in construct
-//            //TODO: change with error holder
-//            throw new GraphQlInputException(__(\implode('; ', \array_map('\strval', $errors))));
-//        }
-
-        $items = array_map(function (\Magento\CatalogStorefrontApi\Api\Data\ProductInterface $item) {
-            $result = [
-                'attribute_set_id' => $item->getAttributeSetId(),
-                'categories' => $item->getCategories(),
-                'created_at' => $item->getCreatedAt(),
-                'updated_at' => $item->getUpdatedAt(),
-                'sku' => $item->getSku(),
-                'id' => $item->getId(),
-                'entity_id' => $item->getId(),
-                'type_id' => $item->getTypeId(),
-                'description' => ['html' => $item->getDescription() ?? null],
-                'name' => $item->getName(),
-                'stock_status' => $item->getStockStatus(),
-                'url_key' => $item->getUrlKey(),
-                'url_suffix' => $item->getUrlSuffix(),
-                'swatch_image' => $item->getSwatchImage(),
-                'weight' => $item->getWeight(),
-                'meta_description' => $item->getMetaDescription(),
-                'meta_keyword' => $item->getMetaKeyword(),
-                'meta_title' => $item->getMetaTitle(),
-                'country_of_manufacture' => $item->getCountryOfManufacture(),
-                'gift_message_available' => (int)$item->getGiftMessageAvailable(),
-                'options_container' => $item->getOptionsContainer(),
-                'special_price' => $item->getSpecialPrice(),
-                'special_from_date' => $item->getSpecialFromDate(),
-                'special_to_date' => $item->getSpecialToDate(),
-            ];
-
-            if ($item->getImage()) {
-                $result['image']['url'] = $item->getImage()->getUrl() ?? "";
-                $result['image']['label'] = $item->getImage()->getLabel() ?? "";
+        $errors = $additionalInfo['errors'] ?? [];
+        if (!empty($errors)) {
+            //ad-hoc solution with __() as GraphQlInputException accepts Phrase in construct
+            //TODO: change with error holder
+            throw new GraphQlInputException(__(\implode('; ', \array_map('\strval', $errors))));
+        }
+        $converter = new ObjectToArray;
+        $items = [];
+        foreach ($result->getItems() as $item) {
+            $currentResult = $converter->getArray($item);
+            $currentResult['entity_id'] = $currentResult['id'];
+            $currentResult['description'] = ['html' => $currentResult['description']];
+            $currentResult['short_description'] = ['html' => $currentResult['short_description']];
+            $currentResult['gift_message_available'] = (int)$currentResult['gift_message_available'];
+            if (
+                isset($currentResult['only_x_left_in_stock'])
+                && (string)$currentResult['only_x_left_in_stock'] == "0"
+            ) {
+                $currentResult['only_x_left_in_stock'] = null;
             }
 
+            $currentResult['canonical_url'] = empty($currentResult['canonical_url'])
+                ? null
+                : $currentResult['canonical_url'];
 
-            if ($item->getSmallImage()) {
-                $result['small_image']['url'] = $item->getSmallImage()->getUrl() ?? "";
-                $result['small_image']['label'] = $item->getSmallImage()->getLabel() ?? "";
+            foreach ($currentResult['options'] as &$option) {
+                //Convert simple option types from arrays
+                $simpleOptionTypes = ['date_time', 'field', 'area', 'file'];
+                if (isset($option['type']) && in_array($option['type'], $simpleOptionTypes)) {
+                    $option['value'] = reset($option['value']);
+                }
             }
+            $currentResult['media_gallery'] = array_map(function (array $item) {
+                $item['disabled'] = false;
+                return $item;
+            }, $currentResult['media_gallery']);
 
-            if ($item->getThumbnail()) {
-                $result['thumbnail']['url'] = $item->getThumbnail()->getUrl() ?? "";
-                $result['thumbnail']['label'] = $item->getThumbnail()->getLabel() ?? "";
-            }
-
-            //TODO: Revise options structure and remove free form structure from index/api
-            if ($item->getOptions()) {
-                $result['options'] = array_map(function (OptionInterface $option) {
-                    $output = [
-                        'option_id' => $option->getOptionId(),
-                        'product_id' => $option->getProductId(),
-                        'type' => $option->getType(),
-                        'is_require' => $option->getIsRequire(),
-                        'sku' => $option->getSku(),
-                        'max_characters' => (int)$option->getMaxCharacters(),
-                        'file_extension' => $option->getFileExtension(),
-                        'image_size_x' => (int)$option->getImageSizeX(),
-                        'image_size_y' => (int)$option->getImageSizeY(),
-                        'sort_order' => $option->getSortOrder(),
-                        'default_title' => $option->getDefaultTitle(),
-                        'store_title' => $option->getStoreTitle(),
-                        'title' => $option->getTitle(),
-                        'default_price' => $option->getDefaultPrice(),
-                        'default_price_type' => $option->getDefaultPriceType(),
-                        'store_price' => $option->getStorePrice(),
-                        'store_price_type' => $option->getStorePriceType(),
-                        'price' => (float)$option->getPrice(),
-                        'price_type' => empty($option->getPriceType()) ? "FIXED" : $option->getPriceType(),
-                        'required' => $option->getRequired(),
-                        'product_sku' => $option->getProductSku(),
-
-                    ];
-                    $output['value'] = array_map(function (OptionValueInterface $value) {
-                        return [
-                            'option_id' => $value->getOptionId(),
-                            'option_type_id' => $value->getOptionTypeId(),
-                            'product_id' => $value->getProductId(),
-                            'type' => $value->getType(),
-                            'is_require' => $value->getIsRequire(),
-                            'sku' => $value->getSku(),
-                            'max_characters' => (int)$value->getMaxCharacters(),
-                            'file_extension' => $value->getFileExtension(),
-                            'image_size_x' => (int)$value->getImageSizeX(),
-                            'image_size_y' => (int)$value->getImageSizeY(),
-                            'sort_order' => $value->getSortOrder(),
-                            'default_title' => $value->getDefaultTitle(),
-                            'store_title' => $value->getStoreTitle(),
-                            'title' => $value->getTitle(),
-                            'default_price' => $value->getDefaultPrice(),
-                            'default_price_type' => $value->getDefaultPriceType(),
-                            'store_price' => $value->getStorePrice(),
-                            'store_price_type' => $value->getStorePriceType(),
-                            'price' => (float)$value->getPrice(),
-                            'price_type' => empty($value->getPriceType()) ? "FIXED" : $value->getPriceType(),
-
-                        ];
-                    }, $option->getValue());
-
-                    //Convert simple option types from arrays
-                    $simpleOptionTypes = ['date_time', 'field', 'area', 'file'];
-                    if (isset($output['type']) && in_array($output['type'], $simpleOptionTypes)) {
-                        $output['value'] = reset($output['value']);
-                    }
-
-                    return $output;
-                }, $item->getOptions());
-            }
-
-            $result['product_links'] = array_map(function (ProductLinkInterface $item) {
-                return [
-                    "linked_product_sku" => $item->getLinkedProductSku(),
-                    "linked_product_type" => $item->getLinkedProductType(),
-                    "link_type_id" => $item->getLinkTypeId(),
-                    "position" => $item->getPosition(),
-                    "sku" => $item->getSku(),
-                    "link_type" => $item->getLinkType(),
-                ];
-            }, $item->getProductLinks());
-
-            return $result;
-        }, $result->getItems());
-
-
+            $items[] = $currentResult;
+        }
         $metaInfo = $additionalInfo['meta_info'] ?? [];
         $aggregations = $additionalInfo['aggregations'] ?? [];
+
         return [
             'items' => $items,
             'aggregations' => $aggregations,
@@ -178,6 +87,7 @@ class OutputFormatter
                 'current_page' => $metaInfo['current_page'] ?? null,
                 'total_pages' => $metaInfo['total_pages'] ?? null,
             ],
+            'search_result' => $additionalInfo['search_result'] ?? null,
             // for backward compatibility: support "filters" field
             'layer_type' => isset($request->getArgs()['search'])
                 ? Resolver::CATALOG_LAYER_SEARCH

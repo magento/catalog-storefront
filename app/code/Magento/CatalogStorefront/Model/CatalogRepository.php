@@ -17,8 +17,8 @@ use Psr\Log\LoggerInterface;
  */
 class CatalogRepository
 {
-    private const DELETE = 'delete';
-    private const SAVE = 'save';
+    protected const DELETE = 'delete';
+    protected const SAVE = 'save';
 
     /**
      * @var CommandInterface
@@ -77,6 +77,8 @@ class CatalogRepository
     }
 
     /**
+     * Delete bulk of entities by data, source name and entity type
+     *
      * @param array $data
      * @param string $sourceName
      * @param string $entityType
@@ -102,6 +104,8 @@ class CatalogRepository
     }
 
     /**
+     * Save bulk of entities by data, source name and entity type
+     *
      * @param array $data
      * @param string $sourceName
      * @param string $entityType

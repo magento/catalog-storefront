@@ -16,7 +16,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class DataProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
@@ -26,14 +26,14 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     private $dataProvider;
 
     /**
-     * @var Transformer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Transformer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $transformerMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMock();

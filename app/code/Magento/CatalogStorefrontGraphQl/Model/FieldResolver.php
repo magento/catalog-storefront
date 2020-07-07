@@ -34,36 +34,38 @@ class FieldResolver
         $fieldNames = [];
         foreach ($info->fieldNodes as $node) {
             $schemaType = $node->name->value;
+
             if (!\in_array($schemaType, $schemaTypes, true)) {
                 continue;
             }
-            if (null === $requestedField && isset($this->fieldNamesCache[$schemaType])) {
-                return $this->fieldNamesCache[$schemaType];
+
+            $schemaTypeHash = $schemaType . $requestedField;
+
+            if (isset($this->fieldNamesCache[$schemaTypeHash])) {
+                return $this->fieldNamesCache[$schemaTypeHash];
             }
+
             foreach ($node->selectionSet->selections as $selection) {
+                if ($selection instanceof \GraphQL\Language\AST\InlineFragmentNode) {
+                    continue;
+                }
                 if (null !== $requestedField && $selection->name->value !== $requestedField) {
                     continue;
                 }
-                $schemaTypeField = $schemaType . $requestedField;
-                if (null !== $requestedField && isset($this->fieldNamesCache[$schemaTypeField])) {
-                    return $this->fieldNamesCache[$schemaTypeField];
-                }
 
-                if (isset($selection->selectionSet, $selection->selectionSet->selections)) {
-                    if (null !== $requestedField && $selection->name->value === $requestedField) {
-                        $fieldNames = $this->getFieldNames($selection, $fieldNames);
-                    } elseif ($selection->kind === 'InlineFragment') {
-                        $fieldNames = $this->getFieldNames($selection, $fieldNames);
+                if (!isset($selection->selectionSet, $selection->selectionSet->selections)) {
+                    $fieldNames = $this->getFieldNames($selection, $fieldNames);
+                } else {
+                    if (null !== $requestedField && $selection->name->value == $requestedField) {
+                        $fieldNames = $this->getFieldNames($selection, []);
                     } else {
                         $fieldNames[$selection->name->value] = $this->getFieldNames($selection, []);
                     }
-                } else {
-                    $fieldNames = $this->getFieldNames($selection, $fieldNames);
                 }
-
-                $this->fieldNamesCache[$schemaTypeField] = $fieldNames;
             }
-            $this->fieldNamesCache[$schemaType] = $fieldNames;
+
+            $fieldNames = $this->unwrapFragments($fieldNames, $info->fragments);
+            $this->fieldNamesCache[$schemaTypeHash] = $fieldNames;
         }
 
         return $fieldNames;
@@ -85,6 +87,7 @@ class FieldResolver
             }
             return $fieldNames;
         }
+
         foreach ($selection->selectionSet->selections as $itemSelection) {
             if ($itemSelection->kind === 'InlineFragment') {
                 foreach ($itemSelection->selectionSet->selections as $inlineSelection) {
@@ -97,14 +100,42 @@ class FieldResolver
                     if ($inlineSelection->kind === 'InlineFragment') {
                         continue;
                     }
-
                     $fieldNames = $this->getNestedFields($fieldNames, $inlineSelection);
                 }
                 continue;
             }
+
             $fieldNames = $this->getNestedFields($fieldNames, $itemSelection);
         }
+
         return $fieldNames;
+    }
+
+    /**
+     * Unwrap graphql fragments in provided fields array
+     *
+     * @param array $fields
+     * @param \GraphQL\Language\AST\FragmentDefinitionNode[] $fragments
+     * @return array
+     */
+    private function unwrapFragments(array $fields, array $fragments): array
+    {
+        $result = [];
+        foreach ($fragments as $fragment) {
+            if (!in_array($fragment->name->value, $fields)) {
+                continue;
+            }
+
+            foreach ($fragment->selectionSet->selections as $itemSelection) {
+                $result = $this->getNestedFields($result, $itemSelection);
+            }
+
+            //Cleanup fragment fields
+            $key = array_search($fragment->name->value, $fields);
+            unset($fields[$key]);
+        }
+
+        return array_merge($result, $fields);
     }
 
     /**

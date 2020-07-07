@@ -10,17 +10,9 @@
     <!-- Product search -->
     <preference for="Magento\CatalogStorefrontApi\Api\CatalogInterface" type="Magento\CatalogStorefrontApi\Api\InMemoryCatalog"/>
     <preference for="Magento\CatalogStorefrontApi\Api\CatalogServerInterface" type="Magento\CatalogStorefront\Model\CatalogService"/>
-    <preference for="Magento\CatalogStorefrontApi\Api\ProductInterface" type="Magento\CatalogStorefront\Model\ProductSearch"/>
-    <preference for="Magento\CatalogStorefrontApi\Api\Data\ProductResultContainerInterface" type="Magento\CatalogStorefront\Model\ProductSearch\ProductResultContainer"/>
-    <preference for="Magento\CatalogStorefrontApi\Api\Data\ProductCriteriaInterface" type="Magento\CatalogStorefront\Model\ProductSearch\ProductSearchCriteria"/>
     <preference for="Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface" type="Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchDataDefinitionAdapter"/>
     <preference for="Magento\CatalogStorefront\Model\Storage\Client\QueryInterface" type="Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchQuery"/>
     <preference for="Magento\CatalogStorefront\Model\Storage\Client\CommandInterface" type="Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchCommand"/>
-
-    <!-- Category search -->
-    <preference for="Magento\CatalogStorefrontApi\Api\CategoryInterface" type="Magento\CatalogStorefront\Model\CategorySearch"/>
-    <preference for="Magento\CatalogStorefrontApi\Api\Data\CategoryResultContainerInterface" type="Magento\CatalogStorefront\Model\CategorySearch\CategoryResultContainer"/>
-    <preference for="Magento\CatalogStorefrontApi\Api\Data\CategoryCriteriaInterface" type="Magento\CatalogStorefront\Model\CategorySearch\CategorySearchCriteria"/>
 
     <type name="Magento\CatalogStorefront\Model\Storage\Client\Config\EntityConfigPool">
         <arguments>
@@ -38,13 +30,10 @@
             <argument name="categoryDataProvider" xsi:type="object">\Magento\CatalogStorefront\DataProvider\CategoryDataProvider\Proxy</argument>
             <argument name="linkedEntityPath" xsi:type="array">
                 <item name="product" xsi:type="array">
-                    <item xsi:type="string" name="BundleProduct">BundleProduct:items.options.product</item>
                     <item xsi:type="string" name="ConfigurableProduct">ConfigurableProduct:variants.product</item>
                     <item xsi:type="string" name="GroupedProduct">GroupedProduct:items.product</item>
                 </item>
                 <item name="category" xsi:type="array">
-                    <item xsi:type="string" name="categories">categories</item>
-                    <item xsi:type="string" name="children">children</item>
                 </item>
             </argument>
         </arguments>
@@ -87,15 +76,4 @@
             <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogStorefront\Model\ProductSearch">
-        <arguments>
-            <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
-        </arguments>
-    </type>
-    <type name="Magento\CatalogStorefront\Model\CategorySearch">
-        <arguments>
-            <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
-        </arguments>
-    </type>
-
 </config>

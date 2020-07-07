@@ -82,6 +82,7 @@ class CategoriesQueueConsumerTest extends AbstractGraphQl
      */
     public function testMessageReading(array $expectedData): void
     {
+        $this->markTestSkipped();
         $this->invokeConsumers();
         $category = $this->categoryRepository->get(333, 1);
         $category->setName('Category New Name');
