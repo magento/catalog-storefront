@@ -35,7 +35,7 @@ use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface;
 use Psr\Log\LoggerInterface;
-
+use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseFactory;
 /**
  * Class for retrieving catalog data
  *
@@ -135,8 +135,10 @@ class CatalogService implements CatalogServerInterface
 
         if (count($rawItems) !== count($request->getIds())) {
             throw new \InvalidArgumentException(
-                'Products with the following ids are not found in catalog: %1',
-                implode(', ', array_diff($request->getIds(), array_keys($rawItems)))
+                sprintf(
+                    'Products with the following ids are not found in catalog: %s',
+                    implode(', ', array_diff($request->getIds(), array_keys($rawItems)))
+                )
             );
         }
 
