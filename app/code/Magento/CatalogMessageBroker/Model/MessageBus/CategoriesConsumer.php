@@ -23,11 +23,6 @@ use Magento\CatalogMessageBroker\Model\ProductDataProcessor;
 class CategoriesConsumer extends OldConsumer
 {
     /**
-     * @var DataProviderInterface
-     */
-    private $dataProvider;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -38,32 +33,19 @@ class CategoriesConsumer extends OldConsumer
     private $storeManager;
 
     /**
-     * @var AppState
-     */
-    private $appState;
-
-    /**
-     * @var ProductDataProcessor
-     */
-    private $productDataProcessor;
-
-    /**
      * @var FetchCategoriesInterface
      */
     private $fetchCategories;
 
     /**
+     * CategoriesConsumer constructor.
      * @param CommandInterface $storageWriteSource
      * @param DataDefinitionInterface $storageSchemaManager
      * @param State $storageState
      * @param CatalogItemMessageBuilder $catalogItemMessageBuilder
      * @param LoggerInterface $logger
-     * @param DataProviderInterface $dataProvider
      * @param FetchCategoriesInterface $fetchCategories
      * @param StoreManagerInterface $storeManager
-     * @param AppState $appState
-     * @param ProductDataProcessor $productDataProcessor
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         CommandInterface $storageWriteSource,
@@ -71,11 +53,8 @@ class CategoriesConsumer extends OldConsumer
         State $storageState,
         CatalogItemMessageBuilder $catalogItemMessageBuilder,
         LoggerInterface $logger,
-        DataProviderInterface $dataProvider,
         FetchCategoriesInterface $fetchCategories,
-        StoreManagerInterface $storeManager,
-        AppState $appState,
-        ProductDataProcessor $productDataProcessor
+        StoreManagerInterface $storeManager
     ) {
         parent::__construct(
             $storageWriteSource,
@@ -85,10 +64,7 @@ class CategoriesConsumer extends OldConsumer
             $logger
         );
         $this->logger = $logger;
-        $this->dataProvider = $dataProvider;
         $this->storeManager = $storeManager;
-        $this->appState = $appState;
-        $this->productDataProcessor = $productDataProcessor;
         $this->fetchCategories = $fetchCategories;
     }
 
@@ -103,9 +79,16 @@ class CategoriesConsumer extends OldConsumer
         $dataPerType = [];
         $categories = $this->fetchCategories->execute($ids);
 
+        // @todo eliminate store manager
+        $stores = $this->storeManager->getStores(true);
+        $storesToIds = [];
+        foreach ($stores as $store) {
+            $storesToIds[$store->getCode()] = $store->getId();
+        }
+
         foreach ($categories as $category) {
-            //@TODO: resolve issue with stores
-            $dataPerType['category'][0][self::SAVE][] = $category;
+            $storeId = $storesToIds[$category['store_view_code']];
+            $dataPerType['category'][$storeId][self::SAVE][] = $category;
         }
 
         try {

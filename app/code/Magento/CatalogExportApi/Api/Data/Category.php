@@ -77,6 +77,11 @@ class Category
     private $updatedAt;
 
     /**
+     * @var string
+     */
+    private $storeViewCode;
+
+    /**
      * @var ?int
      */
     private $productCount;
@@ -404,5 +409,26 @@ class Category
     public function setBreadcrumbs(?string $breadcrumbs)
     {
         $this->breadcrumbs = $breadcrumbs;
+    }
+
+    /**
+     * Get store view code
+     *
+     * @return string
+     */
+    public function getStoreViewCode(): string
+    {
+        return $this->storeViewCode;
+    }
+
+    /**
+     * Set store view code
+     * 
+     * @param string $storeViewCode
+     * @return void
+     */
+    public function setStoreViewCode(string $storeViewCode): void
+    {
+        $this->storeViewCode = $storeViewCode;
     }
 }
