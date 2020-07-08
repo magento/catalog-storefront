@@ -6,18 +6,18 @@
 
 namespace Magento\CatalogStorefrontConnector\Model\Publisher;
 
+use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterfaceFactory;
 use Magento\CategoryExtractor\DataProvider\DataProviderInterface;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
-use Magento\Framework\MessageQueue\PublisherInterface;
 use Psr\Log\LoggerInterface;
-use Magento\CatalogStorefrontConnector\Model\Publisher\RestClient;
 
 /**
  * Category publisher
  *
- * Push product data for given category ids and store id to the Message Bus
- * with topic storefront.catalog.data.consume
+ * Push category data for given category ids and store id to the Storefront via Import API
+ * TODO: move to CatalogMessageBroker module
  */
 class CategoryPublisher
 {
@@ -25,21 +25,6 @@ class CategoryPublisher
      * @var DataProviderInterface
      */
     private $categoriesDataProvider;
-
-    /**
-     * @var CatalogItemMessageBuilder
-     */
-    private $messageBuilder;
-
-    /**
-     * @var PublisherInterface
-     */
-    private $queuePublisher;
-
-    /**
-     * @var string
-     */
-    private const TOPIC_NAME = 'storefront.catalog.data.consume';
 
     /**
      * @var int
@@ -57,35 +42,37 @@ class CategoryPublisher
     private $logger;
 
     /**
-     * @var RestClient
+     * @var CatalogServerInterface
      */
-    private $restClient;
+    private $catalogServer;
+
+    /**
+     * @var ImportCategoriesRequestInterfaceFactory
+     */
+    private $importCategoriesRequestInterfaceFactory;
 
     /**
      * @param DataProviderInterface $categoriesDataProvider
-     * @param CatalogItemMessageBuilder $messageBuilder
-     * @param PublisherInterface $queuePublisher
      * @param State $state
      * @param LoggerInterface $logger
-     * @param RestClient $restClient,
+     * @param CatalogServerInterface $catalogServer
+     * @param ImportCategoriesRequestInterfaceFactory $importCategoriesRequestInterfaceFactory
      * @param int $batchSize
      */
     public function __construct(
         DataProviderInterface $categoriesDataProvider,
-        CatalogItemMessageBuilder $messageBuilder,
-        PublisherInterface $queuePublisher,
         State $state,
         LoggerInterface $logger,
-        RestClient $restClient,
+        CatalogServerInterface $catalogServer,
+        ImportCategoriesRequestInterfaceFactory $importCategoriesRequestInterfaceFactory,
         int $batchSize
     ) {
         $this->categoriesDataProvider = $categoriesDataProvider;
-        $this->messageBuilder = $messageBuilder;
-        $this->queuePublisher = $queuePublisher;
         $this->batchSize = $batchSize;
         $this->state = $state;
         $this->logger = $logger;
-        $this->restClient = $restClient;
+        $this->catalogServer = $catalogServer;
+        $this->importCategoriesRequestInterfaceFactory = $importCategoriesRequestInterfaceFactory;
     }
 
     /**
@@ -258,10 +245,11 @@ class CategoryPublisher
         }
 
         try {
-            $this->restClient->post(
-                '/V1/storefront-categories',
-                ['request' => ['categories' => $categories, 'store' => $storeId]],
-                ["Content-Type: application/json"]
+            $importCategoriesRequest = $this->importCategoriesRequestInterfaceFactory->create();
+            $importCategoriesRequest->setCategories($categories);
+            $importCategoriesRequest->setStore($storeId);
+            $this->catalogServer->importCategories(
+                $importCategoriesRequest
             );
         } catch (\Exception $e) {
             // TODO: Implement logging

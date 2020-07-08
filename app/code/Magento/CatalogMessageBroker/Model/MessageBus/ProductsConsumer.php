@@ -5,28 +5,16 @@
  */
 namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
-use Magento\CatalogStorefront\Model\Storage\Client\CommandInterface;
-use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
-use Magento\CatalogStorefront\Model\Storage\State;
-use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
 use Magento\CatalogMessageBroker\Model\FetchProductsInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\CatalogStorefront\Model\MessageBus\Consumer as OldConsumer;
-use Magento\CatalogStorefront\Model\MessageBus\CatalogItemMessageBuilder;
-use Magento\Framework\App\State as AppState;
 use Psr\Log\LoggerInterface;
-use Magento\CatalogMessageBroker\Model\ProductDataProcessor;
+use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 
 /**
  * Process product update messages and update storefront app
  */
-class ProductsConsumer extends OldConsumer
+class ProductsConsumer
 {
-    /**
-     * @var DataProviderInterface
-     */
-    private $dataProvider;
-
     /**
      * @var FetchProductsInterface
      */
@@ -43,53 +31,27 @@ class ProductsConsumer extends OldConsumer
     private $storeManager;
 
     /**
-     * @var AppState
+     * @var ProductPublisher
      */
-    private $appState;
+    private $productPublisher;
 
     /**
-     * @var ProductDataProcessor
-     */
-    private $productDataProcessor;
-
-    /**
-     * @param CommandInterface $storageWriteSource
-     * @param DataDefinitionInterface $storageSchemaManager
-     * @param State $storageState
-     * @param CatalogItemMessageBuilder $catalogItemMessageBuilder
      * @param LoggerInterface $logger
-     * @param DataProviderInterface $dataProvider
      * @param FetchProductsInterface $fetchProducts
      * @param StoreManagerInterface $storeManager
-     * @param AppState $appState
-     * @param ProductDataProcessor $productDataProcessor
+     * @param ProductPublisher $productPublisher
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        CommandInterface $storageWriteSource,
-        DataDefinitionInterface $storageSchemaManager,
-        State $storageState,
-        CatalogItemMessageBuilder $catalogItemMessageBuilder,
         LoggerInterface $logger,
-        DataProviderInterface $dataProvider,
         FetchProductsInterface $fetchProducts,
         StoreManagerInterface $storeManager,
-        AppState $appState,
-        ProductDataProcessor $productDataProcessor
+        ProductPublisher $productPublisher
     ) {
-        parent::__construct(
-            $storageWriteSource,
-            $storageSchemaManager,
-            $storageState,
-            $catalogItemMessageBuilder,
-            $logger
-        );
         $this->logger = $logger;
-        $this->dataProvider = $dataProvider;
         $this->fetchProducts = $fetchProducts;
         $this->storeManager = $storeManager;
-        $this->appState = $appState;
-        $this->productDataProcessor = $productDataProcessor;
+        $this->productPublisher = $productPublisher;
     }
 
     /**
@@ -110,31 +72,17 @@ class ProductsConsumer extends OldConsumer
             $storesToIds[$store->getCode()] = $store->getId();
         }
 
+        $productsPerStore = [];
         foreach ($overrides as $override) {
             $storeId = $storesToIds[$override['store_view_code']];
-            $products = [];
-            // @todo this is taken from old consumer, need to revise in the future
-            $this->appState->emulateAreaCode(
-                \Magento\Framework\App\Area::AREA_FRONTEND,
-                function () use ($override, $storeId, &$products) {
-                    try {
-                        // @todo eliminate calling old API when new API can provide all of the necessary data
-                        $products = $this->dataProvider->fetch([$override['id']], [], ['store' => $storeId]);
-                    } catch (\Throwable $e) {
-                        $this->logger->critical($e);
-                    }
-                }
-            );
-            if (count($products) > 0) {
-                $product = $this->productDataProcessor->merge($override, array_pop($products));
-                $product['store_id'] = $storeId;
-                $dataPerType['product'][$storeId][self::SAVE][] = $product;
-            }
+            $productsPerStore[$storeId][$override['id']] = $override;
         }
-        try {
-            $this->saveToStorage($dataPerType);
-        } catch (\Throwable $e) {
-            $this->logger->critical($e);
+        foreach ($productsPerStore as $storeId => $products) {
+            try {
+                $this->productPublisher->publish(\array_keys($products), $storeId, $products);
+            } catch (\Throwable $e) {
+                $this->logger->critical($e);
+            }
         }
     }
 }

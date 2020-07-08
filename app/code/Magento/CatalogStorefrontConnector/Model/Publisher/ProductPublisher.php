@@ -7,16 +7,19 @@
 namespace Magento\CatalogStorefrontConnector\Model\Publisher;
 
 use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
-use Magento\CatalogStorefrontConnector\Model\Publisher\RestClient;
+use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterfaceFactory;
 use Magento\Framework\App\State;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Psr\Log\LoggerInterface;
+use Magento\CatalogMessageBroker\Model\ProductDataProcessor;
+
 
 /**
  * Product publisher
  *
- * Push product data for given product ids and store id to the Message Bus
- * with topic storefront.catalog.data.consume
+ * Push product data for given product ids and store id to the Storefront via Import API
+ * TODO: move to CatalogMessageBroker module
  */
 class ProductPublisher
 {
@@ -36,11 +39,6 @@ class ProductPublisher
     private $queuePublisher;
 
     /**
-     * @var string
-     */
-    private const TOPIC_NAME = 'storefront.catalog.data.consume';
-
-    /**
      * @var int
      */
     private $batchSize;
@@ -55,9 +53,17 @@ class ProductPublisher
      */
     private $logger;
     /**
-     * @var RestClient
+     * @var CatalogServerInterface
      */
-    private $restClient;
+    private $catalogServer;
+    /**
+     * @var ImportProductsRequestInterfaceFactory
+     */
+    private $importProductsRequestInterfaceFactory;
+    /**
+     * @var ProductDataProcessor
+     */
+    private $productDataProcessor;
 
     /**
      * @param DataProviderInterface $productsDataProvider
@@ -75,6 +81,9 @@ class ProductPublisher
         State $state,
         LoggerInterface $logger,
         RestClient $restClient,
+        CatalogServerInterface $catalogServer,
+        ImportProductsRequestInterfaceFactory $importProductsRequestInterfaceFactory,
+        ProductDataProcessor $productDataProcessor,
         int $batchSize
     ) {
         $this->productsDataProvider = $productsDataProvider;
@@ -84,6 +93,9 @@ class ProductPublisher
         $this->state = $state;
         $this->logger = $logger;
         $this->restClient = $restClient;
+        $this->catalogServer = $catalogServer;
+        $this->importProductsRequestInterfaceFactory = $importProductsRequestInterfaceFactory;
+        $this->productDataProcessor = $productDataProcessor;
     }
 
     /**
@@ -91,16 +103,17 @@ class ProductPublisher
      *
      * @param array $productIds
      * @param int $storeId
+     * @param array $overrideProducts Temporary variables to support transition period between new and old Export API
      * @return void
      * @throws \Exception
      */
-    public function publish(array $productIds, int $storeId): void
+    public function publish(array $productIds, int $storeId, $overrideProducts = []): void
     {
         $this->state->emulateAreaCode(
             \Magento\Framework\App\Area::AREA_FRONTEND,
-            function () use ($productIds, $storeId) {
+            function () use ($productIds, $storeId, $overrideProducts) {
                 try {
-                    $this->publishEntities($productIds, $storeId);
+                    $this->publishEntities($productIds, $storeId, $overrideProducts);
                 } catch (\Throwable $e) {
                     $this->logger->critical(
                         \sprintf(
@@ -120,19 +133,20 @@ class ProductPublisher
      *
      * @param array $productIds
      * @param int $storeId
+     * @param array $overrideProducts
      * @return void
      */
-    private function publishEntities(array $productIds, int $storeId): void
+    private function publishEntities(array $productIds, int $storeId, $overrideProducts = []): void
     {
         foreach (\array_chunk($productIds, $this->batchSize) as $idsBunch) {
+            // @todo eliminate calling old API when new API can provide all of the necessary data
             $productsData = $this->productsDataProvider->fetch($idsBunch, [], ['store' => $storeId]);
-            $this->unsetNullRecursively($productsData);
             $this->logger->debug(
                 \sprintf('Publish products with ids "%s" in store %s', \implode(', ', $productIds), $storeId),
                 ['verbose' => $productsData]
             );
             if (count($productsData)) {
-                $this->importProducts($storeId, array_values($productsData));
+                $this->importProducts($storeId, array_values($productsData), $overrideProducts);
             }
         }
     }
@@ -246,18 +260,29 @@ class ProductPublisher
     /**
      * @param int $storeId
      * @param array $products
+     * @param array $overrideProducts
+     * @throws \Throwable
      */
-    private function importProducts($storeId, array $products): void
+    private function importProducts($storeId, array $products, $overrideProducts = []): void
     {
+        $this->unsetNullRecursively($products);
+
         foreach ($products as &$product) {
+            if (isset($overrideProducts[$product['entity_id']])) {
+                $newApiProductData = $overrideProducts[$product['entity_id']];
+                $product = $this->productDataProcessor->merge($newApiProductData, $product);
+            }
+
             $this->temporaryProductTransformation($product);
         }
+        unset($product);
 
         try {
-            $this->restClient->post(
-                '/V1/storefront-products',
-                ['request' => ['products' => $products, 'store' => $storeId]],
-                ["Content-Type: application/json"]
+            $importProductRequest = $this->importProductsRequestInterfaceFactory->create();
+            $importProductRequest->setProducts($products);
+            $importProductRequest->setStore($storeId);
+            $this->catalogServer->importProducts(
+                $importProductRequest
             );
         } catch (\Exception $e) {
             // TODO: Implement logging

@@ -273,10 +273,12 @@ class CatalogService implements CatalogServerInterface
                     // $dataPerType[$entity->getEntityType()][$entity->getStoreId()][self::DELETE][] = $entity->getEntityId();
                 } else {
                     $categoryInElasticFormat['store_id'] = $storeId;
-                    foreach ($categoryInElasticFormat['dynamic_attributes'] as $dynamicAttribute) {
-                        $categoryInElasticFormat[$dynamicAttribute['code']] = $dynamicAttribute['value'];
+                    if (isset($categoryInElasticFormat['dynamic_attributes'])) {
+                        foreach ($categoryInElasticFormat['dynamic_attributes'] as $dynamicAttribute) {
+                            $categoryInElasticFormat[$dynamicAttribute['code']] = $dynamicAttribute['value'];
+                        }
+                        unset($categoryInElasticFormat['dynamic_attributes']);
                     }
-                    unset($categoryInElasticFormat['dynamic_attributes']);
 
                     // TODO: Check if any of the following is required
                     $categoryInElasticFormat['is_active'] = $categoryInElasticFormat['is_active'] ? '1' : '0';
