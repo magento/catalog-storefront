@@ -163,6 +163,11 @@ class ExportTest extends WebapiAbstract
      */
     public function testEavAttributes()
     {
+
+        $this->_markTestAsRestOnly('SOAP will be covered in another test');
+
+        $this->reindex();
+
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $product = $productRepository->get('simple1');
@@ -170,11 +175,97 @@ class ExportTest extends WebapiAbstract
         $this->createServiceInfo['rest']['resourcePath'] .= '?ids[0]=' . $product->getId();
         $result = $this->_webApiCall($this->createServiceInfo, []);
 
-        $productFeed = $this->productsFeed->getFeedByIds([$product->getId()])['feed'];
-        var_dump($productFeed);
+        //todo:: weee attribute is not coming through web api
+        //todo:: date attribute is not coming through web api
+        //todo:: datetime attribute is not coming through web api
 
-        $name = $product->getName();
-//        echo  $name;
+        $eavAttributes = [
+            'text' => [
+                'attribute_code' => 'text_attribute',
+                'value' => 'text Attribute test'
 
+            ],
+            'multiselect' => [
+                'attribute_code' => 'multiselect_attribute',
+                'value' => 'Option 1'
+            ],
+            'textarea' => [
+                'attribute_code' => 'text_area_attribute',
+                'value' => 'text Area Attribute test'
+            ],
+            'texteditor' => [
+                'attribute_code' => 'text_editor_attribute',
+                'value' => 'text Editor Attribute test'
+
+            ],
+            'datetime' => [
+                'attribute_code' => 'datetime_attribute',
+                'value' => date('Y-m-d H:i:s')
+
+            ],
+            'date' => [
+                'attribute_code' => 'date_attribute',
+                'value' => date('Y-m-d')
+
+            ],
+            'boolean' => [
+                'attribute_code' => 'boolean_attribute',
+                'value' => 'yes'
+            ],
+
+            'price' => [
+                'attribute_code' => 'price_attribute',
+                'value' => '100.000000'
+            ],
+            'media_image' => [
+                'attribute_code' => 'image_attribute',
+                'value' => 'imagepath'
+
+            ],
+            'weee' => [
+                'attribute_code' => 'weee_attribute',
+                'value' => 10
+
+            ],
+        ];
+
+        $attributes = $result[0]['attributes'];
+
+        foreach ($attributes as $attribute) {
+            foreach ($eavAttributes as $eavAttribute) {
+                if(in_array($eavAttribute['attribute_code'],$attribute)) {
+                    $this->assertTrue($eavAttribute['value'] === $attribute['value'][0]['value']);
+                }
+
+            }
+        }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Swatches/_files/configurable_product_two_attributes.php
+     */
+    public function testEavSwatchAttributes()
+    {
+        $this->_markTestAsRestOnly('SOAP will be covered in another test');
+
+        $this->reindex();
+
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $product = $productRepository->get('configurable');
+
+        $this->createServiceInfo['rest']['resourcePath'] .= '?ids[0]=' . $product->getId();
+        $result = $this->_webApiCall($this->createServiceInfo, []);
+
+        $options = \Safe\json_decode($result[0]['options'][0])->values;
+        $arrayOptions = [
+            'Option 1',
+            'Option 2',
+            'Option 3'
+        ];
+
+        foreach ($options as $option) {
+            $this->assertContains($option->value, $arrayOptions);
+        }
     }
 }
