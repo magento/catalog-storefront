@@ -11,7 +11,7 @@ namespace Magento\CatalogExportApi\Api\Data;
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Option
+class CustomOption
 {
     /**
      * @var string
@@ -28,6 +28,16 @@ class Option
      */
     private $label;
 
+    /**
+     * @var string
+     */
+    private $title;
+
+    /**
+     * @var string
+     */
+    private $productSku;
+
     /***
      * @var int
      */
@@ -39,12 +49,22 @@ class Option
     private $isRequired;
 
     /**
-     * @var \Magento\CatalogExportApi\Api\Data\OptionValue[]
+     * @var bool
+     */
+    private $required;
+
+    /**
+     * @var string
+     */
+    private $renderType;
+
+    /**
+     * @var \Magento\CatalogExportApi\Api\Data\CustomOptionValue[]
      */
     private $values;
 
     /**
-     * Get option type
+     * Get type
      *
      * @return string
      */
@@ -54,7 +74,7 @@ class Option
     }
 
     /**
-     * Set option type
+     * Set type
      *
      * @param string $type
      * @return void
@@ -65,7 +85,7 @@ class Option
     }
 
     /**
-     * Get option id
+     * Get id
      *
      * @return int|null
      */
@@ -75,7 +95,7 @@ class Option
     }
 
     /**
-     * Set option id
+     * Set id
      *
      * @param int|null $id
      * @return void
@@ -86,7 +106,7 @@ class Option
     }
 
     /**
-     * Get option label
+     * Get label
      *
      * @return string|null
      */
@@ -96,7 +116,7 @@ class Option
     }
 
     /**
-     * Set option label
+     * Set label
      *
      * @param string|null $label
      * @return void
@@ -104,6 +124,48 @@ class Option
     public function setLabel(?string $label)
     {
         $this->label = $label;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string|null
+     */
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string|null $title
+     * @return void
+     */
+    public function setTitle(?string $title): void
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * Get product sku
+     *
+     * @return string|null
+     */
+    public function getProductSku(): ?string
+    {
+        return $this->productSku;
+    }
+
+    /**
+     * Set product sku
+     *
+     * @param string|null $productSku
+     * @return void
+     */
+    public function setProductSku(?string $productSku): void
+    {
+        $this->productSku = $productSku;
     }
 
     /**
@@ -131,7 +193,6 @@ class Option
      * Get is required
      *
      * @return bool|null
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsRequired(): ?bool
     {
@@ -150,9 +211,51 @@ class Option
     }
 
     /**
+     * Get required
+     *
+     * @return bool|null
+     */
+    public function getRequired(): ?bool
+    {
+        return $this->required;
+    }
+
+    /**
+     * Set required
+     *
+     * @param bool|null $isRequired
+     * @return void
+     */
+    public function setRequired(?bool $isRequired): void
+    {
+        $this->required = $isRequired;
+    }
+
+    /**
+     * Return render type
+     *
+     * @return string|null
+     */
+    public function getRenderType(): ?string
+    {
+        return $this->renderType;
+    }
+
+    /**
+     * Set render type
+     *
+     * @param string|null $renderType
+     * @return void
+     */
+    public function setRenderType(?string $renderType): void
+    {
+        $this->renderType = $renderType;
+    }
+
+    /**
      * Get option values
      *
-     * @return \Magento\CatalogExportApi\Api\Data\OptionValue[]|null
+     * @return \Magento\CatalogExportApi\Api\Data\CustomOptionValue[]|null
      */
     public function getValues(): ?array
     {
@@ -162,7 +265,7 @@ class Option
     /**
      * Set option values
      *
-     * @param \Magento\CatalogExportApi\Api\Data\OptionValue[]|null $values
+     * @param \Magento\CatalogExportApi\Api\Data\CustomOptionValue[]|null $values
      * @return void
      */
     public function setValues(?array $values = null): void

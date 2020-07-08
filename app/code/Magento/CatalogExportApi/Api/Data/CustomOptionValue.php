@@ -11,7 +11,7 @@ namespace Magento\CatalogExportApi\Api\Data;
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class OptionValue
+class CustomOptionValue
 {
     /**
      * @var int
@@ -29,9 +29,19 @@ class OptionValue
     private $sortOrder;
 
     /**
-     * @var Price
+     * @var float
      */
     private $price;
+
+    /**
+     * @var string
+     */
+    private $priceType;
+
+    /**
+     * @var string
+     */
+    private $sku;
 
     /**
      * @var bool
@@ -39,7 +49,7 @@ class OptionValue
     private $isDefault;
 
     /**
-     * @var int
+     * @var string
      */
     private $value;
 
@@ -49,7 +59,7 @@ class OptionValue
     private $sample;
 
     /**
-     * Get option value ID
+     * Get ID
      *
      * @return int
      */
@@ -59,7 +69,7 @@ class OptionValue
     }
 
     /**
-     * Set option value ID
+     * Set ID
      *
      * @param int $id
      * @return void
@@ -112,28 +122,70 @@ class OptionValue
     }
 
     /**
-     * Get option value price
+     * Get price
      *
-     * @return Price|null
+     * @return float|null
      */
-    public function getPrice(): ?Price
+    public function getPrice(): ?float
     {
         return $this->price;
     }
 
     /**
-     * Set option value price
+     * Set price
      *
-     * @param Price|null $price
+     * @param float|null $price
      * @return void
      */
-    public function setPrice(?Price $price): void
+    public function setPrice(?float $price): void
     {
         $this->price = $price;
     }
 
     /**
-     * Get option is default
+     * Get price type
+     *
+     * @return string|null
+     */
+    public function getPriceType(): ?string
+    {
+        return $this->priceType;
+    }
+
+    /**
+     * Set price type
+     *
+     * @param string|null $priceType
+     * @return void
+     */
+    public function setPriceType(?string $priceType): void
+    {
+        $this->priceType = $priceType;
+    }
+
+    /**
+     * Get Sku
+     *
+     * @return string|null
+     */
+    public function getSku(): ?string
+    {
+        return $this->sku;
+    }
+
+    /**
+     * Set Sku
+     *
+     * @param string|null $sku
+     * @return void
+     */
+    public function setSku(?string $sku): void
+    {
+        $this->sku = $sku;
+    }
+
+    /**
+     * Get is default
      *
      * @return bool|null
      */
@@ -143,7 +195,7 @@ class OptionValue
     }
 
     /**
-     * Set option is default
+     * Set is default
      *
      * @param bool|null $isDefault
      * @return void
@@ -154,28 +206,28 @@ class OptionValue
     }
 
     /**
-     * Get option value
+     * Get value
      *
-     * @return int|null
+     * @return string|null
      */
-    public function getValue(): ?int
+    public function getValue(): ?string
     {
         return $this->value;
     }
 
     /**
-     * Set option value
+     * Set value
      *
-     * @param int|null $value
+     * @param string|null $value
      * @return void
      */
-    public function setValue(?int $value): void
+    public function setValue(?string $value): void
     {
         $this->value = $value;
     }
 
     /**
-     * Get option sample
+     * Get sample
      *
      * @return string|null
      */
@@ -185,7 +237,7 @@ class OptionValue
     }
 
     /**
-     * Set option sample
+     * Set sample
      *
      * @param string|null $sample
      * @return void
