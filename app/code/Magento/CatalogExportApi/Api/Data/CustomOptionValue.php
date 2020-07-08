@@ -29,7 +29,7 @@ class CustomOptionValue
     private $sortOrder;
 
     /**
-     * @var float
+     * @var Price
      */
     private $price;
 
@@ -124,9 +124,9 @@ class CustomOptionValue
     /**
      * Get price
      *
-     * @return float|null
+     * @return Price|null
      */
-    public function getPrice(): ?float
+    public function getPrice(): ?Price
     {
         return $this->price;
     }
@@ -134,10 +134,10 @@ class CustomOptionValue
     /**
      * Set price
      *
-     * @param float|null $price
+     * @param Price|null $price
      * @return void
      */
-    public function setPrice(?float $price): void
+    public function setPrice(?Price $price): void
     {
         $this->price = $price;
     }
