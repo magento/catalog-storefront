@@ -5,11 +5,11 @@
  */
 namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
+use Magento\CatalogMessageBroker\Model\FetchCategoriesInterface;
 use Magento\CatalogStorefront\Model\Storage\Client\CommandInterface;
 use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
 use Magento\CatalogStorefront\Model\Storage\State;
 use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
-use Magento\CatalogMessageBroker\Model\FetchProductsInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\CatalogStorefront\Model\MessageBus\Consumer as OldConsumer;
 use Magento\CatalogStorefront\Model\MessageBus\CatalogItemMessageBuilder;
@@ -26,11 +26,6 @@ class CategoriesConsumer extends OldConsumer
      * @var DataProviderInterface
      */
     private $dataProvider;
-
-    /**
-     * @var FetchProductsInterface
-     */
-    private $fetchProducts;
 
     /**
      * @var LoggerInterface
@@ -53,13 +48,18 @@ class CategoriesConsumer extends OldConsumer
     private $productDataProcessor;
 
     /**
+     * @var FetchCategoriesInterface
+     */
+    private $fetchCategories;
+
+    /**
      * @param CommandInterface $storageWriteSource
      * @param DataDefinitionInterface $storageSchemaManager
      * @param State $storageState
      * @param CatalogItemMessageBuilder $catalogItemMessageBuilder
      * @param LoggerInterface $logger
      * @param DataProviderInterface $dataProvider
-     * @param FetchProductsInterface $fetchProducts
+     * @param FetchCategoriesInterface $fetchCategories
      * @param StoreManagerInterface $storeManager
      * @param AppState $appState
      * @param ProductDataProcessor $productDataProcessor
@@ -72,7 +72,7 @@ class CategoriesConsumer extends OldConsumer
         CatalogItemMessageBuilder $catalogItemMessageBuilder,
         LoggerInterface $logger,
         DataProviderInterface $dataProvider,
-        FetchProductsInterface $fetchProducts,
+        FetchCategoriesInterface $fetchCategories,
         StoreManagerInterface $storeManager,
         AppState $appState,
         ProductDataProcessor $productDataProcessor
@@ -86,10 +86,10 @@ class CategoriesConsumer extends OldConsumer
         );
         $this->logger = $logger;
         $this->dataProvider = $dataProvider;
-        $this->fetchProducts = $fetchProducts;
         $this->storeManager = $storeManager;
         $this->appState = $appState;
         $this->productDataProcessor = $productDataProcessor;
+        $this->fetchCategories = $fetchCategories;
     }
 
     /**
@@ -101,36 +101,13 @@ class CategoriesConsumer extends OldConsumer
     {
         $ids = json_decode($ids, true);
         $dataPerType = [];
-        $overrides = $this->fetchProducts->execute($ids);
+        $categories = $this->fetchCategories->execute($ids);
 
-        // @todo eliminate store manager
-        $stores = $this->storeManager->getStores(true);
-        $storesToIds = [];
-        foreach ($stores as $store) {
-            $storesToIds[$store->getCode()] = $store->getId();
+        foreach ($categories as $category) {
+            //@TODO: resolve issue with stores
+            $dataPerType['category'][0][self::SAVE][] = $category;
         }
 
-        foreach ($overrides as $override) {
-            $storeId = $storesToIds[$override['store_view_code']];
-            $products = [];
-            // @todo this is taken from old consumer, need to revise in the future
-            $this->appState->emulateAreaCode(
-                \Magento\Framework\App\Area::AREA_FRONTEND,
-                function () use ($override, $storeId, &$products) {
-                    try {
-                        // @todo eliminate calling old API when new API can provide all of the necessary data
-                        $products = $this->dataProvider->fetch([$override['id']], [], ['store' => $storeId]);
-                    } catch (\Throwable $e) {
-                        $this->logger->critical($e);
-                    }
-                }
-            );
-            if (count($products) > 0) {
-                $product = $this->productDataProcessor->merge($override, array_pop($products));
-                $product['store_id'] = $storeId;
-                $dataPerType['product'][$storeId][self::SAVE][] = $product;
-            }
-        }
         try {
             $this->saveToStorage($dataPerType);
         } catch (\Throwable $e) {

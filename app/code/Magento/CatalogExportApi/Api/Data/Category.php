@@ -7,53 +7,98 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExportApi\Api\Data;
 
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DataObject;
 
 /**
  * Product entity
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Category extends AbstractModel
+class Category
 {
-    private const ID = 'id';
+    /**
+     * @var ?int
+     */
+    private $id;
 
-    private const NAME = 'name';
+    /**
+     * @var string
+     */
+    private $name;
 
-    private const DESCRIPTION = 'description';
+    /**
+     * @var ?string
+     */
+    private $description;
 
-    private const PATH = 'path';
+    /**
+     * @var string
+     */
+    private $path;
 
-    private const PATH_IN_STORE = 'path_in_store';
+    /**
+     * @var string
+     */
+    private $pathInStore;
 
-    private const URL_KEY = 'url_key';
+    /**
+     * @var string
+     */
+    private $urlKey;
 
-    private const URL_PATH = 'url_path';
+    /**
+     * @var string
+     */
+    private $urlPath;
 
-    private const CANONICAL_URL = 'canonical_url';
+    /**
+     * @var string
+     */
+    private $canonicalUrl;
 
-    private const POSITION = 'position';
+    /**
+     * @var int
+     */
+    private $position;
 
-    private const LEVEL = 'level';
+    /**
+     * @var int
+     */
+    private $level;
 
-    private const CREATED_AT = 'created_at';
+    /**
+     * @var string
+     */
+    private $createdAt;
 
-    private const UPDATED_AT = 'updated_at';
+    /**
+     * @var string
+     */
+    private $updatedAt;
 
-    private const PRODUCT_COUNT = 'product_count';
+    /**
+     * @var ?int
+     */
+    private $productCount;
 
-    private const DEFAULT_SORT_BY = 'default_sort_by';
+    /**
+     * @var ?int
+     */
+    private $defaultSortBy;
 
-    private const BREADCRUMBS = 'breadcrumbs';
+    /**
+     * @var ?string
+     */
+    private $breadcrumbs;
 
     /**
      * Get product ID
      *
      * @return int
      */
-    public function getId(): ?int
+    public function getId()
     {
-        return $this->getData(self::ID);
+        return $this->id;
     }
 
     /**
@@ -64,7 +109,7 @@ class Category extends AbstractModel
      */
     public function setId($id)
     {
-        $this->setData(self::ID, $id);
+        $this->id = $id;
     }
 
     /**
@@ -72,9 +117,9 @@ class Category extends AbstractModel
      *
      * @return string
      */
-    public function getDescription() : string
+    public function getDescription() : ?string
     {
-        return $this->getData(self::DESCRIPTION);
+        return $this->description;
     }
 
     /**
@@ -83,9 +128,9 @@ class Category extends AbstractModel
      * @param string $description
      * @return void
      */
-    public function setDescription(string $description): void
+    public function setDescription(?string $description): void
     {
-        $this->setData(self::DESCRIPTION, $description);
+        $this->description = $description;
     }
 
     /**
@@ -95,7 +140,7 @@ class Category extends AbstractModel
      */
     public function getName(): string
     {
-        return $this->getData(self::NAME);
+        return $this->name;
     }
 
     /**
@@ -106,7 +151,7 @@ class Category extends AbstractModel
      */
     public function setName(string $name)
     {
-        $this->setData(self::NAME, $name);
+        $this->name = $name;
     }
 
     /**
@@ -116,7 +161,7 @@ class Category extends AbstractModel
      */
     public function getPath(): string
     {
-        return $this->getData(self::PATH);
+        return $this->path;
     }
 
     /**
@@ -127,7 +172,7 @@ class Category extends AbstractModel
      */
     public function setPath(string $path)
     {
-        $this->setData(self::PATH, $path);
+        $this->path = $path;
     }
 
     /**
@@ -137,7 +182,7 @@ class Category extends AbstractModel
      */
     public function getPathInStore(): string
     {
-        return $this->getData(self::PATH_IN_STORE);
+        return $this->pathInStore;
     }
 
     /**
@@ -148,7 +193,7 @@ class Category extends AbstractModel
      */
     public function setPathInStore(string $pathInStore)
     {
-        $this->setData(self::PATH_IN_STORE, $pathInStore);
+        $this->pathInStore = $pathInStore;
     }
 
     /**
@@ -158,7 +203,7 @@ class Category extends AbstractModel
      */
     public function getUrlKey(): string
     {
-        return $this->getData(self::URL_KEY);
+        return $this->urlKey;
     }
 
     /**
@@ -169,7 +214,7 @@ class Category extends AbstractModel
      */
     public function setUrlKey(string $urlKey)
     {
-        $this->setData(self::URL_KEY, $urlKey);
+        $this->urlKey = $urlKey;
     }
 
     /**
@@ -179,7 +224,7 @@ class Category extends AbstractModel
      */
     public function getUrlPath(): string
     {
-        return $this->getData(self::URL_PATH);
+        return $this->urlPath;
     }
 
     /**
@@ -190,7 +235,7 @@ class Category extends AbstractModel
      */
     public function setUrlPath(string $urlPath)
     {
-        $this->setData(self::URL_PATH, $urlPath);
+        $this->urlPath = $urlPath;
     }
 
     /**
@@ -198,9 +243,9 @@ class Category extends AbstractModel
      *
      * @return string
      */
-    public function getCanonicalUrl(): string
+    public function getCanonicalUrl(): ?string
     {
-        return $this->getData(self::CANONICAL_URL);
+        return $this->canonicalUrl;
     }
 
     /**
@@ -209,9 +254,9 @@ class Category extends AbstractModel
      * @param string $canonicalUrl
      * @return void
      */
-    public function setCanonicalUrl(string $canonicalUrl)
+    public function setCanonicalUrl(?string $canonicalUrl)
     {
-        $this->setData(self::CANONICAL_URL, $canonicalUrl);
+        $this->canonicalUrl = $canonicalUrl;
     }
 
     /**
@@ -221,7 +266,7 @@ class Category extends AbstractModel
      */
     public function getPosition(): int
     {
-        return $this->getData(self::POSITION);
+        return $this->position;
     }
 
     /**
@@ -232,7 +277,7 @@ class Category extends AbstractModel
      */
     public function setPosition(int $position)
     {
-        $this->setData(self::POSITION, $position);
+        $this->position = $position;
     }
 
     /**
@@ -242,7 +287,7 @@ class Category extends AbstractModel
      */
     public function getLevel(): int
     {
-        return $this->getData(self::LEVEL);
+        return $this->level;
     }
 
     /**
@@ -253,7 +298,7 @@ class Category extends AbstractModel
      */
     public function setLevel(int $level)
     {
-        $this->setData(self::LEVEL, $level);
+        $this->level = $level;
     }
 
     /**
@@ -263,7 +308,7 @@ class Category extends AbstractModel
      */
     public function getCreatedAt(): string
     {
-        return $this->getData(self::CREATED_AT);
+        return $this->createdAt;
     }
 
     /**
@@ -274,7 +319,7 @@ class Category extends AbstractModel
      */
     public function setCreatedAt(string $createdAt)
     {
-        $this->setData(self::CREATED_AT, $createdAt);
+        $this->createdAt = $createdAt;
     }
 
     /**
@@ -284,7 +329,7 @@ class Category extends AbstractModel
      */
     public function getUpdatedAt(): string
     {
-        return $this->getData(self::UPDATED_AT);
+        return $this->updatedAt;
     }
 
     /**
@@ -295,7 +340,7 @@ class Category extends AbstractModel
      */
     public function setUpdatedAt(string $updatedAt)
     {
-        $this->setData(self::UPDATED_AT, $updatedAt);
+        $this->updatedAt = $updatedAt;
     }
 
     /**
@@ -304,9 +349,9 @@ class Category extends AbstractModel
      * @param int $productCount
      * @return void
      */
-    public function setProductCount(int $productCount)
+    public function setProductCount(?int $productCount)
     {
-        $this->setData(self::PRODUCT_COUNT, $productCount);
+        $this->productCount = $productCount;
     }
 
     /**
@@ -314,9 +359,9 @@ class Category extends AbstractModel
      *
      * @return int
      */
-    public function getProductCount(): int
+    public function getProductCount(): ?int
     {
-        return $this->getData(self::PRODUCT_COUNT);
+        return $this->productCount;
     }
 
     /**
@@ -326,7 +371,7 @@ class Category extends AbstractModel
      */
     public function getDefaultSortBy(): string
     {
-        return $this->getData(self::DEFAULT_SORT_BY);
+        return $this->defaultSortBy;
     }
 
     /**
@@ -337,7 +382,7 @@ class Category extends AbstractModel
      */
     public function setDefaultSortBy(string $defaultSortBy)
     {
-        $this->setData(self::DEFAULT_SORT_BY, $defaultSortBy);
+        $this->defaultSortBy = $defaultSortBy;
     }
 
     /**
@@ -345,9 +390,9 @@ class Category extends AbstractModel
      *
      * @return string|null
      */
-    public function getBreadcrumbs(): string
+    public function getBreadcrumbs(): ?string
     {
-        return $this->getData(self::BREADCRUMBS);
+        return $this->breadcrumbs;
     }
 
     /**
@@ -356,8 +401,8 @@ class Category extends AbstractModel
      * @param string $breadcrumbs
      * @return void
      */
-    public function setBreadcrumbs(string $breadcrumbs)
+    public function setBreadcrumbs(?string $breadcrumbs)
     {
-        $this->setData(self::BREADCRUMBS, $breadcrumbs);
+        $this->breadcrumbs = $breadcrumbs;
     }
 }
