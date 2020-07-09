@@ -7,10 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExportApi\Api\Data;
 
-use Magento\Framework\DataObject;
-
 /**
- * Product entity
+ * Category entity
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
@@ -109,10 +107,10 @@ class Category
     /**
      * Set product ID
      *
-     * @param ?int $id
+     * @param string $id
      * @return void
      */
-    public function setId($id)
+    public function setId(?string $id)
     {
         $this->id = $id;
     }
@@ -154,7 +152,7 @@ class Category
      * @param string $name
      * @return void
      */
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -175,7 +173,7 @@ class Category
      * @param string $path
      * @return void
      */
-    public function setPath(string $path)
+    public function setPath(string $path): void
     {
         $this->path = $path;
     }
@@ -191,7 +189,7 @@ class Category
     }
 
     /**
-     * Set category path
+     * Set category path in store
      *
      * @param string $pathInStore
      * @return void
@@ -217,7 +215,7 @@ class Category
      * @param string $urlKey
      * @return void
      */
-    public function setUrlKey(string $urlKey)
+    public function setUrlKey(string $urlKey): void
     {
         $this->urlKey = $urlKey;
     }
@@ -238,7 +236,7 @@ class Category
      * @param string $urlPath
      * @return void
      */
-    public function setUrlPath(string $urlPath)
+    public function setUrlPath(string $urlPath): void
     {
         $this->urlPath = $urlPath;
     }
@@ -259,7 +257,7 @@ class Category
      * @param string $canonicalUrl
      * @return void
      */
-    public function setCanonicalUrl(?string $canonicalUrl)
+    public function setCanonicalUrl(?string $canonicalUrl): void
     {
         $this->canonicalUrl = $canonicalUrl;
     }
@@ -280,7 +278,7 @@ class Category
      * @param int $position
      * @return void
      */
-    public function setPosition(int $position)
+    public function setPosition(int $position): void
     {
         $this->position = $position;
     }
@@ -374,7 +372,7 @@ class Category
      *
      * @return string|null
      */
-    public function getDefaultSortBy(): string
+    public function getDefaultSortBy(): ?string
     {
         return $this->defaultSortBy;
     }

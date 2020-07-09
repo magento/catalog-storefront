@@ -9,6 +9,12 @@ namespace Magento\CatalogExport\Model;
 
 use Magento\Framework\App\DeploymentConfig;
 
+/**
+ * Class ExportConfiguration
+ * @package Magento\CatalogExport\Model
+ *
+ * The main responsibility of that class is to provide deployment and other kind of configurations for catalog export
+ */
 class ExportConfiguration
 {
     /**
@@ -27,7 +33,6 @@ class ExportConfiguration
     private $deploymentConfig;
 
     /**
-     * ExportConfiguration constructor.
      * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(DeploymentConfig $deploymentConfig)
@@ -39,8 +44,10 @@ class ExportConfiguration
      * Get max items in response
      *
      * @return int
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function getMaxItemsInResponse()
+    public function getMaxItemsInResponse(): int
     {
         $maxItemsInResponse = (int) $this->deploymentConfig->get(self::MAX_ITEM_IN_RESPONSE_PATH);
         return $maxItemsInResponse ?: self::MAX_ITEMS_IN_RESPONSE;

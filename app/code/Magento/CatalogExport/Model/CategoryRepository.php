@@ -35,7 +35,6 @@ class CategoryRepository implements CategoryRepositoryInterface
     private $exportConfiguration;
 
     /**
-     * CategoryRepository constructor.
      * @param \Magento\CatalogDataExporter\Model\Feed\Categories $categoriesFeed
      * @param \Magento\CatalogExportApi\Api\Data\CategoryFactory $categoryFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
@@ -59,7 +58,7 @@ class CategoryRepository implements CategoryRepositoryInterface
      * @param array $ids
      * @return array|\Magento\CatalogExportApi\Api\Data\Category[]
      */
-    public function get(array $ids)
+    public function get(array $ids): array
     {
         if (count($ids) > $this->exportConfiguration->getMaxItemsInResponse()) {
             throw new \InvalidArgumentException(

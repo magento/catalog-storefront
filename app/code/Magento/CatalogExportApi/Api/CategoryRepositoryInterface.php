@@ -12,7 +12,7 @@ namespace Magento\CatalogExportApi\Api;
 interface CategoryRepositoryInterface
 {
     /**
-     * Get products by ids
+     * Get categories by ids
      *
      * @param string[] $ids
      * @return \Magento\CatalogExportApi\Api\Data\Category[]
