@@ -45,7 +45,7 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $ids)
+    public function execute(array $ids): void
     {
         foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
             if (!empty($idsChunk)) {
