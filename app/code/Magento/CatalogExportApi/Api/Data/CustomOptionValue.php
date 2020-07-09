@@ -29,16 +29,6 @@ class CustomOptionValue
     private $sortOrder;
 
     /**
-     * @var Price
-     */
-    private $price;
-
-    /**
-     * @var string
-     */
-    private $priceType;
-
-    /**
      * @var string
      */
     private $sku;
@@ -119,48 +109,6 @@ class CustomOptionValue
     public function setSortOrder(?int $sortOrder): void
     {
         $this->sortOrder = $sortOrder;
-    }
-
-    /**
-     * Get price
-     *
-     * @return Price|null
-     */
-    public function getPrice(): ?Price
-    {
-        return $this->price;
-    }
-
-    /**
-     * Set price
-     *
-     * @param Price|null $price
-     * @return void
-     */
-    public function setPrice(?Price $price): void
-    {
-        $this->price = $price;
-    }
-
-    /**
-     * Get price type
-     *
-     * @return string|null
-     */
-    public function getPriceType(): ?string
-    {
-        return $this->priceType;
-    }
-
-    /**
-     * Set price type
-     *
-     * @param string|null $priceType
-     * @return void
-     */
-    public function setPriceType(?string $priceType): void
-    {
-        $this->priceType = $priceType;
     }
 
     /**

@@ -49,11 +49,6 @@ class CustomOption
     private $isRequired;
 
     /**
-     * @var bool
-     */
-    private $required;
-
-    /**
      * @var string
      */
     private $renderType;
@@ -208,27 +203,6 @@ class CustomOption
     public function setIsRequired(?bool $isRequired): void
     {
         $this->isRequired = $isRequired;
-    }
-
-    /**
-     * Get required
-     *
-     * @return bool|null
-     */
-    public function getRequired(): ?bool
-    {
-        return $this->required;
-    }
-
-    /**
-     * Set required
-     *
-     * @param bool|null $isRequired
-     * @return void
-     */
-    public function setRequired(?bool $isRequired): void
-    {
-        $this->required = $isRequired;
     }
 
     /**

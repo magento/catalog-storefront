@@ -26,7 +26,7 @@ class EnteredOption
     /**
      * @var bool
      */
-    private $required;
+    private $isRequired;
 
     /**
      * @var string
@@ -47,16 +47,6 @@ class EnteredOption
      * @var string
      */
     private $sku;
-
-    /**
-     * @var float[]
-     */
-    private $price;
-
-    /**
-     * @var string
-     */
-    private $priceType;
 
     /**
      * @var ?string
@@ -126,48 +116,6 @@ class EnteredOption
     }
 
     /**
-     * Get option value price
-     *
-     * @return \Magento\CatalogExportApi\Api\Data\Price
-     */
-    public function getPrice()
-    {
-        return $this->price;
-    }
-
-    /**
-     * Set option value price
-     *
-     * @param \Magento\CatalogExportApi\Api\Data\Price $price
-     * @return void
-     */
-    public function setPrice($price)
-    {
-        $this->price = $price;
-    }
-
-    /**
-     * Get price type
-     *
-     * @return string|null
-     */
-    public function getPriceType(): ?string
-    {
-        return $this->priceType;
-    }
-
-    /**
-     * Set price type
-     *
-     * @param string $priceType
-     * @return void
-     */
-    public function setPriceType($priceType)
-    {
-        $this->priceType = $priceType;
-    }
-
-    /**
      * Get option value
      *
      * @return string|null
@@ -210,25 +158,25 @@ class EnteredOption
     }
 
     /**
-     * Get is require
+     * Get isRequired
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getRequired(): bool
+    public function getIsRequired(): bool
     {
-        return $this->required;
+        return $this->isRequired;
     }
 
     /**
-     * Set is require
+     * Set isRequired
      *
      * @param bool $isRequired
      * @return void
      */
-    public function setRequired($isRequired): void
+    public function setIsRequired($isRequired): void
     {
-        $this->required = $isRequired;
+        $this->isRequired = $isRequired;
     }
 
     /**
