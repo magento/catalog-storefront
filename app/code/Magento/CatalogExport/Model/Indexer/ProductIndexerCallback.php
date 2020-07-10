@@ -7,14 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExport\Model\Indexer;
 
-use Magento\CatalogDataExporter\Model\Indexer\IndexerCallbackInterface;
+use Magento\CatalogDataExporter\Model\Indexer\ProductIndexerCallbackInterface;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * Publishes ids of updated products in queue
  */
-class IndexerCallback implements IndexerCallbackInterface
+class ProductIndexerCallback implements ProductIndexerCallbackInterface
 {
     private const BATCH_SIZE = 100;
 
@@ -45,7 +45,7 @@ class IndexerCallback implements IndexerCallbackInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $ids)
+    public function execute(array $ids) : void
     {
         foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
             if (!empty($idsChunk)) {
