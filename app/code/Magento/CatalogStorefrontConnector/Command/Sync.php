@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefrontConnector\Command;
 
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
-use Magento\CatalogStorefrontConnector\Model\Publisher\CategoryPublisher;
 use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 use Magento\Store\Model\StoreManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -56,11 +55,6 @@ class Sync extends Command
     private $storeManager;
 
     /**
-     * @var CategoryPublisher
-     */
-    private $categoryPublisher;
-
-    /**
      * @var CatalogEntityIdsProvider
      */
     private $catalogEntityIdsProvider;
@@ -72,21 +66,18 @@ class Sync extends Command
 
     /**
      * @param ProductPublisher $productPublisher
-     * @param CategoryPublisher $categoryPublisher
      * @param StoreManagerInterface $storeManager
      * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
      * @param ProductFeedIndexer $productFeedIndexer
      */
     public function __construct(
         ProductPublisher $productPublisher,
-        CategoryPublisher $categoryPublisher,
         StoreManagerInterface $storeManager,
         CatalogEntityIdsProvider $catalogEntityIdsProvider,
         ProductFeedIndexer $productFeedIndexer
     ) {
         parent::__construct();
         $this->productPublisher = $productPublisher;
-        $this->categoryPublisher = $categoryPublisher;
         $this->storeManager = $storeManager;
         $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
         $this->productFeedIndexer = $productFeedIndexer;
@@ -123,9 +114,6 @@ class Sync extends Command
             if (!$entityType || $entityType === self::ENTITY_TYPE_PRODUCT) {
                 $this->syncProducts($output, $storeId);
             }
-            if (!$entityType || $entityType === self::ENTITY_TYPE_CATEGORY) {
-                $this->syncCategories($output, $storeId);
-            }
         }
     }
 
@@ -147,29 +135,6 @@ class Sync extends Command
                     $this->productPublisher->publish($productIds, $storeId);
                     $output->write('.');
                     $processedN += count($productIds);
-                }
-                return $processedN;
-            },
-            $output
-        );
-    }
-
-    /**
-     * Sync categories
-     *
-     * @param OutputInterface $output
-     * @param int $storeId
-     */
-    protected function syncCategories(OutputInterface $output, int $storeId): void
-    {
-        $output->writeln("<info>Sync categories for store {$storeId}</info>");
-        $this->measure(
-            function () use ($output, $storeId) {
-                $processedN = 0;
-                foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $categoryIds) {
-                    $this->categoryPublisher->publish($categoryIds, $storeId);
-                    $output->write('.');
-                    $processedN += count($categoryIds);
                 }
                 return $processedN;
             },
