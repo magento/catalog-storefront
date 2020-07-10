@@ -253,8 +253,8 @@ class ProductPublisher
             }
         }
 
-        $product['short_description'] = $product['short_description'][0]['html'] ?? '';
-        $product['description'] = $product['description'][0]['html'] ?? '';
+        $product['short_description'] = $product['short_description']['html'] ?? '';
+        $product['description'] = $product['description']['html'] ?? '';
     }
 
     /**

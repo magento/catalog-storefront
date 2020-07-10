@@ -240,7 +240,11 @@ class CategoryPublisher
      */
     private function importCategories($storeId, array $categories): void
     {
-        foreach ($categories as &$category) {
+        foreach ($categories as $key => &$category) {
+            // Ad-hoc solution until import api will be implemented
+            if (!isset($category['id'])) {
+                unset($categories[$key]);
+            }
 //            $this->temporaryProductTransformation($category);
         }
 
