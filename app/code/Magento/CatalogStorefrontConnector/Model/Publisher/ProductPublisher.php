@@ -277,16 +277,12 @@ class ProductPublisher
         }
         unset($product);
 
-        try {
-            $importProductRequest = $this->importProductsRequestInterfaceFactory->create();
-            $importProductRequest->setProducts($products);
-            $importProductRequest->setStore($storeId);
-            $this->catalogServer->importProducts(
-                $importProductRequest
-            );
-        } catch (\Exception $e) {
-            // TODO: Implement logging
-            die($e->getMessage());
+        $importProductRequest = $this->importProductsRequestInterfaceFactory->create();
+        $importProductRequest->setProducts($products);
+        $importProductRequest->setStore($storeId);
+        $importResult = $this->catalogServer->importProducts($importProductRequest);
+        if ($importResult->getStatus() === false) {
+            $this->logger->error(sprintf('Products import is failed: "%s"', $importResult->getMessage()));
         }
     }
 }

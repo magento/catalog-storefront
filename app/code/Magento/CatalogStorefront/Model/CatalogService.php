@@ -291,7 +291,7 @@ class CatalogService implements CatalogServerInterface
                     $categoryInElasticFormat['description'] = !empty($categoryInElasticFormat['description']) ? $categoryInElasticFormat['description'] : null;
                     $categoryInElasticFormat['canonical_url'] = !empty($categoryInElasticFormat['canonical_url']) ? $categoryInElasticFormat['canonical_url'] : null;
 
-                    $categoryInElasticFormat['product_count'] = (string)$categoryInElasticFormat['product_count'];
+                    $categoryInElasticFormat['product_count'] = (string)($categoryInElasticFormat['product_count'] ?? 0);
                     $categoryInElasticFormat['children_count'] = (string)$categoryInElasticFormat['children_count'];
                     $categoryInElasticFormat['level'] = (string)$categoryInElasticFormat['level'];
                     $categoryInElasticFormat['position'] = (string)$categoryInElasticFormat['position'];

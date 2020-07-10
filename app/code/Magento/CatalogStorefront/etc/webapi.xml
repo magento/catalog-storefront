@@ -8,21 +8,22 @@
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
 
-    <!--TODO: Autogenerate as part of API-module-->
-    <route url="/V1/storefront-products" method="POST">
-        <service class="Magento\CatalogStorefrontApi\Api\CatalogServerInterface" method="importProducts"/>
-        <resources>
-            <!--TODO: Restrict permissions-->
-            <resource ref="anonymous" />
-            <!--<resource ref="Magento_Catalog::products" />-->
-        </resources>
-    </route>
-    <route url="/V1/storefront-categories" method="POST">
-        <service class="Magento\CatalogStorefrontApi\Api\CatalogServerInterface" method="importCategories"/>
-        <resources>
-            <!--TODO: Restrict permissions-->
-            <resource ref="anonymous" />
-            <!--<resource ref="Magento_Catalog::products" />-->
-        </resources>
-    </route>
+    <!-- temporary not used -->
+    <!--&lt;!&ndash;TODO: Autogenerate as part of API-module&ndash;&gt;-->
+    <!--<route url="/V1/storefront-products" method="POST">-->
+        <!--<service class="Magento\CatalogStorefrontApi\Api\CatalogServerInterface" method="importProducts"/>-->
+        <!--<resources>-->
+            <!--&lt;!&ndash;TODO: Restrict permissions&ndash;&gt;-->
+            <!--<resource ref="anonymous" />-->
+            <!--&lt;!&ndash;<resource ref="Magento_Catalog::products" />&ndash;&gt;-->
+        <!--</resources>-->
+    <!--</route>-->
+    <!--<route url="/V1/storefront-categories" method="POST">-->
+        <!--<service class="Magento\CatalogStorefrontApi\Api\CatalogServerInterface" method="importCategories"/>-->
+        <!--<resources>-->
+            <!--&lt;!&ndash;TODO: Restrict permissions&ndash;&gt;-->
+            <!--<resource ref="anonymous" />-->
+            <!--&lt;!&ndash;<resource ref="Magento_Catalog::products" />&ndash;&gt;-->
+        <!--</resources>-->
+    <!--</route>-->
 </routes>

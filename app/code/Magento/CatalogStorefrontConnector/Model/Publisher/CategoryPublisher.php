@@ -244,16 +244,13 @@ class CategoryPublisher
 //            $this->temporaryProductTransformation($category);
         }
 
-        try {
-            $importCategoriesRequest = $this->importCategoriesRequestInterfaceFactory->create();
-            $importCategoriesRequest->setCategories($categories);
-            $importCategoriesRequest->setStore($storeId);
-            $this->catalogServer->importCategories(
-                $importCategoriesRequest
-            );
-        } catch (\Exception $e) {
-            // TODO: Implement logging
-            die($e->getMessage());
+        $importCategoriesRequest = $this->importCategoriesRequestInterfaceFactory->create();
+        $importCategoriesRequest->setCategories($categories);
+        $importCategoriesRequest->setStore($storeId);
+        $importResult = $this->catalogServer->importCategories($importCategoriesRequest);
+
+        if ($importResult->getStatus() === false) {
+            $this->logger->error(sprintf('Categories import is failed: "%s"', $importResult->getMessage()));
         }
     }
 }
