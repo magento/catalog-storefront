@@ -160,8 +160,9 @@ class ExportTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/simple_products_eav.php
+     * @dataProvider eavAttributesResult
      */
-    public function testEavAttributes()
+    public function testEavAttributes($eavAttributes)
     {
 
         $this->_markTestAsRestOnly('SOAP will be covered in another test');
@@ -178,73 +179,23 @@ class ExportTest extends WebapiAbstract
         //todo:: weee attribute is not coming through web api
         //todo:: date attribute is not coming through web api
         //todo:: datetime attribute is not coming through web api
-
-        $eavAttributes = [
-            'text' => [
-                'attribute_code' => 'text_attribute',
-                'value' => 'text Attribute test'
-
-            ],
-            'multiselect' => [
-                'attribute_code' => 'multiselect_attribute',
-                'value' => 'Option 1'
-            ],
-            'textarea' => [
-                'attribute_code' => 'text_area_attribute',
-                'value' => 'text Area Attribute test'
-            ],
-            'texteditor' => [
-                'attribute_code' => 'text_editor_attribute',
-                'value' => 'text Editor Attribute test'
-
-            ],
-            'datetime' => [
-                'attribute_code' => 'datetime_attribute',
-                'value' => date('Y-m-d H:i:s')
-
-            ],
-            'date' => [
-                'attribute_code' => 'date_attribute',
-                'value' => date('Y-m-d')
-
-            ],
-            'boolean' => [
-                'attribute_code' => 'boolean_attribute',
-                'value' => 'yes'
-            ],
-
-            'price' => [
-                'attribute_code' => 'price_attribute',
-                'value' => '100.000000'
-            ],
-            'media_image' => [
-                'attribute_code' => 'image_attribute',
-                'value' => 'imagepath'
-
-            ],
-            'weee' => [
-                'attribute_code' => 'weee_attribute',
-                'value' => 10
-
-            ],
-        ];
-
         $attributes = $result[0]['attributes'];
 
         foreach ($attributes as $attribute) {
             foreach ($eavAttributes as $eavAttribute) {
                 if(in_array($eavAttribute['attribute_code'],$attribute)) {
-                    $this->assertTrue($eavAttribute['value'] === $attribute['value'][0]['value']);
+                    $attributeCode = $eavAttribute['attribute_code'];
+                    $this->assertTrue($eavAttribute['value'] == $attribute['value'][0]['value'], "Attribute " . $attributeCode . " failed the test.");
                 }
-
             }
         }
     }
 
     /**
      * @magentoApiDataFixture Magento/Swatches/_files/configurable_product_two_attributes.php
+     * @dataProvider multiselectOptions
      */
-    public function testEavSwatchAttributes()
+    public function testEavSwatchAttributes($arrayOptions)
     {
         $this->_markTestAsRestOnly('SOAP will be covered in another test');
 
@@ -258,14 +209,89 @@ class ExportTest extends WebapiAbstract
         $result = $this->_webApiCall($this->createServiceInfo, []);
 
         $options = \Safe\json_decode($result[0]['options'][0])->values;
-        $arrayOptions = [
-            'Option 1',
-            'Option 2',
-            'Option 3'
-        ];
 
         foreach ($options as $option) {
             $this->assertContains($option->value, $arrayOptions);
         }
+    }
+
+    /**
+     * Data Provider with eav attribute result
+     *
+     * @return array
+     */
+    public function eavAttributesResult()
+    {
+        $eavAttributes = [
+            'data' => [
+                [
+                    'text' => [
+                        'attribute_code' => 'text_attribute',
+                        'value' => 'text Attribute test'
+                    ],
+                    'multiselect' => [
+                        'attribute_code' => 'multiselect_attribute',
+                        'value' => 'Option 1'
+                    ],
+                    'textarea' => [
+                        'attribute_code' => 'text_area_attribute',
+                        'value' => 'text Area Attribute test'
+                    ],
+                    'texteditor' => [
+                        'attribute_code' => 'text_editor_attribute',
+                        'value' => 'text Editor Attribute test'
+
+                    ],
+                    'datetime' => [
+                        'attribute_code' => 'datetime_attribute',
+                        'value' => date('Y-m-d H:i:s')
+
+                    ],
+                    'date' => [
+                        'attribute_code' => 'date_attribute',
+                        'value' => date('Y-m-d')
+                    ],
+                    'boolean' => [
+                        'attribute_code' => 'boolean_attribute',
+                        'value' => 'yes'
+                    ],
+
+                    'price' => [
+                        'attribute_code' => 'price_attribute',
+                        'value' => '100.000000'
+                    ],
+                    'media_image' => [
+                        'attribute_code' => 'image_attribute',
+                        'value' => 'imagepath'
+                    ],
+                    'weee' => [
+                        'attribute_code' => 'weee_attribute',
+                        'value' => 10
+                    ],
+                ],
+            ]
+        ];
+
+        return $eavAttributes;
+    }
+
+    /**
+     * Data Provider with Multiselect Options
+     *
+     * @return array
+     */
+    public function multiselectOptions()
+    {
+        $arrayOptions = [
+            'data' => [
+                'options' => [
+                    'Option 1',
+                    'Option 2',
+                    'Option 3'
+                ]
+            ],
+        ];
+
+        return $arrayOptions;
     }
 }

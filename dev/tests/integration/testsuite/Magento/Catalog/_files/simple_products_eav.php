@@ -29,7 +29,6 @@ $multiselectOptionsIds = $objectManager->create(Collection::class)
     ->setAttributeFilter($multiselectAttribute->getId())
     ->getAllIds();
 
-var_dump($multiselectOptionsIds);
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class)
     ->setTypeId('simple')
     ->setId(1)
@@ -60,12 +59,7 @@ $product = $objectManager->create(\Magento\Catalog\Model\Product::class)
     ]);
 $productRepository->save($product);
 $productAction = $objectManager->get(\Magento\Catalog\Model\Product\Action::class);
-var_dump($product->getDateTimeAttribute());
-//$productAction->updateAttributes([$product->getId()],
-//    [
-//        'text_attribute' => 'red'
-//    ],
-//    $store->getId());
+
 
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class)
     ->setTypeId('simple')
