@@ -73,6 +73,8 @@ class OutputFormatter
                 return $item;
             }, $currentResult['media_gallery']);
 
+            $currentResult = $this->setDynamicAttributes($currentResult);
+
             $items[] = $currentResult;
         }
         $metaInfo = $additionalInfo['meta_info'] ?? [];
@@ -93,5 +95,26 @@ class OutputFormatter
                 ? Resolver::CATALOG_LAYER_SEARCH
                 : Resolver::CATALOG_LAYER_CATEGORY,
         ];
+    }
+
+    /**
+     * Set dynamic attributes (product attributes created in admin) into output result
+     *
+     * @param array $currentResult
+     * @return array
+     */
+    private function setDynamicAttributes(array $currentResult): array
+    {
+        if (empty($currentResult['dynamic_attributes'])) {
+            return $currentResult;
+        }
+
+        foreach ($currentResult['dynamic_attributes'] as $attribute) {
+            if (!isset($currentResult[$attribute['code']])) {
+                $currentResult[$attribute['code']] = $attribute['value'];
+            }
+        }
+
+        return $currentResult;
     }
 }
