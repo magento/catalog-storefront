@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontGraphQl\Model;
 
+use GraphQL\Language\AST\InlineFragmentNode;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
@@ -46,20 +47,13 @@ class FieldResolver
             }
 
             foreach ($node->selectionSet->selections as $selection) {
-                if ($selection instanceof \GraphQL\Language\AST\InlineFragmentNode) {
-                    continue;
-                }
-                if (null !== $requestedField && $selection->name->value !== $requestedField) {
-                    continue;
-                }
-
-                if (!isset($selection->selectionSet, $selection->selectionSet->selections)) {
+                if ($selection instanceof InlineFragmentNode || !isset($selection->selectionSet, $selection->selectionSet->selections)) {
                     $fieldNames = $this->getFieldNames($selection, $fieldNames);
                 } else {
-                    if (null !== $requestedField && $selection->name->value == $requestedField) {
-                        $fieldNames = $this->getFieldNames($selection, []);
-                    } else {
+                    if (null == $requestedField) {
                         $fieldNames[$selection->name->value] = $this->getFieldNames($selection, []);
+                    } elseif ($selection->name->value == $requestedField) {
+                        $fieldNames = $this->getFieldNames($selection, []);
                     }
                 }
             }
