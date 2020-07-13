@@ -12,7 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $eavConfig = Bootstrap::getObjectManager()->get(Config::class);
-Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/eav_attributes_with_custom_attribute_set.php');
+Resolver::getInstance()->requireDataFixture('Magento/Eav/_files/eav_attributes_with_custom_attribute_set.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

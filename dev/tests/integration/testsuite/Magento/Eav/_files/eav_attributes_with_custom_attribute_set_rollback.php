@@ -12,9 +12,7 @@ $installer = $objectManager->create(\Magento\Catalog\Setup\CategorySetup::class)
 /** @var \Magento\Eav\Api\AttributeRepositoryInterface $eavRepository */
 $eavRepository = $objectManager->get(\Magento\Eav\Api\AttributeRepositoryInterface::class);
 
-try {
-
-    $eavAttributes = [
+$eavAttributes = [
         'text_attribute',
         'multiselect_attribute',
         'text_area_attribute',
@@ -25,21 +23,19 @@ try {
         'image_attribute',
         'weee_attribute',
         'price_attribute'
-    ];
+];
 
-    foreach ($eavAttributes as $attribute) {
-        $attribute = $eavRepository->get($installer->getEntityTypeId('catalog_product'), $attribute);
+foreach ($eavAttributes as $attribute) {
+    $attribute = $eavRepository->get($installer->getEntityTypeId('catalog_product'), $attribute);
+    if($attribute->getAttributeId()) {
         $eavRepository->delete($attribute);
     }
-
-    //delete attribute set
-    $attributeSet = $objectManager->create(\Magento\Eav\Model\Entity\Attribute\Set::class)
-        ->load('new_attribute_set_storefront', 'attribute_set_name');
-    if ($attributeSet->getId()) {
-        $attributeSet->delete();
-    }
-
-} catch (\Exception $ex) {
-    //Nothing to remove
-    var_dump($ex->getMessage());
 }
+
+//delete attribute set
+$attributeSet = $objectManager->create(\Magento\Eav\Model\Entity\Attribute\Set::class)
+    ->load('new_attribute_set_storefront', 'attribute_set_name');
+if ($attributeSet->getId()) {
+    $attributeSet->delete();
+}
+
