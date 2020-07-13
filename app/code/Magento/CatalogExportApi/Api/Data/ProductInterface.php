@@ -416,7 +416,7 @@ interface ProductInterface
      *
      * @return void
      */
-    public function setMediaGallery(?array $mediaGallery);
+    public function setMediaGallery(?array $mediaGallery) : void;
 
     /**
      * Get is product in stock
