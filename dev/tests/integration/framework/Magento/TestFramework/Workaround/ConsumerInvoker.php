@@ -26,7 +26,8 @@ class ConsumerInvoker
         'storefront.catalog.product.update',
         'storefront.catalog.data.consume',
         'catalog.export.consumer',
-        'catalog.category.export.consumer'
+        'catalog.category.export.consumer',
+        'storefront.catalog.category.update'
     ];
 
     /**
