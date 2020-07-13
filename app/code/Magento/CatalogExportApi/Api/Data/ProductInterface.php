@@ -405,18 +405,18 @@ interface ProductInterface
     /**
      * Get media gallery
      *
-     * @return \Magento\CatalogExportApi\Api\Data\GalleryItem[]
+     * @return \Magento\CatalogExportApi\Api\Data\GalleryItem[]|null
      */
-    public function getMediaGallery();
+    public function getMediaGallery() : ?array;
 
     /**
      * Set media gallery
      *
-     * @param \Magento\CatalogExportApi\Api\Data\GalleryItem[] $mediaGallery
+     * @param \Magento\CatalogExportApi\Api\Data\GalleryItem[]|null $mediaGallery
      *
      * @return void
      */
-    public function setMediaGallery($mediaGallery);
+    public function setMediaGallery(?array $mediaGallery);
 
     /**
      * Get is product in stock

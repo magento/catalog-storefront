@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\CatalogExportApi\Api\Data;
 
 /**
- * Class VideoAttributes
+ * Video attributes entity
  */
 class VideoAttributes
 {
@@ -44,8 +44,6 @@ class VideoAttributes
     private $videoMetadata;
 
     /**
-     * VideoAttributes constructor.
-     *
      * @param string|null $mediaType
      * @param string|null $videoProvider
      * @param string|null $videoUrl

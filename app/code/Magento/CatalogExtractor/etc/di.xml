@@ -18,7 +18,6 @@
         <arguments>
             <argument name="defaultDataProvider" xsi:type="string">Magento\CatalogExtractor\DataProvider\EavAttributeProvider</argument>
             <argument name="dataProviders" xsi:type="array">
-                <item name="media_gallery" xsi:type="string">Magento\CatalogExtractor\DataProvider\MediaGallery\MediaGalleryProvider</item>
                 <item name="url_rewrites" xsi:type="string">Magento\CatalogExtractor\DataProvider\UrlRewrites\UrlRewritesDataProvider</item>
                 <item name="product_links" xsi:type="string">Magento\CatalogExtractor\DataProvider\Link\Provider</item>
                 <item name="url_suffix" xsi:type="string">Magento\CatalogExtractor\DataProvider\UrlRewrites\ProductUrlSuffix</item>

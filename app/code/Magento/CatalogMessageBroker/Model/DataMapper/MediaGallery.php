@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\CatalogMessageBroker\Model\DataMapper;
 
 /**
- * Class MediaGallery
+ * Data mapper for media gallery
  */
 class MediaGallery implements DataMapperInterface
 {
@@ -29,7 +29,7 @@ class MediaGallery implements DataMapperInterface
                 'position' => $mediaData['sort_order'],
                 'media_type' => $mediaData['media_type'],
                 'types' => $mediaData['types'] ?? [],
-            ], isset($mediaData['video_attributes']) && !empty($mediaData['video_attributes']) ? [
+            ], !empty($mediaData['video_attributes']) ? [
                 'video_content' => $mediaData['video_attributes'],
             ] : []);
         }, $data['media_gallery']);

@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\CatalogExportApi\Api\Data;
 
 /**
- * Class GalleryItem
+ * Gallery item entity
  */
 class GalleryItem
 {

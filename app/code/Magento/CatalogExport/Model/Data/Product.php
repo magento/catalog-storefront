@@ -506,7 +506,7 @@ class Product extends AbstractModel implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function getMediaGallery()
+    public function getMediaGallery() : ?array
     {
         return $this->getData(self::MEDIA_GALLERY);
     }
@@ -514,7 +514,7 @@ class Product extends AbstractModel implements ProductInterface
     /**
      * @inheritdoc
      */
-    public function setMediaGallery($mediaGallery)
+    public function setMediaGallery(?array $mediaGallery)
     {
         $this->setData(self::MEDIA_GALLERY, $mediaGallery);
     }
