@@ -31,6 +31,15 @@ try {
         $attribute = $eavRepository->get($installer->getEntityTypeId('catalog_product'), $attribute);
         $eavRepository->delete($attribute);
     }
+
+    //delete attribute set
+    $attributeSet = $objectManager->create(\Magento\Eav\Model\Entity\Attribute\Set::class)
+        ->load('new_attribute_set_storefront', 'attribute_set_name');
+    if ($attributeSet->getId()) {
+        $attributeSet->delete();
+    }
+
 } catch (\Exception $ex) {
     //Nothing to remove
+    var_dump($ex->getMessage());
 }

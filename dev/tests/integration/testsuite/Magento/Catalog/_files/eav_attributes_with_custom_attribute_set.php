@@ -4,18 +4,61 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Catalog\Setup\CategorySetup;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Eav\Api\AttributeSetRepositoryInterface;
+use Magento\Eav\Api\Data\AttributeGroupInterface;
 use Magento\Eav\Model\Entity\Attribute\Source\Boolean;
+use Magento\Eav\Model\Entity\Type;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Eav\Api\Data\AttributeSetInterfaceFactory;
+use Magento\Eav\Model\Entity\Attribute\GroupFactory;
 
 /** @var \Magento\Catalog\Setup\CategorySetup $installer */
 $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\Catalog\Setup\CategorySetup::class
 );
 
+$objectManager = Bootstrap::getObjectManager();
+/** @var AttributeSetRepositoryInterface $attributeSetRepository */
+$attributeSetRepository = $objectManager->get(AttributeSetRepositoryInterface::class);
+/** @var AttributeSetInterfaceFactory $attributeSetFactory */
+$attributeSetFactory = $objectManager->get(AttributeSetInterfaceFactory::class);
+/** @var Type $entityType */
+$entityType = $objectManager->create(Type::class)->loadByCode(ProductAttributeInterface::ENTITY_TYPE_CODE);
+$attributeSet = $attributeSetFactory->create(
+    [
+        'data' => [
+            'id' => null,
+            'attribute_set_name' => 'new_attribute_set_storefront',
+            'entity_type_id' => $entityType->getId(),
+            'sort_order' => 300,
+        ],
+    ]
+);
+$attributeSet->isObjectNew(true);
+$attributeSet->setHasDataChanges(true);
+$attributeSet->validate();
+$attributeSetRepository->save($attributeSet);
+$attributeSet->initFromSkeleton($entityType->getDefaultAttributeSetId());
+/** @var AttributeGroupInterface $newGroup */
+$newGroup = $objectManager->get(GroupFactory::class)->create();
+$newGroup->setId('EavStorefront')
+    ->setAttributeGroupName('EavStorefront')
+    ->setAttributeSetId($attributeSet->getAttributeSetId())
+    ->setSortOrder(11)
+    ->setAttributes([]);
+/** @var AttributeGroupInterface[] $groups */
+$groups = $attributeSet->getGroups();
+array_push($groups, $newGroup);
+$attributeSet->setGroups($groups);
+$attributeSetRepository->save($attributeSet);
+
+$attributeSetId = $installer->getAttributeSetId('catalog_product', 'new_attribute_set_storefront');
+
 $eavAttributes = [
     'text' => [
         'attribute_code' => 'text_attribute',
-        'entity_type_id' => $installer->getEntityTypeId('catalog_product'),
+        'entity_type_id' => $entityType->getId(),
         'is_global' => 1,
         'is_user_defined' => 1,
         'frontend_input' => 'text',
@@ -24,7 +67,7 @@ $eavAttributes = [
     ],
     'multiselect' => [
         'attribute_code' => 'multiselect_attribute',
-        'entity_type_id' => $installer->getEntityTypeId('catalog_product'),
+        'entity_type_id' => $entityType->getId(),
         'is_global' => 1,
         'is_user_defined' => 1,
         'frontend_input' => 'select',
@@ -49,7 +92,7 @@ $eavAttributes = [
     ],
     'textarea' => [
         'attribute_code' => 'text_area_attribute',
-        'entity_type_id' => $installer->getEntityTypeId('catalog_product'),
+        'entity_type_id' => $entityType->getId(),
         'is_global' => 1,
         'is_user_defined' => 1,
         'frontend_input' => 'textarea',
@@ -70,7 +113,7 @@ $eavAttributes = [
     ],
     'texteditor' => [
         'attribute_code' => 'text_editor_attribute',
-        'entity_type_id' => $installer->getEntityTypeId('catalog_product'),
+        'entity_type_id' => $entityType->getId(),
         'is_global' => 1,
         'is_user_defined' => 1,
         'frontend_input' => 'texteditor',
@@ -91,7 +134,7 @@ $eavAttributes = [
     ],
     'datetime' => [
         'attribute_code' => 'datetime_attribute',
-        'entity_type_id' => $installer->getEntityTypeId('catalog_product'),
+        'entity_type_id' => $entityType->getId(),
         'is_global' => 1,
         'is_user_defined' => 1,
         'frontend_input' => 'datetime',
@@ -112,7 +155,7 @@ $eavAttributes = [
     ],
     'date' => [
         'attribute_code' => 'date_attribute',
-        'entity_type_id' => $installer->getEntityTypeId('catalog_product'),
+        'entity_type_id' => $entityType->getId(),
         'is_global' => 1,
         'is_user_defined' => 1,
         'frontend_input' => 'date',
@@ -133,7 +176,7 @@ $eavAttributes = [
     ],
     'boolean' => [
         'attribute_code'                => 'boolean_attribute',
-        'entity_type_id' => $installer->getEntityTypeId('catalog_product'),
+        'entity_type_id' => $entityType->getId(),
         'is_global'                     => 0,
         'is_user_defined'               => 1,
         'frontend_input'                => 'boolean',
@@ -156,7 +199,7 @@ $eavAttributes = [
 
     'price' => [
         'attribute_code' => 'price_attribute',
-        'entity_type_id' => $installer->getEntityTypeId('catalog_product'),
+        'entity_type_id' => $entityType->getId(),
         'is_global' => 1,
         'is_user_defined' => 1,
         'frontend_input' => 'price',
@@ -182,7 +225,7 @@ $eavAttributes = [
         'used_for_sort_by' => 0,
         'frontend_label' => ['Image Attribute'],
         'backend_type' => 'varchar',
-        'entity_type_id' => $installer->getEntityTypeId('catalog_product'),
+        'entity_type_id' => $entityType->getId(),
     ],
     'weee' => [
         'attribute_code' => 'weee_attribute',
@@ -192,7 +235,7 @@ $eavAttributes = [
         'is_static' => 1,
         'frontend_input' => 'weee',
         'frontend_label' => 'fixed product tax',
-        'entity_type_id' => $installer->getEntityTypeId('catalog_product'),
+        'entity_type_id' => $entityType->getId(),
     ]
 ];
 
@@ -208,7 +251,7 @@ foreach ($eavAttributes as $key => $eavAttribute) {
     $attribute->save();
 
     /* Assign attribute to attribute set */
-    $installer->addAttributeToGroup('catalog_product', 'Default', 'General', $attribute->getId());
+    $installer->addAttributeToGroup('catalog_product', $attributeSetId, 'EavStorefront', $attribute->getId());
 }
 
 /** @var \Magento\Eav\Model\Config $eavConfig */

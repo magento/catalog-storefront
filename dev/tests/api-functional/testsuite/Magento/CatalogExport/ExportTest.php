@@ -159,7 +159,7 @@ class ExportTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/simple_products_eav.php
+     * @magentoApiDataFixture Magento/Catalog/_files/simple_products_eav_with_custom_attribute_set.php
      * @dataProvider eavAttributesResult
      */
     public function testEavAttributes($eavAttributes)
