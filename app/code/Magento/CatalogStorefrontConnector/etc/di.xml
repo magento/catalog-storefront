@@ -54,6 +54,7 @@
     <type name="Magento\CatalogStorefrontConnector\Command\Sync">
         <arguments>
             <argument name="productFeedIndexer" xsi:type="object">Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer\Proxy</argument>
+            <argument name="categoryFeedIndexer" xsi:type="object">Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer\Proxy</argument>
             <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
             <argument name="productPublisher" xsi:type="object">Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher\Proxy</argument>
         </arguments>

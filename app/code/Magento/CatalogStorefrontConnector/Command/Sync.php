@@ -81,6 +81,7 @@ class Sync extends Command
      * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
      * @param CategoriesConsumer $categoriesConsumer
      * @param ProductFeedIndexer $productFeedIndexer
+     * @param CategoryFeedIndexer $categoryFeedIndexer
      */
     public function __construct(
         ProductPublisher $productPublisher,
