@@ -204,7 +204,7 @@ class Category
      *
      * @return string
      */
-    public function getUrlKey(): string
+    public function getUrlKey(): ?string
     {
         return $this->urlKey;
     }
@@ -215,7 +215,7 @@ class Category
      * @param string $urlKey
      * @return void
      */
-    public function setUrlKey(string $urlKey): void
+    public function setUrlKey(?string $urlKey): void
     {
         $this->urlKey = $urlKey;
     }
@@ -225,7 +225,7 @@ class Category
      *
      * @return string
      */
-    public function getUrlPath(): string
+    public function getUrlPath(): ?string
     {
         return $this->urlPath;
     }
@@ -236,7 +236,7 @@ class Category
      * @param string $urlPath
      * @return void
      */
-    public function setUrlPath(string $urlPath): void
+    public function setUrlPath(?string $urlPath): void
     {
         $this->urlPath = $urlPath;
     }
