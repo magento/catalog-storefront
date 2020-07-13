@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Command;
 
+use Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer;
 use Magento\CatalogMessageBroker\Model\MessageBus\CategoriesConsumer;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
 use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
@@ -69,6 +70,10 @@ class Sync extends Command
      * @var CategoriesConsumer
      */
     private $categoriesConsumer;
+    /**
+     * @var CategoryFeedIndexer
+     */
+    private $categoryFeedIndexer;
 
     /**
      * @param ProductPublisher $productPublisher
@@ -82,7 +87,8 @@ class Sync extends Command
         StoreManagerInterface $storeManager,
         CatalogEntityIdsProvider $catalogEntityIdsProvider,
         CategoriesConsumer $categoriesConsumer,
-        ProductFeedIndexer $productFeedIndexer
+        ProductFeedIndexer $productFeedIndexer,
+        CategoryFeedIndexer $categoryFeedIndexer
     ) {
         parent::__construct();
         $this->productPublisher = $productPublisher;
@@ -90,6 +96,7 @@ class Sync extends Command
         $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
         $this->productFeedIndexer = $productFeedIndexer;
         $this->categoriesConsumer = $categoriesConsumer;
+        $this->categoryFeedIndexer = $categoryFeedIndexer;
     }
 
     /**
@@ -117,6 +124,15 @@ class Sync extends Command
     {
         $entityType = $this->getEntityType($input);
         // TODO: MC-30961 clean product ids from storefront.catalog.category.update topic
+
+        // @todo eliminate dependency on indexer
+        if (!$entityType || $entityType === self::ENTITY_TYPE_CATEGORY) {
+            $this->categoryFeedIndexer->executeFull();
+        }
+        if (!$entityType || $entityType === self::ENTITY_TYPE_PRODUCT) {
+            $this->productFeedIndexer->executeFull();
+        }
+
         foreach ($this->storeManager->getStores() as $store) {
             $storeId = (int)$store->getId();
 
@@ -140,8 +156,6 @@ class Sync extends Command
         $output->writeln("<info>Sync products for store {$storeId}</info>");
         $this->measure(
             function () use ($output, $storeId) {
-                // @todo try to eliminate dependency on indexer
-                $this->productFeedIndexer->executeFull();
                 $processedN = 0;
                 foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $productIds) {
                     $this->productPublisher->publish($productIds, $storeId);

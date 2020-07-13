@@ -95,6 +95,12 @@ class Category
     private $breadcrumbs;
 
     /**
+     * @var string[]|null
+     * TODO: ad-hoc solution
+     */
+    private $children;
+
+    /**
      * Get product ID
      *
      * @return int
@@ -223,7 +229,7 @@ class Category
     /**
      * Get category url key
      *
-     * @return string
+     * @return string|null
      */
     public function getUrlPath(): ?string
     {
@@ -391,9 +397,9 @@ class Category
     /**
      * Retrieve category default sort by
      *
-     * @return string|null
+     * @return array|null
      */
-    public function getBreadcrumbs(): ?string
+    public function getBreadcrumbs(): ?array
     {
         return $this->breadcrumbs;
     }
@@ -401,10 +407,10 @@ class Category
     /**
      * Set category default sort by
      *
-     * @param string $breadcrumbs
+     * @param array|null $breadcrumbs
      * @return void
      */
-    public function setBreadcrumbs(?string $breadcrumbs)
+    public function setBreadcrumbs(array $breadcrumbs = null): void
     {
         $this->breadcrumbs = $breadcrumbs;
     }
@@ -428,5 +434,26 @@ class Category
     public function setStoreViewCode(string $storeViewCode): void
     {
         $this->storeViewCode = $storeViewCode;
+    }
+
+    /**
+     * Set categories
+     *
+     * @param string[]|null $children
+     * @return void
+     */
+    public function setChildren(?array $children): void
+    {
+        $this->children = $children;
+    }
+
+    /**
+     * Get categories
+     *
+     * @return int[]|null
+     */
+    public function getChildren(): ?array
+    {
+        return $this->children;
     }
 }

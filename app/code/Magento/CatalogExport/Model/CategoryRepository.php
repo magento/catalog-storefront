@@ -74,6 +74,9 @@ class CategoryRepository implements CategoryRepositoryInterface
         foreach ($feedData['feed'] as $feedItem) {
             $category = $this->categoryFactory->create();
             $feedItem['id'] = $feedItem['categoryId'];
+
+            // implement breadcrumbs
+            unset($feedItem['breadcrumbs']);
             $this->dataObjectHelper->populateWithArray(
                 $category,
                 $feedItem,
