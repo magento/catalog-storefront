@@ -150,9 +150,9 @@ class Category
     /**
      * Get category name
      *
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -160,10 +160,10 @@ class Category
     /**
      * Set category name
      *
-     * @param string $name
+     * @param string|null $name
      * @return void
      */
-    public function setName(string $name): void
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }
