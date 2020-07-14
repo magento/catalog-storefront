@@ -13,4 +13,10 @@
             <resource ref="Magento_Catalog::products" />
         </resources>
     </route>
+    <route url="/V1/catalog-export/variants" method="GET">
+        <service class="Magento\CatalogExportApi\Api\VariantRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
 </routes>
