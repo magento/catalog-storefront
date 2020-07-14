@@ -57,7 +57,7 @@ class CatalogService implements CatalogServerInterface
     /**
      * @var DynamicAttributeValueInterfaceFactory
      */
-    private $dynamicAttributesFactory;
+    private $dynamicAttributeFactory;
 
     /**
      * @param ProductDataProvider $dataProvider
@@ -69,12 +69,12 @@ class CatalogService implements CatalogServerInterface
         ProductDataProvider $dataProvider,
         DataObjectHelper $dataObjectHelper,
         CategoryDataProvider $categoryDataProvider,
-        DynamicAttributeValueInterfaceFactory $dynamicAttributesFactory
+        DynamicAttributeValueInterfaceFactory $dynamicAttributeFactory
     ) {
         $this->dataProvider = $dataProvider;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->categoryDataProvider = $categoryDataProvider;
-        $this->dynamicAttributesFactory = $dynamicAttributesFactory;
+        $this->dynamicAttributeFactory = $dynamicAttributeFactory;
     }
 
     /**
@@ -338,7 +338,6 @@ class CatalogService implements CatalogServerInterface
         return $product;
     }
 
-
     /**
      * Set dynamic attributes (custom attributes created in admin) to product entity.
      *
@@ -361,7 +360,7 @@ class CatalogService implements CatalogServerInterface
                 continue;
             }
             /** @var \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface $dynamicAttribute */
-            $dynamicAttribute = $this->dynamicAttributesFactory->create();
+            $dynamicAttribute = $this->dynamicAttributeFactory->create();
             $dynamicAttribute->setCode((string)$attributeCode);
             $dynamicAttribute->setValue((string)$value);
             $dynamicAttributes[] = $dynamicAttribute;
