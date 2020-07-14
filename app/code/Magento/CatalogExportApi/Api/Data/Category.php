@@ -101,6 +101,11 @@ class Category
     private $children;
 
     /**
+     * @var string|null
+     */
+    private $image;
+
+    /**
      * Get product ID
      *
      * @return int
@@ -456,5 +461,22 @@ class Category
     public function getChildren(): ?array
     {
         return $this->children;
+    }
+
+    /**
+     * @param string|null $image
+     * @return void
+     */
+    public function setImage(?string $image): void
+    {
+        $this->image = $image;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getImage(): ?string
+    {
+        return $this->image;
     }
 }
