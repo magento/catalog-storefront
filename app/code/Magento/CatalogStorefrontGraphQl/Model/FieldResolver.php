@@ -113,10 +113,38 @@ class FieldResolver
     }
 
     /**
-     * @param array $fieldNames
-     * @param array $fragments
+     * Add fields from fragment to already existing fields in schema.
+     *
+     * GraphQL query:
+     * ```
+     * {
+     *   categoryList(filters: {ids: {eq: "3"}}){
+     *     url_key
+     *     url_path
+     *     ...Cat
+     *   }
+     * }
+     *
+     * fragment Cat on CategoryTree {
+     *   id
+     *   name
+     * }
+     * ```
+     * Result or merge:
+     * ```
+     * [
+     *   'url_key',
+     *   'url_path',
+     *   'id',
+     *   'name'.
+     * ]
+     * ```
+     *
+     * @param string[] $fieldNames
+     * @param \GraphQL\Language\AST\FragmentDefinitionNode[] $fragments
+     * @return array
      */
-    private function addFragmentFields(array $fieldNames, array $fragments)
+    private function addFragmentFields(array $fieldNames, array $fragments): array
     {
         $fragmentFieldNames = [];
         /** @var \GraphQL\Language\AST\FragmentDefinitionNode $fragment */
