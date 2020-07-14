@@ -24,19 +24,9 @@ class GalleryItem
     private $label;
 
     /**
-     * @var string
-     */
-    private $mediaType;
-
-    /**
      * @var string[]|null
      */
     private $types;
-
-    /**
-     * @var string|null
-     */
-    private $description;
 
     /**
      * @var int
@@ -93,28 +83,6 @@ class GalleryItem
     }
 
     /**
-     * Get media type
-     *
-     * @return string
-     */
-    public function getMediaType() : string
-    {
-        return $this->mediaType;
-    }
-
-    /**
-     * Set media type
-     *
-     * @param string $mediaType
-     *
-     * @return void
-     */
-    public function setMediaType(string $mediaType) : void
-    {
-        $this->mediaType = $mediaType;
-    }
-
-    /**
      * Get types
      *
      * @return string[]|null
@@ -134,28 +102,6 @@ class GalleryItem
     public function setTypes(?array $types) : void
     {
         $this->types = $types;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string|null
-     */
-    public function getDescription() : ?string
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string|null $description
-     *
-     * @return void
-     */
-    public function setDescription(?string $description) : void
-    {
-        $this->description = $description;
     }
 
     /**

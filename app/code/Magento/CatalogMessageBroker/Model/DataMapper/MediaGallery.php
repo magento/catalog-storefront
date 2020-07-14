@@ -27,7 +27,6 @@ class MediaGallery implements DataMapperInterface
                 'url' => $mediaData['url'],
                 'label' => $mediaData['label'],
                 'position' => $mediaData['sort_order'],
-                'media_type' => $mediaData['media_type'],
                 'types' => $mediaData['types'] ?? [],
             ], !empty($mediaData['video_attributes']) ? [
                 'video_content' => $mediaData['video_attributes'],
