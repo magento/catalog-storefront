@@ -270,7 +270,10 @@ abstract class GraphQlAbstract extends WebapiAbstract
         foreach ($expected as $key => $value) {
             if (array_key_exists($key, $actual)) {
                 if (is_array($value)) {
-                    $diffResult[$key] = $this->compareArraysRecursively($value, $actual[$key]);
+                    $recursiveDiff = $this->compareArraysRecursively($value, $actual[$key]);
+                    if (!empty($recursiveDiff)) {
+                        $diffResult[$key] = $recursiveDiff;
+                    }
                 } else {
                     if (!in_array($value, $actual, true)) {
                         $diffResult[$key] = $value;
