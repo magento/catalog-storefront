@@ -90,7 +90,7 @@ class Category
     private $defaultSortBy;
 
     /**
-     * @var ?string
+     * @var \Magento\CatalogExportApi\Api\Data\Breadcrumb[]|null
      */
     private $breadcrumbs;
 
@@ -395,9 +395,9 @@ class Category
     }
 
     /**
-     * Retrieve category default sort by
+     * Retrieve category breadcrumbs
      *
-     * @return array|null
+     * @return \Magento\CatalogExportApi\Api\Data\Breadcrumb[]|null
      */
     public function getBreadcrumbs(): ?array
     {
@@ -405,12 +405,13 @@ class Category
     }
 
     /**
-     * Set category default sort by
+     * Set category breadcrumbs
      *
-     * @param array|null $breadcrumbs
+     * @param \Magento\CatalogExportApi\Api\Data\Breadcrumb[]|null $breadcrumbs
+     *
      * @return void
      */
-    public function setBreadcrumbs(array $breadcrumbs = null): void
+    public function setBreadcrumbs(?array $breadcrumbs): void
     {
         $this->breadcrumbs = $breadcrumbs;
     }
@@ -427,7 +428,7 @@ class Category
 
     /**
      * Set store view code
-     * 
+     *
      * @param string $storeViewCode
      * @return void
      */
