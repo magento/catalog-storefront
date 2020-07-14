@@ -89,10 +89,9 @@ class VariantsDataProvider implements DataProviderInterface
         if (empty($requestedAttributes) || isset($requestedAttributes['variants']['attributes'])) {
             $result[] = $this->buildVariantAttributes($products, $attributesPerProduct, $childAttributeOptions);
         }
-        //Removed options, since they are provided through saasExport
-//        if (empty($requestedAttributes) || isset($requestedAttributes['configurable_options'])) {
-//            $result[] = $this->buildConfigurableOptions($products, $attributesPerProduct, $childAttributeOptions);
-//        }
+        if (empty($requestedAttributes) || isset($requestedAttributes['configurable_options'])) {
+            $result[] = $this->buildConfigurableOptions($products, $attributesPerProduct, $childAttributeOptions);
+        }
 
         return !empty($result) ? array_replace_recursive(...$result) : $result;
     }
