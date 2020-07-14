@@ -48,7 +48,9 @@ class FieldResolver
             }
 
             foreach ($node->selectionSet->selections as $selection) {
-                if ($selection instanceof InlineFragmentNode || !isset($selection->selectionSet, $selection->selectionSet->selections)) {
+                if ($selection instanceof InlineFragmentNode
+                    || !isset($selection->selectionSet, $selection->selectionSet->selections)
+                ) {
                     $fieldNames = $this->getFieldNames($selection, $fieldNames, (array)$info->fragments);
                 } else {
                     if (null == $requestedField) {
