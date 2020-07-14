@@ -113,7 +113,7 @@ class FieldResolver
     }
 
     /**
-     * Add fields from fragment to already existing fields in schema.
+     * Merge fields from fragment with fields in requested query.
      *
      * GraphQL query:
      * ```
@@ -130,7 +130,8 @@ class FieldResolver
      *   name
      * }
      * ```
-     * Result or merge:
+     *
+     * Result of merge:
      * ```
      * [
      *   'url_key',
