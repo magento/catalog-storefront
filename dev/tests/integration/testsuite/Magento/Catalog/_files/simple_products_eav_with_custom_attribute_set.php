@@ -16,8 +16,6 @@ Resolver::getInstance()->requireDataFixture('Magento/Eav/_files/eav_attributes_w
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-$storeManager = $objectManager->get(\Magento\Store\Model\StoreManager::class);
-$store = $storeManager->getStore('default');
 $productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
 $installer = $objectManager->get(\Magento\Catalog\Setup\CategorySetup::class);
