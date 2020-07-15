@@ -196,9 +196,9 @@ class ExportTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Swatches/_files/configurable_product_two_attributes.php
      * @dataProvider multiselectOptionsResult
-     * @param $arrayOptions $this expected data
+     * @param $arrayOptionsExpected $this expected data
      */
-    public function testEavSwatchAttributes($arrayOptions)
+    public function testEavSwatchAttributes($arrayOptionsExpected)
     {
         $this->_markTestAsRestOnly('SOAP will be covered in another test');
 
@@ -213,12 +213,12 @@ class ExportTest extends WebapiAbstract
 
         $options = json_decode($result[0]['options'][0])->values;
 
-        $arr = [];
+        $arrayOptions = [];
         foreach ($options as $option) {
-            $arr[] = $option->value;
+            $arrayOptions[] = $option->value;
         }
 
-        $this->assertEquals($arrayOptions, $arr);
+        $this->assertEquals($arrayOptionsExpected, $arrayOptions);
 
     }
 
@@ -309,7 +309,7 @@ class ExportTest extends WebapiAbstract
      */
     public function multiselectOptionsResult()
     {
-        $arrayOptions = [
+        $arrayOptionsExpected = [
             'data' => [
                 'options' => [
                     'Option 3',
@@ -319,6 +319,6 @@ class ExportTest extends WebapiAbstract
             ],
         ];
 
-        return $arrayOptions;
+        return $arrayOptionsExpected;
     }
 }
