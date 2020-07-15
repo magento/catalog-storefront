@@ -29,6 +29,7 @@ class OutputFormatter
      * @return array
      * @throws GraphQlInputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __invoke(
         ProductsGetResultInterface $result,

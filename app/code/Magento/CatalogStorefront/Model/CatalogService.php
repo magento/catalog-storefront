@@ -63,7 +63,7 @@ class CatalogService implements CatalogServerInterface
      * @param ProductDataProvider $dataProvider
      * @param DataObjectHelper $dataObjectHelper
      * @param CategoryDataProvider $categoryDataProvider
-     * @param DynamicAttributeValueInterfaceFactory $dynamicAttributeValueFactory
+     * @param DynamicAttributeValueInterfaceFactory $dynamicAttributeFactory
      */
     public function __construct(
         ProductDataProvider $dataProvider,
@@ -171,6 +171,7 @@ class CatalogService implements CatalogServerInterface
      * @param ImportProductsRequestInterface $request
      * @return ImportProductsResponseInterface
      * phpcs:disable Generic.CodeAnalysis.EmptyStatement
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function importProducts(
         ImportProductsRequestInterface $request
@@ -186,6 +187,7 @@ class CatalogService implements CatalogServerInterface
      * @param ImportCategoriesRequestInterface $request
      * @return ImportCategoriesResponseInterface
      * phpcs:disable Generic.CodeAnalysis.EmptyStatement
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function importCategories(ImportCategoriesRequestInterface $request): ImportCategoriesResponseInterface
     {
