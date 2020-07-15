@@ -56,26 +56,18 @@ class CatalogService implements CatalogServerInterface
     private $categoryDataProvider;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @param ProductDataProvider $dataProvider
      * @param DataObjectHelper $dataObjectHelper
      * @param CategoryDataProvider $categoryDataProvider
-     * @param LoggerInterface $logger
      */
     public function __construct(
         ProductDataProvider $dataProvider,
         DataObjectHelper $dataObjectHelper,
-        CategoryDataProvider $categoryDataProvider,
-        LoggerInterface $logger
+        CategoryDataProvider $categoryDataProvider
     ) {
         $this->dataProvider = $dataProvider;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->categoryDataProvider = $categoryDataProvider;
-        $this->logger = $logger;
     }
 
     /**
@@ -83,8 +75,6 @@ class CatalogService implements CatalogServerInterface
      *
      * @param ProductsGetRequestInterface $request
      * @return ProductsGetResultInterface
-     * @throws \Magento\Framework\Exception\FileSystemException
-     * @throws \Magento\Framework\Exception\RuntimeException
      * @throws \Throwable
      */
     public function getProducts(
@@ -93,12 +83,9 @@ class CatalogService implements CatalogServerInterface
         $result = new ProductsGetResult();
 
         if (empty($request->getStore()) || $request->getStore() === null) {
-            $this->logger->error(
-                __('Store id is not present in Search Criteria. Please add missing info.')
-            );
-            return $result;
+            throw new \InvalidArgumentException('Store id is not present in request.');
         }
-        $products = [];
+
         if (empty($request->getIds())) {
             return $result;
         }
@@ -110,15 +97,13 @@ class CatalogService implements CatalogServerInterface
         );
 
         if (count($rawItems) !== count($request->getIds())) {
-            $this->logger->error(
-                __(
-                    'Products with the following ids are not found in catalog: %1',
-                    implode(', ', array_diff($request->getIds(), array_keys($rawItems)))
-                )
+            throw new \InvalidArgumentException(
+                'Products with the following ids are not found in catalog: %1',
+                implode(', ', array_diff($request->getIds(), array_keys($rawItems)))
             );
-            return $result;
         }
 
+        $products = [];
         foreach ($rawItems as $item) {
             $products[] = $this->prepareProduct($item);
         }
@@ -167,8 +152,9 @@ class CatalogService implements CatalogServerInterface
         $parts = explode('_', $key);
         $parts = array_map("ucfirst", $parts);
         $methodName = 'set' . implode('', $parts);
-
-        $product->$methodName($image);
+        if (method_exists($product, $methodName)) {
+            $product->$methodName($image);
+        }
         return $product;
     }
 
@@ -184,7 +170,7 @@ class CatalogService implements CatalogServerInterface
     ): ImportProductsResponseInterface {
         // TODO: Implement ImportProducts() method.
 
-        return $request;
+        return new \Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponse();
     }
 
     /**
@@ -198,7 +184,7 @@ class CatalogService implements CatalogServerInterface
     {
         // TODO: Implement ImportCategories() method.
 
-        return $request;
+        return new \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponse();
     }
 
     /**
@@ -225,53 +211,18 @@ class CatalogService implements CatalogServerInterface
         foreach ($categories as $category) {
             $item = new Category();
             $category = $this->cleanUpNullValues($category);
-            $category = $this->convertKeyToString('image', $category);
-            $category = $this->convertKeyToString('canonical_url', $category);
-            $category = $this->convertKeyToString('description', $category);
 
             $this->dataObjectHelper->populateWithArray($item, $category, CategoryInterface::class);
 
-            $breadcrumbsData = $category['breadcrumbs'] ?? [];
-            if ($breadcrumbsData) {
-                $breadcrumbs = [];
-                foreach ($breadcrumbsData as $breadcrumbData) {
-                    $breadcrumb = new Breadcrumb();
-                    $breadcrumb->setCategoryId($breadcrumbData['category_id']);
-                    $breadcrumb->setCategoryLevel((int)$breadcrumbData['category_level']);
-                    $breadcrumb->setCategoryName($breadcrumbData['category_name']);
-                    $breadcrumb->setCategoryUrlKey($breadcrumbData['category_url_key']);
-                    $breadcrumb->setCategoryUrlPath($breadcrumbData['category_url_path']);
-                    $breadcrumbs[] = $breadcrumb;
-                }
-            }
-            $categories = [];
+            $children = [];
             foreach ($category['children'] ?? [] as $categoryId) {
-                $categories[$categoryId] = $categoryId;
+                $children[$categoryId] = $categoryId;
             }
-            $item->setChildren($categories);
+            $item->setChildren($children);
             $items[] = $item;
         }
         $result->setItems($items);
         return $result;
-    }
-
-    /**
-     * Converts value of array to string type for provided key
-     *
-     * @param string $key
-     * @param array $data
-     * @return array
-     */
-    private function convertKeyToString(string $key, array $data): array
-    {
-        if (!array_key_exists($key, $data)) {
-            return $data;
-        }
-
-        if (!is_string($data[$key])) {
-            $data[$key] = '';
-        }
-        return $data;
     }
 
     /**
@@ -366,6 +317,7 @@ class CatalogService implements CatalogServerInterface
             $urlRewrites[] = $this->prepareUrlRewrite($urlRewriteData);
         }
         $product->setUrlRewrites($urlRewrites);
+
         /**
          * FIXME: Ugly way to populate child items for Grouped product.
          * It should be refactored to general approach how to work with variations. Probably, in scope of MC-31164.

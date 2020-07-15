@@ -36,10 +36,12 @@ class Product implements BatchResolverInterface
      * @var RequestBuilder
      */
     private $requestBuilder;
+
     /**
      * @var FieldResolver
      */
     private $fieldResolver;
+
     /**
      * @var ScopeProvider
      */

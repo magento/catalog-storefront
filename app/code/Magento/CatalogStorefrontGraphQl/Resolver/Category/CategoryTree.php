@@ -11,7 +11,6 @@ use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
 use Magento\CatalogStorefrontGraphQl\Model\FieldResolver;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResolverInterface;

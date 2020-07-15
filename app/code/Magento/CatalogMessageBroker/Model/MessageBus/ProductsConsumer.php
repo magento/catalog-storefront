@@ -15,6 +15,7 @@ use Magento\CatalogStorefront\Model\MessageBus\Consumer as OldConsumer;
 use Magento\CatalogStorefront\Model\MessageBus\CatalogItemMessageBuilder;
 use Magento\Framework\App\State as AppState;
 use Psr\Log\LoggerInterface;
+use Magento\CatalogMessageBroker\Model\ProductDataProcessor;
 
 /**
  * Process product update messages and update storefront app
@@ -47,6 +48,11 @@ class ProductsConsumer extends OldConsumer
     private $appState;
 
     /**
+     * @var ProductDataProcessor
+     */
+    private $productDataProcessor;
+
+    /**
      * @param CommandInterface $storageWriteSource
      * @param DataDefinitionInterface $storageSchemaManager
      * @param State $storageState
@@ -56,6 +62,8 @@ class ProductsConsumer extends OldConsumer
      * @param FetchProductsInterface $fetchProducts
      * @param StoreManagerInterface $storeManager
      * @param AppState $appState
+     * @param ProductDataProcessor $productDataProcessor
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         CommandInterface $storageWriteSource,
@@ -66,7 +74,8 @@ class ProductsConsumer extends OldConsumer
         DataProviderInterface $dataProvider,
         FetchProductsInterface $fetchProducts,
         StoreManagerInterface $storeManager,
-        AppState $appState
+        AppState $appState,
+        ProductDataProcessor $productDataProcessor
     ) {
         parent::__construct(
             $storageWriteSource,
@@ -80,6 +89,7 @@ class ProductsConsumer extends OldConsumer
         $this->fetchProducts = $fetchProducts;
         $this->storeManager = $storeManager;
         $this->appState = $appState;
+        $this->productDataProcessor = $productDataProcessor;
     }
 
     /**
@@ -116,7 +126,7 @@ class ProductsConsumer extends OldConsumer
                 }
             );
             if (count($products) > 0) {
-                $product = $this->mergeData(array_pop($products), $override);
+                $product = $this->productDataProcessor->merge($override, array_pop($products));
                 $product['store_id'] = $storeId;
                 $dataPerType['product'][$storeId][self::SAVE][] = $product;
             }
