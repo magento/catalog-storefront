@@ -51,6 +51,7 @@ class EavAttributeProvider implements DataProviderInterface
      */
     public function fetch(array $productIds, array $attributes, array $scopes): array
     {
+        var_dump("54");die;
         $connection = $this->resourceConnection->getConnection();
         $productsQuery = $this->productsQuery->build($productIds, $attributes, (int)$scopes['store']);
 
