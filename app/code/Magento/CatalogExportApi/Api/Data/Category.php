@@ -456,7 +456,7 @@ class Category
     /**
      * Get categories
      *
-     * @return int[]|null
+     * @return string[]|null
      */
     public function getChildren(): ?array
     {
