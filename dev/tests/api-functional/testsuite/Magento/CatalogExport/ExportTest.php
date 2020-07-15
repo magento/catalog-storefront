@@ -180,18 +180,16 @@ class ExportTest extends WebapiAbstract
         //todo:: weee attribute is not coming through web api
         //todo:: date attribute is not coming through web api
         //todo:: datetime attribute is not coming through web api
-        if(isset($attributes = $result[0]['attributes'])) {
-            var_dump($expectedAttributes);
-            var_dump($attributes);
+        if(isset($result[0]['attributes'])) {
+
+            $attributes = $result[0]['attributes'];
             $attributesWithoutValueId = [];
             foreach ($attributes as $attribute) {
-                unset($attribute['value'][0]['id']);
+                unset($attribute['value'][0]['id']); // unset id as it generates dynamically,
                 $attributesWithoutValueId[] = $attribute;
             }
 
-            var_dump($attributesWithoutValueId);
-
-            $this->assertEquals($expectedAttributes, $attributesArray);
+            $this->assertEquals($expectedAttributes, $attributesWithoutValueId);
         }
     }
 
@@ -215,9 +213,13 @@ class ExportTest extends WebapiAbstract
 
         $options = json_decode($result[0]['options'][0])->values;
 
+        $arr = [];
         foreach ($options as $option) {
-            $this->assertContains($option->value, $arrayOptions);
+            $arr[] = $option->value;
         }
+
+        $this->assertEquals($arrayOptions, $arr);
+
     }
 
     /**
@@ -227,19 +229,9 @@ class ExportTest extends WebapiAbstract
      */
     public function attributesResult()
     {
-
         $expectedAttributes = [
             'data' => [
                 [
-//                    'datetime' => [
-//                        'attribute_code' => 'datetime_attribute',
-//                        'value' => date('Y-m-d H:i:s')
-//
-//                    ],
-//                    'date' => [
-//                        'attribute_code' => 'date_attribute',
-//                        'value' => date('Y-m-d')
-//                    ],
                     [
                         'attribute_code' => 'multiselect_attribute',
                         'type'  => 'select',
@@ -303,16 +295,6 @@ class ExportTest extends WebapiAbstract
                             ]
                         ]
                     ],
-//                    'weee' => [
-//                        'attribute_code' => 'weee_attribute',
-//                        'type' => 'weee',
-    //                    'value' => [
-    //                        [
-    //                            'value' => 10
-    //                        ]
-    //                    ]
-//
-//                    ],
                 ],
             ]
         ];
@@ -330,9 +312,9 @@ class ExportTest extends WebapiAbstract
         $arrayOptions = [
             'data' => [
                 'options' => [
+                    'Option 3',
                     'Option 1',
-                    'Option 2',
-                    'Option 3'
+                    'Option 2'
                 ]
             ],
         ];
