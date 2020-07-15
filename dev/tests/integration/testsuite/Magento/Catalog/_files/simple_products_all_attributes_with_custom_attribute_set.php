@@ -12,7 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $eavConfig = Bootstrap::getObjectManager()->get(Config::class);
-Resolver::getInstance()->requireDataFixture('Magento/Eav/_files/eav_attributes_with_custom_attribute_set.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/all_attributes_with_custom_attribute_set.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -38,14 +38,14 @@ $product = $objectManager->create(\Magento\Catalog\Model\Product::class)
     ->setTextAttribute('text Attribute test')
     ->setTextAreaAttribute('text Area Attribute test')
     ->setBooleanAttribute(1)
-    ->setDateAttribute(date('Y-m-d'))
-    ->setDateTimeAttribute(date('Y-m-d H:i:s'))
+//    ->setDateAttribute(date('Y-m-d'))
+//    ->setDateTimeAttribute(date('Y-m-d H:i:s'))
     ->setTextEditorAttribute('text Editor Attribute test')
     ->setImageAttribute('imagepath')
     ->setPriceAttribute(100)
-    ->setWeeeAttribute(
-        [['website_id' => 0, 'country' => 'US', 'state' => 0, 'price' => 10.00, 'delete' => '']]
-    )
+//    ->setWeeeAttribute(
+//        [['website_id' => 0, 'country' => 'US', 'state' => 0, 'price' => 10.00, 'delete' => '']]
+//    )
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setStockData([

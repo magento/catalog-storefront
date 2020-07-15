@@ -18,17 +18,19 @@ $eavAttributes = [
         'text_area_attribute',
         'text_editor_attribute',
         'boolean_attribute',
-        'date_attribute',
-        'datetime_attribute',
+//        'date_attribute',
+//        'datetime_attribute',
         'image_attribute',
-        'weee_attribute',
+//        'weee_attribute',
         'price_attribute'
 ];
 
 foreach ($eavAttributes as $attribute) {
-    $attribute = $eavRepository->get($installer->getEntityTypeId('catalog_product'), $attribute);
-    if($attribute->getAttributeId()) {
-        $eavRepository->delete($attribute);
+    if($eavRepository->get($installer->getEntityTypeId('catalog_product'), $attribute)) {
+        $attribute = $eavRepository->get($installer->getEntityTypeId('catalog_product'), $attribute);
+        if($attribute->getAttributeId()) {
+            $eavRepository->delete($attribute);
+        }
     }
 }
 

@@ -32,4 +32,4 @@ foreach (['simple1'] as $sku) {
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 
-Resolver::getInstance()->requireDataFixture('Magento/Eav/_files/eav_attributes_with_custom_attribute_set_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/all_attributes_with_custom_attribute_set_rollback.php');
