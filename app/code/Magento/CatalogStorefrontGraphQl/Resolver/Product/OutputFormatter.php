@@ -29,6 +29,7 @@ class OutputFormatter
      * @return array
      * @throws GraphQlInputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __invoke(
         ProductsGetResultInterface $result,
@@ -50,8 +51,7 @@ class OutputFormatter
             $currentResult['description'] = ['html' => $currentResult['description']];
             $currentResult['short_description'] = ['html' => $currentResult['short_description']];
             $currentResult['gift_message_available'] = (int)$currentResult['gift_message_available'];
-            if (
-                isset($currentResult['only_x_left_in_stock'])
+            if (isset($currentResult['only_x_left_in_stock'])
                 && (string)$currentResult['only_x_left_in_stock'] == "0"
             ) {
                 $currentResult['only_x_left_in_stock'] = null;

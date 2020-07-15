@@ -57,24 +57,24 @@ class CatalogService implements CatalogServerInterface
     /**
      * @var DynamicAttributeValueInterfaceFactory
      */
-    private $dynamicAttributesFactory;
+    private $dynamicAttributeFactory;
 
     /**
      * @param ProductDataProvider $dataProvider
      * @param DataObjectHelper $dataObjectHelper
      * @param CategoryDataProvider $categoryDataProvider
-     * @param DynamicAttributeValueInterfaceFactory $dynamicAttributeValueFactory
+     * @param DynamicAttributeValueInterfaceFactory $dynamicAttributeFactory
      */
     public function __construct(
         ProductDataProvider $dataProvider,
         DataObjectHelper $dataObjectHelper,
         CategoryDataProvider $categoryDataProvider,
-        DynamicAttributeValueInterfaceFactory $dynamicAttributesFactory
+        DynamicAttributeValueInterfaceFactory $dynamicAttributeFactory
     ) {
         $this->dataProvider = $dataProvider;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->categoryDataProvider = $categoryDataProvider;
-        $this->dynamicAttributesFactory = $dynamicAttributesFactory;
+        $this->dynamicAttributeFactory = $dynamicAttributeFactory;
     }
 
     /**
@@ -171,6 +171,7 @@ class CatalogService implements CatalogServerInterface
      * @param ImportProductsRequestInterface $request
      * @return ImportProductsResponseInterface
      * phpcs:disable Generic.CodeAnalysis.EmptyStatement
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function importProducts(
         ImportProductsRequestInterface $request
@@ -186,6 +187,7 @@ class CatalogService implements CatalogServerInterface
      * @param ImportCategoriesRequestInterface $request
      * @return ImportCategoriesResponseInterface
      * phpcs:disable Generic.CodeAnalysis.EmptyStatement
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function importCategories(ImportCategoriesRequestInterface $request): ImportCategoriesResponseInterface
     {
@@ -338,7 +340,6 @@ class CatalogService implements CatalogServerInterface
         return $product;
     }
 
-
     /**
      * Set dynamic attributes (custom attributes created in admin) to product entity.
      *
@@ -361,7 +362,7 @@ class CatalogService implements CatalogServerInterface
                 continue;
             }
             /** @var \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface $dynamicAttribute */
-            $dynamicAttribute = $this->dynamicAttributesFactory->create();
+            $dynamicAttribute = $this->dynamicAttributeFactory->create();
             $dynamicAttribute->setCode((string)$attributeCode);
             $dynamicAttribute->setValue((string)$value);
             $dynamicAttributes[] = $dynamicAttribute;
