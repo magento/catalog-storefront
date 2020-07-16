@@ -197,7 +197,7 @@ class ExportTest extends WebapiAbstract
      * @dataProvider multiselectOptionsResult
      * @param $arrayOptionsExpected $this expected data
      */
-    public function testEavSwatchAttributes($arrayOptionsExpected)
+    public function testSwatchAttributes()
     {
         $this->_markTestAsRestOnly('SOAP will be covered in another test');
 
@@ -210,15 +210,14 @@ class ExportTest extends WebapiAbstract
         $this->createServiceInfo['rest']['resourcePath'] .= '?ids[0]=' . $product->getId();
         $result = $this->_webApiCall($this->createServiceInfo, []);
 
-        var_dump($result);
-//        $options = json_decode($result[0]['options'][0])->values;
+        $options = json_decode($result[0]['options'][0])->values;
 
-//        $arrayOptions = [];
-//        foreach ($options as $option) {
-//            $arrayOptions[] = $option->value;
-//        }
+        $arrayOptions = [];
+        foreach ($options as $option) {
+            $arrayOptions[] = $option->value;
+        }
 
-//        $this->assertEquals($arrayOptionsExpected, $arrayOptions);
+        $this->assertEquals($arrayOptionsExpected, $arrayOptions);
 
     }
 
