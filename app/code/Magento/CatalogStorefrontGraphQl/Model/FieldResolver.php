@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontGraphQl\Model;
 
+use GraphQL\Language\AST\InlineFragmentNode;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use GraphQL\Language\AST\NodeKind;
 
 /**
  * Resolve fields for query.
@@ -46,20 +48,15 @@ class FieldResolver
             }
 
             foreach ($node->selectionSet->selections as $selection) {
-                if ($selection instanceof \GraphQL\Language\AST\InlineFragmentNode) {
-                    continue;
-                }
-                if (null !== $requestedField && $selection->name->value !== $requestedField) {
-                    continue;
-                }
-
-                if (!isset($selection->selectionSet, $selection->selectionSet->selections)) {
-                    $fieldNames = $this->getFieldNames($selection, $fieldNames);
+                if ($selection instanceof InlineFragmentNode
+                    || !isset($selection->selectionSet, $selection->selectionSet->selections)
+                ) {
+                    $fieldNames = $this->getFieldNames($selection, $fieldNames, (array)$info->fragments);
                 } else {
-                    if (null !== $requestedField && $selection->name->value == $requestedField) {
-                        $fieldNames = $this->getFieldNames($selection, []);
-                    } else {
+                    if (null == $requestedField) {
                         $fieldNames[$selection->name->value] = $this->getFieldNames($selection, []);
+                    } elseif ($selection->name->value == $requestedField) {
+                        $fieldNames = $this->getFieldNames($selection, []);
                     }
                 }
             }
@@ -76,28 +73,34 @@ class FieldResolver
      *
      * @param \GraphQL\Language\AST\SelectionNode $selection
      * @param array $fieldNames
+     * @param \GraphQL\Language\AST\FragmentDefinitionNode[] $fragments
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function getFieldNames(\GraphQL\Language\AST\SelectionNode $selection, array $fieldNames): array
-    {
+    private function getFieldNames(
+        \GraphQL\Language\AST\SelectionNode $selection,
+        array $fieldNames,
+        $fragments = []
+    ): array {
         if (!isset($selection->selectionSet) && !isset($selection->selectionSet->selections)) {
-            if ($selection->kind === 'Field' && $selection->name->value) {
+            if ($selection->kind === NodeKind::FIELD && $selection->name->value) {
                 $fieldNames[] = $selection->name->value;
+            } elseif ($selection->kind === NodeKind::FRAGMENT_SPREAD && !empty($fragments)) {
+                $fieldNames = $this->addFragmentFields($fieldNames, $fragments);
             }
             return $fieldNames;
         }
 
         foreach ($selection->selectionSet->selections as $itemSelection) {
-            if ($itemSelection->kind === 'InlineFragment') {
+            if ($itemSelection->kind === NodeKind::INLINE_FRAGMENT) {
                 foreach ($itemSelection->selectionSet->selections as $inlineSelection) {
-                    if ($itemSelection->typeCondition->kind === 'NamedType') {
+                    if ($itemSelection->typeCondition->kind === NodeKind::NAMED_TYPE) {
                         $namedType = $itemSelection->typeCondition->name->value;
                         $fieldNames = $this->getNestedFields($fieldNames, $inlineSelection, $namedType);
                         continue;
                     }
 
-                    if ($inlineSelection->kind === 'InlineFragment') {
+                    if ($inlineSelection->kind === NodeKind::INLINE_FRAGMENT) {
                         continue;
                     }
                     $fieldNames = $this->getNestedFields($fieldNames, $inlineSelection);
@@ -107,6 +110,55 @@ class FieldResolver
 
             $fieldNames = $this->getNestedFields($fieldNames, $itemSelection);
         }
+
+        return $fieldNames;
+    }
+
+    /**
+     * Merge fields from fragment with fields in requested query.
+     *
+     * GraphQL query:
+     * ```
+     * {
+     *   categoryList(filters: {ids: {eq: "3"}}){
+     *     url_key
+     *     url_path
+     *     ...Cat
+     *   }
+     * }
+     *
+     * fragment Cat on CategoryTree {
+     *   id
+     *   name
+     * }
+     * ```
+     *
+     * Result of merge:
+     * ```
+     * [
+     *   'url_key',
+     *   'url_path',
+     *   'id',
+     *   'name'.
+     * ]
+     * ```
+     *
+     * @param string[] $fieldNames
+     * @param \GraphQL\Language\AST\FragmentDefinitionNode[] $fragments
+     * @return array
+     */
+    private function addFragmentFields(array $fieldNames, array $fragments): array
+    {
+        $fragmentFieldNames = [];
+        /** @var \GraphQL\Language\AST\FragmentDefinitionNode $fragment */
+        foreach ($fragments as $fragment) {
+            /** @var \GraphQL\Language\AST\FieldNode $itemSelection */
+            foreach ($fragment->selectionSet->selections as $itemSelection) {
+                $fragmentFieldNames []= $this->getNestedFields($fieldNames, $itemSelection);
+            }
+        }
+
+        $fieldNames = array_merge($fieldNames, ...$fragmentFieldNames);
 
         return $fieldNames;
     }
