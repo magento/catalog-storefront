@@ -106,6 +106,36 @@ class Category
     private $image;
 
     /**
+     * @var int
+     */
+    private $isAnchor;
+
+    /**
+     * @var string|null
+     */
+    private $displayMode;
+
+    /**
+     * @var string[]|null
+     */
+    private $availableSortBy;
+
+    /**
+     * @var string|null
+     */
+    private $metaTitle;
+
+    /**
+     * @var string|null
+     */
+    private $metaKeywords;
+
+    /**
+     * @var string|null
+     */
+    private $metaDescription;
+
+    /**
      * Get product ID
      *
      * @return int
@@ -478,5 +508,137 @@ class Category
     public function getImage(): ?string
     {
         return $this->image;
+    }
+
+    /**
+     * Get category is anchor
+     *
+     * @return int
+     */
+    public function getIsAnchor(): int
+    {
+        return $this->isAnchor;
+    }
+
+    /**
+     * Set category is anchor
+     *
+     * @param int $isAnchor
+     *
+     * @return void
+     */
+    public function setIsAnchor(int $isAnchor): void
+    {
+        $this->isAnchor = $isAnchor;
+    }
+
+    /**
+     * Get category display mode
+     *
+     * @return string|null
+     */
+    public function getDisplayMode(): ?string
+    {
+        return $this->displayMode;
+    }
+
+    /**
+     * Set category display mode
+     *
+     * @param string|null $displayMode
+     *
+     * @return void
+     */
+    public function setDisplayMode(?string $displayMode): void
+    {
+        $this->displayMode = $displayMode;
+    }
+
+    /**
+     * Get category available sort by options
+     *
+     * @return string[]|null
+     */
+    public function getAvailableSortBy(): ?array
+    {
+        return $this->availableSortBy;
+    }
+
+    /**
+     * Set category available sort by options
+     *
+     * @param string[]|null $availableSortBy
+     *
+     * @return void
+     */
+    public function setAvailableSortBy(?array $availableSortBy): void
+    {
+        $this->availableSortBy = $availableSortBy;
+    }
+
+    /**
+     * Get category meta title
+     *
+     * @return string|null
+     */
+    public function getMetaTitle(): ?string
+    {
+        return $this->metaTitle;
+    }
+
+    /**
+     * Set category meta title
+     *
+     * @param string|null $metaTitle
+     *
+     * @return void
+     */
+    public function setMetaTitle(?string $metaTitle): void
+    {
+        $this->metaTitle = $metaTitle;
+    }
+
+    /**
+     * Get category meta keywords
+     *
+     * @return string|null
+     */
+    public function getMetaKeywords(): ?string
+    {
+        return $this->metaKeywords;
+    }
+
+    /**
+     * Set category meta keywords
+     *
+     * @param string|null $metaKeywords
+     *
+     * @return void
+     */
+    public function setMetaKeywords(?string $metaKeywords): void
+    {
+        $this->metaKeywords = $metaKeywords;
+    }
+
+    /**
+     * Get category meta description
+     *
+     * @return string|null
+     */
+    public function getMetaDescription(): ?string
+    {
+        return $this->metaDescription;
+    }
+
+    /**
+     * Set category meta description
+     *
+     * @param string|null $metaDescription
+     *
+     * @return void
+     */
+    public function setMetaDescription(?string $metaDescription): void
+    {
+        $this->metaDescription = $metaDescription;
     }
 }
