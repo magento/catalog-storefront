@@ -106,6 +106,11 @@ class Category
     private $image;
 
     /**
+     * @var int
+     */
+    private $isActive;
+
+    /**
      * Get product ID
      *
      * @return int
@@ -478,5 +483,22 @@ class Category
     public function getImage(): ?string
     {
         return $this->image;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIsActive(): int
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * @param int $isActive
+     * @return void
+     */
+    public function setIsActive(int $isActive): void
+    {
+        $this->isActive = $isActive;
     }
 }
