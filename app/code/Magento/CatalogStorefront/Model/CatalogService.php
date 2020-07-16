@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefront\Model;
 
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
-use Magento\CatalogStorefrontApi\Api\Data\Breadcrumb;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\Category;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryInterface;
@@ -31,7 +30,7 @@ use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface;
-use Psr\Log\LoggerInterface;
+use Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterfaceFactory;
 
 /**
  * Class for retrieving catalog data
@@ -56,18 +55,26 @@ class CatalogService implements CatalogServerInterface
     private $categoryDataProvider;
 
     /**
+     * @var DynamicAttributeValueInterfaceFactory
+     */
+    private $dynamicAttributeFactory;
+
+    /**
      * @param ProductDataProvider $dataProvider
      * @param DataObjectHelper $dataObjectHelper
      * @param CategoryDataProvider $categoryDataProvider
+     * @param DynamicAttributeValueInterfaceFactory $dynamicAttributeFactory
      */
     public function __construct(
         ProductDataProvider $dataProvider,
         DataObjectHelper $dataObjectHelper,
-        CategoryDataProvider $categoryDataProvider
+        CategoryDataProvider $categoryDataProvider,
+        DynamicAttributeValueInterfaceFactory $dynamicAttributeFactory
     ) {
         $this->dataProvider = $dataProvider;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->categoryDataProvider = $categoryDataProvider;
+        $this->dynamicAttributeFactory = $dynamicAttributeFactory;
     }
 
     /**
@@ -164,6 +171,7 @@ class CatalogService implements CatalogServerInterface
      * @param ImportProductsRequestInterface $request
      * @return ImportProductsResponseInterface
      * phpcs:disable Generic.CodeAnalysis.EmptyStatement
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function importProducts(
         ImportProductsRequestInterface $request
@@ -179,6 +187,7 @@ class CatalogService implements CatalogServerInterface
      * @param ImportCategoriesRequestInterface $request
      * @return ImportCategoriesResponseInterface
      * phpcs:disable Generic.CodeAnalysis.EmptyStatement
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function importCategories(ImportCategoriesRequestInterface $request): ImportCategoriesResponseInterface
     {
@@ -325,6 +334,41 @@ class CatalogService implements CatalogServerInterface
         if ($product->getTypeId() == 'grouped') {
             $this->setGroupedItems($product, $item);
         }
+
+        $product = $this->setDynamicAttributes($item, $product);
+
+        return $product;
+    }
+
+    /**
+     * Set dynamic attributes (custom attributes created in admin) to product entity.
+     *
+     * @param array $item
+     * @param \Magento\CatalogStorefrontApi\Api\Data\Product $product
+     * @return \Magento\CatalogStorefrontApi\Api\Data\Product
+     */
+    private function setDynamicAttributes(
+        array $item,
+        \Magento\CatalogStorefrontApi\Api\Data\Product $product
+    ): \Magento\CatalogStorefrontApi\Api\Data\Product {
+
+        $dynamicAttributes = [];
+
+        foreach ($item as $attributeCode => $value) {
+            $parts = explode('_', $attributeCode);
+            $parts = array_map("ucfirst", $parts);
+            $getterMethodName = 'get' . implode('', $parts);
+            if (\method_exists($product, $getterMethodName)) {
+                continue;
+            }
+            /** @var \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface $dynamicAttribute */
+            $dynamicAttribute = $this->dynamicAttributeFactory->create();
+            $dynamicAttribute->setCode((string)$attributeCode);
+            $dynamicAttribute->setValue((string)$value);
+            $dynamicAttributes[] = $dynamicAttribute;
+        }
+
+        $product->setDynamicAttributes($dynamicAttributes);
 
         return $product;
     }
