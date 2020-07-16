@@ -19,13 +19,7 @@ class Variant extends AbstractModel implements VariantInterface
     private const PARENT_ID = 'parent_id';
     private const PRODUCT_ID = 'product_id';
     private const DEFAULT_QTY = 'default_qty';
-    private const QTY_MUTABILITY_TYPE = 'qty_mutability_type';
-    private const QTY_MUTABLE_TYPE = 'mutable';
-    private const QTY_IMMUTABLE_TYPE = 'immutable';
-    private const QTY_MUTABLE_TYPES = [
-        self::QTY_MUTABLE_TYPE,
-        self::QTY_IMMUTABLE_TYPE
-    ];
+    private const QTY_MUTABILITY = 'qty_mutability';
     private const OPTION_VALUE_IDS = 'option_value_ids';
     private const PRICE = 'price';
 
@@ -64,14 +58,9 @@ class Variant extends AbstractModel implements VariantInterface
     /**
      * @inheritDoc
      */
-    public function isQtyMutable(): bool
+    public function getQtyMutability(): bool
     {
-        $value = $this->getData(self::QTY_MUTABILITY_TYPE);
-        if (!isset(self::QTY_MUTABLE_TYPES[$value])){
-            throw \DomainException("Unsupported mutability type: " . $value);
-        }
-
-        return $value === self::QTY_MUTABLE_TYPE;
+        return $this->getData(self::QTY_MUTABILITY);
     }
 
     /**

@@ -35,7 +35,7 @@ interface VariantInterface
     /**
      * @return bool
      */
-    public function isQtyMutable(): bool;
+    public function getQtyMutability(): bool;
 
     /**
      * @return int[]
