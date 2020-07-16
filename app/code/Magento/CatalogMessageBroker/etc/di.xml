@@ -15,7 +15,9 @@
                 </item>
                 <item name="configurable_options" xsi:type="array">
                     <item name="class" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\ConfigurableOptions</item>
-                    <item name="types" xsi:type="string">configurable</item>
+                    <item name="types" xsi:type="array">
+                        <item name="configurable" xsi:type="string">configurable</item>
+                    </item>
                     <item name="recursive" xsi:type="boolean">true</item>
                 </item>
             </argument>
