@@ -56,7 +56,6 @@ class CategoriesQueueConsumer
                     $this->categoryPublisher->processMessage(json_encode($ids));
                 }
             } else {
-                $this->categoryFeedIndexer->executeList(array_unique($categoryIds));
                 $this->categoryPublisher->processMessage(json_encode(array_unique($categoryIds)));
             }
         }
