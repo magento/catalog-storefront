@@ -6,7 +6,6 @@
 
 namespace Magento\CatalogStorefrontConnector\Model;
 
-use Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer;
 use Magento\CatalogMessageBroker\Model\MessageBus\CategoriesConsumer as CategoryPublisher;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
@@ -27,23 +26,15 @@ class CategoriesQueueConsumer
     private $catalogEntityIdsProvider;
 
     /**
-     * @var CategoryFeedIndexer
-     */
-    private $categoryFeedIndexer;
-
-    /**
      * @param CategoryPublisher $categoryPublisher
      * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
-     * @param CategoryFeedIndexer $categoryFeedIndexer
      */
     public function __construct(
         CategoryPublisher $categoryPublisher,
-        CatalogEntityIdsProvider $catalogEntityIdsProvider,
-        CategoryFeedIndexer $categoryFeedIndexer
+        CatalogEntityIdsProvider $catalogEntityIdsProvider
     ) {
         $this->categoryPublisher = $categoryPublisher;
         $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
-        $this->categoryFeedIndexer = $categoryFeedIndexer;
     }
 
     /**
@@ -62,7 +53,6 @@ class CategoriesQueueConsumer
         foreach ($storeCategories as $storeId => $categoryIds) {
             if (empty($categoryIds)) {
                 foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $ids) {
-                    $this->categoryFeedIndexer->executeList($ids);
                     $this->categoryPublisher->processMessage(json_encode($ids));
                 }
             } else {
