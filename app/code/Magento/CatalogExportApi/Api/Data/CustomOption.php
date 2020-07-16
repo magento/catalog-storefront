@@ -46,7 +46,7 @@ class CustomOption
     /**
      * @var bool
      */
-    private $isRequired;
+    private $required;
 
     /**
      * @var string
@@ -185,24 +185,24 @@ class CustomOption
     }
 
     /**
-     * Get is required
+     * Get required
      *
      * @return bool|null
      */
-    public function getIsRequired(): ?bool
+    public function getRequired(): ?bool
     {
-        return $this->isRequired;
+        return $this->required;
     }
 
     /**
-     * Set is required
+     * Set required
      *
-     * @param bool|null $isRequired
+     * @param bool|null $required
      * @return void
      */
-    public function setIsRequired(?bool $isRequired): void
+    public function setRequired(?bool $required): void
     {
-        $this->isRequired = $isRequired;
+        $this->required = $required;
     }
 
     /**

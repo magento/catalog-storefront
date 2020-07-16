@@ -26,7 +26,7 @@ class EnteredOption
     /**
      * @var bool
      */
-    private $isRequired;
+    private $required;
 
     /**
      * @var string
@@ -158,25 +158,25 @@ class EnteredOption
     }
 
     /**
-     * Get isRequired
+     * Get required
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getIsRequired(): bool
+    public function getRequired(): bool
     {
-        return $this->isRequired;
+        return $this->required;
     }
 
     /**
-     * Set isRequired
+     * Set required
      *
-     * @param bool $isRequired
+     * @param bool $required
      * @return void
      */
-    public function setIsRequired($isRequired): void
+    public function setRequired($required): void
     {
-        $this->isRequired = $isRequired;
+        $this->required = $required;
     }
 
     /**
