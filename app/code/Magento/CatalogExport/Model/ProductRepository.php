@@ -88,6 +88,8 @@ class ProductRepository implements ProductRepositoryInterface
             return $products;
         }
 
+        // TODO: remove temporary solution after https://github.com/magento/catalog-storefront/issues/157
+        return $this->toSnakeCase($feedData['feed']);
         foreach ($feedData['feed'] as $feedItem) {
             $product = $this->productFactory->create();
             $feedItem['id'] = $feedItem['productId'];
@@ -99,6 +101,25 @@ class ProductRepository implements ProductRepositoryInterface
             $products[] = $product;
         }
         return $products;
+    }
+
+    /**
+     * @param array $product
+     * @return array
+     */
+    private function toSnakeCase(array $product)
+    {
+        foreach ($product as $key => $value) {
+            if (!\is_int($key)) {
+                unset($product[$key]);
+                $key = \Magento\Framework\Api\SimpleDataObjectConverter::camelCaseToSnakeCase($key);
+                $product[$key] = $value;
+            }
+            if (\is_array($value)) {
+                $product[$key] = $this->toSnakeCase($value);
+            }
+        }
+        return $product;
     }
 
     /**

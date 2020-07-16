@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Command;
 
+use Magento\CatalogExportApi\Api\ProductRepositoryInterface;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CategoryPublisher;
 use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
@@ -69,6 +70,10 @@ class Sync extends Command
      * @var ProductFeedIndexer
      */
     private $productFeedIndexer;
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
 
     /**
      * @param ProductPublisher $productPublisher
@@ -82,7 +87,8 @@ class Sync extends Command
         CategoryPublisher $categoryPublisher,
         StoreManagerInterface $storeManager,
         CatalogEntityIdsProvider $catalogEntityIdsProvider,
-        ProductFeedIndexer $productFeedIndexer
+        ProductFeedIndexer $productFeedIndexer,
+        ProductRepositoryInterface $productRepository
     ) {
         parent::__construct();
         $this->productPublisher = $productPublisher;
@@ -90,6 +96,7 @@ class Sync extends Command
         $this->storeManager = $storeManager;
         $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
         $this->productFeedIndexer = $productFeedIndexer;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -144,7 +151,8 @@ class Sync extends Command
                 $this->productFeedIndexer->executeFull();
                 $processedN = 0;
                 foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $productIds) {
-                    $this->productPublisher->publish($productIds, $storeId);
+                    $newApiProducts = $this->productRepository->get($productIds);
+                    $this->productPublisher->publish($productIds, $storeId, $newApiProducts);
                     $output->write('.');
                     $processedN += count($productIds);
                 }

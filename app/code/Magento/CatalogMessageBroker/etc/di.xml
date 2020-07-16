@@ -12,16 +12,6 @@
             <argument name="dataMappers" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\CustomOptions</item>
             </argument>
-            <argument name="fields" xsi:type="array">
-                <item name="id" xsi:type="string">id</item>
-                <item name="sku" xsi:type="string">sku</item>
-                <item name="name" xsi:type="string">name</item>
-                <item name="meta_description" xsi:type="string">meta_description</item>
-                <item name="meta_keyword" xsi:type="string">meta_keyword</item>
-                <item name="meta_title" xsi:type="string">meta_title</item>
-                <item name="created_at" xsi:type="string">created_at</item>
-                <item name="updated_at" xsi:type="string">updated_at</item>
-            </argument>
         </arguments>
     </type>
 </config>
