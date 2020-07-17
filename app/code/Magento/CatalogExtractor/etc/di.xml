@@ -6,14 +6,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-
     <!-- Data providers -->
     <preference for="Magento\CatalogExtractor\DataProvider\DataProviderInterface" type="Magento\CatalogExtractor\DataProvider\DataProvider"/>
-    <type name="Magento\CatalogExtractor\DataProvider\MediaGallery\ImageUrlResolver">
-        <arguments>
-            <argument name="imageHelper" xsi:type="object">\Magento\Catalog\Helper\Image\Proxy</argument>
-        </arguments>
-    </type>
+
     <type name="Magento\CatalogExtractor\DataProvider\DataProvider">
         <arguments>
             <argument name="defaultDataProvider" xsi:type="string">Magento\CatalogExtractor\DataProvider\EavAttributeProvider</argument>
@@ -30,9 +25,6 @@
     <type name="Magento\CatalogExtractor\DataProvider\Transformer">
         <arguments>
             <argument name="map" xsi:type="array">
-                <item name="image" xsi:type="string">Magento\CatalogExtractor\DataProvider\MediaGallery\ProductImageTransformer</item>
-                <item name="small_image" xsi:type="string">Magento\CatalogExtractor\DataProvider\MediaGallery\ProductImageTransformer</item>
-                <item name="thumbnail" xsi:type="string">Magento\CatalogExtractor\DataProvider\MediaGallery\ProductImageTransformer</item>
                 <item name="short_description" xsi:type="string">Magento\CatalogExtractor\DataProvider\Transformer\DescriptionTransformer</item>
                 <item name="description" xsi:type="string">Magento\CatalogExtractor\DataProvider\Transformer\DescriptionTransformer</item>
             </argument>

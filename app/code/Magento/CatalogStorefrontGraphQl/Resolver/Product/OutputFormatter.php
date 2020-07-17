@@ -69,6 +69,7 @@ class OutputFormatter
                 }
             }
             $currentResult['media_gallery'] = array_map(function (array $item) {
+                $item['media_type'] = empty($item['video_content']) ? 'image' : 'external-video';
                 $item['disabled'] = false;
                 return $item;
             }, $currentResult['media_gallery']);

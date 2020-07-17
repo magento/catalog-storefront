@@ -22,6 +22,10 @@
                 <item name="meta_title" xsi:type="string">meta_title</item>
                 <item name="created_at" xsi:type="string">created_at</item>
                 <item name="updated_at" xsi:type="string">updated_at</item>
+                <item name="image" xsi:type="string">image</item>
+                <item name="small_image" xsi:type="string">small_image</item>
+                <item name="thumbnail" xsi:type="string">thumbnail</item>
+                <item name="swatch_image" xsi:type="string">swatch_image</item>
             </argument>
         </arguments>
     </type>
