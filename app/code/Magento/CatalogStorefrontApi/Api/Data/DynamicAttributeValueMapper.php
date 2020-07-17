@@ -72,6 +72,10 @@ final class DynamicAttributeValueMapper
     */
     private function setByKey(DynamicAttributeValue $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "code":
                 $dto->setCode((string) $value);

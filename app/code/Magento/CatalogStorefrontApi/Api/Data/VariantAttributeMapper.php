@@ -72,6 +72,10 @@ final class VariantAttributeMapper
     */
     private function setByKey(VariantAttribute $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "label":
                 $dto->setLabel((string) $value);

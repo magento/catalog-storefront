@@ -72,6 +72,10 @@ final class ConfigurableOptionMapper
     */
     private function setByKey(ConfigurableOption $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "id":
                 $dto->setId((string) $value);

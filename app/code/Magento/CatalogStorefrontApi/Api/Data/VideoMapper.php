@@ -72,6 +72,10 @@ final class VideoMapper
     */
     private function setByKey(Video $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "video_provider":
                 $dto->setVideoProvider((string) $value);

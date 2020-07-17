@@ -72,6 +72,10 @@ final class GroupedItemProductInfoMapper
     */
     private function setByKey(GroupedItemProductInfo $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "sku":
                 $dto->setSku((string) $value);

@@ -72,6 +72,10 @@ final class BundleItemMapper
     */
     private function setByKey(BundleItem $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "option_id":
                 $dto->setOptionId((string) $value);

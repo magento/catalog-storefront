@@ -72,6 +72,10 @@ final class ImageMapper
     */
     private function setByKey(Image $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "url":
                 $dto->setUrl((string) $value);

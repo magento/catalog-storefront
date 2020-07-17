@@ -72,6 +72,10 @@ final class ProductsGetResultMapper
     */
     private function setByKey(ProductsGetResult $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "items":
                 $convertedArray = [];

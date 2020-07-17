@@ -72,6 +72,10 @@ final class ImportProductsRequestMapper
     */
     private function setByKey(ImportProductsRequest $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "products":
                 $convertedArray = [];

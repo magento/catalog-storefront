@@ -72,6 +72,10 @@ final class GroupedItemMapper
     */
     private function setByKey(GroupedItem $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "qty":
                 $dto->setQty((float) $value);

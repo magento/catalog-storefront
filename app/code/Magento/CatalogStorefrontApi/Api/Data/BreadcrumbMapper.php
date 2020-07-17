@@ -72,6 +72,10 @@ final class BreadcrumbMapper
     */
     private function setByKey(Breadcrumb $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "category_id":
                 $dto->setCategoryId((string) $value);

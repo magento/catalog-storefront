@@ -72,6 +72,10 @@ final class MediaGalleryItemMapper
     */
     private function setByKey(MediaGalleryItem $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "url":
                 $dto->setUrl((string) $value);

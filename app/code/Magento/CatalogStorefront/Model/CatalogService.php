@@ -492,7 +492,6 @@ class CatalogService implements CatalogServerInterface
         array $item,
         \Magento\CatalogStorefrontApi\Api\Data\Product $product
     ): \Magento\CatalogStorefrontApi\Api\Data\Product {
-
         $dynamicAttributes = [];
 
         foreach ($item as $attributeCode => $value) {

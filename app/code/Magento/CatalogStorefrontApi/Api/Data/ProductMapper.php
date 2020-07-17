@@ -72,6 +72,10 @@ final class ProductMapper
     */
     private function setByKey(Product $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "id":
                 $dto->setId((string) $value);

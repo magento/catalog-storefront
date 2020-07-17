@@ -72,6 +72,10 @@ final class KeyValueMapper
     */
     private function setByKey(KeyValue $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "key":
                 $dto->setKey((string) $value);

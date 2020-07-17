@@ -14,7 +14,6 @@ use Magento\Framework\App\State;
 use Psr\Log\LoggerInterface;
 use Magento\CatalogMessageBroker\Model\ProductDataProcessor;
 
-
 /**
  * Product publisher
  *
@@ -45,22 +44,26 @@ class ProductPublisher
      * @var LoggerInterface
      */
     private $logger;
+
     /**
      * @var CatalogServerInterface
      */
     private $catalogServer;
+
     /**
      * @var ImportProductsRequestInterfaceFactory
      */
     private $importProductsRequestInterfaceFactory;
+
     /**
      * @var ProductDataProcessor
      */
     private $productDataProcessor;
+
     /**
-     * @var DataObjectHelper
+     * @var \Magento\CatalogStorefrontApi\Api\Data\ProductMapper
      */
-    private $dataObjectHelper;
+    private $productMapper;
 
     /**
      * @param DataProviderInterface $productsDataProvider
@@ -70,6 +73,7 @@ class ProductPublisher
      * @param ImportProductsRequestInterfaceFactory $importProductsRequestInterfaceFactory
      * @param ProductDataProcessor $productDataProcessor
      * @param DataObjectHelper $dataObjectHelper
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ProductMapper $productMapper
      * @param int $batchSize
      */
     public function __construct(
@@ -79,7 +83,7 @@ class ProductPublisher
         CatalogServerInterface $catalogServer,
         ImportProductsRequestInterfaceFactory $importProductsRequestInterfaceFactory,
         ProductDataProcessor $productDataProcessor,
-        DataObjectHelper $dataObjectHelper,
+        \Magento\CatalogStorefrontApi\Api\Data\ProductMapper $productMapper,
         int $batchSize
     ) {
         $this->productsDataProvider = $productsDataProvider;
@@ -89,7 +93,7 @@ class ProductPublisher
         $this->catalogServer = $catalogServer;
         $this->importProductsRequestInterfaceFactory = $importProductsRequestInterfaceFactory;
         $this->productDataProcessor = $productDataProcessor;
-        $this->dataObjectHelper = $dataObjectHelper;
+        $this->productMapper = $productMapper;
     }
 
     /**
@@ -103,7 +107,6 @@ class ProductPublisher
      */
     public function publish(array $productIds, int $storeId, $overrideProducts = []): void
     {
-
         $this->state->emulateAreaCode(
             \Magento\Framework\App\Area::AREA_FRONTEND,
             function () use ($productIds, $storeId, $overrideProducts) {
@@ -147,24 +150,6 @@ class ProductPublisher
     }
 
     /**
-     * Recursively unset array elements equal to NULL.
-     *
-     * @param array $haystack
-     * @return void
-     */
-    private function unsetNullRecursively(&$haystack)
-    {
-        foreach ($haystack as $key => $value) {
-            if (is_array($value)) {
-                $this->unsetNullRecursively($haystack[$key]);
-            }
-            if ($haystack[$key] === null) {
-                unset($haystack[$key]);
-            }
-        }
-    }
-
-    /**
      * @param int $storeId
      * @param array $products
      * @param array $overrideProducts
@@ -177,17 +162,12 @@ class ProductPublisher
             $newApiProducts[$product['product_id']] = $product;
         }
 
-        $this->unsetNullRecursively($products);
         foreach ($products as &$product) {
             if (isset($newApiProducts[$product['entity_id']])) {
                 $product = $this->productDataProcessor->merge($newApiProducts[$product['entity_id']], $product);
             }
-            // TODO: add conversion to validate input data
-//            $product = $this->dataObjectHelper->populateWithArray(
-//                new \Magento\CatalogStorefrontApi\Api\Data\Product,
-//                $product,
-//                \Magento\CatalogStorefrontApi\Api\Data\ProductInterface::class
-//            );
+            // be sure, that data passed to Import API in the expected format
+            $product = $this->productMapper->setData($product)->build();
         }
         unset($product);
 

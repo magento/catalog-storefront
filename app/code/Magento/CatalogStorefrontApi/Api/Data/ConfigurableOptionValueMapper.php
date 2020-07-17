@@ -72,6 +72,10 @@ final class ConfigurableOptionValueMapper
     */
     private function setByKey(ConfigurableOptionValue $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "value_index":
                 $dto->setValueIndex((string) $value);

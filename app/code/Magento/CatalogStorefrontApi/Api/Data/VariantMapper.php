@@ -72,6 +72,10 @@ final class VariantMapper
     */
     private function setByKey(Variant $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "product":
                 $dto->setProduct((string) $value);

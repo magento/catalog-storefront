@@ -72,6 +72,10 @@ final class CategoriesGetRequestMapper
     */
     private function setByKey(CategoriesGetRequest $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "ids":
                 $dto->setIds((array) $value);

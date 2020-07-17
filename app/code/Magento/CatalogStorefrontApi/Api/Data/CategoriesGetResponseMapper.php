@@ -72,6 +72,10 @@ final class CategoriesGetResponseMapper
     */
     private function setByKey(CategoriesGetResponse $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "items":
                 $convertedArray = [];

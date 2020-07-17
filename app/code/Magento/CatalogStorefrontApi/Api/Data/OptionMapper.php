@@ -72,6 +72,10 @@ final class OptionMapper
     */
     private function setByKey(Option $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "option_id":
                 $dto->setOptionId((string) $value);

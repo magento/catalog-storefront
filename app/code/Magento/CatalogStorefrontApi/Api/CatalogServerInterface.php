@@ -38,6 +38,7 @@ interface CatalogServerInterface
      *
      * @param ImportProductsRequestInterface $request
      * @return ImportProductsResponseInterface
+     * @throws \Throwable
      */
     public function importProducts(ImportProductsRequestInterface $request): ImportProductsResponseInterface;
 
@@ -46,6 +47,7 @@ interface CatalogServerInterface
      *
      * @param ImportCategoriesRequestInterface $request
      * @return ImportCategoriesResponseInterface
+     * @throws \Throwable
      */
     public function importCategories(ImportCategoriesRequestInterface $request): ImportCategoriesResponseInterface;
 

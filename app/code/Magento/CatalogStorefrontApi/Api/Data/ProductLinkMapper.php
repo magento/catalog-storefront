@@ -72,6 +72,10 @@ final class ProductLinkMapper
     */
     private function setByKey(ProductLink $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "linked_product_sku":
                 $dto->setLinkedProductSku((string) $value);

@@ -72,6 +72,10 @@ final class ImportCategoriesResponseMapper
     */
     private function setByKey(ImportCategoriesResponse $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "status":
                 $dto->setStatus((bool) $value);

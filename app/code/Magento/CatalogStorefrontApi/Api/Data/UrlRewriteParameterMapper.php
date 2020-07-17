@@ -72,6 +72,10 @@ final class UrlRewriteParameterMapper
     */
     private function setByKey(UrlRewriteParameter $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "name":
                 $dto->setName((string) $value);

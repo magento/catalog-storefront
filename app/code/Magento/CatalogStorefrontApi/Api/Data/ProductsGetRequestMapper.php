@@ -72,6 +72,10 @@ final class ProductsGetRequestMapper
     */
     private function setByKey(ProductsGetRequest $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "ids":
                 $dto->setIds((array) $value);

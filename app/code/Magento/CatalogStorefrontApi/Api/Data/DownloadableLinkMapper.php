@@ -72,6 +72,10 @@ final class DownloadableLinkMapper
     */
     private function setByKey(DownloadableLink $dto, string $key, $value): void
     {
+        if ($value === null) {
+            return;
+        }
+
         switch ($key) {
             case "sample_url":
                 $dto->setSampleUrl((string) $value);
