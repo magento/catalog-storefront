@@ -76,24 +76,6 @@ class ExportTest extends WebapiAbstract
         ];
     }
 
-    /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_custom_attribute.php
-     */
-    public function testExport()
-    {
-        $this->_markTestAsRestOnly('SOAP will be covered in another test');
-
-        $this->reindex();
-
-        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-        $product = $productRepository->get('simple');
-
-        $this->createServiceInfo['rest']['resourcePath'] .= '?ids[0]=' . $product->getId();
-        $result = $this->_webApiCall($this->createServiceInfo, []);
-        $this->assertProductsEquals($this->productsFeed->getFeedByIds([$product->getId()])['feed'], $result);
-    }
-
     private function assertProductsEquals(array $expected, array $actual)
     {
         $n = sizeof($expected);
@@ -160,8 +142,10 @@ class ExportTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/simple_products_all_attributes_with_custom_attribute_set.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_date_attribute.php
+     * @magentoApiDataFixture Magento/Swatches/_files/configurable_product_two_attributes.php
      * @dataProvider attributesResult
-     * @param $expectedAttributes $this data expected
+     * @param [] $expectedAttributes
      */
     public function testAllAttributes($expectedAttributes)
     {
@@ -172,53 +156,33 @@ class ExportTest extends WebapiAbstract
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $product = $productRepository->get('simple1');
+        $simpleProductWithDate = $productRepository->get('simple_with_date');
+        $configurableProductWithSwatches = $productRepository->get('configurable');
 
-        $this->createServiceInfo['rest']['resourcePath'] .= '?ids[0]=' . $product->getId();
-        $result = $this->_webApiCall($this->createServiceInfo, []);
+        $this->createServiceInfo['rest']['resourcePath'] .= '?ids[0]=' . $product->getId() .
+            '&ids[1]=' . $simpleProductWithDate->getId() .
+            '&ids[2]=' . $configurableProductWithSwatches->getId();
 
-        //todo:: weee attribute is not coming through web api
-        //todo:: date attribute is not coming through web api
-        //todo:: datetime attribute is not coming through web api
-        if(isset($result[0]['attributes'])) {
+        $results = $this->_webApiCall($this->createServiceInfo, []);
+        $attributesWithoutValueId = [];
 
-            $attributes = $result[0]['attributes'];
-            $attributesWithoutValueId = [];
-            foreach ($attributes as $attribute) {
-                unset($attribute['value'][0]['id']); // unset id as it generates dynamically,
-                $attributesWithoutValueId[] = $attribute;
+        foreach ($results as $result) {
+            if(isset($result['attributes'])) {
+
+                $attributes = $result['attributes'];
+                foreach ($attributes as $attribute) {
+                    unset($attribute['value'][0]['id']); // unset id as it generates dynamically,
+                    $attributesWithoutValueId[] = $attribute;
+                }
             }
 
-            $this->assertEquals($expectedAttributes, $attributesWithoutValueId);
-        }
-    }
+            if(isset($result['options'])) {
+                $attributesWithoutValueId[] = $result['options'][0]['values'];
 
-    /**
-     * @magentoApiDataFixture Magento/Swatches/_files/configurable_product_two_attributes.php
-     * @dataProvider multiselectOptionsResult
-     * @param $arrayOptionsExpected $this expected data
-     */
-    public function testSwatchAttributes()
-    {
-        $this->_markTestAsRestOnly('SOAP will be covered in another test');
-
-        $this->reindex();
-
-        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-        $product = $productRepository->get('configurable');
-
-        $this->createServiceInfo['rest']['resourcePath'] .= '?ids[0]=' . $product->getId();
-        $result = $this->_webApiCall($this->createServiceInfo, []);
-
-        $options = json_decode($result[0]['options'][0])->values;
-
-        $arrayOptions = [];
-        foreach ($options as $option) {
-            $arrayOptions[] = $option->value;
+            }
         }
 
-        $this->assertEquals($arrayOptionsExpected, $arrayOptions);
-
+        $this->assertEquals($expectedAttributes, $attributesWithoutValueId);
     }
 
     /**
@@ -229,17 +193,8 @@ class ExportTest extends WebapiAbstract
     public function attributesResult()
     {
         return [
-            'data' => [
+            'attribute_results_export' => [
                 [
-                    [
-                        'attribute_code' => 'multiselect_attribute',
-                        'type'  => 'select',
-                        'value' => [
-                            [
-                                'value' => 'Option 1',
-                            ]
-                        ]
-                    ],
                     [
                         'attribute_code' => 'boolean_attribute',
                         'type'  => 'boolean',
@@ -259,7 +214,16 @@ class ExportTest extends WebapiAbstract
                         ]
                     ],
                     [
-                        'attribute_code' => 'price_attribute',
+                        'attribute_code' => 'multiselect_attribute',
+                        'type'  => 'multiselect',
+                        'value' => [
+                            [
+                                'value' => 'Option 1',
+                            ]
+                        ]
+                    ],
+                    [
+                        'attribute_code' => 'decimal_attribute',
                         'type'  => 'price',
                         'value' => [
                             [
@@ -268,52 +232,45 @@ class ExportTest extends WebapiAbstract
                         ]
                     ],
                     [
-                        'attribute_code' => 'text_attribute',
-                        'type'  => 'text',
-                        'value' => [
-                            [
-                                'value' => 'text Attribute test'
-                            ]
-                        ]
-                    ],
-                    [
-                        'attribute_code' => 'text_area_attribute',
-                        'type'  => 'textarea',
-                        'value' => [
-                            [
-                                'value' => 'text Area Attribute test',
-                            ]
-                        ]
-                    ],
-                    [
                         'attribute_code' => 'text_editor_attribute',
-                        'type'  => 'texteditor',
+                        'type'  => 'textarea',
                         'value' => [
                             [
                                 'value' => 'text Editor Attribute test',
                             ]
                         ]
                     ],
+                    [
+                        'attribute_code' => 'date_attribute',
+                        'type'  => 'date',
+                        'value' => [
+                            [
+                                'value' => date('Y-m-d 00:00:00'),
+                            ]
+                        ]
+                    ],
+                    [
+                        [
+                            'id' => 0,
+                            'value' => 'Option 3',
+                            'price' => NULL,
+                            'sku'   => NULL
+                        ],
+                        [
+                            'id' => 0,
+                            'value' => 'Option 1',
+                            'price' =>  NULL,
+                            'sku'   =>  NULL
+                        ],
+                        [
+                            'id' => 0,
+                            'value' => 'Option 2',
+                            'price' => NULL,
+                            'sku'   => NULL
+                        ],
+                    ],
                 ],
             ]
-        ];
-    }
-
-    /**
-     * Data Provider with Multiselect Options
-     *
-     * @return array
-     */
-    public function multiselectOptionsResult()
-    {
-        return [
-            'data' => [
-                'options' => [
-                    'Option 3',
-                    'Option 1',
-                    'Option 2'
-                ]
-            ],
         ];
     }
 }
