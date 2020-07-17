@@ -108,6 +108,10 @@ class ProductDataProcessor
             if (isset($product[$nameInExport])) {
                 $importData[$nameInImport] = $product[$nameInExport];
             }
+
+            if (isset($oldExportDataProduct[$nameInExport])) {
+                unset($oldExportDataProduct[$nameInExport]);
+            }
         }
 
         /** @var DataMapperInterface $dataMapper */
