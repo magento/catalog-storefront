@@ -73,27 +73,28 @@ class CategoriesConsumer extends OldConsumer
      */
     public function processMessage(string $ids)
     {
-        $ids = json_decode($ids, true);
-        $dataPerType = [];
-        $categories = $this->fetchCategories->execute($ids);
-
-        // @todo eliminate store manager
-        $stores = $this->storeManager->getStores(true);
-        $storesToIds = [];
-        foreach ($stores as $store) {
-            $storesToIds[$store->getCode()] = $store->getId();
-        }
-
-        foreach ($categories as $category) {
-            //workaround for tests
-            $storeId = $storesToIds[$category['store_view_code']] ?? 1;
-            $dataPerType['category'][$storeId][self::SAVE][] = $category;
-        }
-
         try {
+            //For test purposes
+            $ids = json_decode($ids, true);
+            $dataPerType = [];
+            $categories = $this->fetchCategories->execute($ids);
+
+            // @todo eliminate store manager
+            $stores = $this->storeManager->getStores(true);
+            $storesToIds = [];
+            foreach ($stores as $store) {
+                $storesToIds[$store->getCode()] = $store->getId();
+            }
+
+            foreach ($categories as $category) {
+                //workaround for tests
+                $storeId = $storesToIds[$category['store_view_code']] ?? 1;
+                $dataPerType['category'][$storeId][self::SAVE][] = $category;
+            }
+
             $this->saveToStorage($dataPerType);
         } catch (\Throwable $e) {
-            $this->logger->critical($e);
+            throw $e;
         }
     }
 }
