@@ -32,10 +32,7 @@ foreach (['simple1'] as $sku) {
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 
-//Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/all_attributes_with_custom_attribute_set_rollback.php');
 Resolver::getInstance()->requireDataFixture('Magento/Eav/_files/product_texteditor_attribute_rollback.php');
-//Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_text_attribute_rollback.php');
 Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/multiselect_attribute_rollback.php');
 Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_boolean_attribute_rollback.php');
 Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_decimal_attribute_rollback.php');
-

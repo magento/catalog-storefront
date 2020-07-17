@@ -12,7 +12,6 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $eavConfig = Bootstrap::getObjectManager()->get(Config::class);
-//Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/all_attributes_with_custom_attribute_set.php');
 Resolver::getInstance()->requireDataFixture('Magento/Eav/_files/product_texteditor_attribute.php');
 Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/multiselect_attribute.php');
 Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_boolean_attribute.php');

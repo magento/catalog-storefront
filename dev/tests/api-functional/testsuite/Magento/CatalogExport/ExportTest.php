@@ -178,7 +178,6 @@ class ExportTest extends WebapiAbstract
 
             if(isset($result['options'])) {
                 $attributesWithoutValueId[] = $result['options'][0]['values'];
-
             }
         }
 
