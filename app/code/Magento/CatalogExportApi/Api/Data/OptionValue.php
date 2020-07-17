@@ -1,0 +1,164 @@
+<?php
+
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ *
+ * Generated from et_schema.xml. DO NOT EDIT!”
+ */
+
+declare(strict_types=1);
+
+namespace Magento\CatalogExportApi\Api\Data;
+
+/**
+ * OptionValue entity
+ *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ */
+class OptionValue
+{
+    /** @var int */
+    private $id;
+
+    /** @var \Magento\CatalogExportApi\Api\Data\ProductPrice[]|null */
+    private $price;
+
+    /** @var string */
+    private $priceType;
+
+    /** @var string */
+    private $value;
+
+    /** @var int */
+    private $sortOrder;
+
+    /** @var string */
+    private $sku;
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set id
+     *
+     * @param int $id
+     * @return void
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * Get price
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\ProductPrice[]|null
+     */
+    public function getPrice(): ?array
+    {
+        return $this->price;
+    }
+
+    /**
+     * Set price
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\ProductPrice[] $price
+     * @return void
+     */
+    public function setPrice(array $price = null): void
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * Get price type
+     *
+     * @return string
+     */
+    public function getPriceType(): ?string
+    {
+        return $this->priceType;
+    }
+
+    /**
+     * Set price type
+     *
+     * @param string $priceType
+     * @return void
+     */
+    public function setPriceType(string $priceType): void
+    {
+        $this->priceType = $priceType;
+    }
+
+    /**
+     * Get value
+     *
+     * @return string
+     */
+    public function getValue(): ?string
+    {
+        return $this->value;
+    }
+
+    /**
+     * Set value
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setValue(string $value): void
+    {
+        $this->value = $value;
+    }
+
+    /**
+     * Get sort order
+     *
+     * @return int
+     */
+    public function getSortOrder(): ?int
+    {
+        return $this->sortOrder;
+    }
+
+    /**
+     * Set sort order
+     *
+     * @param int $sortOrder
+     * @return void
+     */
+    public function setSortOrder(int $sortOrder): void
+    {
+        $this->sortOrder = $sortOrder;
+    }
+
+    /**
+     * Get sku
+     *
+     * @return string
+     */
+    public function getSku(): ?string
+    {
+        return $this->sku;
+    }
+
+    /**
+     * Set sku
+     *
+     * @param string $sku
+     * @return void
+     */
+    public function setSku(string $sku): void
+    {
+        $this->sku = $sku;
+    }
+}

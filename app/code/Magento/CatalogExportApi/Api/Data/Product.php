@@ -1,0 +1,1052 @@
+<?php
+
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ *
+ * Generated from et_schema.xml. DO NOT EDIT!”
+ */
+
+declare(strict_types=1);
+
+namespace Magento\CatalogExportApi\Api\Data;
+
+/**
+ * Product entity
+ *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ */
+class Product
+{
+    /** @var int */
+    private $sku;
+
+    /** @var \Magento\CatalogExportApi\Api\Data\ParentProduct[]|null */
+    private $parents;
+
+    /** @var string */
+    private $storeViewCode;
+
+    /** @var string */
+    private $storeCode;
+
+    /** @var string */
+    private $websiteCode;
+
+    /** @var string */
+    private $name;
+
+    /** @var int */
+    private $productId;
+
+    /** @var string */
+    private $type;
+
+    /** @var string */
+    private $productType;
+
+    /** @var string */
+    private $shortDescription;
+
+    /** @var string */
+    private $description;
+
+    /** @var \Magento\CatalogExportApi\Api\Data\Image[]|null */
+    private $image;
+
+    /** @var bool */
+    private $linksExist;
+
+    /** @var bool */
+    private $linksPurchasedSeparately;
+
+    /** @var string */
+    private $linksTitle;
+
+    /** @var string */
+    private $metaDescription;
+
+    /** @var string */
+    private $metaKeyword;
+
+    /** @var string */
+    private $metaTitle;
+
+    /** @var string */
+    private $samplesTitle;
+
+    /** @var \Magento\CatalogExportApi\Api\Data\Image[]|null */
+    private $smallImage;
+
+    /** @var string */
+    private $status;
+
+    /** @var \Magento\CatalogExportApi\Api\Data\Image[]|null */
+    private $swatchImage;
+
+    /** @var string */
+    private $taxClassId;
+
+    /** @var \Magento\CatalogExportApi\Api\Data\Image[]|null */
+    private $thumbnail;
+
+    /** @var string */
+    private $createdAt;
+
+    /** @var string */
+    private $updatedAt;
+
+    /** @var string */
+    private $modifiedAt;
+
+    /** @var string */
+    private $urlKey;
+
+    /** @var string */
+    private $visibility;
+
+    /** @var float */
+    private $weight;
+
+    /** @var string */
+    private $weightUnit;
+
+    /** @var string */
+    private $weightType;
+
+    /** @var string */
+    private $currency;
+
+    /** @var \Magento\CatalogExportApi\Api\Data\TierPrice[]|null */
+    private $tierPrice;
+
+    /** @var string */
+    private $deletedAt;
+
+    /** @var bool */
+    private $displayable;
+
+    /** @var bool */
+    private $buyable;
+
+    /** @var \Magento\CatalogExportApi\Api\Data\Attribute[]|null */
+    private $attributes;
+
+    /** @var string */
+    private $categories;
+
+    /** @var \Magento\CatalogExportApi\Api\Data\PriceRange[]|null */
+    private $prices;
+
+    /** @var \Magento\CatalogExportApi\Api\Data\Inventory[]|null */
+    private $inventory;
+
+    /** @var \Magento\CatalogExportApi\Api\Data\Option[]|null */
+    private $options;
+
+    /** @var \Magento\CatalogExportApi\Api\Data\EnteredOption[]|null */
+    private $enteredOptions;
+
+    /**
+     * Get sku
+     *
+     * @return int
+     */
+    public function getSku(): ?int
+    {
+        return $this->sku;
+    }
+
+    /**
+     * Set sku
+     *
+     * @param int $sku
+     * @return void
+     */
+    public function setSku(int $sku): void
+    {
+        $this->sku = $sku;
+    }
+
+    /**
+     * Get parents
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\ParentProduct[]|null
+     */
+    public function getParents(): ?array
+    {
+        return $this->parents;
+    }
+
+    /**
+     * Set parents
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\ParentProduct[] $parents
+     * @return void
+     */
+    public function setParents(array $parents = null): void
+    {
+        $this->parents = $parents;
+    }
+
+    /**
+     * Get store view code
+     *
+     * @return string
+     */
+    public function getStoreViewCode(): ?string
+    {
+        return $this->storeViewCode;
+    }
+
+    /**
+     * Set store view code
+     *
+     * @param string $storeViewCode
+     * @return void
+     */
+    public function setStoreViewCode(string $storeViewCode): void
+    {
+        $this->storeViewCode = $storeViewCode;
+    }
+
+    /**
+     * Get store code
+     *
+     * @return string
+     */
+    public function getStoreCode(): string
+    {
+        return $this->storeCode;
+    }
+
+    /**
+     * Set store code
+     *
+     * @param string $storeCode
+     * @return void
+     */
+    public function setStoreCode(string $storeCode): void
+    {
+        $this->storeCode = $storeCode;
+    }
+
+    /**
+     * Get website code
+     *
+     * @return string
+     */
+    public function getWebsiteCode(): ?string
+    {
+        return $this->websiteCode;
+    }
+
+    /**
+     * Set website code
+     *
+     * @param string $websiteCode
+     * @return void
+     */
+    public function setWebsiteCode(string $websiteCode): void
+    {
+        $this->websiteCode = $websiteCode;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return void
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * Get product id
+     *
+     * @return int
+     */
+    public function getProductId(): ?int
+    {
+        return $this->productId;
+    }
+
+    /**
+     * Set product id
+     *
+     * @param int $productId
+     * @return void
+     */
+    public function setProductId(int $productId): void
+    {
+        $this->productId = $productId;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return void
+     */
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * Get product type
+     *
+     * @return string
+     */
+    public function getProductType(): ?string
+    {
+        return $this->productType;
+    }
+
+    /**
+     * Set product type
+     *
+     * @param string $productType
+     * @return void
+     */
+    public function setProductType(string $productType): void
+    {
+        $this->productType = $productType;
+    }
+
+    /**
+     * Get short description
+     *
+     * @return string
+     */
+    public function getShortDescription(): ?string
+    {
+        return $this->shortDescription;
+    }
+
+    /**
+     * Set short description
+     *
+     * @param string $shortDescription
+     * @return void
+     */
+    public function setShortDescription(string $shortDescription): void
+    {
+        $this->shortDescription = $shortDescription;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return void
+     */
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * Get image
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\Image[]|null
+     */
+    public function getImage(): ?array
+    {
+        return $this->image;
+    }
+
+    /**
+     * Set image
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\Image[] $image
+     * @return void
+     */
+    public function setImage(array $image = null): void
+    {
+        $this->image = $image;
+    }
+
+    /**
+     * Get links exist
+     *
+     * @return bool
+     */
+    public function getLinksExist(): ?bool
+    {
+        return $this->linksExist;
+    }
+
+    /**
+     * Set links exist
+     *
+     * @param bool $linksExist
+     * @return void
+     */
+    public function setLinksExist(bool $linksExist): void
+    {
+        $this->linksExist = $linksExist;
+    }
+
+    /**
+     * Get links purchased separately
+     *
+     * @return bool
+     */
+    public function getLinksPurchasedSeparately(): ?bool
+    {
+        return $this->linksPurchasedSeparately;
+    }
+
+    /**
+     * Set links purchased separately
+     *
+     * @param bool $linksPurchasedSeparately
+     * @return void
+     */
+    public function setLinksPurchasedSeparately(bool $linksPurchasedSeparately): void
+    {
+        $this->linksPurchasedSeparately = $linksPurchasedSeparately;
+    }
+
+    /**
+     * Get links title
+     *
+     * @return string
+     */
+    public function getLinksTitle(): ?string
+    {
+        return $this->linksTitle;
+    }
+
+    /**
+     * Set links title
+     *
+     * @param string $linksTitle
+     * @return void
+     */
+    public function setLinksTitle(string $linksTitle): void
+    {
+        $this->linksTitle = $linksTitle;
+    }
+
+    /**
+     * Get meta description
+     *
+     * @return string
+     */
+    public function getMetaDescription(): ?string
+    {
+        return $this->metaDescription;
+    }
+
+    /**
+     * Set meta description
+     *
+     * @param string $metaDescription
+     * @return void
+     */
+    public function setMetaDescription(string $metaDescription): void
+    {
+        $this->metaDescription = $metaDescription;
+    }
+
+    /**
+     * Get meta keyword
+     *
+     * @return string
+     */
+    public function getMetaKeyword(): ?string
+    {
+        return $this->metaKeyword;
+    }
+
+    /**
+     * Set meta keyword
+     *
+     * @param string $metaKeyword
+     * @return void
+     */
+    public function setMetaKeyword(string $metaKeyword): void
+    {
+        $this->metaKeyword = $metaKeyword;
+    }
+
+    /**
+     * Get meta title
+     *
+     * @return string
+     */
+    public function getMetaTitle(): ?string
+    {
+        return $this->metaTitle;
+    }
+
+    /**
+     * Set meta title
+     *
+     * @param string $metaTitle
+     * @return void
+     */
+    public function setMetaTitle(string $metaTitle): void
+    {
+        $this->metaTitle = $metaTitle;
+    }
+
+    /**
+     * Get samples title
+     *
+     * @return string
+     */
+    public function getSamplesTitle(): ?string
+    {
+        return $this->samplesTitle;
+    }
+
+    /**
+     * Set samples title
+     *
+     * @param string $samplesTitle
+     * @return void
+     */
+    public function setSamplesTitle(string $samplesTitle): void
+    {
+        $this->samplesTitle = $samplesTitle;
+    }
+
+    /**
+     * Get small image
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\Image[]|null
+     */
+    public function getSmallImage(): ?array
+    {
+        return $this->smallImage;
+    }
+
+    /**
+     * Set small image
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\Image[] $smallImage
+     * @return void
+     */
+    public function setSmallImage(array $smallImage = null): void
+    {
+        $this->smallImage = $smallImage;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     * @return void
+     */
+    public function setStatus(string $status): void
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * Get swatch image
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\Image[]|null
+     */
+    public function getSwatchImage(): ?array
+    {
+        return $this->swatchImage;
+    }
+
+    /**
+     * Set swatch image
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\Image[] $swatchImage
+     * @return void
+     */
+    public function setSwatchImage(array $swatchImage = null): void
+    {
+        $this->swatchImage = $swatchImage;
+    }
+
+    /**
+     * Get tax class id
+     *
+     * @return string
+     */
+    public function getTaxClassId(): ?string
+    {
+        return $this->taxClassId;
+    }
+
+    /**
+     * Set tax class id
+     *
+     * @param string $taxClassId
+     * @return void
+     */
+    public function setTaxClassId(string $taxClassId): void
+    {
+        $this->taxClassId = $taxClassId;
+    }
+
+    /**
+     * Get thumbnail
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\Image[]|null
+     */
+    public function getThumbnail(): ?array
+    {
+        return $this->thumbnail;
+    }
+
+    /**
+     * Set thumbnail
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\Image[] $thumbnail
+     * @return void
+     */
+    public function setThumbnail(array $thumbnail = null): void
+    {
+        $this->thumbnail = $thumbnail;
+    }
+
+    /**
+     * Get created at
+     *
+     * @return string
+     */
+    public function getCreatedAt(): ?string
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set created at
+     *
+     * @param string $createdAt
+     * @return void
+     */
+    public function setCreatedAt(string $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * Get updated at
+     *
+     * @return string
+     */
+    public function getUpdatedAt(): ?string
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set updated at
+     *
+     * @param string $updatedAt
+     * @return void
+     */
+    public function setUpdatedAt(string $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * Get modified at
+     *
+     * @return string
+     */
+    public function getModifiedAt(): ?string
+    {
+        return $this->modifiedAt;
+    }
+
+    /**
+     * Set modified at
+     *
+     * @param string $modifiedAt
+     * @return void
+     */
+    public function setModifiedAt(string $modifiedAt): void
+    {
+        $this->modifiedAt = $modifiedAt;
+    }
+
+    /**
+     * Get url key
+     *
+     * @return string
+     */
+    public function getUrlKey(): ?string
+    {
+        return $this->urlKey;
+    }
+
+    /**
+     * Set url key
+     *
+     * @param string $urlKey
+     * @return void
+     */
+    public function setUrlKey(string $urlKey): void
+    {
+        $this->urlKey = $urlKey;
+    }
+
+    /**
+     * Get visibility
+     *
+     * @return string
+     */
+    public function getVisibility(): ?string
+    {
+        return $this->visibility;
+    }
+
+    /**
+     * Set visibility
+     *
+     * @param string $visibility
+     * @return void
+     */
+    public function setVisibility(string $visibility): void
+    {
+        $this->visibility = $visibility;
+    }
+
+    /**
+     * Get weight
+     *
+     * @return float
+     */
+    public function getWeight(): ?float
+    {
+        return $this->weight;
+    }
+
+    /**
+     * Set weight
+     *
+     * @param float $weight
+     * @return void
+     */
+    public function setWeight(float $weight): void
+    {
+        $this->weight = $weight;
+    }
+
+    /**
+     * Get weight unit
+     *
+     * @return string
+     */
+    public function getWeightUnit(): ?string
+    {
+        return $this->weightUnit;
+    }
+
+    /**
+     * Set weight unit
+     *
+     * @param string $weightUnit
+     * @return void
+     */
+    public function setWeightUnit(string $weightUnit): void
+    {
+        $this->weightUnit = $weightUnit;
+    }
+
+    /**
+     * Get weight type
+     *
+     * @return string
+     */
+    public function getWeightType(): ?string
+    {
+        return $this->weightType;
+    }
+
+    /**
+     * Set weight type
+     *
+     * @param string $weightType
+     * @return void
+     */
+    public function setWeightType(string $weightType): void
+    {
+        $this->weightType = $weightType;
+    }
+
+    /**
+     * Get currency
+     *
+     * @return string
+     */
+    public function getCurrency(): ?string
+    {
+        return $this->currency;
+    }
+
+    /**
+     * Set currency
+     *
+     * @param string $currency
+     * @return void
+     */
+    public function setCurrency(string $currency): void
+    {
+        $this->currency = $currency;
+    }
+
+    /**
+     * Get tier price
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\TierPrice[]|null
+     */
+    public function getTierPrice(): ?array
+    {
+        return $this->tierPrice;
+    }
+
+    /**
+     * Set tier price
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\TierPrice[] $tierPrice
+     * @return void
+     */
+    public function setTierPrice(array $tierPrice = null): void
+    {
+        $this->tierPrice = $tierPrice;
+    }
+
+    /**
+     * Get deleted at
+     *
+     * @return string
+     */
+    public function getDeletedAt(): ?string
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * Set deleted at
+     *
+     * @param string $deletedAt
+     * @return void
+     */
+    public function setDeletedAt(string $deletedAt): void
+    {
+        $this->deletedAt = $deletedAt;
+    }
+
+    /**
+     * Get displayable
+     *
+     * @return bool
+     */
+    public function getDisplayable(): ?bool
+    {
+        return $this->displayable;
+    }
+
+    /**
+     * Set displayable
+     *
+     * @param bool $displayable
+     * @return void
+     */
+    public function setDisplayable(bool $displayable): void
+    {
+        $this->displayable = $displayable;
+    }
+
+    /**
+     * Get buyable
+     *
+     * @return bool
+     */
+    public function getBuyable(): ?bool
+    {
+        return $this->buyable;
+    }
+
+    /**
+     * Set buyable
+     *
+     * @param bool $buyable
+     * @return void
+     */
+    public function setBuyable(bool $buyable): void
+    {
+        $this->buyable = $buyable;
+    }
+
+    /**
+     * Get attributes
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\Attribute[]|null
+     */
+    public function getAttributes(): ?array
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * Set attributes
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\Attribute[] $attributes
+     * @return void
+     */
+    public function setAttributes(array $attributes = null): void
+    {
+        $this->attributes = $attributes;
+    }
+
+    /**
+     * Get categories
+     *
+     * @return string
+     */
+    public function getCategories(): ?string
+    {
+        return $this->categories;
+    }
+
+    /**
+     * Set categories
+     *
+     * @param string $categories
+     * @return void
+     */
+    public function setCategories(string $categories): void
+    {
+        $this->categories = $categories;
+    }
+
+    /**
+     * Get prices
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\PriceRange[]|null
+     */
+    public function getPrices(): ?array
+    {
+        return $this->prices;
+    }
+
+    /**
+     * Set prices
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\PriceRange[] $prices
+     * @return void
+     */
+    public function setPrices(array $prices = null): void
+    {
+        $this->prices = $prices;
+    }
+
+    /**
+     * Get inventory
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\Inventory[]|null
+     */
+    public function getInventory(): ?array
+    {
+        return $this->inventory;
+    }
+
+    /**
+     * Set inventory
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\Inventory[] $inventory
+     * @return void
+     */
+    public function setInventory(array $inventory = null): void
+    {
+        $this->inventory = $inventory;
+    }
+
+    /**
+     * Get options
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\Option[]|null
+     */
+    public function getOptions(): ?array
+    {
+        return $this->options;
+    }
+
+    /**
+     * Set options
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\Option[] $options
+     * @return void
+     */
+    public function setOptions(array $options = null): void
+    {
+        $this->options = $options;
+    }
+
+    /**
+     * Get entered options
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\EnteredOption[]|null
+     */
+    public function getEnteredOptions(): ?array
+    {
+        return $this->enteredOptions;
+    }
+
+    /**
+     * Set entered options
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\EnteredOption[] $enteredOptions
+     * @return void
+     */
+    public function setEnteredOptions(array $enteredOptions = null): void
+    {
+        $this->enteredOptions = $enteredOptions;
+    }
+}

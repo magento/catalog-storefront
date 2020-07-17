@@ -1,90 +1,67 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ *
+ * Generated from et_schema.xml. DO NOT EDIT!”
  */
+
+declare(strict_types=1);
 
 namespace Magento\CatalogExportApi\Api\Data;
 
 /**
- * Entered option entity
+ * EnteredOption entity
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class EnteredOption
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var string
-     */
-    private $productSku;
-
-    /**
-     * @var bool
-     */
-    private $required;
-
-    /**
-     * @var string
-     */
-    private $renderType;
-
-    /***
-     * @var int
-     */
-    private $sortOrder;
-
-    /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var string
-     */
-    private $sku;
-
-    /**
-     * @var float[]
-     */
-    private $price;
-
-    /**
-     * @var string
-     */
-    private $priceType;
-
-    /**
-     * @var ?string
-     */
+    /** @var string */
     private $value;
 
-    /**
-     * @var ?string
-     */
-    private $fileExtension;
+    /** @var bool */
+    private $required;
 
-    /**
-     * @var ?int
-     */
+    /** @var int */
+    private $sortOrder;
+
+    /** @var string */
+    private $type;
+
+    /** @var string */
+    private $renderType;
+
+    /** @var string */
+    private $productSku;
+
+    /** @var string */
+    private $sku;
+
+    /** @var \Magento\CatalogExportApi\Api\Data\ProductPrice[]|null */
+    private $price;
+
+    /** @var string */
+    private $priceType;
+
+    /** @var int */
     private $maxCharacters;
 
-    /**
-     * @var ?int
-     */
+    /** @var string */
+    private $fileExtension;
+
+    /** @var int */
     private $imageSizeX;
 
-    /**
-     * @var ?int
-     */
+    /** @var int */
     private $imageSizeY;
 
     /**
-     * Get option id
+     * Get id
      *
      * @return int
      */
@@ -94,7 +71,7 @@ class EnteredOption
     }
 
     /**
-     * Set option id
+     * Set id
      *
      * @param int $id
      * @return void
@@ -105,72 +82,9 @@ class EnteredOption
     }
 
     /**
-     * Get sku of the product
+     * Get value
      *
      * @return string
-     */
-    public function getProductSku()
-    {
-        return $this->productSku;
-    }
-
-    /**
-     * Set product sku
-     *
-     * @param string $productSku
-     * @return void
-     */
-    public function setProductSku(string $productSku)
-    {
-        $this->productSku = $productSku;
-    }
-
-    /**
-     * Get option value price
-     *
-     * @return \Magento\CatalogExportApi\Api\Data\Price
-     */
-    public function getPrice()
-    {
-        return $this->price;
-    }
-
-    /**
-     * Set option value price
-     *
-     * @param \Magento\CatalogExportApi\Api\Data\Price $price
-     * @return void
-     */
-    public function setPrice($price)
-    {
-        $this->price = $price;
-    }
-
-    /**
-     * Get price type
-     *
-     * @return string|null
-     */
-    public function getPriceType(): ?string
-    {
-        return $this->priceType;
-    }
-
-    /**
-     * Set price type
-     *
-     * @param string $priceType
-     * @return void
-     */
-    public function setPriceType($priceType)
-    {
-        $this->priceType = $priceType;
-    }
-
-    /**
-     * Get option value
-     *
-     * @return string|null
      */
     public function getValue(): ?string
     {
@@ -178,63 +92,62 @@ class EnteredOption
     }
 
     /**
-     * Set option value
+     * Set value
      *
-     * @param string|null $value
+     * @param string $value
      * @return void
      */
-    public function setValue(?string $value): void
+    public function setValue(string $value): void
     {
         $this->value = $value;
     }
 
     /**
-     * Get Sku
-     *
-     * @return ?string
-     */
-    public function getSku(): ?string
-    {
-        return $this->sku;
-    }
-
-    /**
-     * Set Sku
-     *
-     * @param string $sku
-     * @return void
-     */
-    public function setSku(string $sku): void
-    {
-        $this->sku = $sku;
-    }
-
-    /**
-     * Get is require
+     * Get required
      *
      * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getRequired(): bool
+    public function getRequired(): ?bool
     {
         return $this->required;
     }
 
     /**
-     * Set is require
+     * Set required
      *
-     * @param bool $isRequired
+     * @param bool $required
      * @return void
      */
-    public function setRequired($isRequired): void
+    public function setRequired(bool $required): void
     {
-        $this->required = $isRequired;
+        $this->required = $required;
     }
 
     /**
-     * Get option type
+     * Get sort order
      *
-     * @return ?string
+     * @return int
+     */
+    public function getSortOrder(): ?int
+    {
+        return $this->sortOrder;
+    }
+
+    /**
+     * Set sort order
+     *
+     * @param int $sortOrder
+     * @return void
+     */
+    public function setSortOrder(int $sortOrder): void
+    {
+        $this->sortOrder = $sortOrder;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
      */
     public function getType(): ?string
     {
@@ -242,7 +155,7 @@ class EnteredOption
     }
 
     /**
-     * Set option type
+     * Set type
      *
      * @param string $type
      * @return void
@@ -253,11 +166,11 @@ class EnteredOption
     }
 
     /**
-     * Return render type
+     * Get render type
      *
      * @return string
      */
-    public function getRenderType(): string
+    public function getRenderType(): ?string
     {
         return $this->renderType;
     }
@@ -274,51 +187,93 @@ class EnteredOption
     }
 
     /**
-     * Get sort order
+     * Get product sku
      *
-     * @return int|null
+     * @return string
      */
-    public function getSortOrder(): ?int
+    public function getProductSku(): ?string
     {
-        return $this->sortOrder;
+        return $this->productSku;
     }
 
     /**
-     * Set sort order
+     * Set product sku
      *
-     * @param int|null $sortOrder
+     * @param string $productSku
      * @return void
      */
-    public function setSortOrder(?int $sortOrder): void
+    public function setProductSku(string $productSku): void
     {
-        $this->sortOrder = $sortOrder;
+        $this->productSku = $productSku;
     }
 
     /**
-     * Get file extension
+     * Get sku
      *
-     * @return string|null
+     * @return string
      */
-    public function getFileExtension(): ?string
+    public function getSku(): ?string
     {
-        return $this->fileExtension;
+        return $this->sku;
     }
 
     /**
-     * Set File Extension
+     * Set sku
      *
-     * @param string|null $fileExtension
+     * @param string $sku
      * @return void
      */
-    public function setFileExtension(?string $fileExtension)
+    public function setSku(string $sku): void
     {
-        $this->fileExtension = $fileExtension;
+        $this->sku = $sku;
     }
 
     /**
-     * Get Max Characters
+     * Get price
      *
-     * @return int|null
+     * @return \Magento\CatalogExportApi\Api\Data\ProductPrice[]|null
+     */
+    public function getPrice(): ?array
+    {
+        return $this->price;
+    }
+
+    /**
+     * Set price
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\ProductPrice[] $price
+     * @return void
+     */
+    public function setPrice(array $price = null): void
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * Get price type
+     *
+     * @return string
+     */
+    public function getPriceType(): ?string
+    {
+        return $this->priceType;
+    }
+
+    /**
+     * Set price type
+     *
+     * @param string $priceType
+     * @return void
+     */
+    public function setPriceType(string $priceType): void
+    {
+        $this->priceType = $priceType;
+    }
+
+    /**
+     * Get max characters
+     *
+     * @return int
      */
     public function getMaxCharacters(): ?int
     {
@@ -326,20 +281,41 @@ class EnteredOption
     }
 
     /**
-     * Set Max Characters
+     * Set max characters
      *
-     * @param int|null $maxCharacters
+     * @param int $maxCharacters
      * @return void
      */
-    public function setMaxCharacters(?int $maxCharacters): void
+    public function setMaxCharacters(int $maxCharacters): void
     {
         $this->maxCharacters = $maxCharacters;
     }
 
     /**
-     * Get image size X
+     * Get file extension
      *
-     * @return int|null
+     * @return string
+     */
+    public function getFileExtension(): ?string
+    {
+        return $this->fileExtension;
+    }
+
+    /**
+     * Set file extension
+     *
+     * @param string $fileExtension
+     * @return void
+     */
+    public function setFileExtension(string $fileExtension): void
+    {
+        $this->fileExtension = $fileExtension;
+    }
+
+    /**
+     * Get image size x
+     *
+     * @return int
      */
     public function getImageSizeX(): ?int
     {
@@ -347,20 +323,20 @@ class EnteredOption
     }
 
     /**
-     * Set Image Size X
+     * Set image size x
      *
-     * @param int|null $imageSizeX
+     * @param int $imageSizeX
      * @return void
      */
-    public function setImageSizeX(?int $imageSizeX): void
+    public function setImageSizeX(int $imageSizeX): void
     {
         $this->imageSizeX = $imageSizeX;
     }
 
     /**
-     * Get image size Y
+     * Get image size y
      *
-     * @return int|null
+     * @return int
      */
     public function getImageSizeY(): ?int
     {
@@ -368,12 +344,12 @@ class EnteredOption
     }
 
     /**
-     * Set Image Size Y
+     * Set image size y
      *
-     * @param int|null $imageSizeY
+     * @param int $imageSizeY
      * @return void
      */
-    public function setImageSizeY(?int $imageSizeY): void
+    public function setImageSizeY(int $imageSizeY): void
     {
         $this->imageSizeY = $imageSizeY;
     }
