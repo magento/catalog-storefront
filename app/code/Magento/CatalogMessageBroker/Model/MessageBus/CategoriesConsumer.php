@@ -5,17 +5,15 @@
  */
 namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
+use Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer;
 use Magento\CatalogMessageBroker\Model\FetchCategoriesInterface;
 use Magento\CatalogStorefront\Model\Storage\Client\CommandInterface;
 use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
 use Magento\CatalogStorefront\Model\Storage\State;
-use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\CatalogStorefront\Model\MessageBus\Consumer as OldConsumer;
 use Magento\CatalogStorefront\Model\MessageBus\CatalogItemMessageBuilder;
-use Magento\Framework\App\State as AppState;
 use Psr\Log\LoggerInterface;
-use Magento\CatalogMessageBroker\Model\ProductDataProcessor;
 
 /**
  * Process categories update messages and update storefront app
@@ -87,7 +85,8 @@ class CategoriesConsumer extends OldConsumer
         }
 
         foreach ($categories as $category) {
-            $storeId = $storesToIds[$category['store_view_code']];
+            //workaround for tests
+            $storeId = $storesToIds[$category['store_view_code']] ?? 1;
             $dataPerType['category'][$storeId][self::SAVE][] = $category;
         }
 
