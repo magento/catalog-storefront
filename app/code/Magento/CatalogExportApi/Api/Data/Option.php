@@ -18,7 +18,7 @@ namespace Magento\CatalogExportApi\Api\Data;
  */
 class Option
 {
-    /** @var int */
+    /** @var string */
     private $id;
 
     /** @var string */
@@ -45,9 +45,9 @@ class Option
     /**
      * Get id
      *
-     * @return int
+     * @return string
      */
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
@@ -55,10 +55,10 @@ class Option
     /**
      * Set id
      *
-     * @param int $id
+     * @param string $id
      * @return void
      */
-    public function setId(int $id): void
+    public function setId(string $id): void
     {
         $this->id = $id;
     }

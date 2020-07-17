@@ -18,7 +18,7 @@ namespace Magento\CatalogExportApi\Api\Data;
  */
 class Product
 {
-    /** @var int */
+    /** @var string */
     private $sku;
 
     /** @var \Magento\CatalogExportApi\Api\Data\ParentProduct[]|null */
@@ -150,9 +150,9 @@ class Product
     /**
      * Get sku
      *
-     * @return int
+     * @return string
      */
-    public function getSku(): ?int
+    public function getSku(): ?string
     {
         return $this->sku;
     }
@@ -160,10 +160,10 @@ class Product
     /**
      * Set sku
      *
-     * @param int $sku
+     * @param string $sku
      * @return void
      */
-    public function setSku(int $sku): void
+    public function setSku(string $sku): void
     {
         $this->sku = $sku;
     }

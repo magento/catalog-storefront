@@ -18,7 +18,7 @@ namespace Magento\CatalogExportApi\Api\Data;
  */
 class OptionValue
 {
-    /** @var int */
+    /** @var string */
     private $id;
 
     /** @var \Magento\CatalogExportApi\Api\Data\ProductPrice[]|null */
@@ -39,9 +39,9 @@ class OptionValue
     /**
      * Get id
      *
-     * @return int
+     * @return string
      */
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
@@ -49,10 +49,10 @@ class OptionValue
     /**
      * Set id
      *
-     * @param int $id
+     * @param string $id
      * @return void
      */
-    public function setId(int $id): void
+    public function setId(string $id): void
     {
         $this->id = $id;
     }
