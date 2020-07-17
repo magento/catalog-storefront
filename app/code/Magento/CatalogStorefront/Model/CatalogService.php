@@ -34,6 +34,7 @@ use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterfaceFactory;
+use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseFactory;
 
 /**
  * Class for retrieving catalog data
