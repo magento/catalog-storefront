@@ -75,10 +75,11 @@ class ProductsConsumer
         $productsPerStore = [];
         foreach ($overrides as $override) {
             $storeId = $storesToIds[$override['store_view_code']];
-            $productsPerStore[$storeId][$override['id']] = $override;
+            $productsPerStore[$storeId][$override['product_id']] = $override;
         }
         foreach ($productsPerStore as $storeId => $products) {
             try {
+                //TODO: add batching
                 $this->productPublisher->publish(\array_keys($products), $storeId, $products);
             } catch (\Throwable $e) {
                 $this->logger->critical($e);

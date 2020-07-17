@@ -230,13 +230,14 @@ class CatalogService implements CatalogServerInterface
                     $productsInElasticFormat['product'][$storeId]['save'][] = $productInElasticFormat;
                 }
             }
+
             $this->catalogRepository->saveToStorage($productsInElasticFormat);
 
             $importProductsResponse = $this->importProductsResponseFactory->create();
             $importProductsResponse->setMessage('Records imported successfully');
             $importProductsResponse->setStatus(true);
             return $importProductsResponse;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // TODO: Hide real message in production
             $importProductsResponse = $this->importProductsResponseFactory->create();
             $importProductsResponse->setMessage($e->getMessage());

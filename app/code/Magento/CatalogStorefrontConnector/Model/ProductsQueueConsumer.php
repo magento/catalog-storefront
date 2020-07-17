@@ -27,15 +27,28 @@ class ProductsQueueConsumer
     private $catalogEntityIdsProvider;
 
     /**
-     * @param ProductPublisher $productPublisher
+     * @var \Magento\CatalogMessageBroker\Model\MessageBus\ProductsConsumer
+     */
+    private $productsConsumer;
+
+    /**
+     * @var \Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer
+     */
+    private $productFeedIndexer;
+
+    /**
+     * @param \Magento\CatalogMessageBroker\Model\MessageBus\ProductsConsumer $productsConsumer
+     * @param \Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer $productFeedIndexer
      * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
      */
     public function __construct(
-        ProductPublisher $productPublisher,
+        \Magento\CatalogMessageBroker\Model\MessageBus\ProductsConsumer $productsConsumer,
+        \Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer $productFeedIndexer,
         CatalogEntityIdsProvider $catalogEntityIdsProvider
     ) {
-        $this->productPublisher = $productPublisher;
         $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
+        $this->productsConsumer = $productsConsumer;
+        $this->productFeedIndexer = $productFeedIndexer;
     }
 
     /**
@@ -51,15 +64,20 @@ class ProductsQueueConsumer
     public function processMessages(UpdatedEntitiesDataInterface $message): void
     {
         $storeProducts = $this->getUniqueIdsForStores([$message]);
+        //TODO: remove ad-hoc solution after moving events to saas-export
+        $allProductIds = [];
         foreach ($storeProducts as $storeId => $productIds) {
             if (empty($productIds)) {
                 foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $ids) {
-                    $this->productPublisher->publish($ids, $storeId);
+                    $allProductIds[] = $ids;
                 }
             } else {
-                $this->productPublisher->publish(\array_unique($productIds), $storeId);
+                $allProductIds[] = $productIds;
             }
         }
+        $ids = \array_unique(\array_merge(...$allProductIds));
+        $this->productFeedIndexer->executeList($ids);
+        $this->productsConsumer->processMessage(\json_encode($ids));
     }
 
     /**
