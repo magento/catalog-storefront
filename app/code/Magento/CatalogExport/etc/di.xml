@@ -12,6 +12,7 @@
     <preference for="Magento\CatalogExportApi\Api\ProductRepositoryInterface" type="Magento\CatalogExport\Model\ProductRepository"/>
     <preference for="Magento\CatalogExportApi\Api\VariantRepositoryInterface" type="Magento\CatalogExport\Model\VariantRepository"/>
     <preference for="Magento\CatalogDataExporter\Model\Indexer\IndexerCallbackInterface" type="Magento\CatalogExport\Model\Indexer\IndexerCallback" />
+    <preference for="Magento\CatalogExportApi\Api\Data\VariantInterfaceFactory" type="Magento\CatalogExport\Model\Data\VariantFactory" />
 
     <type name="Magento\CatalogExport\Model\ProductRepository">
         <arguments>

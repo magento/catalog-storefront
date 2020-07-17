@@ -18,6 +18,7 @@ interface VariantRepositoryInterface
      *
      * @param string[] $ids
      * @return VariantInterface[]
+     * @throws \InvalidArgumentException
      */
     public function get(array $ids): array;
 }
