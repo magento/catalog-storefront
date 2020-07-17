@@ -111,7 +111,7 @@ class Category
     private $isActive;
 
     /**
-     * @var int
+     * @var int|null
      */
     private $isAnchor;
 
@@ -518,9 +518,9 @@ class Category
     /**
      * Get category is anchor
      *
-     * @return int
+     * @return int|null
      */
-    public function getIsAnchor(): int
+    public function getIsAnchor(): ?int
     {
         return $this->isAnchor;
     }
@@ -528,11 +528,11 @@ class Category
     /**
      * Set category is anchor
      *
-     * @param int $isAnchor
+     * @param int|null $isAnchor
      *
      * @return void
      */
-    public function setIsAnchor(int $isAnchor): void
+    public function setIsAnchor(?int $isAnchor): void
     {
         $this->isAnchor = $isAnchor;
     }
