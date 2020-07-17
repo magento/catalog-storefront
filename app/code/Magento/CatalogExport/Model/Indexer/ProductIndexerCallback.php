@@ -47,6 +47,7 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
      */
     public function execute(array $ids) : void
     {
+        $this->logger->info('\Magento\CatalogExport\Model\Indexer\ProductIndexerCallback::execute');
         foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
             if (!empty($idsChunk)) {
                 try {
