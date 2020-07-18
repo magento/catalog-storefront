@@ -74,7 +74,6 @@ class CategoriesConsumer extends OldConsumer
     public function processMessage(string $ids)
     {
         try {
-            //For test purposes
             $ids = json_decode($ids, true);
             $dataPerType = [];
             $categories = $this->fetchCategories->execute($ids);
@@ -94,7 +93,7 @@ class CategoriesConsumer extends OldConsumer
 
             $this->saveToStorage($dataPerType);
         } catch (\Throwable $e) {
-            throw $e;
+            $this->logger->critical($e->getMessage());
         }
     }
 }
