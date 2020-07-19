@@ -141,7 +141,7 @@ class ExportTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/simple_products_all_attributes_with_custom_attribute_set.php
+     * @magentoApiDataFixture Magento/Catalog/_files/simple_product_with_all_attribute_types
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_date_attribute.php
      * @magentoApiDataFixture Magento/Swatches/_files/configurable_product_two_attributes.php
      * @dataProvider attributesResult
