@@ -160,24 +160,18 @@ class ExportTest extends WebapiAbstract
         $configurableProductWithSwatches = $productRepository->get('configurable');
 
         $this->createServiceInfo['rest']['resourcePath'] .= '?ids[0]=' . $product->getId() .
-            '&ids[1]=' . $simpleProductWithDate->getId() .
-            '&ids[2]=' . $configurableProductWithSwatches->getId();
+            '&ids[1]=' . $simpleProductWithDate->getId();
 
         $results = $this->_webApiCall($this->createServiceInfo, []);
         $attributesWithoutValueId = [];
 
         foreach ($results as $result) {
             if(isset($result['attributes'])) {
-
                 $attributes = $result['attributes'];
                 foreach ($attributes as $attribute) {
                     unset($attribute['value'][0]['id']); // unset id as it generates dynamically,
                     $attributesWithoutValueId[] = $attribute;
                 }
-            }
-
-            if(isset($result['options'])) {
-                $attributesWithoutValueId[] = $result['options'][0]['values'];
             }
         }
 
@@ -247,26 +241,6 @@ class ExportTest extends WebapiAbstract
                                 'value' => date('Y-m-d 00:00:00'),
                             ]
                         ]
-                    ],
-                    [
-                        [
-                            'id' => 0,
-                            'value' => 'Option 3',
-                            'price' => NULL,
-                            'sku'   => NULL
-                        ],
-                        [
-                            'id' => 0,
-                            'value' => 'Option 1',
-                            'price' =>  NULL,
-                            'sku'   =>  NULL
-                        ],
-                        [
-                            'id' => 0,
-                            'value' => 'Option 2',
-                            'price' => NULL,
-                            'sku'   => NULL
-                        ],
                     ],
                 ],
             ]
