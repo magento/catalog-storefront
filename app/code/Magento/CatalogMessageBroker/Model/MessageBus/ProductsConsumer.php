@@ -79,7 +79,6 @@ class ProductsConsumer
         }
         foreach ($productsPerStore as $storeId => $products) {
             try {
-                //TODO: add batching
                 $this->productPublisher->publish(\array_keys($products), $storeId, $products);
             } catch (\Throwable $e) {
                 $this->logger->critical($e);

@@ -55,11 +55,11 @@ class ProductsQueueConsumer
      * Process collected product IDs for update
      *
      * Process messages from storefront.catalog.product.update topic
-     * and publish new messages to storefront.catalog.data.consume
      *
      * @param UpdatedEntitiesDataInterface $message
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @deprecated React on events triggered by plugins to push data to SF storage
      */
     public function processMessages(UpdatedEntitiesDataInterface $message): void
     {

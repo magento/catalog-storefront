@@ -76,12 +76,13 @@ class CategoryPublisher
     }
 
     /**
-     * Publish new messages to storefront.catalog.data.consume topic
+     * Publish data to Storefront directly
      *
      * @param array $categoryIds
      * @param int $storeId
      * @return void
      * @throws \Exception
+     * @deprecated
      */
     public function publish(array $categoryIds, int $storeId): void
     {

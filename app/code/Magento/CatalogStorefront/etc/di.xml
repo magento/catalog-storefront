@@ -31,14 +31,6 @@
         </arguments>
     </type>
 
-    <type name="Magento\Framework\MessageQueue\MergerFactory">
-        <arguments>
-            <argument name="mergers" xsi:type="array">
-                <item name="storefront.catalog.data.consume" xsi:type="string">Magento\CatalogStorefront\Model\Merger</item>
-            </argument>
-        </arguments>
-    </type>
-
     <!-- Logger -->
     <virtualType name="CatalogStorefrontLogger" type="Magento\Framework\Logger\Monolog">
         <arguments>
@@ -48,7 +40,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\CatalogStorefront\Model\MessageBus\CatalogRepository">
+    <type name="Magento\CatalogStorefront\Model\CatalogRepository">
         <arguments>
             <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
         </arguments>
@@ -64,6 +56,11 @@
         </arguments>
     </type>
     <type name="Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchQuery">
+        <arguments>
+            <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogStorefront\Model\CatalogService">
         <arguments>
             <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
         </arguments>

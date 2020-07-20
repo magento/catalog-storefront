@@ -28,9 +28,6 @@ class ProductPublisher
     private $productsDataProvider;
 
     /**
-     * @var CatalogItemMessageBuilder
-
-    /**
      * @var int
      */
     private $batchSize;
@@ -97,13 +94,14 @@ class ProductPublisher
     }
 
     /**
-     * Publish new messages to storefront.catalog.data.consume topic
+     * Publish data to Storefront directly
      *
      * @param array $productIds
      * @param int $storeId
      * @param array $overrideProducts Temporary variables to support transition period between new and old Export API
      * @return void
      * @throws \Exception
+     * @deprecated
      */
     public function publish(array $productIds, int $storeId, $overrideProducts = []): void
     {

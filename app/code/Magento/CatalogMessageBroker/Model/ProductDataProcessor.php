@@ -136,7 +136,7 @@ class ProductDataProcessor
             }
         }
 
-        // TODO: only importData must be returned
+        // TODO: only importData must be returned https://github.com/magento/catalog-storefront/issues/165
         return array_merge($oldExportDataProduct, $importData);
     }
 }

@@ -36,6 +36,7 @@ use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterfaceFactory;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class for retrieving catalog data
@@ -91,6 +92,11 @@ class CatalogService implements CatalogServerInterface
     private $productArrayMapper;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param ProductDataProvider $dataProvider
      * @param DataObjectHelper $dataObjectHelper
      * @param CategoryDataProvider $categoryDataProvider
@@ -100,6 +106,7 @@ class CatalogService implements CatalogServerInterface
      * @param ServiceOutputProcessor $serviceOutputProcessor
      * @param CatalogRepository $catalogRepository
      * @param ProductArrayMapper $productArrayMapper
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ProductDataProvider $dataProvider,
@@ -110,7 +117,8 @@ class CatalogService implements CatalogServerInterface
         ImportCategoriesResponseFactory $importCategoriesResponseFactory,
         ServiceOutputProcessor $serviceOutputProcessor,
         CatalogRepository $catalogRepository,
-        ProductArrayMapper $productArrayMapper
+        ProductArrayMapper $productArrayMapper,
+        LoggerInterface $logger
     ) {
         $this->dataProvider = $dataProvider;
         $this->dataObjectHelper = $dataObjectHelper;
@@ -121,6 +129,7 @@ class CatalogService implements CatalogServerInterface
         $this->categoryDataProvider = $categoryDataProvider;
         $this->dynamicAttributeFactory = $dynamicAttributeFactory;
         $this->productArrayMapper = $productArrayMapper;
+        $this->logger = $logger;
     }
 
     /**
@@ -262,12 +271,15 @@ class CatalogService implements CatalogServerInterface
             $importProductsResponse = $this->importProductsResponseFactory->create();
             $importProductsResponse->setMessage('Records imported successfully');
             $importProductsResponse->setStatus(true);
+
             return $importProductsResponse;
         } catch (\Throwable $e) {
-            // TODO: Hide real message in production
+            $message = 'Cannot process product import';
+            $this->logger->error($message, ['exception' => $e]);
             $importProductsResponse = $this->importProductsResponseFactory->create();
-            $importProductsResponse->setMessage($e->getMessage());
+            $importProductsResponse->setMessage($message);
             $importProductsResponse->setStatus(false);
+
             return $importProductsResponse;
         }
     }
@@ -343,12 +355,15 @@ class CatalogService implements CatalogServerInterface
             $importCategoriesResponse = $this->importCategoriesResponseFactory->create();
             $importCategoriesResponse->setMessage('Records imported successfully');
             $importCategoriesResponse->setStatus(true);
+
             return $importCategoriesResponse;
         } catch (\Exception $e) {
-            // TODO: Hide real message in production
+            $message = 'Cannot process categories import';
+            $this->logger->error($message, ['exception' => $e]);
             $importCategoriesResponse = $this->importCategoriesResponseFactory->create();
-            $importCategoriesResponse->setMessage($e->getMessage());
+            $importCategoriesResponse->setMessage($message);
             $importCategoriesResponse->setStatus(false);
+
             return $importCategoriesResponse;
         }
     }

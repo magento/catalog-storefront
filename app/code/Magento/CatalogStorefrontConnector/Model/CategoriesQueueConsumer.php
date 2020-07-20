@@ -40,12 +40,12 @@ class CategoriesQueueConsumer
     /**
      * Process collected categories IDs for update
      *
-     * Process messages from storefront.collect.updated.categories.data topic
-     * and publish new messages to storefront.catalog.data.consume topic
+     * Process messages from storefront.collect.updated.categories.data
      *
      * @param UpdatedEntitiesDataInterface $message
      * @return void
      * @throws \Exception
+     * @deprecated React on events triggered by plugins to push data to SF storage
      */
     public function processMessages(UpdatedEntitiesDataInterface $message): void
     {
