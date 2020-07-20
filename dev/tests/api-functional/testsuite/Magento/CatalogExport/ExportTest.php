@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogExport;
+namespace Magento\CatalogExport\Api;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -76,24 +76,6 @@ class ExportTest extends WebapiAbstract
         ];
     }
 
-    /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_custom_attribute.php
-     */
-    public function testExport()
-    {
-        $this->_markTestAsRestOnly('SOAP will be covered in another test');
-
-        $this->reindex();
-
-        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-        $product = $productRepository->get('simple');
-
-        $this->createServiceInfo['rest']['resourcePath'] .= '?ids[0]=' . $product->getId();
-        $result = $this->_webApiCall($this->createServiceInfo, []);
-        $this->assertProductsEquals($this->productsFeed->getFeedByIds([$product->getId()])['feed'], $result);
-    }
-
     private function assertProductsEquals(array $expected, array $actual)
     {
         $n = sizeof($expected);
@@ -156,5 +138,111 @@ class ExportTest extends WebapiAbstract
         $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
         // phpcs:ignore Magento2.Security.InsecureFunction
         exec("php -f {$appDir}/bin/magento indexer:reindex");
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/simple_product_with_all_attribute_types.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_date_attribute.php
+     * @dataProvider attributesResult
+     * @param [] $expectedAttributes
+     */
+    public function testAllAttributes($expectedAttributes)
+    {
+        $this->_markTestAsRestOnly('SOAP will be covered in another test');
+
+        $this->reindex();
+
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $product = $productRepository->get('simple1');
+        $simpleProductWithDate = $productRepository->get('simple_with_date');
+        $configurableProductWithSwatches = $productRepository->get('configurable');
+
+        $this->createServiceInfo['rest']['resourcePath'] .= '?ids[0]=' . $product->getId() .
+            '&ids[1]=' . $simpleProductWithDate->getId();
+
+        $results = $this->_webApiCall($this->createServiceInfo, []);
+        $attributesWithoutValueId = [];
+
+        foreach ($results as $result) {
+            if(isset($result['attributes'])) {
+                $attributes = $result['attributes'];
+                foreach ($attributes as $attribute) {
+                    unset($attribute['value'][0]['id']); // unset id as it generates dynamically,
+                    $attributesWithoutValueId[] = $attribute;
+                }
+            }
+        }
+
+        $this->assertEquals($expectedAttributes, $attributesWithoutValueId);
+    }
+
+    /**
+     * Data Provider with eav attribute result
+     *
+     * @return array
+     */
+    public function attributesResult()
+    {
+        return [
+            'attribute_results_export' => [
+                [
+                    [
+                        'attribute_code' => 'boolean_attribute',
+                        'type'  => 'boolean',
+                        'value' => [
+                            [
+                                'value' => 'yes'
+                            ]
+                        ]
+                    ],
+                    [
+                        'attribute_code' => 'image_attribute',
+                        'type'  => 'media_image',
+                        'value' => [
+                            [
+                                'value' => 'imagepath',
+                            ]
+                        ]
+                    ],
+                    [
+                        'attribute_code' => 'multiselect_attribute',
+                        'type'  => 'multiselect',
+                        'value' => [
+                            [
+                                'value' => 'Option 1',
+                            ]
+                        ]
+                    ],
+                    [
+                        'attribute_code' => 'decimal_attribute',
+                        'type'  => 'price',
+                        'value' => [
+                            [
+                                'value' => '100.000000',
+                            ]
+                        ]
+                    ],
+                    [
+                        'attribute_code' => 'text_editor_attribute',
+                        'type'  => 'textarea',
+                        'value' => [
+                            [
+                                'value' => 'text Editor Attribute test',
+                            ]
+                        ]
+                    ],
+                    [
+                        'attribute_code' => 'date_attribute',
+                        'type'  => 'date',
+                        'value' => [
+                            [
+                                'value' => date('Y-m-d 00:00:00'),
+                            ]
+                        ]
+                    ],
+                ],
+            ]
+        ];
     }
 }

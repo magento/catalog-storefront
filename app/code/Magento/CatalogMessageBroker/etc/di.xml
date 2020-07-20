@@ -11,6 +11,7 @@
         <arguments>
             <argument name="dataMappers" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\CustomOptions</item>
+                <item name="dynamic_attributes" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\DynamicAttribute</item>
             </argument>
             <argument name="fields" xsi:type="array">
                 <item name="id" xsi:type="string">id</item>

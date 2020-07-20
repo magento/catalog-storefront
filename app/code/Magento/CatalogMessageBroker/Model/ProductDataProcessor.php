@@ -53,7 +53,7 @@ class ProductDataProcessor
 
         /** @var DataMapperInterface $dataMapper */
         foreach ($this->dataMappers as $field => $dataMapper) {
-            $overriddenFields[$field] = $dataMapper->map($data);
+            $overriddenFields = array_merge($overriddenFields, $dataMapper->map($data));
         }
 
         return array_merge($product, $overriddenFields);
