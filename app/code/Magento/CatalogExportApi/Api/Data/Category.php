@@ -141,6 +141,11 @@ class Category
     private $metaDescription;
 
     /**
+     * @var int|null
+     */
+    private $includeInMenu;
+
+    /**
      * Get product ID
      *
      * @return int
@@ -662,5 +667,22 @@ class Category
     public function setIsActive(int $isActive): void
     {
         $this->isActive = $isActive;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getIncludeInMenu(): ?int
+    {
+        return $this->includeInMenu;
+    }
+
+    /**
+     * @param int|null $includeInMenu
+     * @return void
+     */
+    public function setIncludeInMenu(?int $includeInMenu): void
+    {
+        $this->includeInMenu = $includeInMenu;
     }
 }
