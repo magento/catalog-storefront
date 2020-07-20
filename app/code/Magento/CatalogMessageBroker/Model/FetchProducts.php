@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogMessageBroker\Model;
 
-use Magento\CatalogExportApi\Api\Data\ProductInterface;
+use Magento\CatalogExportApi\Api\Data\Product;
 use Magento\CatalogExportApi\Api\ProductRepositoryInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 
@@ -39,7 +39,7 @@ class FetchProducts implements FetchProductsInterface
         $data = [];
         $products = $this->productRepository->get($ids);
         foreach ($products as $product) {
-            $data[] = $this->dataObjectProcessor->buildOutputDataArray($product, ProductInterface::class);
+            $data[] = $this->dataObjectProcessor->buildOutputDataArray($product, Product::class);
         }
         return $data;
     }
