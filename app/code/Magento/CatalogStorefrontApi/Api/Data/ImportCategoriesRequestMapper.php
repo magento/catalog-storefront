@@ -55,6 +55,9 @@ final class ImportCategoriesRequestMapper
     {
         $dto = $this->objectManager->create(self::$dtoClassName);
         foreach ($this->data as $key => $valueData) {
+            if ($valueData === null) {
+                continue;
+            }
             $this->setByKey($dto, $key, $valueData);
         }
         return $dto;
@@ -72,10 +75,6 @@ final class ImportCategoriesRequestMapper
     */
     private function setByKey(ImportCategoriesRequest $dto, string $key, $value): void
     {
-        if ($value === null) {
-            return;
-        }
-
         switch ($key) {
             case "categories":
                 $convertedArray = [];

@@ -55,6 +55,9 @@ final class CategoryMapper
     {
         $dto = $this->objectManager->create(self::$dtoClassName);
         foreach ($this->data as $key => $valueData) {
+            if ($valueData === null) {
+                continue;
+            }
             $this->setByKey($dto, $key, $valueData);
         }
         return $dto;
@@ -72,10 +75,6 @@ final class CategoryMapper
     */
     private function setByKey(Category $dto, string $key, $value): void
     {
-        if ($value === null) {
-            return;
-        }
-
         switch ($key) {
             case "id":
                 $dto->setId((string) $value);

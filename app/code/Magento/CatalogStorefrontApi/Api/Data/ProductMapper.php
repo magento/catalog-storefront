@@ -55,6 +55,9 @@ final class ProductMapper
     {
         $dto = $this->objectManager->create(self::$dtoClassName);
         foreach ($this->data as $key => $valueData) {
+            if ($valueData === null) {
+                continue;
+            }
             $this->setByKey($dto, $key, $valueData);
         }
         return $dto;
@@ -72,10 +75,6 @@ final class ProductMapper
     */
     private function setByKey(Product $dto, string $key, $value): void
     {
-        if ($value === null) {
-            return;
-        }
-
         switch ($key) {
             case "id":
                 $dto->setId((string) $value);
@@ -332,6 +331,16 @@ final class ProductMapper
                 break;
             case "only_x_left_in_stock":
                 $dto->setOnlyXLeftInStock((float) $value);
+                break;
+            case "grouped_items":
+                $convertedArray = [];
+                foreach ($value as $element) {
+                    $convertedArray[] = $this->objectManager
+                        ->create(\Magento\CatalogStorefrontApi\Api\Data\GroupedItemMapper::class)
+                        ->setData($element)
+                        ->build();
+                }
+                $dto->setGroupedItems($convertedArray);
                 break;
         }
     }

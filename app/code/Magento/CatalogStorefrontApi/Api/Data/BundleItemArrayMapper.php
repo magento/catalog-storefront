@@ -47,7 +47,7 @@ final class BundleItemArrayMapper
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getOptions() as $fieldArrayDto) {
-            $fieldData[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\BundleItemOptionInterface::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\BundleItemOptionArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["options"] = $fieldArray;

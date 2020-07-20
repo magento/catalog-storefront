@@ -28,14 +28,6 @@
         <arguments>
             <argument name="productDataProvider" xsi:type="object">\Magento\CatalogStorefront\DataProvider\ProductDataProvider\Proxy</argument>
             <argument name="categoryDataProvider" xsi:type="object">\Magento\CatalogStorefront\DataProvider\CategoryDataProvider\Proxy</argument>
-            <argument name="linkedEntityPath" xsi:type="array">
-                <item name="product" xsi:type="array">
-                    <item xsi:type="string" name="ConfigurableProduct">ConfigurableProduct:variants.product</item>
-                    <item xsi:type="string" name="GroupedProduct">GroupedProduct:items.product</item>
-                </item>
-                <item name="category" xsi:type="array">
-                </item>
-            </argument>
         </arguments>
     </type>
 

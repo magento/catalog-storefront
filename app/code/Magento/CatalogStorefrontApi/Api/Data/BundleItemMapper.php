@@ -55,6 +55,9 @@ final class BundleItemMapper
     {
         $dto = $this->objectManager->create(self::$dtoClassName);
         foreach ($this->data as $key => $valueData) {
+            if ($valueData === null) {
+                continue;
+            }
             $this->setByKey($dto, $key, $valueData);
         }
         return $dto;
@@ -72,10 +75,6 @@ final class BundleItemMapper
     */
     private function setByKey(BundleItem $dto, string $key, $value): void
     {
-        if ($value === null) {
-            return;
-        }
-
         switch ($key) {
             case "option_id":
                 $dto->setOptionId((string) $value);

@@ -55,6 +55,9 @@ final class BreadcrumbMapper
     {
         $dto = $this->objectManager->create(self::$dtoClassName);
         foreach ($this->data as $key => $valueData) {
+            if ($valueData === null) {
+                continue;
+            }
             $this->setByKey($dto, $key, $valueData);
         }
         return $dto;
@@ -72,10 +75,6 @@ final class BreadcrumbMapper
     */
     private function setByKey(Breadcrumb $dto, string $key, $value): void
     {
-        if ($value === null) {
-            return;
-        }
-
         switch ($key) {
             case "category_id":
                 $dto->setCategoryId((string) $value);

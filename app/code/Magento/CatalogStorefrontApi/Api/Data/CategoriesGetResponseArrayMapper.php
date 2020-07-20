@@ -41,7 +41,7 @@ final class CategoriesGetResponseArrayMapper
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getItems() as $fieldArrayDto) {
-            $fieldData[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\CategoryInterface::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\CategoryArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["items"] = $fieldArray;

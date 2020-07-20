@@ -122,6 +122,11 @@ class ProductDataProcessor
             $importData['swatch_image'] = $product['swatch_image']['url'];
         }
 
+        // TODO: handle grouped product
+        if (isset($oldExportDataProduct['type_id']) && $oldExportDataProduct['type_id'] === 'grouped') {
+            $importData['grouped_items'] = $oldExportDataProduct['items'];
+        }
+
         //TODO: remove after resolving https://github.com/magento/catalog-storefront/issues/66
         $importData['dynamic_attributes'] = [];
         foreach ($product['attributes'] ?? [] as $attribute) {

@@ -14,6 +14,7 @@ use Magento\CatalogStorefrontApi\Api\Data\CategoryInterface;
 use Magento\CatalogStorefrontApi\Api\Data\Image;
 use Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItem;
 use Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductArrayMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ProductInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface;
@@ -84,16 +85,21 @@ class CatalogService implements CatalogServerInterface
      * @var DynamicAttributeValueInterfaceFactory
      */
     private $dynamicAttributeFactory;
+    /**
+     * @var ProductArrayMapper
+     */
+    private $productArrayMapper;
 
     /**
      * @param ProductDataProvider $dataProvider
      * @param DataObjectHelper $dataObjectHelper
+     * @param CategoryDataProvider $categoryDataProvider
+     * @param DynamicAttributeValueInterfaceFactory $dynamicAttributeFactory
      * @param ImportProductsResponseFactory $importProductsResponseFactory
      * @param ImportCategoriesResponseFactory $importCategoriesResponseFactory
      * @param ServiceOutputProcessor $serviceOutputProcessor
      * @param CatalogRepository $catalogRepository
-     * @param CategoryDataProvider $categoryDataProvider
-     * @param DynamicAttributeValueInterfaceFactory $dynamicAttributeFactory
+     * @param ProductArrayMapper $productArrayMapper
      */
     public function __construct(
         ProductDataProvider $dataProvider,
@@ -103,7 +109,8 @@ class CatalogService implements CatalogServerInterface
         ImportProductsResponseFactory $importProductsResponseFactory,
         ImportCategoriesResponseFactory $importCategoriesResponseFactory,
         ServiceOutputProcessor $serviceOutputProcessor,
-        CatalogRepository $catalogRepository
+        CatalogRepository $catalogRepository,
+        ProductArrayMapper $productArrayMapper
     ) {
         $this->dataProvider = $dataProvider;
         $this->dataObjectHelper = $dataObjectHelper;
@@ -113,6 +120,7 @@ class CatalogService implements CatalogServerInterface
         $this->catalogRepository = $catalogRepository;
         $this->categoryDataProvider = $categoryDataProvider;
         $this->dynamicAttributeFactory = $dynamicAttributeFactory;
+        $this->productArrayMapper = $productArrayMapper;
     }
 
     /**
@@ -216,12 +224,20 @@ class CatalogService implements CatalogServerInterface
     public function importProducts(ImportProductsRequestInterface $request): ImportProductsResponseInterface
     {
         try {
-            $convertedRequest = $this->serviceOutputProcessor->convertValue(
-                $request,
-                ImportProductsRequestInterface::class
+            $products = \array_map(
+                function ($product) {
+                    $product = $this->productArrayMapper->convertToArray($product);
+                    // TODO: handle grouped products
+                    if (!empty($product['grouped_items'])) {
+                        $product['items'] = $product['grouped_items'];
+                    }
+                    return $product;
+                },
+                $request->getProducts()
             );
-            $products = $convertedRequest['products'];
-            $storeId = $convertedRequest['store'];
+
+            $storeId = $request->getStore();
+
             $productsInElasticFormat = [];
             foreach ($products as $product) {
                 $productInElasticFormat = $product;
@@ -414,9 +430,12 @@ class CatalogService implements CatalogServerInterface
     {
         $item = $this->cleanUpNullValues($item);
         $variants = [];
-        foreach ($item['variants'] ?? [] as $productId => $variantData) {
+        foreach ($item['variants'] ?? [] as $variantData) {
+            if (!isset($variantData['product'])) {
+                throw new \RuntimeException('Cannot find product id for product variant');
+            }
             $variant = [
-                'product' => $productId,
+                'product' => $variantData['product'],
                 'attributes' => $variantData['attributes']
             ];
             $variants[] = $variant;
@@ -529,12 +548,7 @@ class CatalogService implements CatalogServerInterface
             $groupedItem = new \Magento\CatalogStorefrontApi\Api\Data\GroupedItem();
             $groupedItem->setPosition((int)$item['position']);
             $groupedItem->setQty((float)$item['qty']);
-            $groupedItemInfo = new \Magento\CatalogStorefrontApi\Api\Data\GroupedItemProductInfo();
-            $groupedItemInfo->setName($item['product']['name']);
-            $groupedItemInfo->setSku($item['product']['sku']);
-            $groupedItemInfo->setTypeId($item['product']['type_id']);
-            $groupedItemInfo->setUrlKey($item['product']['url_key']);
-            $groupedItem->setProduct($groupedItemInfo);
+            $groupedItem->setProduct((string)$item['product']);
             $items[] = $groupedItem;
         }
         $product->setItems($items);
