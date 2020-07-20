@@ -14,6 +14,11 @@ namespace Magento\CatalogExportApi\Api\Data;
 class CustomOption
 {
     /**
+     * Super Option Type
+     */
+    public const SUPER_OPTION_TYPE = 'super';
+
+    /**
      * @var string
      */
     private $type;
