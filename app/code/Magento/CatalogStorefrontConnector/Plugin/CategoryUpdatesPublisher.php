@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Plugin;
 
-use Magento\CatalogStorefrontConnector\Model\CategoriesQueueConsumer;
 use Magento\CatalogStorefrontConnector\Model\UpdatedEntitiesMessageBuilder;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Store\Model\Store;
@@ -39,26 +38,18 @@ class CategoryUpdatesPublisher
     private $logger;
 
     /**
-     * @var CategoriesQueueConsumer
-     */
-    private $categoriesQueueConsumer;
-
-    /**
      * @param PublisherInterface $queuePublisher
      * @param UpdatedEntitiesMessageBuilder $messageBuilder
-     * @param CategoriesQueueConsumer $categoriesQueueConsumer
      * @param LoggerInterface $logger
      */
     public function __construct(
         PublisherInterface $queuePublisher,
         UpdatedEntitiesMessageBuilder $messageBuilder,
-        CategoriesQueueConsumer $categoriesQueueConsumer,
         LoggerInterface $logger
     ) {
         $this->queuePublisher = $queuePublisher;
         $this->messageBuilder = $messageBuilder;
         $this->logger = $logger;
-        $this->categoriesQueueConsumer = $categoriesQueueConsumer;
     }
 
     /**
@@ -75,8 +66,6 @@ class CategoryUpdatesPublisher
         }
         $message = $this->messageBuilder->build($storeId, $categoryIds);
         try {
-            //Workaround for web-api tests
-            $this->categoriesQueueConsumer->processMessages($message);
             $this->logger->debug(
                 \sprintf('Collect category ids: "%s" in store %s', \implode(', ', $categoryIds), $storeId)
             );
