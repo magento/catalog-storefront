@@ -17,17 +17,17 @@ class ConsumerInvoker
     /**
      * Batch size
      */
-    private const BATCHSIZE = 500;
+    private const BATCHSIZE = 1000;
 
     /**
      * List of storefront consumers
      */
     private const CONSUMERS = [
         'storefront.catalog.product.update',
-        //'storefront.catalog.data.consume',
+        'storefront.catalog.data.consume',
         'catalog.product.export.consumer',
-        //'catalog.category.export.consumer',
-        //'storefront.catalog.category.update'
+        'catalog.category.export.consumer',
+        'storefront.catalog.category.update'
     ];
 
     /**
