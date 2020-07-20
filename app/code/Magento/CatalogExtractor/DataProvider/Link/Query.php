@@ -32,6 +32,11 @@ class Query
     private const LINK_TYPE_CROSSSELL = 5;
 
     /**
+     * @see \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED
+     */
+    private const LINK_TYPE_ASSOCIATED = 3;
+
+    /**
      * @var ResourceConnection
      */
     private $resourceConnection;
@@ -48,6 +53,7 @@ class Query
         self::LINK_TYPE_RELATED,
         self::LINK_TYPE_UPSELL,
         self::LINK_TYPE_CROSSSELL,
+        self::LINK_TYPE_ASSOCIATED,
     ];
 
     /**
