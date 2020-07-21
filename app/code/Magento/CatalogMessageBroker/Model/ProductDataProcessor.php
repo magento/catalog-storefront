@@ -56,7 +56,7 @@ class ProductDataProcessor
         foreach ($this->dataMappers as $field => $dataMapperConfig) {
             if (
                 array_key_exists('types', $dataMapperConfig) &&
-                !in_array($product['type'], $dataMapperConfig['types'])
+                !in_array($product['type_id'], $dataMapperConfig['types'])
             ) {
                 continue;
             }
