@@ -91,6 +91,7 @@ class ProductRepository implements ProductRepositoryInterface
         foreach ($feedData['feed'] as $feedItem) {
             $product = $this->productFactory->create();
             $feedItem['id'] = $feedItem['productId'];
+            $feedItem = $this->cleanUpNullValues($feedItem);
             $this->dataObjectHelper->populateWithArray(
                 $product,
                 $feedItem,
@@ -110,5 +111,24 @@ class ProductRepository implements ProductRepositoryInterface
     {
         $maxItemsInResponse = (int) $this->deploymentConfig->get('catalog_export/max_items_in_response');
         return $maxItemsInResponse ?: self::MAX_ITEMS_IN_RESPONSE;
+    }
+
+    /**
+     * Unset null values in provided array recursively
+     *
+     * @param array $array
+     * @return array
+     */
+    private function cleanUpNullValues(array $array): array
+    {
+        $result = [];
+        foreach ($array as $key => $value) {
+            if ($value === null || $value === '') {
+                continue;
+            }
+
+            $result[$key] = is_array($value) ? $this->cleanUpNullValues($value) : $value;
+        }
+        return $result;
     }
 }
