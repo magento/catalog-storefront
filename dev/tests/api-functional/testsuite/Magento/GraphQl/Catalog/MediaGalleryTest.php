@@ -209,7 +209,10 @@ QUERY;
     }
 
     /**
+     * Check if image exists
+     *
      * @param string $url
+     *
      * @return bool
      */
     private function checkImageExists(string $url): bool

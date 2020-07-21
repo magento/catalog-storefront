@@ -19,6 +19,9 @@ class ProductImageTest extends GraphQlAbstract
      */
     private $objectManager;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -128,7 +131,10 @@ QUERY;
     }
 
     /**
+     * Check if image exists
+     *
      * @param string $url
+     *
      * @return bool
      */
     private function checkImageExists(string $url): bool
