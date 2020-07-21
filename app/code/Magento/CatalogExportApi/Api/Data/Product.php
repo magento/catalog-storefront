@@ -136,7 +136,7 @@ class Product
     /** @var \Magento\CatalogExportApi\Api\Data\Attribute[]|null */
     private $attributes;
 
-    /** @var string */
+    /** @var array */
     private $categories;
 
     /** @var \Magento\CatalogExportApi\Api\Data\PriceRange[]|null */
@@ -952,9 +952,9 @@ class Product
     /**
      * Get categories
      *
-     * @return string
+     * @return string[]
      */
-    public function getCategories(): ?string
+    public function getCategories(): ?array
     {
         return $this->categories;
     }
@@ -962,10 +962,10 @@ class Product
     /**
      * Set categories
      *
-     * @param string $categories
+     * @param string[] $categories
      * @return void
      */
-    public function setCategories(string $categories): void
+    public function setCategories(array $categories = null): void
     {
         $this->categories = $categories;
     }

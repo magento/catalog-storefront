@@ -25,7 +25,7 @@ class Attribute
     /** @var string */
     private $attributeCode;
 
-    /** @var string */
+    /** @var array */
     private $value;
 
     /**
@@ -52,9 +52,9 @@ class Attribute
     /**
      * Get value
      *
-     * @return string
+     * @return string[]
      */
-    public function getValue(): ?string
+    public function getValue(): ?array
     {
         return $this->value;
     }
@@ -62,10 +62,10 @@ class Attribute
     /**
      * Set value
      *
-     * @param string $value
+     * @param string[] $value
      * @return void
      */
-    public function setValue(string $value): void
+    public function setValue(array $value = null): void
     {
         $this->value = $value;
     }
