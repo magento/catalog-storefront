@@ -67,7 +67,8 @@ class ProductRepository implements ProductRepositoryInterface
     }
 
     /**
-     * @inheritdoc
+     * @param array $ids
+     * @return array|\Magento\CatalogExportApi\Api\Data\ProductInterface[]
      */
     public function get(array $ids)
     {

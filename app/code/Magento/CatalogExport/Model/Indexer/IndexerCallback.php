@@ -43,7 +43,7 @@ class IndexerCallback implements IndexerCallbackInterface
     }
 
     /**
-     * @inheritdoc
+     * @param array $ids
      */
     public function execute(array $ids)
     {

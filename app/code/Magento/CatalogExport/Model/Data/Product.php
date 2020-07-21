@@ -86,7 +86,7 @@ class Product extends AbstractModel implements ProductInterface
     private const WEIGHT_TYPE = 'weight_type';
 
     /**
-     * @inheritdoc
+     * @return int|null
      */
     public function getId(): ?int
     {
@@ -94,7 +94,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @param mixed $id
+     * @return AbstractModel|void
      */
     public function setId($id)
     {
@@ -102,7 +103,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getSku(): ?string
     {
@@ -110,39 +111,43 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @param string $sku
      */
     public function setSku(string $sku)
     {
         $this->setData(self::SKU, $sku);
     }
 
+
     /**
-     * @inheritdoc
+     * @return array|null
      */
     public function getParents(): ?array
     {
         return $this->getData(self::PARENTS);
     }
 
+
     /**
-     * @inheritdoc
+     * @param array|null $parents
      */
     public function setParents(?array $parents): void
     {
         $this->setData(self::PARENTS, $parents);
     }
 
+
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getStoreViewCode(): ?string
     {
         return $this->getData(self::STORE_VIEW_CODE);
     }
 
+
     /**
-     * @inheritdoc
+     * @param string $storeViewCode
      */
     public function setStoreViewCode($storeViewCode)
     {
@@ -150,15 +155,16 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getStoreCode(): ?string
     {
         return $this->getData(self::STORE_CODE);
     }
 
+
     /**
-     * @inheritdoc
+     * @param string $storeCode
      */
     public function setStoreCode($storeCode)
     {
@@ -166,7 +172,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getWebsiteCode(): ?string
     {
@@ -174,7 +180,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @param string $websiteCode
      */
     public function setWebsiteCode($websiteCode)
     {
@@ -182,7 +188,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getName(): ?string
     {
@@ -190,7 +196,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @param string $name
      */
     public function setName($name)
     {
@@ -198,7 +204,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getType(): ?string
     {
@@ -206,7 +212,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @param string $type
      */
     public function setType($type)
     {
@@ -214,7 +220,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getMetaDescription(): ?string
     {
@@ -222,7 +228,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @param string $metaDescription
      */
     public function setMetaDescription($metaDescription)
     {
@@ -230,23 +236,25 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getMetaKeyword(): ?string
     {
         return $this->getData(self::META_KEYWORD);
     }
 
+
     /**
-     * @inheritdoc
+     * @param string $metaKeyword
      */
     public function setMetaKeyword($metaKeyword)
     {
         $this->setData(self::META_KEYWORD, $metaKeyword);
     }
 
+
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getMetaTitle(): ?string
     {
@@ -254,7 +262,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @param string $metaTitle
      */
     public function setMetaTitle($metaTitle)
     {
@@ -262,7 +270,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getStatus(): ?string
     {
@@ -270,183 +278,205 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @param string $status
      */
     public function setStatus($status)
     {
         $this->setData(self::STATUS, $status);
     }
 
+
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getTaxClassId(): ?string
     {
         return $this->getData(self::TAX_CLASS_ID);
     }
 
+
     /**
-     * @inheritdoc
+     * @param string $taxClassId
      */
     public function setTaxClassId($taxClassId)
     {
         $this->setData(self::TAX_CLASS_ID, $taxClassId);
     }
 
+
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getCreatedAt(): ?string
     {
         return $this->getData(self::CREATED_AT);
     }
 
+
     /**
-     * @inheritdoc
+     * @param string $createdAt
      */
     public function setCreatedAt($createdAt)
     {
         $this->setData(self::CREATED_AT, $createdAt);
     }
 
+
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getUpdatedAt(): ?string
     {
         return $this->getData(self::UPDATED_AT);
     }
 
+
     /**
-     * @inheritdoc
+     * @param string $updatedAt
      */
     public function setUpdatedAt($updatedAt)
     {
         $this->setData(self::UPDATED_AT, $updatedAt);
     }
 
+
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getUrlKey(): ?string
     {
         return $this->getData(self::URL_KEY);
     }
 
+
     /**
-     * @inheritdoc
+     * @param string $urlKey
      */
     public function setUrlKey($urlKey)
     {
         $this->setData(self::URL_KEY, $urlKey);
     }
 
+
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getVisibility(): ?string
     {
         return $this->getData(self::VISIBILITY);
     }
 
+
     /**
-     * @inheritdoc
+     * @param string $visibility
      */
     public function setVisibility($visibility)
     {
         $this->setData(self::VISIBILITY, $visibility);
     }
 
+
     /**
-     * @inheritdoc
+     * @return int|null
      */
     public function getWeight(): ?int
     {
         return $this->getData(self::WEIGHT);
     }
 
+
     /**
-     * @inheritdoc
+     * @param int $weight
      */
     public function setWeight($weight)
     {
         $this->setData(self::WEIGHT, $weight);
     }
 
+
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getWeightUnit(): ?string
     {
         return $this->getData(self::WEIGHT_UNIT);
     }
 
+
     /**
-     * @inheritdoc
+     * @param string $weightUnit
      */
     public function setWeightUnit($weightUnit)
     {
         $this->setData(self::WEIGHT_UNIT, $weightUnit);
     }
 
+
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getCurrency(): ?string
     {
         return $this->getData(self::CURRENCY);
     }
 
+
     /**
-     * @inheritdoc
+     * @param string $currency
      */
     public function setCurrency($currency)
     {
         $this->setData(self::CURRENCY, $currency);
     }
 
+
     /**
-     * @inheritdoc
+     * @return bool|null
      */
     public function getDisplayable(): ?bool
     {
         return $this->getData(self::DISPLAYABLE);
     }
 
+
     /**
-     * @inheritdoc
+     * @param bool $displayable
      */
     public function setDisplayable($displayable)
     {
         $this->setData(self::DISPLAYABLE, $displayable);
     }
 
+
     /**
-     * @inheritdoc
+     * @return bool|null
      */
     public function getBuyable(): ?bool
     {
         return $this->getData(self::BUYABLE);
     }
 
+
     /**
-     * @inheritdoc
+     * @param bool $buyable
      */
     public function setBuyable($buyable)
     {
         $this->setData(self::BUYABLE, $buyable);
     }
 
+
     /**
-     * @inheritdoc
+     * @return \Magento\CatalogExportApi\Api\Data\AttributeInterface[]|mixed
      */
     public function getAttributes()
     {
         return $this->getData(self::ATTRIBUTES);
     }
 
+
     /**
-     * @inheritdoc
+     * @param \Magento\CatalogExportApi\Api\Data\AttributeInterface[] $attributes
      */
     public function setAttributes($attributes)
     {
@@ -454,7 +484,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @return mixed|string[]
      */
     public function getCategories()
     {
@@ -462,7 +492,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @param string[] $categories
      */
     public function setCategories($categories)
     {
@@ -470,7 +500,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @return \Magento\CatalogExportApi\Api\Data\CustomOption[]|mixed
      */
     public function getOptions()
     {
@@ -478,7 +508,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @param \Magento\CatalogExportApi\Api\Data\CustomOption[] $options
      */
     public function setOptions($options)
     {
@@ -486,7 +516,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @return \Magento\CatalogExportApi\Api\Data\EnteredOption[]|mixed
      */
     public function getEnteredOptions()
     {
@@ -494,7 +524,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @param \Magento\CatalogExportApi\Api\Data\EnteredOption[] $options
      */
     public function setEnteredOptions($options)
     {
@@ -502,7 +532,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @return bool|null
      */
     public function getInStock(): ?bool
     {
@@ -510,7 +540,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @param bool $inStock
      */
     public function setInStock($inStock)
     {
@@ -518,7 +548,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @return bool|null
      */
     public function getLowStock(): ?bool
     {
@@ -526,7 +556,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @param bool $lowStock
      */
     public function setLowStock($lowStock)
     {
@@ -534,7 +564,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getUrl(): ?string
     {
@@ -542,7 +572,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @param string $url
      */
     public function setUrl($url)
     {
@@ -550,7 +580,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @return bool|null
      */
     public function getAllowOpenAmount(): ?bool
     {
@@ -558,7 +588,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @param bool $allowOpenAmount
      */
     public function setAllowOpenAmount($allowOpenAmount)
     {
@@ -566,7 +596,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getGiftCardType() :? string
     {
@@ -574,7 +604,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @param bool $giftCardType
      */
     public function setGiftCardType($giftCardType)
     {
@@ -582,7 +612,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @return bool|null
      */
     public function getRedeemable() :? bool
     {
@@ -590,7 +620,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @param bool $redeemable
      */
     public function setRedeemable($redeemable)
     {
@@ -598,7 +628,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getSkuType() :? string
     {
@@ -606,7 +636,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @param string $skuType
      */
     public function setSkuType($skuType)
     {
@@ -614,7 +644,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getWeightType() :? string
     {
@@ -622,7 +652,7 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
-     * @inheritdoc
+     * @param string $weightType
      */
     public function setWeightType($weightType)
     {

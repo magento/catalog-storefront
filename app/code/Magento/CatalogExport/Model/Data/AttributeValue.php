@@ -20,7 +20,7 @@ class AttributeValue extends AbstractModel implements AttributeValueInterface
     private const VALUE = 'value';
 
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getId() :? string
     {
@@ -28,7 +28,8 @@ class AttributeValue extends AbstractModel implements AttributeValueInterface
     }
 
     /**
-     * @inheritdoc
+     * @param null $id
+     * @return AbstractModel|void
      */
     public function setId($id = null)
     {
@@ -36,7 +37,7 @@ class AttributeValue extends AbstractModel implements AttributeValueInterface
     }
 
     /**
-     * @inheritdoc
+     * @return string|null
      */
     public function getValue() :? string
     {
@@ -44,7 +45,7 @@ class AttributeValue extends AbstractModel implements AttributeValueInterface
     }
 
     /**
-     * @inheritdoc
+     * @param null $value
      */
     public function setValue($value = null)
     {
