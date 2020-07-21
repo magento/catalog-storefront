@@ -14,7 +14,11 @@ namespace Magento\CatalogExportApi\Api\Data;
 /**
  * ProductPrice entity
  *
+ * phpcs:disable Magento2.PHP.FinalImplementation
+ * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ProductPrice
 {
