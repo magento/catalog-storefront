@@ -469,18 +469,18 @@ interface ProductInterface
     /**
      * Get product swatch image file
      *
-     * @return string|null
+     * @return \Magento\CatalogExportApi\Api\Data\ProductImage|null
      */
-    public function getSwatchImage() : ?string;
+    public function getSwatchImage() : ?ProductImage;
 
     /**
      * Set product swatch image file
      *
-     * @param string|null $image
+     * @param \Magento\CatalogExportApi\Api\Data\ProductImage|null $image
      *
      * @return void
      */
-    public function setSwatchImage(?string $image) : void;
+    public function setSwatchImage(?ProductImage $image) : void;
 
     /**
      * Get is product in stock

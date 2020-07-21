@@ -22,15 +22,17 @@ class MediaGallery implements DataMapperInterface
             return [];
         }
 
-        return \array_map(function ($mediaData) {
-            return \array_merge([
-                'url' => $mediaData['url'],
-                'label' => $mediaData['label'],
-                'position' => $mediaData['sort_order'],
-                'types' => $mediaData['types'] ?? [],
-            ], !empty($mediaData['video_attributes']) ? [
-                'video_content' => $mediaData['video_attributes'],
-            ] : []);
-        }, $data['media_gallery']);
+        return [
+            'media_gallery' => \array_map(function ($mediaData) {
+                return \array_merge([
+                    'url' => $mediaData['url'],
+                    'label' => $mediaData['label'],
+                    'position' => $mediaData['sort_order'],
+                    'types' => $mediaData['types'] ?? [],
+                ], !empty($mediaData['video_attributes']) ? [
+                    'video_content' => $mediaData['video_attributes'],
+                ] : []);
+            }, $data['media_gallery']),
+        ];
     }
 }

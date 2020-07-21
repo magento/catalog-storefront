@@ -579,7 +579,7 @@ class Product extends AbstractModel implements ProductInterface
     /**
      * @inheritDoc
      */
-    public function getSwatchImage() : ?string
+    public function getSwatchImage() : ?ProductImage
     {
         return $this->getData(self::SWATCH_IMAGE);
     }
@@ -587,7 +587,7 @@ class Product extends AbstractModel implements ProductInterface
     /**
      * @inheritDoc
      */
-    public function setSwatchImage(?string $image) : void
+    public function setSwatchImage(?ProductImage $image) : void
     {
         $this->setData(self::SWATCH_IMAGE, $image);
     }
