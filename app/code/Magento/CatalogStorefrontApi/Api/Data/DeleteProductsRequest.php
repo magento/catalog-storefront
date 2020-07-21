@@ -67,7 +67,7 @@ final class DeleteProductsRequest implements DeleteProductsRequestInterface
     /**
      * @inheritdoc
      *
-     * @param string $store
+     * @param int $store
      * @return void
      */
     public function setStore(int $store): void
