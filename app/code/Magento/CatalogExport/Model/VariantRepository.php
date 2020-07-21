@@ -25,7 +25,7 @@ class VariantRepository implements VariantRepositoryInterface
     private const CATALOG_EXPORT_MAX_VARIANTS_IN_RESPONSE = 'catalog_export/max_variants_in_response';
 
     /**
-     * @var \Magento\CatalogDataExporter\Model\Feed\Variant
+     * @var \Magento\DataExporter\Model\FeedInterface
      */
     private $variantFeed;
 
@@ -45,13 +45,13 @@ class VariantRepository implements VariantRepositoryInterface
     private $variantFactory;
 
     /**
-     * @param \Magento\CatalogDataExporter\Model\Feed\Variant $variantFeed
+     * @param \Magento\DataExporter\Model\FeedInterface $variantFeed
      * @param \Magento\CatalogExport\Model\Data\VariantFactory $variantFactory
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      * @param LoggerInterface $logger
      */
     public function __construct(
-        \Magento\CatalogDataExporter\Model\Feed\Variant $variantFeed,
+        \Magento\DataExporter\Model\FeedInterface $variantFeed,
         \Magento\CatalogExport\Model\Data\VariantFactory $variantFactory,
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
         LoggerInterface $logger

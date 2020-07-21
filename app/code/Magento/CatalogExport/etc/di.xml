@@ -19,4 +19,10 @@
             <argument name="logger" xsi:type="object">CatalogStorefrontConnectorLogger</argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogExport\Model\VariantRepository">
+        <arguments>
+            <argument name="logger" xsi:type="object">CatalogStorefrontConnectorLogger</argument>
+            <argument name="variantFeed" xsi:type="object">Magento\CatalogDataExporter\Model\Feed\Variant</argument>
+        </arguments>
+    </type>
 </config>

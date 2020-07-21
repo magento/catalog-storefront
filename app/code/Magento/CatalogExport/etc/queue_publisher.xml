@@ -9,4 +9,7 @@
     <publisher topic="catalog.export.product.data">
         <connection name="amqp" exchange="catalog.export.exchange" />
     </publisher>
+    <publisher topic="catalog.export.product.variant.data">
+        <connection name="amqp" exchange="catalog.export.exchange" />
+    </publisher>
 </config>
