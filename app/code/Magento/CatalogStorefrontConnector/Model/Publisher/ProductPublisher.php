@@ -8,7 +8,10 @@ namespace Magento\CatalogStorefrontConnector\Model\Publisher;
 
 use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterfaceFactory;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequestInterfaceFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\State;
 use Psr\Log\LoggerInterface;
@@ -53,6 +56,11 @@ class ProductPublisher
     private $importProductsRequestInterfaceFactory;
 
     /**
+     * @var DeleteProductsRequestInterfaceFactory
+     */
+    private $deleteProductsRequestInterfaceFactory;
+
+    /**
      * @var ProductDataProcessor
      */
     private $productDataProcessor;
@@ -68,6 +76,7 @@ class ProductPublisher
      * @param LoggerInterface $logger
      * @param CatalogServerInterface $catalogServer
      * @param ImportProductsRequestInterfaceFactory $importProductsRequestInterfaceFactory
+     * @param DeleteProductsRequestInterfaceFactory $deleteProductsRequestInterfaceFactory
      * @param ProductDataProcessor $productDataProcessor
      * @param DataObjectHelper $dataObjectHelper
      * @param \Magento\CatalogStorefrontApi\Api\Data\ProductMapper $productMapper
@@ -79,6 +88,7 @@ class ProductPublisher
         LoggerInterface $logger,
         CatalogServerInterface $catalogServer,
         ImportProductsRequestInterfaceFactory $importProductsRequestInterfaceFactory,
+        DeleteProductsRequestInterfaceFactory $deleteProductsRequestInterfaceFactory,
         ProductDataProcessor $productDataProcessor,
         \Magento\CatalogStorefrontApi\Api\Data\ProductMapper $productMapper,
         int $batchSize
@@ -89,6 +99,7 @@ class ProductPublisher
         $this->logger = $logger;
         $this->catalogServer = $catalogServer;
         $this->importProductsRequestInterfaceFactory = $importProductsRequestInterfaceFactory;
+        $this->deleteProductsRequestInterfaceFactory = $deleteProductsRequestInterfaceFactory;
         $this->productDataProcessor = $productDataProcessor;
         $this->productMapper = $productMapper;
     }
@@ -134,15 +145,26 @@ class ProductPublisher
      */
     private function publishEntities(array $productIds, int $storeId, $overrideProducts = []): void
     {
+        $deletedProductIds = \array_keys(\array_map(function($product){
+            return $product['deleted'] === true;
+        }, $overrideProducts));
+
         foreach (\array_chunk($productIds, $this->batchSize) as $idsBunch) {
-            // @todo eliminate calling old API when new API can provide all of the necessary data
-            $productsData = $this->productsDataProvider->fetch($idsBunch, [], ['store' => $storeId]);
-            $this->logger->debug(
-                \sprintf('Publish products with ids "%s" in store %s', \implode(', ', $productIds), $storeId),
-                ['verbose' => $productsData]
-            );
-            if (count($productsData)) {
-                $this->importProducts($storeId, array_values($productsData), $overrideProducts);
+            $existingProductIds = \array_diff($idsBunch, $deletedProductIds);
+            if (!empty($existingProductIds)) {
+                // @todo eliminate calling old API when new API can provide all of the necessary data
+                $productsData = $this->productsDataProvider->fetch($existingProductIds, [], ['store' => $storeId]);
+                $this->logger->debug(
+                    \sprintf('Publish products with ids "%s" in store %s', \implode(', ', $productIds), $storeId),
+                    ['verbose' => $productsData]
+                );
+                if (count($productsData)) {
+                    $this->importProducts($storeId, array_values($productsData), $overrideProducts);
+                }
+            }
+            $deletedProductIdsBunch = \array_intersect($deletedProductIds, $idsBunch);
+            if (!empty($deletedProductIdsBunch)) {
+                $this->deleteProducts($storeId, $deletedProductIdsBunch);
             }
         }
     }
@@ -153,7 +175,7 @@ class ProductPublisher
      * @param array $overrideProducts
      * @throws \Throwable
      */
-    private function importProducts($storeId, array $products, $overrideProducts = []): void
+    private function importProducts(int $storeId, array $products, $overrideProducts = []): void
     {
         $newApiProducts = [];
         foreach ($overrideProducts as $product) {
@@ -169,6 +191,7 @@ class ProductPublisher
         }
         unset($product);
 
+        /** @var ImportProductsRequestInterface $importProductRequest */
         $importProductRequest = $this->importProductsRequestInterfaceFactory->create();
         $importProductRequest->setProducts($products);
         $importProductRequest->setStore($storeId);
@@ -176,5 +199,20 @@ class ProductPublisher
         if ($importResult->getStatus() === false) {
             $this->logger->error(sprintf('Products import is failed: "%s"', $importResult->getMessage()));
         }
+    }
+
+    /**
+     * @param int $storeId
+     * @param int[] $productIds
+     * @return void
+     */
+    private function deleteProducts(int $storeId, array $productIds): void
+    {
+        /** @var DeleteProductsRequestInterface $deleteProductRequest */
+        $deleteProductRequest = $this->deleteProductsRequestInterfaceFactory->create();
+        $deleteProductRequest->setProductIds($productIds);
+        $deleteProductRequest->setStore($storeId);
+
+        $this->catalogServer->deleteProducts($deleteProductRequest);
     }
 }

@@ -36,6 +36,7 @@ use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterfaceFactory;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseFactory;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequestInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -232,6 +233,8 @@ class CatalogService implements CatalogServerInterface
      */
     public function importProducts(ImportProductsRequestInterface $request): ImportProductsResponseInterface
     {
+        $importProductsResponse = $this->importProductsResponseFactory->create();
+
         try {
             $products = \array_map(
                 function ($product) {
@@ -250,10 +253,7 @@ class CatalogService implements CatalogServerInterface
             $productsInElasticFormat = [];
             foreach ($products as $product) {
                 $productInElasticFormat = $product;
-                if (empty($productInElasticFormat)) {
-                    // TODO: Implemente Delete
-                    // $dataPerType[$entity->getEntityType()][$entity->getStoreId()][self::DELETE][] = $entity->getEntityId();
-                } else {
+                if (!empty($productInElasticFormat)) {
                     $productInElasticFormat['store_id'] = $storeId;
                     foreach ($productInElasticFormat['dynamic_attributes'] as $dynamicAttribute) {
                         $productInElasticFormat[$dynamicAttribute['code']] = $dynamicAttribute['value'];
@@ -268,7 +268,6 @@ class CatalogService implements CatalogServerInterface
 
             $this->catalogRepository->saveToStorage($productsInElasticFormat);
 
-            $importProductsResponse = $this->importProductsResponseFactory->create();
             $importProductsResponse->setMessage('Records imported successfully');
             $importProductsResponse->setStatus(true);
 
@@ -276,7 +275,42 @@ class CatalogService implements CatalogServerInterface
         } catch (\Throwable $e) {
             $message = 'Cannot process product import';
             $this->logger->error($message, ['exception' => $e]);
-            $importProductsResponse = $this->importProductsResponseFactory->create();
+            $importProductsResponse->setMessage($message);
+            $importProductsResponse->setStatus(false);
+
+            return $importProductsResponse;
+        }
+    }
+
+    /**
+     * Delete products from storage.
+     *
+     * @param DeleteProductsRequestInterface $request
+     * @return void
+     */
+    public function deleteProducts(DeleteProductsRequestInterface $request): ImportProductsResponseInterface
+    {
+        $storeId = $request->getStore();
+        $productsInElasticFormat = [
+            'product' => [
+                $storeId => [
+                    'delete' => $request->getProductIds()
+                ]
+            ]
+        ];
+
+        $importProductsResponse = $this->importProductsResponseFactory->create();
+
+        try {
+            $this->catalogRepository->saveToStorage($productsInElasticFormat);
+
+            $importProductsResponse->setMessage('Product were removed successfully');
+            $importProductsResponse->setStatus(true);
+
+            return $importProductsResponse;
+        } catch(\Throwable $e) {
+            $message = 'Unable to delete products';
+            $this->logger->error($message, ['exception' => $e]);
             $importProductsResponse->setMessage($message);
             $importProductsResponse->setStatus(false);
 
