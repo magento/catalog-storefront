@@ -42,19 +42,22 @@ class DynamicAttribute implements DataMapperInterface
     public function map(array $productData): array
     {
         $attributes = [];
-        foreach ($productData['attributes'] as $attribute) {
-            if ($attribute['type'] == self::SELECT_OPTION_TYPE) {
-                $attributes[$attribute['attribute_code']] = $attribute['value'][0]['id'];
-            } else if ($attribute['type'] == self::MULTISELECT_OPTION_TYPE) {
-                $values = [];
-                foreach ($attribute['value'] as $attributeValue) {
-                    $values[] = $attributeValue['id'];
+
+        if ( $productData && $productData['attributes']) {
+            foreach ($productData['attributes'] as $attribute) {
+                if ($attribute['type'] == self::SELECT_OPTION_TYPE) {
+                    $attributes[$attribute['attribute_code']] = $attribute['value'][0]['id'];
+                } else if ($attribute['type'] == self::MULTISELECT_OPTION_TYPE) {
+                    $values = [];
+                    foreach ($attribute['value'] as $attributeValue) {
+                        $values[] = $attributeValue['id'];
+                    }
+                    $attributes[$attribute['attribute_code']] = implode(',', $values);
+                } else if ($attribute['type'] == self::BOOLEAN_TYPE) {
+                    $attributes[$attribute['attribute_code']] = $attribute['value'][0]['value'] == 'yes' ? 1 : 0;
+                } else if ($attribute['type'] == self::TEXT_TYPE || $attribute['type'] == self::PRICE_TYPE) {
+                    $attributes[$attribute['attribute_code']] = $attribute['value'][0]['value'];
                 }
-                $attributes[$attribute['attribute_code']] = implode(',', $values);
-            } else if ($attribute['type'] == self::BOOLEAN_TYPE) {
-                $attributes[$attribute['attribute_code']] = $attribute['value'][0]['value'] == 'yes' ? 1 : 0;
-            } else if ($attribute['type'] == self::TEXT_TYPE || $attribute['type'] == self::PRICE_TYPE) {
-                $attributes[$attribute['attribute_code']] = $attribute['value'][0]['value'];
             }
         }
 
