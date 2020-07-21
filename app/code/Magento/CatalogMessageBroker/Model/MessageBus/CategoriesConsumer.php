@@ -67,6 +67,39 @@ class CategoriesConsumer extends OldConsumer
     }
 
     /**
+     * Retrieve mapped stores, in case if something went wrong, retrieve just one default store
+     *
+     * @return array
+     */
+    private function getMappedStores(): array
+    {
+        try {
+            // @todo eliminate store manager
+            $stores = $this->storeManager->getStores(true);
+            $storesToIds = [];
+            foreach ($stores as $store) {
+                $storesToIds[$store->getCode()] = $store->getId();
+            }
+
+        } catch (\Throwable $e) {
+            $storesToIds['default'] = 1;
+        }
+
+        return $storesToIds;
+    }
+
+    /**
+     * @param array $mappedStores
+     * @param string $storeCode
+     * @return int|mixed
+     */
+    private function resolveStoreId(array $mappedStores, string $storeCode)
+    {
+        //workaround for tests
+        return $storesToIds[$storeCode] ?? 1;
+    }
+
+    /**
      * Process message
      *
      * @param string $ids
@@ -77,23 +110,15 @@ class CategoriesConsumer extends OldConsumer
             $ids = json_decode($ids, true);
             $dataPerType = [];
             $categories = $this->fetchCategories->execute($ids);
-
-            // @todo eliminate store manager
-            $stores = $this->storeManager->getStores(true);
-            $storesToIds = [];
-            foreach ($stores as $store) {
-                $storesToIds[$store->getCode()] = $store->getId();
-            }
+            $mappedStores = $this->getMappedStores();
 
             foreach ($categories as $category) {
-                //workaround for tests
-                $storeId = $storesToIds[$category['store_view_code']] ?? 1;
+                $storeId = $this->resolveStoreId($mappedStores, $category['store_view_code']);
                 $dataPerType['category'][$storeId][self::SAVE][] = $category;
             }
 
             $this->saveToStorage($dataPerType);
         } catch (\Throwable $e) {
-            throw $e;
             $this->logger->critical($e->getMessage());
         }
     }
