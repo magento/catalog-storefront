@@ -93,6 +93,7 @@ class CategoriesConsumer extends OldConsumer
 
             $this->saveToStorage($dataPerType);
         } catch (\Throwable $e) {
+            throw $e;
             $this->logger->critical($e->getMessage());
         }
     }
