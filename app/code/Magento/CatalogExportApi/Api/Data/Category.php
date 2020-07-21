@@ -11,6 +11,7 @@ namespace Magento\CatalogExportApi\Api\Data;
  * Category entity
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Category
 {
@@ -144,6 +145,11 @@ class Category
      * @var int|null
      */
     private $includeInMenu;
+
+    /**
+     * @var int|null
+     */
+    private $childrenCount;
 
     /**
      * Get product ID
@@ -504,6 +510,8 @@ class Category
     }
 
     /**
+     * Set image url for category
+     *
      * @param string|null $image
      * @return void
      */
@@ -513,6 +521,8 @@ class Category
     }
 
     /**
+     * Retrieve Image URL for category
+     *
      * @return string|null
      */
     public function getImage(): ?string
@@ -534,7 +544,6 @@ class Category
      * Set category is anchor
      *
      * @param int|null $isAnchor
-     *
      * @return void
      */
     public function setIsAnchor(?int $isAnchor): void
@@ -556,7 +565,6 @@ class Category
      * Set category display mode
      *
      * @param string|null $displayMode
-     *
      * @return void
      */
     public function setDisplayMode(?string $displayMode): void
@@ -578,7 +586,6 @@ class Category
      * Set category available sort by options
      *
      * @param string[]|null $availableSortBy
-     *
      * @return void
      */
     public function setAvailableSortBy(?array $availableSortBy): void
@@ -600,7 +607,6 @@ class Category
      * Set category meta title
      *
      * @param string|null $metaTitle
-     *
      * @return void
      */
     public function setMetaTitle(?string $metaTitle): void
@@ -622,7 +628,6 @@ class Category
      * Set category meta keywords
      *
      * @param string|null $metaKeywords
-     *
      * @return void
      */
     public function setMetaKeywords(?string $metaKeywords): void
@@ -644,7 +649,6 @@ class Category
      * Set category meta description
      *
      * @param string|null $metaDescription
-     *
      * @return void
      */
     public function setMetaDescription(?string $metaDescription): void
@@ -653,6 +657,8 @@ class Category
     }
 
     /**
+     * Return flag that is shown whether category is active or not
+     *
      * @return int
      */
     public function getIsActive(): int
@@ -661,6 +667,8 @@ class Category
     }
 
     /**
+     * Set flag that is shown whether category is active or not
+     *
      * @param int $isActive
      * @return void
      */
@@ -670,6 +678,8 @@ class Category
     }
 
     /**
+     * Return flag that is shown whether category is include in menu
+     *
      * @return int|null
      */
     public function getIncludeInMenu(): ?int
@@ -678,11 +688,34 @@ class Category
     }
 
     /**
+     * Set flag that is shown whether category is include in menu
+     *
      * @param int|null $includeInMenu
      * @return void
      */
     public function setIncludeInMenu(?int $includeInMenu): void
     {
         $this->includeInMenu = $includeInMenu;
+    }
+
+    /**
+     * Retrieve list of all category children
+     *
+     * @return int|null
+     */
+    public function getChildrenCount(): ?int
+    {
+        return $this->childrenCount;
+    }
+
+    /**
+     * Retrieve list of all category children
+     *
+     * @param int|null $childrenCount
+     * @return void
+     */
+    public function setChildrenCount(?int $childrenCount): void
+    {
+        $this->childrenCount = $childrenCount;
     }
 }

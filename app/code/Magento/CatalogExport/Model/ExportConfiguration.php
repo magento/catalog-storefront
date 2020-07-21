@@ -11,7 +11,6 @@ use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Class ExportConfiguration
- * @package Magento\CatalogExport\Model
  *
  * The main responsibility of that class is to provide deployment and other kind of configurations for catalog export
  */

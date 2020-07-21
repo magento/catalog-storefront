@@ -119,6 +119,7 @@ class Sync extends Command
     }
 
     /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
