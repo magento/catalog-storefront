@@ -44,15 +44,37 @@ class ProductDataProcessor
      */
     public function merge(array $data, array $product): array
     {
-        $overriddenFields = [];
-        $recursiveOverriddenFields = [];
+        $scalarFields = $this->mergeScalarFields($data, $product);
+        $compoundFields = $this->mergeCompoundFields($data, $product);
+        return array_merge($scalarFields, $compoundFields, $product);
+    }
 
+    /**
+     * Merge scalar fields in product data
+     *
+     * @param array $data
+     * @param array $product
+     * @return array
+     */
+    private function mergeScalarFields($data, $product) {
+        $fieldsData = [];
         foreach ($this->fields as $field) {
             if (isset($data[$field])) {
-                $overriddenFields[$field] = $data[$field];
+                $fieldsData[$field] = $data[$field];
             }
         }
+        return $fieldsData;
+    }
 
+    /**
+     * Merge compound fields in product data using data mappers
+     *
+     * @param array $data
+     * @param array $product
+     * @return array
+     */
+    private function mergeCompoundFields($data, $product) {
+        $fields = [];
         foreach ($this->dataMappers as $field => $dataMapperConfig) {
             if (
                 array_key_exists('types', $dataMapperConfig) &&
@@ -65,13 +87,11 @@ class ProductDataProcessor
             $dataMapper = $dataMapperConfig['class'];
 
             if (array_key_exists('recursive', $dataMapperConfig) && $dataMapperConfig['recursive'] === true) {
-                $recursiveOverriddenFields[$field] = $dataMapper->map($data);
+                $fields[$field] = array_replace_recursive($product[$field], $dataMapper->map($data));
             } else {
-                $overriddenFields[$field] = $dataMapper->map($data);
+                $fields[$field] = $dataMapper->map($data);
             }
         }
-
-        $product = array_merge($product, $overriddenFields);
-        return array_replace_recursive($product, $recursiveOverriddenFields);
+        return $fields;
     }
 }
