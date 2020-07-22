@@ -23,16 +23,17 @@ namespace Magento\CatalogStorefrontApi\Api\Data;
  */
 final class DeleteProductsRequest implements DeleteProductsRequestInterface
 {
+
     /**
-     * @var int[]
+     * @var array
      */
     private $productIds;
 
     /**
-     * @var int
+     * @var string
      */
     private $store;
-
+    
     /**
      * @inheritdoc
      *
@@ -42,36 +43,36 @@ final class DeleteProductsRequest implements DeleteProductsRequestInterface
     {
         return (array) $this->productIds;
     }
-
+    
     /**
      * @inheritdoc
      *
-     * @param int[] array
+     * @param int[] $value
      * @return void
      */
-    public function setProductIds(array $ids): void
+    public function setProductIds(array $value): void
     {
-        $this->productIds = $ids;
+        $this->productIds = $value;
     }
-
+    
     /**
      * @inheritdoc
      *
-     * @return int
+     * @return string
      */
-    public function getStore(): int
+    public function getStore(): string
     {
-        return (int)$this->store;
+        return (string) $this->store;
     }
-
+    
     /**
      * @inheritdoc
      *
-     * @param int $store
+     * @param string $value
      * @return void
      */
-    public function setStore(int $store): void
+    public function setStore(string $value): void
     {
-        $this->store = $store;
+        $this->store = $value;
     }
 }
