@@ -22,18 +22,18 @@ namespace Magento\CatalogExportApi\Api\Data;
  */
 class PriceRange
 {
-    /** @var \Magento\CatalogExportApi\Api\Data\ProductPrice[]|null */
+    /** @var \Magento\CatalogExportApi\Api\Data\ProductPrice */
     private $minimumPrice;
 
-    /** @var \Magento\CatalogExportApi\Api\Data\ProductPrice[]|null */
+    /** @var \Magento\CatalogExportApi\Api\Data\ProductPrice */
     private $maximumPrice;
 
     /**
      * Get minimum price
      *
-     * @return \Magento\CatalogExportApi\Api\Data\ProductPrice[]|null
+     * @return \Magento\CatalogExportApi\Api\Data\ProductPrice
      */
-    public function getMinimumPrice(): ?array
+    public function getMinimumPrice(): ?ProductPrice
     {
         return $this->minimumPrice;
     }
@@ -52,9 +52,9 @@ class PriceRange
     /**
      * Get maximum price
      *
-     * @return \Magento\CatalogExportApi\Api\Data\ProductPrice[]|null
+     * @return \Magento\CatalogExportApi\Api\Data\ProductPrice
      */
-    public function getMaximumPrice(): ?array
+    public function getMaximumPrice(): ?ProductPrice
     {
         return $this->maximumPrice;
     }

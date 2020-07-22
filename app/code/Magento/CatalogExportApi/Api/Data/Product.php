@@ -55,7 +55,7 @@ class Product
     /** @var string */
     private $description;
 
-    /** @var \Magento\CatalogExportApi\Api\Data\Image[]|null */
+    /** @var \Magento\CatalogExportApi\Api\Data\Image */
     private $image;
 
     /** @var bool */
@@ -79,19 +79,19 @@ class Product
     /** @var string */
     private $samplesTitle;
 
-    /** @var \Magento\CatalogExportApi\Api\Data\Image[]|null */
+    /** @var \Magento\CatalogExportApi\Api\Data\Image */
     private $smallImage;
 
     /** @var string */
     private $status;
 
-    /** @var \Magento\CatalogExportApi\Api\Data\Image[]|null */
+    /** @var \Magento\CatalogExportApi\Api\Data\Image */
     private $swatchImage;
 
     /** @var string */
     private $taxClassId;
 
-    /** @var \Magento\CatalogExportApi\Api\Data\Image[]|null */
+    /** @var \Magento\CatalogExportApi\Api\Data\Image */
     private $thumbnail;
 
     /** @var string */
@@ -139,10 +139,10 @@ class Product
     /** @var array */
     private $categories;
 
-    /** @var \Magento\CatalogExportApi\Api\Data\PriceRange[]|null */
+    /** @var \Magento\CatalogExportApi\Api\Data\PriceRange */
     private $prices;
 
-    /** @var \Magento\CatalogExportApi\Api\Data\Inventory[]|null */
+    /** @var \Magento\CatalogExportApi\Api\Data\Inventory */
     private $inventory;
 
     /** @var \Magento\CatalogExportApi\Api\Data\Option[]|null */
@@ -385,9 +385,9 @@ class Product
     /**
      * Get image
      *
-     * @return \Magento\CatalogExportApi\Api\Data\Image[]|null
+     * @return \Magento\CatalogExportApi\Api\Data\Image
      */
-    public function getImage(): ?array
+    public function getImage(): ?Image
     {
         return $this->image;
     }
@@ -553,9 +553,9 @@ class Product
     /**
      * Get small image
      *
-     * @return \Magento\CatalogExportApi\Api\Data\Image[]|null
+     * @return \Magento\CatalogExportApi\Api\Data\Image
      */
-    public function getSmallImage(): ?array
+    public function getSmallImage(): ?Image
     {
         return $this->smallImage;
     }
@@ -595,9 +595,9 @@ class Product
     /**
      * Get swatch image
      *
-     * @return \Magento\CatalogExportApi\Api\Data\Image[]|null
+     * @return \Magento\CatalogExportApi\Api\Data\Image
      */
-    public function getSwatchImage(): ?array
+    public function getSwatchImage(): ?Image
     {
         return $this->swatchImage;
     }
@@ -637,9 +637,9 @@ class Product
     /**
      * Get thumbnail
      *
-     * @return \Magento\CatalogExportApi\Api\Data\Image[]|null
+     * @return \Magento\CatalogExportApi\Api\Data\Image
      */
-    public function getThumbnail(): ?array
+    public function getThumbnail(): ?Image
     {
         return $this->thumbnail;
     }
@@ -973,9 +973,9 @@ class Product
     /**
      * Get prices
      *
-     * @return \Magento\CatalogExportApi\Api\Data\PriceRange[]|null
+     * @return \Magento\CatalogExportApi\Api\Data\PriceRange
      */
-    public function getPrices(): ?array
+    public function getPrices(): ?PriceRange
     {
         return $this->prices;
     }
@@ -994,9 +994,9 @@ class Product
     /**
      * Get inventory
      *
-     * @return \Magento\CatalogExportApi\Api\Data\Inventory[]|null
+     * @return \Magento\CatalogExportApi\Api\Data\Inventory
      */
-    public function getInventory(): ?array
+    public function getInventory(): ?Inventory
     {
         return $this->inventory;
     }

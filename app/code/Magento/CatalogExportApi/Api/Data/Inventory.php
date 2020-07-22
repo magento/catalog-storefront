@@ -25,7 +25,7 @@ class Inventory
     /** @var int */
     private $qty;
 
-    /** @var \Magento\CatalogExportApi\Api\Data\InventorySettings[]|null */
+    /** @var \Magento\CatalogExportApi\Api\Data\InventorySettings */
     private $configuration;
 
     /**
@@ -52,9 +52,9 @@ class Inventory
     /**
      * Get configuration
      *
-     * @return \Magento\CatalogExportApi\Api\Data\InventorySettings[]|null
+     * @return \Magento\CatalogExportApi\Api\Data\InventorySettings
      */
-    public function getConfiguration(): ?array
+    public function getConfiguration(): ?InventorySettings
     {
         return $this->configuration;
     }

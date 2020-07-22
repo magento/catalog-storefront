@@ -25,7 +25,7 @@ class OptionValue
     /** @var string */
     private $id;
 
-    /** @var \Magento\CatalogExportApi\Api\Data\ProductPrice[]|null */
+    /** @var \Magento\CatalogExportApi\Api\Data\ProductPrice */
     private $price;
 
     /** @var string */
@@ -64,9 +64,9 @@ class OptionValue
     /**
      * Get price
      *
-     * @return \Magento\CatalogExportApi\Api\Data\ProductPrice[]|null
+     * @return \Magento\CatalogExportApi\Api\Data\ProductPrice
      */
-    public function getPrice(): ?array
+    public function getPrice(): ?ProductPrice
     {
         return $this->price;
     }

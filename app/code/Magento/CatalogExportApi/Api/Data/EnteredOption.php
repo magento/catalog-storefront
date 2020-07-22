@@ -46,7 +46,7 @@ class EnteredOption
     /** @var string */
     private $sku;
 
-    /** @var \Magento\CatalogExportApi\Api\Data\ProductPrice[]|null */
+    /** @var \Magento\CatalogExportApi\Api\Data\ProductPrice */
     private $price;
 
     /** @var string */
@@ -235,9 +235,9 @@ class EnteredOption
     /**
      * Get price
      *
-     * @return \Magento\CatalogExportApi\Api\Data\ProductPrice[]|null
+     * @return \Magento\CatalogExportApi\Api\Data\ProductPrice
      */
-    public function getPrice(): ?array
+    public function getPrice(): ?ProductPrice
     {
         return $this->price;
     }
