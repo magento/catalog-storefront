@@ -44,7 +44,7 @@ class ProductPrice
      * @param float $regularPrice
      * @return void
      */
-    public function setRegularPrice(float $regularPrice): void
+    public function setRegularPrice(?float $regularPrice): void
     {
         $this->regularPrice = $regularPrice;
     }
@@ -65,7 +65,7 @@ class ProductPrice
      * @param float $finalPrice
      * @return void
      */
-    public function setFinalPrice(float $finalPrice): void
+    public function setFinalPrice(?float $finalPrice): void
     {
         $this->finalPrice = $finalPrice;
     }

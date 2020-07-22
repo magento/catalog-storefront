@@ -77,7 +77,7 @@ class OptionValue
      * @param \Magento\CatalogExportApi\Api\Data\ProductPrice $price
      * @return void
      */
-    public function setPrice(ProductPrice $price): void
+    public function setPrice(?ProductPrice $price): void
     {
         $this->price = $price;
     }
@@ -98,7 +98,7 @@ class OptionValue
      * @param string $priceType
      * @return void
      */
-    public function setPriceType(string $priceType): void
+    public function setPriceType(?string $priceType): void
     {
         $this->priceType = $priceType;
     }
@@ -119,7 +119,7 @@ class OptionValue
      * @param string $value
      * @return void
      */
-    public function setValue(string $value): void
+    public function setValue(?string $value): void
     {
         $this->value = $value;
     }
@@ -140,7 +140,7 @@ class OptionValue
      * @param int $sortOrder
      * @return void
      */
-    public function setSortOrder(int $sortOrder): void
+    public function setSortOrder(?int $sortOrder): void
     {
         $this->sortOrder = $sortOrder;
     }
@@ -161,7 +161,7 @@ class OptionValue
      * @param string $sku
      * @return void
      */
-    public function setSku(string $sku): void
+    public function setSku(?string $sku): void
     {
         $this->sku = $sku;
     }

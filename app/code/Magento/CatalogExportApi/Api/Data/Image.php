@@ -44,7 +44,7 @@ class Image
      * @param string $url
      * @return void
      */
-    public function setUrl(string $url): void
+    public function setUrl(?string $url): void
     {
         $this->url = $url;
     }
@@ -65,7 +65,7 @@ class Image
      * @param string $label
      * @return void
      */
-    public function setLabel(string $label): void
+    public function setLabel(?string $label): void
     {
         $this->label = $label;
     }

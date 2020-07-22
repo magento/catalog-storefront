@@ -101,7 +101,7 @@ class EnteredOption
      * @param string $value
      * @return void
      */
-    public function setValue(string $value): void
+    public function setValue(?string $value): void
     {
         $this->value = $value;
     }
@@ -122,7 +122,7 @@ class EnteredOption
      * @param bool $required
      * @return void
      */
-    public function setRequired(bool $required): void
+    public function setRequired(?bool $required): void
     {
         $this->required = $required;
     }
@@ -143,7 +143,7 @@ class EnteredOption
      * @param int $sortOrder
      * @return void
      */
-    public function setSortOrder(int $sortOrder): void
+    public function setSortOrder(?int $sortOrder): void
     {
         $this->sortOrder = $sortOrder;
     }
@@ -164,7 +164,7 @@ class EnteredOption
      * @param string $type
      * @return void
      */
-    public function setType(string $type): void
+    public function setType(?string $type): void
     {
         $this->type = $type;
     }
@@ -185,7 +185,7 @@ class EnteredOption
      * @param string $renderType
      * @return void
      */
-    public function setRenderType(string $renderType): void
+    public function setRenderType(?string $renderType): void
     {
         $this->renderType = $renderType;
     }
@@ -206,7 +206,7 @@ class EnteredOption
      * @param string $productSku
      * @return void
      */
-    public function setProductSku(string $productSku): void
+    public function setProductSku(?string $productSku): void
     {
         $this->productSku = $productSku;
     }
@@ -227,7 +227,7 @@ class EnteredOption
      * @param string $sku
      * @return void
      */
-    public function setSku(string $sku): void
+    public function setSku(?string $sku): void
     {
         $this->sku = $sku;
     }
@@ -248,7 +248,7 @@ class EnteredOption
      * @param \Magento\CatalogExportApi\Api\Data\ProductPrice $price
      * @return void
      */
-    public function setPrice(ProductPrice $price): void
+    public function setPrice(?ProductPrice $price): void
     {
         $this->price = $price;
     }
@@ -269,7 +269,7 @@ class EnteredOption
      * @param string $priceType
      * @return void
      */
-    public function setPriceType(string $priceType): void
+    public function setPriceType(?string $priceType): void
     {
         $this->priceType = $priceType;
     }
@@ -290,7 +290,7 @@ class EnteredOption
      * @param int $maxCharacters
      * @return void
      */
-    public function setMaxCharacters(int $maxCharacters): void
+    public function setMaxCharacters(?int $maxCharacters): void
     {
         $this->maxCharacters = $maxCharacters;
     }
@@ -311,7 +311,7 @@ class EnteredOption
      * @param string $fileExtension
      * @return void
      */
-    public function setFileExtension(string $fileExtension): void
+    public function setFileExtension(?string $fileExtension): void
     {
         $this->fileExtension = $fileExtension;
     }
@@ -332,7 +332,7 @@ class EnteredOption
      * @param int $imageSizeX
      * @return void
      */
-    public function setImageSizeX(int $imageSizeX): void
+    public function setImageSizeX(?int $imageSizeX): void
     {
         $this->imageSizeX = $imageSizeX;
     }
@@ -353,7 +353,7 @@ class EnteredOption
      * @param int $imageSizeY
      * @return void
      */
-    public function setImageSizeY(int $imageSizeY): void
+    public function setImageSizeY(?int $imageSizeY): void
     {
         $this->imageSizeY = $imageSizeY;
     }

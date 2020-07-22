@@ -167,7 +167,7 @@ class Product
      * @param string $sku
      * @return void
      */
-    public function setSku(string $sku): void
+    public function setSku(?string $sku): void
     {
         $this->sku = $sku;
     }
@@ -188,7 +188,7 @@ class Product
      * @param \Magento\CatalogExportApi\Api\Data\ParentProduct[] $parents
      * @return void
      */
-    public function setParents(array $parents = null): void
+    public function setParents(?array $parents = null): void
     {
         $this->parents = $parents;
     }
@@ -209,7 +209,7 @@ class Product
      * @param string $storeViewCode
      * @return void
      */
-    public function setStoreViewCode(string $storeViewCode): void
+    public function setStoreViewCode(?string $storeViewCode): void
     {
         $this->storeViewCode = $storeViewCode;
     }
@@ -251,7 +251,7 @@ class Product
      * @param string $websiteCode
      * @return void
      */
-    public function setWebsiteCode(string $websiteCode): void
+    public function setWebsiteCode(?string $websiteCode): void
     {
         $this->websiteCode = $websiteCode;
     }
@@ -272,7 +272,7 @@ class Product
      * @param string $name
      * @return void
      */
-    public function setName(string $name): void
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }
@@ -293,7 +293,7 @@ class Product
      * @param int $productId
      * @return void
      */
-    public function setProductId(int $productId): void
+    public function setProductId(?int $productId): void
     {
         $this->productId = $productId;
     }
@@ -314,7 +314,7 @@ class Product
      * @param string $type
      * @return void
      */
-    public function setType(string $type): void
+    public function setType(?string $type): void
     {
         $this->type = $type;
     }
@@ -335,7 +335,7 @@ class Product
      * @param string $productType
      * @return void
      */
-    public function setProductType(string $productType): void
+    public function setProductType(?string $productType): void
     {
         $this->productType = $productType;
     }
@@ -356,7 +356,7 @@ class Product
      * @param string $shortDescription
      * @return void
      */
-    public function setShortDescription(string $shortDescription): void
+    public function setShortDescription(?string $shortDescription): void
     {
         $this->shortDescription = $shortDescription;
     }
@@ -377,7 +377,7 @@ class Product
      * @param string $description
      * @return void
      */
-    public function setDescription(string $description): void
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
@@ -398,7 +398,7 @@ class Product
      * @param \Magento\CatalogExportApi\Api\Data\Image $image
      * @return void
      */
-    public function setImage(Image $image): void
+    public function setImage(?Image $image): void
     {
         $this->image = $image;
     }
@@ -419,7 +419,7 @@ class Product
      * @param bool $linksExist
      * @return void
      */
-    public function setLinksExist(bool $linksExist): void
+    public function setLinksExist(?bool $linksExist): void
     {
         $this->linksExist = $linksExist;
     }
@@ -440,7 +440,7 @@ class Product
      * @param bool $linksPurchasedSeparately
      * @return void
      */
-    public function setLinksPurchasedSeparately(bool $linksPurchasedSeparately): void
+    public function setLinksPurchasedSeparately(?bool $linksPurchasedSeparately): void
     {
         $this->linksPurchasedSeparately = $linksPurchasedSeparately;
     }
@@ -461,7 +461,7 @@ class Product
      * @param string $linksTitle
      * @return void
      */
-    public function setLinksTitle(string $linksTitle): void
+    public function setLinksTitle(?string $linksTitle): void
     {
         $this->linksTitle = $linksTitle;
     }
@@ -482,7 +482,7 @@ class Product
      * @param string $metaDescription
      * @return void
      */
-    public function setMetaDescription(string $metaDescription): void
+    public function setMetaDescription(?string $metaDescription): void
     {
         $this->metaDescription = $metaDescription;
     }
@@ -503,7 +503,7 @@ class Product
      * @param string $metaKeyword
      * @return void
      */
-    public function setMetaKeyword(string $metaKeyword): void
+    public function setMetaKeyword(?string $metaKeyword): void
     {
         $this->metaKeyword = $metaKeyword;
     }
@@ -524,7 +524,7 @@ class Product
      * @param string $metaTitle
      * @return void
      */
-    public function setMetaTitle(string $metaTitle): void
+    public function setMetaTitle(?string $metaTitle): void
     {
         $this->metaTitle = $metaTitle;
     }
@@ -545,7 +545,7 @@ class Product
      * @param string $samplesTitle
      * @return void
      */
-    public function setSamplesTitle(string $samplesTitle): void
+    public function setSamplesTitle(?string $samplesTitle): void
     {
         $this->samplesTitle = $samplesTitle;
     }
@@ -566,7 +566,7 @@ class Product
      * @param \Magento\CatalogExportApi\Api\Data\Image $smallImage
      * @return void
      */
-    public function setSmallImage(Image $smallImage): void
+    public function setSmallImage(?Image $smallImage): void
     {
         $this->smallImage = $smallImage;
     }
@@ -587,7 +587,7 @@ class Product
      * @param string $status
      * @return void
      */
-    public function setStatus(string $status): void
+    public function setStatus(?string $status): void
     {
         $this->status = $status;
     }
@@ -608,7 +608,7 @@ class Product
      * @param \Magento\CatalogExportApi\Api\Data\Image $swatchImage
      * @return void
      */
-    public function setSwatchImage(Image $swatchImage): void
+    public function setSwatchImage(?Image $swatchImage): void
     {
         $this->swatchImage = $swatchImage;
     }
@@ -629,7 +629,7 @@ class Product
      * @param string $taxClassId
      * @return void
      */
-    public function setTaxClassId(string $taxClassId): void
+    public function setTaxClassId(?string $taxClassId): void
     {
         $this->taxClassId = $taxClassId;
     }
@@ -650,7 +650,7 @@ class Product
      * @param \Magento\CatalogExportApi\Api\Data\Image $thumbnail
      * @return void
      */
-    public function setThumbnail(Image $thumbnail): void
+    public function setThumbnail(?Image $thumbnail): void
     {
         $this->thumbnail = $thumbnail;
     }
@@ -671,7 +671,7 @@ class Product
      * @param string $createdAt
      * @return void
      */
-    public function setCreatedAt(string $createdAt): void
+    public function setCreatedAt(?string $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -692,7 +692,7 @@ class Product
      * @param string $updatedAt
      * @return void
      */
-    public function setUpdatedAt(string $updatedAt): void
+    public function setUpdatedAt(?string $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
@@ -713,7 +713,7 @@ class Product
      * @param string $modifiedAt
      * @return void
      */
-    public function setModifiedAt(string $modifiedAt): void
+    public function setModifiedAt(?string $modifiedAt): void
     {
         $this->modifiedAt = $modifiedAt;
     }
@@ -734,7 +734,7 @@ class Product
      * @param string $urlKey
      * @return void
      */
-    public function setUrlKey(string $urlKey): void
+    public function setUrlKey(?string $urlKey): void
     {
         $this->urlKey = $urlKey;
     }
@@ -755,7 +755,7 @@ class Product
      * @param string $visibility
      * @return void
      */
-    public function setVisibility(string $visibility): void
+    public function setVisibility(?string $visibility): void
     {
         $this->visibility = $visibility;
     }
@@ -776,7 +776,7 @@ class Product
      * @param float $weight
      * @return void
      */
-    public function setWeight(float $weight): void
+    public function setWeight(?float $weight): void
     {
         $this->weight = $weight;
     }
@@ -797,7 +797,7 @@ class Product
      * @param string $weightUnit
      * @return void
      */
-    public function setWeightUnit(string $weightUnit): void
+    public function setWeightUnit(?string $weightUnit): void
     {
         $this->weightUnit = $weightUnit;
     }
@@ -818,7 +818,7 @@ class Product
      * @param string $weightType
      * @return void
      */
-    public function setWeightType(string $weightType): void
+    public function setWeightType(?string $weightType): void
     {
         $this->weightType = $weightType;
     }
@@ -839,7 +839,7 @@ class Product
      * @param string $currency
      * @return void
      */
-    public function setCurrency(string $currency): void
+    public function setCurrency(?string $currency): void
     {
         $this->currency = $currency;
     }
@@ -860,7 +860,7 @@ class Product
      * @param \Magento\CatalogExportApi\Api\Data\TierPrice[] $tierPrice
      * @return void
      */
-    public function setTierPrice(array $tierPrice = null): void
+    public function setTierPrice(?array $tierPrice = null): void
     {
         $this->tierPrice = $tierPrice;
     }
@@ -881,7 +881,7 @@ class Product
      * @param string $deletedAt
      * @return void
      */
-    public function setDeletedAt(string $deletedAt): void
+    public function setDeletedAt(?string $deletedAt): void
     {
         $this->deletedAt = $deletedAt;
     }
@@ -902,7 +902,7 @@ class Product
      * @param bool $displayable
      * @return void
      */
-    public function setDisplayable(bool $displayable): void
+    public function setDisplayable(?bool $displayable): void
     {
         $this->displayable = $displayable;
     }
@@ -923,7 +923,7 @@ class Product
      * @param bool $buyable
      * @return void
      */
-    public function setBuyable(bool $buyable): void
+    public function setBuyable(?bool $buyable): void
     {
         $this->buyable = $buyable;
     }
@@ -944,7 +944,7 @@ class Product
      * @param \Magento\CatalogExportApi\Api\Data\Attribute[] $attributes
      * @return void
      */
-    public function setAttributes(array $attributes = null): void
+    public function setAttributes(?array $attributes = null): void
     {
         $this->attributes = $attributes;
     }
@@ -965,7 +965,7 @@ class Product
      * @param string[] $categories
      * @return void
      */
-    public function setCategories(array $categories = null): void
+    public function setCategories(?array $categories = null): void
     {
         $this->categories = $categories;
     }
@@ -986,7 +986,7 @@ class Product
      * @param \Magento\CatalogExportApi\Api\Data\PriceRange $prices
      * @return void
      */
-    public function setPrices(PriceRange $prices): void
+    public function setPrices(?PriceRange $prices): void
     {
         $this->prices = $prices;
     }
@@ -1007,7 +1007,7 @@ class Product
      * @param \Magento\CatalogExportApi\Api\Data\Inventory $inventory
      * @return void
      */
-    public function setInventory(Inventory $inventory): void
+    public function setInventory(?Inventory $inventory): void
     {
         $this->inventory = $inventory;
     }
@@ -1028,7 +1028,7 @@ class Product
      * @param \Magento\CatalogExportApi\Api\Data\Option[] $options
      * @return void
      */
-    public function setOptions(array $options = null): void
+    public function setOptions(?array $options = null): void
     {
         $this->options = $options;
     }
@@ -1049,7 +1049,7 @@ class Product
      * @param \Magento\CatalogExportApi\Api\Data\EnteredOption[] $enteredOptions
      * @return void
      */
-    public function setEnteredOptions(array $enteredOptions = null): void
+    public function setEnteredOptions(?array $enteredOptions = null): void
     {
         $this->enteredOptions = $enteredOptions;
     }

@@ -44,7 +44,7 @@ class Attribute
      * @param string $attributeCode
      * @return void
      */
-    public function setAttributeCode(string $attributeCode): void
+    public function setAttributeCode(?string $attributeCode): void
     {
         $this->attributeCode = $attributeCode;
     }
@@ -65,7 +65,7 @@ class Attribute
      * @param string[] $value
      * @return void
      */
-    public function setValue(array $value = null): void
+    public function setValue(?array $value = null): void
     {
         $this->value = $value;
     }

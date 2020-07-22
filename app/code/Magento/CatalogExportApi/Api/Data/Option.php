@@ -83,7 +83,7 @@ class Option
      * @param string $type
      * @return void
      */
-    public function setType(string $type): void
+    public function setType(?string $type): void
     {
         $this->type = $type;
     }
@@ -104,7 +104,7 @@ class Option
      * @param string $renderType
      * @return void
      */
-    public function setRenderType(string $renderType): void
+    public function setRenderType(?string $renderType): void
     {
         $this->renderType = $renderType;
     }
@@ -125,7 +125,7 @@ class Option
      * @param bool $required
      * @return void
      */
-    public function setRequired(bool $required): void
+    public function setRequired(?bool $required): void
     {
         $this->required = $required;
     }
@@ -146,7 +146,7 @@ class Option
      * @param string $title
      * @return void
      */
-    public function setTitle(string $title): void
+    public function setTitle(?string $title): void
     {
         $this->title = $title;
     }
@@ -167,7 +167,7 @@ class Option
      * @param int $sortOrder
      * @return void
      */
-    public function setSortOrder(int $sortOrder): void
+    public function setSortOrder(?int $sortOrder): void
     {
         $this->sortOrder = $sortOrder;
     }
@@ -188,7 +188,7 @@ class Option
      * @param string $productSku
      * @return void
      */
-    public function setProductSku(string $productSku): void
+    public function setProductSku(?string $productSku): void
     {
         $this->productSku = $productSku;
     }
@@ -209,7 +209,7 @@ class Option
      * @param \Magento\CatalogExportApi\Api\Data\OptionValue[] $values
      * @return void
      */
-    public function setValues(array $values = null): void
+    public function setValues(?array $values = null): void
     {
         $this->values = $values;
     }

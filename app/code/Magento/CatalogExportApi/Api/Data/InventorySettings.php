@@ -50,7 +50,7 @@ class InventorySettings
      * @param bool $status
      * @return void
      */
-    public function setStatus(bool $status): void
+    public function setStatus(?bool $status): void
     {
         $this->status = $status;
     }
@@ -71,7 +71,7 @@ class InventorySettings
      * @param bool $manageStock
      * @return void
      */
-    public function setManageStock(bool $manageStock): void
+    public function setManageStock(?bool $manageStock): void
     {
         $this->manageStock = $manageStock;
     }
@@ -92,7 +92,7 @@ class InventorySettings
      * @param float $threshold
      * @return void
      */
-    public function setThreshold(float $threshold): void
+    public function setThreshold(?float $threshold): void
     {
         $this->threshold = $threshold;
     }
@@ -113,7 +113,7 @@ class InventorySettings
      * @param bool $productAvailable
      * @return void
      */
-    public function setProductAvailable(bool $productAvailable): void
+    public function setProductAvailable(?bool $productAvailable): void
     {
         $this->productAvailable = $productAvailable;
     }

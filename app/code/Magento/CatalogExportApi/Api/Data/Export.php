@@ -41,7 +41,7 @@ class Export
      * @param \Magento\CatalogExportApi\Api\Data\Product[] $products
      * @return void
      */
-    public function setProducts(array $products = null): void
+    public function setProducts(?array $products = null): void
     {
         $this->products = $products;
     }

@@ -44,7 +44,7 @@ class ParentProduct
      * @param string $sku
      * @return void
      */
-    public function setSku(string $sku): void
+    public function setSku(?string $sku): void
     {
         $this->sku = $sku;
     }
@@ -65,7 +65,7 @@ class ParentProduct
      * @param string $productType
      * @return void
      */
-    public function setProductType(string $productType): void
+    public function setProductType(?string $productType): void
     {
         $this->productType = $productType;
     }

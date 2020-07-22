@@ -44,7 +44,7 @@ class Inventory
      * @param int $qty
      * @return void
      */
-    public function setQty(int $qty): void
+    public function setQty(?int $qty): void
     {
         $this->qty = $qty;
     }
@@ -65,7 +65,7 @@ class Inventory
      * @param \Magento\CatalogExportApi\Api\Data\InventorySettings $configuration
      * @return void
      */
-    public function setConfiguration(InventorySettings $configuration): void
+    public function setConfiguration(?InventorySettings $configuration): void
     {
         $this->configuration = $configuration;
     }

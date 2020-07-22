@@ -44,7 +44,7 @@ class TierPrice
      * @param float $qty
      * @return void
      */
-    public function setQty(float $qty): void
+    public function setQty(?float $qty): void
     {
         $this->qty = $qty;
     }
@@ -65,7 +65,7 @@ class TierPrice
      * @param float $price
      * @return void
      */
-    public function setPrice(float $price): void
+    public function setPrice(?float $price): void
     {
         $this->price = $price;
     }
