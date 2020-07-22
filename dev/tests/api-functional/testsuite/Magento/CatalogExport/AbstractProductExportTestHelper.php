@@ -153,9 +153,10 @@ abstract class AbstractProductExportTestHelper extends WebapiAbstract
     }
 
     /**
+     * Compares complex values
+     *
      * @param mixed $expected
      * @param mixed $actual
-     *
      * @return void
      */
     private function compareComplexValue($expected, $actual): void
@@ -204,7 +205,6 @@ abstract class AbstractProductExportTestHelper extends WebapiAbstract
      * Tranform camel case to snake case
      *
      * @param string|int $string
-     *
      * @return string string
      */
     private function camelToSnakeCase($string): string
