@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExport;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogDataExporter\Model\Feed\Products;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -15,15 +16,16 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Indexer\Model\Indexer;
 
 /**
- * Class ExportTest
+ * Class AbstractProductExportTestHelper
+ *
  * @magentoAppIsolation enabled
  */
-class ExportTest extends WebapiAbstract
+abstract class AbstractProductExportTestHelper extends WebapiAbstract
 {
     /**
      * @var array
      */
-    private $createServiceInfo;
+    protected $createServiceInfo;
 
     /**
      * @var ObjectManager
@@ -33,12 +35,17 @@ class ExportTest extends WebapiAbstract
     /**
      * @var Products
      */
-    private $productsFeed;
+    protected $productsFeed;
 
     /**
      * @var Indexer
      */
     private $indexer;
+
+    /**
+     * @var ProductRepositoryInterface
+     */
+    protected $productRepository;
 
     /**
      * @var string[]
@@ -57,8 +64,7 @@ class ExportTest extends WebapiAbstract
         'displayable',
         'buyable',
         'attributes',
-        'categories', //?
-        'options',
+        'categories',
         'in_stock',
         'low_stock',
         'url',
@@ -72,6 +78,7 @@ class ExportTest extends WebapiAbstract
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productsFeed = $this->objectManager->get(Products::class);
         $this->indexer = Bootstrap::getObjectManager()->create(Indexer::class);
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
 
         $this->createServiceInfo = [
             'rest' => [
@@ -87,48 +94,60 @@ class ExportTest extends WebapiAbstract
     }
 
     /**
-     * Test product export REST API
+     * Validate product data
      *
-     * @magentoApiDataFixture Magento/CatalogRule/_files/configurable_product.php
-     *
-     * @return void
-     * @throws \Throwable
-     */
-    public function testExport()
-    {
-        $this->_markTestAsRestOnly('SOAP will be covered in another test');
-
-        $this->runIndexer();
-
-        $simpleId = '1';
-        $configurableId = '666';
-
-        $this->createServiceInfo['rest']['resourcePath'] .= '?ids[0]=' . $simpleId . '&ids[1]=' . $configurableId;
-        $result = $this->_webApiCall($this->createServiceInfo, []);
-        $feedData = $this->productsFeed->getFeedByIds([$simpleId, $configurableId])['feed'];
-
-        foreach($feedData as $key => $productFeed) {
-            $feedData[$key]['options'] = $productFeed['options'] ? $this->unsetEmptyValues($productFeed['options']) : null;
-        }
-
-        $this->assertProductsEquals($feedData, $result);
-    }
-
-    /**
      * @param array $expected
      * @param array $actual
-     *
      * @return void
      */
-    private function assertProductsEquals(array $expected, array $actual): void
+    protected function assertProductsEquals(array $expected, array $actual): void
     {
         $n = sizeof($expected);
         for ($i = 0; $i < $n; $i++) {
             foreach ($this->attributesToCompare as $attribute) {
                 $this->compareComplexValue(
                     $expected[$i][$this->snakeToCamelCase($attribute)],
-                    $actual[$i][$attribute],
+                    $actual[$i][$attribute]
                 );
+            }
+            $this->assertOptionsEquals(
+                $expected[$i]['options'],
+                $actual[$i]['options']
+            );
+        }
+    }
+
+    /**
+     * Validate product options in extracted product data
+     *
+     * @param null|array $expectedOptions
+     * @param null|array $actualOptions
+     * @return void
+     */
+    protected function assertOptionsEquals(?array $expectedOptions, ?array $actualOptions): void
+    {
+        if ($expectedOptions === null) {
+            $this->assertEquals(null, $actualOptions);
+            return;
+        }
+
+        $this->assertCount(sizeof($expectedOptions), $actualOptions);
+        foreach ($actualOptions as $optionKey => $actualOption) {
+            foreach ($this->optionsToCompare as $optionToCompare) {
+                $this->assertEquals(
+                    $expectedOptions[$optionKey][$optionToCompare],
+                    $actualOption[$optionToCompare]
+                );
+            }
+
+            $this->assertCount(sizeof($expectedOptions[$optionKey]['values']), $actualOption['values']);
+            foreach ($actualOption['values'] as $valueKey => $value) {
+                foreach ($this->optionValuesToCompare as $optionValueToCompare) {
+                    $this->assertEquals(
+                        $expectedOptions[$optionKey]['values'][$valueKey][$optionValueToCompare],
+                        $value[$optionValueToCompare]
+                    );
+                }
             }
         }
     }
@@ -188,7 +207,7 @@ class ExportTest extends WebapiAbstract
      *
      * @return string string
      */
-    private function camelToSnakeCase($string) : string
+    private function camelToSnakeCase($string): string
     {
         return strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $string));
     }
@@ -197,32 +216,15 @@ class ExportTest extends WebapiAbstract
      * Run the indexer to extract product data
      *
      * @return void
-     * @throws \Throwable
      */
-    protected function runIndexer() : void
+    protected function runIndexer(): void
     {
-        $this->indexer->load('catalog_data_exporter_products');
-        $this->indexer->reindexAll();
-    }
-
-    /**
-     * Remove empty values from nested array recursively
-     *
-     * @param mixed $data
-     *
-     * @return mixed
-     */
-    private function unsetEmptyValues($data) {
-        if (is_array($data)) {
-            foreach ($data as $key => $value) {
-                if (is_array($value)) {
-                    $data[$key] = $this->unsetEmptyValues($value);
-                }
-                if ($value === null) {
-                    unset($data[$key]);
-                }
-            }
+        try {
+            $this->indexer->load('catalog_data_exporter_products');
+            $this->indexer->reindexAll();
+        } catch (\Throwable $e) {
+            $this->fail("Couldn`t run catalog_data_exporter_products reindex" . $e->getMessage());
         }
-        return $data;
+
     }
 }
