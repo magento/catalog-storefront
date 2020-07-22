@@ -270,23 +270,21 @@ class CatalogService implements CatalogServerInterface
 
             $importProductsResponse->setMessage('Records imported successfully');
             $importProductsResponse->setStatus(true);
-
-            return $importProductsResponse;
         } catch (\Throwable $e) {
             $message = 'Cannot process product import';
             $this->logger->error($message, ['exception' => $e]);
             $importProductsResponse->setMessage($message);
             $importProductsResponse->setStatus(false);
-
-            return $importProductsResponse;
         }
+
+        return $importProductsResponse;
     }
 
     /**
      * Delete products from storage.
      *
      * @param DeleteProductsRequestInterface $request
-     * @return void
+     * @return ImportProductsResponseInterface
      */
     public function deleteProducts(DeleteProductsRequestInterface $request): ImportProductsResponseInterface
     {
@@ -299,6 +297,7 @@ class CatalogService implements CatalogServerInterface
             ]
         ];
 
+        /** @var \Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponse $importProductsResponse */
         $importProductsResponse = $this->importProductsResponseFactory->create();
 
         try {
@@ -306,16 +305,13 @@ class CatalogService implements CatalogServerInterface
 
             $importProductsResponse->setMessage('Product were removed successfully');
             $importProductsResponse->setStatus(true);
-
-            return $importProductsResponse;
         } catch(\Throwable $e) {
             $message = 'Unable to delete products';
             $this->logger->error($message, ['exception' => $e]);
             $importProductsResponse->setMessage($message);
             $importProductsResponse->setStatus(false);
-
-            return $importProductsResponse;
         }
+        return $importProductsResponse;
     }
 
     /**
@@ -343,10 +339,7 @@ class CatalogService implements CatalogServerInterface
                     continue;
                 }
                 $categoryInElasticFormat = $category;
-                if (empty($categoryInElasticFormat)) {
-                    // TODO: Implemente Delete
-                    // $dataPerType[$entity->getEntityType()][$entity->getStoreId()][self::DELETE][] = $entity->getEntityId();
-                } else {
+                if (!empty($categoryInElasticFormat)) {
                     $categoryInElasticFormat['store_id'] = $storeId;
                     if (isset($categoryInElasticFormat['dynamic_attributes'])) {
                         foreach ($categoryInElasticFormat['dynamic_attributes'] as $dynamicAttribute) {
