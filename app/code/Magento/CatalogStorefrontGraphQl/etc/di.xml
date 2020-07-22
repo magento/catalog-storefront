@@ -28,6 +28,7 @@
     <preference for="Magento\RelatedProductGraphQl\Model\Resolver\Batch\UpSellProducts" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\RelatedProducts\UpSellProducts"/>
     <preference for="Magento\CatalogCustomerGraphQl\Model\Resolver\PriceTiers" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\CatalogCustomer\PriceTiers"/>
     <preference for="Magento\CatalogCustomerGraphQl\Model\Resolver\TierPrices" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\CatalogCustomer\TierPrices"/>
+    <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\SpecialPrice" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\SpecialPrice"/>
 
     <!-- Remove @resolver from schema.graphqls fields, which should be handled on Storefront API -->
     <type name="Magento\StorefrontGraphQl\Plugin\SchemaReader">
