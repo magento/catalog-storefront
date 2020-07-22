@@ -395,10 +395,10 @@ class Product
     /**
      * Set image
      *
-     * @param \Magento\CatalogExportApi\Api\Data\Image[] $image
+     * @param \Magento\CatalogExportApi\Api\Data\Image $image
      * @return void
      */
-    public function setImage(array $image = null): void
+    public function setImage(Image $image): void
     {
         $this->image = $image;
     }
@@ -563,10 +563,10 @@ class Product
     /**
      * Set small image
      *
-     * @param \Magento\CatalogExportApi\Api\Data\Image[] $smallImage
+     * @param \Magento\CatalogExportApi\Api\Data\Image $smallImage
      * @return void
      */
-    public function setSmallImage(array $smallImage = null): void
+    public function setSmallImage(Image $smallImage): void
     {
         $this->smallImage = $smallImage;
     }
@@ -605,10 +605,10 @@ class Product
     /**
      * Set swatch image
      *
-     * @param \Magento\CatalogExportApi\Api\Data\Image[] $swatchImage
+     * @param \Magento\CatalogExportApi\Api\Data\Image $swatchImage
      * @return void
      */
-    public function setSwatchImage(array $swatchImage = null): void
+    public function setSwatchImage(Image $swatchImage): void
     {
         $this->swatchImage = $swatchImage;
     }
@@ -647,10 +647,10 @@ class Product
     /**
      * Set thumbnail
      *
-     * @param \Magento\CatalogExportApi\Api\Data\Image[] $thumbnail
+     * @param \Magento\CatalogExportApi\Api\Data\Image $thumbnail
      * @return void
      */
-    public function setThumbnail(array $thumbnail = null): void
+    public function setThumbnail(Image $thumbnail): void
     {
         $this->thumbnail = $thumbnail;
     }
@@ -983,10 +983,10 @@ class Product
     /**
      * Set prices
      *
-     * @param \Magento\CatalogExportApi\Api\Data\PriceRange[] $prices
+     * @param \Magento\CatalogExportApi\Api\Data\PriceRange $prices
      * @return void
      */
-    public function setPrices(array $prices = null): void
+    public function setPrices(PriceRange $prices): void
     {
         $this->prices = $prices;
     }
@@ -1004,10 +1004,10 @@ class Product
     /**
      * Set inventory
      *
-     * @param \Magento\CatalogExportApi\Api\Data\Inventory[] $inventory
+     * @param \Magento\CatalogExportApi\Api\Data\Inventory $inventory
      * @return void
      */
-    public function setInventory(array $inventory = null): void
+    public function setInventory(Inventory $inventory): void
     {
         $this->inventory = $inventory;
     }

@@ -62,10 +62,10 @@ class Inventory
     /**
      * Set configuration
      *
-     * @param \Magento\CatalogExportApi\Api\Data\InventorySettings[] $configuration
+     * @param \Magento\CatalogExportApi\Api\Data\InventorySettings $configuration
      * @return void
      */
-    public function setConfiguration(array $configuration = null): void
+    public function setConfiguration(InventorySettings $configuration): void
     {
         $this->configuration = $configuration;
     }

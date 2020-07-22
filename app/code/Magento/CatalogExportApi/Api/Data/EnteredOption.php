@@ -245,10 +245,10 @@ class EnteredOption
     /**
      * Set price
      *
-     * @param \Magento\CatalogExportApi\Api\Data\ProductPrice[] $price
+     * @param \Magento\CatalogExportApi\Api\Data\ProductPrice $price
      * @return void
      */
-    public function setPrice(array $price = null): void
+    public function setPrice(ProductPrice $price): void
     {
         $this->price = $price;
     }

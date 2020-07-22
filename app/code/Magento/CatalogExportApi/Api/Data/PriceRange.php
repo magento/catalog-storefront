@@ -41,10 +41,10 @@ class PriceRange
     /**
      * Set minimum price
      *
-     * @param \Magento\CatalogExportApi\Api\Data\ProductPrice[] $minimumPrice
+     * @param \Magento\CatalogExportApi\Api\Data\ProductPrice $minimumPrice
      * @return void
      */
-    public function setMinimumPrice(array $minimumPrice = null): void
+    public function setMinimumPrice(ProductPrice $minimumPrice): void
     {
         $this->minimumPrice = $minimumPrice;
     }
@@ -62,10 +62,10 @@ class PriceRange
     /**
      * Set maximum price
      *
-     * @param \Magento\CatalogExportApi\Api\Data\ProductPrice[] $maximumPrice
+     * @param \Magento\CatalogExportApi\Api\Data\ProductPrice $maximumPrice
      * @return void
      */
-    public function setMaximumPrice(array $maximumPrice = null): void
+    public function setMaximumPrice(ProductPrice $maximumPrice): void
     {
         $this->maximumPrice = $maximumPrice;
     }
