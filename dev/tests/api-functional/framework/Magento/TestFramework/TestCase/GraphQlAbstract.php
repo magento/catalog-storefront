@@ -35,26 +35,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
         $dataDefinition = Bootstrap::getObjectManager()->get(
             DataDefinitionInterface::class
         );
-        /** @var State $storageState */
-        $storageState = Bootstrap::getObjectManager()->get(
-            State::class
-        );
-        $entityTypes = ['category', 'product'];
-        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-        $storeManager = Bootstrap::getObjectManager()
-            ->get(\Magento\Store\Model\StoreManagerInterface::class);
-        $availableStores = $storeManager->getStores();
-        foreach ($entityTypes as $entityType) {
-            foreach ($availableStores as $store) {
-                try {
-                    $sourceName = $storageState->getCurrentDataSourceName([$store->getId(), $entityType]);
-                    $dataDefinition->deleteDataSource($sourceName);
-                } catch (\Exception $e) {
-                    // Do nothing if no source
-                }
-            }
-
-        }
+        $dataDefinition->deleteDataSource('catalog_storefront_*');
     }
 
     /**
