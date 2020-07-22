@@ -84,7 +84,6 @@ class ProductDataProcessor
 
     /**
      * @param DataMapperInterface[] $dataMappers
-     * @param array $map
      */
     public function __construct(array $dataMappers)
     {
@@ -130,7 +129,10 @@ class ProductDataProcessor
         //TODO: remove after resolving https://github.com/magento/catalog-storefront/issues/66
         $importData['dynamic_attributes'] = [];
         foreach ($product['attributes'] ?? [] as $attribute) {
-            $importData['dynamic_attributes'][] = ['code' => $attribute['attribute_code'], 'value' => \implode(',', $attribute['value'])];
+            $importData['dynamic_attributes'][] = [
+                'code' => $attribute['attribute_code'],
+                'value' => \implode(',', $attribute['value'])
+            ];
             if (isset($oldExportDataProduct[$attribute['attribute_code']])) {
                 unset($oldExportDataProduct[$attribute['attribute_code']]);
             }
