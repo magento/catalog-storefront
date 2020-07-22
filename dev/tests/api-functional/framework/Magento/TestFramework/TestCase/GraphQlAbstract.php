@@ -18,6 +18,15 @@ use Magento\TestFramework\Helper\Bootstrap;
 abstract class GraphQlAbstract extends WebapiAbstract
 {
     /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
+    {
+        $this->clearCatalogStorage();
+        parent::setUp();
+    }
+
+    /**
      * @inheritdoc
      */
     protected function tearDown(): void
