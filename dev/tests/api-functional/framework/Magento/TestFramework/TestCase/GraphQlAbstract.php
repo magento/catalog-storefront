@@ -7,6 +7,7 @@ namespace Magento\TestFramework\TestCase;
 
 use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
 use Magento\CatalogStorefront\Model\Storage\State;
+use Magento\Framework\App\ResourceConnection;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -17,6 +18,14 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 abstract class GraphQlAbstract extends WebapiAbstract
 {
+    /**
+     * @var array
+     */
+    private const FEEDS = [
+        'catalog_data_exporter_categories',
+        'catalog_data_exporter_products'
+    ];
+
     /**
      * @inheritDoc
      */
@@ -33,6 +42,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
     {
         parent::tearDown();
         $this->clearCatalogStorage();
+        $this->cleanFeeds();
     }
 
     /**
@@ -176,6 +186,24 @@ abstract class GraphQlAbstract extends WebapiAbstract
             $this->appCache = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Cache::class);
         }
         return $this->appCache;
+    }
+
+    /**
+     * On each tear down we need to clean all feed data
+     *
+     * @return void
+     */
+    private function cleanFeeds(): void
+    {
+        /** @var ResourceConnection $resourceConnection */
+        $resourceConnection = Bootstrap::getObjectManager()
+            ->get(ResourceConnection::class);
+        $connection = $resourceConnection->getConnection();
+
+        foreach (self::FEEDS as $feed) {
+            $feedTable = $resourceConnection->getTableName($feed);
+            $connection->delete($feedTable);
+        }
     }
 
     /**
