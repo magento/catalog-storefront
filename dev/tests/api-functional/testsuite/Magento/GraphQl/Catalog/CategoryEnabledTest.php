@@ -33,6 +33,8 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  *    }
  *   }
  *
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  * @magentoApiDataFixture Magento/Catalog/_files/category_enabled_for_store.php
  */
 class CategoryEnabledTest extends GraphQlAbstract
