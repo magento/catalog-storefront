@@ -3,13 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
 use Magento\CatalogMessageBroker\Model\FetchVariantInterface;
+use Magento\CatalogMessageBroker\Model\SerializerInterface;
 use Magento\CatalogStorefront\Model\Storage\Client\CommandInterface;
 use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
 use Magento\CatalogStorefront\Model\Storage\State;
-use Magento\CatalogMessageBroker\Model\FetchProductsInterface;
 use Magento\CatalogStorefront\Model\MessageBus\Consumer as OldConsumer;
 use Magento\CatalogStorefront\Model\MessageBus\CatalogItemMessageBuilder;
 use Psr\Log\LoggerInterface;
@@ -30,12 +32,18 @@ class VariantConsumer extends OldConsumer
     private $logger;
 
     /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
      * @param CommandInterface $storageWriteSource
      * @param DataDefinitionInterface $storageSchemaManager
      * @param State $storageState
      * @param CatalogItemMessageBuilder $catalogItemMessageBuilder
      * @param LoggerInterface $logger
-     * @param FetchProductsInterface $fetchProducts
+     * @param FetchVariantInterface $fetchVariant
+     * @param SerializerInterface $serializer
      */
     public function __construct(
         CommandInterface $storageWriteSource,
@@ -43,7 +51,8 @@ class VariantConsumer extends OldConsumer
         State $storageState,
         CatalogItemMessageBuilder $catalogItemMessageBuilder,
         LoggerInterface $logger,
-        FetchProductsInterface $fetchProducts
+        FetchVariantInterface $fetchVariant,
+        SerializerInterface $serializer
     ) {
         parent::__construct(
             $storageWriteSource,
@@ -53,7 +62,8 @@ class VariantConsumer extends OldConsumer
             $logger
         );
         $this->logger = $logger;
-        $this->fetchVariant = $fetchProducts;
+        $this->fetchVariant = $fetchVariant;
+        $this->serializer = $serializer;
     }
 
     /**

@@ -8,5 +8,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
     <exchange name="catalog.export.exchange" type="topic" connection="amqp">
         <binding id="catalog.export.consumer" topic="catalog.export.product.data" destinationType="queue" destination="catalog.export.queue"/>
+        <binding id="catalog.product.variant.export.consumer" topic="catalog.export.product.variant.data" destinationType="queue" destination="catalog.product.variant.export.queue"/>
     </exchange>
 </config>

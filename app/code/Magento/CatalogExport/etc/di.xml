@@ -25,4 +25,12 @@
             <argument name="variantFeed" xsi:type="object">Magento\CatalogDataExporter\Model\Feed\Variant</argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogExport\Model\Indexer\IndexerCallback">
+        <arguments>
+            <argument name="topicMap" xsi:type="array">
+                <item name="IndexerCallback::PRODUCT_ENTITY" xsi:type="string">catalog.export.product.data</item>
+                <item name="IndexerCallback::PRODUCT_VARIANT_ENTITY" xsi:type="string">catalog.export.product.variant.data</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
