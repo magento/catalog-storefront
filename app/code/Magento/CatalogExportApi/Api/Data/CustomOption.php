@@ -31,11 +31,6 @@ class CustomOption
     /**
      * @var string
      */
-    private $label;
-
-    /**
-     * @var string
-     */
     private $title;
 
     /**
@@ -103,27 +98,6 @@ class CustomOption
     public function setId(?int $id): void
     {
         $this->id = $id;
-    }
-
-    /**
-     * Get label
-     *
-     * @return string|null
-     */
-    public function getLabel(): ?string
-    {
-        return $this->label;
-    }
-
-    /**
-     * Set label
-     *
-     * @param string|null $label
-     * @return void
-     */
-    public function setLabel(?string $label)
-    {
-        $this->label = $label;
     }
 
     /**

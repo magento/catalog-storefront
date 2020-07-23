@@ -71,6 +71,16 @@ abstract class AbstractProductExportTestHelper extends WebapiAbstract
     ];
 
     /**
+     * @var array
+     */
+    private $optionsToCompare = [];
+
+    /**
+     * @var array
+     */
+    private $optionValuesToCompare = [];
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -225,6 +235,5 @@ abstract class AbstractProductExportTestHelper extends WebapiAbstract
         } catch (\Throwable $e) {
             $this->fail("Couldn`t run catalog_data_exporter_products reindex" . $e->getMessage());
         }
-
     }
 }

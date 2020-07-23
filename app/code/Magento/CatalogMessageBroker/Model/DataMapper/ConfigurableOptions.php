@@ -27,7 +27,7 @@ class ConfigurableOptions implements DataMapperInterface
                     $configurableOptions[$optionArray['id']] = [
                         'id' => $optionArray['id'],
                         'type' => $optionArray['type'],
-                        'label' => $optionArray['label'],
+                        'label' => $optionArray['title'],
                         'position' => $optionArray['sort_order'],
                         'product_id' => $data['id']
                     ];
@@ -42,7 +42,7 @@ class ConfigurableOptions implements DataMapperInterface
     /**
      * Map option values
      *
-     * @param $optionArray
+     * @param array $optionArray
      * @return array|null
      */
     private function mapOptionValues(?array $optionArray): array

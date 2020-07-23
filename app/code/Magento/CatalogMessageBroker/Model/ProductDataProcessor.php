@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogMessageBroker\Model;
 
 use Magento\CatalogMessageBroker\Model\DataMapper\DataMapperInterface;
 
 /**
- * Product data processor.
+ * Product data processor that merges data from old and new providers.
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class ProductDataProcessor
 {
@@ -44,7 +46,7 @@ class ProductDataProcessor
      */
     public function merge(array $data, array $product): array
     {
-        $scalarFields = $this->mergeScalarFields($data, $product);
+        $scalarFields = $this->mergeScalarFields($data);
         $compoundFields = $this->mergeCompoundFields($data, $product);
         return array_merge($scalarFields, $compoundFields, $product);
     }
@@ -56,7 +58,8 @@ class ProductDataProcessor
      * @param array $product
      * @return array
      */
-    private function mergeScalarFields($data, $product) {
+    private function mergeScalarFields($data)
+    {
         $fieldsData = [];
         foreach ($this->fields as $field) {
             if (isset($data[$field])) {
@@ -73,7 +76,8 @@ class ProductDataProcessor
      * @param array $product
      * @return array
      */
-    private function mergeCompoundFields($data, $product) {
+    private function mergeCompoundFields($data, $product)
+    {
         $fields = [];
         foreach ($this->dataMappers as $field => $dataMapperConfig) {
             if (

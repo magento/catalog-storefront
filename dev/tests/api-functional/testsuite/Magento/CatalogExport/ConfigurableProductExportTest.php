@@ -10,7 +10,7 @@ namespace Magento\CatalogExport;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Class ConfigurableProductExportTest
+ * Tests configurable product export
  * @magentoAppIsolation enabled
  */
 class ConfigurableProductExportTest extends AbstractProductExportTestHelper
@@ -23,7 +23,7 @@ class ConfigurableProductExportTest extends AbstractProductExportTestHelper
     protected $optionsToCompare = [
         'id',
         'type',
-        'label',
+        'title',
         'sort_order',
     ];
 
@@ -36,14 +36,6 @@ class ConfigurableProductExportTest extends AbstractProductExportTestHelper
         'id',
         'label',
     ];
-
-    /**
-     * @inheritDoc
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
 
     /**
      * Test product export REST API

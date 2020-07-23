@@ -10,7 +10,7 @@ namespace Magento\CatalogExport;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Class SimpleProductExportTest
+ * Tests simple product export
  * @magentoAppIsolation enabled
  */
 class SimpleProductExportTest extends AbstractProductExportTestHelper
@@ -41,14 +41,6 @@ class SimpleProductExportTest extends AbstractProductExportTestHelper
         'sku',
         'value'
     ];
-
-    /**
-     * @inheritDoc
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
 
     /**
      * Test product export REST API

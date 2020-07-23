@@ -49,6 +49,16 @@ class CustomOptionValue
     private $sample;
 
     /**
+     * @var \Magento\CatalogExportApi\Api\Data\Price
+     */
+    private $price;
+
+    /**
+     * @var string
+     */
+    private $priceType;
+
+    /**
      * Get ID
      *
      * @return int
@@ -109,6 +119,48 @@ class CustomOptionValue
     public function setSortOrder(?int $sortOrder): void
     {
         $this->sortOrder = $sortOrder;
+    }
+
+    /**
+     * Get option value price
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\Price
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * Set option value price
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\Price $price
+     * @return void
+     */
+    public function setPrice($price): void
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * Get price type
+     *
+     * @return string|null
+     */
+    public function getPriceType(): ?string
+    {
+        return $this->priceType;
+    }
+
+    /**
+     * Set price type
+     *
+     * @param string $priceType
+     * @return void
+     */
+    public function setPriceType($priceType): void
+    {
+        $this->priceType = $priceType;
     }
 
     /**

@@ -49,6 +49,16 @@ class EnteredOption
     private $sku;
 
     /**
+     * @var float[]
+     */
+    private $price;
+
+    /**
+     * @var string
+     */
+    private $priceType;
+
+    /**
      * @var ?string
      */
     private $value;
@@ -113,6 +123,48 @@ class EnteredOption
     public function setProductSku(string $productSku)
     {
         $this->productSku = $productSku;
+    }
+
+    /**
+     * Get option value price
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\Price
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * Set option value price
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\Price $price
+     * @return void
+     */
+    public function setPrice($price)
+    {
+        $this->price = $price;
+    }
+
+    /**
+     * Get price type
+     *
+     * @return string|null
+     */
+    public function getPriceType(): ?string
+    {
+        return $this->priceType;
+    }
+
+    /**
+     * Set price type
+     *
+     * @param string $priceType
+     * @return void
+     */
+    public function setPriceType($priceType)
+    {
+        $this->priceType = $priceType;
     }
 
     /**
