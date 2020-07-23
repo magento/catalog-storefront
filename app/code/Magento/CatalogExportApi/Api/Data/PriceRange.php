@@ -24,19 +24,23 @@ use Magento\CatalogExportApi\Api\Data\ProductPrice;
  */
 class PriceRange
 {
-    /** @var ProductPrice */
+    /**
+     * @var ProductPrice
+     */
     private $minimumPrice;
 
-    /** @var ProductPrice */
+    /**
+     * @var ProductPrice
+     */
     private $maximumPrice;
 
     /**
-     * @param $minimumPrice
-     * @param $maximumPrice
+     * @param ProductPrice $minimumPrice
+     * @param ProductPrice $maximumPrice
      */
     public function __construct(
-        $minimumPrice,
-        $maximumPrice
+        ProductPrice $minimumPrice,
+        ProductPrice $maximumPrice
     ) {
       $this->minimumPrice = $minimumPrice;
       $this->maximumPrice = $maximumPrice;
