@@ -88,8 +88,8 @@ class ProductRepository implements ProductRepositoryInterface
             return $products;
         }
 
-        // TODO: remove temporary solution after https://github.com/magento/catalog-storefront/issues/157
-        return $this->toSnakeCase($feedData['feed']);
+//         TODO: remove temporary solution after https://github.com/magento/catalog-storefront/issues/157
+//        return $this->toSnakeCase($feedData['feed']);
         foreach ($feedData['feed'] as $feedItem) {
             $product = $this->productFactory->create();
             $feedItem['id'] = $feedItem['productId'];
