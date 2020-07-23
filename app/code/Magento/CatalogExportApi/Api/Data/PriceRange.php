@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExportApi\Api\Data;
 
+use Magento\CatalogExportApi\Api\Data\ProductPrice;
+
 /**
  * PriceRange entity
  *
@@ -22,11 +24,23 @@ namespace Magento\CatalogExportApi\Api\Data;
  */
 class PriceRange
 {
-    /** @var \Magento\CatalogExportApi\Api\Data\ProductPrice */
+    /** @var ProductPrice */
     private $minimumPrice;
 
-    /** @var \Magento\CatalogExportApi\Api\Data\ProductPrice */
+    /** @var ProductPrice */
     private $maximumPrice;
+
+    /**
+     * @param $minimumPrice
+     * @param $maximumPrice
+     */
+    public function __construct(
+        $minimumPrice,
+        $maximumPrice
+    ) {
+      $this->minimumPrice = $minimumPrice;
+      $this->maximumPrice = $maximumPrice;
+    }
 
     /**
      * Get minimum price
@@ -39,17 +53,6 @@ class PriceRange
     }
 
     /**
-     * Set minimum price
-     *
-     * @param \Magento\CatalogExportApi\Api\Data\ProductPrice $minimumPrice
-     * @return void
-     */
-    public function setMinimumPrice(?ProductPrice $minimumPrice): void
-    {
-        $this->minimumPrice = $minimumPrice;
-    }
-
-    /**
      * Get maximum price
      *
      * @return \Magento\CatalogExportApi\Api\Data\ProductPrice
@@ -57,16 +60,5 @@ class PriceRange
     public function getMaximumPrice(): ?ProductPrice
     {
         return $this->maximumPrice;
-    }
-
-    /**
-     * Set maximum price
-     *
-     * @param \Magento\CatalogExportApi\Api\Data\ProductPrice $maximumPrice
-     * @return void
-     */
-    public function setMaximumPrice(?ProductPrice $maximumPrice): void
-    {
-        $this->maximumPrice = $maximumPrice;
     }
 }
