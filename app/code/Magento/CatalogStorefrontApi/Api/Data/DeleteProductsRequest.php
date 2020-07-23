@@ -37,7 +37,7 @@ final class DeleteProductsRequest implements DeleteProductsRequestInterface
     /**
      * @inheritdoc
      *
-     * @return int[]
+     * @return string[]
      */
     public function getProductIds(): array
     {
@@ -47,7 +47,7 @@ final class DeleteProductsRequest implements DeleteProductsRequestInterface
     /**
      * @inheritdoc
      *
-     * @param int[] $value
+     * @param string[] $value
      * @return void
      */
     public function setProductIds(array $value): void
