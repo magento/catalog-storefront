@@ -156,8 +156,6 @@ class ExportTest extends WebapiAbstract
         $productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $product = $productRepository->get('simple1');
         $simpleProductWithDate = $productRepository->get('simple_with_date');
-        $configurableProductWithSwatches = $productRepository->get('configurable');
-
         $this->createServiceInfo['rest']['resourcePath'] .= '?ids[0]=' . $product->getId() .
             '&ids[1]=' . $simpleProductWithDate->getId();
 
