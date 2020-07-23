@@ -113,7 +113,7 @@ class RequestBuilder
             'page' => $page,
             'scopes' => $this->scopeProvider->getScopes($context),
             'attributes' => $attributes,
-            'sort' => $sort,
+            'sort' => $args['sort'],
             'aggregations' => $aggregations,
             'metaInfo' => $metaInfo,
         ];
