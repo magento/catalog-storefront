@@ -37,6 +37,8 @@ use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterfaceFactory;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseFactory;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseInterfaceFactory;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -62,6 +64,11 @@ class CatalogService implements CatalogServerInterface
      * @var ImportProductsResponseFactory
      */
     private $importProductsResponseFactory;
+
+    /**
+     * @var DeleteProductsResponseInterfaceFactory
+     */
+    private $deleteProductsResponseFactory;
 
     /**
      * @var ImportCategoriesResponseFactory
@@ -103,6 +110,7 @@ class CatalogService implements CatalogServerInterface
      * @param CategoryDataProvider $categoryDataProvider
      * @param DynamicAttributeValueInterfaceFactory $dynamicAttributeFactory
      * @param ImportProductsResponseFactory $importProductsResponseFactory
+     * @param DeleteProductsResponseFactory $deleteProductsResponseFactory
      * @param ImportCategoriesResponseFactory $importCategoriesResponseFactory
      * @param ServiceOutputProcessor $serviceOutputProcessor
      * @param CatalogRepository $catalogRepository
@@ -115,6 +123,7 @@ class CatalogService implements CatalogServerInterface
         CategoryDataProvider $categoryDataProvider,
         DynamicAttributeValueInterfaceFactory $dynamicAttributeFactory,
         ImportProductsResponseFactory $importProductsResponseFactory,
+        DeleteProductsResponseFactory $deleteProductsResponseFactory,
         ImportCategoriesResponseFactory $importCategoriesResponseFactory,
         ServiceOutputProcessor $serviceOutputProcessor,
         CatalogRepository $catalogRepository,
@@ -124,6 +133,7 @@ class CatalogService implements CatalogServerInterface
         $this->dataProvider = $dataProvider;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->importProductsResponseFactory = $importProductsResponseFactory;
+        $this->deleteProductsResponseFactory = $deleteProductsResponseFactory;
         $this->importCategoriesResponseFactory = $importCategoriesResponseFactory;
         $this->serviceOutputProcessor = $serviceOutputProcessor;
         $this->catalogRepository = $catalogRepository;
@@ -284,9 +294,9 @@ class CatalogService implements CatalogServerInterface
      * Delete products from storage.
      *
      * @param DeleteProductsRequestInterface $request
-     * @return ImportProductsResponseInterface
+     * @return DeleteProductsResponseInterface
      */
-    public function deleteProducts(DeleteProductsRequestInterface $request): ImportProductsResponseInterface
+    public function deleteProducts(DeleteProductsRequestInterface $request): DeleteProductsResponseInterface
     {
         $storeId = $request->getStore();
         $productsInElasticFormat = [
@@ -297,21 +307,22 @@ class CatalogService implements CatalogServerInterface
             ]
         ];
 
-        /** @var \Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponse $importProductsResponse */
-        $importProductsResponse = $this->importProductsResponseFactory->create();
+        /** @var \Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponse $deleteProductsResponse */
+        $deleteProductsResponse = $this->deleteProductsResponseFactory->create();
 
         try {
             $this->catalogRepository->saveToStorage($productsInElasticFormat);
 
-            $importProductsResponse->setMessage('Product were removed successfully');
-            $importProductsResponse->setStatus(true);
+            $deleteProductsResponse->setMessage('Product were removed successfully');
+            $deleteProductsResponse->setStatus(true);
         } catch(\Throwable $e) {
             $message = 'Unable to delete products';
             $this->logger->error($message, ['exception' => $e]);
-            $importProductsResponse->setMessage($message);
-            $importProductsResponse->setStatus(false);
+            $deleteProductsResponse->setMessage($message);
+            $deleteProductsResponse->setStatus(false);
         }
-        return $importProductsResponse;
+
+        return $deleteProductsResponse;
     }
 
     /**
