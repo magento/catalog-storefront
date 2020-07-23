@@ -59,7 +59,7 @@ class Config
         'connections' => [
             'default' => [
                 'protocol' => 'http',
-                'hostname' => 'localhost',
+                'hostname' => 'elasticsearch6',
                 'port' => '9200',
                 'username' => '',
                 'password' => '',

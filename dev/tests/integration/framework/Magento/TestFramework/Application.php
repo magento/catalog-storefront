@@ -604,7 +604,9 @@ class Application
         $params['magento-init-params'] = $this->getInitParamsQuery();
         $result = [];
         foreach ($params as $key => $value) {
-            $result["--{$key}=%s"] = $value;
+            if (isset($value)) {
+                $result["--{$key}=%s"] = $value;
+            }
         }
         return $result;
     }
