@@ -80,7 +80,6 @@ class CategoriesConsumer extends OldConsumer
             foreach ($stores as $store) {
                 $storesToIds[$store->getCode()] = $store->getId();
             }
-
         } catch (\Throwable $e) {
             $storesToIds['default'] = 1;
         }
@@ -96,7 +95,7 @@ class CategoriesConsumer extends OldConsumer
     private function resolveStoreId(array $mappedStores, string $storeCode)
     {
         //workaround for tests
-        return $storesToIds[$storeCode] ?? 1;
+        return $mappedStores[$storeCode] ?? 1;
     }
 
     /**
