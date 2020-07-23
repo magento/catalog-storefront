@@ -63,9 +63,15 @@ class OutputFormatter
 
             foreach ($currentResult['options'] as &$option) {
                 //Convert simple option types from arrays
-                $simpleOptionTypes = ['date_time', 'field', 'area', 'file'];
+                $simpleOptionTypes = ['date', 'date_time', 'time', 'field', 'area', 'file'];
                 if (isset($option['type']) && in_array($option['type'], $simpleOptionTypes)) {
                     $option['value'] = reset($option['value']);
+                } elseif (!empty($option['value'])) {
+                    $option['value'] = \array_map(function ($optionValue) use ($option) {
+                        $optionValue['option_id'] = $option['option_id'];
+
+                        return $optionValue;
+                    }, $option['value']);
                 }
             }
             $currentResult['media_gallery'] = array_map(function (array $item) {
