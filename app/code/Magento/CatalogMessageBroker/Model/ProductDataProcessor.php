@@ -117,7 +117,7 @@ class ProductDataProcessor
             $importData[$nameInExport] = $dataMapper->map($product);
         }
 
-        if (\array_key_exsits('swatch_image', $product)
+        if (\array_key_exists('swatch_image', $product)
             && \array_key_exists('url', $product['swatch_image'])
         ) {
             $importData['swatch_image'] = $product['swatch_image']['url'];
