@@ -26,7 +26,7 @@ class ProductRepository implements ProductRepositoryInterface
     private $products;
 
     /**
-     * @var \Magento\CatalogExportApi\Api\Data\ProductInterfaceFactory
+     * @var \Magento\CatalogExportApi\Api\Data\ProductFactory
      */
     private $productFactory;
 
@@ -47,14 +47,14 @@ class ProductRepository implements ProductRepositoryInterface
 
     /**
      * @param \Magento\CatalogDataExporter\Model\Feed\Products $products
-     * @param \Magento\CatalogExportApi\Api\Data\ProductInterfaceFactory $productFactory
+     * @param \Magento\CatalogExportApi\Api\Data\ProductFactory $productFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      * @param LoggerInterface $logger
      */
     public function __construct(
         \Magento\CatalogDataExporter\Model\Feed\Products $products,
-        \Magento\CatalogExportApi\Api\Data\ProductInterfaceFactory $productFactory,
+        \Magento\CatalogExportApi\Api\Data\ProductFactory $productFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
         LoggerInterface $logger
@@ -88,15 +88,16 @@ class ProductRepository implements ProductRepositoryInterface
             return $products;
         }
 
-        // TODO: remove temporary solution after https://github.com/magento/catalog-storefront/issues/157
-        return $this->toSnakeCase($feedData['feed']);
+//         TODO: remove temporary solution after https://github.com/magento/catalog-storefront/issues/157
+//        return $this->toSnakeCase($feedData['feed']);
         foreach ($feedData['feed'] as $feedItem) {
             $product = $this->productFactory->create();
             $feedItem['id'] = $feedItem['productId'];
+            $feedItem = $this->cleanUpNullValues($feedItem);
             $this->dataObjectHelper->populateWithArray(
                 $product,
                 $feedItem,
-                \Magento\CatalogExportApi\Api\Data\ProductInterface::class
+                \Magento\CatalogExportApi\Api\Data\Product::class
             );
             $products[] = $product;
         }
@@ -131,5 +132,24 @@ class ProductRepository implements ProductRepositoryInterface
     {
         $maxItemsInResponse = (int) $this->deploymentConfig->get('catalog_export/max_items_in_response');
         return $maxItemsInResponse ?: self::MAX_ITEMS_IN_RESPONSE;
+    }
+
+    /**
+     * Unset null values in provided array recursively
+     *
+     * @param array $array
+     * @return array
+     */
+    private function cleanUpNullValues(array $array): array
+    {
+        $result = [];
+        foreach ($array as $key => $value) {
+            if ($value === null || $value === '') {
+                continue;
+            }
+
+            $result[$key] = is_array($value) ? $this->cleanUpNullValues($value) : $value;
+        }
+        return $result;
     }
 }
