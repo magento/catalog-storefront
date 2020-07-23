@@ -5,7 +5,6 @@
  */
 namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
-use Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer;
 use Magento\CatalogMessageBroker\Model\FetchCategoriesInterface;
 use Magento\CatalogStorefront\Model\Storage\Client\CommandInterface;
 use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
@@ -88,6 +87,8 @@ class CategoriesConsumer extends OldConsumer
     }
 
     /**
+     * Resolve store ID by store code
+     *
      * @param array $mappedStores
      * @param string $storeCode
      * @return int|mixed

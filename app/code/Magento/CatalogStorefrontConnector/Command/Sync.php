@@ -119,8 +119,10 @@ class Sync extends Command
     }
 
     /**
+     * Sync between Magento and storefront
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @inheritdoc
+     * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
