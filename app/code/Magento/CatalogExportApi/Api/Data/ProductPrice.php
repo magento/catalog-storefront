@@ -29,18 +29,6 @@ class ProductPrice
     private $finalPrice;
 
     /**
-     * @param float|null $regularPrice
-     * @param float|null $finalPrice
-     */
-    public function __construct(
-        ?float $regularPrice,
-        ?float $finalPrice
-    ) {
-        $this->regularPrice = $regularPrice;
-        $this->finalPrice = $finalPrice;
-    }
-
-    /**
      * Get regular price
      *
      * @return float
@@ -48,6 +36,17 @@ class ProductPrice
     public function getRegularPrice(): ?float
     {
         return $this->regularPrice;
+    }
+
+    /**
+     * Set regular price
+     *
+     * @param float $regularPrice
+     * @return void
+     */
+    public function setRegularPrice(?float $regularPrice): void
+    {
+        $this->regularPrice = $regularPrice;
     }
 
     /**
@@ -59,4 +58,16 @@ class ProductPrice
     {
         return $this->finalPrice;
     }
+
+    /**
+     * Set final price
+     *
+     * @param float $finalPrice
+     * @return void
+     */
+    public function setFinalPrice(?float $finalPrice): void
+    {
+        $this->finalPrice = $finalPrice;
+    }
 }
+

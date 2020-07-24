@@ -34,8 +34,6 @@
                 <item name="image" xsi:type="string">Magento\CatalogExtractor\DataProvider\MediaGallery\ProductImageTransformer</item>
                 <item name="small_image" xsi:type="string">Magento\CatalogExtractor\DataProvider\MediaGallery\ProductImageTransformer</item>
                 <item name="thumbnail" xsi:type="string">Magento\CatalogExtractor\DataProvider\MediaGallery\ProductImageTransformer</item>
-                <item name="short_description" xsi:type="string">Magento\CatalogExtractor\DataProvider\Transformer\DescriptionTransformer</item>
-                <item name="description" xsi:type="string">Magento\CatalogExtractor\DataProvider\Transformer\DescriptionTransformer</item>
             </argument>
         </arguments>
     </type>
