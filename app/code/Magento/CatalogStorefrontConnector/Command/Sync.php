@@ -122,7 +122,11 @@ class Sync extends Command
      * Sync between Magento and storefront
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @param InputInterface $input
+     * @param OutputInterface $output
      * @return void
+     * @throws \Magento\DataExporter\Exception\UnableRetrieveData
+     * @throws \Zend_Db_Statement_Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

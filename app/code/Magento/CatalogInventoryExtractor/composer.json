@@ -9,8 +9,6 @@
         "magento/framework": "*",
         "magento/module-catalog-inventory": "*",
         "magento/module-configurable-product-extractor": "*",
-        "magento/module-category-extractor": "*",
-        "magento/module-catalog-extractor": "*",
         "magento/module-catalog-storefront-connector": "*",
         "magento/module-catalog-search": "*",
         "magento/module-config": "*",
