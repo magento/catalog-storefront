@@ -96,8 +96,8 @@ class ExportTest extends WebapiAbstract
 
     private function assertProductsEquals(array $expected, array $actual)
     {
-        $n = sizeof($expected);
-        for ($i = 0; $i < $n; $i++) {
+        $size = sizeof($expected);
+        for ($i = 0; $i < $size; $i++) {
             foreach ($this->attributesToCompare as $attribute) {
                 $this->compareComplexValue(
                     $expected[$i][$this->snakeToCamelCase($attribute)],
@@ -168,8 +168,8 @@ class ExportTest extends WebapiAbstract
         $result = $this->getProductApiResult('simple_with_boolean');
         if ($this->hasAttributeData($result)) {
             unset($result[0]['attributes'][0]['value'][0]['id']);
-            $booleanResult = $result[0]['attributes'][0];
-            $booleanExpectedResult = [
+            $actualResult = $result[0]['attributes'][0];
+            $expectedResult = [
                 'attribute_code' => 'boolean_attribute',
                 'type'  => 'boolean',
                 'value' => [
@@ -179,7 +179,7 @@ class ExportTest extends WebapiAbstract
                 ]
             ];
 
-            $this->assertEquals($booleanExpectedResult, $booleanResult);
+            $this->assertEquals($expectedResult, $actualResult);
         }
     }
 
@@ -193,8 +193,8 @@ class ExportTest extends WebapiAbstract
         $result = $this->getProductApiResult('simple_with_multiselect');
         if ($this->hasAttributeData($result)) {
             unset($result[0]['attributes'][0]['value'][0]['id']);
-            $muiltiselectResult = $result[0]['attributes'][0];
-            $multiselectExpectedResult = [
+            $actualResult = $result[0]['attributes'][0];
+            $expectedResult = [
                 'attribute_code' => 'multiselect_attribute',
                 'type'  => 'multiselect',
                 'value' => [
@@ -204,7 +204,7 @@ class ExportTest extends WebapiAbstract
                 ]
             ];
 
-            $this->assertEquals($multiselectExpectedResult, $muiltiselectResult);
+            $this->assertEquals($expectedResult, $actualResult);
         }
     }
 
@@ -218,8 +218,8 @@ class ExportTest extends WebapiAbstract
         $result = $this->getProductApiResult('simple_with_image');
         if ($this->hasAttributeData($result)) {
             unset($result[0]['attributes'][0]['value'][0]['id']);
-            $imageResult = $result[0]['attributes'][0];
-            $imageExpectedResult = [
+            $actualResult = $result[0]['attributes'][0];
+            $expectedResult = [
                 'attribute_code' => 'image_attribute',
                 'type'  => 'media_image',
                 'value' => [
@@ -229,7 +229,7 @@ class ExportTest extends WebapiAbstract
                 ]
             ];
 
-            $this->assertEquals($imageExpectedResult, $imageResult);
+            $this->assertEquals($expectedResult, $actualResult);
         }
     }
 
@@ -243,8 +243,8 @@ class ExportTest extends WebapiAbstract
         $result = $this->getProductApiResult('simple_with_decimal');
         if ($this->hasAttributeData($result)) {
             unset($result[0]['attributes'][0]['value'][0]['id']);
-            $decimalResult = $result[0]['attributes'][0];
-            $textEditorExpectedResult = [
+            $actualResult = $result[0]['attributes'][0];
+            $expectedResult = [
                 'attribute_code' => 'decimal_attribute',
                 'type'  => 'price',
                 'value' => [
@@ -254,7 +254,7 @@ class ExportTest extends WebapiAbstract
                 ]
             ];
 
-            $this->assertEquals($textEditorExpectedResult, $decimalResult);
+            $this->assertEquals($expectedResult, $actualResult);
         }
     }
 
@@ -268,8 +268,8 @@ class ExportTest extends WebapiAbstract
         $result = $this->getProductApiResult('simple_with_text_editor');
         if ($this->hasAttributeData($result)) {
             unset($result[0]['attributes'][0]['value'][0]['id']);
-            $textEditorResult = $result[0]['attributes'][0];
-            $textEditorExpectedResult = [
+            $actualResult = $result[0]['attributes'][0];
+            $expectedResult = [
                 'attribute_code' => 'text_editor_attribute',
                 'type'  => 'textarea',
                 'value' => [
@@ -278,7 +278,7 @@ class ExportTest extends WebapiAbstract
                     ]
                 ]
             ];
-            $this->assertEquals($textEditorExpectedResult, $textEditorResult);
+            $this->assertEquals($expectedResult, $actualResult);
         }
     }
 
@@ -292,9 +292,8 @@ class ExportTest extends WebapiAbstract
         $result = $this->getProductApiResult('simple_with_date');
         if ($this->hasAttributeData($result)) {
             unset($result[0]['attributes'][0]['value'][0]['id']);
-            $dateAttributeResult = $result[0]['attributes'][0];
-
-            $dateExpectedResult =  [
+            $actualResult = $result[0]['attributes'][0];
+            $expectedResult =  [
                 'attribute_code' => 'date_attribute',
                 'type'  => 'date',
                 'value' => [
@@ -304,7 +303,7 @@ class ExportTest extends WebapiAbstract
                 ]
             ];
 
-            $this->assertEquals($dateExpectedResult, $dateAttributeResult);
+            $this->assertEquals($expectedResult, $actualResult);
         }
     }
 
