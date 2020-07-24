@@ -212,9 +212,13 @@ class CatalogService implements CatalogServerInterface
 
         $categories = $this->categoryDataProvider->fetch(
             $request->getIds(),
-            \array_merge($request->getAttributeCodes(), ['is_active']),
+            \array_merge($request->getAttributeCodes(), ['is_active', 'position']),
             ['store' => $request->getStore()]
         );
+
+        usort($categories, function($a, $b) {
+            return $a['position'] <=> $b['position'];
+        });
 
         $items = [];
         foreach ($categories as $category) {
