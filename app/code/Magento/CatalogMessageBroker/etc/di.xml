@@ -11,6 +11,8 @@
         <arguments>
             <argument name="dataMappers" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\CustomOptions</item>
+                <item name="media_gallery" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\MediaGallery</item>
+                <item name="swatch_image" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\SwatchImage</item>
             </argument>
             <argument name="fields" xsi:type="array">
                 <item name="id" xsi:type="string">id</item>
@@ -21,6 +23,9 @@
                 <item name="meta_title" xsi:type="string">meta_title</item>
                 <item name="created_at" xsi:type="string">created_at</item>
                 <item name="updated_at" xsi:type="string">updated_at</item>
+                <item name="image" xsi:type="string">image</item>
+                <item name="small_image" xsi:type="string">small_image</item>
+                <item name="thumbnail" xsi:type="string">thumbnail</item>
             </argument>
         </arguments>
     </type>
