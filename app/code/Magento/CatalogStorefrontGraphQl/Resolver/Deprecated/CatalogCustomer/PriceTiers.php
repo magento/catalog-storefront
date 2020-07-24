@@ -16,6 +16,7 @@ use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\CatalogCustomerGraphQl\Model\Resolver\Product\Price\TiersFactory;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Override resolver of deprecated field. Add 'model' to output
@@ -34,6 +35,7 @@ class PriceTiers extends \Magento\CatalogCustomerGraphQl\Model\Resolver\PriceTie
      * @param Discount $discount
      * @param PriceProviderPool $priceProviderPool
      * @param ProductModelHydrator $productModelHydrator
+     * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         ValueFactory $valueFactory,
@@ -41,14 +43,16 @@ class PriceTiers extends \Magento\CatalogCustomerGraphQl\Model\Resolver\PriceTie
         GetCustomerGroup $getCustomerGroup,
         Discount $discount,
         PriceProviderPool $priceProviderPool,
-        ProductModelHydrator $productModelHydrator
+        ProductModelHydrator $productModelHydrator,
+        PriceCurrencyInterface $priceCurrency
     ) {
         parent::__construct(
             $valueFactory,
             $tiersFactory,
             $getCustomerGroup,
             $discount,
-            $priceProviderPool
+            $priceProviderPool,
+            $priceCurrency
         );
         $this->productModelHydrator = $productModelHydrator;
     }
