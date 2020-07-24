@@ -9,6 +9,7 @@ namespace Magento\CatalogExport\Model;
 
 use Magento\CatalogExportApi\Api\ProductRepositoryInterface;
 use Psr\Log\LoggerInterface;
+use Magento\CatalogExport\Model\DtoMapper;
 
 /**
  * @inheritdoc
@@ -31,9 +32,9 @@ class ProductRepository implements ProductRepositoryInterface
     private $productFactory;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper
+     * @var DtoMapper
      */
-    private $dataObjectHelper;
+    private $dtoMapper;
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig
@@ -48,19 +49,19 @@ class ProductRepository implements ProductRepositoryInterface
     /**
      * @param \Magento\CatalogDataExporter\Model\Feed\Products $products
      * @param \Magento\CatalogExportApi\Api\Data\ProductFactory $productFactory
-     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param DtoMapper $dtoMapper
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      * @param LoggerInterface $logger
      */
     public function __construct(
         \Magento\CatalogDataExporter\Model\Feed\Products $products,
         \Magento\CatalogExportApi\Api\Data\ProductFactory $productFactory,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        DtoMapper $dtoMapper,
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
         LoggerInterface $logger
     ) {
         $this->products = $products;
-        $this->dataObjectHelper = $dataObjectHelper;
+        $this->dtoMapper = $dtoMapper;
         $this->productFactory = $productFactory;
         $this->deploymentConfig = $deploymentConfig;
         $this->logger = $logger;
@@ -94,7 +95,7 @@ class ProductRepository implements ProductRepositoryInterface
             $product = $this->productFactory->create();
             $feedItem['id'] = $feedItem['productId'];
             $feedItem = $this->cleanUpNullValues($feedItem);
-            $this->dataObjectHelper->populateWithArray(
+            $this->dtoMapper->populateWithArray(
                 $product,
                 $feedItem,
                 \Magento\CatalogExportApi\Api\Data\Product::class

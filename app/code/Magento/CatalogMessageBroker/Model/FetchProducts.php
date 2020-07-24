@@ -41,6 +41,7 @@ class FetchProducts implements FetchProductsInterface
         // So why we need transform objects?
 
         $products = $this->productRepository->get($ids);
+        $data = [];
         foreach ($products as $product) {
             $data[] = $this->dataObjectProcessor->buildOutputDataArray($product, Product::class);
         }

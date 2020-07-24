@@ -108,21 +108,24 @@ class ProductDataProcessor
                 $importData[$nameInImport] = $product[$nameInExport];
             }
 
-            if (isset($oldExportDataProduct[$nameInExport])) {
-                unset($oldExportDataProduct[$nameInExport]);
-            }
+            unset($oldExportDataProduct[$nameInExport]);
         }
 
         /** @var DataMapperInterface $dataMapper */
         foreach ($this->dataMappers as $nameInExport => $dataMapper) {
             $importData[$nameInExport] = $dataMapper->map($product);
         }
-        if (isset($product['swatch_image']['url'])) {
+
+        if (\array_key_exists('swatch_image', $product)
+            && \array_key_exists('url', (array)$product['swatch_image'])
+        ) {
             $importData['swatch_image'] = $product['swatch_image']['url'];
         }
 
         // TODO: handle grouped product
-        if (isset($oldExportDataProduct['type_id']) && $oldExportDataProduct['type_id'] === 'grouped') {
+        if (\array_key_exists('type_id', $oldExportDataProduct)
+            && $oldExportDataProduct['type_id'] === 'grouped'
+        ) {
             $importData['grouped_items'] = $oldExportDataProduct['items'];
         }
 
@@ -133,9 +136,7 @@ class ProductDataProcessor
                 'code' => $attribute['attribute_code'],
                 'value' => \implode(',', $attribute['value'])
             ];
-            if (isset($oldExportDataProduct[$attribute['attribute_code']])) {
-                unset($oldExportDataProduct[$attribute['attribute_code']]);
-            }
+            unset($oldExportDataProduct[$attribute['attribute_code']]);
         }
 
         // TODO: only importData must be returned https://github.com/magento/catalog-storefront/issues/165
