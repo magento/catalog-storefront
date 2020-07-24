@@ -37,6 +37,7 @@ use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterfaceFactory;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseFactory;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseFactory;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseInterfaceFactory;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseInterface;
 use Psr\Log\LoggerInterface;
@@ -307,7 +308,7 @@ class CatalogService implements CatalogServerInterface
             ]
         ];
 
-        /** @var \Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponse $deleteProductsResponse */
+        /** @var \Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponse $deleteProductsResponse */
         $deleteProductsResponse = $this->deleteProductsResponseFactory->create();
 
         try {

@@ -146,7 +146,7 @@ class ProductPublisher
     private function publishEntities(array $productIds, int $storeId, $overrideProducts = []): void
     {
         $deletedProductIds = \array_keys(\array_filter($overrideProducts, function($product){
-            return $product['deleted'] === true;
+            return isset($product['deleted']) && $product['deleted'] === true;
         }));
 
         foreach (\array_chunk($productIds, $this->batchSize) as $idsBunch) {
