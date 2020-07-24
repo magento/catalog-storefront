@@ -130,17 +130,12 @@ abstract class AbstractProductExportTestHelper extends WebapiAbstract
     /**
      * Validate product options in extracted product data
      *
-     * @param null|array $expectedOptions
-     * @param null|array $actualOptions
+     * @param array $expectedOptions
+     * @param array $actualOptions
      * @return void
      */
-    protected function assertOptionsEquals(?array $expectedOptions, ?array $actualOptions): void
+    protected function assertOptionsEquals(array $expectedOptions, array $actualOptions): void
     {
-        if ($expectedOptions === null) {
-            $this->assertEquals(null, $actualOptions);
-            return;
-        }
-
         $this->assertCount(sizeof($expectedOptions), $actualOptions);
         foreach ($actualOptions as $optionKey => $actualOption) {
             foreach ($this->optionsToCompare as $optionToCompare) {
