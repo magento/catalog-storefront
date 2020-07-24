@@ -36,6 +36,7 @@ class ProductDataProcessor
 
     /**
      * Override data returned from old API with data returned from new API
+     *
      * Checks for product type and whether fields are to be remapped
      *
      * @param array $data
@@ -55,7 +56,6 @@ class ProductDataProcessor
      * Merge scalar fields in product data
      *
      * @param array $data
-     * @param array $product
      * @return array
      */
     private function mergeScalarFields($data)
@@ -80,8 +80,7 @@ class ProductDataProcessor
     {
         $fields = [];
         foreach ($this->dataMappers as $field => $dataMapperConfig) {
-            if (
-                array_key_exists('types', $dataMapperConfig) &&
+            if (array_key_exists('types', $dataMapperConfig) &&
                 !in_array($product['type_id'], $dataMapperConfig['types'])
             ) {
                 continue;

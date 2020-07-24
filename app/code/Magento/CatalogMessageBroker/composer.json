@@ -10,7 +10,8 @@
         "magento/module-catalog-export-api": "*",
         "magento/module-catalog-storefront": "*",
         "magento/module-catalog-extractor": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-configurable-product": "*"
     },
     "type": "magento2-module",
     "license": [
