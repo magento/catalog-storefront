@@ -118,13 +118,15 @@ class ProductDataProcessor
         }
 
         if (\array_key_exists('swatch_image', $product)
-            && \array_key_exists('url', $product['swatch_image'])
+            && \array_key_exists('url', (array)$product['swatch_image'])
         ) {
             $importData['swatch_image'] = $product['swatch_image']['url'];
         }
 
         // TODO: handle grouped product
-        if (\array_key_exists('type_id', $oldExportDataProduct) && $oldExportDataProduct['type_id'] === 'grouped') {
+        if (\array_key_exists('type_id', $oldExportDataProduct)
+            && $oldExportDataProduct['type_id'] === 'grouped'
+        ) {
             $importData['grouped_items'] = $oldExportDataProduct['items'];
         }
 

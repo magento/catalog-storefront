@@ -24,27 +24,12 @@ use Magento\CatalogExportApi\Api\Data\ProductPrice;
  */
 class PriceRange
 {
-    /**
-     * @var ProductPrice
-     */
+    /** @var \Magento\CatalogExportApi\Api\Data\ProductPrice */
+    /** @var ProductPrice */
     private $minimumPrice;
 
-    /**
-     * @var ProductPrice
-     */
+    /** @var ProductPrice */
     private $maximumPrice;
-
-    /**
-     * @param ProductPrice $minimumPrice
-     * @param ProductPrice $maximumPrice
-     */
-    public function __construct(
-        ProductPrice $minimumPrice,
-        ProductPrice $maximumPrice
-    ) {
-      $this->minimumPrice = $minimumPrice;
-      $this->maximumPrice = $maximumPrice;
-    }
 
     /**
      * Get minimum price
@@ -57,6 +42,17 @@ class PriceRange
     }
 
     /**
+     * Set minimum price
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\ProductPrice $minimumPrice
+     * @return void
+     */
+    public function setMinimumPrice(?ProductPrice $minimumPrice): void
+    {
+        $this->minimumPrice = $minimumPrice;
+    }
+
+    /**
      * Get maximum price
      *
      * @return \Magento\CatalogExportApi\Api\Data\ProductPrice
@@ -65,4 +61,16 @@ class PriceRange
     {
         return $this->maximumPrice;
     }
+
+    /**
+     * Set maximum price
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\ProductPrice $maximumPrice
+     * @return void
+     */
+    public function setMaximumPrice(?ProductPrice $maximumPrice): void
+    {
+        $this->maximumPrice = $maximumPrice;
+    }
 }
+
