@@ -43,6 +43,7 @@ class DynamicAttribute implements DataMapperInterface
     {
         $attributes = [];
 
+        //use stratergy pattern
         if ( $productData && $productData['attributes']) {
             foreach ($productData['attributes'] as $attribute) {
                 if ($attribute['type'] == self::SELECT_OPTION_TYPE) {
