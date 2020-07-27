@@ -14,7 +14,7 @@ interface AttributeTypeInterface
     /**
      * Get attribute data
      *
-     * @param $attribute
+     * @param array $attribute
      * @return mixed
      */
     public function getAttribute($attribute);

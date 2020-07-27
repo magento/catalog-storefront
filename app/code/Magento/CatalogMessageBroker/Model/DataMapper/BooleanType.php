@@ -22,4 +22,3 @@ class BooleanType implements AttributeTypeInterface
         return $attribute['value'][0]['value'] == 'yes' ? 1 : 0;
     }
 }
-

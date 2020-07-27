@@ -137,7 +137,6 @@ class Product extends AbstractModel implements ProductInterface
         $this->setData(self::SKU, $sku);
     }
 
-
     /**
      * Get parents
      *
@@ -147,7 +146,6 @@ class Product extends AbstractModel implements ProductInterface
     {
         return $this->getData(self::PARENTS);
     }
-
 
     /**
      * Set parents
@@ -159,7 +157,6 @@ class Product extends AbstractModel implements ProductInterface
         $this->setData(self::PARENTS, $parents);
     }
 
-
     /**
      * Get store view code
      *
@@ -169,7 +166,6 @@ class Product extends AbstractModel implements ProductInterface
     {
         return $this->getData(self::STORE_VIEW_CODE);
     }
-
 
     /**
      * Set store view code
@@ -190,7 +186,6 @@ class Product extends AbstractModel implements ProductInterface
     {
         return $this->getData(self::STORE_CODE);
     }
-
 
     /**
      * Set store code
@@ -302,7 +297,6 @@ class Product extends AbstractModel implements ProductInterface
         $this->setData(self::META_KEYWORD, $metaKeyword);
     }
 
-
     /**
      * Get meta title
      *
@@ -343,7 +337,6 @@ class Product extends AbstractModel implements ProductInterface
         $this->setData(self::STATUS, $status);
     }
 
-
     /**
      * Get tax class id
      *
@@ -353,7 +346,6 @@ class Product extends AbstractModel implements ProductInterface
     {
         return $this->getData(self::TAX_CLASS_ID);
     }
-
 
     /**
      * Set tax class id
@@ -365,7 +357,6 @@ class Product extends AbstractModel implements ProductInterface
         $this->setData(self::TAX_CLASS_ID, $taxClassId);
     }
 
-
     /**
      * Get created at
      *
@@ -375,7 +366,6 @@ class Product extends AbstractModel implements ProductInterface
     {
         return $this->getData(self::CREATED_AT);
     }
-
 
     /**
      * Set created at
@@ -387,7 +377,6 @@ class Product extends AbstractModel implements ProductInterface
         $this->setData(self::CREATED_AT, $createdAt);
     }
 
-
     /**
      * Get updated at
      *
@@ -397,7 +386,6 @@ class Product extends AbstractModel implements ProductInterface
     {
         return $this->getData(self::UPDATED_AT);
     }
-
 
     /**
      * Set updated at
@@ -409,7 +397,6 @@ class Product extends AbstractModel implements ProductInterface
         $this->setData(self::UPDATED_AT, $updatedAt);
     }
 
-
     /**
      * Get url key
      *
@@ -419,7 +406,6 @@ class Product extends AbstractModel implements ProductInterface
     {
         return $this->getData(self::URL_KEY);
     }
-
 
     /**
      * Set url key
@@ -431,7 +417,6 @@ class Product extends AbstractModel implements ProductInterface
         $this->setData(self::URL_KEY, $urlKey);
     }
 
-
     /**
      * Get Visibility
      *
@@ -441,7 +426,6 @@ class Product extends AbstractModel implements ProductInterface
     {
         return $this->getData(self::VISIBILITY);
     }
-
 
     /**
      * Set Visibility
@@ -453,7 +437,6 @@ class Product extends AbstractModel implements ProductInterface
         $this->setData(self::VISIBILITY, $visibility);
     }
 
-
     /**
      * Get weight
      *
@@ -463,7 +446,6 @@ class Product extends AbstractModel implements ProductInterface
     {
         return $this->getData(self::WEIGHT);
     }
-
 
     /**
      * Set weight
@@ -475,7 +457,6 @@ class Product extends AbstractModel implements ProductInterface
         $this->setData(self::WEIGHT, $weight);
     }
 
-
     /**
      * Get weight unit
      *
@@ -485,7 +466,6 @@ class Product extends AbstractModel implements ProductInterface
     {
         return $this->getData(self::WEIGHT_UNIT);
     }
-
 
     /**
      * Set weight unit
@@ -497,7 +477,6 @@ class Product extends AbstractModel implements ProductInterface
         $this->setData(self::WEIGHT_UNIT, $weightUnit);
     }
 
-
     /**
      * Get currency
      *
@@ -507,7 +486,6 @@ class Product extends AbstractModel implements ProductInterface
     {
         return $this->getData(self::CURRENCY);
     }
-
 
     /**
      * Set currency
@@ -519,7 +497,6 @@ class Product extends AbstractModel implements ProductInterface
         $this->setData(self::CURRENCY, $currency);
     }
 
-
     /**
      * Get Displayable
      *
@@ -529,7 +506,6 @@ class Product extends AbstractModel implements ProductInterface
     {
         return $this->getData(self::DISPLAYABLE);
     }
-
 
     /**
      * Set displayable
@@ -541,7 +517,6 @@ class Product extends AbstractModel implements ProductInterface
         $this->setData(self::DISPLAYABLE, $displayable);
     }
 
-
     /**
      * Get buyable
      *
@@ -551,7 +526,6 @@ class Product extends AbstractModel implements ProductInterface
     {
         return $this->getData(self::BUYABLE);
     }
-
 
     /**
      * Set buyable
@@ -563,7 +537,6 @@ class Product extends AbstractModel implements ProductInterface
         $this->setData(self::BUYABLE, $buyable);
     }
 
-
     /**
      * Get attributes
      *
@@ -573,7 +546,6 @@ class Product extends AbstractModel implements ProductInterface
     {
         return $this->getData(self::ATTRIBUTES);
     }
-
 
     /**
      * Set attributes
