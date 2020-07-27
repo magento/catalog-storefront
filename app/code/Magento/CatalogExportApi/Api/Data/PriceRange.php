@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExportApi\Api\Data;
 
-use Magento\CatalogExportApi\Api\Data\ProductPrice;
-
 /**
  * PriceRange entity
  *
@@ -25,10 +23,9 @@ use Magento\CatalogExportApi\Api\Data\ProductPrice;
 class PriceRange
 {
     /** @var \Magento\CatalogExportApi\Api\Data\ProductPrice */
-    /** @var ProductPrice */
     private $minimumPrice;
 
-    /** @var ProductPrice */
+    /** @var \Magento\CatalogExportApi\Api\Data\ProductPrice */
     private $maximumPrice;
 
     /**
@@ -73,4 +70,3 @@ class PriceRange
         $this->maximumPrice = $maximumPrice;
     }
 }
-

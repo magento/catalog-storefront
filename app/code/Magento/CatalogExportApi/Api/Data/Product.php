@@ -151,6 +151,18 @@ class Product
     /** @var \Magento\CatalogExportApi\Api\Data\EnteredOption[]|null */
     private $enteredOptions;
 
+    /** @var \Magento\CatalogExportApi\Api\Data\Variant[]|null */
+    private $variants;
+
+    /** @var string */
+    private $url;
+
+    /** @var bool */
+    private $inStock;
+
+    /** @var bool */
+    private $lowStock;
+
     /**
      * Get sku
      *
@@ -1052,5 +1064,89 @@ class Product
     public function setEnteredOptions(?array $enteredOptions = null): void
     {
         $this->enteredOptions = $enteredOptions;
+    }
+
+    /**
+     * Get variants
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\Variant[]|null
+     */
+    public function getVariants(): ?array
+    {
+        return $this->variants;
+    }
+
+    /**
+     * Set variants
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\Variant[] $variants
+     * @return void
+     */
+    public function setVariants(?array $variants = null): void
+    {
+        $this->variants = $variants;
+    }
+
+    /**
+     * Get url
+     *
+     * @return string
+     */
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    /**
+     * Set url
+     *
+     * @param string $url
+     * @return void
+     */
+    public function setUrl(?string $url): void
+    {
+        $this->url = $url;
+    }
+
+    /**
+     * Get in stock
+     *
+     * @return bool
+     */
+    public function getInStock(): ?bool
+    {
+        return $this->inStock;
+    }
+
+    /**
+     * Set in stock
+     *
+     * @param bool $inStock
+     * @return void
+     */
+    public function setInStock(?bool $inStock): void
+    {
+        $this->inStock = $inStock;
+    }
+
+    /**
+     * Get low stock
+     *
+     * @return bool
+     */
+    public function getLowStock(): ?bool
+    {
+        return $this->lowStock;
+    }
+
+    /**
+     * Set low stock
+     *
+     * @param bool $lowStock
+     * @return void
+     */
+    public function setLowStock(?bool $lowStock): void
+    {
+        $this->lowStock = $lowStock;
     }
 }
