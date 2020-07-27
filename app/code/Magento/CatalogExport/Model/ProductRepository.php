@@ -67,8 +67,7 @@ class ProductRepository implements ProductRepositoryInterface
     }
 
     /**
-     * @param array $ids
-     * @return array|\Magento\CatalogExportApi\Api\Data\ProductInterface[]
+     * @inheritdoc
      */
     public function get(array $ids)
     {
@@ -84,7 +83,7 @@ class ProductRepository implements ProductRepositoryInterface
         $feedData = $this->products->getFeedByIds($ids);
         if (empty($feedData['feed'])) {
             $this->logger->error(
-                \sprintf('Cannot find products data in catalog feed with ids "%s"', implode(",", $ids))
+                \sprintf('Cannot find products data in catalog feed with ids "%s"', \implode(',', $ids))
             );
             return $products;
         }
