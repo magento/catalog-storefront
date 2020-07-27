@@ -60,36 +60,4 @@ class ConsumerInvoker
             $consumer->process(self::BATCHSIZE);
         }
     }
-
-    /**
-     * Invoke specific size of events
-     *
-     * @param int $size
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @return void
-     */
-    public function invokeSpecificSize(int $size): void
-    {
-        $invokeInTestsOnly = false;
-        $consumersToProcess = [];
-
-        if ($invokeInTestsOnly) {
-            $trace = (new \Exception())->getTraceAsString();
-            if (false === strpos($trace, 'Magento\GraphQl')
-                || false === strpos($trace, 'src/Framework/TestCase.php')
-                || false !== strpos($trace, 'ApiDataFixture->startTest')) {
-                return;
-            }
-        }
-        $objectManager = Bootstrap::getObjectManager();
-
-        /** @var \Magento\Framework\MessageQueue\ConsumerFactory $consumerFactory */
-        $consumerFactory = $objectManager->create(\Magento\Framework\MessageQueue\ConsumerFactory::class);
-        $consumersToProcess = $consumersToProcess ?: self::CONSUMERS;
-
-        foreach ($consumersToProcess as $consumerName) {
-            $consumer = $consumerFactory->get($consumerName, $size);
-            $consumer->process($size);
-        }
-    }
 }
