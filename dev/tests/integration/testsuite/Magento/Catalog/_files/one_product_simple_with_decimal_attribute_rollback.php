@@ -22,7 +22,7 @@ $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
 try {
-    $product = $productRepository->get('simple_with_date', false, null, true);
+    $product = $productRepository->get('simple_with_decimal', false, null, true);
     $productRepository->delete($product);
 } catch (NoSuchEntityException $e) {
 }
