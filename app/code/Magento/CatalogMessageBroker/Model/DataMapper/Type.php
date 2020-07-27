@@ -11,6 +11,8 @@ namespace Magento\CatalogMessageBroker\Model\DataMapper;
 class Type implements AttributeTypeInterface
 {
     /**
+     * Get attribute
+     *
      * @param $attribute
      * @return mixed
      */

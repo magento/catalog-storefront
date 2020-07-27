@@ -30,9 +30,10 @@ class DynamicAttribute implements DataMapperInterface
     public function map(array $productData): array
     {
         $attributes = [];
-        if ( $productData && $productData['attributes']) {
+        if ($productData && $productData['attributes']) {
             foreach ($productData['attributes'] as $attribute) {
-                $attributes[$attribute['attribute_code']] = $this->attributePool[$attribute['type']]->getAttribute($attribute);
+                $attributes[$attribute['attribute_code']]
+                    = $this->attributePool[$attribute['type']]->getAttribute($attribute);
             }
         }
 

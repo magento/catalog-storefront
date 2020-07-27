@@ -12,7 +12,9 @@ namespace Magento\CatalogMessageBroker\Model\DataMapper;
 class BooleanType implements AttributeTypeInterface
 {
     /**
-     * @param $attribute
+     * Get attribute
+     *
+     * @param array $attribute
      * @return int
      */
     public function getAttribute($attribute)

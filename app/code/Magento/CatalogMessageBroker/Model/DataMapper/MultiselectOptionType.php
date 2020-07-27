@@ -12,7 +12,9 @@ namespace Magento\CatalogMessageBroker\Model\DataMapper;
 class MultiselectOptionType implements AttributeTypeInterface
 {
     /**
-     * @param $attribute
+     * Get attribute
+     *
+     * @param array $attribute
      * @return string
      */
     public function getAttribute($attribute)
