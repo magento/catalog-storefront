@@ -60,6 +60,6 @@ class CustomOptions implements DataMapperInterface
             }
         }
 
-        return $productCustomOptions;
+        return ['options' => $productCustomOptions];
     }
 }

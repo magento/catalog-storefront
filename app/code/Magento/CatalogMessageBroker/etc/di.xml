@@ -20,8 +20,13 @@
                     </item>
                     <item name="recursive" xsi:type="boolean">true</item>
                 </item>
+                <item name="media_gallery" xsi:type="array">
+                    <item name="class" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\MediaGallery</item>
+                </item>
+                <item name="swatch_image" xsi:type="array">
+                    <item name="class" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\SwatchImage</item>
+                </item>
             </argument>
-
             <argument name="fields" xsi:type="array">
                 <item name="id" xsi:type="string">id</item>
                 <item name="sku" xsi:type="string">sku</item>
@@ -31,6 +36,9 @@
                 <item name="meta_title" xsi:type="string">meta_title</item>
                 <item name="created_at" xsi:type="string">created_at</item>
                 <item name="updated_at" xsi:type="string">updated_at</item>
+                <item name="image" xsi:type="string">image</item>
+                <item name="small_image" xsi:type="string">small_image</item>
+                <item name="thumbnail" xsi:type="string">thumbnail</item>
             </argument>
         </arguments>
     </type>

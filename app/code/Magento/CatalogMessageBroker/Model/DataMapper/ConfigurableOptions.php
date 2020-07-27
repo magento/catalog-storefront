@@ -36,7 +36,7 @@ class ConfigurableOptions implements DataMapperInterface
                 }
             }
         }
-        return $configurableOptions;
+        return ['configurable_options' => $configurableOptions];
     }
 
     /**

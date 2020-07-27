@@ -403,6 +403,86 @@ interface ProductInterface
     public function setEnteredOptions($options);
 
     /**
+     * Get media gallery
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\GalleryItem[]|null
+     */
+    public function getMediaGallery() : ?array;
+
+    /**
+     * Set media gallery
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\GalleryItem[]|null $mediaGallery
+     *
+     * @return void
+     */
+    public function setMediaGallery(?array $mediaGallery) : void;
+
+    /**
+     * Get product base image
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\ProductImage|null
+     */
+    public function getImage() : ?ProductImage;
+
+    /**
+     * Set product base image
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\ProductImage|null $image
+     *
+     * @return void
+     */
+    public function setImage(?ProductImage $image) : void;
+
+    /**
+     * Get product small image
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\ProductImage|null
+     */
+    public function getSmallImage() : ?ProductImage;
+
+    /**
+     * Set product small image
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\ProductImage|null $image
+     *
+     * @return void
+     */
+    public function setSmallImage(?ProductImage $image) : void;
+
+    /**
+     * Get product thumbnail image
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\ProductImage|null
+     */
+    public function getThumbnail() : ?ProductImage;
+
+    /**
+     * Set product thumbnail image
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\ProductImage|null $image
+     *
+     * @return void
+     */
+    public function setThumbnail(?ProductImage $image) : void;
+
+    /**
+     * Get product swatch image file
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\ProductImage|null
+     */
+    public function getSwatchImage() : ?ProductImage;
+
+    /**
+     * Set product swatch image file
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\ProductImage|null $image
+     *
+     * @return void
+     */
+    public function setSwatchImage(?ProductImage $image) : void;
+
+    /**
      * Get is product in stock
      *
      * @return bool

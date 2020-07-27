@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExport\Model\Data;
 
+use Magento\CatalogExportApi\Api\Data\ProductImage;
 use Magento\CatalogExportApi\Api\Data\ProductInterface;
 use Magento\Framework\Model\AbstractModel;
 
@@ -68,6 +69,16 @@ class Product extends AbstractModel implements ProductInterface
     private const OPTIONS = 'options';
 
     private const ENTERED_OPTIONS = 'entered_options';
+
+    private const MEDIA_GALLERY = 'media_gallery';
+
+    private const IMAGE = 'image';
+
+    private const SMALL_IMAGE = 'small_image';
+
+    private const THUMBNAIL = 'thumbnail';
+
+    private const SWATCH_IMAGE = 'swatch_image';
 
     private const IN_STOCK = 'in_stock';
 
@@ -499,6 +510,86 @@ class Product extends AbstractModel implements ProductInterface
     public function setEnteredOptions($options)
     {
         $this->setData(self::ENTERED_OPTIONS, $options);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getMediaGallery() : ?array
+    {
+        return $this->getData(self::MEDIA_GALLERY);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setMediaGallery(?array $mediaGallery) : void
+    {
+        $this->setData(self::MEDIA_GALLERY, $mediaGallery);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getImage() : ?ProductImage
+    {
+        return $this->getData(self::IMAGE);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setImage(?ProductImage $image) : void
+    {
+        $this->setData(self::IMAGE, $image);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSmallImage() : ?ProductImage
+    {
+        return $this->getData(self::SMALL_IMAGE);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setSmallImage(?ProductImage $image) : void
+    {
+        $this->setData(self::SMALL_IMAGE, $image);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getThumbnail() : ?ProductImage
+    {
+        return $this->getData(self::THUMBNAIL);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setThumbnail(?ProductImage $image) : void
+    {
+        $this->setData(self::THUMBNAIL, $image);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSwatchImage() : ?ProductImage
+    {
+        return $this->getData(self::SWATCH_IMAGE);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setSwatchImage(?ProductImage $image) : void
+    {
+        $this->setData(self::SWATCH_IMAGE, $image);
     }
 
     /**

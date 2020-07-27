@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\CatalogMessageBroker\Model;
 
 use Magento\CatalogMessageBroker\Model\DataMapper\DataMapperInterface;
@@ -49,7 +48,7 @@ class ProductDataProcessor
     {
         $scalarFields = $this->mergeScalarFields($data);
         $compoundFields = $this->mergeCompoundFields($data, $product);
-        return array_merge($scalarFields, $compoundFields, $product);
+        return array_merge($product, $scalarFields, $compoundFields);
     }
 
     /**
@@ -90,11 +89,11 @@ class ProductDataProcessor
             $dataMapper = $dataMapperConfig['class'];
 
             if (array_key_exists('recursive', $dataMapperConfig) && $dataMapperConfig['recursive'] === true) {
-                $fields[$field] = array_replace_recursive($product[$field], $dataMapper->map($data));
+                $fields[$field] = array_replace_recursive($product[$field], $dataMapper->map($data)[$field]);
             } else {
-                $fields[$field] = $dataMapper->map($data);
+                $fields[$field] = $dataMapper->map($data)[$field];
             }
         }
-        return $fields;
+        return array_filter($fields);
     }
 }
