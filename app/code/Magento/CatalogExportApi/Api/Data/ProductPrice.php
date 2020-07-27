@@ -70,4 +70,3 @@ class ProductPrice
         $this->finalPrice = $finalPrice;
     }
 }
-
