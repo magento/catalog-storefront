@@ -13,7 +13,7 @@ class Type implements AttributeTypeInterface
     /**
      * Get attribute
      *
-     * @param $attribute
+     * @param array $attribute
      * @return mixed
      */
     public function getAttribute($attribute)
