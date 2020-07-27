@@ -48,7 +48,7 @@ class ProductDataProcessor
     {
         $scalarFields = $this->mergeScalarFields($data);
         $compoundFields = $this->mergeCompoundFields($data, $product);
-        return array_merge($product, $scalarFields, $compoundFields);
+        return \array_merge($product, $scalarFields, $compoundFields);
     }
 
     /**
@@ -79,8 +79,8 @@ class ProductDataProcessor
     {
         $fields = [];
         foreach ($this->dataMappers as $field => $dataMapperConfig) {
-            if (array_key_exists('types', $dataMapperConfig) &&
-                !in_array($product['type_id'], $dataMapperConfig['types'])
+            if (\array_key_exists('types', $dataMapperConfig) &&
+                !\in_array($product['type_id'], $dataMapperConfig['types'])
             ) {
                 continue;
             }
@@ -89,11 +89,13 @@ class ProductDataProcessor
             $dataMapper = $dataMapperConfig['class'];
 
             if (array_key_exists('recursive', $dataMapperConfig) && $dataMapperConfig['recursive'] === true) {
-                $fields[$field] = array_replace_recursive($product[$field], $dataMapper->map($data)[$field]);
+                $fields[$field] = isset($product[$field]) ? \array_replace_recursive($product[$field],
+                    $dataMapper->map($data)[$field]) : $dataMapper->map($data)[$field];
             } else {
-                $fields[$field] = $dataMapper->map($data)[$field];
+                $fields[$field] = isset($product[$field]) ? \array_merge($product[$field],
+                    $dataMapper->map($data)[$field]) : $dataMapper->map($data)[$field];
             }
         }
-        return array_filter($fields);
+        return \array_filter($fields);
     }
 }
