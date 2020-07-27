@@ -57,7 +57,7 @@ class ProductDataProcessor
      * @param array $data
      * @return array
      */
-    private function mergeScalarFields($data)
+    private function mergeScalarFields($data): array
     {
         $fieldsData = [];
         foreach ($this->fields as $field) {
@@ -75,7 +75,7 @@ class ProductDataProcessor
      * @param array $product
      * @return array
      */
-    private function mergeCompoundFields($data, $product)
+    private function mergeCompoundFields($data, $product): array
     {
         $fields = [];
         foreach ($this->dataMappers as $field => $dataMapperConfig) {
