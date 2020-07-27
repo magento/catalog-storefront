@@ -21,6 +21,7 @@ class MultiselectOptionType implements AttributeTypeInterface
         foreach ($attribute['value'] as $attributeValue) {
             $values[] = $attributeValue['id'];
         }
-        return $attributes[$attribute['attribute_code']] = implode(',', $values);
+
+        return implode(',', $values);
     }
 }

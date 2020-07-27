@@ -12,31 +12,6 @@ namespace Magento\CatalogMessageBroker\Model\DataMapper;
 class DynamicAttribute implements DataMapperInterface
 {
     /**
-     * Select option type
-     */
-    const SELECT_OPTION_TYPE = 'select';
-
-    /**
-     * Multiselect option type
-     */
-    const MULTISELECT_OPTION_TYPE = 'multiselect';
-
-    /**
-     * Boolean type
-     */
-    const BOOLEAN_TYPE = 'boolean';
-
-    /**
-     * Price type
-     */
-    const PRICE_TYPE = 'price';
-
-    /**
-     * Text type
-     */
-    const TEXT_TYPE = 'text';
-
-    /**
      * @var array
      */
     private $attributePool;

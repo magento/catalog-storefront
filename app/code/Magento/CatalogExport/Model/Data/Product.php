@@ -97,6 +97,8 @@ class Product extends AbstractModel implements ProductInterface
     private const WEIGHT_TYPE = 'weight_type';
 
     /**
+     * Get id
+     *
      * @return int|null
      */
     public function getId(): ?int
@@ -105,6 +107,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Set id
+     *
      * @param mixed $id
      * @return AbstractModel|void
      */
@@ -114,6 +118,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Get sku
+     *
      * @return string|null
      */
     public function getSku(): ?string
@@ -122,6 +128,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Set sku
+     *
      * @param string $sku
      */
     public function setSku(string $sku)
@@ -131,6 +139,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Get parents
+     *
      * @return array|null
      */
     public function getParents(): ?array
@@ -140,6 +150,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Set parents
+     *
      * @param array|null $parents
      */
     public function setParents(?array $parents): void
@@ -149,6 +161,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Get store view code
+     *
      * @return string|null
      */
     public function getStoreViewCode(): ?string
@@ -158,6 +172,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Set store view code
+     *
      * @param string $storeViewCode
      */
     public function setStoreViewCode($storeViewCode)
@@ -166,6 +182,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Get store code
+     *
      * @return string|null
      */
     public function getStoreCode(): ?string
@@ -175,6 +193,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Set store code
+     *
      * @param string $storeCode
      */
     public function setStoreCode($storeCode)
@@ -183,6 +203,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Get website code
+     *
      * @return string|null
      */
     public function getWebsiteCode(): ?string
@@ -191,6 +213,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Set website code
+     *
      * @param string $websiteCode
      */
     public function setWebsiteCode($websiteCode)
@@ -199,6 +223,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Get Name
+     *
      * @return string|null
      */
     public function getName(): ?string
@@ -207,6 +233,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Set name
+     *
      * @param string $name
      */
     public function setName($name)
@@ -215,6 +243,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Get type
+     *
      * @return string|null
      */
     public function getType(): ?string
@@ -223,6 +253,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Set type
+     *
      * @param string $type
      */
     public function setType($type)
@@ -231,6 +263,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Get meta description
+     *
      * @return string|null
      */
     public function getMetaDescription(): ?string
@@ -239,6 +273,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Set meta description
+     *
      * @param string $metaDescription
      */
     public function setMetaDescription($metaDescription)
@@ -247,6 +283,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Get meta keyword
+     *
      * @return string|null
      */
     public function getMetaKeyword(): ?string
@@ -254,8 +292,9 @@ class Product extends AbstractModel implements ProductInterface
         return $this->getData(self::META_KEYWORD);
     }
 
-
     /**
+     * Set meta keyword
+     *
      * @param string $metaKeyword
      */
     public function setMetaKeyword($metaKeyword)
@@ -265,6 +304,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Get meta title
+     *
      * @return string|null
      */
     public function getMetaTitle(): ?string
@@ -273,6 +314,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Set meta title
+     *
      * @param string $metaTitle
      */
     public function setMetaTitle($metaTitle)
@@ -281,6 +324,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Get status
+     *
      * @return string|null
      */
     public function getStatus(): ?string
@@ -289,6 +334,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Set status
+     *
      * @param string $status
      */
     public function setStatus($status)
@@ -298,6 +345,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Get tax class id
+     *
      * @return string|null
      */
     public function getTaxClassId(): ?string
@@ -307,6 +356,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Set tax class id
+     *
      * @param string $taxClassId
      */
     public function setTaxClassId($taxClassId)
@@ -316,6 +367,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Get created at
+     *
      * @return string|null
      */
     public function getCreatedAt(): ?string
@@ -325,6 +378,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Set created at
+     *
      * @param string $createdAt
      */
     public function setCreatedAt($createdAt)
@@ -334,6 +389,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Get updated at
+     *
      * @return string|null
      */
     public function getUpdatedAt(): ?string
@@ -343,6 +400,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Set updated at
+     *
      * @param string $updatedAt
      */
     public function setUpdatedAt($updatedAt)
@@ -352,6 +411,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Get url key
+     *
      * @return string|null
      */
     public function getUrlKey(): ?string
@@ -361,6 +422,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Set url key
+     *
      * @param string $urlKey
      */
     public function setUrlKey($urlKey)
@@ -370,6 +433,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Get Visibility
+     *
      * @return string|null
      */
     public function getVisibility(): ?string
@@ -379,6 +444,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Set Visibility
+     *
      * @param string $visibility
      */
     public function setVisibility($visibility)
@@ -388,6 +455,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Get weight
+     *
      * @return int|null
      */
     public function getWeight(): ?int
@@ -397,6 +466,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Set weight
+     *
      * @param int $weight
      */
     public function setWeight($weight)
@@ -406,6 +477,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Get weight unit
+     *
      * @return string|null
      */
     public function getWeightUnit(): ?string
@@ -415,6 +488,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Set weight unit
+     *
      * @param string $weightUnit
      */
     public function setWeightUnit($weightUnit)
@@ -424,6 +499,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Get currency
+     *
      * @return string|null
      */
     public function getCurrency(): ?string
@@ -433,6 +510,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Set currency
+     *
      * @param string $currency
      */
     public function setCurrency($currency)
@@ -442,6 +521,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Get Displayable
+     *
      * @return bool|null
      */
     public function getDisplayable(): ?bool
@@ -451,6 +532,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Set displayable
+     *
      * @param bool $displayable
      */
     public function setDisplayable($displayable)
@@ -460,6 +543,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Get buyable
+     *
      * @return bool|null
      */
     public function getBuyable(): ?bool
@@ -469,6 +554,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Set buyable
+     *
      * @param bool $buyable
      */
     public function setBuyable($buyable)
@@ -478,6 +565,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Get attributes
+     *
      * @return \Magento\CatalogExportApi\Api\Data\AttributeInterface[]|mixed
      */
     public function getAttributes()
@@ -487,6 +576,8 @@ class Product extends AbstractModel implements ProductInterface
 
 
     /**
+     * Set attributes
+     *
      * @param \Magento\CatalogExportApi\Api\Data\AttributeInterface[] $attributes
      */
     public function setAttributes($attributes)
@@ -495,6 +586,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Get Categories
+     *
      * @return mixed|string[]
      */
     public function getCategories()
@@ -503,6 +596,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Set categories
+     *
      * @param string[] $categories
      */
     public function setCategories($categories)
@@ -511,6 +606,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Get options
+     *
      * @return \Magento\CatalogExportApi\Api\Data\CustomOption[]|mixed
      */
     public function getOptions()
@@ -519,6 +616,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Set Options
+     *
      * @param \Magento\CatalogExportApi\Api\Data\CustomOption[] $options
      */
     public function setOptions($options)
@@ -527,6 +626,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Get entered options
+     *
      * @return \Magento\CatalogExportApi\Api\Data\EnteredOption[]|mixed
      */
     public function getEnteredOptions()
@@ -535,6 +636,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Set entered options
+     *
      * @param \Magento\CatalogExportApi\Api\Data\EnteredOption[] $options
      */
     public function setEnteredOptions($options)
@@ -543,6 +646,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Get media gallery
+     *
      * @return bool|null
      */
     public function getMediaGallery() : ?array

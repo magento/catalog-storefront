@@ -32,7 +32,7 @@ class AttributeValue extends AbstractModel implements AttributeValueInterface
     /**
      * Set id
      *
-     * @param null $id
+     * @param string|null $id
      * @return AbstractModel|void
      */
     public function setId($id = null)
