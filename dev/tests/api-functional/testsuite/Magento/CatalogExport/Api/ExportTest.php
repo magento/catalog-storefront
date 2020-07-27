@@ -334,10 +334,9 @@ class ExportTest extends WebapiAbstract
      */
     public function hasAttributeData($result)
     {
-        if (
-            isset($result[0]['attributes'][0]) &&
-            $result[0]['attributes'][0]['value'][0]['id']
-        ) {
+        if (isset($result[0]['attributes'][0]) &&
+            $result[0]['attributes'][0]['value'][0]['id'])
+        {
             return true;
         }
 

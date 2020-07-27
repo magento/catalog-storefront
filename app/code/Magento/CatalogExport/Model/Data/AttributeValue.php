@@ -20,6 +20,8 @@ class AttributeValue extends AbstractModel implements AttributeValueInterface
     private const VALUE = 'value';
 
     /**
+     * Get id
+     *
      * @return string|null
      */
     public function getId() :? string
@@ -28,6 +30,8 @@ class AttributeValue extends AbstractModel implements AttributeValueInterface
     }
 
     /**
+     * Set id
+     *
      * @param null $id
      * @return AbstractModel|void
      */
@@ -37,6 +41,8 @@ class AttributeValue extends AbstractModel implements AttributeValueInterface
     }
 
     /**
+     * Get value
+     *
      * @return string|null
      */
     public function getValue() :? string
@@ -45,7 +51,9 @@ class AttributeValue extends AbstractModel implements AttributeValueInterface
     }
 
     /**
-     * @param null $value
+     * Set the value
+     *
+     * @param string|null $value
      */
     public function setValue($value = null)
     {

@@ -96,7 +96,7 @@ class ExportTest extends WebapiAbstract
                     [
                         'id' => 0,
                         'title'  => 'Text swatch attribute',
-                        'product_sku'  => NULL,
+                        'product_sku'  => null,
                         'required'  => true,
                         'render_type'  => 'drop_down',
                         'type'  => 'configurable',
@@ -104,27 +104,27 @@ class ExportTest extends WebapiAbstract
                             [
                                 'id' => 0,
                                 'value' => 'Option 3',
-                                'price' => NULL,
-                                'sku'   => NULL
+                                'price' => null,
+                                'sku'   => null
                             ],
                             [
                                 'id' => 0,
                                 'value' => 'Option 1',
-                                'price' => NULL,
-                                'sku'   => NULL
+                                'price' => null,
+                                'sku'   => null
                             ],
                             [
                                 'id' => 0,
                                 'value' => 'Option 2',
-                                'price' => NULL,
-                                'sku'   => NULL
+                                'price' => null,
+                                'sku'   => null
                             ],
                         ]
                     ],
                     [
                         'id' => 0,
                         'title'  => 'Visual swatch attribute',
-                        'product_sku'  => NULL,
+                        'product_sku'  => null,
                         'required'  => true,
                         'render_type'  => 'drop_down',
                         'type'  => 'configurable',
@@ -132,20 +132,20 @@ class ExportTest extends WebapiAbstract
                             [
                                 'id' => 0,
                                 'value' => 'option 1',
-                                'price' => NULL,
-                                'sku'   => NULL
+                                'price' => null,
+                                'sku'   => null
                             ],
                             [
                                 'id' => 0,
                                 'value' => 'option 2',
-                                'price' => NULL,
-                                'sku'   => NULL
+                                'price' => null,
+                                'sku'   => null
                             ],
                             [
                                 'id' => 0,
                                 'value' => 'option 3',
-                                'price' => NULL,
-                                'sku'   => NULL
+                                'price' => null,
+                                'sku'   => null
                             ],
                         ]
                     ],

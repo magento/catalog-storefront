@@ -8,7 +8,7 @@ namespace Magento\CatalogMessageBroker\Model;
 use Magento\CatalogMessageBroker\Model\DataMapper\DataMapperInterface;
 
 /**
- * Product data processor.
+ * Processor for the product data.
  */
 class ProductDataProcessor
 {
@@ -53,7 +53,7 @@ class ProductDataProcessor
 
         /** @var DataMapperInterface $dataMapper */
         foreach ($this->dataMappers as $field => $dataMapper) {
-            $overriddenFields = \array_merge($overriddenFields, $dataMapper->map($data));
+            $overriddenFields[$field] = $dataMapper->map($data);
         }
 
         return array_merge($product, $overriddenFields);

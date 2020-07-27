@@ -631,6 +631,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Set in stock
+     *
      * @param bool $inStock
      */
     public function setInStock($inStock)
@@ -639,6 +641,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Get low stock
+     *
      * @return bool|null
      */
     public function getLowStock(): ?bool
@@ -647,6 +651,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Set low stock
+     *
      * @param bool $lowStock
      */
     public function setLowStock($lowStock)
@@ -655,6 +661,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Get url
+     *
      * @return string|null
      */
     public function getUrl(): ?string
@@ -663,6 +671,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Set url
+     *
      * @param string $url
      */
     public function setUrl($url)
@@ -671,6 +681,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Allow open amount
+     *
      * @return bool|null
      */
     public function getAllowOpenAmount(): ?bool
@@ -679,6 +691,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Allow open amount
+     *
      * @param bool $allowOpenAmount
      */
     public function setAllowOpenAmount($allowOpenAmount)
@@ -687,6 +701,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Get gift card type
+     *
      * @return string|null
      */
     public function getGiftCardType() :? string
@@ -695,6 +711,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Set gift card type
+     *
      * @param bool $giftCardType
      */
     public function setGiftCardType($giftCardType)
@@ -703,6 +721,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Get Redeemable
+     *
      * @return bool|null
      */
     public function getRedeemable() :? bool
@@ -711,6 +731,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Set Redeemble
+     *
      * @param bool $redeemable
      */
     public function setRedeemable($redeemable)
@@ -719,6 +741,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Get Sku type
+     *
      * @return string|null
      */
     public function getSkuType() :? string
@@ -727,6 +751,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Set sku type
+     *
      * @param string $skuType
      */
     public function setSkuType($skuType)
@@ -735,6 +761,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Get Weight type
+     *
      * @return string|null
      */
     public function getWeightType() :? string
@@ -743,6 +771,8 @@ class Product extends AbstractModel implements ProductInterface
     }
 
     /**
+     * Set Weight type
+     *
      * @param string $weightType
      */
     public function setWeightType($weightType)

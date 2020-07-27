@@ -15,13 +15,24 @@ use Magento\Framework\Model\AbstractModel;
  */
 class Attribute extends AbstractModel implements AttributeInterface
 {
+    /**
+     * Attribute code
+     */
     private const ATTRIBUTE_CODE = 'attribute_code';
 
+    /**
+     * Type
+     */
     private const TYPE = 'type';
 
+    /**
+     * Value
+     */
     private const VALUE = 'value';
 
     /**
+     * Get attribute code
+     *
      * @return string
      */
     public function getAttributeCode() : string
@@ -30,6 +41,8 @@ class Attribute extends AbstractModel implements AttributeInterface
     }
 
     /**
+     * Set attribute code
+     *
      * @param string $attributeCode
      */
     public function setAttributeCode($attributeCode)
@@ -38,6 +51,8 @@ class Attribute extends AbstractModel implements AttributeInterface
     }
 
     /**
+     * Get Type
+     *
      * @return string
      */
     public function getType() : string
@@ -46,6 +61,8 @@ class Attribute extends AbstractModel implements AttributeInterface
     }
 
     /**
+     * Set type
+     *
      * @param string $type
      */
     public function setType($type)
@@ -54,6 +71,8 @@ class Attribute extends AbstractModel implements AttributeInterface
     }
 
     /**
+     * Get Value
+     *
      * @return \Magento\CatalogExportApi\Api\Data\AttributeValueInterface[]|mixed
      */
     public function getValue()
@@ -62,6 +81,8 @@ class Attribute extends AbstractModel implements AttributeInterface
     }
 
     /**
+     * Set value
+     *
      * @param \Magento\CatalogExportApi\Api\Data\AttributeValueInterface[] $value
      */
     public function setValue($value)

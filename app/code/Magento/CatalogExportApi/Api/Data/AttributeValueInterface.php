@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogExportApi\Api\Data;
 
 /**
- * Attribute value interface
+ * Interface for attribute values
  */
 interface AttributeValueInterface
 {
