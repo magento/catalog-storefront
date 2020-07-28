@@ -14,7 +14,7 @@ namespace Magento\CatalogExportApi\Api\Data;
 class EnteredOption
 {
     /**
-     * @var int
+     * @var string
      */
     private $id;
 
@@ -26,7 +26,7 @@ class EnteredOption
     /**
      * @var bool
      */
-    private $required;
+    private $isRequired;
 
     /**
      * @var string
@@ -49,7 +49,7 @@ class EnteredOption
     private $sku;
 
     /**
-     * @var float[]
+     * @var \Magento\CatalogExportApi\Api\Data\Price
      */
     private $price;
 
@@ -86,9 +86,9 @@ class EnteredOption
     /**
      * Get option id
      *
-     * @return int
+     * @return string
      */
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
@@ -96,10 +96,10 @@ class EnteredOption
     /**
      * Set option id
      *
-     * @param int $id
+     * @param string $id
      * @return void
      */
-    public function setId(int $id): void
+    public function setId(string $id): void
     {
         $this->id = $id;
     }
@@ -210,25 +210,25 @@ class EnteredOption
     }
 
     /**
-     * Get required
+     * Get isRequired
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getRequired(): bool
+    public function getIsRequired(): bool
     {
-        return $this->required;
+        return $this->isRequired;
     }
 
     /**
-     * Set required
+     * Set isRequired
      *
-     * @param bool $required
+     * @param bool $isRequired
      * @return void
      */
-    public function setRequired($required): void
+    public function setIsRequired($isRequired): void
     {
-        $this->required = $required;
+        $this->isRequired = $isRequired;
     }
 
     /**

@@ -43,6 +43,7 @@ class CustomOptions implements DataMapperInterface
                 $customOption['value'] = $customOptionValues;
                 $customOption['type'] = $customOption['render_type'];
                 $customOption['option_id'] = $customOption['id'];
+                $customOption['required'] = $customOption['is_required'];
                 $productCustomOptions[] = $customOption;
             }
         }
@@ -55,6 +56,7 @@ class CustomOptions implements DataMapperInterface
                 $customOption['type'] = $customOption['render_type'];
                 $customOption['option_id'] = $customOption['id'];
                 $customOption['price_type'] = strtoupper($customOption['price_type']);
+                $customOption['required'] = $customOption['is_required'];
                 $customOption['value'] = $customOption;
                 $productCustomOptions[] = $customOption;
             }
