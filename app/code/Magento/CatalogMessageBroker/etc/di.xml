@@ -7,10 +7,13 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\CatalogMessageBroker\Model\FetchProductsInterface" type="Magento\CatalogMessageBroker\Model\FetchProducts"/>
+    <preference for="Magento\CatalogMessageBroker\Model\FetchCategoriesInterface" type="Magento\CatalogMessageBroker\Model\FetchCategories"/>
     <type name="Magento\CatalogMessageBroker\Model\ProductDataProcessor">
         <arguments>
             <argument name="dataMappers" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\CustomOptions</item>
+                <item name="media_gallery" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\MediaGallery</item>
+                <item name="swatch_image" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\SwatchImage</item>
             </argument>
         </arguments>
     </type>

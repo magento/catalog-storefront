@@ -390,6 +390,10 @@ class CatalogService implements CatalogServerInterface
 
         $items = [];
         foreach ($categories as $category) {
+            //We need to bypass inactive categories
+            if (isset($category['is_active']) && $category['is_active'] == 0) {
+                continue;
+            }
             $item = new Category();
             $category = $this->cleanUpNullValues($category);
 
