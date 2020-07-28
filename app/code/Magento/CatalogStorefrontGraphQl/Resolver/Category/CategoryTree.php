@@ -83,7 +83,7 @@ class CategoryTree implements BatchResolverInterface
                 $output = [];
                 if (count($result->getItems()) != count($additionalInfo['category_ids'])) {
                     throw new GraphQlNoSuchEntityException(
-                        __('Category doesn\'t exist')
+                        __('Category doesn\'t exist' . implode(',', $additionalInfo['category_ids']))
                     );
                 }
 
