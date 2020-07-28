@@ -62,8 +62,6 @@ class ProductsConsumer
     public function processMessage(string $ids)
     {
         $ids = json_decode($ids, true);
-        $dataPerType = [];
-        $overrides = $this->fetchProducts->execute($ids);
 
         // @todo eliminate store manager
         $stores = $this->storeManager->getStores(true);
@@ -71,7 +69,26 @@ class ProductsConsumer
         foreach ($stores as $store) {
             $storesToIds[$store->getCode()] = $store->getId();
         }
+        $overrides = $this->fetchProducts->execute($ids);
+        if (!empty($overrides)) {
+            $this->publishProducts($overrides, $storesToIds);
+        }
+        // @todo temporary solution. Deleted products must be processed from different message in queue
+        // message must be published into \Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer::process
+        $deletedProducts = $this->fetchProducts->getDeleted($ids);
+        if (!empty($deletedProducts)) {
+            $this->deleteProducts($deletedProducts, $storesToIds);
+        }
+    }
 
+    /**
+     * Publishes products to storage
+     *
+     * @param array $overrides
+     * @param array $storesToIds
+     */
+    private function publishProducts(array $overrides, array $storesToIds)
+    {
         $productsPerStore = [];
         foreach ($overrides as $override) {
             $storeId = $storesToIds[$override['store_view_code']];
@@ -80,6 +97,28 @@ class ProductsConsumer
         foreach ($productsPerStore as $storeId => $products) {
             try {
                 $this->productPublisher->publish(\array_keys($products), $storeId, $products);
+            } catch (\Throwable $e) {
+                $this->logger->critical($e);
+            }
+        }
+    }
+
+    /**
+     * Deleted products from storage
+     *
+     * @param array $deletedProducts
+     * @param array $storesToIds
+     */
+    private function deleteProducts(array $deletedProducts, array $storesToIds)
+    {
+        $productsPerStore = [];
+        foreach ($deletedProducts as $product) {
+            $storeId = $storesToIds[$product['store_view_code']];
+            $productsPerStore[$storeId][$product['product_id']] = $product;
+        }
+        foreach ($productsPerStore as $storeId => $products) {
+            try {
+                $this->productPublisher->delete(\array_keys($products), $storeId);
             } catch (\Throwable $e) {
                 $this->logger->critical($e);
             }

@@ -136,6 +136,36 @@ class ProductPublisher
     }
 
     /**
+     * Delete data from to Storefront
+     *
+     * @param string[] $productIds
+     * @param int $storeId
+     * @return void
+     * @throws \Exception
+     * @deprecated
+     */
+    public function delete(array $productIds, int $storeId): void
+    {
+        $this->state->emulateAreaCode(
+            \Magento\Framework\App\Area::AREA_FRONTEND,
+            function () use ($productIds, $storeId) {
+                try {
+                    $this->deleteProducts($storeId, $productIds);
+                } catch (\Throwable $e) {
+                    $this->logger->critical(
+                        \sprintf(
+                            'Error on publish product ids "%s" in store %s',
+                            \implode(', ', $productIds),
+                            $storeId
+                        ),
+                        ['exception' => $e]
+                    );
+                }
+            }
+        );
+    }
+
+    /**
      * Publish entities to the queue
      *
      * @param array $productIds
@@ -145,26 +175,15 @@ class ProductPublisher
      */
     private function publishEntities(array $productIds, int $storeId, $overrideProducts = []): void
     {
-        $deletedProductIds = \array_keys(\array_filter($overrideProducts, function($product){
-            return isset($product['deleted']) && $product['deleted'] === true;
-        }));
-
         foreach (\array_chunk($productIds, $this->batchSize) as $idsBunch) {
-            $existingProductIds = \array_diff($idsBunch, $deletedProductIds);
-            if (!empty($existingProductIds)) {
-                // @todo eliminate calling old API when new API can provide all of the necessary data
-                $productsData = $this->productsDataProvider->fetch($existingProductIds, [], ['store' => $storeId]);
-                $this->logger->debug(
-                    \sprintf('Publish products with ids "%s" in store %s', \implode(', ', $productIds), $storeId),
-                    ['verbose' => $productsData]
-                );
-                if (count($productsData)) {
-                    $this->importProducts($storeId, array_values($productsData), $overrideProducts);
-                }
-            }
-            $deletedProductIdsBunch = \array_intersect($deletedProductIds, $idsBunch);
-            if (!empty($deletedProductIdsBunch)) {
-                $this->deleteProducts($storeId, $deletedProductIdsBunch);
+            // @todo eliminate calling old API when new API can provide all of the necessary data
+            $productsData = $this->productsDataProvider->fetch($productIds, [], ['store' => $storeId]);
+            $this->logger->debug(
+                \sprintf('Publish products with ids "%s" in store %s', \implode(', ', $productIds), $storeId),
+                ['verbose' => $productsData]
+            );
+            if (count($productsData)) {
+                $this->importProducts($storeId, array_values($productsData), $overrideProducts);
             }
         }
     }

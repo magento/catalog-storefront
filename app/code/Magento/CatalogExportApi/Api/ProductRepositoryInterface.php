@@ -18,4 +18,12 @@ interface ProductRepositoryInterface
      * @return \Magento\CatalogExportApi\Api\Data\Product[]
      */
     public function get(array $ids);
+
+    /**
+     * Get deleted products by ids.
+     *
+     * @param string[] $ids
+     * @return array
+     */
+    public function getDeleted(array $ids): array;
 }

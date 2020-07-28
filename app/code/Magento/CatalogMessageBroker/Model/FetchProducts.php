@@ -33,6 +33,8 @@ class FetchProducts implements FetchProductsInterface
 
     /**
      * @inheritdoc
+     *
+     * @param string[] $ids
      */
     public function execute(array $ids)
     {
@@ -53,5 +55,16 @@ class FetchProducts implements FetchProductsInterface
 //            $data[] = $this->dataObjectProcessor->buildOutputDataArray($product, Product::class);
 //        }
 //        return $data;
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @param string[] $ids
+     * @return array
+     */
+    public function getDeleted(array $ids): array
+    {
+        return (array)$this->productRepository->getDeleted($ids);
     }
 }
