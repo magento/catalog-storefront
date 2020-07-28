@@ -7,8 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Command;
 
+use Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer;
+use Magento\CatalogMessageBroker\Model\MessageBus\CategoriesConsumer;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
-use Magento\CatalogStorefrontConnector\Model\Publisher\CategoryPublisher;
 use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 use Magento\Store\Model\StoreManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -56,11 +57,6 @@ class Sync extends Command
     private $storeManager;
 
     /**
-     * @var CategoryPublisher
-     */
-    private $categoryPublisher;
-
-    /**
      * @var CatalogEntityIdsProvider
      */
     private $catalogEntityIdsProvider;
@@ -71,25 +67,37 @@ class Sync extends Command
     private $productFeedIndexer;
 
     /**
+     * @var CategoriesConsumer
+     */
+    private $categoriesConsumer;
+    /**
+     * @var CategoryFeedIndexer
+     */
+    private $categoryFeedIndexer;
+
+    /**
      * @param ProductPublisher $productPublisher
-     * @param CategoryPublisher $categoryPublisher
      * @param StoreManagerInterface $storeManager
      * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
+     * @param CategoriesConsumer $categoriesConsumer
      * @param ProductFeedIndexer $productFeedIndexer
+     * @param CategoryFeedIndexer $categoryFeedIndexer
      */
     public function __construct(
         ProductPublisher $productPublisher,
-        CategoryPublisher $categoryPublisher,
         StoreManagerInterface $storeManager,
         CatalogEntityIdsProvider $catalogEntityIdsProvider,
-        ProductFeedIndexer $productFeedIndexer
+        CategoriesConsumer $categoriesConsumer,
+        ProductFeedIndexer $productFeedIndexer,
+        CategoryFeedIndexer $categoryFeedIndexer
     ) {
         parent::__construct();
         $this->productPublisher = $productPublisher;
-        $this->categoryPublisher = $categoryPublisher;
         $this->storeManager = $storeManager;
         $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
         $this->productFeedIndexer = $productFeedIndexer;
+        $this->categoriesConsumer = $categoriesConsumer;
+        $this->categoryFeedIndexer = $categoryFeedIndexer;
     }
 
     /**
@@ -111,12 +119,28 @@ class Sync extends Command
     }
 
     /**
-     * @inheritdoc
+     * Sync between Magento and storefront
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return void
+     * @throws \Magento\DataExporter\Exception\UnableRetrieveData
+     * @throws \Zend_Db_Statement_Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $entityType = $this->getEntityType($input);
         // TODO: MC-30961 clean product ids from storefront.catalog.category.update topic
+
+        // @todo eliminate dependency on indexer
+        if (!$entityType || $entityType === self::ENTITY_TYPE_CATEGORY) {
+            $this->categoryFeedIndexer->executeFull();
+        }
+        if (!$entityType || $entityType === self::ENTITY_TYPE_PRODUCT) {
+            $this->productFeedIndexer->executeFull();
+        }
+
         foreach ($this->storeManager->getStores() as $store) {
             $storeId = (int)$store->getId();
 
@@ -140,8 +164,6 @@ class Sync extends Command
         $output->writeln("<info>Sync products for store {$storeId}</info>");
         $this->measure(
             function () use ($output, $storeId) {
-                // @todo try to eliminate dependency on indexer
-                $this->productFeedIndexer->executeFull();
                 $processedN = 0;
                 foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $productIds) {
                     $this->productPublisher->publish($productIds, $storeId);
@@ -167,7 +189,7 @@ class Sync extends Command
             function () use ($output, $storeId) {
                 $processedN = 0;
                 foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $categoryIds) {
-                    $this->categoryPublisher->publish($categoryIds, $storeId);
+                    $this->categoriesConsumer->processMessage(json_encode($categoryIds));
                     $output->write('.');
                     $processedN += count($categoryIds);
                 }

@@ -9,6 +9,7 @@
     <module name="Magento_CatalogStorefrontConnector">
         <sequence>
             <module name="Magento_Config"/>
+            <module name="Magento_CatalogMessageBroker" />
         </sequence>
     </module>
 </config>
