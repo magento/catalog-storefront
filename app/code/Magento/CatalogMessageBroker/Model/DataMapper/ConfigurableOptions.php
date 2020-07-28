@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogMessageBroker\Model\DataMapper;
 
-use Magento\CatalogExportApi\Api\Data\CustomOption;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProductDataExporter\Model\Provider\Product\Options;
 
 /**
  * Data mapper for configurable options
@@ -23,7 +23,7 @@ class ConfigurableOptions implements DataMapperInterface
         $configurableOptions = [];
         if ($data['type'] === Configurable::TYPE_CODE && !empty($data['options'])) {
             foreach ($data['options'] as $optionArray) {
-                if ($optionArray['type'] === CustomOption::SUPER_OPTION_TYPE) {
+                if ($optionArray['type'] === Options::CONFIGURABLE_RELATION_TYPE) {
                     $configurableOptions[$optionArray['id']] = [
                         'id' => $optionArray['id'],
                         'type' => $optionArray['type'],

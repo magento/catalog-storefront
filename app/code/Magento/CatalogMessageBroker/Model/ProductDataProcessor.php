@@ -88,12 +88,17 @@ class ProductDataProcessor
             /** @var DataMapperInterface $dataMapper */
             $dataMapper = $dataMapperConfig['class'];
 
+            //Some of the new data-providers, do not contain all the neccessary data yet, so recursive merge is used for these.
             if (array_key_exists('recursive', $dataMapperConfig) && $dataMapperConfig['recursive'] === true) {
-                $fields[$field] = isset($product[$field]) ? \array_replace_recursive($product[$field],
-                    $dataMapper->map($data)[$field]) : $dataMapper->map($data)[$field];
+                $fields[$field] = (isset($product[$field]) && \is_array($product[$field])) ? \array_replace_recursive(
+                    $product[$field],
+                    $dataMapper->map($data)[$field]
+                ) : $dataMapper->map($data)[$field];
             } else {
-                $fields[$field] = isset($product[$field]) ? \array_merge($product[$field],
-                    $dataMapper->map($data)[$field]) : $dataMapper->map($data)[$field];
+                $fields[$field] = isset($product[$field]) && \is_array($product[$field]) ? \array_merge(
+                    $product[$field],
+                    $dataMapper->map($data)[$field]
+                ) : $dataMapper->map($data)[$field];
             }
         }
         return \array_filter($fields);
