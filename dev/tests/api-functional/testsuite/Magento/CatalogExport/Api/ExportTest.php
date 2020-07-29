@@ -96,8 +96,8 @@ class ExportTest extends WebapiAbstract
 
     private function assertProductsEquals(array $expected, array $actual)
     {
-        $n = sizeof($expected);
-        for ($i = 0; $i < $n; $i++) {
+        $size = sizeof($expected);
+        for ($i = 0; $i < $size; $i++) {
             foreach ($this->attributesToCompare as $attribute) {
                 $this->compareComplexValue(
                     $expected[$i][$this->snakeToCamelCase($attribute)],
