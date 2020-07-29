@@ -12,6 +12,7 @@
         <arguments>
             <argument name="dataMappers" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\CustomOptions</item>
+                <item name="items" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\BundleItems</item>
                 <item name="media_gallery" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\MediaGallery</item>
                 <item name="swatch_image" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\SwatchImage</item>
             </argument>
