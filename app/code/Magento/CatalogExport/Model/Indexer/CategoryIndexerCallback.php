@@ -7,18 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExport\Model\Indexer;
 
-use Magento\CatalogDataExporter\Model\Indexer\IndexerCallbackInterface;
+use Magento\CatalogDataExporter\Model\Indexer\CategoryIndexerCallbackInterface;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Publishes ids of updated products in queue
+ * Publishes ids of updated categories in queue
  */
-class IndexerCallback implements IndexerCallbackInterface
+class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
 {
     private const BATCH_SIZE = 100;
 
-    private const TOPIC_NAME = 'catalog.export.product.data';
+    private const TOPIC_NAME = 'catalog.export.category.data';
 
     /**
      * @var PublisherInterface
@@ -43,11 +43,9 @@ class IndexerCallback implements IndexerCallbackInterface
     }
 
     /**
-     * Publishing ids
-     *
-     * @param array $ids
+     * @inheritdoc
      */
-    public function execute(array $ids)
+    public function execute(array $ids): void
     {
         foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
             if (!empty($idsChunk)) {
