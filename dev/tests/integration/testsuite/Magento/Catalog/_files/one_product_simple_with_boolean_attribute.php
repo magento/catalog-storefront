@@ -29,4 +29,3 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setBooleanAttribute(1)
     ->setUrlKey('simple_with_boolean')
     ->save();
-
