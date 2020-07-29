@@ -17,10 +17,14 @@ class Attribute extends AbstractModel implements AttributeInterface
 {
     private const ATTRIBUTE_CODE = 'attribute_code';
 
+    private const TYPE = 'type';
+
     private const VALUE = 'value';
 
     /**
-     * @inheritdoc
+     * Get attribute code
+     *
+     * @return string
      */
     public function getAttributeCode() : string
     {
@@ -28,7 +32,9 @@ class Attribute extends AbstractModel implements AttributeInterface
     }
 
     /**
-     * @inheritdoc
+     * Set attribute code
+     *
+     * @param string $attributeCode
      */
     public function setAttributeCode($attributeCode)
     {
@@ -36,7 +42,29 @@ class Attribute extends AbstractModel implements AttributeInterface
     }
 
     /**
-     * @inheritdoc
+     * Get Type
+     *
+     * @return string
+     */
+    public function getType() : string
+    {
+        return $this->getData(self::TYPE);
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->setData(self::TYPE, $type);
+    }
+
+    /**
+     * Get value
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\AttributeValueInterface[]|mixed|string[]
      */
     public function getValue()
     {
@@ -44,7 +72,9 @@ class Attribute extends AbstractModel implements AttributeInterface
     }
 
     /**
-     * @inheritdoc
+     * Set value
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\AttributeValueInterface[]|string $value
      */
     public function setValue($value)
     {

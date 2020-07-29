@@ -11,6 +11,7 @@
         <arguments>
             <argument name="dataMappers" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\CustomOptions</item>
+                <item name="dynamic_attributes" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\DynamicAttribute</item>
                 <item name="media_gallery" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\MediaGallery</item>
                 <item name="swatch_image" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\SwatchImage</item>
             </argument>
@@ -26,6 +27,17 @@
                 <item name="image" xsi:type="string">image</item>
                 <item name="small_image" xsi:type="string">small_image</item>
                 <item name="thumbnail" xsi:type="string">thumbnail</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogMessageBroker\Model\DataMapper\DynamicAttribute">
+        <arguments>
+            <argument name="attributePool" xsi:type="array">
+                <item name="boolean" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\BooleanType</item>
+                <item name="select" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\Type</item>
+                <item name="text" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\Type</item>
+                <item name="price" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\Type</item>
+                <item name="multiselect" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\MultiselectOptionType</item>
             </argument>
         </arguments>
     </type>

@@ -43,7 +43,9 @@ class IndexerCallback implements IndexerCallbackInterface
     }
 
     /**
-     * @inheritdoc
+     * Publishing ids
+     *
+     * @param array $ids
      */
     public function execute(array $ids)
     {

@@ -28,6 +28,21 @@ interface AttributeInterface
     public function setAttributeCode($attributeCode);
 
     /**
+     * Get attribute type
+     *
+     * @return string
+     */
+    public function getType() : string;
+
+    /**
+     * Set attribute type
+     *
+     * @param string $type
+     * @return void
+     */
+    public function setType($type);
+
+    /**
      * Get entity attribute value
      *
      * @return string[]
