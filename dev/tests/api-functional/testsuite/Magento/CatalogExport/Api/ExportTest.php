@@ -111,6 +111,7 @@ class ExportTest extends WebapiAbstract
     private function compareComplexValue($expected, $actual)
     {
         if (is_array($expected)) {
+            $actual = !is_array($actual) ? json_decode($actual, true) : $actual;
             $this->assertEquals(
                 sizeof($expected),
                 sizeof($actual),
