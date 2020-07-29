@@ -19,4 +19,3 @@ interface AttributeTypeInterface
      */
     public function getAttribute($attribute);
 }
-
