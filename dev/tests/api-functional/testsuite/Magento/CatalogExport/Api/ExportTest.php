@@ -91,6 +91,7 @@ class ExportTest extends WebapiAbstract
 
         $this->createServiceInfo['rest']['resourcePath'] .= '?ids[0]=' . $product->getId();
         $result = $this->_webApiCall($this->createServiceInfo, []);
+
         $this->assertProductsEquals($this->productsFeed->getFeedByIds([$product->getId()])['feed'], $result);
     }
 
@@ -167,19 +168,18 @@ class ExportTest extends WebapiAbstract
     {
         $result = $this->getProductApiResult('simple_with_boolean');
         if ($this->hasAttributeData($result)) {
-            unset($result[0]['attributes'][0]['value'][0]['id']);
+            $value = json_decode($result[0]['attributes'][0]['value'][0])->value;
+            unset($result[0]['attributes'][0]['value']); // re adding as array insted of json
             $actualResult = $result[0]['attributes'][0];
+            $actualResult['value'] = $value;
             $expectedResult = [
                 'attribute_code' => 'boolean_attribute',
                 'type'  => 'boolean',
-                'value' => [
-                    [
-                        'value' => 'yes'
-                    ]
-                ]
+                'value' => 'yes'
             ];
 
             $this->assertEquals($expectedResult, $actualResult);
+            $this->assertEquals('simple_with_boolean', $result[0]['sku']);
         }
     }
 
@@ -192,19 +192,19 @@ class ExportTest extends WebapiAbstract
     {
         $result = $this->getProductApiResult('simple_with_multiselect');
         if ($this->hasAttributeData($result)) {
-            unset($result[0]['attributes'][0]['value'][0]['id']);
+            $value = json_decode($result[0]['attributes'][0]['value'][0])->value;
+            unset($result[0]['attributes'][0]['value']); // re adding as array insted of json
             $actualResult = $result[0]['attributes'][0];
+            $actualResult['value'] = $value;
+
             $expectedResult = [
                 'attribute_code' => 'multiselect_attribute',
                 'type'  => 'multiselect',
-                'value' => [
-                    [
-                        'value' => 'Option 1',
-                    ]
-                ]
+                'value' => 'Option 1',
             ];
 
             $this->assertEquals($expectedResult, $actualResult);
+            $this->assertEquals('simple_with_multiselect', $result[0]['sku']);
         }
     }
 
@@ -217,19 +217,19 @@ class ExportTest extends WebapiAbstract
     {
         $result = $this->getProductApiResult('simple_with_image');
         if ($this->hasAttributeData($result)) {
-            unset($result[0]['attributes'][0]['value'][0]['id']);
+            $value = json_decode($result[0]['attributes'][0]['value'][0])->value;
+            unset($result[0]['attributes'][0]['value']); // re adding as array insted of json
             $actualResult = $result[0]['attributes'][0];
+            $actualResult['value'] = $value;
+
             $expectedResult = [
                 'attribute_code' => 'image_attribute',
                 'type'  => 'media_image',
-                'value' => [
-                    [
-                        'value' => 'imagepath',
-                    ]
-                ]
+                'value' => 'imagepath',
             ];
 
             $this->assertEquals($expectedResult, $actualResult);
+            $this->assertEquals('simple_with_image', $result[0]['sku']);
         }
     }
 
@@ -242,19 +242,19 @@ class ExportTest extends WebapiAbstract
     {
         $result = $this->getProductApiResult('simple_with_decimal');
         if ($this->hasAttributeData($result)) {
-            unset($result[0]['attributes'][0]['value'][0]['id']);
+            $value = json_decode($result[0]['attributes'][0]['value'][0])->value;
+            unset($result[0]['attributes'][0]['value']); // re adding as array insted of json
             $actualResult = $result[0]['attributes'][0];
+            $actualResult['value'] = $value;
+
             $expectedResult = [
                 'attribute_code' => 'decimal_attribute',
                 'type'  => 'price',
-                'value' => [
-                    [
-                        'value' => '100.000000',
-                    ]
-                ]
+                'value' => '100.000000',
             ];
 
             $this->assertEquals($expectedResult, $actualResult);
+            $this->assertEquals('simple_with_decimal', $result[0]['sku']);
         }
     }
 
@@ -267,18 +267,18 @@ class ExportTest extends WebapiAbstract
     {
         $result = $this->getProductApiResult('simple_with_text_editor');
         if ($this->hasAttributeData($result)) {
-            unset($result[0]['attributes'][0]['value'][0]['id']);
+            $value = json_decode($result[0]['attributes'][0]['value'][0])->value;
+            unset($result[0]['attributes'][0]['value']); // re adding as array insted of json
             $actualResult = $result[0]['attributes'][0];
+            $actualResult['value'] = $value;
+
             $expectedResult = [
                 'attribute_code' => 'text_editor_attribute',
                 'type'  => 'textarea',
-                'value' => [
-                    [
-                        'value' => 'text Editor Attribute test',
-                    ]
-                ]
+                'value' => 'text Editor Attribute test',
             ];
             $this->assertEquals($expectedResult, $actualResult);
+            $this->assertEquals('simple_with_text_editor', $result[0]['sku']);
         }
     }
 
@@ -291,19 +291,19 @@ class ExportTest extends WebapiAbstract
     {
         $result = $this->getProductApiResult('simple_with_date');
         if ($this->hasAttributeData($result)) {
-            unset($result[0]['attributes'][0]['value'][0]['id']);
+            $value = json_decode($result[0]['attributes'][0]['value'][0])->value;
+            unset($result[0]['attributes'][0]['value']); // re adding as array insted of json
             $actualResult = $result[0]['attributes'][0];
+            $actualResult['value'] = $value;
+
             $expectedResult =  [
                 'attribute_code' => 'date_attribute',
                 'type'  => 'date',
-                'value' => [
-                    [
-                        'value' => date('Y-m-d 00:00:00'),
-                    ]
-                ]
+                'value' => date('Y-m-d 00:00:00'),
             ];
 
             $this->assertEquals($expectedResult, $actualResult);
+            $this->assertEquals('simple_with_date', $result[0]['sku']);
         }
     }
 
@@ -335,7 +335,7 @@ class ExportTest extends WebapiAbstract
     public function hasAttributeData($result)
     {
         if (isset($result[0]['attributes'][0]) &&
-            $result[0]['attributes'][0]['value'][0]['id']) {
+            isset($result[0]['attributes'][0]['value'][0])) {
 
             return true;
         }
