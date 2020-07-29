@@ -7,4 +7,5 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
     <topic name="catalog.export.product.data" request="string"/>
+    <topic name="catalog.export.category.data" request="string"/>
 </config>
