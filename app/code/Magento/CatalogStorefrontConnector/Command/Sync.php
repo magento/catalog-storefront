@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Command;
 
-use Magento\CatalogExportApi\Api\ProductRepositoryInterface;
+use Magento\CatalogMessageBroker\Model\FetchProductsInterface;
 use Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer;
 use Magento\CatalogMessageBroker\Model\MessageBus\CategoriesConsumer;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
@@ -66,10 +66,6 @@ class Sync extends Command
      * @var ProductFeedIndexer
      */
     private $productFeedIndexer;
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
 
     /**
      * @var CategoriesConsumer
@@ -79,6 +75,10 @@ class Sync extends Command
      * @var CategoryFeedIndexer
      */
     private $categoryFeedIndexer;
+    /**
+     * @var FetchProductsInterface
+     */
+    private $fetchProducts;
 
     /**
      * @param ProductPublisher $productPublisher
@@ -87,6 +87,7 @@ class Sync extends Command
      * @param CategoriesConsumer $categoriesConsumer
      * @param ProductFeedIndexer $productFeedIndexer
      * @param CategoryFeedIndexer $categoryFeedIndexer
+     * @param FetchProductsInterface $fetchProducts
      */
     public function __construct(
         ProductPublisher $productPublisher,
@@ -95,7 +96,7 @@ class Sync extends Command
         CategoriesConsumer $categoriesConsumer,
         ProductFeedIndexer $productFeedIndexer,
         CategoryFeedIndexer $categoryFeedIndexer,
-        ProductRepositoryInterface $productRepository
+        \Magento\CatalogMessageBroker\Model\FetchProductsInterface $fetchProducts
     ) {
         parent::__construct();
         $this->productPublisher = $productPublisher;
@@ -104,7 +105,7 @@ class Sync extends Command
         $this->productFeedIndexer = $productFeedIndexer;
         $this->categoriesConsumer = $categoriesConsumer;
         $this->categoryFeedIndexer = $categoryFeedIndexer;
-        $this->productRepository = $productRepository;
+        $this->fetchProducts = $fetchProducts;
     }
 
     /**
@@ -173,7 +174,7 @@ class Sync extends Command
             function () use ($output, $storeId) {
                 $processedN = 0;
                 foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $productIds) {
-                    $newApiProducts = $this->productRepository->get($productIds);
+                    $newApiProducts = $this->fetchProducts->execute($productIds);
                     $this->productPublisher->publish($productIds, $storeId, $newApiProducts);
                     $output->write('.');
                     $processedN += count($productIds);

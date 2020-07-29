@@ -103,6 +103,10 @@ class ProductDataProcessor
     public function merge(array $product, array $oldExportDataProduct): array
     {
         $importData = [];
+        // ad-hoc: Export API do not return data if no image, but old api return "no selection" which broke schema
+        $imageAttributes = ['thumbnail', 'image', 'small_image', 'swatch_image'];
+        $imageAttributes = array_combine($imageAttributes, $imageAttributes);
+        $oldExportDataProduct = \array_diff_key($oldExportDataProduct, $imageAttributes);
 
         foreach (self::$map as $nameInExport => $nameInImport) {
             if (isset($product[$nameInExport])) {
@@ -114,15 +118,8 @@ class ProductDataProcessor
 
         /** @var DataMapperInterface $dataMapper */
         foreach ($this->dataMappers as $nameInExport => $dataMapper) {
-            $importData[$nameInExport] = $dataMapper->map($product);
+            $importData = \array_merge($importData, $dataMapper->map($product));
         }
-
-        if (\array_key_exists('swatch_image', $product)
-            && \array_key_exists('url', (array)$product['swatch_image'])
-        ) {
-            $importData['swatch_image'] = $product['swatch_image']['url'];
-        }
-
         // TODO: handle grouped product
         if (\array_key_exists('type_id', $oldExportDataProduct)
             && $oldExportDataProduct['type_id'] === 'grouped'

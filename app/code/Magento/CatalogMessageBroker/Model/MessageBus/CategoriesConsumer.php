@@ -6,18 +6,14 @@
 namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
 use Magento\CatalogMessageBroker\Model\FetchCategoriesInterface;
-use Magento\CatalogStorefront\Model\Storage\Client\CommandInterface;
-use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
-use Magento\CatalogStorefront\Model\Storage\State;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\CatalogStorefront\Model\MessageBus\Consumer as OldConsumer;
-use Magento\CatalogStorefront\Model\MessageBus\CatalogItemMessageBuilder;
 use Psr\Log\LoggerInterface;
-
+use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterfaceFactory;
 /**
  * Process categories update messages and update storefront app
  */
-class CategoriesConsumer extends OldConsumer
+class CategoriesConsumer
 {
     /**
      * @var LoggerInterface
@@ -33,36 +29,35 @@ class CategoriesConsumer extends OldConsumer
      * @var FetchCategoriesInterface
      */
     private $fetchCategories;
+    /**
+     * @var CatalogServerInterface
+     */
+    private $catalogServer;
+    /**
+     * @var ImportCategoriesRequestInterfaceFactory
+     */
+    private $importCategoriesRequestInterfaceFactory;
 
     /**
      * CategoriesConsumer constructor.
-     * @param CommandInterface $storageWriteSource
-     * @param DataDefinitionInterface $storageSchemaManager
-     * @param State $storageState
-     * @param CatalogItemMessageBuilder $catalogItemMessageBuilder
      * @param LoggerInterface $logger
      * @param FetchCategoriesInterface $fetchCategories
      * @param StoreManagerInterface $storeManager
+     * @param CatalogServerInterface $catalogServer
+     * @param ImportCategoriesRequestInterfaceFactory $importCategoriesRequestInterfaceFactory
      */
     public function __construct(
-        CommandInterface $storageWriteSource,
-        DataDefinitionInterface $storageSchemaManager,
-        State $storageState,
-        CatalogItemMessageBuilder $catalogItemMessageBuilder,
         LoggerInterface $logger,
         FetchCategoriesInterface $fetchCategories,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        CatalogServerInterface $catalogServer,
+        ImportCategoriesRequestInterfaceFactory $importCategoriesRequestInterfaceFactory
     ) {
-        parent::__construct(
-            $storageWriteSource,
-            $storageSchemaManager,
-            $storageState,
-            $catalogItemMessageBuilder,
-            $logger
-        );
         $this->logger = $logger;
         $this->storeManager = $storeManager;
         $this->fetchCategories = $fetchCategories;
+        $this->catalogServer = $catalogServer;
+        $this->importCategoriesRequestInterfaceFactory = $importCategoriesRequestInterfaceFactory;
     }
 
     /**
@@ -108,18 +103,60 @@ class CategoriesConsumer extends OldConsumer
     {
         try {
             $ids = json_decode($ids, true);
-            $dataPerType = [];
-            $categories = $this->fetchCategories->execute($ids);
+            $dataPerStore = [];
+
             $mappedStores = $this->getMappedStores();
 
-            foreach ($categories as $category) {
+            foreach ($this->fetchCategories->execute($ids) as $category) {
                 $storeId = $this->resolveStoreId($mappedStores, $category['store_view_code']);
-                $dataPerType['category'][$storeId][self::SAVE][] = $category;
+                $dataPerStore[$storeId][] = $category;
+            }
+            foreach ($dataPerStore as $storeId => $categories) {
+                $this->unsetNullRecursively($categories);
+                $this->importCategories($storeId, $categories);
             }
 
-            $this->saveToStorage($dataPerType);
         } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage());
+        }
+    }
+
+    /**
+     * Recursively unset array elements equal to NULL.
+     *
+     * TODO: Eliminate duplicate @see \Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher::unsetNullRecursively
+     *
+     * @param array $haystack
+     * @return void
+     */
+    private function unsetNullRecursively(&$haystack)
+    {
+        foreach ($haystack as $key => $value) {
+            if (is_array($value)) {
+                $this->unsetNullRecursively($haystack[$key]);
+            }
+            if ($haystack[$key] === null) {
+                unset($haystack[$key]);
+            }
+        }
+    }
+
+    /**
+     * Import categories
+     *
+     * @param int $storeId
+     * @param array $categories
+     * @throws \Throwable
+     */
+    private function importCategories($storeId, array $categories): void
+    {
+        $importCategoriesRequest = $this->importCategoriesRequestInterfaceFactory->create();
+        $importCategoriesRequest->setCategories($categories);
+        $importCategoriesRequest->setStore($storeId);
+        $importResult = $this->catalogServer->importCategories($importCategoriesRequest);
+
+        if ($importResult->getStatus() === false) {
+            $this->logger->error(sprintf('Categories import is failed: "%s"', $importResult->getMessage()));
         }
     }
 }
