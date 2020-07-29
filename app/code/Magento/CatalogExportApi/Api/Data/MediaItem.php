@@ -4,7 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
- * Generated from et_schema.xml. DO NOT EDIT!”
+ * Generated from et_schema.xml. DO NOT EDIT!
  */
 
 declare(strict_types=1);
