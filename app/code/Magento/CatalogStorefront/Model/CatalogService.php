@@ -304,7 +304,7 @@ class CatalogService implements CatalogServerInterface
             $categoriesInElasticFormat = [];
 
             foreach ($categories as $category) {
-                if (isset($category['id']) && ($category['id'] === self::ROOT_CATEGORY_ID)) {
+                if (isset($category['category_id']) && ($category['category_id'] === self::ROOT_CATEGORY_ID)) {
                     // Protect root category from modifications
                     continue;
                 }
@@ -336,7 +336,7 @@ class CatalogService implements CatalogServerInterface
                     $categoryInElasticFormat['children_count'] = (string)$categoryInElasticFormat['children_count'];
                     $categoryInElasticFormat['level'] = (string)$categoryInElasticFormat['level'];
                     $categoryInElasticFormat['position'] = (string)$categoryInElasticFormat['position'];
-                    $categoryInElasticFormat['id'] = (int)$categoryInElasticFormat['id'];
+                    $categoryInElasticFormat['id'] = (int)$categoryInElasticFormat['category_id'];
                     if (isset($categoryInElasticFormat['parent_id']) && empty($categoryInElasticFormat['parent_id'])) {
                         unset($categoryInElasticFormat['parent_id']);
                     }
@@ -358,7 +358,7 @@ class CatalogService implements CatalogServerInterface
 
             return $importCategoriesResponse;
         } catch (\Exception $e) {
-            $message = 'Cannot process categories import';
+            $message = 'Cannot process categories import: ' . $e->getMessage();
             $this->logger->error($message, ['exception' => $e]);
             $importCategoriesResponse = $this->importCategoriesResponseFactory->create();
             $importCategoriesResponse->setMessage($message);
