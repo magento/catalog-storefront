@@ -106,6 +106,8 @@ class ProductRepository implements ProductRepositoryInterface
     }
 
     /**
+     * Converts product properties to snake case.
+     *
      * @param array $product
      * @return array
      */

@@ -10,6 +10,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterfaceFactory;
+
 /**
  * Process categories update messages and update storefront app
  */
@@ -124,10 +125,12 @@ class CategoriesConsumer
     /**
      * Recursively unset array elements equal to NULL.
      *
-     * TODO: Eliminate duplicate @see \Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher::unsetNullRecursively
+     * @TODO: Eliminate duplicate
+     * \Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher::unsetNullRecursively
      *
      * @param array $haystack
      * @return void
+     *
      */
     private function unsetNullRecursively(&$haystack)
     {

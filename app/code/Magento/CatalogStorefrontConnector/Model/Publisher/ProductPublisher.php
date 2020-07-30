@@ -69,7 +69,6 @@ class ProductPublisher
      * @param CatalogServerInterface $catalogServer
      * @param ImportProductsRequestInterfaceFactory $importProductsRequestInterfaceFactory
      * @param ProductDataProcessor $productDataProcessor
-     * @param DataObjectHelper $dataObjectHelper
      * @param \Magento\CatalogStorefrontApi\Api\Data\ProductMapper $productMapper
      * @param int $batchSize
      */
@@ -148,6 +147,8 @@ class ProductPublisher
     }
 
     /**
+     * Import products into product storage.
+     *
      * @param int $storeId
      * @param array $products
      * @param array $overrideProducts

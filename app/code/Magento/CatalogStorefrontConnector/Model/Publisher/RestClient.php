@@ -125,6 +125,8 @@ class RestClient
     }
 
     /**
+     * Creates resource url.
+     *
      * @param string $resourcePath Resource URL like /V1/Resource1/123
      * @return string resource URL
      * @throws \Exception

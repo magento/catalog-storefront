@@ -11,7 +11,7 @@ use Magento\Framework\Api\ObjectFactory;
 use Magento\Framework\Reflection\TypeProcessor;
 
 /**
- * Data object helper.
+ * Data object mapper.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -82,9 +82,7 @@ class DtoMapper
             if ($methodNames = array_intersect($possibleMethods, $dataObjectMethods)) {
                 $methodName = array_values($methodNames)[0];
                 if (!is_array($value)) {
-                    if ($methodName === 'setExtensionAttributes' && $value === null) {
-                        // Cannot pass a null value to a method with a typed parameter
-                    } else {
+                    if (!($methodName === 'setExtensionAttributes' && $value === null)) {
                         $dataObject->$methodName($value);
                     }
                 } else {
@@ -98,6 +96,8 @@ class DtoMapper
     }
 
     /**
+     * Set complex value for dataObject.
+     *
      * @param mixed $dataObject
      * @param string $getterMethodName
      * @param string $methodName

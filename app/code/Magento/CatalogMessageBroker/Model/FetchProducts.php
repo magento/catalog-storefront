@@ -20,6 +20,11 @@ class FetchProducts implements FetchProductsInterface
     private $productRepository;
 
     /**
+     * @var DataObjectProcessor
+     */
+    private $dataObjectProcessor;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      * @param DataObjectProcessor $dataObjectProcessor
      */
@@ -36,7 +41,8 @@ class FetchProducts implements FetchProductsInterface
      */
     public function execute(array $ids)
     {
-        // TODO: Why do we need this class? We suppose to do REST call to ExportAPI which will return json, not object. If this is implementation for in-process call we can simplify it and return array from productRepo
+        // TODO: Why do we need this class? We suppose to do REST call to ExportAPI which will return json, not object.
+        // If this is implementation for in-process call we can simplify it and return array from productRepo
         // So why we need transform objects?
 
         $products = $this->productRepository->get($ids);
@@ -46,7 +52,7 @@ class FetchProducts implements FetchProductsInterface
         }
         return $data;
         // TODO: remove temporary solution after https://github.com/magento/catalog-storefront/issues/157
-        return $products;
+//        return $products;
 //        $data = [];
 //        foreach ($products as $product) {
 //            $data[] = $this->dataObjectProcessor->buildOutputDataArray($product, Product::class);

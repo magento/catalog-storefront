@@ -9,6 +9,8 @@ use Magento\CatalogMessageBroker\Model\DataMapper\DataMapperInterface;
 
 /**
  * Product data processor.
+ *
+ * Processes data coming from old api and merges data from new API to replace usage of existing data providers.
  */
 class ProductDataProcessor
 {
@@ -87,7 +89,6 @@ class ProductDataProcessor
 
     /**
      * @param DataMapperInterface[] $dataMappers
-     * @param array $map
      */
     public function __construct(array $dataMappers)
     {
@@ -115,6 +116,7 @@ class ProductDataProcessor
 
         /** @var DataMapperInterface $dataMapper */
         foreach ($this->dataMappers as $nameInExport => $dataMapper) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $importProduct = \array_merge($importProduct, $dataMapper->map($product));
         }
         // TODO: handle grouped product
@@ -127,7 +129,10 @@ class ProductDataProcessor
         //TODO: remove after resolving https://github.com/magento/catalog-storefront/issues/66
         $importProduct['dynamic_attributes'] = [];
         foreach ($product['attributes'] ?? [] as $attribute) {
-            $importProduct['dynamic_attributes'][] = ['code' => $attribute['attribute_code'], 'value' => \implode(',', $attribute['value'])];
+            $importProduct['dynamic_attributes'][] = [
+                'code' => $attribute['attribute_code'],
+                'value' => \implode(',', $attribute['value'])
+            ];
             unset($oldExportDataProduct[$attribute['attribute_code']]);
         }
 
