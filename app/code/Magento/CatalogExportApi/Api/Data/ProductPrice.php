@@ -9,7 +9,7 @@ namespace Magento\CatalogExportApi\Api\Data;
 /**
  * Option price
  */
-class Price
+class ProductPrice
 {
     /**
      * @var float|null

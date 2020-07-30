@@ -49,7 +49,7 @@ class EnteredOption
     private $sku;
 
     /**
-     * @var \Magento\CatalogExportApi\Api\Data\Price
+     * @var \Magento\CatalogExportApi\Api\Data\ProductPrice
      */
     private $price;
 
@@ -128,7 +128,7 @@ class EnteredOption
     /**
      * Get option value price
      *
-     * @return \Magento\CatalogExportApi\Api\Data\Price
+     * @return \Magento\CatalogExportApi\Api\Data\ProductPrice
      */
     public function getPrice()
     {
@@ -138,7 +138,7 @@ class EnteredOption
     /**
      * Set option value price
      *
-     * @param \Magento\CatalogExportApi\Api\Data\Price $price
+     * @param \Magento\CatalogExportApi\Api\Data\ProductPrice $price
      * @return void
      */
     public function setPrice($price)
