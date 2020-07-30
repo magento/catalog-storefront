@@ -22,6 +22,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Sync Catalog data with Storefront storage. Collect product data and push it to the Message Bus
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Sync extends Command
 {
