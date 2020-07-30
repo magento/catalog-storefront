@@ -24,22 +24,25 @@ class ProductDataProcessor
      */
     private static $map = [
         'product_id' => 'id',
-//        'sku' => 'sku',
-//        'status' => 'status',
-//        'name' => 'name',
-//        'description' => 'description',
-//        'short_description' => 'short_description',
-//        'url_key' => 'url_key',
-//        'tax_class_id' => 'tax_class_id',
-//        'weight' => 'weight',
-//        'swatch_image' => 'swatch_image', //Array to String converting (GQL schema has string value)
-//        'visibility' => 'visibility',
-//        'meta_description' => 'meta_description',
-//        'meta_keyword' => 'meta_keyword',
-//        'meta_title' => 'meta_title',
-//        'created_at' => 'created_at',
-//        'updated_at' => 'updated_at',
-//        'attributes' => 'dynamic_attributes',
+        'sku' => 'sku',
+        'status' => 'status',
+        'name' => 'name',
+        'description' => 'description',
+        'short_description' => 'short_description',
+        'url_key' => 'url_key',
+        'tax_class_id' => 'tax_class_id',
+        'weight' => 'weight',
+        'swatch_image' => 'swatch_image',
+        'thumbnail' => 'thumbnail',
+        'image' => 'image',
+        'small_image' => 'small_image',
+        'visibility' => 'visibility',
+        'meta_description' => 'meta_description',
+        'meta_keyword' => 'meta_keyword',
+        'meta_title' => 'meta_title',
+        'created_at' => 'created_at',
+        'updated_at' => 'updated_at',
+        'attributes' => 'dynamic_attributes',
         // 'variants' => 'variants', // \Magento\CatalogStorefrontApi\Api\Data\VariantInterface[]
         // 'categories' => 'categories', TODO category ids (create category_v2 field) must be returned instead of urls
 
@@ -102,37 +105,34 @@ class ProductDataProcessor
      */
     public function merge(array $product, array $oldExportDataProduct): array
     {
-        // TODO: remove after eliminating old data providers
-        unset($product['categories']);
-        $oldExportDataProduct = \array_diff_key($oldExportDataProduct, $product);
-
+        $importProduct = [];
         foreach (self::$map as $nameInExport => $nameInImport) {
             if (isset($product[$nameInExport])) {
-                $product[$nameInImport] = $product[$nameInExport];
+                $importProduct[$nameInImport] = $product[$nameInExport];
             }
             unset($oldExportDataProduct[$nameInExport]);
         }
 
         /** @var DataMapperInterface $dataMapper */
         foreach ($this->dataMappers as $nameInExport => $dataMapper) {
-            $product = \array_merge($product, $dataMapper->map($product));
+            $importProduct = \array_merge($importProduct, $dataMapper->map($product));
         }
         // TODO: handle grouped product
         if (\array_key_exists('type_id', $oldExportDataProduct)
             && $oldExportDataProduct['type_id'] === 'grouped'
         ) {
-            $product['grouped_items'] = $oldExportDataProduct['items'];
+            $importProduct['grouped_items'] = $oldExportDataProduct['items'];
         }
 
         //TODO: remove after resolving https://github.com/magento/catalog-storefront/issues/66
-        $product['dynamic_attributes'] = [];
+        $importProduct['dynamic_attributes'] = [];
         foreach ($product['attributes'] ?? [] as $attribute) {
-            $product['dynamic_attributes'][] = ['code' => $attribute['attribute_code'], 'value' => \implode(',', $attribute['value'])];
+            $importProduct['dynamic_attributes'][] = ['code' => $attribute['attribute_code'], 'value' => \implode(',', $attribute['value'])];
             unset($oldExportDataProduct[$attribute['attribute_code']]);
         }
 
 
-        // TODO: only $product must be returned https://github.com/magento/catalog-storefront/issues/165
-        return array_merge($oldExportDataProduct, $product);
+        // TODO: only $importProduct must be returned https://github.com/magento/catalog-storefront/issues/165
+        return array_merge($oldExportDataProduct, $importProduct);
     }
 }
