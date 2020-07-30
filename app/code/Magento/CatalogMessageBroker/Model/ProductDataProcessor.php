@@ -103,15 +103,16 @@ class ProductDataProcessor
     public function merge(array $product, array $oldExportDataProduct): array
     {
         // TODO: remove after eliminating old data providers
+        unset($product['categories']);
         $oldExportDataProduct = \array_diff_key($oldExportDataProduct, $product);
 
         foreach (self::$map as $nameInExport => $nameInImport) {
             if (isset($product[$nameInExport])) {
                 $product[$nameInImport] = $product[$nameInExport];
             }
-
             unset($oldExportDataProduct[$nameInExport]);
         }
+
         /** @var DataMapperInterface $dataMapper */
         foreach ($this->dataMappers as $nameInExport => $dataMapper) {
             $product = \array_merge($product, $dataMapper->map($product));
@@ -131,7 +132,6 @@ class ProductDataProcessor
         }
 
 
-//        print_r([$oldExportDataProduct, $product]);
         // TODO: only $product must be returned https://github.com/magento/catalog-storefront/issues/165
         return array_merge($oldExportDataProduct, $product);
     }
