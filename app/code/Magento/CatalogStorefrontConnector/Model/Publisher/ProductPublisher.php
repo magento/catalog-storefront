@@ -12,7 +12,6 @@ use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterfaceFactory;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequestInterfaceFactory;
-use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\State;
 use Psr\Log\LoggerInterface;
 use Magento\CatalogMessageBroker\Model\ProductDataProcessor;
@@ -176,7 +175,7 @@ class ProductPublisher
     {
         foreach (\array_chunk($productIds, $this->batchSize) as $idsBunch) {
             // @todo eliminate calling old API when new API can provide all of the necessary data
-            $productsData = $this->productsDataProvider->fetch($productIds, [], ['store' => $storeId]);
+            $productsData = $this->productsDataProvider->fetch($idsBunch, [], ['store' => $storeId]);
             $this->logger->debug(
                 \sprintf('Publish products with ids "%s" in store %s', \implode(', ', $productIds), $storeId),
                 ['verbose' => $productsData]
@@ -222,6 +221,8 @@ class ProductPublisher
     }
 
     /**
+     * Delete products from storage
+     *
      * @param int $storeId
      * @param int[] $productIds
      * @return void

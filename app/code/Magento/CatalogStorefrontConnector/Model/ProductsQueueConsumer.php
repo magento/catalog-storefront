@@ -8,7 +8,6 @@ namespace Magento\CatalogStorefrontConnector\Model;
 
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesData;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
-use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
 
 /**
@@ -16,11 +15,6 @@ use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
  */
 class ProductsQueueConsumer
 {
-    /**
-     * @var ProductPublisher
-     */
-    private $productPublisher;
-
     /**
      * @var CatalogEntityIdsProvider
      */

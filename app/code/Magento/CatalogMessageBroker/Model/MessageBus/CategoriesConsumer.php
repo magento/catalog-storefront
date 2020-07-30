@@ -130,7 +130,6 @@ class CategoriesConsumer
      *
      * @param array $haystack
      * @return void
-     *
      */
     private function unsetNullRecursively(&$haystack)
     {

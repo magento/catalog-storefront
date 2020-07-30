@@ -75,6 +75,7 @@ class Sync extends Command
      * @var CategoryFeedIndexer
      */
     private $categoryFeedIndexer;
+
     /**
      * @var FetchProductsInterface
      */

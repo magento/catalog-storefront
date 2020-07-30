@@ -46,6 +46,9 @@ use Psr\Log\LoggerInterface;
  * Class for retrieving catalog data
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class CatalogService implements CatalogServerInterface
 {
@@ -320,7 +323,7 @@ class CatalogService implements CatalogServerInterface
 
             $deleteProductsResponse->setMessage('Product were removed successfully');
             $deleteProductsResponse->setStatus(true);
-        } catch(\Throwable $e) {
+        } catch (\Throwable $e) {
             $message = 'Unable to delete products';
             $this->logger->error($message, ['exception' => $e]);
             $deleteProductsResponse->setMessage($message);
