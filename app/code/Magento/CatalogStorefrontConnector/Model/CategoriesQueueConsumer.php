@@ -6,7 +6,8 @@
 
 namespace Magento\CatalogStorefrontConnector\Model;
 
-use Magento\CatalogStorefrontConnector\Model\Publisher\CategoryPublisher;
+use Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer;
+use Magento\CatalogMessageBroker\Model\MessageBus\CategoriesConsumer as CategoryPublisher;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
 
@@ -26,15 +27,23 @@ class CategoriesQueueConsumer
     private $catalogEntityIdsProvider;
 
     /**
+     * @var CategoryFeedIndexer
+     */
+    private $categoryFeedIndexer;
+
+    /**
      * @param CategoryPublisher $categoryPublisher
      * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
+     * @param CategoryFeedIndexer $categoryFeedIndexer
      */
     public function __construct(
         CategoryPublisher $categoryPublisher,
-        CatalogEntityIdsProvider $catalogEntityIdsProvider
+        CatalogEntityIdsProvider $catalogEntityIdsProvider,
+        CategoryFeedIndexer $categoryFeedIndexer
     ) {
         $this->categoryPublisher = $categoryPublisher;
         $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
+        $this->categoryFeedIndexer = $categoryFeedIndexer;
     }
 
     /**
@@ -52,11 +61,13 @@ class CategoriesQueueConsumer
         $storeCategories = $this->getUniqueIdsForStores([$message]);
         foreach ($storeCategories as $storeId => $categoryIds) {
             if (empty($categoryIds)) {
+                $this->categoryFeedIndexer->executeFull();
                 foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $ids) {
-                    $this->categoryPublisher->publish($ids, $storeId);
+                    $this->categoryPublisher->processMessage(json_encode($ids));
                 }
             } else {
-                $this->categoryPublisher->publish(\array_unique($categoryIds), $storeId);
+                $this->categoryFeedIndexer->executeList($categoryIds);
+                $this->categoryPublisher->processMessage(json_encode(array_unique($categoryIds)));
             }
         }
     }

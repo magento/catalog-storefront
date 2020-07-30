@@ -117,6 +117,7 @@ class CatalogService implements CatalogServerInterface
      * @param CatalogRepository $catalogRepository
      * @param ProductArrayMapper $productArrayMapper
      * @param LoggerInterface $logger
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ProductDataProvider $dataProvider,
@@ -263,18 +264,21 @@ class CatalogService implements CatalogServerInterface
 
             $productsInElasticFormat = [];
             foreach ($products as $product) {
-                $productInElasticFormat = $product;
-                if (!empty($productInElasticFormat)) {
-                    $productInElasticFormat['store_id'] = $storeId;
-                    foreach ($productInElasticFormat['dynamic_attributes'] as $dynamicAttribute) {
-                        $productInElasticFormat[$dynamicAttribute['code']] = $dynamicAttribute['value'];
-                    }
-                    $productInElasticFormat['short_description'] = ['html' => $productInElasticFormat['short_description']];
-                    $productInElasticFormat['description'] = ['html' => $productInElasticFormat['description']];
-                    unset($productInElasticFormat['dynamic_attributes']);
-
-                    $productsInElasticFormat['product'][$storeId]['save'][] = $productInElasticFormat;
+                if (empty($product)) {
+                    continue;
                 }
+                $productInElasticFormat = $product;
+                $productInElasticFormat['store_id'] = $storeId;
+                foreach ($productInElasticFormat['dynamic_attributes'] as $dynamicAttribute) {
+                    $productInElasticFormat[$dynamicAttribute['code']] = $dynamicAttribute['value'];
+                }
+                $productInElasticFormat['short_description'] = [
+                    'html' => $productInElasticFormat['short_description']
+                ];
+                $productInElasticFormat['description'] = ['html' => $productInElasticFormat['description']];
+                unset($productInElasticFormat['dynamic_attributes']);
+
+                $productsInElasticFormat['product'][$storeId]['save'][] = $productInElasticFormat;
             }
 
             $this->catalogRepository->saveToStorage($productsInElasticFormat);
@@ -346,48 +350,61 @@ class CatalogService implements CatalogServerInterface
             $categoriesInElasticFormat = [];
 
             foreach ($categories as $category) {
-                if (isset($category['id']) && ($category['id'] === self::ROOT_CATEGORY_ID)) {
+                if (isset($category['category_id']) && ($category['category_id'] === self::ROOT_CATEGORY_ID)) {
                     // Protect root category from modifications
                     continue;
                 }
                 $categoryInElasticFormat = $category;
-                if (!empty($categoryInElasticFormat)) {
-                    $categoryInElasticFormat['store_id'] = $storeId;
-                    if (isset($categoryInElasticFormat['dynamic_attributes'])) {
-                        foreach ($categoryInElasticFormat['dynamic_attributes'] as $dynamicAttribute) {
-                            $categoryInElasticFormat[$dynamicAttribute['code']] = $dynamicAttribute['value'];
-                        }
-                        unset($categoryInElasticFormat['dynamic_attributes']);
-                    }
-
-                    // TODO: Check if any of the following is required
-                    $categoryInElasticFormat['is_active'] = $categoryInElasticFormat['is_active'] ? '1' : '0';
-                    $categoryInElasticFormat['is_anchor'] = $categoryInElasticFormat['is_anchor'] ? '1' : '0';
-                    $categoryInElasticFormat['include_in_menu'] = $categoryInElasticFormat['include_in_menu'] ? '1' : '0';
-                    $categoryInElasticFormat['store_id'] = (int)$categoryInElasticFormat['store_id'];
-
-                    $categoryInElasticFormat['url_path'] = !empty($categoryInElasticFormat['url_path']) ? $categoryInElasticFormat['url_path'] :  null;
-                    $categoryInElasticFormat['image'] = !empty($categoryInElasticFormat['image']) ? $categoryInElasticFormat['image'] : null;
-                    $categoryInElasticFormat['description'] = !empty($categoryInElasticFormat['description']) ? $categoryInElasticFormat['description'] : null;
-                    $categoryInElasticFormat['canonical_url'] = !empty($categoryInElasticFormat['canonical_url']) ? $categoryInElasticFormat['canonical_url'] : null;
-
-                    $categoryInElasticFormat['product_count'] = (string)($categoryInElasticFormat['product_count'] ?? 0);
-                    $categoryInElasticFormat['children_count'] = (string)$categoryInElasticFormat['children_count'];
-                    $categoryInElasticFormat['level'] = (string)$categoryInElasticFormat['level'];
-                    $categoryInElasticFormat['position'] = (string)$categoryInElasticFormat['position'];
-                    $categoryInElasticFormat['id'] = (int)$categoryInElasticFormat['id'];
-                    if (isset($categoryInElasticFormat['parent_id']) && empty($categoryInElasticFormat['parent_id'])) {
-                        unset($categoryInElasticFormat['parent_id']);
-                    }
-                    if (isset($categoryInElasticFormat['display_mode']) && empty($categoryInElasticFormat['display_mode'])) {
-                        unset($categoryInElasticFormat['display_mode']);
-                    }
-                    if (isset($categoryInElasticFormat['default_sort_by']) && empty($categoryInElasticFormat['default_sort_by'])) {
-                        unset($categoryInElasticFormat['default_sort_by']);
-                    }
-
-                    $categoriesInElasticFormat['category'][$storeId]['save'][] = $categoryInElasticFormat;
+                if (empty($categoryInElasticFormat)) {
+                    continue;
                 }
+                $categoryInElasticFormat['store_id'] = $storeId;
+                if (isset($categoryInElasticFormat['dynamic_attributes'])) {
+                    foreach ($categoryInElasticFormat['dynamic_attributes'] as $dynamicAttribute) {
+                        $categoryInElasticFormat[$dynamicAttribute['code']] = $dynamicAttribute['value'];
+                    }
+                    unset($categoryInElasticFormat['dynamic_attributes']);
+                }
+
+                // TODO: Check if any of the following is required
+                $categoryInElasticFormat['is_active'] = $categoryInElasticFormat['is_active'] ? '1' : '0';
+                $categoryInElasticFormat['is_anchor'] = $categoryInElasticFormat['is_anchor'] ? '1' : '0';
+                $categoryInElasticFormat['include_in_menu'] = $categoryInElasticFormat['include_in_menu'] ? '1' : '0';
+                $categoryInElasticFormat['store_id'] = (int)$categoryInElasticFormat['store_id'];
+
+                $categoryInElasticFormat['url_path'] = !empty($categoryInElasticFormat['url_path'])
+                    ? $categoryInElasticFormat['url_path']
+                    : null;
+                $categoryInElasticFormat['image'] = !empty($categoryInElasticFormat['image'])
+                    ? $categoryInElasticFormat['image']
+                    : null;
+                $categoryInElasticFormat['description'] = !empty($categoryInElasticFormat['description'])
+                    ? $categoryInElasticFormat['description']
+                    : null;
+                $categoryInElasticFormat['canonical_url'] = !empty($categoryInElasticFormat['canonical_url'])
+                    ? $categoryInElasticFormat['canonical_url']
+                    : null;
+
+                $categoryInElasticFormat['product_count'] = (string)($categoryInElasticFormat['product_count'] ?? 0);
+                $categoryInElasticFormat['children_count'] = (string)$categoryInElasticFormat['children_count'];
+                $categoryInElasticFormat['level'] = (string)$categoryInElasticFormat['level'];
+                $categoryInElasticFormat['position'] = (string)$categoryInElasticFormat['position'];
+                $categoryInElasticFormat['id'] = (int)$categoryInElasticFormat['category_id'];
+                if (isset($categoryInElasticFormat['parent_id']) && empty($categoryInElasticFormat['parent_id'])) {
+                    unset($categoryInElasticFormat['parent_id']);
+                }
+                if (isset($categoryInElasticFormat['display_mode'])
+                    && empty($categoryInElasticFormat['display_mode'])
+                ) {
+                    unset($categoryInElasticFormat['display_mode']);
+                }
+                if (isset($categoryInElasticFormat['default_sort_by'])
+                    && empty($categoryInElasticFormat['default_sort_by'])
+                ) {
+                    unset($categoryInElasticFormat['default_sort_by']);
+                }
+
+                $categoriesInElasticFormat['category'][$storeId]['save'][] = $categoryInElasticFormat;
             }
             $this->catalogRepository->saveToStorage($categoriesInElasticFormat);
 
@@ -397,7 +414,7 @@ class CatalogService implements CatalogServerInterface
 
             return $importCategoriesResponse;
         } catch (\Exception $e) {
-            $message = 'Cannot process categories import';
+            $message = 'Cannot process categories import: ' . $e->getMessage();
             $this->logger->error($message, ['exception' => $e]);
             $importCategoriesResponse = $this->importCategoriesResponseFactory->create();
             $importCategoriesResponse->setMessage($message);
@@ -429,6 +446,10 @@ class CatalogService implements CatalogServerInterface
 
         $items = [];
         foreach ($categories as $category) {
+            //We need to bypass inactive categories
+            if (isset($category['is_active']) && $category['is_active'] == 0) {
+                continue;
+            }
             $item = new Category();
             $category = $this->cleanUpNullValues($category);
 

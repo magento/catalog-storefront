@@ -9,6 +9,8 @@ use Magento\CatalogMessageBroker\Model\DataMapper\DataMapperInterface;
 
 /**
  * Product data processor.
+ *
+ * Processes data coming from old api and merges data from new API to replace usage of existing data providers.
  */
 class ProductDataProcessor
 {
@@ -32,14 +34,17 @@ class ProductDataProcessor
         'url_key' => 'url_key',
         'tax_class_id' => 'tax_class_id',
         'weight' => 'weight',
-        'swatch_image' => 'swatch_image', //Array to String converting (GQL schema has string value)
+        'swatch_image' => 'swatch_image',
+        'thumbnail' => 'thumbnail',
+        'image' => 'image',
+        'small_image' => 'small_image',
         'visibility' => 'visibility',
         'meta_description' => 'meta_description',
         'meta_keyword' => 'meta_keyword',
         'meta_title' => 'meta_title',
         'created_at' => 'created_at',
         'updated_at' => 'updated_at',
-//        'attributes' => 'dynamic_attributes',
+        'attributes' => 'dynamic_attributes',
         // 'variants' => 'variants', // \Magento\CatalogStorefrontApi\Api\Data\VariantInterface[]
         // 'categories' => 'categories', TODO category ids (create category_v2 field) must be returned instead of urls
 
@@ -101,45 +106,38 @@ class ProductDataProcessor
      */
     public function merge(array $product, array $oldExportDataProduct): array
     {
-        $importData = [];
-
+        $importProduct = [];
         foreach (self::$map as $nameInExport => $nameInImport) {
             if (isset($product[$nameInExport])) {
-                $importData[$nameInImport] = $product[$nameInExport];
+                $importProduct[$nameInImport] = $product[$nameInExport];
             }
-
             unset($oldExportDataProduct[$nameInExport]);
         }
 
         /** @var DataMapperInterface $dataMapper */
         foreach ($this->dataMappers as $nameInExport => $dataMapper) {
-            $importData[$nameInExport] = $dataMapper->map($product);
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+            $importProduct = \array_merge($importProduct, $dataMapper->map($product));
         }
-
-        if (\array_key_exists('swatch_image', $product)
-            && \array_key_exists('url', (array)$product['swatch_image'])
-        ) {
-            $importData['swatch_image'] = $product['swatch_image']['url'];
-        }
-
         // TODO: handle grouped product
         if (\array_key_exists('type_id', $oldExportDataProduct)
             && $oldExportDataProduct['type_id'] === 'grouped'
         ) {
-            $importData['grouped_items'] = $oldExportDataProduct['items'];
+            $importProduct['grouped_items'] = $oldExportDataProduct['items'];
         }
 
         //TODO: remove after resolving https://github.com/magento/catalog-storefront/issues/66
-        $importData['dynamic_attributes'] = [];
+        $importProduct['dynamic_attributes'] = [];
         foreach ($product['attributes'] ?? [] as $attribute) {
-            $importData['dynamic_attributes'][] = [
+            $importProduct['dynamic_attributes'][] = [
                 'code' => $attribute['attribute_code'],
                 'value' => \implode(',', $attribute['value'])
             ];
             unset($oldExportDataProduct[$attribute['attribute_code']]);
         }
 
-        // TODO: only importData must be returned https://github.com/magento/catalog-storefront/issues/165
-        return array_merge($oldExportDataProduct, $importData);
+
+        // TODO: only $importProduct must be returned https://github.com/magento/catalog-storefront/issues/165
+        return array_merge($oldExportDataProduct, $importProduct);
     }
 }

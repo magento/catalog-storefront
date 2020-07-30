@@ -4,7 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
- * Generated from et_schema.xml. DO NOT EDIT!”
+ * Generated from et_schema.xml. DO NOT EDIT!
  */
 
 declare(strict_types=1);
@@ -150,6 +150,9 @@ class Product
 
     /** @var \Magento\CatalogExportApi\Api\Data\EnteredOption[]|null */
     private $enteredOptions;
+
+    /** @var \Magento\CatalogExportApi\Api\Data\MediaItem[]|null */
+    private $mediaGallery;
 
     /** @var \Magento\CatalogExportApi\Api\Data\Variant[]|null */
     private $variants;
@@ -1064,6 +1067,27 @@ class Product
     public function setEnteredOptions(?array $enteredOptions = null): void
     {
         $this->enteredOptions = $enteredOptions;
+    }
+
+    /**
+     * Get media gallery
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\MediaItem[]|null
+     */
+    public function getMediaGallery(): ?array
+    {
+        return $this->mediaGallery;
+    }
+
+    /**
+     * Set media gallery
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\MediaItem[] $mediaGallery
+     * @return void
+     */
+    public function setMediaGallery(?array $mediaGallery = null): void
+    {
+        $this->mediaGallery = $mediaGallery;
     }
 
     /**

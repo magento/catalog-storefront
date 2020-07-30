@@ -152,6 +152,7 @@ class ElasticsearchCommand implements CommandInterface
 
     /**
      * @inheritdoc
+     *
      * @throws BulkException
      */
     public function bulkDelete(string $dataSourceName, string $entityName, array $ids): void
@@ -162,7 +163,12 @@ class ElasticsearchCommand implements CommandInterface
             },
             $ids
         );
-        $query = $this->getDocsArrayInBulkIndexFormat($dataSourceName, $entityName, $documents, self::BULK_ACTION_DELETE);
+        $query = $this->getDocsArrayInBulkIndexFormat(
+            $dataSourceName,
+            $entityName,
+            $documents,
+            self::BULK_ACTION_DELETE
+        );
         try {
             $result = $this->getConnection()->bulk($query);
             $error = $result['errors'] ?? false;
