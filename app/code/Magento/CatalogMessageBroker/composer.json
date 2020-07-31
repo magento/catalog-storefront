@@ -8,8 +8,6 @@
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
         "magento/module-catalog-export-api": "*",
-        "magento/module-catalog-storefront": "*",
-        "magento/module-catalog-extractor": "*",
         "magento/module-store": "*",
         "magento/module-catalog-storefront-api": "*",
         "magento/module-catalog-storefront-connector": "*"
