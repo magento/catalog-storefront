@@ -40,6 +40,7 @@ class CustomOptions implements DataMapperInterface
                 $customOption['value'] = $customOptionValues;
                 $customOption['type'] = $customOption['render_type'];
                 $customOption['option_id'] = $customOption['id'];
+                $customOption['required'] = $customOption['is_required'];
                 $productCustomOptions[] = $customOption;
             }
         }
