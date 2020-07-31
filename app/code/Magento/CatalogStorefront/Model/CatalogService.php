@@ -10,6 +10,7 @@ namespace Magento\CatalogStorefront\Model;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\Category;
+use Magento\CatalogStorefrontApi\Api\Data\CategoryArrayMapper;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryInterface;
 use Magento\CatalogStorefrontApi\Api\Data\Image;
 use Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItem;
@@ -29,7 +30,6 @@ use Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameter;
 use Magento\CatalogStorefrontApi\Api\Data\Video;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
-use Magento\CatalogStorefront\Model\CatalogRepository;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface;
@@ -52,8 +52,6 @@ use Psr\Log\LoggerInterface;
  */
 class CatalogService implements CatalogServerInterface
 {
-    private const ROOT_CATEGORY_ID = 1;
-
     /**
      * @var ProductDataProvider
      */
@@ -109,6 +107,11 @@ class CatalogService implements CatalogServerInterface
     private $logger;
 
     /**
+     * @var CategoryArrayMapper
+     */
+    private $categoryArrayMapper;
+
+    /**
      * @param ProductDataProvider $dataProvider
      * @param DataObjectHelper $dataObjectHelper
      * @param CategoryDataProvider $categoryDataProvider
@@ -133,6 +136,7 @@ class CatalogService implements CatalogServerInterface
         ServiceOutputProcessor $serviceOutputProcessor,
         CatalogRepository $catalogRepository,
         ProductArrayMapper $productArrayMapper,
+        CategoryArrayMapper $categoryArrayMapper,
         LoggerInterface $logger
     ) {
         $this->dataProvider = $dataProvider;
@@ -145,6 +149,7 @@ class CatalogService implements CatalogServerInterface
         $this->categoryDataProvider = $categoryDataProvider;
         $this->dynamicAttributeFactory = $dynamicAttributeFactory;
         $this->productArrayMapper = $productArrayMapper;
+        $this->categoryArrayMapper = $categoryArrayMapper;
         $this->logger = $logger;
     }
 
@@ -344,69 +349,23 @@ class CatalogService implements CatalogServerInterface
     public function importCategories(ImportCategoriesRequestInterface $request): ImportCategoriesResponseInterface
     {
         try {
-            $convertedRequest = $this->serviceOutputProcessor->convertValue(
-                $request,
-                ImportCategoriesRequestInterface::class
+            $categories = \array_map(
+                function ($category) {
+                    return $this->categoryArrayMapper->convertToArray($category);
+                },
+                $request->getCategories()
             );
-            $categories = $convertedRequest['categories'];
-            $storeId = $convertedRequest['store'];
+            $storeId = $request->getStore();
+
             $categoriesInElasticFormat = [];
 
             foreach ($categories as $category) {
-                if (isset($category['category_id']) && ($category['category_id'] === self::ROOT_CATEGORY_ID)) {
-                    // Protect root category from modifications
-                    continue;
-                }
                 $categoryInElasticFormat = $category;
                 if (empty($categoryInElasticFormat)) {
                     continue;
                 }
+
                 $categoryInElasticFormat['store_id'] = $storeId;
-                if (isset($categoryInElasticFormat['dynamic_attributes'])) {
-                    foreach ($categoryInElasticFormat['dynamic_attributes'] as $dynamicAttribute) {
-                        $categoryInElasticFormat[$dynamicAttribute['code']] = $dynamicAttribute['value'];
-                    }
-                    unset($categoryInElasticFormat['dynamic_attributes']);
-                }
-
-                // TODO: Check if any of the following is required
-                $categoryInElasticFormat['is_active'] = $categoryInElasticFormat['is_active'] ? '1' : '0';
-                $categoryInElasticFormat['is_anchor'] = $categoryInElasticFormat['is_anchor'] ? '1' : '0';
-                $categoryInElasticFormat['include_in_menu'] = $categoryInElasticFormat['include_in_menu'] ? '1' : '0';
-                $categoryInElasticFormat['store_id'] = (int)$categoryInElasticFormat['store_id'];
-
-                $categoryInElasticFormat['url_path'] = !empty($categoryInElasticFormat['url_path'])
-                    ? $categoryInElasticFormat['url_path']
-                    : null;
-                $categoryInElasticFormat['image'] = !empty($categoryInElasticFormat['image'])
-                    ? $categoryInElasticFormat['image']
-                    : null;
-                $categoryInElasticFormat['description'] = !empty($categoryInElasticFormat['description'])
-                    ? $categoryInElasticFormat['description']
-                    : null;
-                $categoryInElasticFormat['canonical_url'] = !empty($categoryInElasticFormat['canonical_url'])
-                    ? $categoryInElasticFormat['canonical_url']
-                    : null;
-
-                $categoryInElasticFormat['product_count'] = (string)($categoryInElasticFormat['product_count'] ?? 0);
-                $categoryInElasticFormat['children_count'] = (string)$categoryInElasticFormat['children_count'];
-                $categoryInElasticFormat['level'] = (string)$categoryInElasticFormat['level'];
-                $categoryInElasticFormat['position'] = (string)$categoryInElasticFormat['position'];
-                $categoryInElasticFormat['id'] = (int)$categoryInElasticFormat['category_id'];
-                if (isset($categoryInElasticFormat['parent_id']) && empty($categoryInElasticFormat['parent_id'])) {
-                    unset($categoryInElasticFormat['parent_id']);
-                }
-                if (isset($categoryInElasticFormat['display_mode'])
-                    && empty($categoryInElasticFormat['display_mode'])
-                ) {
-                    unset($categoryInElasticFormat['display_mode']);
-                }
-                if (isset($categoryInElasticFormat['default_sort_by'])
-                    && empty($categoryInElasticFormat['default_sort_by'])
-                ) {
-                    unset($categoryInElasticFormat['default_sort_by']);
-                }
-
                 $categoriesInElasticFormat['category'][$storeId]['save'][] = $categoryInElasticFormat;
             }
             $this->catalogRepository->saveToStorage($categoriesInElasticFormat);

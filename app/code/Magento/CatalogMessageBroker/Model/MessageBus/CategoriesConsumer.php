@@ -40,25 +40,33 @@ class CategoriesConsumer
     private $importCategoriesRequestInterfaceFactory;
 
     /**
+     * @var \Magento\CatalogStorefrontApi\Api\Data\CategoryMapper
+     */
+    private $categoryMapper;
+
+    /**
      * CategoriesConsumer constructor.
      * @param LoggerInterface $logger
      * @param FetchCategoriesInterface $fetchCategories
      * @param StoreManagerInterface $storeManager
      * @param CatalogServerInterface $catalogServer
      * @param ImportCategoriesRequestInterfaceFactory $importCategoriesRequestInterfaceFactory
+     * @param \Magento\CatalogStorefrontApi\Api\Data\CategoryMapper $categoryMapper
      */
     public function __construct(
         LoggerInterface $logger,
         FetchCategoriesInterface $fetchCategories,
         StoreManagerInterface $storeManager,
         CatalogServerInterface $catalogServer,
-        ImportCategoriesRequestInterfaceFactory $importCategoriesRequestInterfaceFactory
+        ImportCategoriesRequestInterfaceFactory $importCategoriesRequestInterfaceFactory,
+        \Magento\CatalogStorefrontApi\Api\Data\CategoryMapper $categoryMapper
     ) {
         $this->logger = $logger;
         $this->storeManager = $storeManager;
         $this->fetchCategories = $fetchCategories;
         $this->catalogServer = $catalogServer;
         $this->importCategoriesRequestInterfaceFactory = $importCategoriesRequestInterfaceFactory;
+        $this->categoryMapper = $categoryMapper;
     }
 
     /**
@@ -152,6 +160,12 @@ class CategoriesConsumer
      */
     private function importCategories($storeId, array $categories): void
     {
+        foreach ($categories as &$category) {
+            // be sure, that data passed to Import API in the expected format
+            $category['id'] = $category['category_id'];
+            $category = $this->categoryMapper->setData($category)->build();
+
+        }
         $importCategoriesRequest = $this->importCategoriesRequestInterfaceFactory->create();
         $importCategoriesRequest->setCategories($categories);
         $importCategoriesRequest->setStore($storeId);
