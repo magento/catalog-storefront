@@ -62,8 +62,6 @@ class ProductsConsumer
     public function processMessage(string $ids)
     {
         $ids = json_decode($ids, true);
-        $overrides = $this->fetchProducts->execute($ids);
-
         // @todo eliminate store manager
         $stores = $this->storeManager->getStores(true);
         $storesToIds = [];

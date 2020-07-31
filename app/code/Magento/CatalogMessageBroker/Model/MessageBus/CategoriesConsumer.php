@@ -45,7 +45,6 @@ class CategoriesConsumer
     private $categoryMapper;
 
     /**
-     * CategoriesConsumer constructor.
      * @param LoggerInterface $logger
      * @param FetchCategoriesInterface $fetchCategories
      * @param StoreManagerInterface $storeManager

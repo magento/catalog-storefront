@@ -12,25 +12,23 @@ use Magento\Framework\Reflection\TypeProcessor;
 
 /**
  * Data object mapper.
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DtoMapper
 {
     /**
      * @var ObjectFactory
      */
-    protected $objectFactory;
+    private $objectFactory;
 
     /**
      * @var TypeProcessor
      */
-    protected $typeProcessor;
+    private $typeProcessor;
 
     /**
      * @var MethodsMap
      */
-    protected $methodsMapProcessor;
+    private $methodsMapProcessor;
 
     /**
      * @param ObjectFactory $objectFactory
@@ -71,20 +69,14 @@ class DtoMapper
      */
     private function setDataValues($dataObject, array $data, $interfaceName)
     {
-        $dataObjectMethods = get_class_methods(get_class($dataObject));
+        $dataObjectMethods = get_class_methods(\get_class($dataObject));
         foreach ($data as $key => $value) {
             /* First, verify is there any setter for the key on the Service Data Object */
             $camelCaseKey = \Magento\Framework\Api\SimpleDataObjectConverter::snakeCaseToUpperCamelCase($key);
-            $possibleMethods = [
-                'set' . $camelCaseKey,
-                'setIs' . $camelCaseKey,
-            ];
-            if ($methodNames = array_intersect($possibleMethods, $dataObjectMethods)) {
-                $methodName = array_values($methodNames)[0];
+            $methodName = 'set' . $camelCaseKey;
+            if (\in_array($methodName, $dataObjectMethods, true)) {
                 if (!is_array($value)) {
-                    if (!($methodName === 'setExtensionAttributes' && $value === null)) {
-                        $dataObject->$methodName($value);
-                    }
+                    $dataObject->$methodName($value);
                 } else {
                     $getterMethodName = 'get' . $camelCaseKey;
                     $this->setComplexValue($dataObject, $getterMethodName, $methodName, $value, $interfaceName);
@@ -114,7 +106,7 @@ class DtoMapper
         $interfaceName
     ) {
         if ($interfaceName === null) {
-            $interfaceName = get_class($dataObject);
+            $interfaceName = \get_class($dataObject);
         }
         $returnType = $this->methodsMapProcessor->getMethodReturnType($interfaceName, $getterMethodName);
         if ($this->typeProcessor->isTypeSimple($returnType)) {

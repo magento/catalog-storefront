@@ -29,7 +29,6 @@ use Magento\CatalogStorefrontApi\Api\Data\UrlRewrite;
 use Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameter;
 use Magento\CatalogStorefrontApi\Api\Data\Video;
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface;
@@ -78,11 +77,6 @@ class CatalogService implements CatalogServerInterface
     private $importCategoriesResponseFactory;
 
     /**
-     * @var ServiceOutputProcessor
-     */
-    private $serviceOutputProcessor;
-
-    /**
      * @var CatalogRepository
      */
     private $catalogRepository;
@@ -119,7 +113,6 @@ class CatalogService implements CatalogServerInterface
      * @param ImportProductsResponseFactory $importProductsResponseFactory
      * @param DeleteProductsResponseFactory $deleteProductsResponseFactory
      * @param ImportCategoriesResponseFactory $importCategoriesResponseFactory
-     * @param ServiceOutputProcessor $serviceOutputProcessor
      * @param CatalogRepository $catalogRepository
      * @param ProductArrayMapper $productArrayMapper
      * @param LoggerInterface $logger
@@ -133,7 +126,6 @@ class CatalogService implements CatalogServerInterface
         ImportProductsResponseFactory $importProductsResponseFactory,
         DeleteProductsResponseFactory $deleteProductsResponseFactory,
         ImportCategoriesResponseFactory $importCategoriesResponseFactory,
-        ServiceOutputProcessor $serviceOutputProcessor,
         CatalogRepository $catalogRepository,
         ProductArrayMapper $productArrayMapper,
         CategoryArrayMapper $categoryArrayMapper,
@@ -144,7 +136,6 @@ class CatalogService implements CatalogServerInterface
         $this->importProductsResponseFactory = $importProductsResponseFactory;
         $this->deleteProductsResponseFactory = $deleteProductsResponseFactory;
         $this->importCategoriesResponseFactory = $importCategoriesResponseFactory;
-        $this->serviceOutputProcessor = $serviceOutputProcessor;
         $this->catalogRepository = $catalogRepository;
         $this->categoryDataProvider = $categoryDataProvider;
         $this->dynamicAttributeFactory = $dynamicAttributeFactory;

@@ -9,7 +9,6 @@ namespace Magento\CatalogExport\Model;
 
 use Magento\CatalogExportApi\Api\ProductRepositoryInterface;
 use Psr\Log\LoggerInterface;
-use Magento\CatalogExport\Model\DtoMapper;
 
 /**
  * @inheritdoc
@@ -89,8 +88,6 @@ class ProductRepository implements ProductRepositoryInterface
             return $products;
         }
 
-//         TODO: remove temporary solution after https://github.com/magento/catalog-storefront/issues/157
-//        return $this->toSnakeCase($feedData['feed']);
         foreach ($feedData['feed'] as $feedItem) {
             $product = $this->productFactory->create();
             $feedItem['id'] = $feedItem['productId'];
@@ -114,27 +111,6 @@ class ProductRepository implements ProductRepositoryInterface
     public function getDeleted(array $ids): array
     {
         return $this->products->getDeletedByIds($ids);
-    }
-
-    /**
-     * Converts product properties to snake case.
-     *
-     * @param array $product
-     * @return array
-     */
-    private function toSnakeCase(array $product)
-    {
-        foreach ($product as $key => $value) {
-            if (!\is_int($key)) {
-                unset($product[$key]);
-                $key = \Magento\Framework\Api\SimpleDataObjectConverter::camelCaseToSnakeCase($key);
-                $product[$key] = $value;
-            }
-            if (\is_array($value)) {
-                $product[$key] = $this->toSnakeCase($value);
-            }
-        }
-        return $product;
     }
 
     /**
