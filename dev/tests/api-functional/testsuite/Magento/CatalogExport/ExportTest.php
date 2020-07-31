@@ -122,7 +122,7 @@ class ExportTest extends WebapiAbstract
             foreach (array_keys($expected) as $key) {
                 $snakeCaseKey = $this->camelToSnakeCase($key);
                 $this->assertTrue(
-                    isset($actual[$snakeCaseKey]),
+                    \array_key_exists($snakeCaseKey, $actual),
                     $snakeCaseKey . 'doesn\'t exist, '
                     . json_encode($expected)
                     . ', actual '
