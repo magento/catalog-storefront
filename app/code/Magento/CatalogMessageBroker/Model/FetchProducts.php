@@ -41,7 +41,7 @@ class FetchProducts implements FetchProductsInterface
      *
      * @param string[] $ids
      */
-    public function execute(array $ids)
+    public function getByIds(array $ids)
     {
         $products = $this->productRepository->get($ids);
         $data = [];

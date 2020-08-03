@@ -68,7 +68,7 @@ class ProductsConsumer
         foreach ($stores as $store) {
             $storesToIds[$store->getCode()] = $store->getId();
         }
-        $overrides = $this->fetchProducts->execute($ids);
+        $overrides = $this->fetchProducts->getByIds($ids);
         if (!empty($overrides)) {
             $this->publishProducts($overrides, $storesToIds);
         }

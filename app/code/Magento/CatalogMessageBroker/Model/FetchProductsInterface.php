@@ -16,7 +16,7 @@ interface FetchProductsInterface
      * @param string[] $ids
      * @return array
      */
-    public function execute(array $ids);
+    public function getByIds(array $ids);
 
     /**
      * Fetch deleted products

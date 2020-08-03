@@ -177,7 +177,7 @@ class Sync extends Command
             function () use ($output, $storeId) {
                 $processedN = 0;
                 foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $productIds) {
-                    $newApiProducts = $this->fetchProducts->execute($productIds);
+                    $newApiProducts = $this->fetchProducts->getByIds($productIds);
                     $this->productPublisher->publish($productIds, $storeId, $newApiProducts);
                     $output->write('.');
                     $processedN += count($productIds);
