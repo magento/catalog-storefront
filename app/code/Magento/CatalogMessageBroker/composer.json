@@ -11,7 +11,9 @@
         "magento/module-catalog-storefront": "*",
         "magento/module-catalog-extractor": "*",
         "magento/module-store": "*",
-        "magento/module-configurable-product": "*"
+        "magento/module-configurable-product": "*",
+        "magento/module-configurable-product-data-exporter": "*"
+
     },
     "type": "magento2-module",
     "license": [

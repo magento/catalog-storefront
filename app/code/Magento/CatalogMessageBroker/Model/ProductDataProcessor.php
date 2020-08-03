@@ -74,6 +74,8 @@ class ProductDataProcessor
      * @param array $data
      * @param array $product
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function mergeCompoundFields($data, $product): array
     {
