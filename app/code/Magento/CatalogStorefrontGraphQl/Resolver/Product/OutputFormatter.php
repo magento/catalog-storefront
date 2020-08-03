@@ -80,6 +80,14 @@ class OutputFormatter
                 return $item;
             }, $currentResult['media_gallery']);
 
+            if (!empty($currentResult['downloadable_product_links'])) {
+                $currentResult['downloadable_product_links'] = \array_map(function ($link) {
+                    $link['id'] = $link['link_id'];
+
+                    return $link;
+                }, $currentResult['downloadable_product_links']);
+            }
+
             $currentResult = $this->setDynamicAttributes($currentResult);
 
             $items[] = $currentResult;
