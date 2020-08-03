@@ -90,6 +90,7 @@ class CatalogService implements CatalogServerInterface
      * @var DynamicAttributeValueInterfaceFactory
      */
     private $dynamicAttributeFactory;
+
     /**
      * @var ProductArrayMapper
      */
@@ -115,6 +116,7 @@ class CatalogService implements CatalogServerInterface
      * @param ImportCategoriesResponseFactory $importCategoriesResponseFactory
      * @param CatalogRepository $catalogRepository
      * @param ProductArrayMapper $productArrayMapper
+     * @param CategoryArrayMapper $categoryArrayMapper
      * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -460,7 +462,14 @@ class CatalogService implements CatalogServerInterface
         $variants = [];
         foreach ($item['variants'] ?? [] as $variantData) {
             if (!isset($variantData['product'])) {
-                throw new \RuntimeException('Cannot find product id for product variant');
+                $attribute = current($variantData['attributes']);
+                throw new \RuntimeException(
+                    \sprintf(
+                        'Cannot find product id for product variant with code "%s" and label "%s"',
+                        $attribute['code'],
+                        $attribute['label']
+                    )
+                );
             }
             $variant = [
                 'product' => $variantData['product'],

@@ -99,7 +99,7 @@ class Sync extends Command
         CategoriesConsumer $categoriesConsumer,
         ProductFeedIndexer $productFeedIndexer,
         CategoryFeedIndexer $categoryFeedIndexer,
-        \Magento\CatalogMessageBroker\Model\FetchProductsInterface $fetchProducts
+        FetchProductsInterface $fetchProducts
     ) {
         parent::__construct();
         $this->productPublisher = $productPublisher;
