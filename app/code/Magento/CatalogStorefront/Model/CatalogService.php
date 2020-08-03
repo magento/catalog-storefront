@@ -248,7 +248,7 @@ class CatalogService implements CatalogServerInterface
      */
     private function getMediaGalleryVideo(array $mediaGalleryItemVideo): Video
     {
-        $videoContent = new Video();
+        $videoContent = new Video;
         $videoContent->setMediaType($mediaGalleryItemVideo['media_type'] ?? '');
         $videoContent->setVideoDescription(
             $mediaGalleryItemVideo['video_description'] ?? ''
@@ -311,7 +311,7 @@ class CatalogService implements CatalogServerInterface
         $mediaGalleryData = $item['media_gallery'] ?? [];
         $mediaGallery = [];
         foreach ($mediaGalleryData as $mediaGalleryDataItem) {
-            $mediaGalleryItem = new MediaGalleryItem();
+            $mediaGalleryItem = new MediaGalleryItem;
             $this->dataObjectHelper->populateWithArray(
                 $mediaGalleryItem,
                 $mediaGalleryDataItem,
@@ -414,11 +414,11 @@ class CatalogService implements CatalogServerInterface
      */
     private function prepareUrlRewrite(array $urlRewriteData): UrlRewrite
     {
-        $rewrite = new UrlRewrite();
+        $rewrite = new UrlRewrite;
         $rewrite->setUrl($urlRewriteData['url'] ?? '');
         $parameters = [];
         foreach ($urlRewriteData['parameters'] ?? [] as $parameterData) {
-            $parameter = new UrlRewriteParameter();
+            $parameter = new UrlRewriteParameter;
             $parameter->setName($parameterData['name'] ?? '');
             $parameter->setValue($parameterData['value'] ?? '');
             $parameters[] = $parameter;
