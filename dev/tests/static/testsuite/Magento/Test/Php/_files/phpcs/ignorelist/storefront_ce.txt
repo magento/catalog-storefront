@@ -3,6 +3,7 @@
 # Example:
 # app/code/Magento/Catalog
 # dev/tests/static/framework/bootstrap.php
+# @todo remove when will be fixed into https://github.com/magento/catalog-storefront/issues/124
+app/code/Magento/CatalogStorefrontApi/Api
 app/code/Magento/CatalogStorefrontApi/Proto
 app/code/Magento/CatalogStorefrontApi/Metadata/Catalog.php
-app/code/Magento/CatalogStorefrontApi/Api
