@@ -9,11 +9,11 @@
         "magento/framework": "*",
         "magento/framework-message-queue": "*",
         "magento/module-catalog": "*",
-        "magento/module-category-extractor": "*",
         "magento/module-catalog-extractor": "*",
         "magento/module-catalog-search": "*",
         "magento/module-config": "*",
         "magento/module-store": "*",
+        "magento/module-catalog-message-broker": "*",
         "magento/module-catalog-data-exporter": "*"
     },
     "suggest": {

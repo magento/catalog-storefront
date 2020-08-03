@@ -105,10 +105,8 @@ class CatalogService implements CatalogServerInterface
 
         if (count($rawItems) !== count($request->getIds())) {
             throw new \InvalidArgumentException(
-                \sprintf(
-                    'Products with the following ids are not found in catalog: %s',
-                    \implode(', ', \array_diff($request->getIds(), \array_keys($rawItems)))
-                )
+                'Products with the following ids are not found in catalog: %1',
+                implode(', ', array_diff($request->getIds(), array_keys($rawItems)))
             );
         }
 
@@ -220,6 +218,10 @@ class CatalogService implements CatalogServerInterface
 
         $items = [];
         foreach ($categories as $category) {
+            //We need to bypass inactive categories
+            if (isset($category['is_active']) && $category['is_active'] == 0) {
+                continue;
+            }
             $item = new Category();
             $category = $this->cleanUpNullValues($category);
 
