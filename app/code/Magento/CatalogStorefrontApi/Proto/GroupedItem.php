@@ -22,9 +22,9 @@ class GroupedItem extends \Google\Protobuf\Internal\Message
      */
     protected $position = 0;
     /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.GroupedItemProductInfo product = 3;</code>
+     * Generated from protobuf field <code>string product = 3;</code>
      */
-    protected $product = null;
+    protected $product = '';
 
     /**
      * Constructor.
@@ -34,7 +34,7 @@ class GroupedItem extends \Google\Protobuf\Internal\Message
      *
      *     @type float $qty
      *     @type int $position
-     *     @type \Magento\CatalogStorefrontApi\Proto\GroupedItemProductInfo $product
+     *     @type string $product
      * }
      */
     public function __construct($data = null)
@@ -88,8 +88,8 @@ class GroupedItem extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.GroupedItemProductInfo product = 3;</code>
-     * @return \Magento\CatalogStorefrontApi\Proto\GroupedItemProductInfo
+     * Generated from protobuf field <code>string product = 3;</code>
+     * @return string
      */
     public function getProduct()
     {
@@ -97,13 +97,13 @@ class GroupedItem extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.GroupedItemProductInfo product = 3;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\GroupedItemProductInfo $var
+     * Generated from protobuf field <code>string product = 3;</code>
+     * @param string $var
      * @return $this
      */
     public function setProduct($var)
     {
-        GPBUtil::checkMessage($var, \Magento\CatalogStorefrontApi\Proto\GroupedItemProductInfo::class);
+        GPBUtil::checkString($var, true);
         $this->product = $var;
 
         return $this;

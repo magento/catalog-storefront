@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogMessageBroker\Model;
 
-use Magento\CatalogExportApi\Api\Data\ProductInterface;
+use Magento\CatalogExportApi\Api\Data\Product;
 use Magento\CatalogExportApi\Api\ProductRepositoryInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 
@@ -18,6 +18,11 @@ class FetchProducts implements FetchProductsInterface
      * @var ProductRepositoryInterface
      */
     private $productRepository;
+
+    /**
+     * @var DataObjectProcessor
+     */
+    private $dataObjectProcessor;
 
     /**
      * @param ProductRepositoryInterface $productRepository
@@ -33,14 +38,27 @@ class FetchProducts implements FetchProductsInterface
 
     /**
      * @inheritdoc
+     *
+     * @param string[] $ids
      */
-    public function execute(array $ids)
+    public function getByIds(array $ids)
     {
-        $data = [];
         $products = $this->productRepository->get($ids);
+        $data = [];
         foreach ($products as $product) {
-            $data[] = $this->dataObjectProcessor->buildOutputDataArray($product, ProductInterface::class);
+            $data[] = $this->dataObjectProcessor->buildOutputDataArray($product, Product::class);
         }
         return $data;
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @param string[] $ids
+     * @return array
+     */
+    public function getDeleted(array $ids): array
+    {
+        return $this->productRepository->getDeleted($ids);
     }
 }

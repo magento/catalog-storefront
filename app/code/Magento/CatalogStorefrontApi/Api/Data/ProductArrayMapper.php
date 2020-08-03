@@ -55,22 +55,22 @@ final class ProductArrayMapper
         $result["tax_class_id"] = $dto->getTaxClassId();
         $result["weight"] = $dto->getWeight();
         if ($dto->getImage() !== null) {
-            $result["image"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ImageInterface::class)
+            $result["image"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ImageArrayMapper::class)
                 ->convertToArray($dto->getImage());
         }
         if ($dto->getSmallImage() !== null) {
-            $result["small_image"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ImageInterface::class)
+            $result["small_image"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ImageArrayMapper::class)
                 ->convertToArray($dto->getSmallImage());
         }
         if ($dto->getThumbnail() !== null) {
-            $result["thumbnail"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ImageInterface::class)
+            $result["thumbnail"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ImageArrayMapper::class)
                 ->convertToArray($dto->getThumbnail());
         }
         $result["swatch_image"] = $dto->getSwatchImage();
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getMediaGallery() as $fieldArrayDto) {
-            $fieldData[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemInterface::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["media_gallery"] = $fieldArray;
@@ -78,7 +78,7 @@ final class ProductArrayMapper
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getDynamicAttributes() as $fieldArrayDto) {
-            $fieldData[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["dynamic_attributes"] = $fieldArray;
@@ -97,28 +97,28 @@ final class ProductArrayMapper
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getOptions() as $fieldArrayDto) {
-            $fieldData[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\OptionInterface::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\OptionArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["options"] = $fieldArray;
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getUrlRewrites() as $fieldArrayDto) {
-            $fieldData[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\UrlRewriteInterface::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\UrlRewriteArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["url_rewrites"] = $fieldArray;
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getVariants() as $fieldArrayDto) {
-            $fieldData[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\VariantInterface::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\VariantArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["variants"] = $fieldArray;
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getConfigurableOptions() as $fieldArrayDto) {
-            $fieldData[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionInterface::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["configurable_options"] = $fieldArray;
@@ -130,7 +130,7 @@ final class ProductArrayMapper
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getProductLinks() as $fieldArrayDto) {
-            $fieldData[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ProductLinkInterface::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ProductLinkArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["product_links"] = $fieldArray;
@@ -143,7 +143,7 @@ final class ProductArrayMapper
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getItems() as $fieldArrayDto) {
-            $fieldData[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\BundleItemInterface::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\BundleItemArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["items"] = $fieldArray;
@@ -152,18 +152,25 @@ final class ProductArrayMapper
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getDownloadableProductLinks() as $fieldArrayDto) {
-            $fieldData[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\DownloadableLinkInterface::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\DownloadableLinkArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["downloadable_product_links"] = $fieldArray;
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getDownloadableProductSamples() as $fieldArrayDto) {
-            $fieldData[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\DownloadableSampleInterface::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\DownloadableSampleArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["downloadable_product_samples"] = $fieldArray;
         $result["only_x_left_in_stock"] = $dto->getOnlyXLeftInStock();
+        /** Convert complex Array field **/
+        $fieldArray = [];
+        foreach ($dto->getGroupedItems() as $fieldArrayDto) {
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\GroupedItemArrayMapper::class)
+                ->convertToArray($fieldArrayDto);
+        }
+        $result["grouped_items"] = $fieldArray;
         return $result;
     }
 }

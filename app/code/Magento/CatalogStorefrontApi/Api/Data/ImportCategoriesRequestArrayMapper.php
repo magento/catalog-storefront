@@ -41,13 +41,13 @@ final class ImportCategoriesRequestArrayMapper
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getCategories() as $fieldArrayDto) {
-            $fieldData[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\CategoryInterface::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\CategoryArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["categories"] = $fieldArray;
         $result["store"] = $dto->getStore();
         if ($dto->getParams() !== null) {
-            $result["params"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\KeyValueInterface::class)
+            $result["params"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\KeyValueArrayMapper::class)
                 ->convertToArray($dto->getParams());
         }
         return $result;

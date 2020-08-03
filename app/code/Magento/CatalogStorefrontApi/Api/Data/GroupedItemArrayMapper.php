@@ -40,10 +40,7 @@ final class GroupedItemArrayMapper
         $result = [];
         $result["qty"] = $dto->getQty();
         $result["position"] = $dto->getPosition();
-        if ($dto->getProduct() !== null) {
-            $result["product"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\GroupedItemProductInfoInterface::class)
-                ->convertToArray($dto->getProduct());
-        }
+        $result["product"] = $dto->getProduct();
         return $result;
     }
 }
