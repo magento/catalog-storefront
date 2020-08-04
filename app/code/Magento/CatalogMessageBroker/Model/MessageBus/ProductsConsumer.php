@@ -5,28 +5,16 @@
  */
 namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
-use Magento\CatalogStorefront\Model\Storage\Client\CommandInterface;
-use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
-use Magento\CatalogStorefront\Model\Storage\State;
-use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
 use Magento\CatalogMessageBroker\Model\FetchProductsInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\CatalogStorefront\Model\MessageBus\Consumer as OldConsumer;
-use Magento\CatalogStorefront\Model\MessageBus\CatalogItemMessageBuilder;
-use Magento\Framework\App\State as AppState;
 use Psr\Log\LoggerInterface;
-use Magento\CatalogMessageBroker\Model\ProductDataProcessor;
+use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 
 /**
  * Process product update messages and update storefront app
  */
-class ProductsConsumer extends OldConsumer
+class ProductsConsumer
 {
-    /**
-     * @var DataProviderInterface
-     */
-    private $dataProvider;
-
     /**
      * @var FetchProductsInterface
      */
@@ -43,53 +31,27 @@ class ProductsConsumer extends OldConsumer
     private $storeManager;
 
     /**
-     * @var AppState
+     * @var ProductPublisher
      */
-    private $appState;
+    private $productPublisher;
 
     /**
-     * @var ProductDataProcessor
-     */
-    private $productDataProcessor;
-
-    /**
-     * @param CommandInterface $storageWriteSource
-     * @param DataDefinitionInterface $storageSchemaManager
-     * @param State $storageState
-     * @param CatalogItemMessageBuilder $catalogItemMessageBuilder
      * @param LoggerInterface $logger
-     * @param DataProviderInterface $dataProvider
      * @param FetchProductsInterface $fetchProducts
      * @param StoreManagerInterface $storeManager
-     * @param AppState $appState
-     * @param ProductDataProcessor $productDataProcessor
+     * @param ProductPublisher $productPublisher
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        CommandInterface $storageWriteSource,
-        DataDefinitionInterface $storageSchemaManager,
-        State $storageState,
-        CatalogItemMessageBuilder $catalogItemMessageBuilder,
         LoggerInterface $logger,
-        DataProviderInterface $dataProvider,
         FetchProductsInterface $fetchProducts,
         StoreManagerInterface $storeManager,
-        AppState $appState,
-        ProductDataProcessor $productDataProcessor
+        ProductPublisher $productPublisher
     ) {
-        parent::__construct(
-            $storageWriteSource,
-            $storageSchemaManager,
-            $storageState,
-            $catalogItemMessageBuilder,
-            $logger
-        );
         $this->logger = $logger;
-        $this->dataProvider = $dataProvider;
         $this->fetchProducts = $fetchProducts;
         $this->storeManager = $storeManager;
-        $this->appState = $appState;
-        $this->productDataProcessor = $productDataProcessor;
+        $this->productPublisher = $productPublisher;
     }
 
     /**
@@ -100,41 +62,65 @@ class ProductsConsumer extends OldConsumer
     public function processMessage(string $ids)
     {
         $ids = json_decode($ids, true);
-        $dataPerType = [];
-        $overrides = $this->fetchProducts->execute($ids);
-
         // @todo eliminate store manager
         $stores = $this->storeManager->getStores(true);
         $storesToIds = [];
         foreach ($stores as $store) {
             $storesToIds[$store->getCode()] = $store->getId();
         }
+        $overrides = $this->fetchProducts->getByIds($ids);
+        if (!empty($overrides)) {
+            $this->publishProducts($overrides, $storesToIds);
+        }
+        // @todo temporary solution. Deleted products must be processed from different message in queue
+        // message must be published into \Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer::process
+        $deletedProducts = $this->fetchProducts->getDeleted($ids);
+        if (!empty($deletedProducts)) {
+            $this->deleteProducts($deletedProducts, $storesToIds);
+        }
+    }
 
+    /**
+     * Publishes products to storage
+     *
+     * @param array $overrides
+     * @param array $storesToIds
+     */
+    private function publishProducts(array $overrides, array $storesToIds)
+    {
+        $productsPerStore = [];
         foreach ($overrides as $override) {
             $storeId = $storesToIds[$override['store_view_code']];
-            $products = [];
-            // @todo this is taken from old consumer, need to revise in the future
-            $this->appState->emulateAreaCode(
-                \Magento\Framework\App\Area::AREA_FRONTEND,
-                function () use ($override, $storeId, &$products) {
-                    try {
-                        // @todo eliminate calling old API when new API can provide all of the necessary data
-                        $products = $this->dataProvider->fetch([$override['id']], [], ['store' => $storeId]);
-                    } catch (\Throwable $e) {
-                        $this->logger->critical($e);
-                    }
-                }
-            );
-            if (count($products) > 0) {
-                $product = $this->productDataProcessor->merge($override, array_pop($products));
-                $product['store_id'] = $storeId;
-                $dataPerType['product'][$storeId][self::SAVE][] = $product;
+            $productsPerStore[$storeId][$override['product_id']] = $override;
+        }
+        foreach ($productsPerStore as $storeId => $products) {
+            try {
+                $this->productPublisher->publish(\array_keys($products), $storeId, $products);
+            } catch (\Throwable $e) {
+                $this->logger->critical($e);
             }
         }
-        try {
-            $this->saveToStorage($dataPerType);
-        } catch (\Throwable $e) {
-            $this->logger->critical($e);
+    }
+
+    /**
+     * Deleted products from storage
+     *
+     * @param array $deletedProducts
+     * @param array $storesToIds
+     */
+    private function deleteProducts(array $deletedProducts, array $storesToIds)
+    {
+        $productsPerStore = [];
+        foreach ($deletedProducts as $product) {
+            $storeId = $storesToIds[$product['store_view_code']];
+            $productsPerStore[$storeId][$product['product_id']] = $product;
+        }
+        foreach ($productsPerStore as $storeId => $products) {
+            try {
+                $this->productPublisher->delete(\array_keys($products), $storeId);
+            } catch (\Throwable $e) {
+                $this->logger->critical($e);
+            }
         }
     }
 }

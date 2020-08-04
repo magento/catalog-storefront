@@ -62,7 +62,7 @@ final class OptionArrayMapper
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getValue() as $fieldArrayDto) {
-            $fieldData[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\OptionValueInterface::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\OptionValueArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["value"] = $fieldArray;

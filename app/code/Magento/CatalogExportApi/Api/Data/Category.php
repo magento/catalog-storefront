@@ -1,8 +1,12 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ *
+ * Generated from et_schema.xml. DO NOT EDIT!
  */
+
 declare(strict_types=1);
 
 namespace Magento\CatalogExportApi\Api\Data;
@@ -10,180 +14,215 @@ namespace Magento\CatalogExportApi\Api\Data;
 /**
  * Category entity
  *
- * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * phpcs:disable Magento2.PHP.FinalImplementation
+ * @SuppressWarnings(PHPMD.BooleanGetMethodName)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Category
 {
-    /**
-     * @var ?int
-     */
-    private $id;
+    /** @var string */
+    private $categoryId;
 
-    /**
-     * @var string
-     */
-    private $name;
+    /** @var string */
+    private $storeViewCode;
 
-    /**
-     * @var ?string
-     */
+    /** @var int */
+    private $isActive;
+
+    /** @var int */
+    private $isAnchor;
+
+    /** @var string */
+    private $displayMode;
+
+    /** @var string */
     private $description;
 
-    /**
-     * @var string
-     */
+    /** @var string */
+    private $metaTitle;
+
+    /** @var string */
+    private $metaKeywords;
+
+    /** @var string */
+    private $metaDescription;
+
+    /** @var string */
+    private $name;
+
+    /** @var int */
+    private $childrenCount;
+
+    /** @var int */
+    private $includeInMenu;
+
+    /** @var string */
     private $path;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $pathInStore;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $urlKey;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $urlPath;
 
-    /**
-     * @var string
-     */
+    /** @var string */
+    private $image;
+
+    /** @var int */
+    private $position;
+
+    /** @var int */
+    private $level;
+
+    /** @var int */
+    private $parentId;
+
+    /** @var string */
+    private $createdAt;
+
+    /** @var string */
+    private $updatedAt;
+
+    /** @var int */
+    private $productCount;
+
+    /** @var array */
+    private $availableSortBy;
+
+    /** @var string */
+    private $defaultSortBy;
+
+    /** @var \Magento\CatalogExportApi\Api\Data\Breadcrumbs[]|null */
+    private $breadcrumbs;
+
+    /** @var array */
+    private $children;
+
+    /** @var string */
     private $canonicalUrl;
 
     /**
-     * @var int
-     */
-    private $position;
-
-    /**
-     * @var int
-     */
-    private $level;
-
-    /**
-     * @var string
-     */
-    private $createdAt;
-
-    /**
-     * @var string
-     */
-    private $updatedAt;
-
-    /**
-     * @var string
-     */
-    private $storeViewCode;
-
-    /**
-     * @var ?int
-     */
-    private $productCount;
-
-    /**
-     * @var ?int
-     */
-    private $defaultSortBy;
-
-    /**
-     * @var \Magento\CatalogExportApi\Api\Data\Breadcrumb[]|null
-     */
-    private $breadcrumbs;
-
-    /**
-     * @var string[]|null
-     * TODO: ad-hoc solution
-     */
-    private $children;
-
-    /**
-     * @var string|null
-     */
-    private $image;
-
-    /**
-     * @var int
-     */
-    private $isActive;
-
-    /**
-     * @var int|null
-     */
-    private $isAnchor;
-
-    /**
-     * @var string|null
-     */
-    private $displayMode;
-
-    /**
-     * @var string[]|null
-     */
-    private $availableSortBy;
-
-    /**
-     * @var string|null
-     */
-    private $metaTitle;
-
-    /**
-     * @var string|null
-     */
-    private $metaKeywords;
-
-    /**
-     * @var string|null
-     */
-    private $metaDescription;
-
-    /**
-     * @var int|null
-     */
-    private $includeInMenu;
-
-    /**
-     * @var int|null
-     */
-    private $childrenCount;
-
-    /**
-     * Get product ID
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set product ID
-     *
-     * @param string $id
-     * @return void
-     */
-    public function setId(?string $id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Get category description
+     * Get category id
      *
      * @return string
      */
-    public function getDescription() : ?string
+    public function getCategoryId(): ?string
+    {
+        return $this->categoryId;
+    }
+
+    /**
+     * Set category id
+     *
+     * @param string $categoryId
+     * @return void
+     */
+    public function setCategoryId(?string $categoryId): void
+    {
+        $this->categoryId = $categoryId;
+    }
+
+    /**
+     * Get store view code
+     *
+     * @return string
+     */
+    public function getStoreViewCode(): ?string
+    {
+        return $this->storeViewCode;
+    }
+
+    /**
+     * Set store view code
+     *
+     * @param string $storeViewCode
+     * @return void
+     */
+    public function setStoreViewCode(?string $storeViewCode): void
+    {
+        $this->storeViewCode = $storeViewCode;
+    }
+
+    /**
+     * Get is active
+     *
+     * @return int
+     */
+    public function getIsActive(): ?int
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * Set is active
+     *
+     * @param int $isActive
+     * @return void
+     */
+    public function setIsActive(?int $isActive): void
+    {
+        $this->isActive = $isActive;
+    }
+
+    /**
+     * Get is anchor
+     *
+     * @return int
+     */
+    public function getIsAnchor(): ?int
+    {
+        return $this->isAnchor;
+    }
+
+    /**
+     * Set is anchor
+     *
+     * @param int $isAnchor
+     * @return void
+     */
+    public function setIsAnchor(?int $isAnchor): void
+    {
+        $this->isAnchor = $isAnchor;
+    }
+
+    /**
+     * Get display mode
+     *
+     * @return string
+     */
+    public function getDisplayMode(): ?string
+    {
+        return $this->displayMode;
+    }
+
+    /**
+     * Set display mode
+     *
+     * @param string $displayMode
+     * @return void
+     */
+    public function setDisplayMode(?string $displayMode): void
+    {
+        $this->displayMode = $displayMode;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
     /**
-     * Set category description
+     * Set description
      *
      * @param string $description
      * @return void
@@ -194,9 +233,72 @@ class Category
     }
 
     /**
-     * Get category name
+     * Get meta title
      *
-     * @return string|null
+     * @return string
+     */
+    public function getMetaTitle(): ?string
+    {
+        return $this->metaTitle;
+    }
+
+    /**
+     * Set meta title
+     *
+     * @param string $metaTitle
+     * @return void
+     */
+    public function setMetaTitle(?string $metaTitle): void
+    {
+        $this->metaTitle = $metaTitle;
+    }
+
+    /**
+     * Get meta keywords
+     *
+     * @return string
+     */
+    public function getMetaKeywords(): ?string
+    {
+        return $this->metaKeywords;
+    }
+
+    /**
+     * Set meta keywords
+     *
+     * @param string $metaKeywords
+     * @return void
+     */
+    public function setMetaKeywords(?string $metaKeywords): void
+    {
+        $this->metaKeywords = $metaKeywords;
+    }
+
+    /**
+     * Get meta description
+     *
+     * @return string
+     */
+    public function getMetaDescription(): ?string
+    {
+        return $this->metaDescription;
+    }
+
+    /**
+     * Set meta description
+     *
+     * @param string $metaDescription
+     * @return void
+     */
+    public function setMetaDescription(?string $metaDescription): void
+    {
+        $this->metaDescription = $metaDescription;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
      */
     public function getName(): ?string
     {
@@ -204,9 +306,9 @@ class Category
     }
 
     /**
-     * Set category name
+     * Set name
      *
-     * @param string|null $name
+     * @param string $name
      * @return void
      */
     public function setName(?string $name): void
@@ -215,49 +317,91 @@ class Category
     }
 
     /**
-     * Get category path
+     * Get children count
+     *
+     * @return int
+     */
+    public function getChildrenCount(): ?int
+    {
+        return $this->childrenCount;
+    }
+
+    /**
+     * Set children count
+     *
+     * @param int $childrenCount
+     * @return void
+     */
+    public function setChildrenCount(?int $childrenCount): void
+    {
+        $this->childrenCount = $childrenCount;
+    }
+
+    /**
+     * Get include in menu
+     *
+     * @return int
+     */
+    public function getIncludeInMenu(): ?int
+    {
+        return $this->includeInMenu;
+    }
+
+    /**
+     * Set include in menu
+     *
+     * @param int $includeInMenu
+     * @return void
+     */
+    public function setIncludeInMenu(?int $includeInMenu): void
+    {
+        $this->includeInMenu = $includeInMenu;
+    }
+
+    /**
+     * Get path
      *
      * @return string
      */
-    public function getPath(): string
+    public function getPath(): ?string
     {
         return $this->path;
     }
 
     /**
-     * Set category path
+     * Set path
      *
      * @param string $path
      * @return void
      */
-    public function setPath(string $path): void
+    public function setPath(?string $path): void
     {
         $this->path = $path;
     }
 
     /**
-     * Get category path in store
+     * Get path in store
      *
      * @return string
      */
-    public function getPathInStore(): string
+    public function getPathInStore(): ?string
     {
         return $this->pathInStore;
     }
 
     /**
-     * Set category path in store
+     * Set path in store
      *
      * @param string $pathInStore
      * @return void
      */
-    public function setPathInStore(string $pathInStore)
+    public function setPathInStore(?string $pathInStore): void
     {
         $this->pathInStore = $pathInStore;
     }
 
     /**
-     * Get category url key
+     * Get url key
      *
      * @return string
      */
@@ -267,7 +411,7 @@ class Category
     }
 
     /**
-     * Set category path
+     * Set url key
      *
      * @param string $urlKey
      * @return void
@@ -278,9 +422,9 @@ class Category
     }
 
     /**
-     * Get category url key
+     * Get url path
      *
-     * @return string|null
+     * @return string
      */
     public function getUrlPath(): ?string
     {
@@ -288,7 +432,7 @@ class Category
     }
 
     /**
-     * Set category path
+     * Set url path
      *
      * @param string $urlPath
      * @return void
@@ -299,119 +443,129 @@ class Category
     }
 
     /**
-     * Get category canonical url
+     * Get image
      *
      * @return string
      */
-    public function getCanonicalUrl(): ?string
+    public function getImage(): ?string
     {
-        return $this->canonicalUrl;
+        return $this->image;
     }
 
     /**
-     * Set category path
+     * Set image
      *
-     * @param string $canonicalUrl
+     * @param string $image
      * @return void
      */
-    public function setCanonicalUrl(?string $canonicalUrl): void
+    public function setImage(?string $image): void
     {
-        $this->canonicalUrl = $canonicalUrl;
+        $this->image = $image;
     }
 
     /**
-     * Get category position
+     * Get position
      *
      * @return int
      */
-    public function getPosition(): int
+    public function getPosition(): ?int
     {
         return $this->position;
     }
 
     /**
-     * Set category position
+     * Set position
      *
      * @param int $position
      * @return void
      */
-    public function setPosition(int $position): void
+    public function setPosition(?int $position): void
     {
         $this->position = $position;
     }
 
     /**
-     * Get category level
+     * Get level
      *
      * @return int
      */
-    public function getLevel(): int
+    public function getLevel(): ?int
     {
         return $this->level;
     }
 
     /**
-     * Set category level
+     * Set level
      *
      * @param int $level
      * @return void
      */
-    public function setLevel(int $level)
+    public function setLevel(?int $level): void
     {
         $this->level = $level;
     }
 
     /**
-     * Retrieve category creation date and time.
+     * Get parent id
      *
-     * @return string|null
+     * @return int
      */
-    public function getCreatedAt(): string
+    public function getParentId(): ?int
+    {
+        return $this->parentId;
+    }
+
+    /**
+     * Set parent id
+     *
+     * @param int $parentId
+     * @return void
+     */
+    public function setParentId(?int $parentId): void
+    {
+        $this->parentId = $parentId;
+    }
+
+    /**
+     * Get created at
+     *
+     * @return string
+     */
+    public function getCreatedAt(): ?string
     {
         return $this->createdAt;
     }
 
     /**
-     * Set category creation date and time.
+     * Set created at
      *
      * @param string $createdAt
      * @return void
      */
-    public function setCreatedAt(string $createdAt)
+    public function setCreatedAt(?string $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
 
     /**
-     * Retrieve category last update date and time.
+     * Get updated at
      *
-     * @return string|null
+     * @return string
      */
-    public function getUpdatedAt(): string
+    public function getUpdatedAt(): ?string
     {
         return $this->updatedAt;
     }
 
     /**
-     * Set category last update date and time.
+     * Set updated at
      *
      * @param string $updatedAt
      * @return void
      */
-    public function setUpdatedAt(string $updatedAt)
+    public function setUpdatedAt(?string $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
-    }
-
-    /**
-     * Set product count
-     *
-     * @param int $productCount
-     * @return void
-     */
-    public function setProductCount(?int $productCount)
-    {
-        $this->productCount = $productCount;
     }
 
     /**
@@ -425,157 +579,20 @@ class Category
     }
 
     /**
-     * Retrieve category default sort by
+     * Set product count
      *
-     * @return string|null
-     */
-    public function getDefaultSortBy(): ?string
-    {
-        return $this->defaultSortBy;
-    }
-
-    /**
-     * Set category default sort by
-     *
-     * @param string $defaultSortBy
+     * @param int $productCount
      * @return void
      */
-    public function setDefaultSortBy(string $defaultSortBy)
+    public function setProductCount(?int $productCount): void
     {
-        $this->defaultSortBy = $defaultSortBy;
+        $this->productCount = $productCount;
     }
 
     /**
-     * Retrieve category breadcrumbs
+     * Get available sort by
      *
-     * @return \Magento\CatalogExportApi\Api\Data\Breadcrumb[]|null
-     */
-    public function getBreadcrumbs(): ?array
-    {
-        return $this->breadcrumbs;
-    }
-
-    /**
-     * Set category breadcrumbs
-     *
-     * @param \Magento\CatalogExportApi\Api\Data\Breadcrumb[]|null $breadcrumbs
-     *
-     * @return void
-     */
-    public function setBreadcrumbs(?array $breadcrumbs): void
-    {
-        $this->breadcrumbs = $breadcrumbs;
-    }
-
-    /**
-     * Get store view code
-     *
-     * @return string
-     */
-    public function getStoreViewCode(): string
-    {
-        return $this->storeViewCode;
-    }
-
-    /**
-     * Set store view code
-     *
-     * @param string $storeViewCode
-     * @return void
-     */
-    public function setStoreViewCode(string $storeViewCode): void
-    {
-        $this->storeViewCode = $storeViewCode;
-    }
-
-    /**
-     * Set categories
-     *
-     * @param string[]|null $children
-     * @return void
-     */
-    public function setChildren(?array $children): void
-    {
-        $this->children = $children;
-    }
-
-    /**
-     * Get categories
-     *
-     * @return string[]|null
-     */
-    public function getChildren(): ?array
-    {
-        return $this->children;
-    }
-
-    /**
-     * Set image url for category
-     *
-     * @param string|null $image
-     * @return void
-     */
-    public function setImage(?string $image): void
-    {
-        $this->image = $image;
-    }
-
-    /**
-     * Retrieve Image URL for category
-     *
-     * @return string|null
-     */
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    /**
-     * Get category is anchor
-     *
-     * @return int|null
-     */
-    public function getIsAnchor(): ?int
-    {
-        return $this->isAnchor;
-    }
-
-    /**
-     * Set category is anchor
-     *
-     * @param int|null $isAnchor
-     * @return void
-     */
-    public function setIsAnchor(?int $isAnchor): void
-    {
-        $this->isAnchor = $isAnchor;
-    }
-
-    /**
-     * Get category display mode
-     *
-     * @return string|null
-     */
-    public function getDisplayMode(): ?string
-    {
-        return $this->displayMode;
-    }
-
-    /**
-     * Set category display mode
-     *
-     * @param string|null $displayMode
-     * @return void
-     */
-    public function setDisplayMode(?string $displayMode): void
-    {
-        $this->displayMode = $displayMode;
-    }
-
-    /**
-     * Get category available sort by options
-     *
-     * @return string[]|null
+     * @return string[]
      */
     public function getAvailableSortBy(): ?array
     {
@@ -583,139 +600,97 @@ class Category
     }
 
     /**
-     * Set category available sort by options
+     * Set available sort by
      *
-     * @param string[]|null $availableSortBy
+     * @param string[] $availableSortBy
      * @return void
      */
-    public function setAvailableSortBy(?array $availableSortBy): void
+    public function setAvailableSortBy(?array $availableSortBy = null): void
     {
         $this->availableSortBy = $availableSortBy;
     }
 
     /**
-     * Get category meta title
+     * Get default sort by
      *
-     * @return string|null
+     * @return string
      */
-    public function getMetaTitle(): ?string
+    public function getDefaultSortBy(): ?string
     {
-        return $this->metaTitle;
+        return $this->defaultSortBy;
     }
 
     /**
-     * Set category meta title
+     * Set default sort by
      *
-     * @param string|null $metaTitle
+     * @param string $defaultSortBy
      * @return void
      */
-    public function setMetaTitle(?string $metaTitle): void
+    public function setDefaultSortBy(?string $defaultSortBy): void
     {
-        $this->metaTitle = $metaTitle;
+        $this->defaultSortBy = $defaultSortBy;
     }
 
     /**
-     * Get category meta keywords
+     * Get breadcrumbs
      *
-     * @return string|null
+     * @return \Magento\CatalogExportApi\Api\Data\Breadcrumbs[]|null
      */
-    public function getMetaKeywords(): ?string
+    public function getBreadcrumbs(): ?array
     {
-        return $this->metaKeywords;
+        return $this->breadcrumbs;
     }
 
     /**
-     * Set category meta keywords
+     * Set breadcrumbs
      *
-     * @param string|null $metaKeywords
+     * @param \Magento\CatalogExportApi\Api\Data\Breadcrumbs[] $breadcrumbs
      * @return void
      */
-    public function setMetaKeywords(?string $metaKeywords): void
+    public function setBreadcrumbs(?array $breadcrumbs = null): void
     {
-        $this->metaKeywords = $metaKeywords;
+        $this->breadcrumbs = $breadcrumbs;
     }
 
     /**
-     * Get category meta description
+     * Get children
      *
-     * @return string|null
+     * @return string[]
      */
-    public function getMetaDescription(): ?string
+    public function getChildren(): ?array
     {
-        return $this->metaDescription;
+        return $this->children;
     }
 
     /**
-     * Set category meta description
+     * Set children
      *
-     * @param string|null $metaDescription
+     * @param string[] $children
      * @return void
      */
-    public function setMetaDescription(?string $metaDescription): void
+    public function setChildren(?array $children = null): void
     {
-        $this->metaDescription = $metaDescription;
+        $this->children = $children;
     }
 
     /**
-     * Return flag that is shown whether category is active or not
+     * Get canonical url
      *
-     * @return int
+     * @return string
      */
-    public function getIsActive(): int
+    public function getCanonicalUrl(): ?string
     {
-        return $this->isActive;
+        return $this->canonicalUrl;
     }
 
     /**
-     * Set flag that is shown whether category is active or not
+     * Set canonical url
      *
-     * @param int $isActive
+     * @param string $canonicalUrl
      * @return void
      */
-    public function setIsActive(int $isActive): void
+    public function setCanonicalUrl(?string $canonicalUrl): void
     {
-        $this->isActive = $isActive;
-    }
-
-    /**
-     * Return flag that is shown whether category is include in menu
-     *
-     * @return int|null
-     */
-    public function getIncludeInMenu(): ?int
-    {
-        return $this->includeInMenu;
-    }
-
-    /**
-     * Set flag that is shown whether category is include in menu
-     *
-     * @param int|null $includeInMenu
-     * @return void
-     */
-    public function setIncludeInMenu(?int $includeInMenu): void
-    {
-        $this->includeInMenu = $includeInMenu;
-    }
-
-    /**
-     * Retrieve list of all category children
-     *
-     * @return int|null
-     */
-    public function getChildrenCount(): ?int
-    {
-        return $this->childrenCount;
-    }
-
-    /**
-     * Retrieve list of all category children
-     *
-     * @param int|null $childrenCount
-     * @return void
-     */
-    public function setChildrenCount(?int $childrenCount): void
-    {
-        $this->childrenCount = $childrenCount;
+        $this->canonicalUrl = $canonicalUrl;
     }
 }

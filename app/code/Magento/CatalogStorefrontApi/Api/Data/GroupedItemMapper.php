@@ -55,6 +55,9 @@ final class GroupedItemMapper
     {
         $dto = $this->objectManager->create(self::$dtoClassName);
         foreach ($this->data as $key => $valueData) {
+            if ($valueData === null) {
+                continue;
+            }
             $this->setByKey($dto, $key, $valueData);
         }
         return $dto;
@@ -80,12 +83,7 @@ final class GroupedItemMapper
                 $dto->setPosition((int) $value);
                 break;
             case "product":
-                $dto->setProduct(
-                    $this->objectManager
-                       ->create(\Magento\CatalogStorefrontApi\Api\Data\GroupedItemProductInfoMapper::class)
-                       ->setData($value)
-                       ->build()
-                );
+                $dto->setProduct((string) $value);
                 break;
         }
     }
