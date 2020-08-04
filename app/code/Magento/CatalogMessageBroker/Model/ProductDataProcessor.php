@@ -8,13 +8,12 @@ namespace Magento\CatalogMessageBroker\Model;
 use Magento\CatalogMessageBroker\Model\DataMapper\DataMapperInterface;
 
 /**
- * Product data processor that merges data from old and new providers.
- * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ * Product data processor.
  */
 class ProductDataProcessor
 {
     /**
-     * @var array
+     * @var DataMapperInterface[]
      */
     private $dataMappers;
 
@@ -24,7 +23,7 @@ class ProductDataProcessor
     private $fields;
 
     /**
-     * @param array $dataMappers
+     * @param DataMapperInterface[] $dataMappers
      * @param string[] $fields
      */
     public function __construct(array $dataMappers, array $fields)
@@ -36,8 +35,6 @@ class ProductDataProcessor
     /**
      * Override data returned from old API with data returned from new API
      *
-     * Checks for product type and whether fields are to be remapped
-     *
      * @param array $data
      * @param array $product
      * @return array
@@ -46,63 +43,19 @@ class ProductDataProcessor
      */
     public function merge(array $data, array $product): array
     {
-        $scalarFields = $this->mergeScalarFields($data);
-        $compoundFields = $this->mergeCompoundFields($data, $product);
-        return \array_merge($product, $scalarFields, $compoundFields);
-    }
+        $overriddenFields = [];
 
-    /**
-     * Merge scalar fields in product data
-     *
-     * @param array $data
-     * @return array
-     */
-    private function mergeScalarFields($data): array
-    {
-        $fieldsData = [];
         foreach ($this->fields as $field) {
             if (isset($data[$field])) {
-                $fieldsData[$field] = $data[$field];
+                $overriddenFields[$field] = $data[$field];
             }
         }
-        return $fieldsData;
-    }
 
-    /**
-     * Merge compound fields in product data using data mappers
-     *
-     * @param array $data
-     * @param array $product
-     * @return array
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    private function mergeCompoundFields($data, $product): array
-    {
-        $fields = [];
-        foreach ($this->dataMappers as $field => $dataMapperConfig) {
-            if (\array_key_exists('types', $dataMapperConfig) &&
-                !\in_array($product['type_id'], $dataMapperConfig['types'])
-            ) {
-                continue;
-            }
-
-            /** @var DataMapperInterface $dataMapper */
-            $dataMapper = $dataMapperConfig['class'];
-
-            //Some of the new data-providers, do not contain all the neccessary data yet, so recursive merge is used for these.
-            if (array_key_exists('recursive', $dataMapperConfig) && $dataMapperConfig['recursive'] === true) {
-                $fields[$field] = (isset($product[$field]) && \is_array($product[$field])) ? \array_replace_recursive(
-                    $product[$field],
-                    $dataMapper->map($data)[$field]
-                ) : $dataMapper->map($data)[$field];
-            } else {
-                $fields[$field] = isset($product[$field]) && \is_array($product[$field]) ? \array_merge(
-                    $product[$field],
-                    $dataMapper->map($data)[$field]
-                ) : $dataMapper->map($data)[$field];
-            }
+        /** @var DataMapperInterface $dataMapper */
+        foreach ($this->dataMappers as $field => $dataMapper) {
+            $overriddenFields = \array_merge($overriddenFields, $dataMapper->map($data));
         }
-        return \array_filter($fields);
+
+        return array_merge($product, $overriddenFields);
     }
 }

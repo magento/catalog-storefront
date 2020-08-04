@@ -29,7 +29,10 @@ class ConfigurableOptions implements DataMapperInterface
                         'type' => $optionArray['type'],
                         'label' => $optionArray['title'],
                         'position' => $optionArray['sort_order'],
-                        'product_id' => $data['id']
+                        'product_id' => $data['id'],
+                        'attribute_id' => $optionArray['attribute_id'],
+                        'attribute_code' => $optionArray['attribute_code'],
+                        'use_default' => $optionArray['use_default'],
                     ];
 
                     $configurableOptions[$optionArray['id']]['values'] = $this->mapOptionValues($optionArray);
@@ -52,7 +55,10 @@ class ConfigurableOptions implements DataMapperInterface
             foreach ($optionArray['values'] as $value) {
                 $values[$value['id']] = [
                     'value_index' => $value['id'],
-                    'label' => $value['label']
+                    'label' => $value['label'],
+                    'default_label' => $value['default_label'],
+                    'store_label' => $value['store_label'],
+                    'use_default_value' => $value['use_default_value']
                 ];
             }
         }

@@ -25,6 +25,9 @@ class ConfigurableProductExportTest extends AbstractProductExportTestHelper
         'type',
         'title',
         'sort_order',
+        'attribute_id',
+        'attribute_code',
+        'use_default'
     ];
 
     /**
@@ -35,6 +38,9 @@ class ConfigurableProductExportTest extends AbstractProductExportTestHelper
     protected $optionValuesToCompare = [
         'id',
         'label',
+        'default_label',
+        'store_label',
+        'use_default_value'
     ];
 
     /**

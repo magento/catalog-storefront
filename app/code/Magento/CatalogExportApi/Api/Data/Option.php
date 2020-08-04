@@ -29,6 +29,15 @@ class Option
     private $type;
 
     /** @var string */
+    private $attributeId;
+
+    /** @var string */
+    private $attributeCode;
+
+    /** @var bool */
+    private $useDefault;
+
+    /** @var string */
     private $renderType;
 
     /** @var bool */
@@ -86,6 +95,69 @@ class Option
     public function setType(?string $type): void
     {
         $this->type = $type;
+    }
+
+    /**
+     * Get attribute id
+     *
+     * @return string
+     */
+    public function getAttributeId(): ?string
+    {
+        return $this->attributeId;
+    }
+
+    /**
+     * Set attribute id
+     *
+     * @param string $attributeId
+     * @return void
+     */
+    public function setAttributeId(?string $attributeId): void
+    {
+        $this->attributeId = $attributeId;
+    }
+
+    /**
+     * Get attribute code
+     *
+     * @return string
+     */
+    public function getAttributeCode(): ?string
+    {
+        return $this->attributeCode;
+    }
+
+    /**
+     * Set attribute code
+     *
+     * @param string $attributeCode
+     * @return void
+     */
+    public function setAttributeCode(?string $attributeCode): void
+    {
+        $this->attributeCode = $attributeCode;
+    }
+
+    /**
+     * Get use default
+     *
+     * @return bool
+     */
+    public function getUseDefault(): ?bool
+    {
+        return $this->useDefault;
+    }
+
+    /**
+     * Set use default
+     *
+     * @param bool $useDefault
+     * @return void
+     */
+    public function setUseDefault(?bool $useDefault): void
+    {
+        $this->useDefault = $useDefault;
     }
 
     /**

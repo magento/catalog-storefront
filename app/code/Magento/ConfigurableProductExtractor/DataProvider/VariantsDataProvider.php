@@ -65,6 +65,8 @@ class VariantsDataProvider implements DataProviderInterface
     }
 
     /**
+     * Remove module once configurable product variants provider is implemented in saasExport
+     *
      * @inheritdoc
      * @throws \Zend_Db_Statement_Exception
      */
@@ -89,9 +91,9 @@ class VariantsDataProvider implements DataProviderInterface
         if (empty($requestedAttributes) || isset($requestedAttributes['variants']['attributes'])) {
             $result[] = $this->buildVariantAttributes($products, $attributesPerProduct, $childAttributeOptions);
         }
-        if (empty($requestedAttributes) || isset($requestedAttributes['configurable_options'])) {
-            $result[] = $this->buildConfigurableOptions($products, $attributesPerProduct, $childAttributeOptions);
-        }
+//        if (empty($requestedAttributes) || isset($requestedAttributes['configurable_options'])) {
+//            $result[] = $this->buildConfigurableOptions($products, $attributesPerProduct, $childAttributeOptions);
+//        }
 
         return !empty($result) ? array_replace_recursive(...$result) : $result;
     }
@@ -115,43 +117,43 @@ class VariantsDataProvider implements DataProviderInterface
         return $childrenMap;
     }
 
-    /**
-     * Build configurable options
-     *
-     * @param array $products
-     * @param array $attributesPerProduct
-     * @param array $childProductAttributeOptions
-     * @return array
-     */
-    private function buildConfigurableOptions(
-        array $products,
-        array $attributesPerProduct,
-        array $childProductAttributeOptions
-    ): array {
-        $configurableOptions = [];
-
-        $parentChildMap = [];
-        foreach ($products as $product) {
-            $childId = $product['variant_id'];
-            $parentChildMap[$product['parent_id']][$childId] = $childId;
-        }
-
-        foreach ($attributesPerProduct as $parentId => $configurableAttributes) {
-            // handle case when configurable product do not contains variations
-            if (!isset($parentChildMap[$parentId])) {
-                continue ;
-            }
-            $attributeOptionsPerAttribute = $this->convertToOptionsPerAttribute(
-                $childProductAttributeOptions,
-                $parentChildMap[$parentId]
-            );
-            foreach ($configurableAttributes as $attributeId => &$attributes) {
-                $attributes['values'] = $attributeOptionsPerAttribute[$attributeId];
-            }
-            $configurableOptions[$parentId]['configurable_options'] = $configurableAttributes;
-        }
-        return $configurableOptions;
-    }
+//    /**
+//     * Build configurable options
+//     *
+//     * @param array $products
+//     * @param array $attributesPerProduct
+//     * @param array $childProductAttributeOptions
+//     * @return array
+//     */
+//    private function buildConfigurableOptions(
+//        array $products,
+//        array $attributesPerProduct,
+//        array $childProductAttributeOptions
+//    ): array {
+//        $configurableOptions = [];
+//
+//        $parentChildMap = [];
+//        foreach ($products as $product) {
+//            $childId = $product['variant_id'];
+//            $parentChildMap[$product['parent_id']][$childId] = $childId;
+//        }
+//
+//        foreach ($attributesPerProduct as $parentId => $configurableAttributes) {
+//            // handle case when configurable product do not contains variations
+//            if (!isset($parentChildMap[$parentId])) {
+//                continue;
+//            }
+//            $attributeOptionsPerAttribute = $this->convertToOptionsPerAttribute(
+//                $childProductAttributeOptions,
+//                $parentChildMap[$parentId]
+//            );
+//            foreach ($configurableAttributes as $attributeId => &$attributes) {
+//                $attributes['values'] = $attributeOptionsPerAttribute[$attributeId];
+//            }
+//            $configurableOptions[$parentId]['configurable_options'] = $configurableAttributes;
+//        }
+//        return $configurableOptions;
+//    }
 
     /**
      * Build attributes for given configurable variants
@@ -186,25 +188,25 @@ class VariantsDataProvider implements DataProviderInterface
         return $variantAttributes;
     }
 
-    /**
-     * Find thought child products of configurable product attribute options belonging to the same attribute
-     *
-     * @param array $childProductAttributeOptions
-     * @param array $childIds
-     * @return array
-     */
-    private function convertToOptionsPerAttribute(array $childProductAttributeOptions, array $childIds): array
-    {
-        $childrenAttributes = \array_intersect_key($childProductAttributeOptions, $childIds);
-        $childrenAttributes = \array_merge(...$childrenAttributes);
-
-        $options = [];
-        foreach ($childrenAttributes as $attributeOption) {
-            $options[$attributeOption['attribute_id']][$attributeOption['value_index']] = $attributeOption;
-        }
-
-        return $options;
-    }
+//    /**
+//     * Find thought child products of configurable product attribute options belonging to the same attribute
+//     *
+//     * @param array $childProductAttributeOptions
+//     * @param array $childIds
+//     * @return array
+//     */
+//    private function convertToOptionsPerAttribute(array $childProductAttributeOptions, array $childIds): array
+//    {
+//        $childrenAttributes = \array_intersect_key($childProductAttributeOptions, $childIds);
+//        $childrenAttributes = \array_merge(...$childrenAttributes);
+//
+//        $options = [];
+//        foreach ($childrenAttributes as $attributeOption) {
+//            $options[$attributeOption['attribute_id']][$attributeOption['value_index']] = $attributeOption;
+//        }
+//
+//        return $options;
+//    }
 
     /**
      * Load required attributes

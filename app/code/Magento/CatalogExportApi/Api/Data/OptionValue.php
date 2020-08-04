@@ -49,6 +49,15 @@ class OptionValue
     /** @var string */
     private $sku;
 
+    /** @var string */
+    private $defaultLabel;
+
+    /** @var string */
+    private $storeLabel;
+
+    /** @var bool */
+    private $useDefaultValue;
+
     /**
      * Get id
      *
@@ -236,5 +245,68 @@ class OptionValue
     public function setSku(?string $sku): void
     {
         $this->sku = $sku;
+    }
+
+    /**
+     * Get default label
+     *
+     * @return string
+     */
+    public function getDefaultLabel(): ?string
+    {
+        return $this->defaultLabel;
+    }
+
+    /**
+     * Set default label
+     *
+     * @param string $defaultLabel
+     * @return void
+     */
+    public function setDefaultLabel(?string $defaultLabel): void
+    {
+        $this->defaultLabel = $defaultLabel;
+    }
+
+    /**
+     * Get store label
+     *
+     * @return string
+     */
+    public function getStoreLabel(): ?string
+    {
+        return $this->storeLabel;
+    }
+
+    /**
+     * Set store label
+     *
+     * @param string $storeLabel
+     * @return void
+     */
+    public function setStoreLabel(?string $storeLabel): void
+    {
+        $this->storeLabel = $storeLabel;
+    }
+
+    /**
+     * Get use default value
+     *
+     * @return bool
+     */
+    public function getUseDefaultValue(): ?bool
+    {
+        return $this->useDefaultValue;
+    }
+
+    /**
+     * Set use default value
+     *
+     * @param bool $useDefaultValue
+     * @return void
+     */
+    public function setUseDefaultValue(?bool $useDefaultValue): void
+    {
+        $this->useDefaultValue = $useDefaultValue;
     }
 }
