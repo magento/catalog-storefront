@@ -42,7 +42,7 @@ final class VariantArrayMapper
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getAttributes() as $fieldArrayDto) {
-            $fieldData[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\VariantAttributeInterface::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\VariantAttributeArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["attributes"] = $fieldArray;

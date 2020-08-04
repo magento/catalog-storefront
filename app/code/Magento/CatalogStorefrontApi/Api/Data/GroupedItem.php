@@ -35,7 +35,7 @@ final class GroupedItem implements GroupedItemInterface
     private $position;
 
     /**
-     * @var \Magento\CatalogStorefrontApi\Api\Data\GroupedItemProductInfoInterface
+     * @var string
      */
     private $product;
     
@@ -84,20 +84,20 @@ final class GroupedItem implements GroupedItemInterface
     /**
      * @inheritdoc
      *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\GroupedItemProductInfoInterface|null
+     * @return string
      */
-    public function getProduct(): ?\Magento\CatalogStorefrontApi\Api\Data\GroupedItemProductInfoInterface
+    public function getProduct(): string
     {
-        return $this->product;
+        return (string) $this->product;
     }
     
     /**
      * @inheritdoc
      *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\GroupedItemProductInfoInterface $value
+     * @param string $value
      * @return void
      */
-    public function setProduct(\Magento\CatalogStorefrontApi\Api\Data\GroupedItemProductInfoInterface $value): void
+    public function setProduct(string $value): void
     {
         $this->product = $value;
     }

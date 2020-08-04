@@ -71,9 +71,6 @@
                 <item name="GroupedProduct" xsi:type="array">
                     <item name="items" xsi:type="string">items</item>
                 </item>
-                <item name="GroupedProductItem" xsi:type="array">
-                    <item name="product" xsi:type="string">product</item>
-                </item>
                 <item name="MediaGalleryInterface" xsi:type="array">
                     <item name="url" xsi:type="string">url</item>
                     <item name="label" xsi:type="string">label</item>

@@ -42,7 +42,7 @@ final class UrlRewriteArrayMapper
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getParameters() as $fieldArrayDto) {
-            $fieldData[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameterInterface::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameterArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["parameters"] = $fieldArray;

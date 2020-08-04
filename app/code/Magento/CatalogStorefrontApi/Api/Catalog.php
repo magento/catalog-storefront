@@ -536,6 +536,22 @@ class Catalog implements CatalogInterface
                     }
                     $r->setDownloadableProductSamples($res);
                     $r->setOnlyXLeftInStock($item1->getOnlyXLeftInStock());
+                    $res = [];
+                    foreach ($item1->getGroupedItems() as $item59) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\GroupedItem
+                        // to \Magento\CatalogStorefrontApi\Api\Data\GroupedItem
+                        /** @var \Magento\CatalogStorefrontApi\Proto\GroupedItem $item59 **/
+                        $p = function () use ($item59) {
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\GroupedItem();
+                            $r->setQty($item59->getQty());
+                            $r->setPosition($item59->getPosition());
+                            $r->setProduct($item59->getProduct());
+                            return $r;
+                        };
+                        $out = $p();
+                        $res[] = $out;
+                    }
+                    $r->setGroupedItems($res);
                     return $r;
                 };
                 $out = $p();
@@ -997,6 +1013,22 @@ class Catalog implements CatalogInterface
                     }
                     $r->setDownloadableProductSamples($res);
                     $r->setOnlyXLeftInStock($item1->getOnlyXLeftInStock());
+                    $res = [];
+                    foreach ($item1->getGroupedItems() as $item59) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\GroupedItem
+                        // to \Magento\CatalogStorefrontApi\Proto\GroupedItem
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\GroupedItem $item59 **/
+                        $p = function () use ($item59) {
+                            $r = new \Magento\CatalogStorefrontApi\Proto\GroupedItem();
+                            $r->setQty($item59->getQty());
+                            $r->setPosition($item59->getPosition());
+                            $r->setProduct($item59->getProduct());
+                            return $r;
+                        };
+                        $proto = $p();
+                        $res[] = $proto;
+                    }
+                    $r->setGroupedItems($res);
                     return $r;
                 };
                 $proto = $p();

@@ -1,9 +1,14 @@
 # Overview
 
+Module is deprecated and will be replaced with CatalogMessageBroker
+Currently provides
+- events for product/category that handled in \Magento\CatalogStorefrontConnector\Model\ProductsQueueConsumer::processMessages and \Magento\CatalogStorefrontConnector\Model\CategoriesQueueConsumer::processMessages
+- sync command
+
 Module Magento_CatalogStorefrontConnector has the following responsibilities:
 
 - Connects Magento Monolith to Catalog Storefront service
-- Collects and transfers product/category data to Catalog Storefront pipeline (pushes data to storefront.catalog.data.consume queue)
+- Collects and transfers product/category data to Catalog Storefront pipeline
 
 # Internal behaviour
 

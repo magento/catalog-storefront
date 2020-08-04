@@ -10,16 +10,19 @@ namespace Magento\CatalogStorefront\Model;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\Category;
+use Magento\CatalogStorefrontApi\Api\Data\CategoryArrayMapper;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryInterface;
 use Magento\CatalogStorefrontApi\Api\Data\Image;
 use Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItem;
 use Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductArrayMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ProductInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResult;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseFactory;
 use Magento\CatalogStorefront\DataProvider\ProductDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponse;
 use Magento\CatalogStorefrontApi\Api\Data\UrlRewrite;
@@ -31,11 +34,20 @@ use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterfaceFactory;
+use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseFactory;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseFactory;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseInterfaceFactory;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class for retrieving catalog data
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class CatalogService implements CatalogServerInterface
 {
@@ -50,6 +62,26 @@ class CatalogService implements CatalogServerInterface
     private $dataObjectHelper;
 
     /**
+     * @var ImportProductsResponseFactory
+     */
+    private $importProductsResponseFactory;
+
+    /**
+     * @var DeleteProductsResponseInterfaceFactory
+     */
+    private $deleteProductsResponseFactory;
+
+    /**
+     * @var ImportCategoriesResponseFactory
+     */
+    private $importCategoriesResponseFactory;
+
+    /**
+     * @var CatalogRepository
+     */
+    private $catalogRepository;
+
+    /**
      * @var CategoryDataProvider
      */
     private $categoryDataProvider;
@@ -60,21 +92,58 @@ class CatalogService implements CatalogServerInterface
     private $dynamicAttributeFactory;
 
     /**
+     * @var ProductArrayMapper
+     */
+    private $productArrayMapper;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var CategoryArrayMapper
+     */
+    private $categoryArrayMapper;
+
+    /**
      * @param ProductDataProvider $dataProvider
      * @param DataObjectHelper $dataObjectHelper
      * @param CategoryDataProvider $categoryDataProvider
      * @param DynamicAttributeValueInterfaceFactory $dynamicAttributeFactory
+     * @param ImportProductsResponseFactory $importProductsResponseFactory
+     * @param DeleteProductsResponseFactory $deleteProductsResponseFactory
+     * @param ImportCategoriesResponseFactory $importCategoriesResponseFactory
+     * @param CatalogRepository $catalogRepository
+     * @param ProductArrayMapper $productArrayMapper
+     * @param CategoryArrayMapper $categoryArrayMapper
+     * @param LoggerInterface $logger
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ProductDataProvider $dataProvider,
         DataObjectHelper $dataObjectHelper,
         CategoryDataProvider $categoryDataProvider,
-        DynamicAttributeValueInterfaceFactory $dynamicAttributeFactory
+        DynamicAttributeValueInterfaceFactory $dynamicAttributeFactory,
+        ImportProductsResponseFactory $importProductsResponseFactory,
+        DeleteProductsResponseFactory $deleteProductsResponseFactory,
+        ImportCategoriesResponseFactory $importCategoriesResponseFactory,
+        CatalogRepository $catalogRepository,
+        ProductArrayMapper $productArrayMapper,
+        CategoryArrayMapper $categoryArrayMapper,
+        LoggerInterface $logger
     ) {
         $this->dataProvider = $dataProvider;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->importProductsResponseFactory = $importProductsResponseFactory;
+        $this->deleteProductsResponseFactory = $deleteProductsResponseFactory;
+        $this->importCategoriesResponseFactory = $importCategoriesResponseFactory;
+        $this->catalogRepository = $catalogRepository;
         $this->categoryDataProvider = $categoryDataProvider;
         $this->dynamicAttributeFactory = $dynamicAttributeFactory;
+        $this->productArrayMapper = $productArrayMapper;
+        $this->categoryArrayMapper = $categoryArrayMapper;
+        $this->logger = $logger;
     }
 
     /**
@@ -105,8 +174,10 @@ class CatalogService implements CatalogServerInterface
 
         if (count($rawItems) !== count($request->getIds())) {
             throw new \InvalidArgumentException(
-                'Products with the following ids are not found in catalog: %1',
-                implode(', ', array_diff($request->getIds(), array_keys($rawItems)))
+                sprintf(
+                    'Products with the following ids are not found in catalog: %s',
+                    implode(', ', array_diff($request->getIds(), array_keys($rawItems)))
+                )
             );
         }
 
@@ -168,32 +239,144 @@ class CatalogService implements CatalogServerInterface
     /**
      * Import requested products
      *
-     * @param ImportProductsRequestInterface $request
-     * @return ImportProductsResponseInterface
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface $request
+     * @return \Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseInterface
      * phpcs:disable Generic.CodeAnalysis.EmptyStatement
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function importProducts(
-        ImportProductsRequestInterface $request
-    ): ImportProductsResponseInterface {
-        // TODO: Implement ImportProducts() method.
+    public function importProducts(ImportProductsRequestInterface $request): ImportProductsResponseInterface
+    {
+        $importProductsResponse = $this->importProductsResponseFactory->create();
 
-        return new \Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponse();
+        try {
+            $products = \array_map(
+                function ($product) {
+                    $product = $this->productArrayMapper->convertToArray($product);
+                    // TODO: handle grouped products
+                    if (!empty($product['grouped_items'])) {
+                        $product['items'] = $product['grouped_items'];
+                    }
+                    return $product;
+                },
+                $request->getProducts()
+            );
+
+            $storeId = $request->getStore();
+
+            $productsInElasticFormat = [];
+            foreach ($products as $product) {
+                if (empty($product)) {
+                    continue;
+                }
+                $productInElasticFormat = $product;
+                $productInElasticFormat['store_id'] = $storeId;
+                foreach ($productInElasticFormat['dynamic_attributes'] as $dynamicAttribute) {
+                    $productInElasticFormat[$dynamicAttribute['code']] = $dynamicAttribute['value'];
+                }
+                $productInElasticFormat['short_description'] = [
+                    'html' => $productInElasticFormat['short_description']
+                ];
+                $productInElasticFormat['description'] = ['html' => $productInElasticFormat['description']];
+                unset($productInElasticFormat['dynamic_attributes']);
+
+                $productsInElasticFormat['product'][$storeId]['save'][] = $productInElasticFormat;
+            }
+
+            $this->catalogRepository->saveToStorage($productsInElasticFormat);
+
+            $importProductsResponse->setMessage('Records imported successfully');
+            $importProductsResponse->setStatus(true);
+        } catch (\Throwable $e) {
+            $message = 'Cannot process product import';
+            $this->logger->error($message, ['exception' => $e]);
+            $importProductsResponse->setMessage($message);
+            $importProductsResponse->setStatus(false);
+        }
+
+        return $importProductsResponse;
+    }
+
+    /**
+     * Delete products from storage.
+     *
+     * @param DeleteProductsRequestInterface $request
+     * @return DeleteProductsResponseInterface
+     */
+    public function deleteProducts(DeleteProductsRequestInterface $request): DeleteProductsResponseInterface
+    {
+        $storeId = $request->getStore();
+        $productsInElasticFormat = [
+            'product' => [
+                $storeId => [
+                    'delete' => $request->getProductIds()
+                ]
+            ]
+        ];
+
+        /** @var \Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponse $deleteProductsResponse */
+        $deleteProductsResponse = $this->deleteProductsResponseFactory->create();
+
+        try {
+            $this->catalogRepository->saveToStorage($productsInElasticFormat);
+
+            $deleteProductsResponse->setMessage('Product were removed successfully');
+            $deleteProductsResponse->setStatus(true);
+        } catch (\Throwable $e) {
+            $message = 'Unable to delete products';
+            $this->logger->error($message, ['exception' => $e]);
+            $deleteProductsResponse->setMessage($message);
+            $deleteProductsResponse->setStatus(false);
+        }
+
+        return $deleteProductsResponse;
     }
 
     /**
      * Import requested categories
      *
-     * @param ImportCategoriesRequestInterface $request
-     * @return ImportCategoriesResponseInterface
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface $request
+     * @return \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface
      * phpcs:disable Generic.CodeAnalysis.EmptyStatement
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function importCategories(ImportCategoriesRequestInterface $request): ImportCategoriesResponseInterface
     {
-        // TODO: Implement ImportCategories() method.
+        try {
+            $categories = \array_map(
+                function ($category) {
+                    return $this->categoryArrayMapper->convertToArray($category);
+                },
+                $request->getCategories()
+            );
+            $storeId = $request->getStore();
 
-        return new \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponse();
+            $categoriesInElasticFormat = [];
+
+            foreach ($categories as $category) {
+                $categoryInElasticFormat = $category;
+                if (empty($categoryInElasticFormat)) {
+                    continue;
+                }
+
+                $categoryInElasticFormat['store_id'] = $storeId;
+                $categoriesInElasticFormat['category'][$storeId]['save'][] = $categoryInElasticFormat;
+            }
+            $this->catalogRepository->saveToStorage($categoriesInElasticFormat);
+
+            $importCategoriesResponse = $this->importCategoriesResponseFactory->create();
+            $importCategoriesResponse->setMessage('Records imported successfully');
+            $importCategoriesResponse->setStatus(true);
+
+            return $importCategoriesResponse;
+        } catch (\Exception $e) {
+            $message = 'Cannot process categories import: ' . $e->getMessage();
+            $this->logger->error($message, ['exception' => $e]);
+            $importCategoriesResponse = $this->importCategoriesResponseFactory->create();
+            $importCategoriesResponse->setMessage($message);
+            $importCategoriesResponse->setStatus(false);
+
+            return $importCategoriesResponse;
+        }
     }
 
     /**
@@ -277,9 +460,19 @@ class CatalogService implements CatalogServerInterface
     {
         $item = $this->cleanUpNullValues($item);
         $variants = [];
-        foreach ($item['variants'] ?? [] as $productId => $variantData) {
+        foreach ($item['variants'] ?? [] as $variantData) {
+            if (!isset($variantData['product'])) {
+                $attribute = current($variantData['attributes']);
+                throw new \RuntimeException(
+                    \sprintf(
+                        'Cannot find product id for product variant with code "%s" and label "%s"',
+                        $attribute['code'],
+                        $attribute['label']
+                    )
+                );
+            }
             $variant = [
-                'product' => $productId,
+                'product' => $variantData['product'],
                 'attributes' => $variantData['attributes']
             ];
             $variants[] = $variant;
@@ -355,7 +548,6 @@ class CatalogService implements CatalogServerInterface
         array $item,
         \Magento\CatalogStorefrontApi\Api\Data\Product $product
     ): \Magento\CatalogStorefrontApi\Api\Data\Product {
-
         $dynamicAttributes = [];
 
         foreach ($item as $attributeCode => $value) {
@@ -393,12 +585,7 @@ class CatalogService implements CatalogServerInterface
             $groupedItem = new \Magento\CatalogStorefrontApi\Api\Data\GroupedItem();
             $groupedItem->setPosition((int)$item['position']);
             $groupedItem->setQty((float)$item['qty']);
-            $groupedItemInfo = new \Magento\CatalogStorefrontApi\Api\Data\GroupedItemProductInfo();
-            $groupedItemInfo->setName($item['product']['name']);
-            $groupedItemInfo->setSku($item['product']['sku']);
-            $groupedItemInfo->setTypeId($item['product']['type_id']);
-            $groupedItemInfo->setUrlKey($item['product']['url_key']);
-            $groupedItem->setProduct($groupedItemInfo);
+            $groupedItem->setProduct((string)$item['product']);
             $items[] = $groupedItem;
         }
         $product->setItems($items);

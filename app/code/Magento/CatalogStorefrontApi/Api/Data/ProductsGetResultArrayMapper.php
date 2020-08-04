@@ -41,7 +41,7 @@ final class ProductsGetResultArrayMapper
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getItems() as $fieldArrayDto) {
-            $fieldData[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ProductInterface::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ProductArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["items"] = $fieldArray;
