@@ -71,9 +71,10 @@ class ElasticsearchCommand implements CommandInterface
         } catch (\Throwable $throwable) {
             throw new BulkException(
                 __(
-                    'Error occurred while bulk insert to "%1" index. Entity ids: "%2"',
+                    'Error occurred while bulk insert to "%1" index. Entity ids: "%2". Error: %3',
                     $dataSourceName,
-                    \array_column($entries, 'id')
+                    \array_column($entries, 'id'),
+                    $throwable->getMessage()
                 ),
                 $throwable
             );
@@ -140,7 +141,7 @@ class ElasticsearchCommand implements CommandInterface
                     'id: %s, status: %s, error: %s',
                     $item['_id'],
                     $item['status'],
-                    $error['type'] ?? '' . ': ' . $error['reason'] ?? ''
+                    ($error['type'] ?? '') . ': ' . ($error['reason'] ?? '')
                 );
             }
         }
@@ -151,6 +152,7 @@ class ElasticsearchCommand implements CommandInterface
 
     /**
      * @inheritdoc
+     *
      * @throws BulkException
      */
     public function bulkDelete(string $dataSourceName, string $entityName, array $ids): void
@@ -161,7 +163,12 @@ class ElasticsearchCommand implements CommandInterface
             },
             $ids
         );
-        $query = $this->getDocsArrayInBulkIndexFormat($dataSourceName, $entityName, $documents, self::BULK_ACTION_DELETE);
+        $query = $this->getDocsArrayInBulkIndexFormat(
+            $dataSourceName,
+            $entityName,
+            $documents,
+            self::BULK_ACTION_DELETE
+        );
         try {
             $result = $this->getConnection()->bulk($query);
             $error = $result['errors'] ?? false;

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogStorefront\Model\MessageBus;
+namespace Magento\CatalogStorefront\Model;
 
 use Magento\CatalogStorefront\Model\Storage\Client\CommandInterface;
 use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
@@ -13,9 +13,9 @@ use Magento\CatalogStorefront\Model\Storage\State;
 use Psr\Log\LoggerInterface;
 
 /**
- * Consumer for store data to data storage.
+ * Repository for storing data to data storage.
  */
-class Consumer
+class CatalogRepository
 {
     protected const DELETE = 'delete';
     protected const SAVE = 'save';
@@ -36,11 +36,6 @@ class Consumer
     private $logger;
 
     /**
-     * @var CatalogItemMessageBuilder
-     */
-    private $catalogItemMessageBuilder;
-
-    /**
      * @var DataDefinitionInterface
      */
     private $storageSchemaManager;
@@ -49,61 +44,18 @@ class Consumer
      * @param CommandInterface $storageWriteSource
      * @param DataDefinitionInterface $storageSchemaManager
      * @param State $storageState
-     * @param CatalogItemMessageBuilder $catalogItemMessageBuilder
      * @param LoggerInterface $logger
      */
     public function __construct(
         CommandInterface $storageWriteSource,
         DataDefinitionInterface $storageSchemaManager,
         State $storageState,
-        CatalogItemMessageBuilder $catalogItemMessageBuilder,
         LoggerInterface $logger
     ) {
         $this->storageWriteSource = $storageWriteSource;
         $this->storageSchemaManager = $storageSchemaManager;
         $this->storageState = $storageState;
         $this->logger = $logger;
-        $this->catalogItemMessageBuilder = $catalogItemMessageBuilder;
-    }
-
-    /**
-     * Process
-     *
-     * @param CatalogItemMessage[] $entities
-     * @return void
-     */
-    public function process(array $entities): void
-    {
-        try {
-            $dataPerType = $this->collectDataByEntityTypeAnsScope($entities);
-            $this->saveToStorage($dataPerType);
-        } catch (\Throwable $e) {
-            $this->logger->critical($e);
-        }
-    }
-
-    /**
-     * Collect catalog data. Structure by entity type and scope
-     *
-     * @param array $messages
-     * @return array
-     */
-    private function collectDataByEntityTypeAnsScope(array $messages): array
-    {
-        $dataPerType = [];
-        foreach ($messages as $message) {
-            $entity = $this->catalogItemMessageBuilder->build($message);
-            $entityData = $entity->getEntityData();
-            if (empty($entityData)) {
-                $dataPerType[$entity->getEntityType()][$entity->getStoreId()][self::DELETE][] = $entity->getEntityId();
-            } else {
-                $entityData['id'] = $entity->getEntityId();
-                $entityData['store_id'] = $entity->getStoreId();
-                $dataPerType[$entity->getEntityType()][$entity->getStoreId()][self::SAVE][] = $entityData;
-            }
-        }
-
-        return $dataPerType;
     }
 
     /**
@@ -113,7 +65,7 @@ class Consumer
      * @throws \Magento\Framework\Exception\BulkException
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    protected function saveToStorage(array $dataPerType): void
+    public function saveToStorage(array $dataPerType): void
     {
         foreach ($dataPerType as $entityType => $dataPerStore) {
             foreach ($dataPerStore as $storeId => $data) {

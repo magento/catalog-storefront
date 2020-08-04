@@ -43,7 +43,7 @@ final class MediaGalleryItemArrayMapper
         $result["media_type"] = $dto->getMediaType();
         $result["position"] = $dto->getPosition();
         if ($dto->getVideoContent() !== null) {
-            $result["video_content"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\VideoInterface::class)
+            $result["video_content"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\VideoArrayMapper::class)
                 ->convertToArray($dto->getVideoContent());
         }
         return $result;

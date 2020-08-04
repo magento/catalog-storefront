@@ -1,7 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ *
+ * Generated from et_schema.xml. DO NOT EDIT!
  */
 
 declare(strict_types=1);
@@ -9,53 +12,48 @@ declare(strict_types=1);
 namespace Magento\CatalogExportApi\Api\Data;
 
 /**
- * Gallery item entity
+ * MediaItem entity
+ *
+ * phpcs:disable Magento2.PHP.FinalImplementation
+ * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class GalleryItem
+class MediaItem
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $url;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $label;
 
-    /**
-     * @var string[]|null
-     */
+    /** @var array */
     private $types;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $sortOrder;
 
-    /**
-     * @var \Magento\CatalogExportApi\Api\Data\VideoAttributes|null
-     */
+    /** @var \Magento\CatalogExportApi\Api\Data\VideoAttributes */
     private $videoAttributes;
 
     /**
-     * Get URL
+     * Get url
      *
      * @return string
      */
-    public function getUrl() : string
+    public function getUrl(): ?string
     {
         return $this->url;
     }
 
     /**
-     * Set URL
+     * Set url
      *
      * @param string $url
-     *
      * @return void
      */
-    public function setUrl(string $url) : void
+    public function setUrl(?string $url): void
     {
         $this->url = $url;
     }
@@ -65,7 +63,7 @@ class GalleryItem
      *
      * @return string
      */
-    public function getLabel() : string
+    public function getLabel(): ?string
     {
         return $this->label;
     }
@@ -74,10 +72,9 @@ class GalleryItem
      * Set label
      *
      * @param string $label
-     *
      * @return void
      */
-    public function setLabel(string $label) : void
+    public function setLabel(?string $label): void
     {
         $this->label = $label;
     }
@@ -85,9 +82,9 @@ class GalleryItem
     /**
      * Get types
      *
-     * @return string[]|null
+     * @return string[]
      */
-    public function getTypes() : ?array
+    public function getTypes(): ?array
     {
         return $this->types;
     }
@@ -95,11 +92,10 @@ class GalleryItem
     /**
      * Set types
      *
-     * @param string[]|null $types
-     *
+     * @param string[] $types
      * @return void
      */
-    public function setTypes(?array $types) : void
+    public function setTypes(?array $types = null): void
     {
         $this->types = $types;
     }
@@ -109,7 +105,7 @@ class GalleryItem
      *
      * @return int
      */
-    public function getSortOrder() : int
+    public function getSortOrder(): ?int
     {
         return $this->sortOrder;
     }
@@ -118,10 +114,9 @@ class GalleryItem
      * Set sort order
      *
      * @param int $sortOrder
-     *
      * @return void
      */
-    public function setSortOrder(int $sortOrder) : void
+    public function setSortOrder(?int $sortOrder): void
     {
         $this->sortOrder = $sortOrder;
     }
@@ -129,9 +124,9 @@ class GalleryItem
     /**
      * Get video attributes
      *
-     * @return \Magento\CatalogExportApi\Api\Data\VideoAttributes|null
+     * @return \Magento\CatalogExportApi\Api\Data\VideoAttributes
      */
-    public function getVideoAttributes() : ?VideoAttributes
+    public function getVideoAttributes(): ?VideoAttributes
     {
         return $this->videoAttributes;
     }
@@ -139,11 +134,10 @@ class GalleryItem
     /**
      * Set video attributes
      *
-     * @param \Magento\CatalogExportApi\Api\Data\VideoAttributes|null $videoAttributes
-     *
+     * @param \Magento\CatalogExportApi\Api\Data\VideoAttributes $videoAttributes
      * @return void
      */
-    public function setVideoAttributes(?VideoAttributes $videoAttributes) : void
+    public function setVideoAttributes(?VideoAttributes $videoAttributes): void
     {
         $this->videoAttributes = $videoAttributes;
     }
