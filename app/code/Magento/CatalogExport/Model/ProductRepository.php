@@ -26,14 +26,14 @@ class ProductRepository implements ProductRepositoryInterface
     private $products;
 
     /**
-     * @var \Magento\CatalogExportApi\Api\Data\ProductInterfaceFactory
+     * @var \Magento\CatalogExportApi\Api\Data\ProductFactory
      */
     private $productFactory;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper
+     * @var DtoMapper
      */
-    private $dataObjectHelper;
+    private $dtoMapper;
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig
@@ -47,20 +47,20 @@ class ProductRepository implements ProductRepositoryInterface
 
     /**
      * @param \Magento\CatalogDataExporter\Model\Feed\Products $products
-     * @param \Magento\CatalogExportApi\Api\Data\ProductInterfaceFactory $productFactory
-     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Magento\CatalogExportApi\Api\Data\ProductFactory $productFactory
+     * @param DtoMapper $dtoMapper
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      * @param LoggerInterface $logger
      */
     public function __construct(
         \Magento\CatalogDataExporter\Model\Feed\Products $products,
-        \Magento\CatalogExportApi\Api\Data\ProductInterfaceFactory $productFactory,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\CatalogExportApi\Api\Data\ProductFactory $productFactory,
+        DtoMapper $dtoMapper,
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
         LoggerInterface $logger
     ) {
         $this->products = $products;
-        $this->dataObjectHelper = $dataObjectHelper;
+        $this->dtoMapper = $dtoMapper;
         $this->productFactory = $productFactory;
         $this->deploymentConfig = $deploymentConfig;
         $this->logger = $logger;
@@ -91,14 +91,26 @@ class ProductRepository implements ProductRepositoryInterface
         foreach ($feedData['feed'] as $feedItem) {
             $product = $this->productFactory->create();
             $feedItem['id'] = $feedItem['productId'];
-            $this->dataObjectHelper->populateWithArray(
+            $feedItem = $this->cleanUpNullValues($feedItem);
+            $this->dtoMapper->populateWithArray(
                 $product,
                 $feedItem,
-                \Magento\CatalogExportApi\Api\Data\ProductInterface::class
+                \Magento\CatalogExportApi\Api\Data\Product::class
             );
             $products[] = $product;
         }
         return $products;
+    }
+
+    /**
+     * Get deleted products.
+     *
+     * @param string[] $ids
+     * @return array
+     */
+    public function getDeleted(array $ids): array
+    {
+        return $this->products->getDeletedByIds($ids);
     }
 
     /**
@@ -110,5 +122,24 @@ class ProductRepository implements ProductRepositoryInterface
     {
         $maxItemsInResponse = (int) $this->deploymentConfig->get('catalog_export/max_items_in_response');
         return $maxItemsInResponse ?: self::MAX_ITEMS_IN_RESPONSE;
+    }
+
+    /**
+     * Unset null values in provided array recursively
+     *
+     * @param array $array
+     * @return array
+     */
+    private function cleanUpNullValues(array $array): array
+    {
+        $result = [];
+        foreach ($array as $key => $value) {
+            if ($value === null || $value === '') {
+                continue;
+            }
+
+            $result[$key] = is_array($value) ? $this->cleanUpNullValues($value) : $value;
+        }
+        return $result;
     }
 }

@@ -55,7 +55,7 @@ final class CategoryArrayMapper
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getBreadcrumbs() as $fieldArrayDto) {
-            $fieldData[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\BreadcrumbInterface::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\BreadcrumbArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["breadcrumbs"] = $fieldArray;
@@ -71,7 +71,7 @@ final class CategoryArrayMapper
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getDynamicAttributes() as $fieldArrayDto) {
-            $fieldData[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["dynamic_attributes"] = $fieldArray;

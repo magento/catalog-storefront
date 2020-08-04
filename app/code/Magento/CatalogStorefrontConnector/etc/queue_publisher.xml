@@ -14,8 +14,4 @@
         <connection name="amqp" exchange="magento" disabled="false"/>
         <connection name="db" exchange="magento-db" disabled="true"/>
     </publisher>
-    <publisher topic="storefront.catalog.data.consume">
-        <connection name="amqp" exchange="magento" disabled="false"/>
-        <connection name="db" exchange="magento-db" disabled="true"/>
-    </publisher>
 </config>

@@ -4,7 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
- * Generated from et_schema.xml. DO NOT EDIT!”
+ * Generated from et_schema.xml. DO NOT EDIT!
  */
 
 declare(strict_types=1);
@@ -39,21 +39,6 @@ class OptionValue
 
     /** @var string */
     private $sku;
-
-    /** @var string */
-    private $label;
-
-    /** @var float */
-    private $quantity;
-
-    /** @var bool */
-    private $isDefault;
-
-    /** @var bool */
-    private $canChangeQuantity;
-
-    /** @var int */
-    private $entityId;
 
     /**
      * Get id
@@ -179,110 +164,5 @@ class OptionValue
     public function setSku(?string $sku): void
     {
         $this->sku = $sku;
-    }
-
-    /**
-     * Get label
-     *
-     * @return string
-     */
-    public function getLabel(): ?string
-    {
-        return $this->label;
-    }
-
-    /**
-     * Set label
-     *
-     * @param string $label
-     * @return void
-     */
-    public function setLabel(?string $label): void
-    {
-        $this->label = $label;
-    }
-
-    /**
-     * Get quantity
-     *
-     * @return float
-     */
-    public function getQuantity(): ?float
-    {
-        return $this->quantity;
-    }
-
-    /**
-     * Set quantity
-     *
-     * @param float $quantity
-     * @return void
-     */
-    public function setQuantity(?float $quantity): void
-    {
-        $this->quantity = $quantity;
-    }
-
-    /**
-     * Get is default
-     *
-     * @return bool
-     */
-    public function getIsDefault(): ?bool
-    {
-        return $this->isDefault;
-    }
-
-    /**
-     * Set is default
-     *
-     * @param bool $isDefault
-     * @return void
-     */
-    public function setIsDefault(?bool $isDefault): void
-    {
-        $this->isDefault = $isDefault;
-    }
-
-    /**
-     * Get can change quantity
-     *
-     * @return bool
-     */
-    public function getCanChangeQuantity(): ?bool
-    {
-        return $this->canChangeQuantity;
-    }
-
-    /**
-     * Set can change quantity
-     *
-     * @param bool $canChangeQuantity
-     * @return void
-     */
-    public function setCanChangeQuantity(?bool $canChangeQuantity): void
-    {
-        $this->canChangeQuantity = $canChangeQuantity;
-    }
-
-    /**
-     * Get entity id
-     *
-     * @return int
-     */
-    public function getEntityId(): ?int
-    {
-        return $this->entityId;
-    }
-
-    /**
-     * Set entity id
-     *
-     * @param int $entityId
-     * @return void
-     */
-    public function setEntityId(?int $entityId): void
-    {
-        $this->entityId = $entityId;
     }
 }

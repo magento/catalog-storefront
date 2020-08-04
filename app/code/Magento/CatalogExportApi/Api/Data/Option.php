@@ -4,7 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  *
- * Generated from et_schema.xml. DO NOT EDIT!”
+ * Generated from et_schema.xml. DO NOT EDIT!
  */
 
 declare(strict_types=1);
@@ -32,7 +32,7 @@ class Option
     private $renderType;
 
     /** @var bool */
-    private $isRequired;
+    private $required;
 
     /** @var string */
     private $title;
@@ -110,24 +110,24 @@ class Option
     }
 
     /**
-     * Get is required
+     * Get required
      *
      * @return bool
      */
-    public function getIsRequired(): ?bool
+    public function getRequired(): ?bool
     {
-        return $this->isRequired;
+        return $this->required;
     }
 
     /**
-     * Set is required
+     * Set required
      *
-     * @param bool $isRequired
+     * @param bool $required
      * @return void
      */
-    public function setIsRequired(?bool $isRequired): void
+    public function setRequired(?bool $required): void
     {
-        $this->isRequired = $isRequired;
+        $this->required = $required;
     }
 
     /**

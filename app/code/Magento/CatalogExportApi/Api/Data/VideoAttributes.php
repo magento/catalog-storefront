@@ -1,7 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ *
+ * Generated from et_schema.xml. DO NOT EDIT!
  */
 
 declare(strict_types=1);
@@ -9,121 +12,157 @@ declare(strict_types=1);
 namespace Magento\CatalogExportApi\Api\Data;
 
 /**
- * Video attributes entity
+ * VideoAttributes entity
+ *
+ * phpcs:disable Magento2.PHP.FinalImplementation
+ * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class VideoAttributes
 {
-    /**
-     * @var string|null
-     */
+    /** @var string */
     private $mediaType;
 
-    /**
-     * @var string|null
-     */
+    /** @var string */
     private $videoProvider;
 
-    /**
-     * @var string|null
-     */
+    /** @var string */
     private $videoUrl;
 
-    /**
-     * @var string|null
-     */
+    /** @var string */
     private $videoTitle;
 
-    /**
-     * @var string|null
-     */
+    /** @var string */
     private $videoDescription;
 
-    /**
-     * @var string|null
-     */
+    /** @var string */
     private $videoMetadata;
-
-    /**
-     * @param string|null $mediaType
-     * @param string|null $videoProvider
-     * @param string|null $videoUrl
-     * @param string|null $videoTitle
-     * @param string|null $videoDescription
-     * @param string|null $videoMetadata
-     */
-    public function __construct(
-        ?string $mediaType,
-        ?string $videoProvider,
-        ?string $videoUrl,
-        ?string $videoTitle,
-        ?string $videoDescription,
-        ?string $videoMetadata
-    ) {
-        $this->mediaType = $mediaType;
-        $this->videoProvider = $videoProvider;
-        $this->videoUrl = $videoUrl;
-        $this->videoTitle = $videoTitle;
-        $this->videoDescription = $videoDescription;
-        $this->videoMetadata = $videoMetadata;
-    }
 
     /**
      * Get media type
      *
-     * @return string|null
+     * @return string
      */
-    public function getMediaType() : ?string
+    public function getMediaType(): ?string
     {
         return $this->mediaType;
     }
 
     /**
+     * Set media type
+     *
+     * @param string $mediaType
+     * @return void
+     */
+    public function setMediaType(?string $mediaType): void
+    {
+        $this->mediaType = $mediaType;
+    }
+
+    /**
      * Get video provider
      *
-     * @return string|null
+     * @return string
      */
-    public function getVideoProvider() : ?string
+    public function getVideoProvider(): ?string
     {
         return $this->videoProvider;
     }
 
     /**
-     * Get video URL
+     * Set video provider
      *
-     * @return string|null
+     * @param string $videoProvider
+     * @return void
      */
-    public function getVideoUrl() : ?string
+    public function setVideoProvider(?string $videoProvider): void
+    {
+        $this->videoProvider = $videoProvider;
+    }
+
+    /**
+     * Get video url
+     *
+     * @return string
+     */
+    public function getVideoUrl(): ?string
     {
         return $this->videoUrl;
     }
 
     /**
+     * Set video url
+     *
+     * @param string $videoUrl
+     * @return void
+     */
+    public function setVideoUrl(?string $videoUrl): void
+    {
+        $this->videoUrl = $videoUrl;
+    }
+
+    /**
      * Get video title
      *
-     * @return string|null
+     * @return string
      */
-    public function getVideoTitle() : ?string
+    public function getVideoTitle(): ?string
     {
         return $this->videoTitle;
     }
 
     /**
+     * Set video title
+     *
+     * @param string $videoTitle
+     * @return void
+     */
+    public function setVideoTitle(?string $videoTitle): void
+    {
+        $this->videoTitle = $videoTitle;
+    }
+
+    /**
      * Get video description
      *
-     * @return string|null
+     * @return string
      */
-    public function getVideoDescription() : ?string
+    public function getVideoDescription(): ?string
     {
         return $this->videoDescription;
     }
 
     /**
+     * Set video description
+     *
+     * @param string $videoDescription
+     * @return void
+     */
+    public function setVideoDescription(?string $videoDescription): void
+    {
+        $this->videoDescription = $videoDescription;
+    }
+
+    /**
      * Get video metadata
      *
-     * @return string|null
+     * @return string
      */
-    public function getVideoMetadata() : ?string
+    public function getVideoMetadata(): ?string
     {
         return $this->videoMetadata;
+    }
+
+    /**
+     * Set video metadata
+     *
+     * @param string $videoMetadata
+     * @return void
+     */
+    public function setVideoMetadata(?string $videoMetadata): void
+    {
+        $this->videoMetadata = $videoMetadata;
     }
 }

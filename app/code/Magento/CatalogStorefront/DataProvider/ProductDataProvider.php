@@ -34,26 +34,18 @@ class ProductDataProvider
     private $logger;
 
     /**
-     * @var LinkedEntityHydrator
-     */
-    private $linkedEntityHydrator;
-
-    /**
      * @param QueryInterface $query
      * @param State $storageState
      * @param LoggerInterface $logger
-     * @param LinkedEntityHydrator $linkedEntityHydrator
      */
     public function __construct(
         QueryInterface $query,
         State $storageState,
-        LoggerInterface $logger,
-        LinkedEntityHydrator $linkedEntityHydrator
+        LoggerInterface $logger
     ) {
         $this->query = $query;
         $this->storageState = $storageState;
         $this->logger = $logger;
-        $this->linkedEntityHydrator = $linkedEntityHydrator;
     }
 
     /**
@@ -107,7 +99,7 @@ class ProductDataProvider
             }
         }
 
-        return $this->linkedEntityHydrator->hydrate($products, $attributes, $scopes);
+        return $products;
     }
 
     /**

@@ -38,7 +38,7 @@ class LinkedEntityHydrator
     public function __construct(
         CategoryDataProvider $categoryDataProvider,
         ProductDataProvider $productDataProvider,
-        array $linkedEntityPath
+        array $linkedEntityPath = []
     ) {
         $this->categoryDataProvider = $categoryDataProvider;
         $this->productDataProvider = $productDataProvider;

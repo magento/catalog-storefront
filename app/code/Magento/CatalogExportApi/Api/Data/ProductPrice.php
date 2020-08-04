@@ -1,40 +1,37 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ *
+ * Generated from et_schema.xml. DO NOT EDIT!
  */
+
+declare(strict_types=1);
 
 namespace Magento\CatalogExportApi\Api\Data;
 
 /**
- * Product price entity
+ * ProductPrice entity
+ *
+ * phpcs:disable Magento2.PHP.FinalImplementation
+ * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ProductPrice
 {
-    /**
-     * @var float|null
-     */
+    /** @var float */
     private $regularPrice;
 
-    /**
-     * @var float|null
-     */
+    /** @var float */
     private $finalPrice;
-
-    /**
-     * @param float|null $regularPrice
-     * @param float|null $finalPrice
-     */
-    public function __construct(?float $regularPrice, ?float $finalPrice)
-    {
-        $this->regularPrice = $regularPrice;
-        $this->finalPrice = $finalPrice;
-    }
 
     /**
      * Get regular price
      *
-     * @return float|null
+     * @return float
      */
     public function getRegularPrice(): ?float
     {
@@ -42,12 +39,34 @@ class ProductPrice
     }
 
     /**
+     * Set regular price
+     *
+     * @param float $regularPrice
+     * @return void
+     */
+    public function setRegularPrice(?float $regularPrice): void
+    {
+        $this->regularPrice = $regularPrice;
+    }
+
+    /**
      * Get final price
      *
-     * @return float|null
+     * @return float
      */
     public function getFinalPrice(): ?float
     {
         return $this->finalPrice;
+    }
+
+    /**
+     * Set final price
+     *
+     * @param float $finalPrice
+     * @return void
+     */
+    public function setFinalPrice(?float $finalPrice): void
+    {
+        $this->finalPrice = $finalPrice;
     }
 }
