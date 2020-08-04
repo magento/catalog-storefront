@@ -1,115 +1,201 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ *
+ * Generated from et_schema.xml. DO NOT EDIT!
  */
+
+declare(strict_types=1);
 
 namespace Magento\CatalogExportApi\Api\Data;
 
 /**
- * Entered option entity
+ * EnteredOption entity
  *
+ * phpcs:disable Magento2.PHP.FinalImplementation
+ * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class EnteredOption
 {
-    /**
-     * @var int
-     */
+    /** @var string */
     private $id;
 
-    /**
-     * @var string
-     */
-    private $productSku;
-
-    /**
-     * @var bool
-     */
-    private $required;
-
-    /**
-     * @var string
-     */
-    private $renderType;
-
-    /***
-     * @var int
-     */
-    private $sortOrder;
-
-    /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var string
-     */
-    private $sku;
-
-    /**
-     * @var float[]
-     */
-    private $price;
-
-    /**
-     * @var string
-     */
-    private $priceType;
-
-    /**
-     * @var ?string
-     */
+    /** @var string */
     private $value;
 
-    /**
-     * @var ?string
-     */
-    private $fileExtension;
+    /** @var bool */
+    private $required;
 
-    /**
-     * @var ?int
-     */
+    /** @var int */
+    private $sortOrder;
+
+    /** @var string */
+    private $type;
+
+    /** @var string */
+    private $renderType;
+
+    /** @var string */
+    private $productSku;
+
+    /** @var string */
+    private $sku;
+
+    /** @var \Magento\CatalogExportApi\Api\Data\ProductPrice */
+    private $price;
+
+    /** @var string */
+    private $priceType;
+
+    /** @var int */
     private $maxCharacters;
 
-    /**
-     * @var ?int
-     */
+    /** @var string */
+    private $fileExtension;
+
+    /** @var int */
     private $imageSizeX;
 
-    /**
-     * @var ?int
-     */
+    /** @var int */
     private $imageSizeY;
 
     /**
-     * Get option id
+     * Get id
      *
-     * @return int
+     * @return string
      */
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
 
     /**
-     * Set option id
+     * Set id
      *
-     * @param int $id
+     * @param string $id
      * @return void
      */
-    public function setId(int $id): void
+    public function setId(string $id): void
     {
         $this->id = $id;
     }
 
     /**
-     * Get sku of the product
+     * Get value
      *
      * @return string
      */
-    public function getProductSku()
+    public function getValue(): ?string
+    {
+        return $this->value;
+    }
+
+    /**
+     * Set value
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setValue(?string $value): void
+    {
+        $this->value = $value;
+    }
+
+    /**
+     * Get required
+     *
+     * @return bool
+     */
+    public function getRequired(): ?bool
+    {
+        return $this->required;
+    }
+
+    /**
+     * Set required
+     *
+     * @param bool $required
+     * @return void
+     */
+    public function setRequired(?bool $required): void
+    {
+        $this->required = $required;
+    }
+
+    /**
+     * Get sort order
+     *
+     * @return int
+     */
+    public function getSortOrder(): ?int
+    {
+        return $this->sortOrder;
+    }
+
+    /**
+     * Set sort order
+     *
+     * @param int $sortOrder
+     * @return void
+     */
+    public function setSortOrder(?int $sortOrder): void
+    {
+        $this->sortOrder = $sortOrder;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return void
+     */
+    public function setType(?string $type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * Get render type
+     *
+     * @return string
+     */
+    public function getRenderType(): ?string
+    {
+        return $this->renderType;
+    }
+
+    /**
+     * Set render type
+     *
+     * @param string $renderType
+     * @return void
+     */
+    public function setRenderType(?string $renderType): void
+    {
+        $this->renderType = $renderType;
+    }
+
+    /**
+     * Get product sku
+     *
+     * @return string
+     */
+    public function getProductSku(): ?string
     {
         return $this->productSku;
     }
@@ -120,28 +206,49 @@ class EnteredOption
      * @param string $productSku
      * @return void
      */
-    public function setProductSku(string $productSku)
+    public function setProductSku(?string $productSku): void
     {
         $this->productSku = $productSku;
     }
 
     /**
-     * Get option value price
+     * Get sku
      *
-     * @return \Magento\CatalogExportApi\Api\Data\Price
+     * @return string
      */
-    public function getPrice()
+    public function getSku(): ?string
+    {
+        return $this->sku;
+    }
+
+    /**
+     * Set sku
+     *
+     * @param string $sku
+     * @return void
+     */
+    public function setSku(?string $sku): void
+    {
+        $this->sku = $sku;
+    }
+
+    /**
+     * Get price
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\ProductPrice
+     */
+    public function getPrice(): ?ProductPrice
     {
         return $this->price;
     }
 
     /**
-     * Set option value price
+     * Set price
      *
-     * @param \Magento\CatalogExportApi\Api\Data\Price $price
+     * @param \Magento\CatalogExportApi\Api\Data\ProductPrice $price
      * @return void
      */
-    public function setPrice($price)
+    public function setPrice(?ProductPrice $price): void
     {
         $this->price = $price;
     }
@@ -149,7 +256,7 @@ class EnteredOption
     /**
      * Get price type
      *
-     * @return string|null
+     * @return string
      */
     public function getPriceType(): ?string
     {
@@ -162,163 +269,15 @@ class EnteredOption
      * @param string $priceType
      * @return void
      */
-    public function setPriceType($priceType)
+    public function setPriceType(?string $priceType): void
     {
         $this->priceType = $priceType;
     }
 
     /**
-     * Get option value
+     * Get max characters
      *
-     * @return string|null
-     */
-    public function getValue(): ?string
-    {
-        return $this->value;
-    }
-
-    /**
-     * Set option value
-     *
-     * @param string|null $value
-     * @return void
-     */
-    public function setValue(?string $value): void
-    {
-        $this->value = $value;
-    }
-
-    /**
-     * Get Sku
-     *
-     * @return ?string
-     */
-    public function getSku(): ?string
-    {
-        return $this->sku;
-    }
-
-    /**
-     * Set Sku
-     *
-     * @param string $sku
-     * @return void
-     */
-    public function setSku(string $sku): void
-    {
-        $this->sku = $sku;
-    }
-
-    /**
-     * Get is require
-     *
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     */
-    public function getRequired(): bool
-    {
-        return $this->required;
-    }
-
-    /**
-     * Set is require
-     *
-     * @param bool $isRequired
-     * @return void
-     */
-    public function setRequired($isRequired): void
-    {
-        $this->required = $isRequired;
-    }
-
-    /**
-     * Get option type
-     *
-     * @return ?string
-     */
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    /**
-     * Set option type
-     *
-     * @param string $type
-     * @return void
-     */
-    public function setType(string $type): void
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * Return render type
-     *
-     * @return string
-     */
-    public function getRenderType(): string
-    {
-        return $this->renderType;
-    }
-
-    /**
-     * Set render type
-     *
-     * @param string $renderType
-     * @return void
-     */
-    public function setRenderType(string $renderType): void
-    {
-        $this->renderType = $renderType;
-    }
-
-    /**
-     * Get sort order
-     *
-     * @return int|null
-     */
-    public function getSortOrder(): ?int
-    {
-        return $this->sortOrder;
-    }
-
-    /**
-     * Set sort order
-     *
-     * @param int|null $sortOrder
-     * @return void
-     */
-    public function setSortOrder(?int $sortOrder): void
-    {
-        $this->sortOrder = $sortOrder;
-    }
-
-    /**
-     * Get file extension
-     *
-     * @return string|null
-     */
-    public function getFileExtension(): ?string
-    {
-        return $this->fileExtension;
-    }
-
-    /**
-     * Set File Extension
-     *
-     * @param string|null $fileExtension
-     * @return void
-     */
-    public function setFileExtension(?string $fileExtension)
-    {
-        $this->fileExtension = $fileExtension;
-    }
-
-    /**
-     * Get Max Characters
-     *
-     * @return int|null
+     * @return int
      */
     public function getMaxCharacters(): ?int
     {
@@ -326,9 +285,9 @@ class EnteredOption
     }
 
     /**
-     * Set Max Characters
+     * Set max characters
      *
-     * @param int|null $maxCharacters
+     * @param int $maxCharacters
      * @return void
      */
     public function setMaxCharacters(?int $maxCharacters): void
@@ -337,9 +296,30 @@ class EnteredOption
     }
 
     /**
-     * Get image size X
+     * Get file extension
      *
-     * @return int|null
+     * @return string
+     */
+    public function getFileExtension(): ?string
+    {
+        return $this->fileExtension;
+    }
+
+    /**
+     * Set file extension
+     *
+     * @param string $fileExtension
+     * @return void
+     */
+    public function setFileExtension(?string $fileExtension): void
+    {
+        $this->fileExtension = $fileExtension;
+    }
+
+    /**
+     * Get image size x
+     *
+     * @return int
      */
     public function getImageSizeX(): ?int
     {
@@ -347,9 +327,9 @@ class EnteredOption
     }
 
     /**
-     * Set Image Size X
+     * Set image size x
      *
-     * @param int|null $imageSizeX
+     * @param int $imageSizeX
      * @return void
      */
     public function setImageSizeX(?int $imageSizeX): void
@@ -358,9 +338,9 @@ class EnteredOption
     }
 
     /**
-     * Get image size Y
+     * Get image size y
      *
-     * @return int|null
+     * @return int
      */
     public function getImageSizeY(): ?int
     {
@@ -368,9 +348,9 @@ class EnteredOption
     }
 
     /**
-     * Set Image Size Y
+     * Set image size y
      *
-     * @param int|null $imageSizeY
+     * @param int $imageSizeY
      * @return void
      */
     public function setImageSizeY(?int $imageSizeY): void

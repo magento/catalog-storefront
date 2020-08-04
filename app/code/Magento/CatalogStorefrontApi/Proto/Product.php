@@ -272,6 +272,10 @@ class Product extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>float only_x_left_in_stock = 102;</code>
      */
     protected $only_x_left_in_stock = 0.0;
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.GroupedItem grouped_items = 103;</code>
+     */
+    private $grouped_items;
 
     /**
      * Constructor.
@@ -356,6 +360,7 @@ class Product extends \Google\Protobuf\Internal\Message
      *     @type \Magento\CatalogStorefrontApi\Proto\DownloadableLink[]|\Google\Protobuf\Internal\RepeatedField $downloadable_product_links
      *     @type \Magento\CatalogStorefrontApi\Proto\DownloadableSample[]|\Google\Protobuf\Internal\RepeatedField $downloadable_product_samples
      *     @type float $only_x_left_in_stock
+     *     @type \Magento\CatalogStorefrontApi\Proto\GroupedItem[]|\Google\Protobuf\Internal\RepeatedField $grouped_items
      * }
      */
     public function __construct($data = null)
@@ -1676,6 +1681,28 @@ class Product extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkFloat($var);
         $this->only_x_left_in_stock = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.GroupedItem grouped_items = 103;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getGroupedItems()
+    {
+        return $this->grouped_items;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.GroupedItem grouped_items = 103;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\GroupedItem[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setGroupedItems($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\GroupedItem::class);
+        $this->grouped_items = $arr;
 
         return $this;
     }

@@ -21,13 +21,4 @@
             </argument>
         </arguments>
     </type>
-
-    <type name="Magento\CatalogExtractor\DataProvider\Transformer">
-        <arguments>
-            <argument name="map" xsi:type="array">
-                <item name="short_description" xsi:type="string">Magento\CatalogExtractor\DataProvider\Transformer\DescriptionTransformer</item>
-                <item name="description" xsi:type="string">Magento\CatalogExtractor\DataProvider\Transformer\DescriptionTransformer</item>
-            </argument>
-        </arguments>
-    </type>
 </config>

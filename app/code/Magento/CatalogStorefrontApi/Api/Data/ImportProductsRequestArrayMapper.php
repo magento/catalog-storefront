@@ -41,13 +41,13 @@ final class ImportProductsRequestArrayMapper
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getProducts() as $fieldArrayDto) {
-            $fieldData[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ProductInterface::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ProductArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["products"] = $fieldArray;
         $result["store"] = $dto->getStore();
         if ($dto->getParams() !== null) {
-            $result["params"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\KeyValueInterface::class)
+            $result["params"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\KeyValueArrayMapper::class)
                 ->convertToArray($dto->getParams());
         }
         return $result;

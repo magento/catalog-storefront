@@ -1,7 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
+ *
+ * Generated from et_schema.xml. DO NOT EDIT!
  */
 
 declare(strict_types=1);
@@ -9,41 +12,37 @@ declare(strict_types=1);
 namespace Magento\CatalogExportApi\Api\Data;
 
 /**
- * Breadcrumb entity
+ * Breadcrumbs entity
+ *
+ * phpcs:disable Magento2.PHP.FinalImplementation
+ * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Breadcrumb
+class Breadcrumbs
 {
-    /**
-     * @var int|null
-     */
+    /** @var string */
     private $categoryId;
 
-    /**
-     * @var string|null
-     */
+    /** @var string */
     private $categoryName;
 
-    /**
-     * @var int|null
-     */
+    /** @var int */
     private $categoryLevel;
 
-    /**
-     * @var string|null
-     */
+    /** @var string */
     private $categoryUrlKey;
 
-    /**
-     * @var string|null
-     */
+    /** @var string */
     private $categoryUrlPath;
 
     /**
      * Get category id
      *
-     * @return int|null
+     * @return string
      */
-    public function getCategoryId() : ?int
+    public function getCategoryId(): ?string
     {
         return $this->categoryId;
     }
@@ -51,11 +50,10 @@ class Breadcrumb
     /**
      * Set category id
      *
-     * @param int|null $categoryId
-     *
+     * @param string $categoryId
      * @return void
      */
-    public function setCategoryId(?int $categoryId) : void
+    public function setCategoryId(?string $categoryId): void
     {
         $this->categoryId = $categoryId;
     }
@@ -63,9 +61,9 @@ class Breadcrumb
     /**
      * Get category name
      *
-     * @return string|null
+     * @return string
      */
-    public function getCategoryName() : ?string
+    public function getCategoryName(): ?string
     {
         return $this->categoryName;
     }
@@ -73,11 +71,10 @@ class Breadcrumb
     /**
      * Set category name
      *
-     * @param string|null $categoryName
-     *
+     * @param string $categoryName
      * @return void
      */
-    public function setCategoryName(?string $categoryName) : void
+    public function setCategoryName(?string $categoryName): void
     {
         $this->categoryName = $categoryName;
     }
@@ -85,9 +82,9 @@ class Breadcrumb
     /**
      * Get category level
      *
-     * @return int|null
+     * @return int
      */
-    public function getCategoryLevel() : ?int
+    public function getCategoryLevel(): ?int
     {
         return $this->categoryLevel;
     }
@@ -95,11 +92,10 @@ class Breadcrumb
     /**
      * Set category level
      *
-     * @param int|null $categoryLevel
-     *
+     * @param int $categoryLevel
      * @return void
      */
-    public function setCategoryLevel(?int $categoryLevel) : void
+    public function setCategoryLevel(?int $categoryLevel): void
     {
         $this->categoryLevel = $categoryLevel;
     }
@@ -107,9 +103,9 @@ class Breadcrumb
     /**
      * Get category url key
      *
-     * @return string|null
+     * @return string
      */
-    public function getCategoryUrlKey() : ?string
+    public function getCategoryUrlKey(): ?string
     {
         return $this->categoryUrlKey;
     }
@@ -117,11 +113,10 @@ class Breadcrumb
     /**
      * Set category url key
      *
-     * @param string|null $categoryUrlKey
-     *
+     * @param string $categoryUrlKey
      * @return void
      */
-    public function setCategoryUrlKey(?string $categoryUrlKey) : void
+    public function setCategoryUrlKey(?string $categoryUrlKey): void
     {
         $this->categoryUrlKey = $categoryUrlKey;
     }
@@ -129,9 +124,9 @@ class Breadcrumb
     /**
      * Get category url path
      *
-     * @return string|null
+     * @return string
      */
-    public function getCategoryUrlPath() : ?string
+    public function getCategoryUrlPath(): ?string
     {
         return $this->categoryUrlPath;
     }
@@ -139,11 +134,10 @@ class Breadcrumb
     /**
      * Set category url path
      *
-     * @param string|null $categoryUrlPath
-     *
+     * @param string $categoryUrlPath
      * @return void
      */
-    public function setCategoryUrlPath(?string $categoryUrlPath) : void
+    public function setCategoryUrlPath(?string $categoryUrlPath): void
     {
         $this->categoryUrlPath = $categoryUrlPath;
     }

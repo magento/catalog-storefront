@@ -8,7 +8,6 @@ namespace Magento\CatalogStorefrontConnector\Model;
 
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesData;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
-use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
 
 /**
@@ -17,49 +16,62 @@ use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
 class ProductsQueueConsumer
 {
     /**
-     * @var ProductPublisher
-     */
-    private $productPublisher;
-
-    /**
      * @var CatalogEntityIdsProvider
      */
     private $catalogEntityIdsProvider;
 
     /**
-     * @param ProductPublisher $productPublisher
+     * @var \Magento\CatalogMessageBroker\Model\MessageBus\ProductsConsumer
+     */
+    private $productsConsumer;
+
+    /**
+     * @var \Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer
+     */
+    private $productFeedIndexer;
+
+    /**
+     * @param \Magento\CatalogMessageBroker\Model\MessageBus\ProductsConsumer $productsConsumer
+     * @param \Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer $productFeedIndexer
      * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
      */
     public function __construct(
-        ProductPublisher $productPublisher,
+        \Magento\CatalogMessageBroker\Model\MessageBus\ProductsConsumer $productsConsumer,
+        \Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer $productFeedIndexer,
         CatalogEntityIdsProvider $catalogEntityIdsProvider
     ) {
-        $this->productPublisher = $productPublisher;
         $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
+        $this->productsConsumer = $productsConsumer;
+        $this->productFeedIndexer = $productFeedIndexer;
     }
 
     /**
      * Process collected product IDs for update
      *
      * Process messages from storefront.catalog.product.update topic
-     * and publish new messages to storefront.catalog.data.consume
      *
      * @param UpdatedEntitiesDataInterface $message
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @deprecated React on events triggered by plugins to push data to SF storage
      */
     public function processMessages(UpdatedEntitiesDataInterface $message): void
     {
         $storeProducts = $this->getUniqueIdsForStores([$message]);
+        //TODO: remove ad-hoc solution after moving events to saas-export
+        $allProductIds = [];
         foreach ($storeProducts as $storeId => $productIds) {
             if (empty($productIds)) {
                 foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $ids) {
-                    $this->productPublisher->publish($ids, $storeId);
+                    $allProductIds[] = $ids;
                 }
             } else {
-                $this->productPublisher->publish(\array_unique($productIds), $storeId);
+                $allProductIds[] = $productIds;
             }
         }
+        $ids = \array_unique(\array_merge(...$allProductIds));
+        $this->productFeedIndexer->executeList($ids);
+        $this->productsConsumer->processMessage(\json_encode($ids));
     }
 
     /**

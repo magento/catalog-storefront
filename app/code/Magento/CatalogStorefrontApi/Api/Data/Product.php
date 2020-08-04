@@ -308,6 +308,11 @@ final class Product implements ProductInterface
      * @var float
      */
     private $onlyXLeftInStock;
+
+    /**
+     * @var array
+     */
+    private $groupedItems;
     
     /**
      * @inheritdoc
@@ -1504,5 +1509,26 @@ final class Product implements ProductInterface
     public function setOnlyXLeftInStock(float $value): void
     {
         $this->onlyXLeftInStock = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return \Magento\CatalogStorefrontApi\Api\Data\GroupedItemInterface[]
+     */
+    public function getGroupedItems(): array
+    {
+        return (array) $this->groupedItems;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param \Magento\CatalogStorefrontApi\Api\Data\GroupedItemInterface[] $value
+     * @return void
+     */
+    public function setGroupedItems(array $value): void
+    {
+        $this->groupedItems = $value;
     }
 }
