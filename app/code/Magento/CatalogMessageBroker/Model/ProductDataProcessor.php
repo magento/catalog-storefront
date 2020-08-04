@@ -118,7 +118,6 @@ class ProductDataProcessor
         foreach ($this->dataMappers as $nameInExport => $dataMapper) {
             // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $importProduct = \array_merge($importProduct, $dataMapper->map($product));
-            //             $overriddenFields[$field] = $dataMapper->map($data); ???????
         }
         // TODO: handle grouped product
         if (\array_key_exists('type_id', $oldExportDataProduct)
@@ -132,12 +131,45 @@ class ProductDataProcessor
         foreach ($product['attributes'] ?? [] as $attribute) {
             $importProduct['dynamic_attributes'][] = [
                 'code' => $attribute['attribute_code'],
-                'value' => \implode(',', $attribute['value'])
+                'value' => $this->getAttributeValue($attribute),
             ];
             unset($oldExportDataProduct[$attribute['attribute_code']]);
         }
 
         // TODO: only $importProduct must be returned https://github.com/magento/catalog-storefront/issues/165
         return array_merge($oldExportDataProduct, $importProduct);
+    }
+
+    /**
+     * Get attribute value based on attribute type
+     *
+     * @param array $attribute
+     * @return int|string|float|null
+     */
+    private function getAttributeValue(array $attribute)
+    {
+        $attributeValue = null;
+
+        switch ($attribute['type']) {
+            case 'select':
+                $attributeValue = $attribute['value'][0]['id'];
+                break;
+            case 'multiselect':
+                $values = [];
+                foreach ($attribute['value'] as $attributeValue) {
+                    $values[] = $attributeValue['id'];
+                }
+                $attributeValue = implode(',', $values);
+                break;
+            case 'boolean':
+                $attributeValue = $attribute['value'][0]['value'] == 'yes' ? 1 : 0;
+                break;
+            case 'text':
+            case 'price':
+                $attributeValue = $attribute['value'][0]['value'];
+                break;
+        }
+
+        return $attributeValue;
     }
 }

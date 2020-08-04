@@ -77,6 +77,13 @@ class ExportTest extends WebapiAbstract
         $swatchAttributes = [];
         if (isset($results[0]['options'])) {
             $options = $results[0]['options'];
+            foreach ($options as &$option) {
+                // remove option id because it's dynamic field from response
+                unset($option['id']);
+                foreach ($option['values'] as &$value) {
+                    unset($value['id']);
+                }
+            }
             $swatchAttributes = $options;
         }
 
@@ -94,7 +101,6 @@ class ExportTest extends WebapiAbstract
             'swatch_results_export' => [
                 [
                     [
-                        'id' => 0,
                         'title'  => 'Text swatch attribute',
                         'product_sku'  => null,
                         'required'  => true,
@@ -102,27 +108,30 @@ class ExportTest extends WebapiAbstract
                         'type'  => 'configurable',
                         'values' => [
                             [
-                                'id' => 0,
                                 'value' => 'Option 3',
                                 'price' => null,
-                                'sku'   => null
+                                'sku'   => null,
+                                'price_type' => null,
+                                'sort_order' => null
                             ],
                             [
-                                'id' => 0,
                                 'value' => 'Option 1',
                                 'price' => null,
-                                'sku'   => null
+                                'sku'   => null,
+                                'price_type' => null,
+                                'sort_order' => null
                             ],
                             [
-                                'id' => 0,
                                 'value' => 'Option 2',
                                 'price' => null,
-                                'sku'   => null
+                                'sku'   => null,
+                                'price_type' => null,
+                                'sort_order' => null
                             ],
-                        ]
+                        ],
+                        'sort_order' => null
                     ],
                     [
-                        'id' => 0,
                         'title'  => 'Visual swatch attribute',
                         'product_sku'  => null,
                         'required'  => true,
@@ -130,24 +139,28 @@ class ExportTest extends WebapiAbstract
                         'type'  => 'configurable',
                         'values' => [
                             [
-                                'id' => 0,
                                 'value' => 'option 1',
                                 'price' => null,
-                                'sku'   => null
+                                'sku'   => null,
+                                'price_type' => null,
+                                'sort_order' => null
                             ],
                             [
-                                'id' => 0,
                                 'value' => 'option 2',
                                 'price' => null,
-                                'sku'   => null
+                                'sku'   => null,
+                                'price_type' => null,
+                                'sort_order' => null
                             ],
                             [
-                                'id' => 0,
                                 'value' => 'option 3',
                                 'price' => null,
-                                'sku'   => null
+                                'sku'   => null,
+                                'price_type' => null,
+                                'sort_order' => null
                             ],
-                        ]
+                        ],
+                        'sort_order' => null
                     ],
                 ],
             ]

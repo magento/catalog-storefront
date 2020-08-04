@@ -169,7 +169,7 @@ class ExportTest extends WebapiAbstract
     {
         $result = $this->getProductApiResult('simple_with_boolean');
         if ($this->hasAttributeData($result)) {
-            $value = json_decode($result[0]['attributes'][0]['value'][0])->value;
+            $value = $result[0]['attributes'][0]['value'][0]['value'];
             unset($result[0]['attributes'][0]['value']); // re adding as array insted of json
             $actualResult = $result[0]['attributes'][0];
             $actualResult['value'] = $value;
@@ -193,7 +193,7 @@ class ExportTest extends WebapiAbstract
     {
         $result = $this->getProductApiResult('simple_with_multiselect');
         if ($this->hasAttributeData($result)) {
-            $value = json_decode($result[0]['attributes'][0]['value'][0])->value;
+            $value = $result[0]['attributes'][0]['value'][0]['value'];
             unset($result[0]['attributes'][0]['value']); // re adding as array insted of json
             $actualResult = $result[0]['attributes'][0];
             $actualResult['value'] = $value;
@@ -218,7 +218,7 @@ class ExportTest extends WebapiAbstract
     {
         $result = $this->getProductApiResult('simple_with_image');
         if ($this->hasAttributeData($result)) {
-            $value = json_decode($result[0]['attributes'][0]['value'][0])->value;
+            $value = $result[0]['attributes'][0]['value'][0]['value'];
             unset($result[0]['attributes'][0]['value']); // re adding as array insted of json
             $actualResult = $result[0]['attributes'][0];
             $actualResult['value'] = $value;
@@ -243,7 +243,7 @@ class ExportTest extends WebapiAbstract
     {
         $result = $this->getProductApiResult('simple_with_decimal');
         if ($this->hasAttributeData($result)) {
-            $value = json_decode($result[0]['attributes'][0]['value'][0])->value;
+            $value = $result[0]['attributes'][0]['value'][0]['value'];
             unset($result[0]['attributes'][0]['value']); // re adding as array insted of json
             $actualResult = $result[0]['attributes'][0];
             $actualResult['value'] = $value;
@@ -268,7 +268,7 @@ class ExportTest extends WebapiAbstract
     {
         $result = $this->getProductApiResult('simple_with_text_editor');
         if ($this->hasAttributeData($result)) {
-            $value = json_decode($result[0]['attributes'][0]['value'][0])->value;
+            $value = $result[0]['attributes'][0]['value'][0]['value'];
             unset($result[0]['attributes'][0]['value']); // re adding as array insted of json
             $actualResult = $result[0]['attributes'][0];
             $actualResult['value'] = $value;
@@ -292,7 +292,7 @@ class ExportTest extends WebapiAbstract
     {
         $result = $this->getProductApiResult('simple_with_date');
         if ($this->hasAttributeData($result)) {
-            $value = json_decode($result[0]['attributes'][0]['value'][0])->value;
+            $value = $result[0]['attributes'][0]['value'][0]['value'];
             unset($result[0]['attributes'][0]['value']); // re adding as array insted of json
             $actualResult = $result[0]['attributes'][0];
             $actualResult['value'] = $value;
