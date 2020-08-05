@@ -29,7 +29,7 @@ class ConfigurableOptions implements DataMapperInterface
                         'type' => $optionArray['type'],
                         'label' => $optionArray['title'],
                         'position' => $optionArray['sort_order'],
-                        'product_id' => $data['id'],
+                        'product_id' => $data['product_id'],
                         'attribute_id' => $optionArray['attribute_id'],
                         'attribute_code' => $optionArray['attribute_code'],
                         'use_default' => $optionArray['use_default'],
