@@ -30,6 +30,9 @@
     <preference for="Magento\CatalogCustomerGraphQl\Model\Resolver\TierPrices" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\CatalogCustomer\TierPrices"/>
     <preference for="Magento\CatalogGraphQl\Model\Resolver\Product\SpecialPrice" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\SpecialPrice"/>
     <preference for="Magento\TargetRuleGraphQl\Model\Resolver\Batch\TargetRuleProducts" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\TargetRuleProducts"/>
+    <preference for="Magento\ReviewGraphQl\Model\Resolver\Product\RatingSummary" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\Review\RatingSummary"/>
+    <preference for="Magento\ReviewGraphQl\Model\Resolver\Product\ReviewCount" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\Review\ReviewCount"/>
+    <preference for="Magento\ReviewGraphQl\Model\Resolver\Product\Reviews" type="Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\Review\Reviews"/>
 
     <!-- Remove @resolver from schema.graphqls fields, which should be handled on Storefront API -->
     <type name="Magento\StorefrontGraphQl\Plugin\SchemaReader">
