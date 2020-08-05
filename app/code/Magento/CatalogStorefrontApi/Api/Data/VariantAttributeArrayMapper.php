@@ -41,6 +41,7 @@ final class VariantAttributeArrayMapper
         $result["label"] = $dto->getLabel();
         $result["code"] = $dto->getCode();
         $result["value_index"] = $dto->getValueIndex();
+        $result["attribute_id"] = $dto->getAttributeId();
         return $result;
     }
 }
