@@ -55,9 +55,6 @@ class OptionValue
     /** @var string */
     private $storeLabel;
 
-    /** @var bool */
-    private $useDefaultValue;
-
     /**
      * Get id
      *
@@ -287,26 +284,5 @@ class OptionValue
     public function setStoreLabel(?string $storeLabel): void
     {
         $this->storeLabel = $storeLabel;
-    }
-
-    /**
-     * Get use default value
-     *
-     * @return bool
-     */
-    public function getUseDefaultValue(): ?bool
-    {
-        return $this->useDefaultValue;
-    }
-
-    /**
-     * Set use default value
-     *
-     * @param bool $useDefaultValue
-     * @return void
-     */
-    public function setUseDefaultValue(?bool $useDefaultValue): void
-    {
-        $this->useDefaultValue = $useDefaultValue;
     }
 }

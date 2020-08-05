@@ -55,10 +55,10 @@ class ConfigurableOptions implements DataMapperInterface
             foreach ($optionArray['values'] as $value) {
                 $values[$value['id']] = [
                     'value_index' => $value['id'],
-                    'label' => $value['label'],
+                    'label' => $value['store_label'],
                     'default_label' => $value['default_label'],
                     'store_label' => $value['store_label'],
-                    'use_default_value' => $value['use_default_value']
+                    'use_default_value' => $value['store_label'] === $value['default_label']
                 ];
             }
         }
