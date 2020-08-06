@@ -20,6 +20,11 @@ use Magento\Framework\GraphQl\Query\Resolver\BatchRequestItemInterface;
 class OutputFormatter
 {
     /**
+     * @var ObjectToArray
+     */
+    private $converter;
+
+    /**
      * Format Storefront output for GraphQL response
      *
      * @param ProductResultContainerInterface $result
@@ -29,7 +34,6 @@ class OutputFormatter
      * @return array
      * @throws GraphQlInputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __invoke(
         ProductsGetResultInterface $result,
@@ -43,54 +47,9 @@ class OutputFormatter
             //TODO: change with error holder
             throw new GraphQlInputException(__(\implode('; ', \array_map('\strval', $errors))));
         }
-        $converter = new ObjectToArray;
         $items = [];
         foreach ($result->getItems() as $item) {
-            $currentResult = $converter->getArray($item);
-            $currentResult['entity_id'] = $currentResult['id'];
-            $currentResult['description'] = ['html' => $currentResult['description']];
-            $currentResult['short_description'] = ['html' => $currentResult['short_description']];
-            $currentResult['gift_message_available'] = (int)$currentResult['gift_message_available'];
-            if (isset($currentResult['only_x_left_in_stock'])
-                && (string)$currentResult['only_x_left_in_stock'] == "0"
-            ) {
-                $currentResult['only_x_left_in_stock'] = null;
-            }
-
-            $currentResult['canonical_url'] = empty($currentResult['canonical_url'])
-                ? null
-                : $currentResult['canonical_url'];
-
-            foreach ($currentResult['options'] as &$option) {
-                //Convert simple option types from arrays
-                $simpleOptionTypes = ['date', 'date_time', 'time', 'field', 'area', 'file'];
-                if (isset($option['type']) && in_array($option['type'], $simpleOptionTypes)) {
-                    $option['value'] = reset($option['value']);
-                } elseif (!empty($option['value'])) {
-                    $option['value'] = \array_map(function ($optionValue) use ($option) {
-                        $optionValue['option_id'] = $option['option_id'];
-
-                        return $optionValue;
-                    }, $option['value']);
-                }
-            }
-            $currentResult['media_gallery'] = array_map(function (array $item) {
-                $item['media_type'] = empty($item['video_content']) ? 'image' : 'external-video';
-                $item['disabled'] = false;
-                return $item;
-            }, $currentResult['media_gallery']);
-
-            if (!empty($currentResult['downloadable_product_links'])) {
-                $currentResult['downloadable_product_links'] = \array_map(function ($link) {
-                    $link['id'] = $link['link_id'];
-
-                    return $link;
-                }, $currentResult['downloadable_product_links']);
-            }
-
-            $currentResult = $this->setDynamicAttributes($currentResult);
-
-            $items[] = $currentResult;
+            $items[] = $this->prepareResult($item);
         }
         $metaInfo = $additionalInfo['meta_info'] ?? [];
         $aggregations = $additionalInfo['aggregations'] ?? [];
@@ -131,5 +90,68 @@ class OutputFormatter
         }
 
         return $currentResult;
+    }
+
+    /**
+     * @param $item
+     * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function prepareResult($item): array
+    {
+        $currentResult = $this->getConverter()->getArray($item);
+        $currentResult['entity_id'] = $currentResult['id'];
+        $currentResult['description'] = ['html' => $currentResult['description']];
+        $currentResult['short_description'] = ['html' => $currentResult['short_description']];
+        $currentResult['gift_message_available'] = (int)$currentResult['gift_message_available'];
+        if (isset($currentResult['only_x_left_in_stock'])
+            && (string)$currentResult['only_x_left_in_stock'] == "0"
+        ) {
+            $currentResult['only_x_left_in_stock'] = null;
+        }
+
+        $currentResult['canonical_url'] = empty($currentResult['canonical_url'])
+            ? null
+            : $currentResult['canonical_url'];
+
+        foreach ($currentResult['options'] as &$option) {
+            //Convert simple option types from arrays
+            $simpleOptionTypes = ['date', 'date_time', 'time', 'field', 'area', 'file'];
+            if (isset($option['type']) && in_array($option['type'], $simpleOptionTypes)) {
+                $option['value'] = reset($option['value']);
+            } elseif (!empty($option['value'])) {
+                $option['value'] = \array_map(function ($optionValue) use ($option) {
+                    $optionValue['option_id'] = $option['option_id'];
+
+                    return $optionValue;
+                }, $option['value']);
+            }
+        }
+        $currentResult['media_gallery'] = array_map(function (array $item) {
+            $item['media_type'] = empty($item['video_content']) ? 'image' : 'external-video';
+            $item['disabled'] = false;
+            return $item;
+        }, $currentResult['media_gallery']);
+
+        if (!empty($currentResult['downloadable_product_links'])) {
+            $currentResult['downloadable_product_links'] = \array_map(function ($link) {
+                $link['id'] = $link['link_id'];
+
+                return $link;
+            }, $currentResult['downloadable_product_links']);
+        }
+
+        return $this->setDynamicAttributes($currentResult);
+    }
+
+    /**
+     * @return ObjectToArray
+     */
+    private function getConverter(): ObjectToArray
+    {
+        if ($this->converter === null) {
+            $this->converter = new ObjectToArray;
+        }
+        return $this->converter;
     }
 }
