@@ -32,8 +32,11 @@ class DynamicAttribute implements DataMapperInterface
         $attributes = [];
         if (!empty($productData['attributes'])) {
             foreach ($productData['attributes'] as $attribute) {
-                $attributes[$attribute['attribute_code']]
-                    = $this->attributePool[$attribute['type']]->getAttribute($attribute);
+                $attributeType = $this->attributePool[$attribute['type']];
+                if (!$attributeType instanceof \Magento\CatalogMessageBroker\Model\DataMapper\AttributeTypeInterface) {
+                    continue;
+                }
+                $attributes[$attribute['attribute_code']] = $attributeType->getAttribute($attribute);
             }
         }
 

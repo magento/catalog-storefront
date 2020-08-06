@@ -6,9 +6,9 @@
 namespace Magento\CatalogMessageBroker\Model\DataMapper;
 
 /**
- * Class for text, price types
+ * Class for select type
  */
-class Type implements AttributeTypeInterface
+class SelectOptionType implements AttributeTypeInterface
 {
     /**
      * Get attribute
@@ -18,6 +18,6 @@ class Type implements AttributeTypeInterface
      */
     public function getAttribute($attribute)
     {
-        return $attribute['value'][0]['value'];
+        return $attribute['value'][0]['id'];
     }
 }

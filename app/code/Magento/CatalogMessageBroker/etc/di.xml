@@ -22,7 +22,7 @@
         <arguments>
             <argument name="attributePool" xsi:type="array">
                 <item name="boolean" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\BooleanType</item>
-                <item name="select" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\Type</item>
+                <item name="select" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\SelectOptionType</item>
                 <item name="text" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\Type</item>
                 <item name="price" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\Type</item>
                 <item name="multiselect" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\MultiselectOptionType</item>

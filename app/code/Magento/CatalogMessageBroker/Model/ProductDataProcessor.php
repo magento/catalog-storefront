@@ -126,50 +126,16 @@ class ProductDataProcessor
             $importProduct['grouped_items'] = $oldExportDataProduct['items'];
         }
 
-        //TODO: remove after resolving https://github.com/magento/catalog-storefront/issues/66
         $importProduct['dynamic_attributes'] = [];
         foreach ($product['attributes'] ?? [] as $attribute) {
             $importProduct['dynamic_attributes'][] = [
                 'code' => $attribute['attribute_code'],
-                'value' => $this->getAttributeValue($attribute),
+                'value' => $importProduct[$attribute['attribute_code']] ?? '',
             ];
             unset($oldExportDataProduct[$attribute['attribute_code']]);
         }
 
         // TODO: only $importProduct must be returned https://github.com/magento/catalog-storefront/issues/165
         return array_merge($oldExportDataProduct, $importProduct);
-    }
-
-    /**
-     * Get attribute value based on attribute type
-     *
-     * @param array $attribute
-     * @return int|string|float|null
-     */
-    private function getAttributeValue(array $attribute)
-    {
-        $attributeValue = null;
-
-        switch ($attribute['type']) {
-            case 'select':
-                $attributeValue = $attribute['value'][0]['id'];
-                break;
-            case 'multiselect':
-                $values = [];
-                foreach ($attribute['value'] as $attributeValue) {
-                    $values[] = $attributeValue['id'];
-                }
-                $attributeValue = implode(',', $values);
-                break;
-            case 'boolean':
-                $attributeValue = $attribute['value'][0]['value'] == 'yes' ? 1 : 0;
-                break;
-            case 'text':
-            case 'price':
-                $attributeValue = $attribute['value'][0]['value'];
-                break;
-        }
-
-        return $attributeValue;
     }
 }
