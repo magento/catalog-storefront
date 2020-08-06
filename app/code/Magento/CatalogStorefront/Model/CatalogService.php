@@ -39,6 +39,10 @@ use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseFactory;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseInterfaceFactory;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseInterface;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesResponseFactory;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesResponseInterface;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesResponseInterfaceFactory;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -70,6 +74,11 @@ class CatalogService implements CatalogServerInterface
      * @var DeleteProductsResponseInterfaceFactory
      */
     private $deleteProductsResponseFactory;
+
+    /**
+     * @var DeleteCategoriesResponseInterfaceFactory
+     */
+    private $deleteCategoriesResponseFactory;
 
     /**
      * @var ImportCategoriesResponseFactory
@@ -112,8 +121,9 @@ class CatalogService implements CatalogServerInterface
      * @param CategoryDataProvider $categoryDataProvider
      * @param DynamicAttributeValueInterfaceFactory $dynamicAttributeFactory
      * @param ImportProductsResponseFactory $importProductsResponseFactory
-     * @param DeleteProductsResponseFactory $deleteProductsResponseFactory
      * @param ImportCategoriesResponseFactory $importCategoriesResponseFactory
+     * @param DeleteProductsResponseFactory $deleteProductsResponseFactory
+     * @param DeleteCategoriesResponseFactory $deleteProductsResponseFactory
      * @param CatalogRepository $catalogRepository
      * @param ProductArrayMapper $productArrayMapper
      * @param CategoryArrayMapper $categoryArrayMapper
@@ -127,6 +137,7 @@ class CatalogService implements CatalogServerInterface
         DynamicAttributeValueInterfaceFactory $dynamicAttributeFactory,
         ImportProductsResponseFactory $importProductsResponseFactory,
         DeleteProductsResponseFactory $deleteProductsResponseFactory,
+        DeleteCategoriesResponseFactory $deleteCategoriesResponseFactory,
         ImportCategoriesResponseFactory $importCategoriesResponseFactory,
         CatalogRepository $catalogRepository,
         ProductArrayMapper $productArrayMapper,
@@ -137,6 +148,7 @@ class CatalogService implements CatalogServerInterface
         $this->dataObjectHelper = $dataObjectHelper;
         $this->importProductsResponseFactory = $importProductsResponseFactory;
         $this->deleteProductsResponseFactory = $deleteProductsResponseFactory;
+        $this->deleteCategoriesResponseFactory = $deleteCategoriesResponseFactory;
         $this->importCategoriesResponseFactory = $importCategoriesResponseFactory;
         $this->catalogRepository = $catalogRepository;
         $this->categoryDataProvider = $categoryDataProvider;
@@ -377,6 +389,41 @@ class CatalogService implements CatalogServerInterface
 
             return $importCategoriesResponse;
         }
+    }
+
+    /**
+     * Delete categories from storage.
+     *
+     * @param DeleteCategoriesRequestInterface $request
+     * @return DeleteCategoriesResponseInterface
+     */
+    public function deleteCategories(DeleteCategoriesRequestInterface $request): DeleteCategoriesResponseInterface
+    {
+        $storeId = $request->getStore();
+        $categoriesInElasticFormat = [
+            'category' => [
+                $storeId => [
+                    'delete' => $request->getCategoryIds()
+                ]
+            ]
+        ];
+
+        /** @var \Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesResponse $deleteCategoriesResponse */
+        $deleteCategoriesResponse = $this->deleteCategoriesResponseFactory->create();
+
+        try {
+            $this->catalogRepository->saveToStorage($categoriesInElasticFormat);
+
+            $deleteCategoriesResponse->setMessage('Category were removed successfully');
+            $deleteCategoriesResponse->setStatus(true);
+        } catch (\Throwable $e) {
+            $message = 'Unable to delete categories';
+            $this->logger->error($message, ['exception' => $e]);
+            $deleteCategoriesResponse->setMessage($message);
+            $deleteCategoriesResponse->setStatus(false);
+        }
+
+        return $deleteCategoriesResponse;
     }
 
     /**

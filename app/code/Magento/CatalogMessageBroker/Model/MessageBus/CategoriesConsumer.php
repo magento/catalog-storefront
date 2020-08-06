@@ -3,9 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
 use Magento\CatalogMessageBroker\Model\FetchCategoriesInterface;
+use Magento\CatalogStorefrontApi\Api\Data\CategoryMapper;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesRequestInterfaceFactory;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesRequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
@@ -40,9 +45,14 @@ class CategoriesConsumer
     private $importCategoriesRequestInterfaceFactory;
 
     /**
-     * @var \Magento\CatalogStorefrontApi\Api\Data\CategoryMapper
+     * @var CategoryMapper
      */
     private $categoryMapper;
+
+    /**
+     * @var DeleteCategoriesRequestInterfaceFactory
+     */
+    private $deleteCategoriesRequestInterfaceFactory;
 
     /**
      * @param LoggerInterface $logger
@@ -50,7 +60,7 @@ class CategoriesConsumer
      * @param StoreManagerInterface $storeManager
      * @param CatalogServerInterface $catalogServer
      * @param ImportCategoriesRequestInterfaceFactory $importCategoriesRequestInterfaceFactory
-     * @param \Magento\CatalogStorefrontApi\Api\Data\CategoryMapper $categoryMapper
+     * @param CategoryMapper $categoryMapper
      */
     public function __construct(
         LoggerInterface $logger,
@@ -58,7 +68,8 @@ class CategoriesConsumer
         StoreManagerInterface $storeManager,
         CatalogServerInterface $catalogServer,
         ImportCategoriesRequestInterfaceFactory $importCategoriesRequestInterfaceFactory,
-        \Magento\CatalogStorefrontApi\Api\Data\CategoryMapper $categoryMapper
+        CategoryMapper $categoryMapper,
+        DeleteCategoriesRequestInterfaceFactory  $deleteCategoriesRequestInterfaceFactory
     ) {
         $this->logger = $logger;
         $this->storeManager = $storeManager;
@@ -66,6 +77,7 @@ class CategoriesConsumer
         $this->catalogServer = $catalogServer;
         $this->importCategoriesRequestInterfaceFactory = $importCategoriesRequestInterfaceFactory;
         $this->categoryMapper = $categoryMapper;
+        $this->deleteCategoriesRequestInterfaceFactory = $deleteCategoriesRequestInterfaceFactory;
     }
 
     /**
@@ -106,24 +118,33 @@ class CategoriesConsumer
      * Process message
      *
      * @param string $ids
+     * @return void
      */
-    public function processMessage(string $ids)
+    public function processMessage(string $ids): void
     {
         try {
             $ids = json_decode($ids, true);
-            $dataPerStore = [];
+            $categoryPerStore = [];
+            $storesToIds = $this->getMappedStores();
+            $categories = $this->fetchCategories->getByIds($ids);
 
-            $mappedStores = $this->getMappedStores();
-
-            foreach ($this->fetchCategories->execute($ids) as $category) {
-                $storeId = $this->resolveStoreId($mappedStores, $category['store_view_code']);
-                $dataPerStore[$storeId][] = $category;
+            if (!empty($categories)) {
+                foreach ($categories as $override) {
+                    $storeId = $this->resolveStoreId($storesToIds, $override['store_view_code']);
+                    $categoryPerStore[$storeId][] = $override;
+                }
+                foreach ($categoryPerStore as $storeId => $categories) {
+                    $this->unsetNullRecursively($categories);
+                    $this->importCategories($storeId, $categories);
+                }
             }
-            foreach ($dataPerStore as $storeId => $categories) {
-                $this->unsetNullRecursively($categories);
-                $this->importCategories($storeId, $categories);
-            }
 
+            // @todo temporary solution. Deleted categories must be processed from different message in queue
+            // message must be published into \Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer::process
+            $deletedCategories = $this->fetchCategories->getDeleted($ids);
+            if (!empty($deletedCategories)) {
+                $this->deleteCategories($deletedCategories, $storesToIds);
+            }
         } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage());
         }
@@ -138,7 +159,7 @@ class CategoriesConsumer
      * @param array $haystack
      * @return void
      */
-    private function unsetNullRecursively(&$haystack)
+    private function unsetNullRecursively(&$haystack): void
     {
         foreach ($haystack as $key => $value) {
             if (is_array($value)) {
@@ -157,7 +178,7 @@ class CategoriesConsumer
      * @param array $categories
      * @throws \Throwable
      */
-    private function importCategories($storeId, array $categories): void
+    private function importCategories(int $storeId, array $categories): void
     {
         foreach ($categories as &$category) {
             // be sure, that data passed to Import API in the expected format
@@ -167,11 +188,40 @@ class CategoriesConsumer
         }
         $importCategoriesRequest = $this->importCategoriesRequestInterfaceFactory->create();
         $importCategoriesRequest->setCategories($categories);
-        $importCategoriesRequest->setStore($storeId);
+        //todo: the expected storeId format should be int
+        $importCategoriesRequest->setStore((string)$storeId);
         $importResult = $this->catalogServer->importCategories($importCategoriesRequest);
 
         if ($importResult->getStatus() === false) {
             $this->logger->error(sprintf('Categories import is failed: "%s"', $importResult->getMessage()));
+        }
+    }
+
+    /**
+     * Deleted products from storage
+     *
+     * @param array $deletedCategories
+     * @param array $storesToIds
+     */
+    private function deleteCategories(array $deletedCategories, array $storesToIds)
+    {
+        $categoriesPerStore = [];
+        foreach ($deletedCategories as $category) {
+            $storeId = $storesToIds[$category['store_view_code']];
+            $categoriesPerStore[$storeId][$category['category_id']] = $category;
+        }
+
+        foreach ($categoriesPerStore as $storeId => $categories) {
+            try {
+                /** @var DeleteCategoriesRequestInterface $deleteCategoryRequest */
+                $deleteCategoryRequest = $this->deleteCategoriesRequestInterfaceFactory->create();
+                $deleteCategoryRequest->setCategoryIds(\array_keys($categories));
+                $deleteCategoryRequest->setStore((string)$storeId);
+
+                $this->catalogServer->deleteCategories($deleteCategoryRequest);
+            } catch (\Throwable $e) {
+                $this->logger->critical($e);
+            }
         }
     }
 }

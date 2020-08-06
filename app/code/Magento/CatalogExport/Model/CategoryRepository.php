@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExport\Model;
 
+use Magento\CatalogDataExporter\Model\Feed\Categories;
 use Magento\CatalogExportApi\Api\CategoryRepositoryInterface;
+use Magento\CatalogExportApi\Api\Data\CategoryFactory;
+use Magento\Framework\Api\DataObjectHelper;
 
 /**
  * @inheritdoc
@@ -15,17 +18,17 @@ use Magento\CatalogExportApi\Api\CategoryRepositoryInterface;
 class CategoryRepository implements CategoryRepositoryInterface
 {
     /**
-     * @var \Magento\CatalogDataExporter\Model\Feed\Categories
+     * @var Categories
      */
     private $categoriesFeed;
 
     /**
-     * @var \Magento\CatalogExportApi\Api\Data\CategoryFactory
+     * @var CategoryFactory
      */
     private $categoryFactory;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper
+     * @var DataObjectHelper
      */
     private $dataObjectHelper;
 
@@ -35,15 +38,15 @@ class CategoryRepository implements CategoryRepositoryInterface
     private $exportConfiguration;
 
     /**
-     * @param \Magento\CatalogDataExporter\Model\Feed\Categories $categoriesFeed
-     * @param \Magento\CatalogExportApi\Api\Data\CategoryFactory $categoryFactory
-     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param Categories $categoriesFeed
+     * @param CategoryFactory $categoryFactory
+     * @param DataObjectHelper $dataObjectHelper
      * @param ExportConfiguration $exportConfiguration
      */
     public function __construct(
-        \Magento\CatalogDataExporter\Model\Feed\Categories $categoriesFeed,
-        \Magento\CatalogExportApi\Api\Data\CategoryFactory $categoryFactory,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        Categories $categoriesFeed,
+        CategoryFactory $categoryFactory,
+        DataObjectHelper $dataObjectHelper,
         ExportConfiguration $exportConfiguration
     ) {
         $this->categoriesFeed = $categoriesFeed;
@@ -83,5 +86,16 @@ class CategoryRepository implements CategoryRepositoryInterface
             $categories[] = $category;
         }
         return $categories;
+    }
+
+    /**
+     * Get deleted categories.
+     *
+     * @param string[] $ids
+     * @return array
+     */
+    public function getDeleted(array $ids): array
+    {
+        return $this->categoriesFeed->getDeletedByIds($ids);
     }
 }

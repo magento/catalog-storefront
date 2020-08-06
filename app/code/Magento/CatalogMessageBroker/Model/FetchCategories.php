@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogMessageBroker\Model;
 
 use Magento\CatalogExportApi\Api\CategoryRepositoryInterface;
@@ -39,12 +41,28 @@ class FetchCategories implements FetchCategoriesInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $ids)
+    public function getByIds(array $ids): array
     {
         $data = [];
         $categories = $this->categoryRepository->get($ids);
         foreach ($categories as $category) {
             $data[] = $this->dataObjectProcessor->buildOutputDataArray($category, Category::class);
+        }
+        return $data;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDeleted(array $ids): array
+    {
+        $data = [];
+        //todo: this loop is unnecessary other than data key formatting. See if can move this to generic feed?.
+        foreach ($this->categoryRepository->getDeleted($ids) as $category) {
+            $data[] = [
+                'category_id' => $category['categoryId'],
+                'store_view_code' => $category['storeViewCode'],
+            ];
         }
         return $data;
     }

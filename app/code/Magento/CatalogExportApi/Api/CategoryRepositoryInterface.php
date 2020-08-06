@@ -7,7 +7,7 @@
 namespace Magento\CatalogExportApi\Api;
 
 /**
- * Product entity repository
+ * Category entity repository interface
  */
 interface CategoryRepositoryInterface
 {
@@ -18,4 +18,12 @@ interface CategoryRepositoryInterface
      * @return \Magento\CatalogExportApi\Api\Data\Category[]
      */
     public function get(array $ids);
+
+    /**
+     * Get deleted categories by ids.
+     *
+     * @param string[] $ids
+     * @return array
+     */
+    public function getDeleted(array $ids): array;
 }
