@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefrontGraphQl\Resolver\Product;
 
 use Magento\Catalog\Model\Layer\Resolver;
+use Magento\CatalogStorefrontApi\Api\Data\ProductInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductResultContainerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
 use Magento\CatalogStorefrontGraphQl\Model\Converter\ObjectToArray;
@@ -48,6 +49,7 @@ class OutputFormatter
             throw new GraphQlInputException(__(\implode('; ', \array_map('\strval', $errors))));
         }
         $items = [];
+        /** @var ProductInterface $item */
         foreach ($result->getItems() as $item) {
             $items[] = $this->prepareResult($item);
         }
@@ -93,11 +95,13 @@ class OutputFormatter
     }
 
     /**
-     * @param $item
+     * Prepare output result for item
+     *
+     * @param ProductInterface $item
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function prepareResult($item): array
+    private function prepareResult(ProductInterface $item): array
     {
         $currentResult = $this->getConverter()->getArray($item);
         $currentResult['entity_id'] = $currentResult['id'];
@@ -145,6 +149,8 @@ class OutputFormatter
     }
 
     /**
+     * Get ObjectToArray converter
+     *
      * @return ObjectToArray
      */
     private function getConverter(): ObjectToArray
