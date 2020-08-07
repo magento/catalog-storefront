@@ -29,17 +29,20 @@ class DynamicAttribute implements DataMapperInterface
      */
     public function map(array $productData): array
     {
-        $attributes = [];
-        if (!empty($productData['attributes'])) {
-            foreach ($productData['attributes'] as $attribute) {
-                $attributeType = $this->attributePool[$attribute['type']];
-                if (!$attributeType instanceof \Magento\CatalogMessageBroker\Model\DataMapper\AttributeTypeInterface) {
-                    continue;
-                }
-                $attributes[$attribute['attribute_code']] = $attributeType->getAttribute($attribute);
+        $dynamicAttributes = [];
+
+        foreach ($productData['attributes'] ?? [] as $attribute) {
+            $attributeType = $this->attributePool[$attribute['type']];
+            if (!$attributeType instanceof \Magento\CatalogMessageBroker\Model\DataMapper\AttributeTypeInterface) {
+                continue;
             }
+            $dynamicAttributes[] = [
+                'code' => $attribute['attribute_code'],
+                'value' => $attributeType->getAttribute($attribute),
+            ];
         }
 
-        return $attributes;
+        return ['dynamic_attributes' => $dynamicAttributes];
     }
 }
+
