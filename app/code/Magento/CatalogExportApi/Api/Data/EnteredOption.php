@@ -107,7 +107,7 @@ class EnteredOption
     }
 
     /**
-     * Get isRequired
+     * Get is required
      *
      * @return bool
      */
@@ -117,7 +117,7 @@ class EnteredOption
     }
 
     /**
-     * Set isRequired
+     * Set is required
      *
      * @param bool $isRequired
      * @return void

@@ -46,9 +46,9 @@ class ConfigurableOptions implements DataMapperInterface
      * Map option values
      *
      * @param array $optionArray
-     * @return array|null
+     * @return array
      */
-    private function mapOptionValues(?array $optionArray): array
+    private function mapOptionValues(array $optionArray): array
     {
         $values = [];
         if (!empty($optionArray['values'])) {
