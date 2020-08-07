@@ -16,6 +16,30 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class ConfigurableProductExportTest extends AbstractProductExportTestHelper
 {
     /**
+     * Attributes to compare for configurable product
+     *
+     * @var string[]
+     */
+    protected $attributesToCompare = [
+        'sku',
+        'name',
+        'type',
+        'status',
+        'tax_class_id',
+        'created_at',
+        'updated_at',
+        'url_key',
+        'visibility',
+        'currency',
+        'displayable',
+        'buyable',
+        'categories',
+        'in_stock',
+        'low_stock',
+        'url',
+    ];
+    
+    /**
      * Option values to compare for configurable products
      *
      * @var string[]
