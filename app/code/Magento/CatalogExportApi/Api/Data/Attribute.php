@@ -25,7 +25,10 @@ class Attribute
     /** @var string */
     private $attributeCode;
 
-    /** @var array */
+    /** @var string */
+    private $type;
+
+    /** @var \Magento\CatalogExportApi\Api\Data\AttributeValue[]|null */
     private $value;
 
     /**
@@ -50,9 +53,30 @@ class Attribute
     }
 
     /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return void
+     */
+    public function setType(?string $type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
      * Get value
      *
-     * @return string[]
+     * @return \Magento\CatalogExportApi\Api\Data\AttributeValue[]|null
      */
     public function getValue(): ?array
     {
@@ -62,7 +86,7 @@ class Attribute
     /**
      * Set value
      *
-     * @param string[] $value
+     * @param \Magento\CatalogExportApi\Api\Data\AttributeValue[] $value
      * @return void
      */
     public function setValue(?array $value = null): void

@@ -8,7 +8,7 @@ namespace Magento\CatalogMessageBroker\Model;
 use Magento\CatalogMessageBroker\Model\DataMapper\DataMapperInterface;
 
 /**
- * Product data processor.
+ * Processing data for the product.
  *
  * Processes data coming from old api and merges data from new API to replace usage of existing data providers.
  */
@@ -126,12 +126,11 @@ class ProductDataProcessor
             $importProduct['grouped_items'] = $oldExportDataProduct['items'];
         }
 
-        //TODO: remove after resolving https://github.com/magento/catalog-storefront/issues/66
         $importProduct['dynamic_attributes'] = [];
         foreach ($product['attributes'] ?? [] as $attribute) {
             $importProduct['dynamic_attributes'][] = [
                 'code' => $attribute['attribute_code'],
-                'value' => \implode(',', $attribute['value'])
+                'value' => $importProduct[$attribute['attribute_code']] ?? '',
             ];
             unset($oldExportDataProduct[$attribute['attribute_code']]);
         }
