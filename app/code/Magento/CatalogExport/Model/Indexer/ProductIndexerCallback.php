@@ -43,7 +43,9 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
     }
 
     /**
-     * @inheritdoc
+     * Publishing ids
+     *
+     * @param array $ids
      */
     public function execute(array $ids) : void
     {
