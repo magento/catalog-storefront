@@ -33,6 +33,8 @@ class ConfigurableProductExportTest extends AbstractProductExportTestHelper
         'currency',
         'displayable',
         'buyable',
+        'options',
+        'variants',
         'categories',
         'in_stock',
         'low_stock',
@@ -51,7 +53,10 @@ class ConfigurableProductExportTest extends AbstractProductExportTestHelper
         'sort_order',
         'attribute_id',
         'attribute_code',
-        'use_default'
+        'use_default',
+        'product_sku',
+        'render_type',
+        'is_required',
     ];
 
     /**
