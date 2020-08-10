@@ -94,6 +94,7 @@ class ExportTest extends WebapiAbstract
      * Data Provider with eav attribute result
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function attributesResult()
     {
