@@ -25,10 +25,10 @@ class ConfigurableProductExportTest extends AbstractProductExportTestHelper
         'name',
         'type',
         'status',
-        'tax_class_id',
-        'created_at',
-        'updated_at',
-        'url_key',
+        'taxClassId',
+        'createdAt',
+        'updatedAt',
+        'urlKey',
         'visibility',
         'currency',
         'displayable',
@@ -36,40 +36,9 @@ class ConfigurableProductExportTest extends AbstractProductExportTestHelper
         'options',
         'variants',
         'categories',
-        'in_stock',
-        'low_stock',
+        'inStock',
+        'lowStock',
         'url',
-    ];
-    
-    /**
-     * Option values to compare for configurable products
-     *
-     * @var string[]
-     */
-    protected $optionsToCompare = [
-        'id',
-        'type',
-        'title',
-        'sort_order',
-        'attribute_id',
-        'attribute_code',
-        'use_default',
-        'product_sku',
-        'render_type',
-        'is_required',
-    ];
-
-    /**
-     * Option 'value' values to compare for configurable products
-     *
-     * @var string[]
-     */
-    protected $optionValuesToCompare = [
-        'id',
-        'label',
-        'default_label',
-        'store_label',
-        'use_default_value'
     ];
 
     /**
@@ -93,7 +62,10 @@ class ConfigurableProductExportTest extends AbstractProductExportTestHelper
         if (isset($product)) {
             $this->createServiceInfo['rest']['resourcePath'] .= '?ids[0]=' . $product->getId();
             $result = $this->_webApiCall($this->createServiceInfo, []);
-            $this->assertProductsEquals($this->productsFeed->getFeedByIds([$product->getId()])['feed'], $result);
+
+            $expected = $this->productsFeed->getFeedByIds([$product->getId()])['feed'];
+
+            $this->assertProductsEquals($expected, $result);
         }
     }
 }

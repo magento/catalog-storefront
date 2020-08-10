@@ -65,7 +65,7 @@ class VariantsDataProvider implements DataProviderInterface
     }
 
     /**
-     * Remove module once configurable product variants provider is implemented in saasExport
+     * todo: Remove module once configurable product variants provider is implemented in saasExport
      *
      * @inheritdoc
      * @throws \Zend_Db_Statement_Exception

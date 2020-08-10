@@ -16,30 +16,29 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class SimpleProductExportTest extends AbstractProductExportTestHelper
 {
     /**
-     * Option values to compare for simple products
-     *
      * @var string[]
      */
-    protected $optionsToCompare = [
-        'id',
-        'type',
-        'title',
-        'product_sku',
-        'sort_order',
-        'required',
-        'render_type',
-    ];
-
-    /**
-     *  Option 'value' values to compare for simple products
-     *
-     * @var string[]
-     */
-    protected $optionValuesToCompare = [
-        'id',
-        'sort_order',
+    protected $attributesToCompare = [
         'sku',
-        'value'
+        'name',
+        'type',
+        'status',
+        'taxClassId',
+        'createdAt',
+        'updatedAt',
+        'urlKey',
+        'visibility',
+        'currency',
+        'displayable',
+        'buyable',
+        'attributes',
+        'categories',
+        'inStock',
+        'lowStock',
+        'url',
+        'image',
+        'smallImage',
+        'entered_options'
     ];
 
     /**

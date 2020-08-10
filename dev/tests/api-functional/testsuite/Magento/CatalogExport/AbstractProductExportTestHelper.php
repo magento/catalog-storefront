@@ -10,10 +10,10 @@ namespace Magento\CatalogExport;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogDataExporter\Model\Feed\Products;
 use Magento\Framework\Webapi\Rest\Request;
+use Magento\Indexer\Model\Indexer;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Indexer\Model\Indexer;
 
 /**
  * Class AbstractProductExportTestHelper
@@ -51,34 +51,7 @@ abstract class AbstractProductExportTestHelper extends WebapiAbstract
      * @var string[]
      */
     protected $attributesToCompare = [
-        'sku',
-        'name',
-        'type',
-        'status',
-        'tax_class_id',
-        'created_at',
-        'updated_at',
-        'url_key',
-        'visibility',
-        'currency',
-        'displayable',
-        'buyable',
-        'attributes',
-        'categories',
-        'in_stock',
-        'low_stock',
-        'url',
     ];
-
-    /**
-     * @var array
-     */
-    private $optionsToCompare = [];
-
-    /**
-     * @var array
-     */
-    private $optionValuesToCompare = [];
 
     /**
      * @inheritDoc
@@ -112,98 +85,20 @@ abstract class AbstractProductExportTestHelper extends WebapiAbstract
      */
     protected function assertProductsEquals(array $expected, array $actual): void
     {
-        $n = sizeof($expected);
-        for ($i = 0; $i < $n; $i++) {
-            foreach ($this->attributesToCompare as $attribute) {
-                $this->compareComplexValue(
-                    $expected[$i][$this->snakeToCamelCase($attribute)],
-                    $actual[$i][$attribute]
-                );
-            }
-            $this->assertOptionsEquals(
-                $expected[$i]['options'],
-                $actual[$i]['options']
-            );
-        }
-    }
 
-    /**
-     * Validate product options in extracted product data
-     *
-     * @param array $expectedOptions
-     * @param array $actualOptions
-     * @return void
-     */
-    protected function assertOptionsEquals(array $expectedOptions, array $actualOptions): void
-    {
-        $this->assertCount(sizeof($expectedOptions), $actualOptions);
-        foreach ($actualOptions as $optionKey => $actualOption) {
-            foreach ($this->optionsToCompare as $optionToCompare) {
-                $this->assertEquals(
-                    $expectedOptions[$optionKey][$optionToCompare],
-                    $actualOption[$optionToCompare]
-                );
-            }
-
-            $this->assertCount(sizeof($expectedOptions[$optionKey]['values']), $actualOption['values']);
-            foreach ($actualOption['values'] as $valueKey => $value) {
-                foreach ($this->optionValuesToCompare as $optionValueToCompare) {
-                    $this->assertEquals(
-                        $expectedOptions[$optionKey]['values'][$valueKey][$optionValueToCompare],
-                        $value[$optionValueToCompare]
-                    );
+        foreach ($expected as $key => $product) {
+            foreach ($product as $attribute => $attributeValue) {
+                if (!array_contains($this->attributesToCompare, $key)) {
+                    unset($expected[$key][$attribute]);
                 }
             }
         }
-    }
 
-    /**
-     * Compares complex values
-     *
-     * @param mixed $expected
-     * @param mixed $actual
-     * @return void
-     */
-    private function compareComplexValue($expected, $actual): void
-    {
-        if (is_array($expected)) {
-            $this->assertEquals(
-                sizeof($expected),
-                sizeof($actual),
-                'Expected and actual are of different size, expected '
-                . json_encode($expected)
-                . ', actual '
-                . json_encode($actual)
-                . '.'
-            );
-            foreach (array_keys($expected) as $key) {
-                $snakeCaseKey = $this->camelToSnakeCase($key);
-                $this->assertTrue(
-                    \array_key_exists($snakeCaseKey, $actual),
-                    "'$snakeCaseKey' doesn't exist\n"
-                    . "expected: \n"
-                    . json_encode($expected)
-                    . "actual: \n"
-                    . json_encode($actual)
-                );
-                $this->compareComplexValue($expected[$key], $actual[$snakeCaseKey]);
-            }
-        } else {
-            $this->assertEquals($expected, $actual);
-        }
-    }
-
-    /**
-     * Tranform snake case to camel case
-     *
-     * @param string|string[] $string
-     * @return string|string[]
-     */
-    private function snakeToCamelCase($string)
-    {
-        $string = str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
-        $string[0] = strtolower($string[0]);
-        return $string;
+        $diff = $this->compareArraysRecursively(
+            $this->camelToSnakeCaseRecursive($expected),
+            $actual
+        );
+        self::assertEquals([], $diff, "Actual response doesn't equal expected data");
     }
 
     /**
@@ -215,6 +110,21 @@ abstract class AbstractProductExportTestHelper extends WebapiAbstract
     private function camelToSnakeCase($string): string
     {
         return strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $string));
+    }
+
+    /**
+     * @param array|mixed $data
+     * @return array|mixed
+     */
+    private function camelToSnakeCaseRecursive($data)
+    {
+        if (is_array($data)) {
+            foreach ($data as $key => $value) {
+                unset($data[$key]);
+                $data[$this->camelToSnakeCase($key)] = $this->camelToSnakeCaseRecursive($value);
+            }
+        }
+        return $data;
     }
 
     /**
