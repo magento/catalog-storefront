@@ -79,6 +79,7 @@ class ExportTest extends WebapiAbstract
             $options = $results[0]['options'];
             foreach ($options as &$option) {
                 // remove option id because it's dynamic field from response
+                unset($option['attribute_id']);
                 unset($option['id']);
                 foreach ($option['values'] as &$value) {
                     unset($value['id']);
@@ -103,64 +104,99 @@ class ExportTest extends WebapiAbstract
                     [
                         'title'  => 'Text swatch attribute',
                         'product_sku'  => null,
-                        'required'  => true,
-                        'render_type'  => 'drop_down',
-                        'type'  => 'configurable',
+                        'render_type'  => null,
+                        'type'  => 'super',
                         'values' => [
                             [
-                                'value' => 'Option 3',
                                 'price' => null,
                                 'sku'   => null,
                                 'price_type' => null,
-                                'sort_order' => null
+                                'sort_order' => null,
+                                'label' => null,
+                                'is_default' => null,
+                                'sample' => null,
+                                'default_label' => 'Option 1',
+                                'store_label' => 'Option 1',
+                                'value' => null
+
                             ],
                             [
-                                'value' => 'Option 1',
                                 'price' => null,
                                 'sku'   => null,
                                 'price_type' => null,
-                                'sort_order' => null
+                                'sort_order' => null,
+                                'label' => null,
+                                'is_default' => null,
+                                'sample' => null,
+                                'default_label' => 'Option 2',
+                                'store_label' => 'Option 2',
+                                'value' => null
                             ],
                             [
-                                'value' => 'Option 2',
                                 'price' => null,
                                 'sku'   => null,
                                 'price_type' => null,
-                                'sort_order' => null
+                                'sort_order' => null,
+                                'label' => null,
+                                'is_default' => null,
+                                'sample' => null,
+                                'default_label' => 'Option 3',
+                                'store_label' => 'Option 3',
+                                'value' => null
                             ],
                         ],
-                        'sort_order' => null
+                        'sort_order' => 0,
+                        'attribute_code' => 'text_swatch_attribute',
+                        'use_default' => false,
+                        'is_required' => null
                     ],
                     [
                         'title'  => 'Visual swatch attribute',
                         'product_sku'  => null,
-                        'required'  => true,
-                        'render_type'  => 'drop_down',
-                        'type'  => 'configurable',
+                        'render_type'  => null,
+                        'type'  => 'super',
                         'values' => [
                             [
-                                'value' => 'option 1',
                                 'price' => null,
                                 'sku'   => null,
                                 'price_type' => null,
-                                'sort_order' => null
+                                'sort_order' => null,
+                                'label' => null,
+                                'is_default' => null,
+                                'sample' => null,
+                                'default_label' => 'option 1',
+                                'store_label' => 'option 1',
+                                'value' => null
                             ],
                             [
-                                'value' => 'option 2',
                                 'price' => null,
                                 'sku'   => null,
                                 'price_type' => null,
-                                'sort_order' => null
+                                'sort_order' => null,
+                                'label' => null,
+                                'is_default' => null,
+                                'sample' => null,
+                                'default_label' => 'option 2',
+                                'store_label' => 'option 2',
+                                'value' => null
                             ],
                             [
-                                'value' => 'option 3',
                                 'price' => null,
                                 'sku'   => null,
                                 'price_type' => null,
-                                'sort_order' => null
+                                'sort_order' => null,
+                                'label' => null,
+                                'is_default' => null,
+                                'sample' => null,
+                                'default_label' => 'option 3',
+                                'store_label' => 'option 3',
+                                'value' => null
                             ],
                         ],
-                        'sort_order' => null
+                        'sort_order' => 0,
+                        'attribute_code' => 'visual_swatch_attribute',
+                        'use_default' => false,
+                        'is_required' => null
                     ],
                 ],
             ]
