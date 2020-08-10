@@ -126,15 +126,6 @@ class ProductDataProcessor
             $importProduct['grouped_items'] = $oldExportDataProduct['items'];
         }
 
-        $importProduct['dynamic_attributes'] = [];
-        foreach ($product['attributes'] ?? [] as $attribute) {
-            $importProduct['dynamic_attributes'][] = [
-                'code' => $attribute['attribute_code'],
-                'value' => $importProduct[$attribute['attribute_code']] ?? '',
-            ];
-            unset($oldExportDataProduct[$attribute['attribute_code']]);
-        }
-
         // TODO: only $importProduct must be returned https://github.com/magento/catalog-storefront/issues/165
         return array_merge($oldExportDataProduct, $importProduct);
     }
