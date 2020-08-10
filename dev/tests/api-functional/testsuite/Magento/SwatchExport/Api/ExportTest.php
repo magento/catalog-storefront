@@ -94,6 +94,7 @@ class ExportTest extends WebapiAbstract
      * Data Provider with eav attribute result
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function attributesResult()
     {
@@ -101,10 +102,10 @@ class ExportTest extends WebapiAbstract
             'swatch_results_export' => [
                 [
                     [
-                        'title'  => 'Text swatch attribute',
-                        'product_sku'  => null,
-                        'required'  => true,
-                        'render_type'  => 'drop_down',
+                        'title' => 'Text swatch attribute',
+                        'product_sku' => null,
+                        'is_required' => true,
+                        'render_type' => 'drop_down',
                         'type'  => 'configurable',
                         'values' => [
                             [
@@ -112,52 +113,82 @@ class ExportTest extends WebapiAbstract
                                 'price' => null,
                                 'sku'   => null,
                                 'price_type' => null,
-                                'sort_order' => null
+                                'sort_order' => null,
+                                'label' => null,
+                                'quantity' => null,
+                                'is_default' => null,
+                                'can_change_quantity' => null,
+                                'entity_id' => null,
                             ],
                             [
                                 'value' => 'Option 1',
                                 'price' => null,
                                 'sku'   => null,
                                 'price_type' => null,
-                                'sort_order' => null
+                                'sort_order' => null,
+                                'label' => null,
+                                'quantity' => null,
+                                'is_default' => null,
+                                'can_change_quantity' => null,
+                                'entity_id' => null,
                             ],
                             [
                                 'value' => 'Option 2',
                                 'price' => null,
                                 'sku'   => null,
                                 'price_type' => null,
-                                'sort_order' => null
+                                'sort_order' => null,
+                                'label' => null,
+                                'quantity' => null,
+                                'is_default' => null,
+                                'can_change_quantity' => null,
+                                'entity_id' => null,
                             ],
                         ],
                         'sort_order' => null
                     ],
                     [
-                        'title'  => 'Visual swatch attribute',
-                        'product_sku'  => null,
-                        'required'  => true,
-                        'render_type'  => 'drop_down',
-                        'type'  => 'configurable',
+                        'title' => 'Visual swatch attribute',
+                        'product_sku' => null,
+                        'is_required' => true,
+                        'render_type' => 'drop_down',
+                        'type' => 'configurable',
                         'values' => [
                             [
                                 'value' => 'option 1',
                                 'price' => null,
                                 'sku'   => null,
                                 'price_type' => null,
-                                'sort_order' => null
+                                'sort_order' => null,
+                                'label' => null,
+                                'quantity' => null,
+                                'is_default' => null,
+                                'can_change_quantity' => null,
+                                'entity_id' => null,
                             ],
                             [
                                 'value' => 'option 2',
                                 'price' => null,
                                 'sku'   => null,
                                 'price_type' => null,
-                                'sort_order' => null
+                                'sort_order' => null,
+                                'label' => null,
+                                'quantity' => null,
+                                'is_default' => null,
+                                'can_change_quantity' => null,
+                                'entity_id' => null,
                             ],
                             [
                                 'value' => 'option 3',
                                 'price' => null,
                                 'sku'   => null,
                                 'price_type' => null,
-                                'sort_order' => null
+                                'sort_order' => null,
+                                'label' => null,
+                                'quantity' => null,
+                                'is_default' => null,
+                                'can_change_quantity' => null,
+                                'entity_id' => null,
                             ],
                         ],
                         'sort_order' => null
