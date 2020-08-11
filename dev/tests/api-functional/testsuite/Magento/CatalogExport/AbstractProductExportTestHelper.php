@@ -87,7 +87,7 @@ abstract class AbstractProductExportTestHelper extends WebapiAbstract
     {
 
         foreach ($expected as $key => $product) {
-            foreach ($product as $attribute => $attributeValue) {
+            foreach (array_keys($product) as $attribute) {
                 if (!array_contains($this->attributesToCompare, $key)) {
                     unset($expected[$key][$attribute]);
                 }
