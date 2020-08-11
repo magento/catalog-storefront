@@ -102,7 +102,7 @@ abstract class AbstractProductExportTestHelper extends WebapiAbstract
     }
 
     /**
-     * Tranform camel case to snake case
+     * Transform camel case to snake case
      *
      * @param string|int $string
      * @return string string
@@ -113,7 +113,7 @@ abstract class AbstractProductExportTestHelper extends WebapiAbstract
     }
 
     /**
-     * Tranform camel case to snake case recursively
+     * Transform camel case to snake case recursively
      *
      * @param array|mixed $data
      * @return array|mixed

@@ -118,8 +118,10 @@ class ExportTest extends WebapiAbstract
                                 'sample' => null,
                                 'default_label' => 'Option 1',
                                 'store_label' => 'Option 1',
-                                'value' => null
-
+                                'value' => null,
+                                'quantity' => null,
+                                'can_change_quantity' => null,
+                                'entity_id' => null,
                             ],
                             [
                                 'price' => null,
@@ -131,7 +133,10 @@ class ExportTest extends WebapiAbstract
                                 'sample' => null,
                                 'default_label' => 'Option 2',
                                 'store_label' => 'Option 2',
-                                'value' => null
+                                'value' => null,
+                                'quantity' => null,
+                                'can_change_quantity' => null,
+                                'entity_id' => null,
                             ],
                             [
                                 'price' => null,
@@ -143,7 +148,10 @@ class ExportTest extends WebapiAbstract
                                 'sample' => null,
                                 'default_label' => 'Option 3',
                                 'store_label' => 'Option 3',
-                                'value' => null
+                                'value' => null,
+                                'quantity' => null,
+                                'can_change_quantity' => null,
+                                'entity_id' => null,
                             ],
                         ],
                         'sort_order' => 0,
@@ -167,7 +175,10 @@ class ExportTest extends WebapiAbstract
                                 'sample' => null,
                                 'default_label' => 'option 1',
                                 'store_label' => 'option 1',
-                                'value' => null
+                                'value' => null,
+                                'quantity' => null,
+                                'can_change_quantity' => null,
+                                'entity_id' => null,
                             ],
                             [
                                 'price' => null,
@@ -179,7 +190,10 @@ class ExportTest extends WebapiAbstract
                                 'sample' => null,
                                 'default_label' => 'option 2',
                                 'store_label' => 'option 2',
-                                'value' => null
+                                'value' => null,
+                                'quantity' => null,
+                                'can_change_quantity' => null,
+                                'entity_id' => null,
                             ],
                             [
                                 'price' => null,
@@ -191,7 +205,10 @@ class ExportTest extends WebapiAbstract
                                 'sample' => null,
                                 'default_label' => 'option 3',
                                 'store_label' => 'option 3',
-                                'value' => null
+                                'value' => null,
+                                'quantity' => null,
+                                'can_change_quantity' => null,
+                                'entity_id' => null,
                             ],
                         ],
                         'sort_order' => 0,
