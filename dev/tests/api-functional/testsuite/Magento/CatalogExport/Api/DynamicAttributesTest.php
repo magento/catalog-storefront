@@ -116,11 +116,11 @@ class DynamicAttributesTest extends WebapiAbstract
                 $snakeCaseKey = $this->camelToSnakeCase($key);
                 $this->assertTrue(
                     \array_key_exists($snakeCaseKey, $actual),
-                    $snakeCaseKey . 'doesn\'t exist, '
+                    "'$snakeCaseKey' doesn't exist\n"
+                    . "expected: \n"
                     . json_encode($expected)
-                    . ', actual '
+                    . "actual: \n"
                     . json_encode($actual)
-                    . '.'
                 );
                 $this->compareComplexValue($expected[$key], $actual[$snakeCaseKey]);
             }

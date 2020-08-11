@@ -55,6 +55,15 @@ class OptionValue
     /** @var string */
     private $storeLabel;
 
+    /** @var float */
+    private $quantity;
+
+    /** @var bool */
+    private $canChangeQuantity;
+
+    /** @var int */
+    private $entityId;
+
     /**
      * Get id
      *
@@ -284,5 +293,68 @@ class OptionValue
     public function setStoreLabel(?string $storeLabel): void
     {
         $this->storeLabel = $storeLabel;
+    }
+
+    /**
+     * Get quantity
+     *
+     * @return float
+     */
+    public function getQuantity(): ?float
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * Set quantity
+     *
+     * @param float $quantity
+     * @return void
+     */
+    public function setQuantity(?float $quantity): void
+    {
+        $this->quantity = $quantity;
+    }
+
+    /**
+     * Get can change quantity
+     *
+     * @return bool
+     */
+    public function getCanChangeQuantity(): ?bool
+    {
+        return $this->canChangeQuantity;
+    }
+
+    /**
+     * Set can change quantity
+     *
+     * @param bool $canChangeQuantity
+     * @return void
+     */
+    public function setCanChangeQuantity(?bool $canChangeQuantity): void
+    {
+        $this->canChangeQuantity = $canChangeQuantity;
+    }
+
+    /**
+     * Get entity id
+     *
+     * @return int
+     */
+    public function getEntityId(): ?int
+    {
+        return $this->entityId;
+    }
+
+    /**
+     * Set entity id
+     *
+     * @param int $entityId
+     * @return void
+     */
+    public function setEntityId(?int $entityId): void
+    {
+        $this->entityId = $entityId;
     }
 }
