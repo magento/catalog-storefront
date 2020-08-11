@@ -23,8 +23,9 @@ class SwatchImage implements DataMapperInterface
         if (empty($data['swatch_image'])) {
             return ['swatch_image' => null];
         }
-
+        // phpcs:disable
         $baseName = \basename($data['swatch_image']['url']);
+        // phpcs:enable
 
         return [
             'swatch_image' => \sprintf('%s/%s', Uploader::getDispersionPath($baseName), $baseName),

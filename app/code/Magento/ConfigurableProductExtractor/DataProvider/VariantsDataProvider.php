@@ -68,6 +68,9 @@ class VariantsDataProvider implements DataProviderInterface
 
     /**
      * @inheritdoc
+     *
+     * Fetches requested product variants attributes for given $parentProductIds.
+     *
      * @throws \Zend_Db_Statement_Exception
      */
     public function fetch(array $parentProductIds, array $requestedAttributes, array $scopes): array
