@@ -5,23 +5,17 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogStorefrontGraphQl\Resolver\Deprecated\CatalogCustomer;
+namespace Magento\CatalogStorefrontGraphQl\Resolver\Deprecated;
 
-use Magento\CatalogCustomerGraphQl\Model\Resolver\Customer\GetCustomerGroup;
-use Magento\CatalogGraphQl\Model\Resolver\Product\Price\Discount;
-use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool as PriceProviderPool;
 use Magento\CatalogStorefrontGraphQl\Model\ProductModelHydrator;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\CatalogCustomerGraphQl\Model\Resolver\Product\Price\TiersFactory;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Override resolver of deprecated field. Add 'model' to output
  */
-class PriceTiers extends \Magento\CatalogCustomerGraphQl\Model\Resolver\PriceTiers
+class SpecialPrice extends \Magento\CatalogGraphQl\Model\Resolver\Product\SpecialPrice
 {
     /**
      * @var ProductModelHydrator
@@ -29,31 +23,11 @@ class PriceTiers extends \Magento\CatalogCustomerGraphQl\Model\Resolver\PriceTie
     private $productModelHydrator;
 
     /**
-     * @param ValueFactory $valueFactory
-     * @param TiersFactory $tiersFactory
-     * @param GetCustomerGroup $getCustomerGroup
-     * @param Discount $discount
-     * @param PriceProviderPool $priceProviderPool
-     * @param PriceCurrencyInterface $priceCurrency
      * @param ProductModelHydrator $productModelHydrator
      */
     public function __construct(
-        ValueFactory $valueFactory,
-        TiersFactory $tiersFactory,
-        GetCustomerGroup $getCustomerGroup,
-        Discount $discount,
-        PriceProviderPool $priceProviderPool,
-        PriceCurrencyInterface $priceCurrency,
         ProductModelHydrator $productModelHydrator
     ) {
-        parent::__construct(
-            $valueFactory,
-            $tiersFactory,
-            $getCustomerGroup,
-            $discount,
-            $priceProviderPool,
-            $priceCurrency
-        );
         $this->productModelHydrator = $productModelHydrator;
     }
 

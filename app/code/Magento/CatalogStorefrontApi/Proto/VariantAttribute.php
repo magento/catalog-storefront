@@ -25,6 +25,10 @@ class VariantAttribute extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string value_index = 3;</code>
      */
     protected $value_index = '';
+    /**
+     * Generated from protobuf field <code>string attribute_id = 4;</code>
+     */
+    protected $attribute_id = '';
 
     /**
      * Constructor.
@@ -35,6 +39,7 @@ class VariantAttribute extends \Google\Protobuf\Internal\Message
      *     @type string $label
      *     @type string $code
      *     @type string $value_index
+     *     @type string $attribute_id
      * }
      */
     public function __construct($data = null)
@@ -105,6 +110,28 @@ class VariantAttribute extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, true);
         $this->value_index = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>string attribute_id = 4;</code>
+     * @return string
+     */
+    public function getAttributeId()
+    {
+        return $this->attribute_id;
+    }
+
+    /**
+     * Generated from protobuf field <code>string attribute_id = 4;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setAttributeId($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->attribute_id = $var;
 
         return $this;
     }
