@@ -64,9 +64,9 @@ class VariantsDataProvider implements DataProviderInterface
         $this->attributeOptionsProvider = $attributeOptionsProvider;
     }
 
+    /** TODO: Remove module once configurable product variants provider is implemented in saasExport*/
+
     /**
-     * todo: Remove module once configurable product variants provider is implemented in saasExport
-     *
      * @inheritdoc
      * @throws \Zend_Db_Statement_Exception
      */

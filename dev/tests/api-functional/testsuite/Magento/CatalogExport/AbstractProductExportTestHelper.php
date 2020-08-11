@@ -113,6 +113,8 @@ abstract class AbstractProductExportTestHelper extends WebapiAbstract
     }
 
     /**
+     * Tranform camel case to snake case recursively
+     *
      * @param array|mixed $data
      * @return array|mixed
      */
