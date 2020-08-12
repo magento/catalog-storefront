@@ -58,7 +58,7 @@ class ProductsQueueConsumer
     public function processMessages(UpdatedEntitiesDataInterface $message): void
     {
         $storeProducts = $this->getUniqueIdsForStores([$message]);
-        //TODO: remove ad-hoc solution after moving events to saas-export
+        //TODO: remove ad-hoc solution after moving events to corresponding export service
         $allProductIds = [];
         foreach ($storeProducts as $storeId => $productIds) {
             if (empty($productIds)) {

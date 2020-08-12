@@ -154,6 +154,9 @@ class Product
     /** @var \Magento\CatalogExportApi\Api\Data\MediaItem[]|null */
     private $mediaGallery;
 
+    /** @var \Magento\CatalogExportApi\Api\Data\Samples[]|null */
+    private $samples;
+
     /** @var \Magento\CatalogExportApi\Api\Data\Variant[]|null */
     private $variants;
 
@@ -1088,6 +1091,27 @@ class Product
     public function setMediaGallery(?array $mediaGallery = null): void
     {
         $this->mediaGallery = $mediaGallery;
+    }
+
+    /**
+     * Get samples
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\Samples[]|null
+     */
+    public function getSamples(): ?array
+    {
+        return $this->samples;
+    }
+
+    /**
+     * Set samples
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\Samples[] $samples
+     * @return void
+     */
+    public function setSamples(?array $samples = null): void
+    {
+        $this->samples = $samples;
     }
 
     /**

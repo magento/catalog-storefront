@@ -20,6 +20,7 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResponse;
 use Magento\Framework\GraphQl\Query\Resolver\BatchResolverInterface;
 use Magento\StorefrontGraphQl\Model\Query\ScopeProvider;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 
 /**
  * Product field resolver, used for GraphQL request processing.
@@ -48,21 +49,29 @@ class Product implements BatchResolverInterface
     private $scopeProvider;
 
     /**
+     * @var ProductResource
+     */
+    private $productResource;
+
+    /**
      * @param \Magento\StorefrontGraphQl\Model\ServiceInvoker $serviceInvoker
      * @param RequestBuilder $requestBuilder
      * @param FieldResolver $fieldResolver
      * @param ScopeProvider $scopeProvider
+     * @param ProductResource $productResource
      */
     public function __construct(
         \Magento\StorefrontGraphQl\Model\ServiceInvoker $serviceInvoker,
         RequestBuilder $requestBuilder,
         FieldResolver $fieldResolver,
-        ScopeProvider $scopeProvider
+        ScopeProvider $scopeProvider,
+        ProductResource $productResource
     ) {
         $this->serviceInvoker = $serviceInvoker;
         $this->requestBuilder = $requestBuilder;
         $this->fieldResolver = $fieldResolver;
         $this->scopeProvider = $scopeProvider;
+        $this->productResource = $productResource;
     }
 
     /**
@@ -81,6 +90,11 @@ class Product implements BatchResolverInterface
             $productId = \is_array($productId)
                 ? $productId['entity_id'] ?? $productId
                 : $productId;
+
+            if (!$productId && !empty($request->getValue()['sku'])) {
+                $productId = $this->productResource->getIdBySku($request->getValue()['sku']);
+            }
+
             if (!$productId) {
                 throw new \InvalidArgumentException('Product id is missing in request');
             }
