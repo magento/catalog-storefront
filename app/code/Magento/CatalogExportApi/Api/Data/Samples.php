@@ -28,6 +28,9 @@ class Samples
     /** @var string */
     private $url;
 
+    /** @var string */
+    private $sortOrder;
+
     /**
      * Get label
      *
@@ -68,5 +71,26 @@ class Samples
     public function setUrl(?string $url): void
     {
         $this->url = $url;
+    }
+
+    /**
+     * Get sort order
+     *
+     * @return string
+     */
+    public function getSortOrder(): ?string
+    {
+        return $this->sortOrder;
+    }
+
+    /**
+     * Set sort order
+     *
+     * @param string $sortOrder
+     * @return void
+     */
+    public function setSortOrder(?string $sortOrder): void
+    {
+        $this->sortOrder = $sortOrder;
     }
 }

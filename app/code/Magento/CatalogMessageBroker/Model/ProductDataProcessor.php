@@ -82,7 +82,7 @@ class ProductDataProcessor
         'links_purchased_separately', //type: bool
         'links_title', //type: string
         'downloadable_product_links', //type: \Magento\CatalogStorefrontApi\Api\Data\DownloadableLinkInterface[]
-        'downloadable_product_samples', //type: \Magento\CatalogStorefrontApi\Api\Data\DownloadableSampleInterface[]
+        'samples', //type: \Magento\CatalogStorefrontApi\Api\Data\Sample[]
         'only_xleft_in_stock', //type: float
 
     ];
