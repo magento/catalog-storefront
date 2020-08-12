@@ -63,6 +63,26 @@ class CatalogClient extends \Grpc\BaseStub
     }
 
     /**
+     * @param \Magento\CatalogStorefrontApi\Proto\DeleteProductsRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     */
+    public function deleteProducts(
+        \Magento\CatalogStorefrontApi\Proto\DeleteProductsRequest $argument,
+        $metadata = [],
+        $options = []
+    )
+    {
+        return $this->_simpleRequest(
+            '/magento.catalogStorefrontApi.proto.Catalog/deleteProducts',
+            $argument,
+            ['\Magento\CatalogStorefrontApi\Proto\DeleteProductsResponse', 'decode'],
+            $metadata,
+            $options
+        );
+    }
+
+    /**
      * @param \Magento\CatalogStorefrontApi\Proto\ImportCategoriesRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options

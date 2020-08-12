@@ -19,6 +19,10 @@ use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseInterface;
 use Magento\CatalogStorefrontApi\Proto\ImportProductsRequest;
 use Magento\CatalogStorefrontApi\Proto\ImportProductsResponse;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseInterface;
+use Magento\CatalogStorefrontApi\Proto\DeleteProductsRequest;
+use Magento\CatalogStorefrontApi\Proto\DeleteProductsResponse;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface;
 use Magento\CatalogStorefrontApi\Proto\ImportCategoriesRequest;
@@ -517,24 +521,20 @@ class Catalog implements CatalogInterface
                     }
                     $r->setDownloadableProductLinks($res);
                     $res = [];
-                    foreach ($item1->getDownloadableProductSamples() as $item57) {
-                        // convert data from \Magento\CatalogStorefrontApi\Proto\DownloadableSample
-                        // to \Magento\CatalogStorefrontApi\Api\Data\DownloadableSample
-                        /** @var \Magento\CatalogStorefrontApi\Proto\DownloadableSample $item57 **/
+                    foreach ($item1->getSamples() as $item57) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\Sample
+                        // to \Magento\CatalogStorefrontApi\Api\Data\Sample
+                        /** @var \Magento\CatalogStorefrontApi\Proto\Sample $item57 **/
                         $p = function () use ($item57) {
-                            $r = new \Magento\CatalogStorefrontApi\Api\Data\DownloadableSample();
-                            $r->setSampleUrl($item57->getSampleUrl());
-                            $r->setTitle($item57->getTitle());
-                            $r->setSortOrder($item57->getSortOrder());
-                            $r->setSampleType($item57->getSampleType());
-                            $r->setSampleFile($item57->getSampleFile());
-                            $r->setEntityId($item57->getEntityId());
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\Sample();
+                            $r->setUrl($item57->getUrl());
+                            $r->setLabel($item57->getLabel());
                             return $r;
                         };
                         $out = $p();
                         $res[] = $out;
                     }
-                    $r->setDownloadableProductSamples($res);
+                    $r->setSamples($res);
                     $r->setOnlyXLeftInStock($item1->getOnlyXLeftInStock());
                     $res = [];
                     foreach ($item1->getGroupedItems() as $item59) {
@@ -994,24 +994,20 @@ class Catalog implements CatalogInterface
                     }
                     $r->setDownloadableProductLinks($res);
                     $res = [];
-                    foreach ($item1->getDownloadableProductSamples() as $item57) {
-                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\DownloadableSample
-                        // to \Magento\CatalogStorefrontApi\Proto\DownloadableSample
-                        /** @var \Magento\CatalogStorefrontApi\Api\Data\DownloadableSample $item57 **/
+                    foreach ($item1->getSamples() as $item57) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\Sample
+                        // to \Magento\CatalogStorefrontApi\Proto\Sample
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\Sample $item57 **/
                         $p = function () use ($item57) {
-                            $r = new \Magento\CatalogStorefrontApi\Proto\DownloadableSample();
-                            $r->setSampleUrl($item57->getSampleUrl());
-                            $r->setTitle($item57->getTitle());
-                            $r->setSortOrder($item57->getSortOrder());
-                            $r->setSampleType($item57->getSampleType());
-                            $r->setSampleFile($item57->getSampleFile());
-                            $r->setEntityId($item57->getEntityId());
+                            $r = new \Magento\CatalogStorefrontApi\Proto\Sample();
+                            $r->setUrl($item57->getUrl());
+                            $r->setLabel($item57->getLabel());
                             return $r;
                         };
                         $proto = $p();
                         $res[] = $proto;
                     }
-                    $r->setDownloadableProductSamples($res);
+                    $r->setSamples($res);
                     $r->setOnlyXLeftInStock($item1->getOnlyXLeftInStock());
                     $res = [];
                     foreach ($item1->getGroupedItems() as $item59) {
@@ -1071,6 +1067,72 @@ class Catalog implements CatalogInterface
         /** @var \Magento\CatalogStorefrontApi\Proto\ImportProductsResponse $value **/
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponse();
+            $r->setStatus($value->getStatus());
+            $r->setMessage($value->getMessage());
+            return $r;
+        };
+        $out = $p();
+
+        return $out;
+    }
+                
+    /**
+     * @inheritdoc
+     *
+     * @param DeleteProductsRequestInterface $request
+     * @return DeleteProductsResponseInterface
+     * @throws \Throwable
+     */
+    public function deleteProducts(DeleteProductsRequestInterface $request): DeleteProductsResponseInterface
+    {
+        $protoRequest = $this->deleteProductsToProto($request);
+        [$protoResult, $status] = $this->protoClient->deleteProducts($protoRequest)->wait();
+        if ($status->code !== 0) {
+            throw new \RuntimeException($status->details, $status->code);
+        }
+        return $this->deleteProductsFromProto($protoResult);
+    }
+
+    /**
+     * Autogenerated description for deleteProducts method
+     *
+     * @param DeleteProductsRequestInterface $value
+     * @return DeleteProductsRequest
+     */
+    private function deleteProductsToProto(DeleteProductsRequestInterface $value): DeleteProductsRequest
+    {
+        // convert data from \Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequest
+        // to \Magento\CatalogStorefrontApi\Proto\DeleteProductsRequest
+        /** @var \Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequest $value **/
+        $p = function () use ($value) {
+            $r = new \Magento\CatalogStorefrontApi\Proto\DeleteProductsRequest();
+            $values = [];
+            foreach ($value->getProductIds() as $value) {
+                $values[] = $value;
+            }
+            $r->setProductIds($values);
+            $r->setStore($value->getStore());
+            return $r;
+        };
+        $proto = $p();
+
+        return $proto;
+    }
+
+    /**
+     * Autogenerated description for deleteProducts method
+     *
+     * @param DeleteProductsResponse $value
+     * @return DeleteProductsResponse
+     * phpcs:disable Generic.Metrics.NestingLevel.TooHigh
+     */
+    private function deleteProductsFromProto(DeleteProductsResponse $value): DeleteProductsResponseInterface
+    {
+        // convert data from \Magento\CatalogStorefrontApi\Proto\DeleteProductsResponse
+        // to \Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponse
+        /** @var \Magento\CatalogStorefrontApi\Proto\DeleteProductsResponse $value **/
+        $p = function () use ($value) {
+            $r = new \Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponse();
             $r->setStatus($value->getStatus());
             $r->setMessage($value->getMessage());
             return $r;
