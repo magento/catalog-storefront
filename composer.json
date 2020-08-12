@@ -327,7 +327,8 @@
         "magento/module-catalog-export": "*",
         "magento/module-catalog-export-api": "*",
         "magento/module-catalog-message-broker": "*",
-        "magento/module-catalog-data-exporter": "*"
+        "magento/module-catalog-data-exporter": "*",
+        "magento/module-configurable-product-data-exporter": "*"
     },
     "conflict": {
         "gene/bluefoot": "*"
