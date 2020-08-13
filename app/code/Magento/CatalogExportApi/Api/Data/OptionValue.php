@@ -40,9 +40,6 @@ class OptionValue
     /** @var string */
     private $sku;
 
-    /** @var string */
-    private $label;
-
     /** @var float */
     private $quantity;
 
@@ -54,6 +51,12 @@ class OptionValue
 
     /** @var int */
     private $entityId;
+
+    /** @var string */
+    private $label;
+
+    /** @var string */
+    private $sample;
 
     /**
      * Get id
@@ -182,37 +185,6 @@ class OptionValue
     }
 
     /**
-     * Get label
-     *
-     * @return string
-     */
-    public function getLabel(): ?string
-    {
-        return $this->label;
-    }
-
-    /**
-     * Set label
-     *
-     * @param string $label
-     * @return void
-     */
-    public function setLabel(?string $label): void
-    {
-        $this->label = $label;
-    }
-
-    /**
-     * Get quantity
-     *
-     * @return float
-     */
-    public function getQuantity(): ?float
-    {
-        return $this->quantity;
-    }
-
-    /**
      * Set quantity
      *
      * @param float $quantity
@@ -284,5 +256,47 @@ class OptionValue
     public function setEntityId(?int $entityId): void
     {
         $this->entityId = $entityId;
+    }
+
+    /**
+     * Get label
+     *
+     * @return string
+     */
+    public function getLabel(): ?string
+    {
+        return $this->label;
+    }
+
+    /**
+     * Set label
+     *
+     * @param string $label
+     * @return void
+     */
+    public function setLabel(?string $label): void
+    {
+        $this->label = $label;
+    }
+
+    /**
+     * Get sample
+     *
+     * @return string
+     */
+    public function getSample(): ?string
+    {
+        return $this->sample;
+    }
+
+    /**
+     * Set sample
+     *
+     * @param string $sample
+     * @return void
+     */
+    public function setSample(?string $sample): void
+    {
+        $this->sample = $sample;
     }
 }
