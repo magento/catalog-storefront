@@ -145,6 +145,16 @@ class OutputFormatter
             }, $currentResult['downloadable_product_links']);
         }
 
+        if (!empty($currentResult['samples'])) {
+            $currentResult['downloadable_product_samples'] = [];
+            $currentResult['downloadable_product_samples'] = \array_map(function ($sample) {
+                $sample['title'] = $sample['url'];
+                $sample['sample_url'] = $sample['label'];
+                return $sample;
+            }, $currentResult['samples']);
+            unset($currentResult['samples']);
+        }
+
         return $this->setDynamicAttributes($currentResult);
     }
 
