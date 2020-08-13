@@ -6,7 +6,7 @@
 namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
 use Magento\CatalogMessageBroker\Model\FetchCategoriesInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\CatalogStorefrontApi\Api\Data\CategoryMapper;
 use Psr\Log\LoggerInterface;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterfaceFactory;
@@ -22,84 +22,44 @@ class CategoriesConsumer
     private $logger;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @var FetchCategoriesInterface
      */
     private $fetchCategories;
+
     /**
      * @var CatalogServerInterface
      */
     private $catalogServer;
+
     /**
      * @var ImportCategoriesRequestInterfaceFactory
      */
     private $importCategoriesRequestInterfaceFactory;
 
     /**
-     * @var \Magento\CatalogStorefrontApi\Api\Data\CategoryMapper
+     * @var CategoryMapper
      */
     private $categoryMapper;
 
     /**
      * @param LoggerInterface $logger
      * @param FetchCategoriesInterface $fetchCategories
-     * @param StoreManagerInterface $storeManager
      * @param CatalogServerInterface $catalogServer
      * @param ImportCategoriesRequestInterfaceFactory $importCategoriesRequestInterfaceFactory
-     * @param \Magento\CatalogStorefrontApi\Api\Data\CategoryMapper $categoryMapper
+     * @param CategoryMapper $categoryMapper
      */
     public function __construct(
         LoggerInterface $logger,
         FetchCategoriesInterface $fetchCategories,
-        StoreManagerInterface $storeManager,
         CatalogServerInterface $catalogServer,
         ImportCategoriesRequestInterfaceFactory $importCategoriesRequestInterfaceFactory,
-        \Magento\CatalogStorefrontApi\Api\Data\CategoryMapper $categoryMapper
+        CategoryMapper $categoryMapper
     ) {
         $this->logger = $logger;
-        $this->storeManager = $storeManager;
         $this->fetchCategories = $fetchCategories;
         $this->catalogServer = $catalogServer;
         $this->importCategoriesRequestInterfaceFactory = $importCategoriesRequestInterfaceFactory;
         $this->categoryMapper = $categoryMapper;
-    }
-
-    /**
-     * Retrieve mapped stores, in case if something went wrong, retrieve just one default store
-     *
-     * @return array
-     */
-    private function getMappedStores(): array
-    {
-        try {
-            // @todo eliminate store manager
-            $stores = $this->storeManager->getStores(true);
-            $storesToIds = [];
-            foreach ($stores as $store) {
-                $storesToIds[$store->getCode()] = $store->getId();
-            }
-        } catch (\Throwable $e) {
-            $storesToIds['default'] = 1;
-        }
-
-        return $storesToIds;
-    }
-
-    /**
-     * Resolve store ID by store code
-     *
-     * @param array $mappedStores
-     * @param string $storeCode
-     * @return int|mixed
-     */
-    private function resolveStoreId(array $mappedStores, string $storeCode)
-    {
-        //workaround for tests
-        return $mappedStores[$storeCode] ?? 1;
     }
 
     /**
@@ -113,15 +73,13 @@ class CategoriesConsumer
             $ids = json_decode($ids, true);
             $dataPerStore = [];
 
-            $mappedStores = $this->getMappedStores();
-
             foreach ($this->fetchCategories->execute($ids) as $category) {
-                $storeId = $this->resolveStoreId($mappedStores, $category['store_view_code']);
-                $dataPerStore[$storeId][] = $category;
+                $dataPerStore[$category['store_view_code']][] = $category;
             }
-            foreach ($dataPerStore as $storeId => $categories) {
+
+            foreach ($dataPerStore as $storeCode => $categories) {
                 $this->unsetNullRecursively($categories);
-                $this->importCategories($storeId, $categories);
+                $this->importCategories($storeCode, $categories);
             }
 
         } catch (\Throwable $e) {
@@ -153,21 +111,22 @@ class CategoriesConsumer
     /**
      * Import categories
      *
-     * @param int $storeId
+     * @param string $storeCode
      * @param array $categories
+     *
      * @throws \Throwable
      */
-    private function importCategories($storeId, array $categories): void
+    private function importCategories(string $storeCode, array $categories): void
     {
         foreach ($categories as &$category) {
             // be sure, that data passed to Import API in the expected format
             $category['id'] = $category['category_id'];
             $category = $this->categoryMapper->setData($category)->build();
-
         }
+
         $importCategoriesRequest = $this->importCategoriesRequestInterfaceFactory->create();
         $importCategoriesRequest->setCategories($categories);
-        $importCategoriesRequest->setStore($storeId);
+        $importCategoriesRequest->setStore($storeCode);
         $importResult = $this->catalogServer->importCategories($importCategoriesRequest);
 
         if ($importResult->getStatus() === false) {

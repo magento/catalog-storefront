@@ -30,6 +30,7 @@ class StoreScope implements ScopeInterface
                 __('There is no store in extension attributes')
             );
         }
-        return (string)$store->getId();
+
+        return $store->getCode();
     }
 }
