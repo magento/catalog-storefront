@@ -285,11 +285,11 @@ class CatalogService implements CatalogServerInterface
                 foreach ($productInElasticFormat['dynamic_attributes'] as $dynamicAttribute) {
                     $productInElasticFormat[$dynamicAttribute['code']] = $dynamicAttribute['value'];
                 }
+                unset($productInElasticFormat['dynamic_attributes']);
                 $productInElasticFormat['short_description'] = [
                     'html' => $productInElasticFormat['short_description']
                 ];
                 $productInElasticFormat['description'] = ['html' => $productInElasticFormat['description']];
-                unset($productInElasticFormat['dynamic_attributes']);
 
                 $productsInElasticFormat['product'][$storeId]['save'][] = $productInElasticFormat;
             }

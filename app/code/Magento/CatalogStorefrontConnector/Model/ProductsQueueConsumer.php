@@ -93,9 +93,9 @@ class ProductsQueueConsumer
      */
     public function processMessages(UpdatedEntitiesDataInterface $message): void
     {
-        //wtf? is this storeview specific?
         $incomingStoreId = $message->getStoreId();
         $ids = $message->getEntityIds();
+        //TODO: remove ad-hoc solution after moving events to corresponding export service
 
         if (empty($ids)) {
             $this->productFeedIndexer->executeFull();

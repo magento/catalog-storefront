@@ -178,6 +178,7 @@ class VariantsDataProvider implements DataProviderInterface
                         'label' => $attribute['label'] ?? '',
                         'code' => $attributesPerProduct[$parentId][$attributeId]['attribute_code'] ?? '',
                         'value_index' => $attribute['value_index'] ?? '',
+                        'attribute_id' => $attributeId
                     ];
                 },
                 $attributeOptions

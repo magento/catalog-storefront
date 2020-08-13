@@ -15,7 +15,9 @@
         "magento/module-cms-graph-ql": "*",
         "magento/module-related-product-graph-ql": "*",
         "magento/module-storefront-graph-ql": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-review": "*",
+        "magento/module-review-graph-ql": "*"
     },
     "type": "magento2-module",
     "license": [
