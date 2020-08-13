@@ -93,7 +93,6 @@ class CategoriesQueueConsumer
      */
     public function processMessages(UpdatedEntitiesDataInterface $message): void
     {
-        //wtf? is this storeview specific?
         $incomingStoreId = $message->getStoreId();
         $ids = $message->getEntityIds();
 
