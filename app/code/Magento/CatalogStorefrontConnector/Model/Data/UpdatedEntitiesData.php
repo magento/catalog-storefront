@@ -13,18 +13,7 @@ namespace Magento\CatalogStorefrontConnector\Model\Data;
 class UpdatedEntitiesData implements UpdatedEntitiesDataInterface
 {
     /**
-     * Event types
-     */
-    const CATEGORIES_UPDATED_EVENT_TYPE = 'categories_updated';
-
-    const CATEGORIES_DELETED_EVENT_TYPE = 'categories_deleted';
-
-    const PRODUCTS_UPDATED_EVENT_TYPE = 'products_updated';
-
-    const PRODUCTS_DELETED_EVENT_TYPE = 'products_deleted';
-
-    /**
-     * @var int|null
+     * @var int
      */
     private $storeId;
 
@@ -34,14 +23,9 @@ class UpdatedEntitiesData implements UpdatedEntitiesDataInterface
     private $entityIds;
 
     /**
-     * @var string|null
-     */
-    private $eventType;
-
-    /**
      * @inheritdoc
      */
-    public function setStoreId(?int $storeId): void
+    public function setStoreId(int $storeId): void
     {
         $this->storeId = $storeId;
     }
@@ -49,7 +33,7 @@ class UpdatedEntitiesData implements UpdatedEntitiesDataInterface
     /**
      * @inheritdoc
      */
-    public function getStoreId(): ?int
+    public function getStoreId(): int
     {
         return $this->storeId;
     }
@@ -68,21 +52,5 @@ class UpdatedEntitiesData implements UpdatedEntitiesDataInterface
     public function getEntityIds(): array
     {
         return $this->entityIds;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setEventType(?string $eventType): void
-    {
-        $this->eventType = $eventType;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getEventType(): ?string
-    {
-        return $this->eventType;
     }
 }

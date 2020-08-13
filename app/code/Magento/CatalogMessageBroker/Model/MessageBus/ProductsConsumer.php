@@ -5,16 +5,27 @@
  */
 namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
+use Magento\CatalogExport\Model\Data\ChangedEntitiesDataInterface;
 use Magento\CatalogMessageBroker\Model\FetchProductsInterface;
+use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequestInterfaceFactory;
+use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
-use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 
 /**
  * Process product update messages and update storefront app
  */
 class ProductsConsumer
 {
+    /**
+     * todo: move these constants
+     * Event types
+     */
+    const PRODUCTS_UPDATED_EVENT_TYPE = 'products_updated';
+
+    const PRODUCTS_DELETED_EVENT_TYPE = 'products_deleted';
+
     /**
      * @var FetchProductsInterface
      */
@@ -36,9 +47,21 @@ class ProductsConsumer
     private $productPublisher;
 
     /**
+     * @var CatalogServerInterface
+     */
+    private $catalogServer;
+
+    /**
+     * @var DeleteProductsRequestInterfaceFactory
+     */
+    private $deleteProductsRequestInterfaceFactory;
+
+    /**
      * @param LoggerInterface $logger
      * @param FetchProductsInterface $fetchProducts
      * @param StoreManagerInterface $storeManager
+     * @param CatalogServerInterface $catalogServer
+     * @param DeleteProductsRequestInterfaceFactory $deleteProductsRequestInterfaceFactory
      * @param ProductPublisher $productPublisher
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -46,81 +69,121 @@ class ProductsConsumer
         LoggerInterface $logger,
         FetchProductsInterface $fetchProducts,
         StoreManagerInterface $storeManager,
+        CatalogServerInterface $catalogServer,
+        DeleteProductsRequestInterfaceFactory $deleteProductsRequestInterfaceFactory,
         ProductPublisher $productPublisher
     ) {
         $this->logger = $logger;
         $this->fetchProducts = $fetchProducts;
         $this->storeManager = $storeManager;
         $this->productPublisher = $productPublisher;
+        $this->catalogServer = $catalogServer;
+        $this->deleteProductsRequestInterfaceFactory = $deleteProductsRequestInterfaceFactory;
     }
 
     /**
      * Process message
      *
-     * @param string $ids
+     * @param ChangedEntitiesDataInterface $message
+     * @return void
      */
-    public function processMessage(string $ids)
+    public function processMessage(ChangedEntitiesDataInterface $message): void
     {
-        $ids = json_decode($ids, true);
-        // @todo eliminate store manager
-        $stores = $this->storeManager->getStores(true);
-        $storesToIds = [];
-        foreach ($stores as $store) {
-            $storesToIds[$store->getCode()] = $store->getId();
-        }
-        $overrides = $this->fetchProducts->getByIds($ids);
-        if (!empty($overrides)) {
-            $this->publishProducts($overrides, $storesToIds);
-        }
-        // @todo temporary solution. Deleted products must be processed from different message in queue
-        // message must be published into \Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer::process
-        $deletedProducts = $this->fetchProducts->getDeleted($ids);
-        if (!empty($deletedProducts)) {
-            $this->deleteProducts($deletedProducts, $storesToIds);
+        try {
+            // @todo eliminate store manager
+            $storesToIds = $this->getMappedStores();
+
+            if ($message->getEventType() === self::PRODUCTS_UPDATED_EVENT_TYPE) {
+                $productsData = $this->fetchProducts->getByIds($message->getEntityIds());
+                if (!empty($productsData)) {
+                    $productsPerStore = [];
+                    foreach ($productsData as $productData) {
+                        $dataStoreId = $this->resolveStoreId($storesToIds, $productData['store_view_code']);
+                        $productsPerStore[$dataStoreId][$productData['product_id']] = $productData;
+                    }
+                    foreach ($productsPerStore as $storeId => $products) {
+                        $this->publishProducts($products, $storeId);
+                    }
+                }
+                // @todo temporary solution. Deleted products must be processed from different message in queue
+                // message must be published into \Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer::process
+            } elseif ($message->getEventType() === self::PRODUCTS_DELETED_EVENT_TYPE) {
+                $this->deleteProducts($message->getEntityIds(), $message->getScope());
+            }
+        } catch (\Throwable $e) {
+            $this->logger->critical($e->getMessage());
         }
     }
 
     /**
      * Publishes products to storage
      *
-     * @param array $overrides
-     * @param array $storesToIds
+     * @param array $products
+     * @param int $storeId
      */
-    private function publishProducts(array $overrides, array $storesToIds)
+    private function publishProducts(array $products, int $storeId)
     {
-        $productsPerStore = [];
-        foreach ($overrides as $override) {
-            $storeId = $storesToIds[$override['store_view_code']];
-            $productsPerStore[$storeId][$override['product_id']] = $override;
-        }
-        foreach ($productsPerStore as $storeId => $products) {
-            try {
-                $this->productPublisher->publish(\array_keys($products), $storeId, $products);
-            } catch (\Throwable $e) {
-                $this->logger->critical($e);
-            }
+        try {
+            $this->productPublisher->publish(\array_keys($products), $storeId, $products);
+        } catch (\Throwable $e) {
+            $this->logger->critical(sprintf('Exception while publishing products: "%s"', $e));
         }
     }
 
     /**
-     * Deleted products from storage
+     * Delete products from storage
      *
-     * @param array $deletedProducts
-     * @param array $storesToIds
+     * @param string $storeId
+     * @param int[] $productIds
+     * @return void
      */
-    private function deleteProducts(array $deletedProducts, array $storesToIds)
+    private function deleteProducts(array $productIds, string $storeId): void
     {
-        $productsPerStore = [];
-        foreach ($deletedProducts as $product) {
-            $storeId = $storesToIds[$product['store_view_code']];
-            $productsPerStore[$storeId][$product['product_id']] = $product;
-        }
-        foreach ($productsPerStore as $storeId => $products) {
-            try {
-                $this->productPublisher->delete(\array_keys($products), $storeId);
-            } catch (\Throwable $e) {
-                $this->logger->critical($e);
+        $deleteProductRequest = $this->deleteProductsRequestInterfaceFactory->create();
+        $deleteProductRequest->setProductIds($productIds);
+        $deleteProductRequest->setStore($storeId);
+
+        try {
+            $importResult = $this->catalogServer->deleteProducts($deleteProductRequest);
+            if ($importResult->getStatus() === false) {
+                $this->logger->error(sprintf('Products deletion has failed: "%s"', $importResult->getMessage()));
             }
+        } catch (\Throwable $e) {
+            $this->logger->critical(sprintf('Exception while deleting products: "%s"', $e));
         }
+    }
+
+    /**
+     * Retrieve mapped stores, in case if something went wrong, retrieve just one default store
+     *
+     * @return array
+     */
+    private function getMappedStores(): array
+    {
+        try {
+            // @todo eliminate store manager
+            $stores = $this->storeManager->getStores(true);
+            $storesToIds = [];
+            foreach ($stores as $store) {
+                $storesToIds[$store->getCode()] = $store->getId();
+            }
+        } catch (\Throwable $e) {
+            $storesToIds['default'] = 1;
+        }
+
+        return $storesToIds;
+    }
+
+    /**
+     * Resolve store ID by store code
+     *
+     * @param array $mappedStores
+     * @param string $storeCode
+     * @return int|mixed
+     */
+    private function resolveStoreId(array $mappedStores, string $storeCode)
+    {
+        //workaround for tests
+        return $mappedStores[$storeCode] ?? 1;
     }
 }

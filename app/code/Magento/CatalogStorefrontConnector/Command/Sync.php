@@ -201,6 +201,7 @@ class Sync extends Command
             function () use ($output, $storeId) {
                 $processedN = 0;
                 foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $categoryIds) {
+                    //TODO: Make this work with the new categories consumer...
                     $this->categoriesConsumer->processMessage(json_encode($categoryIds));
                     $output->write('.');
                     $processedN += count($categoryIds);

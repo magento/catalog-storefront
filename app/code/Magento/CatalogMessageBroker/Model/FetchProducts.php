@@ -52,22 +52,4 @@ class FetchProducts implements FetchProductsInterface
         }
         return $data;
     }
-
-    /**
-     * @inheritDoc
-     *
-     * @param string[] $ids
-     * @return array
-     */
-    public function getDeleted(array $ids): array
-    {
-        $data = [];
-        foreach ($this->productRepository->getDeleted($ids) as $category) {
-            $data[] = [
-                'product_id' => $category['productId'],
-                'store_view_code' => $category['storeViewCode'],
-            ];
-        }
-        return $data;
-    }
 }

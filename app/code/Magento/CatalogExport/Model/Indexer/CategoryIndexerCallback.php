@@ -8,7 +8,8 @@ declare(strict_types=1);
 namespace Magento\CatalogExport\Model\Indexer;
 
 use Magento\CatalogDataExporter\Model\Indexer\CategoryIndexerCallbackInterface;
-use Magento\CatalogStorefrontConnector\Model\UpdatedEntitiesMessageBuilder;
+use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
+use Magento\CatalogMessageBroker\Model\MessageBus\CategoriesConsumer;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -32,13 +33,9 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
      */
     private $logger;
     /**
-     * @var \Magento\CatalogMessageBroker\Model\MessageBus\CategoriesConsumer
+     * @var CategoriesConsumer
      */
     private $consumer;
-    /**
-     * @var UpdatedEntitiesMessageBuilder
-     */
-    private $messageBuilder;
     /**
      * @var \Magento\CatalogDataExporter\Model\Feed\Categories
      */
@@ -47,32 +44,37 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
      * @var StoreManagerInterface
      */
     private $storeManager;
+    /**
+     * @var ChangedEntitiesMessageBuilder
+     */
+    private $messageBuilder;
 
     /**
      * @param PublisherInterface $queuePublisher
-     * @param UpdatedEntitiesMessageBuilder $messageBuilder
+     * @param ChangedEntitiesMessageBuilder $messageBuilder
+     * @param StoreManagerInterface $storeManager
+     * @param CategoriesConsumer $consumer
+     * @param \Magento\CatalogDataExporter\Model\Feed\Categories $categoriesFeed
      * @param LoggerInterface $logger
      */
     public function __construct(
         PublisherInterface $queuePublisher,
-        UpdatedEntitiesMessageBuilder $messageBuilder,
+        ChangedEntitiesMessageBuilder $messageBuilder,
         StoreManagerInterface $storeManager,
-        \Magento\CatalogMessageBroker\Model\MessageBus\CategoriesConsumer $consumer,
+        CategoriesConsumer $consumer,
         \Magento\CatalogDataExporter\Model\Feed\Categories $categoriesFeed,
         LoggerInterface $logger
     ) {
         $this->queuePublisher = $queuePublisher;
         $this->logger = $logger;
         $this->consumer = $consumer;
-        $this->messageBuilder = $messageBuilder;
         $this->categoriesFeed = $categoriesFeed;
         $this->storeManager = $storeManager;
+        $this->messageBuilder = $messageBuilder;
     }
 
     /**
-     * Todo: eliminate duplication of getFeedByIds here and in CategoryConsumer.
-     * Either pass all updated category ids, without storeIds, or... there is no other option i think?
-     * In order to check which were the deleted ids i need to make a call to the feed however. Unless i get that from the function which calls this function (indexer).
+     * Make and publish messages for updated/deleted categories.
      *
      * @inheritdoc
      */
@@ -86,67 +88,50 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
             $deleted[$storeId][] = $category['categoryId'];
             unset($ids[$category['categoryId']]);
         }
-        if (!empty($deleted)) {
-            $this->publishMessage(
-                $deleted,
-                \Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesData::CATEGORIES_DELETED_EVENT_TYPE
-            );
-        }
 
-        if (!empty($ids)) {
-            $this->publishMessage(
-                $ids,
-                \Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesData::CATEGORIES_UPDATED_EVENT_TYPE
-            );
+        foreach ($deleted as $storeId => $entityIds) {
+            foreach (array_chunk($entityIds, self::BATCH_SIZE) as $idsChunk) {
+                if (!empty($idsChunk)) {
+                    $this->publishMessage(
+                        CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
+                        $idsChunk,
+                        (string)$storeId
+                    );
+                }
+            }
+        }
+        foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
+            if (!empty($idsChunk)) {
+                $this->publishMessage(
+                    CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
+                    $idsChunk,
+                );
+            }
         }
     }
 
     /**
      * Publish deleted or updated message
-     * Todo: Shorten/make the function more generic. Is there a point of sending storeId over to the consumer for deletion? Its always deleted from all stores?
+     * Todo: Remove the temporary queue workaround
      *
-     * @param $data
-     * @param $eventType
+     * @param string $eventType
+     * @param int[] $ids
+     * @param null|string $scope
+     *
+     * @return void
      */
-    private function publishMessage($data, $eventType)
+    private function publishMessage(string $eventType, array $ids, ?string $scope = null): void
     {
-        if ($eventType === \Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesData::CATEGORIES_DELETED_EVENT_TYPE) {
-            foreach ($data as $storeId => $entityIds) {
-                foreach (array_chunk($entityIds, self::BATCH_SIZE) as $idsChunk) {
-                    if (!empty($idsChunk)) {
-                        $message = $this->messageBuilder->buildv2(
-                            ['type' => $eventType],
-                            [
-                                'ids' => $idsChunk,
-                                'storeId' => $storeId
-                            ]
-                        );
-                        try {
-//                    $this->queuePublisher->publish(self::TOPIC_NAME, $message);
-                            $this->consumer->processMessage($message);
-                        } catch (\Exception $e) {
-                            $this->logger->critical($e);
-                        }
-                    }
-                }
-            }
-        } elseif ($eventType === \Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesData::CATEGORIES_UPDATED_EVENT_TYPE) {
-            foreach (array_chunk($data, self::BATCH_SIZE) as $idsChunk) {
-                if (!empty($idsChunk)) {
-                    $message = $this->messageBuilder->buildv2(
-                        ['type' => $eventType],
-                        [
-                            'ids' => $idsChunk,
-                        ]
-                    );
-                    try {
-//                    $this->queuePublisher->publish(self::TOPIC_NAME, $message);
-                        $this->consumer->processMessage($message);
-                    } catch (\Exception $e) {
-                        $this->logger->critical($e);
-                    }
-                }
-            }
+        $message = $this->messageBuilder->build(
+            $ids,
+            $eventType,
+            $scope
+        );
+        try {
+//            $this->queuePublisher->publish(self::TOPIC_NAME, $message);
+            $this->consumer->processMessage($message);
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
         }
     }
 
@@ -155,12 +140,12 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
      *
      * @param array $mappedStores
      * @param string $storeCode
-     * @return int|mixed
+     * @return string|mixed
      */
     private function resolveStoreId(array $mappedStores, string $storeCode)
     {
         //workaround for tests
-        return $mappedStores[$storeCode] ?? 1;
+        return $mappedStores[$storeCode] ?? '1';
     }
 
     /**
@@ -175,10 +160,10 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
             $stores = $this->storeManager->getStores(true);
             $storesToIds = [];
             foreach ($stores as $store) {
-                $storesToIds[$store->getCode()] = $store->getId();
+                $storesToIds[$store->getCode()] = (string)$store->getId();
             }
         } catch (\Throwable $e) {
-            $storesToIds['default'] = 1;
+            $storesToIds['default'] = '1';
         }
 
         return $storesToIds;

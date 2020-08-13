@@ -6,47 +6,83 @@
 
 namespace Magento\CatalogStorefrontConnector\Model;
 
-use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesData;
+use Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
+use Magento\CatalogDataExporter\Model\Feed\Products as ProductsFeed;
+use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
+use Magento\CatalogMessageBroker\Model\MessageBus\ProductsConsumer;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Consumer processes messages with store front products data
  */
 class ProductsQueueConsumer
 {
+    const BATCH_SIZE = 100;
+
     /**
      * @var CatalogEntityIdsProvider
      */
     private $catalogEntityIdsProvider;
 
     /**
-     * @var \Magento\CatalogMessageBroker\Model\MessageBus\ProductsConsumer
+     * @var ProductsConsumer
      */
     private $productsConsumer;
 
     /**
-     * @var \Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer
+     * @var ProductFeedIndexer
      */
     private $productFeedIndexer;
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+    /**
+     * @var ChangedEntitiesMessageBuilder
+     */
+    private $messageBuilder;
+    /**
+     * @var ProductsFeed
+     */
+    private $productsFeed;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
-     * @param \Magento\CatalogMessageBroker\Model\MessageBus\ProductsConsumer $productsConsumer
-     * @param \Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer $productFeedIndexer
+     * @param ProductsConsumer $productsConsumer
+     * @param ProductFeedIndexer $productFeedIndexer
+     * @param StoreManagerInterface $storeManager
+     * @param ChangedEntitiesMessageBuilder $messageBuilder
+     * @param LoggerInterface $logger
+     * @param ProductsFeed $productsFeed
      * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
      */
     public function __construct(
-        \Magento\CatalogMessageBroker\Model\MessageBus\ProductsConsumer $productsConsumer,
-        \Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer $productFeedIndexer,
+        ProductsConsumer $productsConsumer,
+        ProductFeedIndexer $productFeedIndexer,
+        StoreManagerInterface $storeManager,
+        ChangedEntitiesMessageBuilder $messageBuilder,
+        LoggerInterface $logger,
+        ProductsFeed $productsFeed,
         CatalogEntityIdsProvider $catalogEntityIdsProvider
     ) {
         $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
         $this->productsConsumer = $productsConsumer;
         $this->productFeedIndexer = $productFeedIndexer;
+        $this->storeManager = $storeManager;
+        $this->messageBuilder = $messageBuilder;
+        $this->productsFeed = $productsFeed;
+        $this->logger = $logger;
     }
 
     /**
      * Process collected product IDs for update
+     * TODO: Eliminate the redundant calls. The incoming message is storeId specific, the outgoing, is not.
      *
      * Process messages from storefront.catalog.product.update topic
      *
@@ -57,51 +93,101 @@ class ProductsQueueConsumer
      */
     public function processMessages(UpdatedEntitiesDataInterface $message): void
     {
-        $storeProducts = $this->getUniqueIdsForStores([$message]);
-        //TODO: remove ad-hoc solution after moving events to saas-export
-        $allProductIds = [];
-        foreach ($storeProducts as $storeId => $productIds) {
-            if (empty($productIds)) {
-                foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $ids) {
-                    $allProductIds[] = $ids;
+        //wtf? is this storeview specific?
+        $incomingStoreId = $message->getStoreId();
+        $ids = $message->getEntityIds();
+
+        if (empty($ids)) {
+            $this->productFeedIndexer->executeFull();
+            foreach ($this->catalogEntityIdsProvider->getProductIds($incomingStoreId) as $idsChunk) {
+                $ids[] = $idsChunk;
+            }
+        } else {
+            $this->productFeedIndexer->executeList($ids);
+        }
+
+        $storesToIds = $this->getMappedStores();
+        $deleted = [];
+        foreach ($this->productsFeed->getDeletedByIds($ids) as $product) {
+            $storeId = $this->resolveStoreId($storesToIds, $product['storeViewCode']);
+            $deleted[$storeId][] = $product['productId'];
+            unset($ids[$product['productId']]);
+        }
+
+        foreach ($deleted as $storeId => $entityIds) {
+            foreach (array_chunk($entityIds, self::BATCH_SIZE) as $idsChunk) {
+                if (!empty($idsChunk && $storeId === $incomingStoreId)) {
+                    $this->passMessage(
+                        ProductsConsumer::PRODUCTS_DELETED_EVENT_TYPE,
+                        $idsChunk,
+                        (string)$storeId
+                    );
                 }
-            } else {
-                $allProductIds[] = $productIds;
             }
         }
-        $ids = \array_unique(\array_merge(...$allProductIds));
-        $this->productFeedIndexer->executeList($ids);
-        $this->productsConsumer->processMessage(\json_encode($ids));
-    }
-
-    /**
-     * Get unique ids for stores from messages
-     *
-     * @param array $messages
-     * @return array
-     */
-    private function getUniqueIdsForStores(array $messages): array
-    {
-        $storesProductIds = [];
-        /** @var UpdatedEntitiesData $updatedProductsData */
-        foreach ($messages as $updatedProductsData) {
-            $storeId = $updatedProductsData->getStoreId();
-            if (empty($updatedProductsData->getEntityIds())) {
-                // full reindex
-                $storesProductIds[$storeId] = [];
-            } elseif (isset($storesProductIds[$storeId]) && empty($storesProductIds[$storeId])) {
-                continue;
-            } elseif (!isset($storesProductIds[$storeId])) {
-                $storesProductIds[$storeId] = $updatedProductsData->getEntityIds();
-            } else {
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $storesProductIds[$storeId] = array_merge(
-                    $storesProductIds[$storeId],
-                    $updatedProductsData->getEntityIds()
+        foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
+            if (!empty($idsChunk)) {
+                $this->passMessage(
+                    ProductsConsumer::PRODUCTS_UPDATED_EVENT_TYPE,
+                    $idsChunk,
                 );
             }
         }
+    }
 
-        return $storesProductIds;
+    /**
+     * Publish deleted or updated message
+     * TODO: Eliminate the redundant calls. The incoming message is storeId specific.
+     *
+     * @param string $eventType
+     * @param int[] $ids
+     * @param null $scope
+     */
+    private function passMessage($eventType, $ids, $scope = null)
+    {
+        $message = $this->messageBuilder->build(
+            $ids,
+            $eventType,
+            $scope
+        );
+        try {
+            $this->productsConsumer->processMessage($message);
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
+        }
+    }
+
+    /**
+     * Resolve store ID by store code
+     *
+     * @param array $mappedStores
+     * @param string $storeCode
+     * @return string|mixed
+     */
+    private function resolveStoreId(array $mappedStores, string $storeCode)
+    {
+        //workaround for tests
+        return $mappedStores[$storeCode] ?? '1';
+    }
+
+    /**
+     * Retrieve mapped stores, in case if something went wrong, retrieve just one default store
+     *
+     * @return array
+     */
+    private function getMappedStores(): array
+    {
+        try {
+            // @todo eliminate store manager
+            $stores = $this->storeManager->getStores(true);
+            $storesToIds = [];
+            foreach ($stores as $store) {
+                $storesToIds[$store->getCode()] = (string)$store->getId();
+            }
+        } catch (\Throwable $e) {
+            $storesToIds['default'] = '1';
+        }
+
+        return $storesToIds;
     }
 }

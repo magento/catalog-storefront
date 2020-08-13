@@ -103,17 +103,6 @@ class ProductRepository implements ProductRepositoryInterface
     }
 
     /**
-     * Get deleted products.
-     *
-     * @param string[] $ids
-     * @return array
-     */
-    public function getDeleted(array $ids): array
-    {
-        return $this->products->getDeletedByIds($ids);
-    }
-
-    /**
      * Get max items in response
      *
      * @return int

@@ -15,17 +15,17 @@ interface UpdatedEntitiesDataInterface
     /**
      * Set store ID for updated entities
      *
-     * @param int|null $storeId
+     * @param int $storeId
      * @return void
      */
-    public function setStoreId(?int $storeId): void;
+    public function setStoreId(int $storeId): void;
 
     /**
      * Get store ID for updated entities
      *
-     * @return int|null
+     * @return int
      */
-    public function getStoreId(): ?int;
+    public function getStoreId(): int;
 
     /**
      * Set updated entities IDs
@@ -41,20 +41,4 @@ interface UpdatedEntitiesDataInterface
      * @return int[]
      */
     public function getEntityIds(): array;
-
-    /**
-     * todo: remove ? and |null
-     * Set event type
-     *
-     * @param string|null $eventType
-     * @return void
-     */
-    public function setEventType(?string $eventType): void;
-
-    /**
-     * Get event type
-     *
-     * @return string|null
-     */
-    public function getEventType(): ?string;
 }

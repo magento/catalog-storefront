@@ -50,20 +50,4 @@ class FetchCategories implements FetchCategoriesInterface
         }
         return $data;
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function getDeleted(array $ids): array
-    {
-        $data = [];
-        //todo: this loop is unnecessary other than data key formatting. See if can move this to generic feed?.
-        foreach ($this->categoryRepository->getDeleted($ids) as $category) {
-            $data[] = [
-                'category_id' => $category['categoryId'],
-                'store_view_code' => $category['storeViewCode'],
-            ];
-        }
-        return $data;
-    }
 }

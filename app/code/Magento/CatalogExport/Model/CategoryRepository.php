@@ -87,15 +87,4 @@ class CategoryRepository implements CategoryRepositoryInterface
         }
         return $categories;
     }
-
-    /**
-     * Get deleted categories.
-     *
-     * @param string[] $ids
-     * @return array
-     */
-    public function getDeleted(array $ids): array
-    {
-        return $this->categoriesFeed->getDeletedByIds($ids);
-    }
 }

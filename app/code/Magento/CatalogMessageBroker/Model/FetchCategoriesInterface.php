@@ -19,12 +19,4 @@ interface FetchCategoriesInterface
      * @return array
      */
     public function getByIds(array $ids): array;
-
-    /**
-     * Fetch deleted categories
-     *
-     * @param string[] $ids
-     * @return array
-     */
-    public function getDeleted(array $ids): array;
 }
