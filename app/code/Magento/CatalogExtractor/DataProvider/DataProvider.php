@@ -82,6 +82,9 @@ class DataProvider implements DataProviderInterface
      * @inheritdoc
      * @throws \InvalidArgumentException
      * @throws NoSuchEntityException
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function fetch(array $productIds, array $attributes, array $scopes): array
     {

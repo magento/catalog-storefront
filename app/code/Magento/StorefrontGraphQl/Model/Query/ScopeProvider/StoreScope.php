@@ -11,7 +11,7 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 
 /**
- * Store scope
+ * Store scope information provider
  */
 class StoreScope implements ScopeInterface
 {
