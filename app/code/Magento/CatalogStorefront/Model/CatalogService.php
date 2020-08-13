@@ -159,7 +159,7 @@ class CatalogService implements CatalogServerInterface
         $result = new ProductsGetResult();
 
         if (empty($request->getStore()) || $request->getStore() === null) {
-            throw new \InvalidArgumentException('Store id is not present in request.');
+            throw new \InvalidArgumentException('Store code is not present in request.');
         }
 
         if (empty($request->getIds())) {
