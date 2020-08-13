@@ -33,6 +33,11 @@ final class Sample implements SampleInterface
      * @var string
      */
     private $label;
+
+    /**
+     * @var int
+     */
+    private $sortOrder;
     
     /**
      * @inheritdoc
@@ -74,5 +79,26 @@ final class Sample implements SampleInterface
     public function setLabel(string $value): void
     {
         $this->label = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return int
+     */
+    public function getSortOrder(): int
+    {
+        return (int) $this->sortOrder;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param int $value
+     * @return void
+     */
+    public function setSortOrder(int $value): void
+    {
+        $this->sortOrder = $value;
     }
 }

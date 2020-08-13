@@ -82,6 +82,9 @@ final class SampleMapper
             case "label":
                 $dto->setLabel((string) $value);
                 break;
+            case "sort_order":
+                $dto->setSortOrder((int) $value);
+                break;
         }
     }
 }

@@ -531,6 +531,7 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                             $r = new \Magento\CatalogStorefrontApi\Proto\Sample();
                             $r->setUrl($item57->getUrl());
                             $r->setLabel($item57->getLabel());
+                            $r->setSortOrder($item57->getSortOrder());
                             return $r;
                         };
                         $proto = $p();
@@ -1011,6 +1012,7 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                             $r = new \Magento\CatalogStorefrontApi\Api\Data\Sample();
                             $r->setUrl($item57->getUrl());
                             $r->setLabel($item57->getLabel());
+                            $r->setSortOrder($item57->getSortOrder());
                             return $r;
                         };
                         $out = $p();

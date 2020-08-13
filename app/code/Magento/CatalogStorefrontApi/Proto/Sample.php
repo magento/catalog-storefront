@@ -21,6 +21,10 @@ class Sample extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string label = 2;</code>
      */
     protected $label = '';
+    /**
+     * Generated from protobuf field <code>int32 sort_order = 3;</code>
+     */
+    protected $sort_order = 0;
 
     /**
      * Constructor.
@@ -30,6 +34,7 @@ class Sample extends \Google\Protobuf\Internal\Message
      *
      *     @type string $url
      *     @type string $label
+     *     @type int $sort_order
      * }
      */
     public function __construct($data = null)
@@ -78,6 +83,28 @@ class Sample extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, true);
         $this->label = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>int32 sort_order = 3;</code>
+     * @return int
+     */
+    public function getSortOrder()
+    {
+        return $this->sort_order;
+    }
+
+    /**
+     * Generated from protobuf field <code>int32 sort_order = 3;</code>
+     * @param int $var
+     * @return $this
+     */
+    public function setSortOrder($var)
+    {
+        GPBUtil::checkInt32($var);
+        $this->sort_order = $var;
 
         return $this;
     }

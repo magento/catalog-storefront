@@ -40,6 +40,7 @@ final class SampleArrayMapper
         $result = [];
         $result["url"] = $dto->getUrl();
         $result["label"] = $dto->getLabel();
+        $result["sort_order"] = $dto->getSortOrder();
         return $result;
     }
 }
