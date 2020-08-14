@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\CatalogMessageBroker\Model\DataMapper;
 
 /**
@@ -33,6 +36,7 @@ class CustomOptions implements DataMapperInterface
                     $customOptionValue['title'] = $value['value'];
                     $customOptionValue['option_type_id'] = $value['id'];
                     $customOptionValue['price_type'] = strtoupper($value['price_type']);
+                    $customOption['required'] = $customOption['is_required'];
                     unset($value['value']);
                     $customOptionValues[] = $customOptionValue;
                 }
@@ -53,6 +57,7 @@ class CustomOptions implements DataMapperInterface
                 $customOption['type'] = $customOption['render_type'];
                 $customOption['option_id'] = $customOption['id'];
                 $customOption['price_type'] = strtoupper($customOption['price_type']);
+                $customOption['required'] = $customOption['is_required'];
                 $customOption['value'] = [$customOption];
                 $productCustomOptions[] = $customOption;
             }
