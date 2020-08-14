@@ -393,7 +393,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         // Make sure that after importing existing options again, option IDs and option value IDs are not changed
         $customOptionValues = $this->getCustomOptionValues($sku);
         $this->createImportModel($pathToFile)->importData();
-        $this->assertEquals($customOptionValues, $this->getCustomOptionValues());
+        $this->assertEquals($customOptionValues, $this->getCustomOptionValues($sku));
         $this->importedProducts = [$sku];
     }
 
@@ -492,7 +492,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 'Option IDs changed after second import'
             );
         }
-        $this->importedProducts = [$sku];
+        $this->importedProducts = ['simple', 'simple1', 'simple2'];
     }
 
     /**
@@ -1361,7 +1361,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             "Value for 'weight' attribute contains incorrect value",
             $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
         );
-        $this->importedProducts[] = ['virtual1'];
+        $this->importedProducts = ['virtual1'];
     }
 
     /**
@@ -1767,6 +1767,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             'simple2' => 'url-key2',
             'simple3' => 'url-key3'
         ];
+        // added by _files/products_to_import_with_valid_url_keys.csv
+        $this->importedProducts[] = 'simple3';
+
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
@@ -1807,6 +1810,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             'simple2' => 'normal-url',
             'simple3' => 'some!wrong\'url'
         ];
+        // added by _files/products_to_import_with_invalid_url_keys.csv
+        $this->importedProducts[] = 'simple3';
+
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
@@ -1956,6 +1962,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             'simple2' => 'simple-2',
             'simple3' => 'simple-3'
         ];
+        // added by _files/products_to_import_without_url_keys.csv
+        $this->importedProducts[] = 'simple3';
+
         $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
@@ -3122,6 +3131,12 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testCheckDoubleImportOfProducts()
     {
+        $this->importedProducts = [
+            'simple1',
+            'simple2',
+            'simple3',
+        ];
+
         /** @var SearchCriteria $searchCriteria */
         $searchCriteria = $this->searchCriteriaBuilder->create();
 
