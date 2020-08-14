@@ -32,22 +32,31 @@ class OptionValue
     private $priceType;
 
     /** @var string */
-    private $value;
+    private $label;
 
     /** @var int */
     private $sortOrder;
+
+    /** @var bool */
+    private $isDefault;
+
+    /** @var string */
+    private $sample;
+
+    /** @var string */
+    private $value;
 
     /** @var string */
     private $sku;
 
     /** @var string */
-    private $label;
+    private $defaultLabel;
+
+    /** @var string */
+    private $storeLabel;
 
     /** @var float */
     private $quantity;
-
-    /** @var bool */
-    private $isDefault;
 
     /** @var bool */
     private $canChangeQuantity;
@@ -119,24 +128,24 @@ class OptionValue
     }
 
     /**
-     * Get value
+     * Get label
      *
      * @return string
      */
-    public function getValue(): ?string
+    public function getLabel(): ?string
     {
-        return $this->value;
+        return $this->label;
     }
 
     /**
-     * Set value
+     * Set label
      *
-     * @param string $value
+     * @param string $label
      * @return void
      */
-    public function setValue(?string $value): void
+    public function setLabel(?string $label): void
     {
-        $this->value = $value;
+        $this->label = $label;
     }
 
     /**
@@ -161,6 +170,69 @@ class OptionValue
     }
 
     /**
+     * Get is default
+     *
+     * @return bool
+     */
+    public function getIsDefault(): ?bool
+    {
+        return $this->isDefault;
+    }
+
+    /**
+     * Set is default
+     *
+     * @param bool $isDefault
+     * @return void
+     */
+    public function setIsDefault(?bool $isDefault): void
+    {
+        $this->isDefault = $isDefault;
+    }
+
+    /**
+     * Get sample
+     *
+     * @return string
+     */
+    public function getSample(): ?string
+    {
+        return $this->sample;
+    }
+
+    /**
+     * Set sample
+     *
+     * @param string $sample
+     * @return void
+     */
+    public function setSample(?string $sample): void
+    {
+        $this->sample = $sample;
+    }
+
+    /**
+     * Get value
+     *
+     * @return string
+     */
+    public function getValue(): ?string
+    {
+        return $this->value;
+    }
+
+    /**
+     * Set value
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setValue(?string $value): void
+    {
+        $this->value = $value;
+    }
+
+    /**
      * Get sku
      *
      * @return string
@@ -182,24 +254,45 @@ class OptionValue
     }
 
     /**
-     * Get label
+     * Get default label
      *
      * @return string
      */
-    public function getLabel(): ?string
+    public function getDefaultLabel(): ?string
     {
-        return $this->label;
+        return $this->defaultLabel;
     }
 
     /**
-     * Set label
+     * Set default label
      *
-     * @param string $label
+     * @param string $defaultLabel
      * @return void
      */
-    public function setLabel(?string $label): void
+    public function setDefaultLabel(?string $defaultLabel): void
     {
-        $this->label = $label;
+        $this->defaultLabel = $defaultLabel;
+    }
+
+    /**
+     * Get store label
+     *
+     * @return string
+     */
+    public function getStoreLabel(): ?string
+    {
+        return $this->storeLabel;
+    }
+
+    /**
+     * Set store label
+     *
+     * @param string $storeLabel
+     * @return void
+     */
+    public function setStoreLabel(?string $storeLabel): void
+    {
+        $this->storeLabel = $storeLabel;
     }
 
     /**
@@ -221,27 +314,6 @@ class OptionValue
     public function setQuantity(?float $quantity): void
     {
         $this->quantity = $quantity;
-    }
-
-    /**
-     * Get is default
-     *
-     * @return bool
-     */
-    public function getIsDefault(): ?bool
-    {
-        return $this->isDefault;
-    }
-
-    /**
-     * Set is default
-     *
-     * @param bool $isDefault
-     * @return void
-     */
-    public function setIsDefault(?bool $isDefault): void
-    {
-        $this->isDefault = $isDefault;
     }
 
     /**
