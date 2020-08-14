@@ -393,7 +393,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         // Make sure that after importing existing options again, option IDs and option value IDs are not changed
         $customOptionValues = $this->getCustomOptionValues($sku);
         $this->createImportModel($pathToFile)->importData();
-        $this->assertEquals($customOptionValues, $this->getCustomOptionValues($sku));
+        $this->assertEquals($customOptionValues, $this->getCustomOptionValues());
+        $this->importedProducts = [$sku];
     }
 
     /**
@@ -491,6 +492,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 'Option IDs changed after second import'
             );
         }
+        $this->importedProducts = [$sku];
     }
 
     /**
@@ -1209,6 +1211,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             . "see acceptable values on settings specified for Admin",
             $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
         );
+        $this->importedProducts = ['simple_ms_1', 'simple_ms_2'];
     }
 
     /**
@@ -1257,6 +1260,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $simpleProduct->load($id);
         $this->assertTrue(count($simpleProduct->getWebsiteIds()) == 2);
         $this->assertEquals('Option Label', $simpleProduct->getAttributeText('attribute_with_option'));
+        $this->importedProducts = ['Configurable 03-Option 1', 'Configurable 03-Option 2', 'Configurable 03'];
     }
 
     /**
@@ -1357,6 +1361,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             "Value for 'weight' attribute contains incorrect value",
             $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
         );
+        $this->importedProducts[] = ['virtual1'];
     }
 
     /**
