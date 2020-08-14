@@ -6,13 +6,12 @@
 
 namespace Magento\CatalogStorefrontConnector\Model;
 
+use Magento\CatalogDataExporter\Model\Feed\Categories as CategoriesFeed;
 use Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer;
+use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
+use Magento\CatalogMessageBroker\Model\MessageBus\CategoriesConsumer;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
-use Magento\CatalogMessageBroker\Model\MessageBus\CategoriesConsumer;
-use Magento\CatalogDataExporter\Model\Feed\Categories as CategoriesFeed;
-use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
-use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -36,28 +35,31 @@ class CategoriesQueueConsumer
      * @var CategoryFeedIndexer
      */
     private $categoryFeedIndexer;
+
     /**
      * @var CategoriesFeed
      */
     private $categoriesFeed;
+
     /**
      * @var ChangedEntitiesMessageBuilder
      */
     private $messageBuilder;
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
+
     /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
+     * @var \Magento\CatalogStorefrontConnector\Helper\CustomStoreResolver
+     */
+    private $storeResolver;
+
+    /**
      * @param ChangedEntitiesMessageBuilder $messageBuilder
      * @param CategoriesConsumer $categoriesConsumer
      * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
-     * @param StoreManagerInterface $storeManager
      * @param LoggerInterface $logger
      * @param CategoriesFeed $categoriesFeed
      * @param CategoryFeedIndexer $categoryFeedIndexer
@@ -66,7 +68,7 @@ class CategoriesQueueConsumer
         ChangedEntitiesMessageBuilder $messageBuilder,
         CategoriesConsumer $categoriesConsumer,
         CatalogEntityIdsProvider $catalogEntityIdsProvider,
-        StoreManagerInterface $storeManager,
+        \Magento\CatalogStorefrontConnector\Helper\CustomStoreResolver $storeResolver,
         LoggerInterface $logger,
         CategoriesFeed $categoriesFeed,
         CategoryFeedIndexer $categoryFeedIndexer
@@ -76,15 +78,12 @@ class CategoriesQueueConsumer
         $this->categoryFeedIndexer = $categoryFeedIndexer;
         $this->categoriesFeed = $categoriesFeed;
         $this->messageBuilder = $messageBuilder;
-        $this->storeManager = $storeManager;
         $this->logger = $logger;
+        $this->storeResolver = $storeResolver;
     }
 
     /**
      * Process collected category IDs for update
-     * TODO: Eliminate the redundant calls. The incoming message is storeId specific.
-     *
-     * Process messages from storefront.collect.updated.categories.data
      *
      * @param UpdatedEntitiesDataInterface $message
      * @return void
@@ -93,42 +92,38 @@ class CategoriesQueueConsumer
      */
     public function processMessages(UpdatedEntitiesDataInterface $message): void
     {
-        $incomingStoreId = $message->getStoreId();
+        $storeId = $message->getStoreId();
+        $storeCode = $this->storeResolver->resolveStoreCode($storeId);
         $ids = $message->getEntityIds();
 
         if (empty($ids)) {
-            foreach ($this->catalogEntityIdsProvider->getCategoryIds($incomingStoreId) as $idsChunk) {
+            foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $idsChunk) {
                 $ids[] = $idsChunk;
             }
         }
+        //TODO: move these reindexes to plugins to avoid calling them per store view?
         $this->categoryFeedIndexer->executeList($ids);
 
-        $storesToIds = $this->getMappedStores();
-        $deleted = [];
-        foreach ($this->categoriesFeed->getDeletedByIds($ids) as $category) {
-            $storeId = $this->resolveStoreId($storesToIds, $category['storeViewCode']);
-            $deleted[$storeId][] = $category['categoryId'];
+        $deletedIds = [];
+        foreach ($this->categoriesFeed->getDeletedByIds($ids, array_filter([$storeCode])) as $category) {
+            $deletedIds[] = $category['categoryId'];
             unset($ids[$category['categoryId']]);
         }
 
-        foreach ($deleted as $storeId => $entityIds) {
-            foreach (array_chunk($entityIds, self::BATCH_SIZE) as $idsChunk) {
-                if (!empty($idsChunk) && $storeId === $incomingStoreId) {
-                    $this->passMessage(
-                        CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
-                        $idsChunk,
-                        (string)$storeId
-                    );
-                }
-            }
+        if (!empty($ids)) {
+            $this->passMessage(
+                CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
+                $ids,
+                $storeCode
+            );
         }
-        foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
-            if (!empty($idsChunk)) {
-                $this->passMessage(
-                    CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
-                    $idsChunk,
-                );
-            }
+
+        if (!empty($deletedIds)) {
+            $this->passMessage(
+                CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
+                $deletedIds,
+                $storeCode
+            );
         }
     }
 
@@ -137,54 +132,23 @@ class CategoriesQueueConsumer
      *
      * @param string $eventType
      * @param int[] $ids
-     * @param null|string $scope
-     */
-    private function passMessage(string $eventType, array $ids, ?string $scope = null)
-    {
-        $message = $this->messageBuilder->build(
-            $ids,
-            $eventType,
-            $scope
-        );
-        try {
-            $this->categoriesConsumer->processMessage($message);
-        } catch (\Exception $e) {
-            $this->logger->critical($e);
-        }
-    }
-
-    /**
-     * Resolve store ID by store code
-     *
-     * @param array $mappedStores
      * @param string $storeCode
-     * @return string|mixed
      */
-    private function resolveStoreId(array $mappedStores, string $storeCode)
+    private function passMessage(string $eventType, array $ids, string $storeCode)
     {
-        //workaround for tests
-        return $mappedStores[$storeCode] ?? '1';
-    }
-
-    /**
-     * Retrieve mapped stores, in case if something went wrong, retrieve just one default store
-     *
-     * @return array
-     */
-    private function getMappedStores(): array
-    {
-        try {
-            // @todo eliminate store manager
-            $stores = $this->storeManager->getStores(true);
-            $storesToIds = [];
-            foreach ($stores as $store) {
-                $storesToIds[$store->getCode()] = (string)$store->getId();
+        foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
+            if (!empty($idsChunk)) {
+                $message = $this->messageBuilder->build(
+                    $ids,
+                    $eventType,
+                    $storeCode
+                );
+                try {
+                    $this->categoriesConsumer->processMessage($message);
+                } catch (\Exception $e) {
+                    $this->logger->critical($e);
+                }
             }
-        } catch (\Throwable $e) {
-            $storesToIds['default'] = '1';
         }
-
-        return $storesToIds;
     }
-
 }

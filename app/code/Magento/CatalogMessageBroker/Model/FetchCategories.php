@@ -41,10 +41,10 @@ class FetchCategories implements FetchCategoriesInterface
     /**
      * @inheritdoc
      */
-    public function getByIds(array $ids): array
+    public function getByIds(array $ids, $storeViewCodes = []): array
     {
         $data = [];
-        $categories = $this->categoryRepository->get($ids);
+        $categories = $this->categoryRepository->get($ids, $storeViewCodes);
         foreach ($categories as $category) {
             $data[] = $this->dataObjectProcessor->buildOutputDataArray($category, Category::class);
         }

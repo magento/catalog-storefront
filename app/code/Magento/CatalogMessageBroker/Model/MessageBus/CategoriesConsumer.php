@@ -24,7 +24,6 @@ class CategoriesConsumer
      * Event types
      */
     const CATEGORIES_UPDATED_EVENT_TYPE = 'categories_updated';
-
     const CATEGORIES_DELETED_EVENT_TYPE = 'categories_deleted';
 
     /**
@@ -90,7 +89,11 @@ class CategoriesConsumer
     {
         try {
             if ($message->getEventType() === self::CATEGORIES_UPDATED_EVENT_TYPE) {
-                $categoriesData = $this->fetchCategories->getByIds($message->getEntityIds());
+                /**
+                 * TODO: Can shorten this when/if we can be sure that store_code is always passed in the $message
+                 */
+                $categoriesData = $this->fetchCategories->getByIds($message->getEntityIds(),
+                    array_filter([$message->getScope()]));
                 if (!empty($categoriesData)) {
                     $categoriesPerStore = [];
                     foreach ($categoriesData as $categoryData) {

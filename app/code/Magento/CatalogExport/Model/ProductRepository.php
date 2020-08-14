@@ -67,12 +67,9 @@ class ProductRepository implements ProductRepositoryInterface
     }
 
     /**
-     * Get products from the feed
-     *
-     * @param array $ids
-     * @return array|\Magento\CatalogExportApi\Api\Data\Product[]
+     * @inheritdoc
      */
-    public function get(array $ids)
+    public function get(array $ids, array $storeViewCodes = [])
     {
         if (count($ids) > $this->getMaxItemsInResponse()) {
             throw new \InvalidArgumentException(
@@ -83,7 +80,7 @@ class ProductRepository implements ProductRepositoryInterface
         }
 
         $products = [];
-        $feedData = $this->products->getFeedByIds($ids);
+        $feedData = $this->products->getFeedByIds($ids, $storeViewCodes);
         if (empty($feedData['feed'])) {
             $this->logger->error(
                 \sprintf('Cannot find products data in catalog feed with ids "%s"', \implode(',', $ids))

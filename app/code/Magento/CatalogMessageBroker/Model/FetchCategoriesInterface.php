@@ -16,7 +16,8 @@ interface FetchCategoriesInterface
      * Fetch categories data by Ids
      *
      * @param string[] $ids
+     * @param string[] $storeViewCodes
      * @return array
      */
-    public function getByIds(array $ids): array;
+    public function getByIds(array $ids, array $storeViewCodes = []): array;
 }

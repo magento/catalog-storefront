@@ -14,7 +14,8 @@ interface FetchProductsInterface
      * Fetch product data
      *
      * @param string[] $ids
+     * @param string[] $storeViewCodes
      * @return array
      */
-    public function getByIds(array $ids);
+    public function getByIds(array $ids, array $storeViewCodes = []): array;
 }

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
 use Magento\CatalogExport\Model\Data\ChangedEntitiesDataInterface;
@@ -19,11 +20,9 @@ use Psr\Log\LoggerInterface;
 class ProductsConsumer
 {
     /**
-     * todo: move these constants
      * Event types
      */
     const PRODUCTS_UPDATED_EVENT_TYPE = 'products_updated';
-
     const PRODUCTS_DELETED_EVENT_TYPE = 'products_deleted';
 
     /**
@@ -73,17 +72,19 @@ class ProductsConsumer
         $this->catalogServer = $catalogServer;
         $this->deleteProductsRequestInterfaceFactory = $deleteProductsRequestInterfaceFactory;
     }
+
     /**
      * Process message
      *
      * @param ChangedEntitiesDataInterface $message
      * @return void
      */
-    public function processMessageMine(ChangedEntitiesDataInterface $message): void
+    public function processMessage(ChangedEntitiesDataInterface $message): void
     {
         try {
             if ($message->getEventType() === self::PRODUCTS_UPDATED_EVENT_TYPE) {
-                $productsData = $this->fetchProducts->getByIds($message->getEntityIds());
+                $productsData = $this->fetchProducts->getByIds($message->getEntityIds(),
+                    array_filter([$message->getScope()]));
                 if (!empty($productsData)) {
                     $productsPerStore = [];
                     foreach ($productsData as $productData) {
@@ -93,7 +94,6 @@ class ProductsConsumer
                         $this->publishProducts($products, $storeCode);
                     }
                 }
-                // @todo temporary solution. Deleted products must be processed from different message in queue
                 // message must be published into \Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer::process
             } elseif ($message->getEventType() === self::PRODUCTS_DELETED_EVENT_TYPE) {
                 $this->deleteProducts($message->getEntityIds(), $message->getScope());

@@ -12,8 +12,6 @@ use Magento\CatalogDataExporter\Model\Indexer\ProductIndexerCallbackInterface;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
 use Magento\CatalogMessageBroker\Model\MessageBus\ProductsConsumer;
 use Magento\Framework\MessageQueue\PublisherInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use org\bovigo\vfs\vfsStream;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -34,14 +32,7 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
      * @var LoggerInterface
      */
     private $logger;
-    /**
-     * @var ProductsConsumer
-     */
-    private $consumer;
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
+
     /**
      * @var ChangedEntitiesMessageBuilder
      */
@@ -53,24 +44,18 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
 
     /**
      * @param PublisherInterface $queuePublisher
-     * @param ProductsConsumer $consumer
      * @param ChangedEntitiesMessageBuilder $messageBuilder
      * @param ProductsFeed $productsFeed
-     * @param StoreManagerInterface $storeManager
      * @param LoggerInterface $logger
      */
     public function __construct(
         PublisherInterface $queuePublisher,
-        ProductsConsumer $consumer,
         ChangedEntitiesMessageBuilder $messageBuilder,
         ProductsFeed $productsFeed,
-        StoreManagerInterface $storeManager,
         LoggerInterface $logger
     ) {
         $this->queuePublisher = $queuePublisher;
         $this->logger = $logger;
-        $this->consumer = $consumer;
-        $this->storeManager = $storeManager;
         $this->messageBuilder = $messageBuilder;
         $this->productsFeed = $productsFeed;
     }
@@ -82,26 +67,25 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
      */
     public function execute(array $ids): void
     {
-        $storesToIds = $this->getMappedStores();
-
         $deleted = [];
         foreach ($this->productsFeed->getDeletedByIds($ids) as $product) {
-            $storeId = $this->resolveStoreId($storesToIds, $product['storeViewCode']);
-            $deleted[$storeId][] = $product['productId'];
+            $deleted[$product['storeViewCode']][] = $product['productId'];
             unset($ids[$product['productId']]);
         }
 
-        foreach ($deleted as $storeId => $entityIds) {
+        foreach ($deleted as $storeCode => $entityIds) {
             foreach (array_chunk($entityIds, self::BATCH_SIZE) as $idsChunk) {
                 if (!empty($idsChunk)) {
                     $this->publishMessage(
                         ProductsConsumer::PRODUCTS_DELETED_EVENT_TYPE,
                         $idsChunk,
-                        (string)$storeId
+                        $storeCode
                     );
                 }
             }
         }
+
+        //TODO: Add store codes to categories_updated message here? Would cause redundant calls back to saasExport though.
         foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
             if (!empty($idsChunk)) {
                 $this->publishMessage(
@@ -129,44 +113,9 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
             $scope
         );
         try {
-//            $this->queuePublisher->publish(self::TOPIC_NAME, $message);
-            $this->consumer->processMessage($message);
+            $this->queuePublisher->publish(self::TOPIC_NAME, $message);
         } catch (\Exception $e) {
             $this->logger->critical($e);
         }
-    }
-
-    /**
-     * Resolve store ID by store code
-     *
-     * @param array $mappedStores
-     * @param string $storeCode
-     * @return string|mixed
-     */
-    private function resolveStoreId(array $mappedStores, string $storeCode)
-    {
-        //workaround for tests
-        return $mappedStores[$storeCode] ?? '1';
-    }
-
-    /**
-     * Retrieve mapped stores, in case if something went wrong, retrieve just one default store
-     *
-     * @return array
-     */
-    private function getMappedStores(): array
-    {
-        try {
-            // @todo eliminate store manager
-            $stores = $this->storeManager->getStores(true);
-            $storesToIds = [];
-            foreach ($stores as $store) {
-                $storesToIds[$store->getCode()] = (string)$store->getId();
-            }
-        } catch (\Throwable $e) {
-            $storesToIds['default'] = '1';
-        }
-
-        return $storesToIds;
     }
 }

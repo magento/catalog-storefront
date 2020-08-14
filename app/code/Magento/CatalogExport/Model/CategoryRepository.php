@@ -56,12 +56,9 @@ class CategoryRepository implements CategoryRepositoryInterface
     }
 
     /**
-     * Retrieve DTO`s search result based on provided IDs
-     *
-     * @param array $ids
-     * @return array|\Magento\CatalogExportApi\Api\Data\Category[]
+     * @inheritdoc
      */
-    public function get(array $ids): array
+    public function get(array $ids, array $storeViewCodes = []): array
     {
         if (count($ids) > $this->exportConfiguration->getMaxItemsInResponse()) {
             throw new \InvalidArgumentException(
@@ -72,7 +69,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         }
 
         $categories = [];
-        $feedData = $this->categoriesFeed->getFeedByIds($ids);
+        $feedData = $this->categoriesFeed->getFeedByIds($ids, $storeViewCodes);
 
         foreach ($feedData['feed'] as $feedItem) {
             $category = $this->categoryFactory->create();

@@ -40,12 +40,10 @@ class FetchProducts implements FetchProductsInterface
 
     /**
      * @inheritdoc
-     *
-     * @param string[] $ids
      */
-    public function getByIds(array $ids)
+    public function getByIds(array $ids, array $storeViewCodes = []): array
     {
-        $products = $this->productRepository->get($ids);
+        $products = $this->productRepository->get($ids, $storeViewCodes);
         $data = [];
         foreach ($products as $product) {
             $data[] = $this->dataObjectProcessor->buildOutputDataArray($product, Product::class);
