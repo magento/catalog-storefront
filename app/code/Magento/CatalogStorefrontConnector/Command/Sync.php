@@ -12,6 +12,7 @@ use Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer;
 use Magento\CatalogMessageBroker\Model\MessageBus\CategoriesConsumer;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
 use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Helper;
@@ -153,13 +154,11 @@ class Sync extends Command
         }
 
         foreach ($this->storeManager->getStores() as $store) {
-            $storeId = (int)$store->getId();
-
             if (!$entityType || $entityType === self::ENTITY_TYPE_PRODUCT) {
-                $this->syncProducts($output, $storeId);
+                $this->syncProducts($output, $store);
             }
             if (!$entityType || $entityType === self::ENTITY_TYPE_CATEGORY) {
-                $this->syncCategories($output, $storeId);
+                $this->syncCategories($output, $store);
             }
         }
     }
@@ -168,17 +167,17 @@ class Sync extends Command
      * Sync products
      *
      * @param OutputInterface $output
-     * @param int $storeId
+     * @param StoreInterface $store
      */
-    protected function syncProducts(OutputInterface $output, int $storeId): void
+    protected function syncProducts(OutputInterface $output, StoreInterface $store): void
     {
-        $output->writeln("<info>Sync products for store {$storeId}</info>");
+        $output->writeln("<info>Sync products for store {$store->getCode()}</info>");
         $this->measure(
-            function () use ($output, $storeId) {
+            function () use ($output, $store) {
                 $processedN = 0;
-                foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $productIds) {
+                foreach ($this->catalogEntityIdsProvider->getProductIds((int)$store->getId()) as $productIds) {
                     $newApiProducts = $this->fetchProducts->getByIds($productIds);
-                    $this->productPublisher->publish($productIds, $storeId, $newApiProducts);
+                    $this->productPublisher->publish($productIds, $store->getCode(), $newApiProducts);
                     $output->write('.');
                     $processedN += count($productIds);
                 }
@@ -192,15 +191,15 @@ class Sync extends Command
      * Sync categories
      *
      * @param OutputInterface $output
-     * @param int $storeId
+     * @param StoreInterface $store
      */
-    protected function syncCategories(OutputInterface $output, int $storeId): void
+    protected function syncCategories(OutputInterface $output, StoreInterface $store): void
     {
-        $output->writeln("<info>Sync categories for store {$storeId}</info>");
+        $output->writeln("<info>Sync categories for store {$store->getCode()}</info>");
         $this->measure(
-            function () use ($output, $storeId) {
+            function () use ($output, $store) {
                 $processedN = 0;
-                foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $categoryIds) {
+                foreach ($this->catalogEntityIdsProvider->getCategoryIds((int)$store->getId()) as $categoryIds) {
                     //TODO: Make this work with the new categories consumer...
                     $this->categoriesConsumer->processMessage(json_encode($categoryIds));
                     $output->write('.');

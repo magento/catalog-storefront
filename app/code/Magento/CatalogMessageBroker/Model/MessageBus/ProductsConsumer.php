@@ -37,11 +37,6 @@ class ProductsConsumer
     private $logger;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @var ProductPublisher
      */
     private $productPublisher;
@@ -63,7 +58,6 @@ class ProductsConsumer
      * @param CatalogServerInterface $catalogServer
      * @param DeleteProductsRequestInterfaceFactory $deleteProductsRequestInterfaceFactory
      * @param ProductPublisher $productPublisher
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         LoggerInterface $logger,
@@ -75,34 +69,28 @@ class ProductsConsumer
     ) {
         $this->logger = $logger;
         $this->fetchProducts = $fetchProducts;
-        $this->storeManager = $storeManager;
         $this->productPublisher = $productPublisher;
         $this->catalogServer = $catalogServer;
         $this->deleteProductsRequestInterfaceFactory = $deleteProductsRequestInterfaceFactory;
     }
-
     /**
      * Process message
      *
      * @param ChangedEntitiesDataInterface $message
      * @return void
      */
-    public function processMessage(ChangedEntitiesDataInterface $message): void
+    public function processMessageMine(ChangedEntitiesDataInterface $message): void
     {
         try {
-            // @todo eliminate store manager
-            $storesToIds = $this->getMappedStores();
-
             if ($message->getEventType() === self::PRODUCTS_UPDATED_EVENT_TYPE) {
                 $productsData = $this->fetchProducts->getByIds($message->getEntityIds());
                 if (!empty($productsData)) {
                     $productsPerStore = [];
                     foreach ($productsData as $productData) {
-                        $dataStoreId = $this->resolveStoreId($storesToIds, $productData['store_view_code']);
-                        $productsPerStore[$dataStoreId][$productData['product_id']] = $productData;
+                        $productsPerStore[$productData['store_view_code']][$productData['product_id']] = $productData;
                     }
-                    foreach ($productsPerStore as $storeId => $products) {
-                        $this->publishProducts($products, $storeId);
+                    foreach ($productsPerStore as $storeCode => $products) {
+                        $this->publishProducts($products, $storeCode);
                     }
                 }
                 // @todo temporary solution. Deleted products must be processed from different message in queue
@@ -119,12 +107,12 @@ class ProductsConsumer
      * Publishes products to storage
      *
      * @param array $products
-     * @param int $storeId
+     * @param string $storeCode
      */
-    private function publishProducts(array $products, int $storeId)
+    private function publishProducts(array $products, string $storeCode)
     {
         try {
-            $this->productPublisher->publish(\array_keys($products), $storeId, $products);
+            $this->productPublisher->publish(\array_keys($products), $storeCode, $products);
         } catch (\Throwable $e) {
             $this->logger->critical(sprintf('Exception while publishing products: "%s"', $e));
         }
@@ -133,15 +121,15 @@ class ProductsConsumer
     /**
      * Delete products from storage
      *
-     * @param string $storeId
+     * @param string $storeCode
      * @param int[] $productIds
      * @return void
      */
-    private function deleteProducts(array $productIds, string $storeId): void
+    private function deleteProducts(array $productIds, string $storeCode): void
     {
         $deleteProductRequest = $this->deleteProductsRequestInterfaceFactory->create();
         $deleteProductRequest->setProductIds($productIds);
-        $deleteProductRequest->setStore($storeId);
+        $deleteProductRequest->setStore($storeCode);
 
         try {
             $importResult = $this->catalogServer->deleteProducts($deleteProductRequest);
@@ -151,39 +139,5 @@ class ProductsConsumer
         } catch (\Throwable $e) {
             $this->logger->critical(sprintf('Exception while deleting products: "%s"', $e));
         }
-    }
-
-    /**
-     * Retrieve mapped stores, in case if something went wrong, retrieve just one default store
-     *
-     * @return array
-     */
-    private function getMappedStores(): array
-    {
-        try {
-            // @todo eliminate store manager
-            $stores = $this->storeManager->getStores(true);
-            $storesToIds = [];
-            foreach ($stores as $store) {
-                $storesToIds[$store->getCode()] = $store->getId();
-            }
-        } catch (\Throwable $e) {
-            $storesToIds['default'] = 1;
-        }
-
-        return $storesToIds;
-    }
-
-    /**
-     * Resolve store ID by store code
-     *
-     * @param array $mappedStores
-     * @param string $storeCode
-     * @return int|mixed
-     */
-    private function resolveStoreId(array $mappedStores, string $storeCode)
-    {
-        //workaround for tests
-        return $mappedStores[$storeCode] ?? 1;
     }
 }
