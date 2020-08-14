@@ -29,7 +29,7 @@ class EnteredOption
     private $value;
 
     /** @var bool */
-    private $required;
+    private $isRequired;
 
     /** @var int */
     private $sortOrder;
@@ -107,24 +107,24 @@ class EnteredOption
     }
 
     /**
-     * Get required
+     * Get is required
      *
      * @return bool
      */
-    public function getRequired(): ?bool
+    public function getIsRequired(): ?bool
     {
-        return $this->required;
+        return $this->isRequired;
     }
 
     /**
-     * Set required
+     * Set is required
      *
-     * @param bool $required
+     * @param bool $isRequired
      * @return void
      */
-    public function setRequired(?bool $required): void
+    public function setIsRequired(?bool $isRequired): void
     {
-        $this->required = $required;
+        $this->isRequired = $isRequired;
     }
 
     /**

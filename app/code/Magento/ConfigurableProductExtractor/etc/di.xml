@@ -9,11 +9,9 @@
     <type name="Magento\CatalogExtractor\DataProvider\DataProvider">
         <arguments>
             <argument name="dataProviders" xsi:type="array">
-                <item name="ConfigurableProduct.configurable_options" xsi:type="string">Magento\ConfigurableProductExtractor\DataProvider\VariantsDataProvider</item>
                 <item name="ConfigurableProduct.variants" xsi:type="string">Magento\ConfigurableProductExtractor\DataProvider\VariantsDataProvider</item>
             </argument>
             <argument name="productTypesMap" xsi:type="array">
-                <item name="ConfigurableProduct.configurable_options" xsi:type="string">configurable</item>
                 <item name="ConfigurableProduct.variants" xsi:type="string">configurable</item>
             </argument>
         </arguments>

@@ -9,7 +9,8 @@
         "magento/framework": "*",
         "magento/module-catalog-export-api": "*",
         "magento/module-catalog-storefront-api": "*",
-        "magento/module-catalog-storefront-connector": "*"
+        "magento/module-catalog-storefront-connector": "*",
+        "magento/module-configurable-product": "*"
     },
     "type": "magento2-module",
     "license": [
