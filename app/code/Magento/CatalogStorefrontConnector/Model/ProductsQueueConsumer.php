@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Consumer processes messages with store front products data
+ * @deprecared https://github.com/magento/catalog-storefront/issues/242
  */
 class ProductsQueueConsumer
 {

@@ -20,7 +20,8 @@ use Psr\Log\LoggerInterface;
 class ProductsConsumer
 {
     /**
-     * Event types
+     * Event types to handle incoming messages from Export API
+     * TODO: make private after https://github.com/magento/catalog-storefront/issues/242
      */
     const PRODUCTS_UPDATED_EVENT_TYPE = 'products_updated';
     const PRODUCTS_DELETED_EVENT_TYPE = 'products_deleted';
@@ -85,7 +86,7 @@ class ProductsConsumer
         try {
             $eventType = $message->getMeta() ? $message->getMeta()->getEventType() : null;
             $scope = $message->getMeta() ? $message->getMeta()->getScope() : null;
-            $entityIds = $message->getData() ? $message->getData()->getEntityIds() : null;
+            $entityIds = $message->getData() ? $message->getData()->getIds() : null;
 
             if (empty($entityIds)) {
                 throw new \InvalidArgumentException('Update/delete message payload is missing product Ids');

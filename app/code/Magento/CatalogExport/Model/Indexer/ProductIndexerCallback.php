@@ -10,9 +10,7 @@ namespace Magento\CatalogExport\Model\Indexer;
 use Magento\CatalogDataExporter\Model\Feed\Products as ProductsFeed;
 use Magento\CatalogDataExporter\Model\Indexer\ProductIndexerCallbackInterface;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
-use Magento\CatalogMessageBroker\Model\MessageBus\ProductsConsumer;
 use Magento\Framework\MessageQueue\PublisherInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Publishes ids of updated products in queue
@@ -23,6 +21,8 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
     private const BATCH_SIZE = 100;
 
     private const TOPIC_NAME = 'catalog.export.product.data';
+    private const PRODUCTS_UPDATED_EVENT_TYPE = 'products_updated';
+    private const PRODUCTS_DELETED_EVENT_TYPE = 'products_deleted';
 
     /**
      * @var PublisherInterface
@@ -76,7 +76,7 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
             foreach (array_chunk($entityIds, self::BATCH_SIZE) as $idsChunk) {
                 if (!empty($idsChunk)) {
                     $this->publishMessage(
-                        ProductsConsumer::PRODUCTS_DELETED_EVENT_TYPE,
+                        self::PRODUCTS_DELETED_EVENT_TYPE,
                         $idsChunk,
                         $storeCode
                     );
@@ -88,7 +88,7 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
         foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
             if (!empty($idsChunk)) {
                 $this->publishMessage(
-                    ProductsConsumer::PRODUCTS_UPDATED_EVENT_TYPE,
+                    self::PRODUCTS_UPDATED_EVENT_TYPE,
                     $idsChunk,
                 );
             }

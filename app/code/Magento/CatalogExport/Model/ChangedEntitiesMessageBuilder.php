@@ -58,7 +58,7 @@ class ChangedEntitiesMessageBuilder
     {
         $this->meta->setEventType($eventType);
         $this->meta->setScope($scope);
-        $this->data->setEntityIds($entityIds);
+        $this->data->setIds($entityIds);
         $this->changedEntities->setMeta($this->meta);
         $this->changedEntities->setData($this->data);
         return $this->changedEntities;

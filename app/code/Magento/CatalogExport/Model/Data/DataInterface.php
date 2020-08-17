@@ -18,12 +18,12 @@ interface DataInterface
      * @param int[] $entityIds
      * @return void
      */
-    public function setEntityIds(array $entityIds): void;
+    public function setIds(array $entityIds): void;
 
     /**
      * Get changed entities IDs
      *
      * @return int[]
      */
-    public function getEntityIds(): array;
+    public function getIds(): array;
 }
