@@ -68,8 +68,8 @@ class CatalogRepository
     public function saveToStorage(array $dataPerType): void
     {
         foreach ($dataPerType as $entityType => $dataPerStore) {
-            foreach ($dataPerStore as $storeId => $data) {
-                $sourceName = $this->storageState->getCurrentDataSourceName([$storeId, $entityType]);
+            foreach ($dataPerStore as $storeCode => $data) {
+                $sourceName = $this->storageState->getCurrentDataSourceName([$storeCode, $entityType]);
                 $this->deleteEntities($data[self::DELETE] ?? [], $sourceName, $entityType);
                 $this->saveEntities($data[self::SAVE] ?? [], $sourceName, $entityType);
             }
