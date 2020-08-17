@@ -8,25 +8,10 @@ declare(strict_types=1);
 namespace Magento\CatalogExport\Model\Data;
 
 /**
- * Data object interface for changed entities collector
+ * MetaData object interface for changed entities
  */
-interface ChangedEntitiesDataInterface
+interface MetaInterface
 {
-    /**
-     * Set changed entities IDs
-     *
-     * @param int[] $entityIds
-     * @return void
-     */
-    public function setEntityIds(array $entityIds): void;
-
-    /**
-     * Get changed entities IDs
-     *
-     * @return int[]
-     */
-    public function getEntityIds(): array;
-
     /**
      * Set scope for changed entities
      *
@@ -53,7 +38,7 @@ interface ChangedEntitiesDataInterface
     /**
      * Get changed entities event type
      *
-     * @return int[]
+     * @return string
      */
     public function getEventType(): string;
 }

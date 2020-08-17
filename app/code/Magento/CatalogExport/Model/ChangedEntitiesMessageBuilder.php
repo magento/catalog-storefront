@@ -7,39 +7,61 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExport\Model;
 
-use Magento\CatalogExport\Model\Data\ChangedEntitiesDataInterface;
+use Magento\CatalogExport\Model\Data\ChangedEntitiesInterface;
+use Magento\CatalogExport\Model\Data\DataInterface;
+use Magento\CatalogExport\Model\Data\MetaInterface;
 
 /**
- * Reindex message builder
+ * Changed entities message builder class
  */
 class ChangedEntitiesMessageBuilder
 {
     /**
-     * @var ChangedEntitiesDataInterface
+     * @var ChangedEntitiesInterface
      */
-    private $changedEntitiesData;
+    private $changedEntities;
 
     /**
-     * @param ChangedEntitiesDataInterface $changedEntitiesData
+     * @var MetaInterface
+     */
+    private $meta;
+
+    /**
+     * @var DataInterface
+     */
+    private $data;
+
+    /**
+     * @param ChangedEntitiesInterface $changedEntities
+     * @param MetaInterface $meta
+     * @param DataInterface $data
      */
     public function __construct(
-        ChangedEntitiesDataInterface $changedEntitiesData
+        ChangedEntitiesInterface $changedEntities,
+        MetaInterface $meta,
+        DataInterface $data
+
     ) {
-        $this->changedEntitiesData = $changedEntitiesData;
+        $this->changedEntities = $changedEntities;
+        $this->meta = $meta;
+        $this->data = $data;
     }
 
     /**
+     * Build message object
+     *
      * @param int[] $entityIds
      * @param string $eventType
      * @param string|null $scope
-     * @return ChangedEntitiesDataInterface
+     * @return \Magento\CatalogExport\Model\Data\ChangedEntitiesInterface
      */
-    public function build(array $entityIds, string $eventType, ?string $scope): ChangedEntitiesDataInterface
+    public function build(array $entityIds, string $eventType, ?string $scope): ChangedEntitiesInterface
     {
-        $this->changedEntitiesData->setEntityIds($entityIds);
-        $this->changedEntitiesData->setEventType($eventType);
-        $this->changedEntitiesData->setScope($scope);
-
-        return $this->changedEntitiesData;
+        $this->meta->setEventType($eventType);
+        $this->meta->setScope($scope);
+        $this->data->setEntityIds($entityIds);
+        $this->changedEntities->setMeta($this->meta);
+        $this->changedEntities->setData($this->data);
+        return $this->changedEntities;
     }
 }

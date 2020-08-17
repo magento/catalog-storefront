@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
-use Magento\CatalogExport\Model\Data\ChangedEntitiesDataInterface;
+use Magento\CatalogExport\Model\Data\ChangedEntitiesInterface;
 use Magento\CatalogMessageBroker\Model\FetchCategoriesInterface;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryMapper;
@@ -83,17 +83,27 @@ class CategoriesConsumer
     /**
      * Process message
      *
-     * @param ChangedEntitiesDataInterface $message
+     * @param \Magento\CatalogExport\Model\Data\ChangedEntitiesInterface $message
      */
-    public function processMessage(ChangedEntitiesDataInterface $message)
+    public function processMessage(ChangedEntitiesInterface $message)
     {
         try {
-            if ($message->getEventType() === self::CATEGORIES_UPDATED_EVENT_TYPE) {
+            $eventType = $message->getMeta() ? $message->getMeta()->getEventType() : null;
+            $scope = $message->getMeta() ? $message->getMeta()->getScope() : null;
+            $entityIds = $message->getData() ? $message->getData()->getEntityIds() : null;
+
+            if (empty($entityIds)) {
+                throw new \InvalidArgumentException('Update/delete message payload is missing category Ids');
+            }
+
+            if ($eventType === self::CATEGORIES_UPDATED_EVENT_TYPE) {
                 /**
                  * TODO: Can shorten this when/if we can be sure that store_code is always passed in the $message
                  */
-                $categoriesData = $this->fetchCategories->getByIds($message->getEntityIds(),
-                    array_filter([$message->getScope()]));
+                $categoriesData = $this->fetchCategories->getByIds(
+                    $entityIds,
+                    array_filter([$scope])
+                );
                 if (!empty($categoriesData)) {
                     $categoriesPerStore = [];
                     foreach ($categoriesData as $categoryData) {
@@ -103,8 +113,15 @@ class CategoriesConsumer
                         $this->importCategories($categories, $storeCode);
                     }
                 }
-            } elseif ($message->getEventType() === self::CATEGORIES_DELETED_EVENT_TYPE) {
-                $this->deleteCategories($message->getEntityIds(), $message->getScope());
+            } elseif ($eventType === self::CATEGORIES_DELETED_EVENT_TYPE) {
+                $this->deleteCategories($entityIds, $scope);
+            } else {
+                throw new \InvalidArgumentException(
+                    \sprintf(
+                        'The provided event type "%s" was not recognized',
+                        $eventType
+                    )
+                );
             }
         } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage());

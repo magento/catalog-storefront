@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExport\Model\Indexer;
 
+use Magento\CatalogDataExporter\Model\Feed\Categories as CategoriesFeed;
 use Magento\CatalogDataExporter\Model\Indexer\CategoryIndexerCallbackInterface;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
 use Magento\CatalogMessageBroker\Model\MessageBus\CategoriesConsumer;
@@ -33,7 +34,7 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
     private $logger;
 
     /**
-     * @var \Magento\CatalogDataExporter\Model\Feed\Categories
+     * @var CategoriesFeed
      */
     private $categoriesFeed;
 
@@ -45,13 +46,13 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
     /**
      * @param PublisherInterface $queuePublisher
      * @param ChangedEntitiesMessageBuilder $messageBuilder
-     * @param \Magento\CatalogDataExporter\Model\Feed\Categories $categoriesFeed
+     * @param CategoriesFeed $categoriesFeed
      * @param LoggerInterface $logger
      */
     public function __construct(
         PublisherInterface $queuePublisher,
         ChangedEntitiesMessageBuilder $messageBuilder,
-        \Magento\CatalogDataExporter\Model\Feed\Categories $categoriesFeed,
+        CategoriesFeed $categoriesFeed,
         LoggerInterface $logger
     ) {
         $this->queuePublisher = $queuePublisher;
@@ -111,6 +112,7 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
             $eventType,
             $scope
         );
+
         try {
             $this->queuePublisher->publish(self::TOPIC_NAME, $message);
         } catch (\Exception $e) {

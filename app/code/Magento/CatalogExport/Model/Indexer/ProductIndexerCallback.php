@@ -85,7 +85,7 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
             }
         }
 
-        //TODO: Add store codes to categories_updated message here? Would cause redundant calls back to saasExport though.
+        //TODO: Add store codes to products_updated message here? Would cause redundant calls back to saasExport though.
         foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
             if (!empty($idsChunk)) {
                 $this->publishMessage(

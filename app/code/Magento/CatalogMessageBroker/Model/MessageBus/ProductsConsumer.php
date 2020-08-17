@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
-use Magento\CatalogExport\Model\Data\ChangedEntitiesDataInterface;
+use Magento\CatalogExport\Model\Data\ChangedEntitiesInterface;
 use Magento\CatalogMessageBroker\Model\FetchProductsInterface;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequestInterfaceFactory;
@@ -76,15 +76,23 @@ class ProductsConsumer
     /**
      * Process message
      *
-     * @param ChangedEntitiesDataInterface $message
+     * @param \Magento\CatalogExport\Model\Data\ChangedEntitiesInterface $message
      * @return void
      */
-    public function processMessage(ChangedEntitiesDataInterface $message): void
+    public function processMessage(ChangedEntitiesInterface $message): void
     {
         try {
-            if ($message->getEventType() === self::PRODUCTS_UPDATED_EVENT_TYPE) {
-                $productsData = $this->fetchProducts->getByIds($message->getEntityIds(),
-                    array_filter([$message->getScope()]));
+            $eventType = $message->getMeta() ? $message->getMeta()->getEventType() : null;
+            $scope = $message->getMeta() ? $message->getMeta()->getScope() : null;
+            $entityIds = $message->getData() ? $message->getData()->getEntityIds() : null;
+
+            if (empty($entityIds)) {
+                throw new \InvalidArgumentException('Update/delete message payload is missing product Ids');
+            }
+
+            if ($eventType === self::PRODUCTS_UPDATED_EVENT_TYPE) {
+                $productsData = $this->fetchProducts->getByIds($entityIds,
+                    array_filter([$scope]));
                 if (!empty($productsData)) {
                     $productsPerStore = [];
                     foreach ($productsData as $productData) {
@@ -95,8 +103,15 @@ class ProductsConsumer
                     }
                 }
                 // message must be published into \Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer::process
-            } elseif ($message->getEventType() === self::PRODUCTS_DELETED_EVENT_TYPE) {
-                $this->deleteProducts($message->getEntityIds(), $message->getScope());
+            } elseif ($eventType === self::PRODUCTS_DELETED_EVENT_TYPE) {
+                $this->deleteProducts($entityIds, $scope);
+            } else {
+                throw new \InvalidArgumentException(
+                    \sprintf(
+                        'The provided event type "%s" was not recognized',
+                        $eventType
+                    )
+                );
             }
         } catch (\Throwable $e) {
             $this->logger->critical($e->getMessage());
