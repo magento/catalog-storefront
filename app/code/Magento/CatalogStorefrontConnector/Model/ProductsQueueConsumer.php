@@ -97,6 +97,7 @@ class ProductsQueueConsumer
         $storeCode = $this->storeResolver->resolveStoreCode($storeId);
         $ids = $message->getEntityIds();
 
+        //TODO: remove ad-hoc solution after moving events to corresponding export service
         if (empty($ids)) {
             $this->productFeedIndexer->executeFull();
             foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $idsChunk) {

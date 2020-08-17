@@ -16,6 +16,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Publishes ids of updated products in queue
+ * TODO: Move logic to saasExport
  */
 class ProductIndexerCallback implements ProductIndexerCallbackInterface
 {

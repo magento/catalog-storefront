@@ -23,7 +23,7 @@ class ChangedEntities implements ChangedEntitiesInterface
     private $meta;
 
     /**
-     * @ingeritdoc
+     * @inheritdoc
      */
     public function setMeta(MetaInterface $meta): void
     {
@@ -31,7 +31,7 @@ class ChangedEntities implements ChangedEntitiesInterface
     }
 
     /**
-     * @ingeritdoc
+     * @inheritdoc
      */
     public function getMeta(): MetaInterface
     {
@@ -39,7 +39,7 @@ class ChangedEntities implements ChangedEntitiesInterface
     }
 
     /**
-     * @ingeritdoc
+     * @inheritdoc
      */
     public function setData(DataInterface $data): void
     {
@@ -47,7 +47,7 @@ class ChangedEntities implements ChangedEntitiesInterface
     }
 
     /**
-     * @ingeritdoc
+     * @inheritdoc
      */
     public function getData(): DataInterface
     {

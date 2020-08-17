@@ -23,7 +23,7 @@ class Meta implements MetaInterface
     private $eventType;
 
     /**
-     * @ingeritdoc
+     * @inheritdoc
      */
     public function setScope(?string $scope): void
     {
@@ -31,7 +31,7 @@ class Meta implements MetaInterface
     }
 
     /**
-     * @ingeritdoc
+     * @inheritdoc
      */
     public function getScope(): ?string
     {
@@ -39,7 +39,7 @@ class Meta implements MetaInterface
     }
 
     /**
-     * @ingeritdoc
+     * @inheritdoc
      */
     public function setEventType(string $eventType): void
     {
@@ -47,7 +47,7 @@ class Meta implements MetaInterface
     }
 
     /**
-     * @ingeritdoc
+     * @inheritdoc
      */
     public function getEventType(): string
     {

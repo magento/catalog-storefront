@@ -13,12 +13,12 @@ namespace Magento\CatalogExport\Model\Data;
 class Data implements DataInterface
 {
     /**
-     * @var array
+     * @var int[]
      */
     private $entityIds;
 
     /**
-     * @ingeritdoc
+     * @inheritdoc
      */
     public function setEntityIds(array $entityIds): void
     {
@@ -26,7 +26,7 @@ class Data implements DataInterface
     }
 
     /**
-     * @ingeritdoc
+     * @inheritdoc
      */
     public function getEntityIds(): array
     {

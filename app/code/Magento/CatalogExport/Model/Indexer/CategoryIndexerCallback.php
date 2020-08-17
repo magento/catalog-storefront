@@ -16,6 +16,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Publishes ids of updated categories in queue
+ * TODO: Move logic to saasExport
  */
 class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
 {
