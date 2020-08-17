@@ -24,7 +24,6 @@ class UpdatedEntitiesMessageBuilder
      */
     public function __construct(
         UpdatedEntitiesDataInterface $updatedEntitiesData
-
     ) {
         $this->updatedEntitiesData = $updatedEntitiesData;
     }

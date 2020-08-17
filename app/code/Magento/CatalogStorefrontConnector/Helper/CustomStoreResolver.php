@@ -7,18 +7,14 @@
 namespace Magento\CatalogStorefrontConnector\Helper;
 
 use Magento\Store\Model\StoreManagerInterface;
-use Psr\Log\LoggerInterface;
 
 class CustomStoreResolver
 {
     /**
-    * @var StoreManagerInterface
-    */
-    private $storeManager;
-    /**
-     * @var LoggerInterface
+     * @var StoreManagerInterface
      */
-    private $logger;
+    private $storeManager;
+
     /**
      * @var array
      */
@@ -26,16 +22,13 @@ class CustomStoreResolver
 
     /**
      * @param StoreManagerInterface $storeManager
-     * @param LoggerInterface $logger
      * @param array $mappedStores
      */
     public function __construct(
         StoreManagerInterface $storeManager,
-        LoggerInterface $logger,
         array $mappedStores = []
     ) {
         $this->storeManager = $storeManager;
-        $this->logger = $logger;
         $this->mappedStores = $mappedStores;
     }
 

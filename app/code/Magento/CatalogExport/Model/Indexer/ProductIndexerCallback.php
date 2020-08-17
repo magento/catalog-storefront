@@ -62,8 +62,6 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
     }
 
     /**
-     * Make and publish messages for updated/deleted products.
-     *
      * @inheritdoc
      */
     public function execute(array $ids): void

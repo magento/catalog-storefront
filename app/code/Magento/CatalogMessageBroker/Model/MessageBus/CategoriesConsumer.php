@@ -84,6 +84,8 @@ class CategoriesConsumer
      * Process message
      *
      * @param \Magento\CatalogExport\Model\Data\ChangedEntitiesInterface $message
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function processMessage(ChangedEntitiesInterface $message)
     {
@@ -131,9 +133,9 @@ class CategoriesConsumer
     /**
      * Import categories
      *
-     * @param string $storeCode
      * @param array $categories
-     *
+     * @param string $storeCode
+     * @return void
      * @throws \Throwable
      */
     private function importCategories(array $categories, string $storeCode): void

@@ -61,6 +61,7 @@ class ProductsQueueConsumer
      * @param ProductsConsumer $productsConsumer
      * @param ProductFeedIndexer $productFeedIndexer
      * @param ChangedEntitiesMessageBuilder $messageBuilder
+     * @param CustomStoreResolver $storeResolver
      * @param LoggerInterface $logger
      * @param ProductsFeed $productsFeed
      * @param CatalogEntityIdsProvider $catalogEntityIdsProvider

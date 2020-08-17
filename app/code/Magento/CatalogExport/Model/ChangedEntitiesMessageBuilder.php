@@ -12,7 +12,7 @@ use Magento\CatalogExport\Model\Data\DataInterface;
 use Magento\CatalogExport\Model\Data\MetaInterface;
 
 /**
- * Changed entities message builder class
+ * Class that builds queue message for changed entities
  */
 class ChangedEntitiesMessageBuilder
 {
@@ -40,7 +40,6 @@ class ChangedEntitiesMessageBuilder
         ChangedEntitiesInterface $changedEntities,
         MetaInterface $meta,
         DataInterface $data
-
     ) {
         $this->changedEntities = $changedEntities;
         $this->meta = $meta;

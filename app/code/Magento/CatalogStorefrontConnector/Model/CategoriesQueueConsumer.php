@@ -10,6 +10,7 @@ use Magento\CatalogDataExporter\Model\Feed\Categories as CategoriesFeed;
 use Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
 use Magento\CatalogMessageBroker\Model\MessageBus\CategoriesConsumer;
+use Magento\CatalogStorefrontConnector\Helper\CustomStoreResolver;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
 use Psr\Log\LoggerInterface;
@@ -52,7 +53,7 @@ class CategoriesQueueConsumer
     private $logger;
 
     /**
-     * @var \Magento\CatalogStorefrontConnector\Helper\CustomStoreResolver
+     * @var CustomStoreResolver
      */
     private $storeResolver;
 
@@ -60,6 +61,7 @@ class CategoriesQueueConsumer
      * @param ChangedEntitiesMessageBuilder $messageBuilder
      * @param CategoriesConsumer $categoriesConsumer
      * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
+     * @param CustomStoreResolver $storeResolver
      * @param LoggerInterface $logger
      * @param CategoriesFeed $categoriesFeed
      * @param CategoryFeedIndexer $categoryFeedIndexer
@@ -68,7 +70,7 @@ class CategoriesQueueConsumer
         ChangedEntitiesMessageBuilder $messageBuilder,
         CategoriesConsumer $categoriesConsumer,
         CatalogEntityIdsProvider $catalogEntityIdsProvider,
-        \Magento\CatalogStorefrontConnector\Helper\CustomStoreResolver $storeResolver,
+        CustomStoreResolver $storeResolver,
         LoggerInterface $logger,
         CategoriesFeed $categoriesFeed,
         CategoryFeedIndexer $categoryFeedIndexer

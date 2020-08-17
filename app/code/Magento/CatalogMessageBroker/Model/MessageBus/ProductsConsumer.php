@@ -78,6 +78,7 @@ class ProductsConsumer
      *
      * @param \Magento\CatalogExport\Model\Data\ChangedEntitiesInterface $message
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function processMessage(ChangedEntitiesInterface $message): void
     {
@@ -91,8 +92,10 @@ class ProductsConsumer
             }
 
             if ($eventType === self::PRODUCTS_UPDATED_EVENT_TYPE) {
-                $productsData = $this->fetchProducts->getByIds($entityIds,
-                    array_filter([$scope]));
+                $productsData = $this->fetchProducts->getByIds(
+                    $entityIds,
+                    array_filter([$scope])
+                );
                 if (!empty($productsData)) {
                     $productsPerStore = [];
                     foreach ($productsData as $productData) {
@@ -136,8 +139,8 @@ class ProductsConsumer
     /**
      * Delete products from storage
      *
-     * @param string $storeCode
      * @param int[] $productIds
+     * @param string $storeCode
      * @return void
      */
     private function deleteProducts(array $productIds, string $storeCode): void

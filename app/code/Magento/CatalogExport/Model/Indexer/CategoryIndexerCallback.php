@@ -63,8 +63,6 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
     }
 
     /**
-     * Make and publish messages for updated/deleted categories.
-     *
      * @inheritdoc
      */
     public function execute(array $ids): void
