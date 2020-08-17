@@ -9,6 +9,7 @@ namespace Magento\TestFramework\Helper;
 
 /**
  * Class for comparing arrays recursively
+ * TODO: This override can be removed once the same code is merged in magento core.
  */
 class CompareArraysRecursively
 {
