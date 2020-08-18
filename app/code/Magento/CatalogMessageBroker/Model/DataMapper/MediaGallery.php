@@ -19,7 +19,7 @@ class MediaGallery implements DataMapperInterface
     public function map(array $data): array
     {
         if (empty($data['media_gallery'])) {
-            return [];
+            return ['media_gallery' => null];
         }
 
         return [

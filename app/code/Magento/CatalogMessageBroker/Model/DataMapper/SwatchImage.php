@@ -21,10 +21,11 @@ class SwatchImage implements DataMapperInterface
     public function map(array $data): array
     {
         if (empty($data['swatch_image'])) {
-            return [];
+            return ['swatch_image' => null];
         }
-
+        // phpcs:disable
         $baseName = \basename($data['swatch_image']['url']);
+        // phpcs:enable
 
         return [
             'swatch_image' => \sprintf('%s/%s', Uploader::getDispersionPath($baseName), $baseName),

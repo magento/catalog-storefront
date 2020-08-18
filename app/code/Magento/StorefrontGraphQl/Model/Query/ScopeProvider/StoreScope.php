@@ -11,7 +11,7 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 
 /**
- * Store scope
+ * Store scope information provider
  */
 class StoreScope implements ScopeInterface
 {
@@ -30,6 +30,7 @@ class StoreScope implements ScopeInterface
                 __('There is no store in extension attributes')
             );
         }
-        return (string)$store->getId();
+
+        return $store->getCode();
     }
 }
