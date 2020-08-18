@@ -21,7 +21,8 @@ use Psr\Log\LoggerInterface;
 class CategoriesConsumer
 {
     /**
-     * Event types
+     * Event types to handle incoming messages from Export API
+     * TODO: make private after https://github.com/magento/catalog-storefront/issues/242
      */
     const CATEGORIES_UPDATED_EVENT_TYPE = 'categories_updated';
     const CATEGORIES_DELETED_EVENT_TYPE = 'categories_deleted';
@@ -92,7 +93,7 @@ class CategoriesConsumer
         try {
             $eventType = $message->getMeta() ? $message->getMeta()->getEventType() : null;
             $scope = $message->getMeta() ? $message->getMeta()->getScope() : null;
-            $entityIds = $message->getData() ? $message->getData()->getEntityIds() : null;
+            $entityIds = $message->getData() ? $message->getData()->getIds() : null;
 
             if (empty($entityIds)) {
                 throw new \InvalidArgumentException('Category Ids are missing in payload');

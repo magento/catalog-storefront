@@ -20,7 +20,7 @@ class Data implements DataInterface
     /**
      * @inheritdoc
      */
-    public function setEntityIds(array $entityIds): void
+    public function setIds(array $entityIds): void
     {
         $this->entityIds = $entityIds;
     }
@@ -28,7 +28,7 @@ class Data implements DataInterface
     /**
      * @inheritdoc
      */
-    public function getEntityIds(): array
+    public function getIds(): array
     {
         return $this->entityIds;
     }

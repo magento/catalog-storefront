@@ -10,7 +10,6 @@ namespace Magento\CatalogExport\Model\Indexer;
 use Magento\CatalogDataExporter\Model\Feed\Categories as CategoriesFeed;
 use Magento\CatalogDataExporter\Model\Indexer\CategoryIndexerCallbackInterface;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
-use Magento\CatalogMessageBroker\Model\MessageBus\CategoriesConsumer;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Psr\Log\LoggerInterface;
 
@@ -23,6 +22,9 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
     private const BATCH_SIZE = 100;
 
     private const TOPIC_NAME = 'catalog.export.category.data';
+
+    private const CATEGORIES_UPDATED_EVENT_TYPE = 'categories_updated';
+    private const CATEGORIES_DELETED_EVENT_TYPE = 'categories_deleted';
 
     /**
      * @var PublisherInterface
@@ -76,7 +78,7 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
         foreach ($deleted as $storeCode => $entityIds) {
             foreach (array_chunk($entityIds, self::BATCH_SIZE) as $idsChunk) {
                 $this->publishMessage(
-                    CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
+                    self::CATEGORIES_DELETED_EVENT_TYPE,
                     $idsChunk,
                     $storeCode
                 );
@@ -86,7 +88,7 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
         //TODO: Add store codes to categories_updated message here? Would cause redundant calls back to saasExport though.
         foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
             $this->publishMessage(
-                CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
+                self::CATEGORIES_UPDATED_EVENT_TYPE,
                 $idsChunk,
             );
         }
