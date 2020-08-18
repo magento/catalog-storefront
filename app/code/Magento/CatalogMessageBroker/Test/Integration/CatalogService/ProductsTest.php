@@ -17,6 +17,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
+use Throwable;
+use Zend_Db_Statement_Exception;
 
 class ProductsTest extends AbstractProductTestHelper
 {
@@ -40,11 +42,6 @@ class ProductsTest extends AbstractProductTestHelper
     private $productsGetRequestInterface;
 
     /**
-     * @var Registry
-     */
-    private $registry;
-
-    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -53,7 +50,6 @@ class ProductsTest extends AbstractProductTestHelper
         $this->productsConsumer = Bootstrap::getObjectManager()->create(ProductsConsumer::class);
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
         $this->productsGetRequestInterface = Bootstrap::getObjectManager()->create(ProductsGetRequestInterface::class);
-        $this->registry = Bootstrap::getObjectManager()->create(Registry::class);
     }
 
     /**
@@ -63,12 +59,11 @@ class ProductsTest extends AbstractProductTestHelper
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @throws StateException
-     * @throws \Throwable
-     * @throws \Zend_Db_Statement_Exception
+     * @throws Throwable
+     * @throws Zend_Db_Statement_Exception
      */
     public function testDeleteProduct()
     {
-        /** @var ProductInterface $product */
         $product = $this->getProduct(self::TEST_SKU);
         $this->assertEquals(self::TEST_SKU, $product->getSku());
         $this->productsConsumer->processMessage("[\"" . $product->getId() . "\"]");
@@ -77,18 +72,13 @@ class ProductsTest extends AbstractProductTestHelper
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
         $item = $catalogServiceItem->getItems()[0];
         $this->assertEquals($item->getSku(), $product->getSku());
-        /** @var Registry $registry */
-        $registry = Bootstrap::getObjectManager()->get(Registry::class);
-        $registry->unregister('isSecureArea');
-        $registry->register('isSecureArea', true);
         $this->deleteProduct($product->getSku());
         $extractedProduct = $this->getExtractedProduct(self::TEST_SKU, self::STORE_CODE);
         $this->assertEquals(1, (int)$extractedProduct['is_deleted']);
         $this->productsConsumer->processMessage("[\"" . $product->getId() . "\"]");
         try {
-            $catalogServiceDeletedItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
-            $DeletedItem = $catalogServiceDeletedItem->getItems();
-            $this->assertEmpty($DeletedItem);
+            $this->catalogService->getProducts($this->productsGetRequestInterface);
+            $this->fail('Item has not been deleted');
         } catch (\InvalidArgumentException $exception) {
             $this->assertEquals(sprintf(self::ERROR_MESSAGE, $product->getId()), $exception->getMessage());
         }
@@ -97,26 +87,33 @@ class ProductsTest extends AbstractProductTestHelper
     /**
      * @param $sku
      * @return ProductInterface
+     * @throws NoSuchEntityException
      */
     public function getProduct($sku)
     {
         try {
             return $this->productRepository->get($sku);
         } catch (NoSuchEntityException $e) {
-            //Product Not Found
+            throw new NoSuchEntityException();
         }
     }
 
     /**
      * @param $sku
+     * @throws NoSuchEntityException
      * @throws StateException
      */
     public function deleteProduct($sku)
     {
         try {
+            $registry = Bootstrap::getObjectManager()->get(Registry::class);
+            $registry->unregister('isSecureArea');
+            $registry->register('isSecureArea', true);
             $this->productRepository->deleteById($sku);
+            $registry->unregister('isSecureArea');
+            $registry->register('isSecureArea', false);
         } catch (NoSuchEntityException $e) {
-            //Product Not Found
+            throw new NoSuchEntityException();
         }
     }
 }
