@@ -112,24 +112,15 @@ class DynamicAttributesTest extends WebapiAbstract
     {
         if (is_array($expected)) {
             $actual = !is_array($actual) ? json_decode($actual, true) : $actual;
-            $this->assertEquals(
-                sizeof($expected),
-                sizeof($actual),
-                'Expected and actual are of different size, expected '
-                . json_encode($expected)
-                . ', actual '
-                . json_encode($actual)
-                . '.'
-            );
             foreach (array_keys($expected) as $key) {
                 $snakeCaseKey = $this->camelToSnakeCase($key);
                 $this->assertTrue(
-                    isset($actual[$snakeCaseKey]),
-                    $snakeCaseKey . 'doesn\'t exist, '
+                    \array_key_exists($snakeCaseKey, $actual),
+                    "'$snakeCaseKey' doesn't exist\n"
+                    . "expected: \n"
                     . json_encode($expected)
-                    . ', actual '
+                    . "actual: \n"
                     . json_encode($actual)
-                    . '.'
                 );
                 $this->compareComplexValue($expected[$key], $actual[$snakeCaseKey]);
             }

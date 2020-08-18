@@ -23,8 +23,6 @@ class BundleProductMultipleOptionsTest extends GraphQlAbstract
      */
     public function testBundleProductWithMultipleOptions(array $bundleProductDataProvider): void
     {
-        //TODO: Unskip after MC-30893 fix
-        self::markTestSkipped('Skipped due to MC-30893: Handle Bundle products on Storefront');
         $productSku = 'bundle-product';
         $query
             = <<<QUERY
@@ -47,7 +45,7 @@ class BundleProductMultipleOptionsTest extends GraphQlAbstract
                 required
                 type
                 position
-                sku              
+                sku
                 options {
                     id
                     quantity

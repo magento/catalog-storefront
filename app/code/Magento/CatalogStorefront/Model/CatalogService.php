@@ -159,7 +159,7 @@ class CatalogService implements CatalogServerInterface
         $result = new ProductsGetResult();
 
         if (empty($request->getStore()) || $request->getStore() === null) {
-            throw new \InvalidArgumentException('Store id is not present in request.');
+            throw new \InvalidArgumentException('Store code is not present in request.');
         }
 
         if (empty($request->getIds())) {
@@ -261,7 +261,7 @@ class CatalogService implements CatalogServerInterface
                 $request->getProducts()
             );
 
-            $storeId = $request->getStore();
+            $storeCode = $request->getStore();
 
             $productsInElasticFormat = [];
             foreach ($products as $product) {
@@ -269,7 +269,7 @@ class CatalogService implements CatalogServerInterface
                     continue;
                 }
                 $productInElasticFormat = $product;
-                $productInElasticFormat['store_id'] = $storeId;
+                $productInElasticFormat['store_code'] = $storeCode;
                 foreach ($productInElasticFormat['dynamic_attributes'] as $dynamicAttribute) {
                     $productInElasticFormat[$dynamicAttribute['code']] = $dynamicAttribute['value'];
                 }
@@ -279,7 +279,7 @@ class CatalogService implements CatalogServerInterface
                 ];
                 $productInElasticFormat['description'] = ['html' => $productInElasticFormat['description']];
 
-                $productsInElasticFormat['product'][$storeId]['save'][] = $productInElasticFormat;
+                $productsInElasticFormat['product'][$storeCode]['save'][] = $productInElasticFormat;
             }
 
             $this->catalogRepository->saveToStorage($productsInElasticFormat);
@@ -304,10 +304,10 @@ class CatalogService implements CatalogServerInterface
      */
     public function deleteProducts(DeleteProductsRequestInterface $request): DeleteProductsResponseInterface
     {
-        $storeId = $request->getStore();
+        $storeCode = $request->getStore();
         $productsInElasticFormat = [
             'product' => [
-                $storeId => [
+                $storeCode => [
                     'delete' => $request->getProductIds()
                 ]
             ]
@@ -348,7 +348,7 @@ class CatalogService implements CatalogServerInterface
                 },
                 $request->getCategories()
             );
-            $storeId = $request->getStore();
+            $storeCode = $request->getStore();
 
             $categoriesInElasticFormat = [];
 
@@ -358,8 +358,8 @@ class CatalogService implements CatalogServerInterface
                     continue;
                 }
 
-                $categoryInElasticFormat['store_id'] = $storeId;
-                $categoriesInElasticFormat['category'][$storeId]['save'][] = $categoryInElasticFormat;
+                $categoryInElasticFormat['store_code'] = $storeCode;
+                $categoriesInElasticFormat['category'][$storeCode]['save'][] = $categoryInElasticFormat;
             }
             $this->catalogRepository->saveToStorage($categoriesInElasticFormat);
 

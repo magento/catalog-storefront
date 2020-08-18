@@ -29,10 +29,19 @@ class Option
     private $type;
 
     /** @var string */
+    private $attributeId;
+
+    /** @var string */
+    private $attributeCode;
+
+    /** @var bool */
+    private $useDefault;
+
+    /** @var string */
     private $renderType;
 
     /** @var bool */
-    private $required;
+    private $isRequired;
 
     /** @var string */
     private $title;
@@ -89,6 +98,69 @@ class Option
     }
 
     /**
+     * Get attribute id
+     *
+     * @return string
+     */
+    public function getAttributeId(): ?string
+    {
+        return $this->attributeId;
+    }
+
+    /**
+     * Set attribute id
+     *
+     * @param string $attributeId
+     * @return void
+     */
+    public function setAttributeId(?string $attributeId): void
+    {
+        $this->attributeId = $attributeId;
+    }
+
+    /**
+     * Get attribute code
+     *
+     * @return string
+     */
+    public function getAttributeCode(): ?string
+    {
+        return $this->attributeCode;
+    }
+
+    /**
+     * Set attribute code
+     *
+     * @param string $attributeCode
+     * @return void
+     */
+    public function setAttributeCode(?string $attributeCode): void
+    {
+        $this->attributeCode = $attributeCode;
+    }
+
+    /**
+     * Get use default
+     *
+     * @return bool
+     */
+    public function getUseDefault(): ?bool
+    {
+        return $this->useDefault;
+    }
+
+    /**
+     * Set use default
+     *
+     * @param bool $useDefault
+     * @return void
+     */
+    public function setUseDefault(?bool $useDefault): void
+    {
+        $this->useDefault = $useDefault;
+    }
+
+    /**
      * Get render type
      *
      * @return string
@@ -110,24 +182,24 @@ class Option
     }
 
     /**
-     * Get required
+     * Get is required
      *
      * @return bool
      */
-    public function getRequired(): ?bool
+    public function getIsRequired(): ?bool
     {
-        return $this->required;
+        return $this->isRequired;
     }
 
     /**
-     * Set required
+     * Set is required
      *
-     * @param bool $required
+     * @param bool $isRequired
      * @return void
      */
-    public function setRequired(?bool $required): void
+    public function setIsRequired(?bool $isRequired): void
     {
-        $this->required = $required;
+        $this->isRequired = $isRequired;
     }
 
     /**

@@ -32,13 +32,37 @@ class OptionValue
     private $priceType;
 
     /** @var string */
-    private $value;
+    private $label;
 
     /** @var int */
     private $sortOrder;
 
+    /** @var bool */
+    private $isDefault;
+
+    /** @var string */
+    private $sample;
+
+    /** @var string */
+    private $value;
+
     /** @var string */
     private $sku;
+
+    /** @var string */
+    private $defaultLabel;
+
+    /** @var string */
+    private $storeLabel;
+
+    /** @var float */
+    private $quantity;
+
+    /** @var bool */
+    private $canChangeQuantity;
+
+    /** @var int */
+    private $entityId;
 
     /**
      * Get id
@@ -104,24 +128,24 @@ class OptionValue
     }
 
     /**
-     * Get value
+     * Get label
      *
      * @return string
      */
-    public function getValue(): ?string
+    public function getLabel(): ?string
     {
-        return $this->value;
+        return $this->label;
     }
 
     /**
-     * Set value
+     * Set label
      *
-     * @param string $value
+     * @param string $label
      * @return void
      */
-    public function setValue(?string $value): void
+    public function setLabel(?string $label): void
     {
-        $this->value = $value;
+        $this->label = $label;
     }
 
     /**
@@ -146,6 +170,69 @@ class OptionValue
     }
 
     /**
+     * Get is default
+     *
+     * @return bool
+     */
+    public function getIsDefault(): ?bool
+    {
+        return $this->isDefault;
+    }
+
+    /**
+     * Set is default
+     *
+     * @param bool $isDefault
+     * @return void
+     */
+    public function setIsDefault(?bool $isDefault): void
+    {
+        $this->isDefault = $isDefault;
+    }
+
+    /**
+     * Get sample
+     *
+     * @return string
+     */
+    public function getSample(): ?string
+    {
+        return $this->sample;
+    }
+
+    /**
+     * Set sample
+     *
+     * @param string $sample
+     * @return void
+     */
+    public function setSample(?string $sample): void
+    {
+        $this->sample = $sample;
+    }
+
+    /**
+     * Get value
+     *
+     * @return string
+     */
+    public function getValue(): ?string
+    {
+        return $this->value;
+    }
+
+    /**
+     * Set value
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setValue(?string $value): void
+    {
+        $this->value = $value;
+    }
+
+    /**
      * Get sku
      *
      * @return string
@@ -164,5 +251,110 @@ class OptionValue
     public function setSku(?string $sku): void
     {
         $this->sku = $sku;
+    }
+
+    /**
+     * Get default label
+     *
+     * @return string
+     */
+    public function getDefaultLabel(): ?string
+    {
+        return $this->defaultLabel;
+    }
+
+    /**
+     * Set default label
+     *
+     * @param string $defaultLabel
+     * @return void
+     */
+    public function setDefaultLabel(?string $defaultLabel): void
+    {
+        $this->defaultLabel = $defaultLabel;
+    }
+
+    /**
+     * Get store label
+     *
+     * @return string
+     */
+    public function getStoreLabel(): ?string
+    {
+        return $this->storeLabel;
+    }
+
+    /**
+     * Set store label
+     *
+     * @param string $storeLabel
+     * @return void
+     */
+    public function setStoreLabel(?string $storeLabel): void
+    {
+        $this->storeLabel = $storeLabel;
+    }
+
+    /**
+     * Get quantity
+     *
+     * @return float
+     */
+    public function getQuantity(): ?float
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * Set quantity
+     *
+     * @param float $quantity
+     * @return void
+     */
+    public function setQuantity(?float $quantity): void
+    {
+        $this->quantity = $quantity;
+    }
+
+    /**
+     * Get can change quantity
+     *
+     * @return bool
+     */
+    public function getCanChangeQuantity(): ?bool
+    {
+        return $this->canChangeQuantity;
+    }
+
+    /**
+     * Set can change quantity
+     *
+     * @param bool $canChangeQuantity
+     * @return void
+     */
+    public function setCanChangeQuantity(?bool $canChangeQuantity): void
+    {
+        $this->canChangeQuantity = $canChangeQuantity;
+    }
+
+    /**
+     * Get entity id
+     *
+     * @return int
+     */
+    public function getEntityId(): ?int
+    {
+        return $this->entityId;
+    }
+
+    /**
+     * Set entity id
+     *
+     * @param int $entityId
+     * @return void
+     */
+    public function setEntityId(?int $entityId): void
+    {
+        $this->entityId = $entityId;
     }
 }
