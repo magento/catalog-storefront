@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExport\Model\Indexer;
 
-use Magento\CatalogDataExporter\Model\Feed\Categories as CategoriesFeed;
 use Magento\CatalogDataExporter\Model\Indexer\CategoryIndexerCallbackInterface;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
+use Magento\DataExporter\Model\FeedPool;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Psr\Log\LoggerInterface;
 
@@ -37,31 +37,31 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
     private $logger;
 
     /**
-     * @var CategoriesFeed
-     */
-    private $categoriesFeed;
-
-    /**
      * @var ChangedEntitiesMessageBuilder
      */
     private $messageBuilder;
 
     /**
+     * @var FeedPool
+     */
+    private $feedPool;
+
+    /**
      * @param PublisherInterface $queuePublisher
      * @param ChangedEntitiesMessageBuilder $messageBuilder
-     * @param CategoriesFeed $categoriesFeed
+     * @param FeedPool $feedPool
      * @param LoggerInterface $logger
      */
     public function __construct(
         PublisherInterface $queuePublisher,
         ChangedEntitiesMessageBuilder $messageBuilder,
-        CategoriesFeed $categoriesFeed,
+        FeedPool $feedPool,
         LoggerInterface $logger
     ) {
         $this->queuePublisher = $queuePublisher;
         $this->logger = $logger;
-        $this->categoriesFeed = $categoriesFeed;
         $this->messageBuilder = $messageBuilder;
+        $this->feedPool = $feedPool;
     }
 
     /**
@@ -70,7 +70,8 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
     public function execute(array $ids): void
     {
         $deleted = [];
-        foreach ($this->categoriesFeed->getDeletedByIds($ids) as $category) {
+        $categoriesFeed = $this->feedPool->getFeed('categories');
+        foreach ($categoriesFeed->getDeletedByIds($ids) as $category) {
             $deleted[$category['storeViewCode']][] = $category['categoryId'];
             unset($ids[$category['categoryId']]);
         }
@@ -100,6 +101,7 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
      * @param string $eventType
      * @param int[] $ids
      * @param null|string $scope
+     *
      * @return void
      */
     private function publishMessage(string $eventType, array $ids, ?string $scope = null): void

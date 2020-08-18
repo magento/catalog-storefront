@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExport\Model;
 
-use Magento\CatalogDataExporter\Model\Feed\Categories;
 use Magento\CatalogExportApi\Api\CategoryRepositoryInterface;
 use Magento\CatalogExportApi\Api\Data\CategoryFactory;
+use Magento\DataExporter\Model\FeedPool;
 use Magento\Framework\Api\DataObjectHelper;
 
 /**
@@ -17,11 +17,6 @@ use Magento\Framework\Api\DataObjectHelper;
  */
 class CategoryRepository implements CategoryRepositoryInterface
 {
-    /**
-     * @var Categories
-     */
-    private $categoriesFeed;
-
     /**
      * @var CategoryFactory
      */
@@ -38,18 +33,23 @@ class CategoryRepository implements CategoryRepositoryInterface
     private $exportConfiguration;
 
     /**
-     * @param Categories $categoriesFeed
+     * @var FeedPool
+     */
+    private $feedPool;
+
+    /**
+     * @param FeedPool $feedPool
      * @param CategoryFactory $categoryFactory
      * @param DataObjectHelper $dataObjectHelper
      * @param ExportConfiguration $exportConfiguration
      */
     public function __construct(
-        Categories $categoriesFeed,
+        FeedPool $feedPool,
         CategoryFactory $categoryFactory,
         DataObjectHelper $dataObjectHelper,
         ExportConfiguration $exportConfiguration
     ) {
-        $this->categoriesFeed = $categoriesFeed;
+        $this->feedPool = $feedPool;
         $this->categoryFactory = $categoryFactory;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->exportConfiguration = $exportConfiguration;
@@ -69,7 +69,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         }
 
         $categories = [];
-        $feedData = $this->categoriesFeed->getFeedByIds($ids, $storeViewCodes);
+        $feedData = $this->feedPool->getFeed('categories')->getFeedByIds($ids, $storeViewCodes);
 
         foreach ($feedData['feed'] as $feedItem) {
             $category = $this->categoryFactory->create();

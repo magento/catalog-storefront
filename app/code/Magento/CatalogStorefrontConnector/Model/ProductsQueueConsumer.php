@@ -6,13 +6,13 @@
 
 namespace Magento\CatalogStorefrontConnector\Model;
 
-use Magento\CatalogDataExporter\Model\Feed\Products as ProductsFeed;
 use Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
 use Magento\CatalogMessageBroker\Model\MessageBus\ProductsConsumer;
 use Magento\CatalogStorefrontConnector\Helper\CustomStoreResolver;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
+use Magento\DataExporter\Model\FeedPool;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -44,11 +44,6 @@ class ProductsQueueConsumer
     private $messageBuilder;
 
     /**
-     * @var ProductsFeed
-     */
-    private $productsFeed;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -57,6 +52,10 @@ class ProductsQueueConsumer
      * @var CustomStoreResolver
      */
     private $storeResolver;
+    /**
+     * @var FeedPool
+     */
+    private $feedPool;
 
     /**
      * @param ProductsConsumer $productsConsumer
@@ -64,7 +63,7 @@ class ProductsQueueConsumer
      * @param ChangedEntitiesMessageBuilder $messageBuilder
      * @param CustomStoreResolver $storeResolver
      * @param LoggerInterface $logger
-     * @param ProductsFeed $productsFeed
+     * @param FeedPool $feedPool
      * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
      */
     public function __construct(
@@ -73,16 +72,16 @@ class ProductsQueueConsumer
         ChangedEntitiesMessageBuilder $messageBuilder,
         CustomStoreResolver $storeResolver,
         LoggerInterface $logger,
-        ProductsFeed $productsFeed,
+        FeedPool $feedPool,
         CatalogEntityIdsProvider $catalogEntityIdsProvider
     ) {
         $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
         $this->productsConsumer = $productsConsumer;
         $this->productFeedIndexer = $productFeedIndexer;
         $this->messageBuilder = $messageBuilder;
-        $this->productsFeed = $productsFeed;
         $this->logger = $logger;
         $this->storeResolver = $storeResolver;
+        $this->feedPool = $feedPool;
     }
 
     /**
@@ -111,7 +110,8 @@ class ProductsQueueConsumer
             }
 
             $deletedIds = [];
-            foreach ($this->productsFeed->getDeletedByIds($ids, array_filter([$storeCode])) as $product) {
+            $productsFeed = $this->feedPool->getFeed('products');
+            foreach ($productsFeed->getDeletedByIds($ids, array_filter([$storeCode])) as $product) {
                 $deletedIds[] = $product['productId'];
                 unset($ids[$product['productId']]);
             }

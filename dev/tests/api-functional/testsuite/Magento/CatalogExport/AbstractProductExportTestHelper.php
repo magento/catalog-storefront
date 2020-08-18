@@ -8,7 +8,8 @@ declare(strict_types=1);
 namespace Magento\CatalogExport;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\CatalogDataExporter\Model\Feed\Products;
+use Magento\DataExporter\Model\FeedInterface;
+use Magento\DataExporter\Model\FeedPool;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Indexer\Model\Indexer;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -33,7 +34,7 @@ abstract class AbstractProductExportTestHelper extends WebapiAbstract
     private $objectManager;
 
     /**
-     * @var Products
+     * @var FeedInterface
      */
     protected $productsFeed;
 
@@ -59,7 +60,8 @@ abstract class AbstractProductExportTestHelper extends WebapiAbstract
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->productsFeed = $this->objectManager->get(Products::class);
+        $this->productsFeed = $this->objectManager->get(FeedPool::class)->getFeed('products');
+
         $this->indexer = Bootstrap::getObjectManager()->create(Indexer::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
 

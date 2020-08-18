@@ -6,13 +6,13 @@
 
 namespace Magento\CatalogStorefrontConnector\Model;
 
-use Magento\CatalogDataExporter\Model\Feed\Categories as CategoriesFeed;
 use Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
 use Magento\CatalogMessageBroker\Model\MessageBus\CategoriesConsumer;
 use Magento\CatalogStorefrontConnector\Helper\CustomStoreResolver;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
+use Magento\DataExporter\Model\FeedPool;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -39,11 +39,6 @@ class CategoriesQueueConsumer
     private $categoryFeedIndexer;
 
     /**
-     * @var CategoriesFeed
-     */
-    private $categoriesFeed;
-
-    /**
      * @var ChangedEntitiesMessageBuilder
      */
     private $messageBuilder;
@@ -59,12 +54,17 @@ class CategoriesQueueConsumer
     private $storeResolver;
 
     /**
+     * @var FeedPool
+     */
+    private $feedPool;
+
+    /**
      * @param ChangedEntitiesMessageBuilder $messageBuilder
      * @param CategoriesConsumer $categoriesConsumer
      * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
      * @param CustomStoreResolver $storeResolver
      * @param LoggerInterface $logger
-     * @param CategoriesFeed $categoriesFeed
+     * @param FeedPool $feedPool
      * @param CategoryFeedIndexer $categoryFeedIndexer
      */
     public function __construct(
@@ -73,16 +73,16 @@ class CategoriesQueueConsumer
         CatalogEntityIdsProvider $catalogEntityIdsProvider,
         CustomStoreResolver $storeResolver,
         LoggerInterface $logger,
-        CategoriesFeed $categoriesFeed,
+        FeedPool $feedPool,
         CategoryFeedIndexer $categoryFeedIndexer
     ) {
         $this->categoriesConsumer = $categoriesConsumer;
         $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
         $this->categoryFeedIndexer = $categoryFeedIndexer;
-        $this->categoriesFeed = $categoriesFeed;
         $this->messageBuilder = $messageBuilder;
         $this->logger = $logger;
         $this->storeResolver = $storeResolver;
+        $this->feedPool = $feedPool;
     }
 
     /**
@@ -109,7 +109,8 @@ class CategoriesQueueConsumer
             $this->categoryFeedIndexer->executeList($ids);
 
             $deletedIds = [];
-            foreach ($this->categoriesFeed->getDeletedByIds($ids, array_filter([$storeCode])) as $category) {
+            $categoriesFeed = $this->feedPool->getFeed('categories');
+            foreach ($categoriesFeed->getDeletedByIds($ids, array_filter([$storeCode])) as $category) {
                 $deletedIds[] = $category['categoryId'];
                 unset($ids[$category['categoryId']]);
             }

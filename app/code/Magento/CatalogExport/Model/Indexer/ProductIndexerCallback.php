@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExport\Model\Indexer;
 
-use Magento\CatalogDataExporter\Model\Feed\Products as ProductsFeed;
 use Magento\CatalogDataExporter\Model\Indexer\ProductIndexerCallbackInterface;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
+use Magento\DataExporter\Model\FeedPool;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Psr\Log\LoggerInterface;
 
@@ -41,26 +41,23 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
     private $messageBuilder;
 
     /**
-     * @var ProductsFeed
+     * @var FeedPool
      */
-    private $productsFeed;
+    private $feedPool;
 
     /**
      * @param PublisherInterface $queuePublisher
      * @param ChangedEntitiesMessageBuilder $messageBuilder
-     * @param ProductsFeed $productsFeed
-     * @param LoggerInterface $logger
+     * @param FeedPool $feedPool
      */
     public function __construct(
         PublisherInterface $queuePublisher,
         ChangedEntitiesMessageBuilder $messageBuilder,
-        ProductsFeed $productsFeed,
-        LoggerInterface $logger
+        FeedPool $feedPool
     ) {
         $this->queuePublisher = $queuePublisher;
-        $this->logger = $logger;
         $this->messageBuilder = $messageBuilder;
-        $this->productsFeed = $productsFeed;
+        $this->feedPool = $feedPool;
     }
 
     /**
@@ -69,7 +66,8 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
     public function execute(array $ids): void
     {
         $deleted = [];
-        foreach ($this->productsFeed->getDeletedByIds($ids) as $product) {
+        $productsFeed = $this->feedPool->getFeed('products');
+        foreach ($productsFeed->getDeletedByIds($ids) as $product) {
             $deleted[$product['storeViewCode']][] = $product['productId'];
             unset($ids[$product['productId']]);
         }
