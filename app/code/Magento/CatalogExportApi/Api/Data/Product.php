@@ -154,20 +154,17 @@ class Product
     /** @var \Magento\CatalogExportApi\Api\Data\MediaItem[]|null */
     private $mediaGallery;
 
-    /** @var \Magento\CatalogExportApi\Api\Data\Samples[]|null */
-    private $samples;
-
     /** @var \Magento\CatalogExportApi\Api\Data\Variant[]|null */
     private $variants;
-
-    /** @var string */
-    private $url;
 
     /** @var bool */
     private $inStock;
 
     /** @var bool */
     private $lowStock;
+
+    /** @var string */
+    private $url;
 
     /**
      * Get sku
@@ -1094,27 +1091,6 @@ class Product
     }
 
     /**
-     * Get samples
-     *
-     * @return \Magento\CatalogExportApi\Api\Data\Samples[]|null
-     */
-    public function getSamples(): ?array
-    {
-        return $this->samples;
-    }
-
-    /**
-     * Set samples
-     *
-     * @param \Magento\CatalogExportApi\Api\Data\Samples[] $samples
-     * @return void
-     */
-    public function setSamples(?array $samples = null): void
-    {
-        $this->samples = $samples;
-    }
-
-    /**
      * Get variants
      *
      * @return \Magento\CatalogExportApi\Api\Data\Variant[]|null
@@ -1133,27 +1109,6 @@ class Product
     public function setVariants(?array $variants = null): void
     {
         $this->variants = $variants;
-    }
-
-    /**
-     * Get url
-     *
-     * @return string
-     */
-    public function getUrl(): ?string
-    {
-        return $this->url;
-    }
-
-    /**
-     * Set url
-     *
-     * @param string $url
-     * @return void
-     */
-    public function setUrl(?string $url): void
-    {
-        $this->url = $url;
     }
 
     /**
@@ -1196,5 +1151,26 @@ class Product
     public function setLowStock(?bool $lowStock): void
     {
         $this->lowStock = $lowStock;
+    }
+
+    /**
+     * Get url
+     *
+     * @return string
+     */
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    /**
+     * Set url
+     *
+     * @param string $url
+     * @return void
+     */
+    public function setUrl(?string $url): void
+    {
+        $this->url = $url;
     }
 }
