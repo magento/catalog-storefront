@@ -38,6 +38,7 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
      * @var ChangedEntitiesMessageBuilder
      */
     private $messageBuilder;
+
     /**
      * @var ProductsFeed
      */
@@ -74,24 +75,20 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
 
         foreach ($deleted as $storeCode => $entityIds) {
             foreach (array_chunk($entityIds, self::BATCH_SIZE) as $idsChunk) {
-                if (!empty($idsChunk)) {
-                    $this->publishMessage(
-                        ProductsConsumer::PRODUCTS_DELETED_EVENT_TYPE,
-                        $idsChunk,
-                        $storeCode
-                    );
-                }
+                $this->publishMessage(
+                    ProductsConsumer::PRODUCTS_DELETED_EVENT_TYPE,
+                    $idsChunk,
+                    $storeCode
+                );
             }
         }
 
         //TODO: Add store codes to products_updated message here? Would cause redundant calls back to saasExport though.
         foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
-            if (!empty($idsChunk)) {
-                $this->publishMessage(
-                    ProductsConsumer::PRODUCTS_UPDATED_EVENT_TYPE,
-                    $idsChunk,
-                );
-            }
+            $this->publishMessage(
+                ProductsConsumer::PRODUCTS_UPDATED_EVENT_TYPE,
+                $idsChunk,
+            );
         }
     }
 

@@ -75,24 +75,20 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
 
         foreach ($deleted as $storeCode => $entityIds) {
             foreach (array_chunk($entityIds, self::BATCH_SIZE) as $idsChunk) {
-                if (!empty($idsChunk)) {
-                    $this->publishMessage(
-                        CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
-                        $idsChunk,
-                        $storeCode
-                    );
-                }
+                $this->publishMessage(
+                    CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
+                    $idsChunk,
+                    $storeCode
+                );
             }
         }
 
         //TODO: Add store codes to categories_updated message here? Would cause redundant calls back to saasExport though.
         foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
-            if (!empty($idsChunk)) {
-                $this->publishMessage(
-                    CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
-                    $idsChunk,
-                );
-            }
+            $this->publishMessage(
+                CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
+                $idsChunk,
+            );
         }
     }
 

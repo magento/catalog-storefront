@@ -6,13 +6,13 @@
 
 namespace Magento\CatalogStorefrontConnector\Model;
 
+use Magento\CatalogDataExporter\Model\Feed\Products as ProductsFeed;
 use Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer;
+use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
 use Magento\CatalogMessageBroker\Model\MessageBus\ProductsConsumer;
 use Magento\CatalogStorefrontConnector\Helper\CustomStoreResolver;
-use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
-use Magento\CatalogDataExporter\Model\Feed\Products as ProductsFeed;
-use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
+use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -85,50 +85,53 @@ class ProductsQueueConsumer
     }
 
     /**
-     * Process collected product IDs for update
+     * Process collected product IDs for update/delete
      *
      * @param UpdatedEntitiesDataInterface $message
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @deprecated React on events triggered by plugins to push data to SF storage
      */
     public function processMessages(UpdatedEntitiesDataInterface $message): void
     {
-        $storeId = $message->getStoreId();
-        $storeCode = $this->storeResolver->resolveStoreCode($storeId);
-        $ids = $message->getEntityIds();
+        try {
+            $storeId = $message->getStoreId();
+            $storeCode = $this->storeResolver->resolveStoreCode($storeId);
+            $ids = $message->getEntityIds();
 
-        //TODO: remove ad-hoc solution after moving events to corresponding export service
-        if (empty($ids)) {
-            $this->productFeedIndexer->executeFull();
-            foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $idsChunk) {
-                $ids[] = $idsChunk;
+            //TODO: remove ad-hoc solution after moving events to corresponding export service
+            if (empty($ids)) {
+                $this->productFeedIndexer->executeFull();
+                foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $idsChunk) {
+                    $ids[] = $idsChunk;
+                }
+            } else {
+                //TODO: move this to plugins?
+                $this->productFeedIndexer->executeList($ids);
             }
-        } else {
-            //TODO: move this to plugins?
-            $this->productFeedIndexer->executeList($ids);
-        }
 
-        $deletedIds = [];
-        foreach ($this->productsFeed->getDeletedByIds($ids, array_filter([$storeCode])) as $product) {
-            $deletedIds[] = $product['productId'];
-            unset($ids[$product['productId']]);
-        }
+            $deletedIds = [];
+            foreach ($this->productsFeed->getDeletedByIds($ids, array_filter([$storeCode])) as $product) {
+                $deletedIds[] = $product['productId'];
+                unset($ids[$product['productId']]);
+            }
 
-        if (!empty($ids)) {
-            $this->passMessage(
-                ProductsConsumer::PRODUCTS_UPDATED_EVENT_TYPE,
-                $ids,
-                $storeCode
-            );
-        }
+            if (!empty($ids)) {
+                $this->passMessage(
+                    ProductsConsumer::PRODUCTS_UPDATED_EVENT_TYPE,
+                    $ids,
+                    $storeCode
+                );
+            }
 
-        if (!empty($deletedIds)) {
-            $this->passMessage(
-                ProductsConsumer::PRODUCTS_DELETED_EVENT_TYPE,
-                $deletedIds,
-                $storeCode
-            );
+            if (!empty($deletedIds)) {
+                $this->passMessage(
+                    ProductsConsumer::PRODUCTS_DELETED_EVENT_TYPE,
+                    $deletedIds,
+                    $storeCode
+                );
+            }
+        } catch (\Throwable $e) {
+            $this->logger->critical('Unable to process collected product data for update/delete. ' . $e->getMessage());
         }
     }
 
@@ -138,8 +141,9 @@ class ProductsQueueConsumer
      * @param string $eventType
      * @param int[] $ids
      * @param string $storeCode
+     * @return void
      */
-    private function passMessage(string $eventType, array $ids, string $storeCode)
+    private function passMessage(string $eventType, array $ids, string $storeCode): void
     {
         foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
             if (!empty($idsChunk)) {

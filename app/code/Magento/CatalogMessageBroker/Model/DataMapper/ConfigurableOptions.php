@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogMessageBroker\Model\DataMapper;
 
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-
 /**
  * Data mapper for configurable options
  */
@@ -20,12 +18,18 @@ class ConfigurableOptions implements DataMapperInterface
     private const CONFIGURABLE_RELATION_TYPE = 'super';
 
     /**
+     * Configurable Product type code.
+     */
+    private const CONFIGURABLE_TYPE_CODE = 'configurable';
+
+
+    /**
      * @inheritDoc
      */
     public function map(array $data): array
     {
         $configurableOptions = [];
-        if ($data['type'] === Configurable::TYPE_CODE && !empty($data['options'])) {
+        if ($data['type'] === self::CONFIGURABLE_TYPE_CODE && !empty($data['options'])) {
             foreach ($data['options'] as $optionArray) {
                 if ($optionArray['type'] === self::CONFIGURABLE_RELATION_TYPE) {
                     $configurableOptions[$optionArray['id']] = [

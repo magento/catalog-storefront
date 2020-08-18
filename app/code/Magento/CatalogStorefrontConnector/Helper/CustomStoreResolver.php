@@ -8,8 +8,14 @@ namespace Magento\CatalogStorefrontConnector\Helper;
 
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Class for resolving store_code and store_id relationship
+ */
 class CustomStoreResolver
 {
+    private const DEFAULT_STORE_VIEW_CODE = 'default';
+    private const DEFAULT_STORE_ID = '1';
+
     /**
      * @var StoreManagerInterface
      */
@@ -33,21 +39,6 @@ class CustomStoreResolver
     }
 
     /**
-     * Resolve store ID by store code
-     *
-     * @param string $storeCode
-     * @return string|mixed
-     */
-    public function resolveStoreId(string $storeCode)
-    {
-        //workaround for tests
-        if (empty($this->mappedStores)) {
-            $this->mappedStores = $this->setMappedStores();
-        }
-        return $this->mappedStores[$storeCode] ?? '1';
-    }
-
-    /**
      * Resolve store Code by store id
      *
      * @param string $storeId
@@ -56,11 +47,9 @@ class CustomStoreResolver
     public function resolveStoreCode(string $storeId)
     {
         //workaround for tests
-        if (empty($this->mappedStores)) {
-            $this->mappedStores = $this->setMappedStores();
-        }
-        $idToCode = array_flip($this->mappedStores);
-        return $idToCode[$storeId] ?? $idToCode['1'];
+        $mappedStores = $this->getMappedStores();
+        $idToCode = array_flip($mappedStores);
+        return $idToCode[$storeId] ?? $idToCode[self::DEFAULT_STORE_ID];
     }
 
     /**
@@ -68,19 +57,19 @@ class CustomStoreResolver
      *
      * @return array
      */
-    private function setMappedStores(): array
+    private function getMappedStores(): array
     {
-        try {
-            // @todo eliminate store manager
-            $stores = $this->storeManager->getStores(true);
-            $storesToIds = [];
-            foreach ($stores as $store) {
-                $storesToIds[$store->getCode()] = (string)$store->getId();
+        if (empty($this->mappedStores)) {
+            try {
+                // @todo eliminate store manager
+                $stores = $this->storeManager->getStores(true);
+                foreach ($stores as $store) {
+                    $this->mappedStores[$store->getCode()] = (string)$store->getId();
+                }
+            } catch (\Throwable $e) {
+                $this->mappedStores[self::DEFAULT_STORE_VIEW_CODE] = self::DEFAULT_STORE_ID;
             }
-        } catch (\Throwable $e) {
-            $storesToIds['default'] = '1';
         }
-
-        return $storesToIds;
+        return $this->mappedStores;
     }
 }

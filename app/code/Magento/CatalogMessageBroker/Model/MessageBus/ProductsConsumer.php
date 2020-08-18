@@ -88,7 +88,7 @@ class ProductsConsumer
             $entityIds = $message->getData() ? $message->getData()->getEntityIds() : null;
 
             if (empty($entityIds)) {
-                throw new \InvalidArgumentException('Update/delete message payload is missing product Ids');
+                throw new \InvalidArgumentException('Product ids are missing in payload');
             }
 
             if ($eventType === self::PRODUCTS_UPDATED_EVENT_TYPE) {
@@ -117,7 +117,7 @@ class ProductsConsumer
                 );
             }
         } catch (\Throwable $e) {
-            $this->logger->critical($e->getMessage());
+            $this->logger->critical('Unable to process collected product data for update/delete. ' . $e->getMessage());
         }
     }
 

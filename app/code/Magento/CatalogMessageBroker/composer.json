@@ -10,7 +10,6 @@
         "magento/module-catalog-export-api": "*",
         "magento/module-catalog-storefront-api": "*",
         "magento/module-catalog-storefront-connector": "*",
-        "magento/module-configurable-product": "*",
         "magento/module-catalog-export": "*"
     },
     "type": "magento2-module",

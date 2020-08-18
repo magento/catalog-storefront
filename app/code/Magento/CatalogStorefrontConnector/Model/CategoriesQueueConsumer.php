@@ -85,48 +85,51 @@ class CategoriesQueueConsumer
     }
 
     /**
-     * Process collected category IDs for update
+     * Process collected category IDs for update/delete
      *
      * @param UpdatedEntitiesDataInterface $message
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @deprecated React on events triggered by plugins to push data to SF storage
      */
     public function processMessages(UpdatedEntitiesDataInterface $message): void
     {
-        $storeId = $message->getStoreId();
-        $storeCode = $this->storeResolver->resolveStoreCode($storeId);
-        $ids = $message->getEntityIds();
+        try {
+            $storeId = $message->getStoreId();
+            $storeCode = $this->storeResolver->resolveStoreCode($storeId);
+            $ids = $message->getEntityIds();
 
-        //TODO: remove ad-hoc solution after moving events to corresponding export service
-        if (empty($ids)) {
-            foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $idsChunk) {
-                $ids[] = $idsChunk;
+            //TODO: remove ad-hoc solution after moving events to corresponding export service
+            if (empty($ids)) {
+                foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $idsChunk) {
+                    $ids[] = $idsChunk;
+                }
             }
-        }
-        //TODO: move these reindexes to plugins to avoid calling them per store view?
-        $this->categoryFeedIndexer->executeList($ids);
+            //TODO: move these reindexes to plugins to avoid calling them per store view?
+            $this->categoryFeedIndexer->executeList($ids);
 
-        $deletedIds = [];
-        foreach ($this->categoriesFeed->getDeletedByIds($ids, array_filter([$storeCode])) as $category) {
-            $deletedIds[] = $category['categoryId'];
-            unset($ids[$category['categoryId']]);
-        }
+            $deletedIds = [];
+            foreach ($this->categoriesFeed->getDeletedByIds($ids, array_filter([$storeCode])) as $category) {
+                $deletedIds[] = $category['categoryId'];
+                unset($ids[$category['categoryId']]);
+            }
 
-        if (!empty($ids)) {
-            $this->passMessage(
-                CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
-                $ids,
-                $storeCode
-            );
-        }
+            if (!empty($ids)) {
+                $this->passMessage(
+                    CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
+                    $ids,
+                    $storeCode
+                );
+            }
 
-        if (!empty($deletedIds)) {
-            $this->passMessage(
-                CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
-                $deletedIds,
-                $storeCode
-            );
+            if (!empty($deletedIds)) {
+                $this->passMessage(
+                    CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
+                    $deletedIds,
+                    $storeCode
+                );
+            }
+        } catch (\Throwable $e) {
+            $this->logger->critical('Unable to process collected category data for update/delete. ' . $e->getMessage());
         }
     }
 

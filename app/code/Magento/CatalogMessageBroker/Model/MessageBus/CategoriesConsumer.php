@@ -95,7 +95,7 @@ class CategoriesConsumer
             $entityIds = $message->getData() ? $message->getData()->getEntityIds() : null;
 
             if (empty($entityIds)) {
-                throw new \InvalidArgumentException('Update/delete message payload is missing category Ids');
+                throw new \InvalidArgumentException('Category Ids are missing in payload');
             }
 
             if ($eventType === self::CATEGORIES_UPDATED_EVENT_TYPE) {
@@ -126,7 +126,7 @@ class CategoriesConsumer
                 );
             }
         } catch (\Throwable $e) {
-            $this->logger->critical($e->getMessage());
+            $this->logger->critical('Unable to process collected category data for update/delete. ' . $e->getMessage());
         }
     }
 
