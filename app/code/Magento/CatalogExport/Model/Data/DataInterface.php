@@ -13,14 +13,6 @@ namespace Magento\CatalogExport\Model\Data;
 interface DataInterface
 {
     /**
-     * Set changed entities IDs
-     *
-     * @param int[] $entityIds
-     * @return void
-     */
-    public function setIds(array $entityIds): void;
-
-    /**
      * Get changed entities IDs
      *
      * @return int[]

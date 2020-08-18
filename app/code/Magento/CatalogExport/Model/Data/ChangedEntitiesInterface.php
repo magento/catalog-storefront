@@ -13,27 +13,11 @@ namespace Magento\CatalogExport\Model\Data;
 interface ChangedEntitiesInterface
 {
     /**
-     * Set changed entities metadata
-     *
-     * @param \Magento\CatalogExport\Model\Data\MetaInterface $meta
-     * @return void
-     */
-    public function setMeta(MetaInterface $meta): void;
-
-    /**
      * Get changed entities metadata
      *
      * @return \Magento\CatalogExport\Model\Data\MetaInterface
      */
     public function getMeta(): MetaInterface;
-
-    /**
-     * Set changed entities data
-     *
-     * @param \Magento\CatalogExport\Model\Data\DataInterface $data
-     * @return void
-     */
-    public function setData(DataInterface $data): void;
 
     /**
      * Get changed entities data

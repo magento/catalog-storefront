@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExport\Model;
 
-use Magento\CatalogExport\Model\Data\ChangedEntitiesInterface;
-use Magento\CatalogExport\Model\Data\DataInterface;
-use Magento\CatalogExport\Model\Data\MetaInterface;
+use Magento\CatalogExport\Model\Data\ChangedEntitiesInterfaceFactory;
+use Magento\CatalogExport\Model\Data\DataInterfaceFactory;
+use Magento\CatalogExport\Model\Data\MetaInterfaceFactory;
+use \Magento\CatalogExport\Model\Data\ChangedEntitiesInterface;
 
 /**
  * Class that builds queue message for changed entities
@@ -17,33 +18,33 @@ use Magento\CatalogExport\Model\Data\MetaInterface;
 class ChangedEntitiesMessageBuilder
 {
     /**
-     * @var ChangedEntitiesInterface
+     * @var ChangedEntitiesInterfaceFactory
      */
-    private $changedEntities;
+    private $changedEntitiesFactory;
 
     /**
-     * @var MetaInterface
+     * @var MetaInterfaceFactory
      */
-    private $meta;
+    private $metaFactory;
 
     /**
-     * @var DataInterface
+     * @var DataInterfaceFactory
      */
-    private $data;
+    private $dataFactory;
 
     /**
-     * @param ChangedEntitiesInterface $changedEntities
-     * @param MetaInterface $meta
-     * @param DataInterface $data
+     * @param ChangedEntitiesInterfaceFactory $changedEntitiesFactory
+     * @param MetaInterfaceFactory $metaFactory
+     * @param DataInterfaceFactory $dataFactory
      */
     public function __construct(
-        ChangedEntitiesInterface $changedEntities,
-        MetaInterface $meta,
-        DataInterface $data
+        ChangedEntitiesInterfaceFactory $changedEntitiesFactory,
+        MetaInterfaceFactory $metaFactory,
+        DataInterfaceFactory $dataFactory
     ) {
-        $this->changedEntities = $changedEntities;
-        $this->meta = $meta;
-        $this->data = $data;
+        $this->changedEntitiesFactory = $changedEntitiesFactory;
+        $this->metaFactory = $metaFactory;
+        $this->dataFactory = $dataFactory;
     }
 
     /**
@@ -56,11 +57,24 @@ class ChangedEntitiesMessageBuilder
      */
     public function build(array $entityIds, string $eventType, ?string $scope): ChangedEntitiesInterface
     {
-        $this->meta->setEventType($eventType);
-        $this->meta->setScope($scope);
-        $this->data->setIds($entityIds);
-        $this->changedEntities->setMeta($this->meta);
-        $this->changedEntities->setData($this->data);
-        return $this->changedEntities;
+        $meta = $this->metaFactory->create(
+            [
+                'scope' => $scope,
+                'eventType' => $eventType
+            ]
+        );
+
+        $data = $this->dataFactory->create(
+            [
+                'entityIds' => $entityIds
+            ]
+        );
+
+        return $this->changedEntitiesFactory->create(
+            [
+                'meta' => $meta,
+                'data' => $data
+            ]
+        );
     }
 }

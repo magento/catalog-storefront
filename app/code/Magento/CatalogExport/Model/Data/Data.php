@@ -18,9 +18,9 @@ class Data implements DataInterface
     private $entityIds;
 
     /**
-     * @inheritdoc
+     * @param array $entityIds
      */
-    public function setIds(array $entityIds): void
+    public function __construct(array $entityIds)
     {
         $this->entityIds = $entityIds;
     }

@@ -13,7 +13,7 @@ namespace Magento\CatalogExport\Model\Data;
 class Meta implements MetaInterface
 {
     /**
-     * @var string
+     * @var null|string
      */
     private $scope;
 
@@ -23,11 +23,13 @@ class Meta implements MetaInterface
     private $eventType;
 
     /**
-     * @inheritdoc
+     * @param string|null $scope
+     * @param string $eventType
      */
-    public function setScope(?string $scope): void
+    public function __construct(?string $scope, string $eventType)
     {
         $this->scope = $scope;
+        $this->eventType = $eventType;
     }
 
     /**
@@ -36,14 +38,6 @@ class Meta implements MetaInterface
     public function getScope(): ?string
     {
         return $this->scope;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setEventType(string $eventType): void
-    {
-        $this->eventType = $eventType;
     }
 
     /**
