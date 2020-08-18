@@ -146,6 +146,7 @@ class RequestBuilder
 
     /**
      * This will be used to map the GraphQL request fields to the ones in the data storage
+     *
      * @param array $attributes
      * @return array
      */
