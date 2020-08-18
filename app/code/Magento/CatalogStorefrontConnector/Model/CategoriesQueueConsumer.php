@@ -144,17 +144,15 @@ class CategoriesQueueConsumer
     private function passMessage(string $eventType, array $ids, string $storeCode)
     {
         foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
-            if (!empty($idsChunk)) {
-                $message = $this->messageBuilder->build(
-                    $ids,
-                    $eventType,
-                    $storeCode
-                );
-                try {
-                    $this->categoriesConsumer->processMessage($message);
-                } catch (\Exception $e) {
-                    $this->logger->critical($e);
-                }
+            $message = $this->messageBuilder->build(
+                $idsChunk,
+                $eventType,
+                $storeCode
+            );
+            try {
+                $this->categoriesConsumer->processMessage($message);
+            } catch (\Exception $e) {
+                $this->logger->critical($e);
             }
         }
     }
