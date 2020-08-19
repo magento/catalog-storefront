@@ -101,12 +101,14 @@ class CategoriesQueueConsumer
 
             //TODO: remove ad-hoc solution after moving events to corresponding export service
             if (empty($ids)) {
+                $this->categoryFeedIndexer->executeFull();
                 foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $idsChunk) {
                     $ids[] = $idsChunk;
                 }
+            } else {
+                //TODO: move these reindexes to plugins to avoid calling them per store view?
+                $this->categoryFeedIndexer->executeList($ids);
             }
-            //TODO: move these reindexes to plugins to avoid calling them per store view?
-            $this->categoryFeedIndexer->executeList($ids);
 
             $deletedIds = [];
             $categoriesFeed = $this->feedPool->getFeed('categories');
