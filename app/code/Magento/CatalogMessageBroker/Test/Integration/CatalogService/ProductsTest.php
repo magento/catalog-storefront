@@ -68,7 +68,7 @@ class ProductsTest extends AbstractProductTestHelper
         $this->assertEquals(self::TEST_SKU, $product->getSku());
         $this->productsConsumer->processMessage("[\"" . $product->getId() . "\"]");
         $this->productsGetRequestInterface->setIds([$product->getId()]);
-        $this->productsGetRequestInterface->setStore("1");
+        $this->productsGetRequestInterface->setStore("default");
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
         $item = $catalogServiceItem->getItems()[0];
         $this->assertEquals($item->getSku(), $product->getSku());
