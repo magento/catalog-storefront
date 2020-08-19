@@ -76,12 +76,9 @@ class ProductsTest extends AbstractProductTestHelper
         $extractedProduct = $this->getExtractedProduct(self::TEST_SKU, self::STORE_CODE);
         $this->assertEquals(1, (int)$extractedProduct['is_deleted']);
         $this->productsConsumer->processMessage("[\"" . $product->getId() . "\"]");
-        try {
-            $this->catalogService->getProducts($this->productsGetRequestInterface);
-            $this->fail('Item has not been deleted');
-        } catch (\InvalidArgumentException $exception) {
-            $this->assertEquals(sprintf(self::ERROR_MESSAGE, $product->getId()), $exception->getMessage());
-        }
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(sprintf(self::ERROR_MESSAGE, $product->getId()));
+        $this->catalogService->getProducts($this->productsGetRequestInterface);
     }
 
     /**
@@ -89,7 +86,7 @@ class ProductsTest extends AbstractProductTestHelper
      * @return ProductInterface
      * @throws NoSuchEntityException
      */
-    public function getProduct($sku)
+    private function getProduct($sku)
     {
         try {
             return $this->productRepository->get($sku);
@@ -103,7 +100,7 @@ class ProductsTest extends AbstractProductTestHelper
      * @throws NoSuchEntityException
      * @throws StateException
      */
-    public function deleteProduct($sku)
+    private function deleteProduct($sku)
     {
         try {
             $registry = Bootstrap::getObjectManager()->get(Registry::class);
