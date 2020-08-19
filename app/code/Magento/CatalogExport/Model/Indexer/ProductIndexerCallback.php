@@ -55,11 +55,13 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
     public function __construct(
         PublisherInterface $queuePublisher,
         ChangedEntitiesMessageBuilder $messageBuilder,
-        FeedPool $feedPool
+        FeedPool $feedPool,
+        LoggerInterface $logger
     ) {
         $this->queuePublisher = $queuePublisher;
         $this->messageBuilder = $messageBuilder;
         $this->feedPool = $feedPool;
+        $this->logger = $logger;
     }
 
     /**
