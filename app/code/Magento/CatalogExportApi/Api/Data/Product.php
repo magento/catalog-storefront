@@ -989,7 +989,7 @@ class Product
     }
 
     /**
-     * Get categories
+     * Get category ids
      *
      * @return string[]
      */
@@ -999,7 +999,7 @@ class Product
     }
 
     /**
-     * Set categories
+     * Set category ids
      *
      * @param string[] $categoryIds
      * @return void
