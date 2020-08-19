@@ -12,7 +12,7 @@ namespace Magento\CatalogStorefrontApi\Api\Data;
 
 use Magento\Framework\ObjectManagerInterface;
 
-final class GroupedItemProductInfoArrayMapper
+final class ProductVariantArrayMapper
 {
     /**
      * @var mixed
@@ -32,16 +32,21 @@ final class GroupedItemProductInfoArrayMapper
     /**
     * Convert the DTO to the array with the data
     *
-    * @param GroupedItemProductInfo $dto
+    * @param ProductVariant $dto
     * @return array
     */
-    public function convertToArray(GroupedItemProductInfo $dto)
+    public function convertToArray(ProductVariant $dto)
     {
         $result = [];
-        $result["sku"] = $dto->getSku();
-        $result["name"] = $dto->getName();
-        $result["type_id"] = $dto->getTypeId();
-        $result["url_key"] = $dto->getUrlKey();
+        $result["id"] = $dto->getId();
+        $result["option_value_id"] = $dto->getOptionValueId();
+        /** Convert complex Array field **/
+        $fieldArray = [];
+        foreach ($dto->getPrice() as $fieldArrayDto) {
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\PriceArrayMapper::class)
+                ->convertToArray($fieldArrayDto);
+        }
+        $result["price"] = $fieldArray;
         return $result;
     }
 }

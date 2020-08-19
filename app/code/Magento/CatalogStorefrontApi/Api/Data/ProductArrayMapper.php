@@ -171,6 +171,17 @@ final class ProductArrayMapper
                 ->convertToArray($fieldArrayDto);
         }
         $result["grouped_items"] = $fieldArray;
+        /** Convert complex Array field **/
+        $fieldArray = [];
+        foreach ($dto->getOptionsV2() as $fieldArrayDto) {
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ProductOptionArrayMapper::class)
+                ->convertToArray($fieldArrayDto);
+        }
+        $result["options_v2"] = $fieldArray;
+        if ($dto->getShopperInputOptions() !== null) {
+            $result["shopper_input_options"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionArrayMapper::class)
+                ->convertToArray($dto->getShopperInputOptions());
+        }
         return $result;
     }
 }

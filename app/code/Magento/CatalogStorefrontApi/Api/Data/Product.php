@@ -313,6 +313,16 @@ final class Product implements ProductInterface
      * @var array
      */
     private $groupedItems;
+
+    /**
+     * @var array
+     */
+    private $optionsV2;
+
+    /**
+     * @var \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionInterface
+     */
+    private $shopperInputOptions;
     
     /**
      * @inheritdoc
@@ -1530,5 +1540,47 @@ final class Product implements ProductInterface
     public function setGroupedItems(array $value): void
     {
         $this->groupedItems = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return \Magento\CatalogStorefrontApi\Api\Data\ProductOptionInterface[]
+     */
+    public function getOptionsV2(): array
+    {
+        return (array) $this->optionsV2;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ProductOptionInterface[] $value
+     * @return void
+     */
+    public function setOptionsV2(array $value): void
+    {
+        $this->optionsV2 = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionInterface|null
+     */
+    public function getShopperInputOptions(): ?\Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionInterface
+    {
+        return $this->shopperInputOptions;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionInterface $value
+     * @return void
+     */
+    public function setShopperInputOptions(\Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionInterface $value): void
+    {
+        $this->shopperInputOptions = $value;
     }
 }

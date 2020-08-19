@@ -342,6 +342,24 @@ final class ProductMapper
                 }
                 $dto->setGroupedItems($convertedArray);
                 break;
+            case "options_v2":
+                $convertedArray = [];
+                foreach ($value as $element) {
+                    $convertedArray[] = $this->objectManager
+                        ->create(\Magento\CatalogStorefrontApi\Api\Data\ProductOptionMapper::class)
+                        ->setData($element)
+                        ->build();
+                }
+                $dto->setOptionsV2($convertedArray);
+                break;
+            case "shopper_input_options":
+                $dto->setShopperInputOptions(
+                    $this->objectManager
+                       ->create(\Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionMapper::class)
+                       ->setData($value)
+                       ->build()
+                );
+                break;
         }
     }
 }

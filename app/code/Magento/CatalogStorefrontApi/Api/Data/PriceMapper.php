@@ -12,12 +12,12 @@ namespace Magento\CatalogStorefrontApi\Api\Data;
 
 use Magento\Framework\ObjectManagerInterface;
 
-final class GroupedItemProductInfoMapper
+final class PriceMapper
 {
     /**
      * @var string
      */
-    private static $dtoClassName = GroupedItemProductInfoInterface::class;
+    private static $dtoClassName = PriceInterface::class;
 
     /**
      * @var mixed
@@ -49,7 +49,7 @@ final class GroupedItemProductInfoMapper
     /**
     * Build new DTO populated with the data
     *
-    * @return GroupedItemProductInfo
+    * @return Price
     */
     public function build()
     {
@@ -69,24 +69,18 @@ final class GroupedItemProductInfoMapper
     * In case if the field is object, the corresponding Mapper would be create and DTO representing the field data
     * would be built
     *
-    * @param GroupedItemProductInfo $dto
+    * @param Price $dto
     * @param string $key
     * @param mixed $value
     */
-    private function setByKey(GroupedItemProductInfo $dto, string $key, $value): void
+    private function setByKey(Price $dto, string $key, $value): void
     {
         switch ($key) {
-            case "sku":
-                $dto->setSku((string) $value);
+            case "price":
+                $dto->setPrice((float) $value);
                 break;
-            case "name":
-                $dto->setName((string) $value);
-                break;
-            case "type_id":
-                $dto->setTypeId((string) $value);
-                break;
-            case "url_key":
-                $dto->setUrlKey((string) $value);
+            case "scope":
+                $dto->setScope((string) $value);
                 break;
         }
     }
