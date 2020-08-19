@@ -24,6 +24,7 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
     private const TOPIC_NAME = 'catalog.export.category.data';
 
     private const CATEGORIES_UPDATED_EVENT_TYPE = 'categories_updated';
+
     private const CATEGORIES_DELETED_EVENT_TYPE = 'categories_deleted';
 
     /**
@@ -86,7 +87,7 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
             }
         }
 
-        //TODO: Add store codes to categories_updated message here? Would cause redundant calls back to saasExport though.
+        //TODO: Add store codes to categories_updated message? Would cause redundant calls back to saasExport though.
         foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
             $this->publishMessage(
                 self::CATEGORIES_UPDATED_EVENT_TYPE,

@@ -11,7 +11,6 @@ use Magento\CatalogMessageBroker\Model\FetchProductsInterface;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequestInterfaceFactory;
 use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
-use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -24,6 +23,7 @@ class ProductsConsumer
      * TODO: make private after https://github.com/magento/catalog-storefront/issues/242
      */
     const PRODUCTS_UPDATED_EVENT_TYPE = 'products_updated';
+
     const PRODUCTS_DELETED_EVENT_TYPE = 'products_deleted';
 
     /**
@@ -54,7 +54,6 @@ class ProductsConsumer
     /**
      * @param LoggerInterface $logger
      * @param FetchProductsInterface $fetchProducts
-     * @param StoreManagerInterface $storeManager
      * @param CatalogServerInterface $catalogServer
      * @param DeleteProductsRequestInterfaceFactory $deleteProductsRequestInterfaceFactory
      * @param ProductPublisher $productPublisher
@@ -62,7 +61,6 @@ class ProductsConsumer
     public function __construct(
         LoggerInterface $logger,
         FetchProductsInterface $fetchProducts,
-        StoreManagerInterface $storeManager,
         CatalogServerInterface $catalogServer,
         DeleteProductsRequestInterfaceFactory $deleteProductsRequestInterfaceFactory,
         ProductPublisher $productPublisher

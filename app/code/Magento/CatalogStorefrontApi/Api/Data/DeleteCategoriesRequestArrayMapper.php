@@ -15,11 +15,6 @@ use Magento\Framework\ObjectManagerInterface;
 final class DeleteCategoriesRequestArrayMapper
 {
     /**
-     * @var mixed
-     */
-    private $data;
-
-    /**
      * @var ObjectManagerInterface
      */
     private $objectManager;

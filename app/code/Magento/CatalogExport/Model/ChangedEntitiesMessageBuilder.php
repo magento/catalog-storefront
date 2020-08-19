@@ -10,7 +10,7 @@ namespace Magento\CatalogExport\Model;
 use Magento\CatalogExport\Model\Data\ChangedEntitiesInterfaceFactory;
 use Magento\CatalogExport\Model\Data\DataInterfaceFactory;
 use Magento\CatalogExport\Model\Data\MetaInterfaceFactory;
-use \Magento\CatalogExport\Model\Data\ChangedEntitiesInterface;
+use Magento\CatalogExport\Model\Data\ChangedEntitiesInterface;
 
 /**
  * Class that builds queue message for changed entities

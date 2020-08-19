@@ -122,7 +122,7 @@ class CatalogService implements CatalogServerInterface
      * @param DynamicAttributeValueInterfaceFactory $dynamicAttributeFactory
      * @param ImportProductsResponseFactory $importProductsResponseFactory
      * @param DeleteProductsResponseFactory $deleteProductsResponseFactory
-     * @param DeleteCategoriesResponseFactory $deleteProductsResponseFactory
+     * @param DeleteCategoriesResponseFactory $deleteCategoriesResponseFactory
      * @param ImportCategoriesResponseFactory $importCategoriesResponseFactory
      * @param CatalogRepository $catalogRepository
      * @param ProductArrayMapper $productArrayMapper

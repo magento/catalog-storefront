@@ -25,6 +25,7 @@ class CategoriesConsumer
      * TODO: make private after https://github.com/magento/catalog-storefront/issues/242
      */
     const CATEGORIES_UPDATED_EVENT_TYPE = 'categories_updated';
+
     const CATEGORIES_DELETED_EVENT_TYPE = 'categories_deleted';
 
     /**

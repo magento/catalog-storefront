@@ -22,7 +22,6 @@ class ConfigurableOptions implements DataMapperInterface
      */
     private const CONFIGURABLE_TYPE_CODE = 'configurable';
 
-
     /**
      * @inheritDoc
      */

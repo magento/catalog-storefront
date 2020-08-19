@@ -22,7 +22,9 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
     private const BATCH_SIZE = 100;
 
     private const TOPIC_NAME = 'catalog.export.product.data';
+
     private const PRODUCTS_UPDATED_EVENT_TYPE = 'products_updated';
+
     private const PRODUCTS_DELETED_EVENT_TYPE = 'products_deleted';
 
     /**
