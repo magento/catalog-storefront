@@ -10,32 +10,15 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontApi\Api\Data;
 
-use Magento\Framework\ObjectManagerInterface;
-
 final class DeleteCategoriesResponseArrayMapper
 {
-    /**
-     * @var mixed
-     */
-    private $data;
-
-    /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    public function __construct(ObjectManagerInterface $objectManager)
-    {
-        $this->objectManager = $objectManager;
-    }
-
     /**
     * Convert the DTO to the array with the data
     *
     * @param DeleteCategoriesResponse $dto
     * @return array
     */
-    public function convertToArray(DeleteCategoriesResponse $dto)
+    public function convertToArray(DeleteCategoriesResponse $dto): array
     {
         $result = [];
         $result["status"] = $dto->getStatus();
