@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExtractor\DataProvider;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * General data provider that returns EAV attributes for eav entities.
@@ -43,6 +45,11 @@ class DataProvider implements DataProviderInterface
     private $transformer;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @var array
      */
     private $productTypesMap;
@@ -51,6 +58,7 @@ class DataProvider implements DataProviderInterface
      * @param string $defaultDataProvider
      * @param ObjectManagerInterface $objectManager
      * @param Transformer $transformer
+     * @param StoreManagerInterface $storeManager
      * @param array $dataProviders
      * @param array $productTypesMap
      */
@@ -58,6 +66,7 @@ class DataProvider implements DataProviderInterface
         string $defaultDataProvider,
         ObjectManagerInterface $objectManager,
         Transformer $transformer,
+        StoreManagerInterface $storeManager,
         array $dataProviders = [],
         array $productTypesMap = []
     ) {
@@ -65,18 +74,27 @@ class DataProvider implements DataProviderInterface
         $this->defaultDataProvider = $defaultDataProvider;
         $this->objectManager = $objectManager;
         $this->transformer = $transformer;
+        $this->storeManager = $storeManager;
         $this->productTypesMap = $productTypesMap;
     }
 
     /**
      * @inheritdoc
      * @throws \InvalidArgumentException
+     * @throws NoSuchEntityException
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function fetch(array $productIds, array $attributes, array $scopes): array
     {
         $items = [];
         if (!$productIds) {
             return $items;
+        }
+
+        if (!empty($scopes['store'])) {
+            $scopes['store'] = $this->storeManager->getStore($scopes['store'])->getId();
         }
 
         $dataProviders = $this->getDataProviders($attributes);
