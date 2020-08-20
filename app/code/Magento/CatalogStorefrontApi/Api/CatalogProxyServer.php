@@ -66,6 +66,7 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
      * @param \Spiral\GRPC\ContextInterface $ctx
      * @param ProductsGetRequest $in
      * @return ProductsGetResult
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getProducts(\Spiral\GRPC\ContextInterface $ctx, ProductsGetRequest $in): ProductsGetResult
     {
@@ -658,6 +659,7 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
      * @param \Spiral\GRPC\ContextInterface $ctx
      * @param ImportProductsRequest $in
      * @return ImportProductsResponse
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function importProducts(\Spiral\GRPC\ContextInterface $ctx, ImportProductsRequest $in): ImportProductsResponse
     {
@@ -1256,6 +1258,7 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
      * @param \Spiral\GRPC\ContextInterface $ctx
      * @param DeleteProductsRequest $in
      * @return DeleteProductsResponse
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function deleteProducts(\Spiral\GRPC\ContextInterface $ctx, DeleteProductsRequest $in): DeleteProductsResponse
     {
@@ -1328,6 +1331,7 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
      * @param \Spiral\GRPC\ContextInterface $ctx
      * @param ImportCategoriesRequest $in
      * @return ImportCategoriesResponse
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function importCategories(\Spiral\GRPC\ContextInterface $ctx, ImportCategoriesRequest $in): ImportCategoriesResponse
     {
@@ -1486,6 +1490,7 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
      * @param \Spiral\GRPC\ContextInterface $ctx
      * @param CategoriesGetRequest $in
      * @return CategoriesGetResponse
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getCategories(\Spiral\GRPC\ContextInterface $ctx, CategoriesGetRequest $in): CategoriesGetResponse
     {
@@ -1639,6 +1644,7 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
      * @param \Spiral\GRPC\ContextInterface $ctx
      * @param ProductVariantsGetRequest $in
      * @return ProductVariantsGetResponse
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getProductVariants(\Spiral\GRPC\ContextInterface $ctx, ProductVariantsGetRequest $in): ProductVariantsGetResponse
     {

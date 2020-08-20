@@ -20,6 +20,7 @@ namespace Magento\CatalogStorefrontApi\Api\Data;
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 final class DeleteProductsRequest implements DeleteProductsRequestInterface
 {
