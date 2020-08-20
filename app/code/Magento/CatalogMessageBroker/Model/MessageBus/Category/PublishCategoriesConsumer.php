@@ -13,6 +13,9 @@ use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterfaceFactor
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Publish categories into storage
+ */
 class PublishCategoriesConsumer implements ConsumerEventInterface
 {
     /**

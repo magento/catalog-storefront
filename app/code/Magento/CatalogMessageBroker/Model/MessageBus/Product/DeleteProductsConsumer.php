@@ -11,6 +11,9 @@ use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequestInterfaceFactory;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Delete products from storage
+ */
 class DeleteProductsConsumer implements ConsumerEventInterface
 {
     /**

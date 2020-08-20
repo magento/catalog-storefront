@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\CatalogMessageBroker\Model\MessageBus;
+
 /**
  * Factory for creating consumer event
  */
-namespace Magento\CatalogMessageBroker\Model\MessageBus;
-
 class ConsumerEventInterfaceFactory
 {
     /**

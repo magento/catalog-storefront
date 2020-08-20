@@ -11,6 +11,9 @@ use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Publish products into storage
+ */
 class PublishProductsConsumer implements ConsumerEventInterface
 {
     /**

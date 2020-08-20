@@ -11,6 +11,9 @@ use Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesRequestInterfaceFactor
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Delete categories from storage
+ */
 class DeleteCategoriesConsumer implements ConsumerEventInterface
 {
     /**
