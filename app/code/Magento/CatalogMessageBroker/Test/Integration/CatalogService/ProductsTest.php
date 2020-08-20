@@ -17,8 +17,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
-use Throwable;
-use Zend_Db_Statement_Exception;
 
 class ProductsTest extends AbstractProductTestHelper
 {
@@ -59,20 +57,22 @@ class ProductsTest extends AbstractProductTestHelper
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      * @throws StateException
-     * @throws Throwable
-     * @throws Zend_Db_Statement_Exception
+     * @throws \Throwable
+     * @throws \Zend_Db_Statement_Exception
      */
     public function testDeleteProduct()
     {
         $product = $this->getProduct(self::TEST_SKU);
         $this->assertEquals(self::TEST_SKU, $product->getSku());
         $this->productsConsumer->processMessage("[\"" . $product->getId() . "\"]");
+
         $this->productsGetRequestInterface->setIds([$product->getId()]);
         $this->productsGetRequestInterface->setStore("default");
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
         $item = $catalogServiceItem->getItems()[0];
         $this->assertEquals($item->getSku(), $product->getSku());
         $this->deleteProduct($product->getSku());
+
         $extractedProduct = $this->getExtractedProduct(self::TEST_SKU, self::STORE_CODE);
         $this->assertEquals(1, (int)$extractedProduct['is_deleted']);
         $this->productsConsumer->processMessage("[\"" . $product->getId() . "\"]");
