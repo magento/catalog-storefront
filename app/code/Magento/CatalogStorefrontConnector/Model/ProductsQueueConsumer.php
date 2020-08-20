@@ -8,7 +8,7 @@ namespace Magento\CatalogStorefrontConnector\Model;
 
 use Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
-use Magento\CatalogMessageBroker\Model\MessageBus\ProductsConsumer;
+use Magento\CatalogMessageBroker\Model\MessageBus\Product\ProductsConsumer;
 use Magento\CatalogStorefrontConnector\Helper\CustomStoreResolver;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
