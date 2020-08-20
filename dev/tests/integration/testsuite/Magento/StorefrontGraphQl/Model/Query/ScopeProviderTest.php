@@ -12,6 +12,7 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\GraphQl\Model\Query\ContextInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @magentoAppArea graphql
@@ -22,6 +23,11 @@ class ScopeProviderTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\StorefrontGraphQl\Model\Query\ScopeProvider
      */
     private $scopeProvider;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * @var ObjectManagerInterface
@@ -35,6 +41,7 @@ class ScopeProviderTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->scopeProvider = $this->objectManager->get(ScopeProvider::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
     }
 
     /**
@@ -55,7 +62,10 @@ class ScopeProviderTest extends \PHPUnit\Framework\TestCase
         $context = $contextFactory->create();
 
         $this->assertEquals(
-            ['store' => $customer->getStoreId(), 'customer_group' => $customer->getGroupId()],
+            [
+                'store' => $this->storeManager->getStore($customer->getStoreId())->getCode(),
+                'customer_group' => $customer->getGroupId(),
+            ],
             $this->scopeProvider->getScopes($context)
         );
     }
@@ -71,7 +81,7 @@ class ScopeProviderTest extends \PHPUnit\Framework\TestCase
         $context = $contextFactory->create();
 
         $this->assertEquals(
-            ['store' => 1, 'customer_group' => CustomerGroup::NOT_LOGGED_IN_ID],
+            ['store' => 'default', 'customer_group' => CustomerGroup::NOT_LOGGED_IN_ID],
             $this->scopeProvider->getScopes($context)
         );
     }

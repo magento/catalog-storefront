@@ -106,25 +106,27 @@ class ProductPublisher
      * Publish data to Storefront directly
      *
      * @param array $productIds
-     * @param int $storeId
+     * @param string $storeCode
      * @param array $overrideProducts Temporary variables to support transition period between new and old Export API
+     *
      * @return void
+     *
      * @throws \Exception
      * @deprecated
      */
-    public function publish(array $productIds, int $storeId, $overrideProducts = []): void
+    public function publish(array $productIds, string $storeCode, $overrideProducts = []): void
     {
         $this->state->emulateAreaCode(
             \Magento\Framework\App\Area::AREA_FRONTEND,
-            function () use ($productIds, $storeId, $overrideProducts) {
+            function () use ($productIds, $storeCode, $overrideProducts) {
                 try {
-                    $this->publishEntities($productIds, $storeId, $overrideProducts);
+                    $this->publishEntities($productIds, $storeCode, $overrideProducts);
                 } catch (\Throwable $e) {
                     $this->logger->critical(
                         \sprintf(
                             'Error on publish product ids "%s" in store %s',
                             \implode(', ', $productIds),
-                            $storeId
+                            $storeCode
                         ),
                         ['exception' => $e]
                     );
@@ -137,24 +139,24 @@ class ProductPublisher
      * Delete data from to Storefront
      *
      * @param string[] $productIds
-     * @param int $storeId
+     * @param string $storeCode
      * @return void
      * @throws \Exception
      * @deprecated
      */
-    public function delete(array $productIds, int $storeId): void
+    public function delete(array $productIds, string $storeCode): void
     {
         $this->state->emulateAreaCode(
             \Magento\Framework\App\Area::AREA_FRONTEND,
-            function () use ($productIds, $storeId) {
+            function () use ($productIds, $storeCode) {
                 try {
-                    $this->deleteProducts($storeId, $productIds);
+                    $this->deleteProducts($storeCode, $productIds);
                 } catch (\Throwable $e) {
                     $this->logger->critical(
                         \sprintf(
                             'Error on publish product ids "%s" in store %s',
                             \implode(', ', $productIds),
-                            $storeId
+                            $storeCode
                         ),
                         ['exception' => $e]
                     );
@@ -167,21 +169,22 @@ class ProductPublisher
      * Publish entities to the queue
      *
      * @param array $productIds
-     * @param int $storeId
+     * @param string $storeCode
      * @param array $overrideProducts
+     *
      * @return void
      */
-    private function publishEntities(array $productIds, int $storeId, $overrideProducts = []): void
+    private function publishEntities(array $productIds, string $storeCode, $overrideProducts = []): void
     {
         foreach (\array_chunk($productIds, $this->batchSize) as $idsBunch) {
             // @todo eliminate calling old API when new API can provide all of the necessary data
-            $productsData = $this->productsDataProvider->fetch($idsBunch, [], ['store' => $storeId]);
+            $productsData = $this->productsDataProvider->fetch($idsBunch, [], ['store' => $storeCode]);
             $this->logger->debug(
-                \sprintf('Publish products with ids "%s" in store %s', \implode(', ', $productIds), $storeId),
+                \sprintf('Publish products with ids "%s" in store %s', \implode(', ', $productIds), $storeCode),
                 ['verbose' => $productsData]
             );
             if (count($productsData)) {
-                $this->importProducts($storeId, array_values($productsData), $overrideProducts);
+                $this->importProducts($storeCode, array_values($productsData), $overrideProducts);
             }
         }
     }
@@ -189,12 +192,13 @@ class ProductPublisher
     /**
      * Import products into product storage.
      *
-     * @param int $storeId
+     * @param string $storeCode
      * @param array $products
      * @param array $overrideProducts
+     *
      * @throws \Throwable
      */
-    private function importProducts(int $storeId, array $products, $overrideProducts = []): void
+    private function importProducts(string $storeCode, array $products, $overrideProducts = []): void
     {
         $newApiProducts = [];
         foreach ($overrideProducts as $product) {
@@ -213,7 +217,7 @@ class ProductPublisher
         /** @var ImportProductsRequestInterface $importProductRequest */
         $importProductRequest = $this->importProductsRequestInterfaceFactory->create();
         $importProductRequest->setProducts($products);
-        $importProductRequest->setStore($storeId);
+        $importProductRequest->setStore($storeCode);
         $importResult = $this->catalogServer->importProducts($importProductRequest);
         if ($importResult->getStatus() === false) {
             $this->logger->error(sprintf('Products import is failed: "%s"', $importResult->getMessage()));
@@ -223,16 +227,16 @@ class ProductPublisher
     /**
      * Delete products from storage
      *
-     * @param int $storeId
+     * @param string $storeCode
      * @param int[] $productIds
      * @return void
      */
-    private function deleteProducts(int $storeId, array $productIds): void
+    private function deleteProducts(string $storeCode, array $productIds): void
     {
         /** @var DeleteProductsRequestInterface $deleteProductRequest */
         $deleteProductRequest = $this->deleteProductsRequestInterfaceFactory->create();
         $deleteProductRequest->setProductIds($productIds);
-        $deleteProductRequest->setStore($storeId);
+        $deleteProductRequest->setStore($storeCode);
 
         $this->catalogServer->deleteProducts($deleteProductRequest);
     }

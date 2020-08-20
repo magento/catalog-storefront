@@ -160,7 +160,7 @@ class CategoryList implements BatchResolverInterface
         $storefrontRequest = [
             'ids' => $categoryIds,
             'scopes' => $scopes,
-            'store' => $store->getId(),
+            'store' => $store->getCode(),
             'attribute_codes' => $attributeCodes,
         ];
         return [

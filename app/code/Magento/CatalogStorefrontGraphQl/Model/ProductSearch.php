@@ -10,6 +10,7 @@ namespace Magento\CatalogStorefrontGraphQl\Model;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Catalog\Model\Layer\Resolver as LayerResolver;
 use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\LayerBuilder;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Products search
@@ -36,18 +37,26 @@ class ProductSearch
     private $layerBuilder;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Search $search
      * @param LayerBuilder $layerBuilder
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Search $search,
-        LayerBuilder $layerBuilder
+        LayerBuilder $layerBuilder,
+        StoreManagerInterface $storeManager
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->search = $search;
         $this->layerBuilder = $layerBuilder;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -94,8 +103,10 @@ class ProductSearch
         }
         $request['additional_info']['meta_info'] = $metaInfo;
         $request['additional_info']['aggregations'] = $showLayeredNavigation
-            ? $this->layerBuilder->build($aggregations, (int)$storefrontRequest['scopes']['store'])
-            : [];
+            ? $this->layerBuilder->build(
+                $aggregations,
+                (int)$this->storeManager->getStore($storefrontRequest['scopes']['store'])->getId()
+            ) : [];
 
         //TODO: Remove dependency on CatalogGraphQl module
         $buckets = [];
