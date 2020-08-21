@@ -147,8 +147,8 @@ class OutputFormatter
 
         if (!empty($currentResult['samples'])) {
             $currentResult['downloadable_product_samples'] = \array_map(function ($sample) {
-                $sample['title'] = $sample['url'];
-                $sample['sample_url'] = $sample['label'];
+                $sample['title'] = $sample['label'];
+                $sample['sample_url'] = $sample['url'];
                 return $sample;
             }, $currentResult['samples']);
             unset($currentResult['samples']);
