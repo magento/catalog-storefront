@@ -153,7 +153,8 @@ class RequestBuilder
     private function storeFrontAttributeMapper(array $attributes): array
     {
         if (isset($attributes['DownloadableProduct.downloadable_product_samples'])) {
-            $attributes['DownloadableProduct.samples'] = $attributes['DownloadableProduct.downloadable_product_samples'];
+            $attributes['DownloadableProduct.samples'] =
+                $attributes['DownloadableProduct.downloadable_product_samples'];
             unset($attributes['DownloadableProduct.downloadable_product_samples']);
         }
         return $attributes;
