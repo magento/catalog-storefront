@@ -10,12 +10,15 @@ namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
+use Magento\CatalogMessageBroker\Model\MessageBus\Category\CategoriesConsumer;
 use Magento\CatalogStorefront\Model\CatalogService;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use Magento\DataExporter\Model\FeedInterface;
 use Magento\DataExporter\Model\FeedPool;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -25,6 +28,7 @@ class CategoryTest extends TestCase
 {
     private const CATEGORY_ID = '333';
     private const STORE_CODE = 'default';
+    private const ERROR_MESSAGE = 'Products with the following ids are not found in catalog: %s';
 
     /**
      * @var CategoriesConsumer
@@ -82,66 +86,53 @@ class CategoryTest extends TestCase
      * Validate deleted category is removed from storefront storage.
      *
      * @magentoDataFixture Magento/Catalog/_files/category.php
-     * @magentoDbIsolation disabled
-     * @magentoAppIsolation enabled
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @throws StateException
+     * @throws FileSystemException
+     * @throws RuntimeException
+     * @throws \Throwable
      */
-    public function testSaveAndDeleteCategory()
+    public function testSaveAndDeleteCategory() : void
     {
-        try {
-            $category = $this->categoryRepository->get(self::CATEGORY_ID);
-            $this->assertEquals(self::CATEGORY_ID, $category->getId());
+        $category = $this->categoryRepository->get(self::CATEGORY_ID);
+        $this->assertEquals(self::CATEGORY_ID, $category->getId());
 
-            $message = $this->messageBuilder->build(
-                [self::CATEGORY_ID],
-                CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
-                self::STORE_CODE
-            );
-            $this->categoriesConsumer->processMessage($message);
+        $message = $this->messageBuilder->build(
+            [(int)$category->getId()],
+            CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
+            self::STORE_CODE
+        );
+        $this->categoriesConsumer->processMessage($message);
 
-            $this->categoriesGetRequestInterface->setIds([self::CATEGORY_ID]);
-            $this->categoriesGetRequestInterface->setStore(self::STORE_CODE);
-            $catalogServiceItem = $this->catalogService->getCategories($this->categoriesGetRequestInterface);
-            $items = $catalogServiceItem->getItems();
-            $this->assertCount(
-                1,
-                $items,
-                'Category could not be found in catalog storefront storage'
-            );
-            $this->assertEquals(
-                $items[0]->getId(),
-                self::CATEGORY_ID,
-                'Category could not be found in catalog storefront storage'
-            );
+        $this->categoriesGetRequestInterface->setIds([$category->getId()]);
+        $this->categoriesGetRequestInterface->setStore(self::STORE_CODE);
+        $catalogServiceItem = $this->catalogService->getCategories($this->categoriesGetRequestInterface);
+        $this->assertNotEmpty($catalogServiceItem->getItems());
+        $item = $catalogServiceItem->getItems()[0];
+        $this->assertEquals($item->getId(), $category->getId());
 
-            $this->deleteCategory(self::CATEGORY_ID);
-            $deletedFeed = $this->categoryFeed->getDeletedByIds([self::CATEGORY_ID], [self::STORE_CODE]);
-            $this->assertCount(1, $deletedFeed);
+        $this->deleteCategory((int)$category->getId());
+        $deletedFeed = $this->categoryFeed->getDeletedByIds([$category->getId()], [self::STORE_CODE]);
+        $this->assertEmpty($deletedFeed);
 
-            $deleteMessage = $this->messageBuilder->build(
-                [self::CATEGORY_ID],
-                CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
-                self::STORE_CODE
-            );
-            $this->categoriesConsumer->processMessage($deleteMessage);
-
-            $catalogServiceItem = $this->catalogService->getCategories($this->categoriesGetRequestInterface)
-                ->getItems();
-            $this->assertEmpty(
-                $catalogServiceItem,
-                'Category has not been removed from catalog storefront storage'
-            );
-        } catch (\Throwable $e) {
-            $this->fail($e->getMessage());
-        }
+        $deleteMessage = $this->messageBuilder->build(
+            [(int)$category->getId()],
+            CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
+            self::STORE_CODE
+        );
+        $this->categoriesConsumer->processMessage($deleteMessage);
+        $items = $this->catalogService->getCategories($this->categoriesGetRequestInterface);
+        $this->assertEmpty($items);
     }
 
     /**
      * @param int $id
+     * @throws InputException
      * @throws NoSuchEntityException
      * @throws StateException
-     * @throws InputException
      */
-    private function deleteCategory($id)
+    private function deleteCategory(int $id) : void
     {
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', true);
