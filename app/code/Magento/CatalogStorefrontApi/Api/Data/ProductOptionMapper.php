@@ -103,6 +103,12 @@ final class ProductOptionMapper
             case "type":
                 $dto->setType((string) $value);
                 break;
+            case "links_purchased_separately":
+                $dto->setLinksPurchasedSeparately((bool) $value);
+                break;
+            case "use_default":
+                $dto->setUseDefault((bool) $value);
+                break;
             case "values":
                 $convertedArray = [];
                 foreach ($value as $element) {

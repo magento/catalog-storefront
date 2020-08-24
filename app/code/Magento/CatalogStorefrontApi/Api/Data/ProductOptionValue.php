@@ -54,6 +54,16 @@ final class ProductOptionValue implements ProductOptionValueInterface
      * @var float
      */
     private $qty;
+
+    /**
+     * @var string
+     */
+    private $infoUrl;
+
+    /**
+     * @var int
+     */
+    private $numberOfDownloads;
     
     /**
      * @inheritdoc
@@ -200,5 +210,47 @@ final class ProductOptionValue implements ProductOptionValueInterface
     public function setQty(float $value): void
     {
         $this->qty = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return string
+     */
+    public function getInfoUrl(): string
+    {
+        return (string) $this->infoUrl;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setInfoUrl(string $value): void
+    {
+        $this->infoUrl = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return int
+     */
+    public function getNumberOfDownloads(): int
+    {
+        return (int) $this->numberOfDownloads;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param int $value
+     * @return void
+     */
+    public function setNumberOfDownloads(int $value): void
+    {
+        $this->numberOfDownloads = $value;
     }
 }

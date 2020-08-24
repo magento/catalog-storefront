@@ -34,6 +34,11 @@ final class VariantAttribute implements VariantAttributeInterface
      * @var string
      */
     private $valueIndex;
+
+    /**
+     * @var string
+     */
+    private $attributeId;
     
     /**
      * @inheritdoc
@@ -96,5 +101,26 @@ final class VariantAttribute implements VariantAttributeInterface
     public function setValueIndex(string $value): void
     {
         $this->valueIndex = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return string
+     */
+    public function getAttributeId(): string
+    {
+        return (string) $this->attributeId;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setAttributeId(string $value): void
+    {
+        $this->attributeId = $value;
     }
 }

@@ -38,7 +38,15 @@ class ProductOption extends \Google\Protobuf\Internal\Message
      */
     protected $type = '';
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOptionValue values = 7;</code>
+     * Generated from protobuf field <code>bool links_purchased_separately = 7;</code>
+     */
+    protected $links_purchased_separately = false;
+    /**
+     * Generated from protobuf field <code>bool use_default = 8;</code>
+     */
+    protected $use_default = false;
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOptionValue values = 9;</code>
      */
     private $values;
 
@@ -54,6 +62,8 @@ class ProductOption extends \Google\Protobuf\Internal\Message
      *     @type bool $required
      *     @type string $render_type
      *     @type string $type
+     *     @type bool $links_purchased_separately
+     *     @type bool $use_default
      *     @type \Magento\CatalogStorefrontApi\Proto\ProductOptionValue[]|\Google\Protobuf\Internal\RepeatedField $values
      * }
      */
@@ -196,7 +206,51 @@ class ProductOption extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOptionValue values = 7;</code>
+     * Generated from protobuf field <code>bool links_purchased_separately = 7;</code>
+     * @return bool
+     */
+    public function getLinksPurchasedSeparately()
+    {
+        return $this->links_purchased_separately;
+    }
+
+    /**
+     * Generated from protobuf field <code>bool links_purchased_separately = 7;</code>
+     * @param bool $var
+     * @return $this
+     */
+    public function setLinksPurchasedSeparately($var)
+    {
+        GPBUtil::checkBool($var);
+        $this->links_purchased_separately = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>bool use_default = 8;</code>
+     * @return bool
+     */
+    public function getUseDefault()
+    {
+        return $this->use_default;
+    }
+
+    /**
+     * Generated from protobuf field <code>bool use_default = 8;</code>
+     * @param bool $var
+     * @return $this
+     */
+    public function setUseDefault($var)
+    {
+        GPBUtil::checkBool($var);
+        $this->use_default = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOptionValue values = 9;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
      */
     public function getValues()
@@ -205,7 +259,7 @@ class ProductOption extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOptionValue values = 7;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOptionValue values = 9;</code>
      * @param \Magento\CatalogStorefrontApi\Proto\ProductOptionValue[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */

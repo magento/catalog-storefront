@@ -94,6 +94,9 @@ final class VariantAttributeMapper
             case "value_index":
                 $dto->setValueIndex((string) $value);
                 break;
+            case "attribute_id":
+                $dto->setAttributeId((string) $value);
+                break;
         }
     }
 }

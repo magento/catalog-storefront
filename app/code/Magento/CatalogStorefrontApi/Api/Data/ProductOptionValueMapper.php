@@ -106,6 +106,12 @@ final class ProductOptionValueMapper
             case "qty":
                 $dto->setQty((float) $value);
                 break;
+            case "info_url":
+                $dto->setInfoUrl((string) $value);
+                break;
+            case "number_of_downloads":
+                $dto->setNumberOfDownloads((int) $value);
+                break;
         }
     }
 }

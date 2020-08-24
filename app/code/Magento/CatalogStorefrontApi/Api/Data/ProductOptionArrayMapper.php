@@ -53,6 +53,8 @@ final class ProductOptionArrayMapper
         $result["required"] = $dto->getRequired();
         $result["render_type"] = $dto->getRenderType();
         $result["type"] = $dto->getType();
+        $result["links_purchased_separately"] = $dto->getLinksPurchasedSeparately();
+        $result["use_default"] = $dto->getUseDefault();
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getValues() as $fieldArrayDto) {
