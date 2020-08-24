@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<overrides>
+    <test class="Magento\GraphQl\Catalog\CategoryProductsCountTest">
+        <method name="testCategoryWithOutOfStockProductManageStockEnabled" skip="true"/>
+        <method name="testCategoryWithConfigurableChildrenOutOfStock" skip="true"/>
+        <method name="testCategoryWithSaleableProduct" skip="true"/>
+        <method name="testCategoryWithOutOfStockProductManageStockDisabled" skip="true"/>
+    </test>
+</overrides>
