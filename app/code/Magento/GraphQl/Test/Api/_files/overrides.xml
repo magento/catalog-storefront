@@ -12,4 +12,7 @@
         <method name="testCategoryWithSaleableProduct" skip="true"/>
         <method name="testCategoryWithOutOfStockProductManageStockDisabled" skip="true"/>
     </test>
+    <test class="Magento\GraphQl\Bundle\AddBundleProductToCartSingleMutationTest">
+        <method name="testAddBundleItemWithCustomOptionQuantity" skip="true"/>
+    </test>
 </overrides>
