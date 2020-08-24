@@ -52,6 +52,8 @@ final class ProductOptionValueArrayMapper
         $result["sort_order"] = $dto->getSortOrder();
         $result["default"] = $dto->getDefault();
         $result["image_url"] = $dto->getImageUrl();
+        $result["qty_mutability"] = $dto->getQtyMutability();
+        $result["qty"] = $dto->getQty();
         return $result;
     }
 }

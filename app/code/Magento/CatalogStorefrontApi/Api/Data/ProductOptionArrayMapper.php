@@ -52,6 +52,7 @@ final class ProductOptionArrayMapper
         $result["sort_order"] = $dto->getSortOrder();
         $result["required"] = $dto->getRequired();
         $result["render_type"] = $dto->getRenderType();
+        $result["type"] = $dto->getType();
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getValues() as $fieldArrayDto) {

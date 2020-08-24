@@ -100,6 +100,9 @@ final class ProductOptionMapper
             case "render_type":
                 $dto->setRenderType((string) $value);
                 break;
+            case "type":
+                $dto->setType((string) $value);
+                break;
             case "values":
                 $convertedArray = [];
                 foreach ($value as $element) {

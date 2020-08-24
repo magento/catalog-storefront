@@ -100,6 +100,12 @@ final class ProductOptionValueMapper
             case "image_url":
                 $dto->setImageUrl((string) $value);
                 break;
+            case "qty_mutability":
+                $dto->setQtyMutability((bool) $value);
+                break;
+            case "qty":
+                $dto->setQty((float) $value);
+                break;
         }
     }
 }

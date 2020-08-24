@@ -46,6 +46,11 @@ final class ProductOption implements ProductOptionInterface
     private $renderType;
 
     /**
+     * @var string
+     */
+    private $type;
+
+    /**
      * @var array
      */
     private $values;
@@ -153,6 +158,27 @@ final class ProductOption implements ProductOptionInterface
     public function setRenderType(string $value): void
     {
         $this->renderType = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return string
+     */
+    public function getType(): string
+    {
+        return (string) $this->type;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setType(string $value): void
+    {
+        $this->type = $value;
     }
     
     /**

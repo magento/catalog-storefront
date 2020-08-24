@@ -30,11 +30,15 @@ class ProductOption extends \Google\Protobuf\Internal\Message
      */
     protected $required = false;
     /**
-     * Generated from protobuf field <code>string render_type = 6;</code>
+     * Generated from protobuf field <code>string render_type = 5;</code>
      */
     protected $render_type = '';
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOptionValue values = 5;</code>
+     * Generated from protobuf field <code>string type = 6;</code>
+     */
+    protected $type = '';
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOptionValue values = 7;</code>
      */
     private $values;
 
@@ -49,6 +53,7 @@ class ProductOption extends \Google\Protobuf\Internal\Message
      *     @type int $sort_order
      *     @type bool $required
      *     @type string $render_type
+     *     @type string $type
      *     @type \Magento\CatalogStorefrontApi\Proto\ProductOptionValue[]|\Google\Protobuf\Internal\RepeatedField $values
      * }
      */
@@ -147,7 +152,7 @@ class ProductOption extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>string render_type = 6;</code>
+     * Generated from protobuf field <code>string render_type = 5;</code>
      * @return string
      */
     public function getRenderType()
@@ -156,7 +161,7 @@ class ProductOption extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>string render_type = 6;</code>
+     * Generated from protobuf field <code>string render_type = 5;</code>
      * @param string $var
      * @return $this
      */
@@ -169,7 +174,29 @@ class ProductOption extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOptionValue values = 5;</code>
+     * Generated from protobuf field <code>string type = 6;</code>
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Generated from protobuf field <code>string type = 6;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setType($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->type = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOptionValue values = 7;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
      */
     public function getValues()
@@ -178,7 +205,7 @@ class ProductOption extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOptionValue values = 5;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOptionValue values = 7;</code>
      * @param \Magento\CatalogStorefrontApi\Proto\ProductOptionValue[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */

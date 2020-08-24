@@ -33,6 +33,14 @@ class ProductOptionValue extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string image_url = 5;</code>
      */
     protected $image_url = '';
+    /**
+     * Generated from protobuf field <code>bool qty_mutability = 6;</code>
+     */
+    protected $qty_mutability = false;
+    /**
+     * Generated from protobuf field <code>float qty = 7;</code>
+     */
+    protected $qty = 0.0;
 
     /**
      * Constructor.
@@ -45,6 +53,8 @@ class ProductOptionValue extends \Google\Protobuf\Internal\Message
      *     @type string $sort_order
      *     @type bool $default
      *     @type string $image_url
+     *     @type bool $qty_mutability
+     *     @type float $qty
      * }
      */
     public function __construct($data = null)
@@ -159,6 +169,50 @@ class ProductOptionValue extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, true);
         $this->image_url = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>bool qty_mutability = 6;</code>
+     * @return bool
+     */
+    public function getQtyMutability()
+    {
+        return $this->qty_mutability;
+    }
+
+    /**
+     * Generated from protobuf field <code>bool qty_mutability = 6;</code>
+     * @param bool $var
+     * @return $this
+     */
+    public function setQtyMutability($var)
+    {
+        GPBUtil::checkBool($var);
+        $this->qty_mutability = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>float qty = 7;</code>
+     * @return float
+     */
+    public function getQty()
+    {
+        return $this->qty;
+    }
+
+    /**
+     * Generated from protobuf field <code>float qty = 7;</code>
+     * @param float $var
+     * @return $this
+     */
+    public function setQty($var)
+    {
+        GPBUtil::checkFloat($var);
+        $this->qty = $var;
 
         return $this;
     }

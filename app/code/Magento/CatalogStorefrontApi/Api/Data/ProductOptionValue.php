@@ -44,6 +44,16 @@ final class ProductOptionValue implements ProductOptionValueInterface
      * @var string
      */
     private $imageUrl;
+
+    /**
+     * @var bool
+     */
+    private $qtyMutability;
+
+    /**
+     * @var float
+     */
+    private $qty;
     
     /**
      * @inheritdoc
@@ -148,5 +158,47 @@ final class ProductOptionValue implements ProductOptionValueInterface
     public function setImageUrl(string $value): void
     {
         $this->imageUrl = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return bool
+     */
+    public function getQtyMutability(): bool
+    {
+        return (bool) $this->qtyMutability;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param bool $value
+     * @return void
+     */
+    public function setQtyMutability(bool $value): void
+    {
+        $this->qtyMutability = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return float
+     */
+    public function getQty(): float
+    {
+        return (float) $this->qty;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param float $value
+     * @return void
+     */
+    public function setQty(float $value): void
+    {
+        $this->qty = $value;
     }
 }
