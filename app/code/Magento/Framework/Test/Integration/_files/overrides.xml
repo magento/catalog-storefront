@@ -6,7 +6,7 @@
  */
 -->
 <overrides>
-    <test class="Magento\Catalog\Controller\Adminhtml\Product\Set\SaveTest">
-        <method name="testRemoveAttributeFromAttributeSet" skip="true"/>
+    <test class="Magento\Framework\MessageQueue\UseCase\MixSyncAndAsyncSingleQueueTest">
+        <method name="testMixSyncAndAsyncSingleQueue" skip="true"/>
     </test>
 </overrides>
