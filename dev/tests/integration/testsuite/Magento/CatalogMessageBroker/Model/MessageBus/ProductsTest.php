@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\CatalogMessageBroker\Test\Integration\CatalogService;
+namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogDataExporter\Test\Integration\AbstractProductTestHelper;
