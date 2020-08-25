@@ -7,7 +7,12 @@
 -->
 <overrides>
     <test class="Magento\Framework\MessageQueue\UseCase\MixSyncAndAsyncSingleQueueTest">
-        <!--Skipped due to https://github.com/magento/catalog-storefront/issues/226-->
+        <!--
+            Skipped due
+            This test requires consumers_wait_for_messages to be set to 1.
+            That is contradict with Catalog Store front initial configuration fro integration test.
+            And impossible to change on a fly.
+        -->
         <method name="testMixSyncAndAsyncSingleQueue" skip="true"/>
     </test>
 </overrides>

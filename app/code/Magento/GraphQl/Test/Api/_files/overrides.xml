@@ -7,18 +7,14 @@
 -->
 <overrides>
     <test class="Magento\GraphQl\Catalog\CategoryProductsCountTest">
-        <!--Skipped due to https://github.com/magento/catalog-storefront/issues/226-->
+        <!--Skip test due to 'MC-31166: Update aggregation data on SF service' task-->
         <method name="testCategoryWithOutOfStockProductManageStockEnabled" skip="true"/>
         <method name="testCategoryWithConfigurableChildrenOutOfStock" skip="true"/>
         <method name="testCategoryWithSaleableProduct" skip="true"/>
         <method name="testCategoryWithOutOfStockProductManageStockDisabled" skip="true"/>
     </test>
     <test class="Magento\GraphQl\Bundle\AddBundleProductToCartSingleMutationTest">
-        <!--Skipped due to https://github.com/magento/catalog-storefront/issues/226-->
+        <!--Skipped due to https://github.com/magento/catalog-storefront/issues/244-->
         <method name="testAddBundleItemWithCustomOptionQuantity" skip="true"/>
-    </test>
-    <test class="Magento\GraphQl\Catalog\MediaGalleryTest">
-        <!--Skipped due to https://github.com/magento/catalog-storefront/issues/226-->
-        <method name="testProductSmallImageUrlPlaceholder" skip="true"/>
     </test>
 </overrides>
