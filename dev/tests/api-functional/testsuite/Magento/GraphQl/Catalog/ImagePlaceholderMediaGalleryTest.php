@@ -9,7 +9,7 @@ namespace Magento\GraphQl\Catalog;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
-class NewMediaGalleryTest extends GraphQlAbstract
+class ImagePlaceholderMediaGalleryTest extends GraphQlAbstract
 {
     /**
      * Test which checks that image placeholder returns null
