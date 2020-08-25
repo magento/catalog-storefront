@@ -21,5 +21,4 @@
         <!--Skipped due to https://github.com/magento/catalog-storefront/issues/226-->
         <method name="testProductSmallImageUrlPlaceholder" skip="true"/>
     </test>
-
 </overrides>
