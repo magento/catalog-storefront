@@ -24,7 +24,12 @@ use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class CategoryTest extends TestCase
+/**
+ * Test class for Categories message bus
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class CatergoriesTest extends TestCase
 {
     private const CATEGORY_ID = '333';
     private const STORE_CODE = 'default';

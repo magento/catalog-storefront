@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Publishes ids of updated categories in queue
- * TODO: Move logic to saasExport
+ * TODO: Move logic to Service Export
  */
 class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
 {
@@ -87,7 +87,8 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
             }
         }
 
-        //TODO: Add store codes to categories_updated message? Would cause redundant calls back to saasExport though.
+        //TODO: Add store codes to categories_updated message?
+        //Would cause redundant calls back to Service Export though.
         foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
             $this->publishMessage(
                 self::CATEGORIES_UPDATED_EVENT_TYPE,

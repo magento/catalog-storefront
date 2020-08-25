@@ -15,7 +15,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Publishes ids of updated products in queue
- * TODO: Move logic to saasExport
+ * TODO: Move logic to Service Export
  */
 class ProductIndexerCallback implements ProductIndexerCallbackInterface
 {
@@ -51,6 +51,7 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
      * @param PublisherInterface $queuePublisher
      * @param ChangedEntitiesMessageBuilder $messageBuilder
      * @param FeedPool $feedPool
+     * @param LoggerInterface $logger
      */
     public function __construct(
         PublisherInterface $queuePublisher,
@@ -86,7 +87,8 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
             }
         }
 
-        //TODO: Add store codes to products_updated message here? Would cause redundant calls back to saasExport though.
+        //TODO: Add store codes to products_updated message here?
+        //Would cause redundant calls back to Service Export though.
         foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
             $this->publishMessage(
                 self::PRODUCTS_UPDATED_EVENT_TYPE,

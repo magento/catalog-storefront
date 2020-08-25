@@ -11,9 +11,10 @@ namespace Magento\CatalogMessageBroker\Model\MessageBus;
  * Execute consumer event
  */
 interface ConsumerEventInterface
-
 {
     /**
+     * Execute consumers by ids for specified scope
+     *
      * @param array $entityIds
      * @param string $scope
      * @return void

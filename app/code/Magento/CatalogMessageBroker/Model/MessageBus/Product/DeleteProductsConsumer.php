@@ -32,7 +32,7 @@ class DeleteProductsConsumer implements ConsumerEventInterface
     private $logger;
 
     /**
-     * @param DeleteProductsRequestInterfaceFactory $deletePrpductsRequestInterfaceFactory
+     * @param DeleteProductsRequestInterfaceFactory $deleteProductsRequestInterfaceFactory
      * @param CatalogServerInterface $catalogServer
      * @param LoggerInterface $logger
      */

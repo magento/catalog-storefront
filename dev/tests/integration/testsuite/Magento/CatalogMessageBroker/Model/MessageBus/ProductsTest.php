@@ -21,6 +21,11 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * Test class for Products message bus
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductsTest extends AbstractProductTestHelper
 {
     const TEST_SKU = 'in-stock-product';
