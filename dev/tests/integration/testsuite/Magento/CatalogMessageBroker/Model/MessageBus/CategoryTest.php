@@ -28,7 +28,6 @@ class CategoryTest extends TestCase
 {
     private const CATEGORY_ID = '333';
     private const STORE_CODE = 'default';
-    private const ERROR_MESSAGE = 'Products with the following ids are not found in catalog: %s';
 
     /**
      * @var CategoriesConsumer
@@ -86,6 +85,7 @@ class CategoryTest extends TestCase
      * Validate deleted category is removed from storefront storage.
      *
      * @magentoDataFixture Magento/Catalog/_files/category.php
+     * @magentoDbIsolation disabled
      * @throws InputException
      * @throws NoSuchEntityException
      * @throws StateException
@@ -114,7 +114,7 @@ class CategoryTest extends TestCase
 
         $this->deleteCategory((int)$category->getId());
         $deletedFeed = $this->categoryFeed->getDeletedByIds([$category->getId()], [self::STORE_CODE]);
-        $this->assertEmpty($deletedFeed);
+        $this->assertNotEmpty($deletedFeed);
 
         $deleteMessage = $this->messageBuilder->build(
             [(int)$category->getId()],
@@ -122,7 +122,7 @@ class CategoryTest extends TestCase
             self::STORE_CODE
         );
         $this->categoriesConsumer->processMessage($deleteMessage);
-        $items = $this->catalogService->getCategories($this->categoriesGetRequestInterface);
+        $items = $this->catalogService->getCategories($this->categoriesGetRequestInterface)->getItems();
         $this->assertEmpty($items);
     }
 
