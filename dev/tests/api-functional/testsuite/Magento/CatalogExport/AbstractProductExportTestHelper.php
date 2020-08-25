@@ -15,6 +15,7 @@ use Magento\Indexer\Model\Indexer;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\TestFramework\Helper\CompareArraysRecursively;
 
 /**
  * Class AbstractProductExportTestHelper
@@ -32,6 +33,11 @@ abstract class AbstractProductExportTestHelper extends WebapiAbstract
      * @var ObjectManager
      */
     private $objectManager;
+
+    /**
+     * @var CompareArraysRecursively
+     */
+    private $compareArraysRecursively;
 
     /**
      * @var FeedInterface
@@ -64,6 +70,7 @@ abstract class AbstractProductExportTestHelper extends WebapiAbstract
 
         $this->indexer = Bootstrap::getObjectManager()->create(Indexer::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->compareArraysRecursively = $this->objectManager->create(CompareArraysRecursively::class);
 
         $this->createServiceInfo = [
             'rest' => [
@@ -96,7 +103,7 @@ abstract class AbstractProductExportTestHelper extends WebapiAbstract
             }
         }
 
-        $diff = $this->compareArraysRecursively(
+        $diff = $this->compareArraysRecursively->execute(
             $this->camelToSnakeCaseRecursive($expected),
             $actual
         );
