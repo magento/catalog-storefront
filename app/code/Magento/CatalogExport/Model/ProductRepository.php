@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogExport\Model;
 
 use Magento\CatalogExportApi\Api\ProductRepositoryInterface;
+use Magento\DataExporter\Model\FeedPool;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -19,11 +20,6 @@ class ProductRepository implements ProductRepositoryInterface
      * Constant value for setting max items in response
      */
     private const MAX_ITEMS_IN_RESPONSE = 250;
-
-    /**
-     * @var \Magento\CatalogDataExporter\Model\Feed\Products
-     */
-    private $products;
 
     /**
      * @var \Magento\CatalogExportApi\Api\Data\ProductFactory
@@ -46,20 +42,25 @@ class ProductRepository implements ProductRepositoryInterface
     private $logger;
 
     /**
-     * @param \Magento\CatalogDataExporter\Model\Feed\Products $products
+     * @var FeedPool
+     */
+    private $feedPool;
+
+    /**
+     * @param FeedPool $feedPool
      * @param \Magento\CatalogExportApi\Api\Data\ProductFactory $productFactory
      * @param DtoMapper $dtoMapper
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      * @param LoggerInterface $logger
      */
     public function __construct(
-        \Magento\CatalogDataExporter\Model\Feed\Products $products,
+        FeedPool $feedPool,
         \Magento\CatalogExportApi\Api\Data\ProductFactory $productFactory,
         DtoMapper $dtoMapper,
         \Magento\Framework\App\DeploymentConfig $deploymentConfig,
         LoggerInterface $logger
     ) {
-        $this->products = $products;
+        $this->feedPool = $feedPool;
         $this->dtoMapper = $dtoMapper;
         $this->productFactory = $productFactory;
         $this->deploymentConfig = $deploymentConfig;
@@ -67,12 +68,9 @@ class ProductRepository implements ProductRepositoryInterface
     }
 
     /**
-     * Get products from the feed
-     *
-     * @param array $ids
-     * @return array|\Magento\CatalogExportApi\Api\Data\Product[]
+     * @inheritdoc
      */
-    public function get(array $ids)
+    public function get(array $ids, array $storeViewCodes = [])
     {
         if (count($ids) > $this->getMaxItemsInResponse()) {
             throw new \InvalidArgumentException(
@@ -83,7 +81,7 @@ class ProductRepository implements ProductRepositoryInterface
         }
 
         $products = [];
-        $feedData = $this->products->getFeedByIds($ids);
+        $feedData = $this->feedPool->getFeed('products')->getFeedByIds($ids, $storeViewCodes);
         if (empty($feedData['feed'])) {
             $this->logger->error(
                 \sprintf('Cannot find products data in catalog feed with ids "%s"', \implode(',', $ids))
@@ -103,17 +101,6 @@ class ProductRepository implements ProductRepositoryInterface
             $products[] = $product;
         }
         return $products;
-    }
-
-    /**
-     * Get deleted products.
-     *
-     * @param string[] $ids
-     * @return array
-     */
-    public function getDeleted(array $ids): array
-    {
-        return $this->products->getDeletedByIds($ids);
     }
 
     /**

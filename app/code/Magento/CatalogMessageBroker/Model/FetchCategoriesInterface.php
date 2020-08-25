@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogMessageBroker\Model;
 
 /**
@@ -11,10 +13,11 @@ namespace Magento\CatalogMessageBroker\Model;
 interface FetchCategoriesInterface
 {
     /**
-     * Fetch categories data
+     * Fetch categories data by Ids
      *
      * @param string[] $ids
+     * @param string[] $storeViewCodes
      * @return array
      */
-    public function execute(array $ids);
+    public function getByIds(array $ids, array $storeViewCodes = []): array;
 }
