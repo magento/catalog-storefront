@@ -7,6 +7,7 @@
 -->
 <overrides>
     <test class="Magento\Catalog\Controller\Adminhtml\Product\Set\SaveTest">
+        <!--Skipped due to https://github.com/magento/catalog-storefront/issues/226-->
         <method name="testRemoveAttributeFromAttributeSet" skip="true"/>
     </test>
 </overrides>
