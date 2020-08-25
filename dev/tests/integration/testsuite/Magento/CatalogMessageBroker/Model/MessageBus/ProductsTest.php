@@ -69,6 +69,7 @@ class ProductsTest extends AbstractProductTestHelper
      * Validate deleted products are removed from StoreFront
      *
      * @magentoDataFixture Magento/Catalog/_files/product_with_category.php
+     * @magentoDbIsolation disabled
      * @throws NoSuchEntityException
      * @throws StateException
      * @throws \Throwable
@@ -97,7 +98,7 @@ class ProductsTest extends AbstractProductTestHelper
 
         $this->deleteProduct($product->getSku());
         $deletedFeed = $this->productFeed->getDeletedByIds([(int)$product->getId()], [self::STORE_CODE]);
-        $this->assertEmpty($deletedFeed);
+        $this->assertNotEmpty($deletedFeed);
 
         $deleteMessage = $this->messageBuilder->build(
             [(int)$product->getId()],
