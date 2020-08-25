@@ -24,11 +24,6 @@ use Magento\Framework\ObjectManagerInterface;
 final class DeleteProductsRequestArrayMapper
 {
     /**
-     * @var mixed
-     */
-    private $data;
-
-    /**
      * @var ObjectManagerInterface
      */
     private $objectManager;

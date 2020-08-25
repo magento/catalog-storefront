@@ -6,102 +6,157 @@
 
 namespace Magento\CatalogStorefrontConnector\Model;
 
-use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesData;
-use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
+use Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer;
+use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
+use Magento\CatalogMessageBroker\Model\MessageBus\Product\ProductsConsumer;
+use Magento\CatalogStorefrontConnector\Helper\CustomStoreResolver;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
+use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
+use Magento\DataExporter\Model\FeedPool;
+use Psr\Log\LoggerInterface;
 
 /**
  * Consumer processes messages with store front products data
+ * @deprecared https://github.com/magento/catalog-storefront/issues/242
  */
 class ProductsQueueConsumer
 {
+    const BATCH_SIZE = 100;
+
     /**
      * @var CatalogEntityIdsProvider
      */
     private $catalogEntityIdsProvider;
 
     /**
-     * @var \Magento\CatalogMessageBroker\Model\MessageBus\ProductsConsumer
+     * @var ProductsConsumer
      */
     private $productsConsumer;
 
     /**
-     * @var \Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer
+     * @var ProductFeedIndexer
      */
     private $productFeedIndexer;
 
     /**
-     * @param \Magento\CatalogMessageBroker\Model\MessageBus\ProductsConsumer $productsConsumer
-     * @param \Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer $productFeedIndexer
+     * @var ChangedEntitiesMessageBuilder
+     */
+    private $messageBuilder;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var CustomStoreResolver
+     */
+    private $storeResolver;
+    /**
+     * @var FeedPool
+     */
+    private $feedPool;
+
+    /**
+     * @param ProductsConsumer $productsConsumer
+     * @param ProductFeedIndexer $productFeedIndexer
+     * @param ChangedEntitiesMessageBuilder $messageBuilder
+     * @param CustomStoreResolver $storeResolver
+     * @param LoggerInterface $logger
+     * @param FeedPool $feedPool
      * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
      */
     public function __construct(
-        \Magento\CatalogMessageBroker\Model\MessageBus\ProductsConsumer $productsConsumer,
-        \Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer $productFeedIndexer,
+        ProductsConsumer $productsConsumer,
+        ProductFeedIndexer $productFeedIndexer,
+        ChangedEntitiesMessageBuilder $messageBuilder,
+        CustomStoreResolver $storeResolver,
+        LoggerInterface $logger,
+        FeedPool $feedPool,
         CatalogEntityIdsProvider $catalogEntityIdsProvider
     ) {
         $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
         $this->productsConsumer = $productsConsumer;
         $this->productFeedIndexer = $productFeedIndexer;
+        $this->messageBuilder = $messageBuilder;
+        $this->logger = $logger;
+        $this->storeResolver = $storeResolver;
+        $this->feedPool = $feedPool;
     }
 
     /**
-     * Process collected product IDs for update
-     *
-     * Process messages from storefront.catalog.product.update topic
+     * Process collected product IDs for update/delete
      *
      * @param UpdatedEntitiesDataInterface $message
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @deprecated React on events triggered by plugins to push data to SF storage
      */
     public function processMessages(UpdatedEntitiesDataInterface $message): void
     {
-        $storeProducts = $this->getUniqueIdsForStores([$message]);
-        //TODO: remove ad-hoc solution after moving events to corresponding export service
-        $allProductIds = [];
-        foreach ($storeProducts as $storeId => $productIds) {
-            if (empty($productIds)) {
-                foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $ids) {
-                    $allProductIds[] = $ids;
+        try {
+            $storeId = $message->getStoreId();
+            $storeCode = $this->storeResolver->resolveStoreCode($storeId);
+            $ids = $message->getEntityIds();
+
+            //TODO: remove ad-hoc solution after moving events to corresponding export service
+            if (empty($ids)) {
+                $this->productFeedIndexer->executeFull();
+                foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $idsChunk) {
+                    $ids[] = $idsChunk;
                 }
             } else {
-                $allProductIds[] = $productIds;
+                //TODO: move this to plugins?
+                $this->productFeedIndexer->executeList($ids);
             }
+
+            $deletedIds = [];
+            $productsFeed = $this->feedPool->getFeed('products');
+            foreach ($productsFeed->getDeletedByIds($ids, array_filter([$storeCode])) as $product) {
+                $deletedIds[] = $product['productId'];
+                unset($ids[$product['productId']]);
+            }
+
+            if (!empty($ids)) {
+                $this->passMessage(
+                    ProductsConsumer::PRODUCTS_UPDATED_EVENT_TYPE,
+                    $ids,
+                    $storeCode
+                );
+            }
+
+            if (!empty($deletedIds)) {
+                $this->passMessage(
+                    ProductsConsumer::PRODUCTS_DELETED_EVENT_TYPE,
+                    $deletedIds,
+                    $storeCode
+                );
+            }
+        } catch (\Throwable $e) {
+            $this->logger->critical('Unable to process collected product data for update/delete. ' . $e->getMessage());
         }
-        $ids = \array_unique(\array_merge(...$allProductIds));
-        $this->productFeedIndexer->executeList($ids);
-        $this->productsConsumer->processMessage(\json_encode($ids));
     }
 
     /**
-     * Get unique ids for stores from messages
+     * Publish deleted or updated message
      *
-     * @param array $messages
-     * @return array
+     * @param string $eventType
+     * @param int[] $ids
+     * @param string $storeCode
+     * @return void
      */
-    private function getUniqueIdsForStores(array $messages): array
+    private function passMessage(string $eventType, array $ids, string $storeCode): void
     {
-        $storesProductIds = [];
-        /** @var UpdatedEntitiesData $updatedProductsData */
-        foreach ($messages as $updatedProductsData) {
-            $storeId = $updatedProductsData->getStoreId();
-            if (empty($updatedProductsData->getEntityIds())) {
-                // full reindex
-                $storesProductIds[$storeId] = [];
-            } elseif (isset($storesProductIds[$storeId]) && empty($storesProductIds[$storeId])) {
-                continue;
-            } elseif (!isset($storesProductIds[$storeId])) {
-                $storesProductIds[$storeId] = $updatedProductsData->getEntityIds();
-            } else {
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $storesProductIds[$storeId] = array_merge(
-                    $storesProductIds[$storeId],
-                    $updatedProductsData->getEntityIds()
-                );
+        foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
+            $message = $this->messageBuilder->build(
+                $idsChunk,
+                $eventType,
+                $storeCode
+            );
+            try {
+                $this->productsConsumer->processMessage($message);
+            } catch (\Exception $e) {
+                $this->logger->critical($e);
             }
         }
-
-        return $storesProductIds;
     }
 }

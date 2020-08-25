@@ -3,18 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogMessageBroker\Model\MessageBus;
+
+namespace Magento\CatalogMessageBroker\Model\MessageBus\Category;
 
 use Magento\CatalogMessageBroker\Model\FetchCategoriesInterface;
-use Magento\CatalogStorefrontApi\Api\Data\CategoryMapper;
-use Psr\Log\LoggerInterface;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
+use Magento\CatalogStorefrontApi\Api\Data\CategoryMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterfaceFactory;
+use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterface;
+use Psr\Log\LoggerInterface;
 
 /**
- * Process categories update messages and update storefront app
+ * Publish categories into storage
  */
-class CategoriesConsumer
+class PublishCategoriesConsumer implements ConsumerEventInterface
 {
     /**
      * @var LoggerInterface
@@ -63,47 +65,21 @@ class CategoriesConsumer
     }
 
     /**
-     * Process message
-     *
-     * @param string $ids
+     * @inheritdoc
      */
-    public function processMessage(string $ids)
+    public function execute(array $entityIds, string $scope): void
     {
-        try {
-            $ids = json_decode($ids, true);
-            $dataPerStore = [];
-
-            foreach ($this->fetchCategories->execute($ids) as $category) {
-                $dataPerStore[$category['store_view_code']][] = $category;
+        $categoriesData = $this->fetchCategories->getByIds(
+            $entityIds,
+            array_filter([$scope])
+        );
+        if (!empty($categoriesData)) {
+            $categoriesPerStore = [];
+            foreach ($categoriesData as $categoryData) {
+                $categoriesPerStore[$categoryData['store_view_code']][] = $categoryData;
             }
-
-            foreach ($dataPerStore as $storeCode => $categories) {
-                $this->unsetNullRecursively($categories);
-                $this->importCategories($storeCode, $categories);
-            }
-
-        } catch (\Throwable $e) {
-            $this->logger->critical($e->getMessage());
-        }
-    }
-
-    /**
-     * Recursively unset array elements equal to NULL.
-     *
-     * @TODO: Eliminate duplicate
-     * \Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher::unsetNullRecursively
-     *
-     * @param array $haystack
-     * @return void
-     */
-    private function unsetNullRecursively(&$haystack)
-    {
-        foreach ($haystack as $key => $value) {
-            if (is_array($value)) {
-                $this->unsetNullRecursively($haystack[$key]);
-            }
-            if ($haystack[$key] === null) {
-                unset($haystack[$key]);
+            foreach ($categoriesPerStore as $storeCode => $categories) {
+                $this->importCategories($categories, $storeCode);
             }
         }
     }
@@ -111,12 +87,12 @@ class CategoriesConsumer
     /**
      * Import categories
      *
-     * @param string $storeCode
      * @param array $categories
-     *
+     * @param string $storeCode
+     * @return void
      * @throws \Throwable
      */
-    private function importCategories(string $storeCode, array $categories): void
+    private function importCategories(array $categories, string $storeCode): void
     {
         foreach ($categories as &$category) {
             // be sure, that data passed to Import API in the expected format

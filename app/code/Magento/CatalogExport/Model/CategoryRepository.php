@@ -8,6 +8,9 @@ declare(strict_types=1);
 namespace Magento\CatalogExport\Model;
 
 use Magento\CatalogExportApi\Api\CategoryRepositoryInterface;
+use Magento\CatalogExportApi\Api\Data\CategoryFactory;
+use Magento\DataExporter\Model\FeedPool;
+use Magento\Framework\Api\DataObjectHelper;
 
 /**
  * @inheritdoc
@@ -15,17 +18,12 @@ use Magento\CatalogExportApi\Api\CategoryRepositoryInterface;
 class CategoryRepository implements CategoryRepositoryInterface
 {
     /**
-     * @var \Magento\CatalogDataExporter\Model\Feed\Categories
-     */
-    private $categoriesFeed;
-
-    /**
-     * @var \Magento\CatalogExportApi\Api\Data\CategoryFactory
+     * @var CategoryFactory
      */
     private $categoryFactory;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper
+     * @var DataObjectHelper
      */
     private $dataObjectHelper;
 
@@ -35,30 +33,32 @@ class CategoryRepository implements CategoryRepositoryInterface
     private $exportConfiguration;
 
     /**
-     * @param \Magento\CatalogDataExporter\Model\Feed\Categories $categoriesFeed
-     * @param \Magento\CatalogExportApi\Api\Data\CategoryFactory $categoryFactory
-     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @var FeedPool
+     */
+    private $feedPool;
+
+    /**
+     * @param FeedPool $feedPool
+     * @param CategoryFactory $categoryFactory
+     * @param DataObjectHelper $dataObjectHelper
      * @param ExportConfiguration $exportConfiguration
      */
     public function __construct(
-        \Magento\CatalogDataExporter\Model\Feed\Categories $categoriesFeed,
-        \Magento\CatalogExportApi\Api\Data\CategoryFactory $categoryFactory,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        FeedPool $feedPool,
+        CategoryFactory $categoryFactory,
+        DataObjectHelper $dataObjectHelper,
         ExportConfiguration $exportConfiguration
     ) {
-        $this->categoriesFeed = $categoriesFeed;
+        $this->feedPool = $feedPool;
         $this->categoryFactory = $categoryFactory;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->exportConfiguration = $exportConfiguration;
     }
 
     /**
-     * Retrieve DTO`s search result based on provided IDs
-     *
-     * @param array $ids
-     * @return array|\Magento\CatalogExportApi\Api\Data\Category[]
+     * @inheritdoc
      */
-    public function get(array $ids): array
+    public function get(array $ids, array $storeViewCodes = []): array
     {
         if (count($ids) > $this->exportConfiguration->getMaxItemsInResponse()) {
             throw new \InvalidArgumentException(
@@ -69,7 +69,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         }
 
         $categories = [];
-        $feedData = $this->categoriesFeed->getFeedByIds($ids);
+        $feedData = $this->feedPool->getFeed('categories')->getFeedByIds($ids, $storeViewCodes);
 
         foreach ($feedData['feed'] as $feedItem) {
             $category = $this->categoryFactory->create();
