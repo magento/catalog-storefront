@@ -17,4 +17,9 @@
         <!--Skipped due to https://github.com/magento/catalog-storefront/issues/226-->
         <method name="testAddBundleItemWithCustomOptionQuantity" skip="true"/>
     </test>
+    <test class="Magento\GraphQl\Catalog\MediaGalleryTest">
+        <!--Skipped due to https://github.com/magento/catalog-storefront/issues/226-->
+        <method name="testProductSmallImageUrlPlaceholder" skip="true"/>
+    </test>
+
 </overrides>
