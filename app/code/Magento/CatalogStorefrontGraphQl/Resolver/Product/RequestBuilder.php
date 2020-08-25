@@ -112,7 +112,7 @@ class RequestBuilder
             'filters' => $filter,
             'page' => $page,
             'scopes' => $this->scopeProvider->getScopes($context),
-            'attributes' => $attributes,
+            'attributes' => $this->storeFrontAttributeMapper($attributes),
             'sort' => $sort,
             'aggregations' => $aggregations,
             'metaInfo' => $metaInfo,
@@ -142,5 +142,22 @@ class RequestBuilder
             $sortDirection = $isSearch ? SortOrder::SORT_DESC : SortOrder::SORT_ASC;
             $request['sort'][$sortField] = $sortDirection;
         }
+    }
+
+    /**
+     * This will be used to map the GraphQL request fields to the ones in the data storage
+     * //TODO: Remove this once the mapper is ready
+     *
+     * @param array $attributes
+     * @return array
+     */
+    private function storeFrontAttributeMapper(array $attributes): array
+    {
+        if (isset($attributes['DownloadableProduct.downloadable_product_samples'])) {
+            $attributes['DownloadableProduct.samples'] =
+                $attributes['DownloadableProduct.downloadable_product_samples'];
+            unset($attributes['DownloadableProduct.downloadable_product_samples']);
+        }
+        return $attributes;
     }
 }

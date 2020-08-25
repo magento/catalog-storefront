@@ -12,7 +12,7 @@ namespace Magento\CatalogStorefrontApi\Api\Data;
 
 use Magento\Framework\ObjectManagerInterface;
 
-final class DownloadableSampleArrayMapper
+final class SampleArrayMapper
 {
     /**
      * @var mixed
@@ -32,18 +32,15 @@ final class DownloadableSampleArrayMapper
     /**
     * Convert the DTO to the array with the data
     *
-    * @param DownloadableSample $dto
+    * @param Sample $dto
     * @return array
     */
-    public function convertToArray(DownloadableSample $dto)
+    public function convertToArray(Sample $dto)
     {
         $result = [];
-        $result["sample_url"] = $dto->getSampleUrl();
-        $result["title"] = $dto->getTitle();
+        $result["url"] = $dto->getUrl();
+        $result["label"] = $dto->getLabel();
         $result["sort_order"] = $dto->getSortOrder();
-        $result["sample_type"] = $dto->getSampleType();
-        $result["sample_file"] = $dto->getSampleFile();
-        $result["entity_id"] = $dto->getEntityId();
         return $result;
     }
 }

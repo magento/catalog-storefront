@@ -18,6 +18,10 @@ use Magento\CatalogStorefrontApi\Proto\ImportProductsRequest;
 use Magento\CatalogStorefrontApi\Proto\ImportProductsResponse;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseInterface;
+use Magento\CatalogStorefrontApi\Proto\DeleteProductsRequest;
+use Magento\CatalogStorefrontApi\Proto\DeleteProductsResponse;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseInterface;
 use Magento\CatalogStorefrontApi\Proto\ImportCategoriesRequest;
 use Magento\CatalogStorefrontApi\Proto\ImportCategoriesResponse;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface;
@@ -519,24 +523,21 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     }
                     $r->setDownloadableProductLinks($res);
                     $res = [];
-                    foreach ($item1->getDownloadableProductSamples() as $item57) {
-                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\DownloadableSample
-                        // to \Magento\CatalogStorefrontApi\Proto\DownloadableSample
-                        /** @var \Magento\CatalogStorefrontApi\Api\Data\DownloadableSample $item57 **/
+                    foreach ($item1->getSamples() as $item57) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\Sample
+                        // to \Magento\CatalogStorefrontApi\Proto\Sample
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\Sample $item57 **/
                         $p = function () use ($item57) {
-                            $r = new \Magento\CatalogStorefrontApi\Proto\DownloadableSample();
-                            $r->setSampleUrl($item57->getSampleUrl());
-                            $r->setTitle($item57->getTitle());
+                            $r = new \Magento\CatalogStorefrontApi\Proto\Sample();
+                            $r->setUrl($item57->getUrl());
+                            $r->setLabel($item57->getLabel());
                             $r->setSortOrder($item57->getSortOrder());
-                            $r->setSampleType($item57->getSampleType());
-                            $r->setSampleFile($item57->getSampleFile());
-                            $r->setEntityId($item57->getEntityId());
                             return $r;
                         };
                         $proto = $p();
                         $res[] = $proto;
                     }
-                    $r->setDownloadableProductSamples($res);
+                    $r->setSamples($res);
                     $r->setOnlyXLeftInStock($item1->getOnlyXLeftInStock());
                     $res = [];
                     foreach ($item1->getGroupedItems() as $item59) {
@@ -1003,24 +1004,21 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     }
                     $r->setDownloadableProductLinks($res);
                     $res = [];
-                    foreach ($item1->getDownloadableProductSamples() as $item57) {
-                        // convert data from \Magento\CatalogStorefrontApi\Proto\DownloadableSample
-                        // to \Magento\CatalogStorefrontApi\Api\Data\DownloadableSample
-                        /** @var \Magento\CatalogStorefrontApi\Proto\DownloadableSample $item57 **/
+                    foreach ($item1->getSamples() as $item57) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\Sample
+                        // to \Magento\CatalogStorefrontApi\Api\Data\Sample
+                        /** @var \Magento\CatalogStorefrontApi\Proto\Sample $item57 **/
                         $p = function () use ($item57) {
-                            $r = new \Magento\CatalogStorefrontApi\Api\Data\DownloadableSample();
-                            $r->setSampleUrl($item57->getSampleUrl());
-                            $r->setTitle($item57->getTitle());
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\Sample();
+                            $r->setUrl($item57->getUrl());
+                            $r->setLabel($item57->getLabel());
                             $r->setSortOrder($item57->getSortOrder());
-                            $r->setSampleType($item57->getSampleType());
-                            $r->setSampleFile($item57->getSampleFile());
-                            $r->setEntityId($item57->getEntityId());
                             return $r;
                         };
                         $out = $p();
                         $res[] = $out;
                     }
-                    $r->setDownloadableProductSamples($res);
+                    $r->setSamples($res);
                     $r->setOnlyXLeftInStock($item1->getOnlyXLeftInStock());
                     $res = [];
                     foreach ($item1->getGroupedItems() as $item59) {
@@ -1080,6 +1078,79 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
         /** @var \Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponse $value **/
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Proto\ImportProductsResponse();
+            $r->setStatus($value->getStatus());
+            $r->setMessage($value->getMessage());
+            return $r;
+        };
+        $proto = $p();
+
+        return $proto;
+    }
+
+    /**
+     * Autogenerated description for deleteProducts method
+     *
+     * @param \Spiral\GRPC\ContextInterface $ctx
+     * @param DeleteProductsRequest $in
+     * @return DeleteProductsResponse
+     */
+    public function deleteProducts(\Spiral\GRPC\ContextInterface $ctx, DeleteProductsRequest $in)
+    : DeleteProductsResponse
+    {
+        try {
+            $magentoDtoRequest = $this->deleteProductsFromProto($in);
+            $magentoDtoResponse = $this->service->deleteProducts($magentoDtoRequest);
+            return $this->deleteProductsToProto($magentoDtoResponse);
+        } catch (\Exception $e) {
+            throw new \Spiral\GRPC\Exception\InvokeException(
+                $e->getMessage(),
+                \Spiral\GRPC\StatusCode::UNKNOWN,
+                [],
+                $e
+            );
+        }
+    }
+
+    /**
+     * Autogenerated description for deleteProducts method
+     *
+     * @param DeleteProductsRequest $value
+     * @return DeleteProductsRequestInterface
+     */
+    private function deleteProductsFromProto(DeleteProductsRequest $value): DeleteProductsRequestInterface
+    {
+        // convert data from \Magento\CatalogStorefrontApi\Proto\DeleteProductsRequest
+        // to \Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequest
+        /** @var \Magento\CatalogStorefrontApi\Proto\DeleteProductsRequest $value **/
+        $p = function () use ($value) {
+            $r = new \Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequest();
+            $values = [];
+            foreach ($value->getProductIds() as $value) {
+                $values[] = $value;
+            }
+            $r->setProductIds($values);
+            $r->setStore($value->getStore());
+            return $r;
+        };
+        $out = $p();
+
+        return $out;
+    }
+
+    /**
+     * Autogenerated description for deleteProducts method
+     *
+     * @param DeleteProductsResponseInterface $value
+     * @return DeleteProductsResponse
+     * phpcs:disable Generic.Metrics.NestingLevel.TooHigh
+     */
+    private function deleteProductsToProto(DeleteProductsResponseInterface $value): DeleteProductsResponse
+    {
+        // convert data from \Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponse
+        // to \Magento\CatalogStorefrontApi\Proto\DeleteProductsResponse
+        /** @var \Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponse $value **/
+        $p = function () use ($value) {
+            $r = new \Magento\CatalogStorefrontApi\Proto\DeleteProductsResponse();
             $r->setStatus($value->getStatus());
             $r->setMessage($value->getMessage());
             return $r;

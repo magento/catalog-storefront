@@ -158,11 +158,11 @@ final class ProductArrayMapper
         $result["downloadable_product_links"] = $fieldArray;
         /** Convert complex Array field **/
         $fieldArray = [];
-        foreach ($dto->getDownloadableProductSamples() as $fieldArrayDto) {
-            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\DownloadableSampleArrayMapper::class)
+        foreach ($dto->getSamples() as $fieldArrayDto) {
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\SampleArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
-        $result["downloadable_product_samples"] = $fieldArray;
+        $result["samples"] = $fieldArray;
         $result["only_x_left_in_stock"] = $dto->getOnlyXLeftInStock();
         /** Convert complex Array field **/
         $fieldArray = [];

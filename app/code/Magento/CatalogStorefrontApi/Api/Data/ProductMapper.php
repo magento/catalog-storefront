@@ -319,15 +319,15 @@ final class ProductMapper
                 }
                 $dto->setDownloadableProductLinks($convertedArray);
                 break;
-            case "downloadable_product_samples":
+            case "samples":
                 $convertedArray = [];
                 foreach ($value as $element) {
                     $convertedArray[] = $this->objectManager
-                        ->create(\Magento\CatalogStorefrontApi\Api\Data\DownloadableSampleMapper::class)
+                        ->create(\Magento\CatalogStorefrontApi\Api\Data\SampleMapper::class)
                         ->setData($element)
                         ->build();
                 }
-                $dto->setDownloadableProductSamples($convertedArray);
+                $dto->setSamples($convertedArray);
                 break;
             case "only_x_left_in_stock":
                 $dto->setOnlyXLeftInStock((float) $value);

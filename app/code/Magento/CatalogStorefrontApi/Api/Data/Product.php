@@ -302,7 +302,7 @@ final class Product implements ProductInterface
     /**
      * @var array
      */
-    private $downloadableProductSamples;
+    private $samples;
 
     /**
      * @var float
@@ -1472,22 +1472,22 @@ final class Product implements ProductInterface
     /**
      * @inheritdoc
      *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\DownloadableSampleInterface[]
+     * @return \Magento\CatalogStorefrontApi\Api\Data\SampleInterface[]
      */
-    public function getDownloadableProductSamples(): array
+    public function getSamples(): array
     {
-        return (array) $this->downloadableProductSamples;
+        return (array) $this->samples;
     }
     
     /**
      * @inheritdoc
      *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\DownloadableSampleInterface[] $value
+     * @param \Magento\CatalogStorefrontApi\Api\Data\SampleInterface[] $value
      * @return void
      */
-    public function setDownloadableProductSamples(array $value): void
+    public function setSamples(array $value): void
     {
-        $this->downloadableProductSamples = $value;
+        $this->samples = $value;
     }
     
     /**
