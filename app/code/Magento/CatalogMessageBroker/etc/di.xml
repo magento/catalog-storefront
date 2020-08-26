@@ -31,4 +31,22 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterfaceFactory">
+        <arguments>
+            <argument name="eventTypeMap" xsi:type="array">
+                <item name="categories_updated" xsi:type="string">
+                    Magento\CatalogMessageBroker\Model\MessageBus\Category\PublishCategoriesConsumer
+                </item>
+                <item name="categories_deleted" xsi:type="string">
+                    Magento\CatalogMessageBroker\Model\MessageBus\Category\DeleteCategoriesConsumer
+                </item>
+                <item name="products_updated" xsi:type="string">
+                    Magento\CatalogMessageBroker\Model\MessageBus\Product\PublishProductsConsumer
+                </item>
+                <item name="products_deleted" xsi:type="string">
+                    Magento\CatalogMessageBroker\Model\MessageBus\Product\DeleteProductsConsumer
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

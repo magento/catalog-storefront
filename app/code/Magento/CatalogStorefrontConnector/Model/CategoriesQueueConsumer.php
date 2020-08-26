@@ -7,19 +7,26 @@
 namespace Magento\CatalogStorefrontConnector\Model;
 
 use Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer;
-use Magento\CatalogMessageBroker\Model\MessageBus\CategoriesConsumer as CategoryPublisher;
+use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
+use Magento\CatalogMessageBroker\Model\MessageBus\Category\CategoriesConsumer;
+use Magento\CatalogStorefrontConnector\Helper\CustomStoreResolver;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
+use Magento\DataExporter\Model\FeedPool;
+use Psr\Log\LoggerInterface;
 
 /**
  * Consumer processes messages with store front categories data
+ * @deprecared https://github.com/magento/catalog-storefront/issues/242
  */
 class CategoriesQueueConsumer
 {
+    const BATCH_SIZE = 100;
+
     /**
-     * @var CategoryPublisher
+     * @var CategoriesConsumer
      */
-    private $categoryPublisher;
+    private $categoriesConsumer;
 
     /**
      * @var CatalogEntityIdsProvider
@@ -32,65 +39,124 @@ class CategoriesQueueConsumer
     private $categoryFeedIndexer;
 
     /**
-     * @param CategoryPublisher $categoryPublisher
+     * @var ChangedEntitiesMessageBuilder
+     */
+    private $messageBuilder;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var CustomStoreResolver
+     */
+    private $storeResolver;
+
+    /**
+     * @var FeedPool
+     */
+    private $feedPool;
+
+    /**
+     * @param ChangedEntitiesMessageBuilder $messageBuilder
+     * @param CategoriesConsumer $categoriesConsumer
      * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
+     * @param CustomStoreResolver $storeResolver
+     * @param LoggerInterface $logger
+     * @param FeedPool $feedPool
      * @param CategoryFeedIndexer $categoryFeedIndexer
      */
     public function __construct(
-        CategoryPublisher $categoryPublisher,
+        ChangedEntitiesMessageBuilder $messageBuilder,
+        CategoriesConsumer $categoriesConsumer,
         CatalogEntityIdsProvider $catalogEntityIdsProvider,
+        CustomStoreResolver $storeResolver,
+        LoggerInterface $logger,
+        FeedPool $feedPool,
         CategoryFeedIndexer $categoryFeedIndexer
     ) {
-        $this->categoryPublisher = $categoryPublisher;
+        $this->categoriesConsumer = $categoriesConsumer;
         $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
         $this->categoryFeedIndexer = $categoryFeedIndexer;
+        $this->messageBuilder = $messageBuilder;
+        $this->logger = $logger;
+        $this->storeResolver = $storeResolver;
+        $this->feedPool = $feedPool;
     }
 
     /**
-     * Process collected categories IDs for update
-     *
-     * Process messages from storefront.collect.updated.categories.data
+     * Process collected category IDs for update/delete
      *
      * @param UpdatedEntitiesDataInterface $message
      * @return void
-     * @throws \Exception
      * @deprecated React on events triggered by plugins to push data to SF storage
      */
     public function processMessages(UpdatedEntitiesDataInterface $message): void
     {
-        $storeCategories = $this->getUniqueIdsForStores([$message]);
-        foreach ($storeCategories as $storeId => $categoryIds) {
-            if (empty($categoryIds)) {
+        try {
+            $storeId = $message->getStoreId();
+            $storeCode = $this->storeResolver->resolveStoreCode($storeId);
+            $ids = $message->getEntityIds();
+
+            //TODO: remove ad-hoc solution after moving events to corresponding export service
+            if (empty($ids)) {
                 $this->categoryFeedIndexer->executeFull();
-                foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $ids) {
-                    $this->categoryPublisher->processMessage(json_encode($ids));
+                foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $idsChunk) {
+                    $ids[] = $idsChunk;
                 }
             } else {
-                $this->categoryFeedIndexer->executeList($categoryIds);
-                $this->categoryPublisher->processMessage(json_encode(array_unique($categoryIds)));
+                //TODO: move these reindexes to plugins to avoid calling them per store view?
+                $this->categoryFeedIndexer->executeList($ids);
             }
+
+            $deletedIds = [];
+            $categoriesFeed = $this->feedPool->getFeed('categories');
+            foreach ($categoriesFeed->getDeletedByIds($ids, array_filter([$storeCode])) as $category) {
+                $deletedIds[] = $category['categoryId'];
+                unset($ids[$category['categoryId']]);
+            }
+
+            if (!empty($ids)) {
+                $this->passMessage(
+                    CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
+                    $ids,
+                    $storeCode
+                );
+            }
+
+            if (!empty($deletedIds)) {
+                $this->passMessage(
+                    CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
+                    $deletedIds,
+                    $storeCode
+                );
+            }
+        } catch (\Throwable $e) {
+            $this->logger->critical('Unable to process collected category data for update/delete. ' . $e->getMessage());
         }
     }
 
     /**
-     * Get unique ids for stores from messages
+     * Publish deleted or updated message
      *
-     * @param array $messages
-     * @return array
+     * @param string $eventType
+     * @param int[] $ids
+     * @param string $storeCode
      */
-    private function getUniqueIdsForStores(array $messages): array
+    private function passMessage(string $eventType, array $ids, string $storeCode)
     {
-        $result = [];
-        /** @var UpdatedEntitiesDataInterface $updatedCategoriesData */
-        foreach ($messages as $updatedCategoriesData) {
-            $storeId = $updatedCategoriesData->getStoreId();
-            $storeCategoriesIds = $updatedCategoriesData->getEntityIds();
-            $result[$storeId] = isset($result[$storeId])
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                ? \array_unique(\array_merge($result[$storeId], $storeCategoriesIds))
-                : $storeCategoriesIds;
+        foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
+            $message = $this->messageBuilder->build(
+                $idsChunk,
+                $eventType,
+                $storeCode
+            );
+            try {
+                $this->categoriesConsumer->processMessage($message);
+            } catch (\Exception $e) {
+                $this->logger->critical($e);
+            }
         }
-
-        return $result;
     }
 }

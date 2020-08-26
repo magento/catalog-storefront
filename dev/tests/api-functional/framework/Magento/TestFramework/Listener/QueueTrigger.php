@@ -5,25 +5,35 @@
  */
 declare(strict_types=1);
 
-namespace Magento\TestFramework\Annotation;
+namespace Magento\TestFramework\Listener;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\TestFramework\Workaround\ConsumerInvoker;
+use PHPUnit\Framework\Test;
+use PHPUnit\Framework\TestListener;
+use PHPUnit\Framework\TestListenerDefaultImplementation;
 
 /**
  * Trigger queue to process storefront consumers
  */
-class QueueTrigger
+class QueueTrigger implements TestListener
 {
+    use TestListenerDefaultImplementation;
+
     /**
      * Handler for 'startTest' event.
      *
      * Sync Magento monolith App data with Catalog Storefront Storage.
      *
-     * @param \PHPUnit\Framework\TestCase $test
+     * @param Test $test
+     *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     *
+     * @throws LocalizedException
      */
-    public function startTest(\PHPUnit\Framework\TestCase $test)
+    public function startTest(Test $test): void
     {
         if ($test instanceof GraphQlAbstract) {
             $this->waitForAsynchronousResult();
@@ -34,13 +44,13 @@ class QueueTrigger
      * Wait for asynchronous handlers to log data to file.
      *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     *
+     * @throws LocalizedException
      */
     private function waitForAsynchronousResult(): void
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\TestFramework\Workaround\ConsumerInvoker $consumerInvoker */
-        $consumerInvoker = $objectManager->get(\Magento\TestFramework\Workaround\ConsumerInvoker::class);
+        /** @var ConsumerInvoker $consumerInvoker */
+        $consumerInvoker = Bootstrap::getObjectManager()->get(ConsumerInvoker::class);
         $consumerInvoker->invoke();
     }
 }
