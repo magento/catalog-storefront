@@ -59,11 +59,6 @@ final class ProductOptionValue implements ProductOptionValueInterface
      * @var string
      */
     private $infoUrl;
-
-    /**
-     * @var int
-     */
-    private $numberOfDownloads;
     
     /**
      * @inheritdoc
@@ -231,26 +226,5 @@ final class ProductOptionValue implements ProductOptionValueInterface
     public function setInfoUrl(string $value): void
     {
         $this->infoUrl = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return int
-     */
-    public function getNumberOfDownloads(): int
-    {
-        return (int) $this->numberOfDownloads;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param int $value
-     * @return void
-     */
-    public function setNumberOfDownloads(int $value): void
-    {
-        $this->numberOfDownloads = $value;
     }
 }

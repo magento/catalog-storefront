@@ -85,8 +85,11 @@ final class PriceMapper
     private function setByKey(Price $dto, string $key, $value): void
     {
         switch ($key) {
-            case "price":
-                $dto->setPrice((float) $value);
+            case "regular_price":
+                $dto->setRegularPrice((float) $value);
+                break;
+            case "final_price":
+                $dto->setFinalPrice((float) $value);
                 break;
             case "scope":
                 $dto->setScope((string) $value);

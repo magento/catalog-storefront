@@ -47,7 +47,8 @@ final class PriceArrayMapper
     public function convertToArray(Price $dto)
     {
         $result = [];
-        $result["price"] = $dto->getPrice();
+        $result["regular_price"] = $dto->getRegularPrice();
+        $result["final_price"] = $dto->getFinalPrice();
         $result["scope"] = $dto->getScope();
         return $result;
     }

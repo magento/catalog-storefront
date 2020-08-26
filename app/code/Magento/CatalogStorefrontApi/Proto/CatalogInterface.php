@@ -40,6 +40,15 @@ interface CatalogInterface extends GRPC\ServiceInterface
 
     /**
     * @param GRPC\ContextInterface $ctx
+    * @param DeleteCategoriesRequest $in
+    * @return DeleteCategoriesResponse
+    *
+    * @throws GRPC\Exception\InvokeException
+    */
+    public function deleteCategories(GRPC\ContextInterface $ctx, DeleteCategoriesRequest $in): DeleteCategoriesResponse;
+
+    /**
+    * @param GRPC\ContextInterface $ctx
     * @param ImportCategoriesRequest $in
     * @return ImportCategoriesResponse
     *

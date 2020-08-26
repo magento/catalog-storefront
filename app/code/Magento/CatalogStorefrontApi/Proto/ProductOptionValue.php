@@ -45,10 +45,6 @@ class ProductOptionValue extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string info_url = 8;</code>
      */
     protected $info_url = '';
-    /**
-     * Generated from protobuf field <code>int32 number_of_downloads = 9;</code>
-     */
-    protected $number_of_downloads = 0;
 
     /**
      * Constructor.
@@ -64,7 +60,6 @@ class ProductOptionValue extends \Google\Protobuf\Internal\Message
      *     @type bool $qty_mutability
      *     @type float $qty
      *     @type string $info_url
-     *     @type int $number_of_downloads
      * }
      */
     public function __construct($data = null)
@@ -245,28 +240,6 @@ class ProductOptionValue extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, true);
         $this->info_url = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>int32 number_of_downloads = 9;</code>
-     * @return int
-     */
-    public function getNumberOfDownloads()
-    {
-        return $this->number_of_downloads;
-    }
-
-    /**
-     * Generated from protobuf field <code>int32 number_of_downloads = 9;</code>
-     * @param int $var
-     * @return $this
-     */
-    public function setNumberOfDownloads($var)
-    {
-        GPBUtil::checkInt32($var);
-        $this->number_of_downloads = $var;
 
         return $this;
     }

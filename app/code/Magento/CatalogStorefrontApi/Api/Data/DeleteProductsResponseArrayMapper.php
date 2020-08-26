@@ -24,11 +24,26 @@ use Magento\Framework\ObjectManagerInterface;
 final class DeleteProductsResponseArrayMapper
 {
     /**
-     * Convert the DTO to the array with the data
-     *
-     * @param DeleteProductsResponse $dto
-     * @return array
+     * @var mixed
      */
+    private $data;
+
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    public function __construct(ObjectManagerInterface $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
+
+    /**
+    * Convert the DTO to the array with the data
+    *
+    * @param DeleteProductsResponse $dto
+    * @return array
+    */
     public function convertToArray(DeleteProductsResponse $dto)
     {
         $result = [];

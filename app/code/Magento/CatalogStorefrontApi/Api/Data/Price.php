@@ -23,7 +23,12 @@ final class Price implements PriceInterface
     /**
      * @var float
      */
-    private $price;
+    private $regularPrice;
+
+    /**
+     * @var float
+     */
+    private $finalPrice;
 
     /**
      * @var string
@@ -35,9 +40,9 @@ final class Price implements PriceInterface
      *
      * @return float
      */
-    public function getPrice(): float
+    public function getRegularPrice(): float
     {
-        return (float) $this->price;
+        return (float) $this->regularPrice;
     }
     
     /**
@@ -46,9 +51,30 @@ final class Price implements PriceInterface
      * @param float $value
      * @return void
      */
-    public function setPrice(float $value): void
+    public function setRegularPrice(float $value): void
     {
-        $this->price = $value;
+        $this->regularPrice = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return float
+     */
+    public function getFinalPrice(): float
+    {
+        return (float) $this->finalPrice;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param float $value
+     * @return void
+     */
+    public function setFinalPrice(float $value): void
+    {
+        $this->finalPrice = $value;
     }
     
     /**

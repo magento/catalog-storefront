@@ -109,9 +109,6 @@ final class ProductOptionValueMapper
             case "info_url":
                 $dto->setInfoUrl((string) $value);
                 break;
-            case "number_of_downloads":
-                $dto->setNumberOfDownloads((int) $value);
-                break;
         }
     }
 }

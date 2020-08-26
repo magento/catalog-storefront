@@ -55,7 +55,6 @@ final class ProductOptionValueArrayMapper
         $result["qty_mutability"] = $dto->getQtyMutability();
         $result["qty"] = $dto->getQty();
         $result["info_url"] = $dto->getInfoUrl();
-        $result["number_of_downloads"] = $dto->getNumberOfDownloads();
         return $result;
     }
 }
