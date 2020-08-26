@@ -40,7 +40,6 @@ class UpdatedEntitiesMessageBuilder
     {
         $this->updatedEntitiesData->setStoreId($storeId);
         $this->updatedEntitiesData->setEntityIds($entityIds);
-
         return $this->updatedEntitiesData;
     }
 }

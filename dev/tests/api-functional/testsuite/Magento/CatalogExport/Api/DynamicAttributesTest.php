@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExport\Api;
 
+use Magento\DataExporter\Model\FeedInterface;
+use Magento\DataExporter\Model\FeedPool;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
@@ -26,7 +28,7 @@ class DynamicAttributesTest extends WebapiAbstract
     private $objectManager;
 
     /**
-     * @var \Magento\CatalogDataExporter\Model\Feed\Products
+     * @var FeedInterface
      */
     private $productsFeed;
 
@@ -61,7 +63,7 @@ class DynamicAttributesTest extends WebapiAbstract
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->productsFeed = $this->objectManager->get(\Magento\CatalogDataExporter\Model\Feed\Products::class);
+        $this->productsFeed = $this->objectManager->get(FeedPool::class)->getFeed('products');
 
         $this->createServiceInfo = [
             'rest' => [

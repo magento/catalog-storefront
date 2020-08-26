@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogMessageBroker\Model;
 
 use Magento\CatalogExportApi\Api\Data\Product;
@@ -38,27 +40,14 @@ class FetchProducts implements FetchProductsInterface
 
     /**
      * @inheritdoc
-     *
-     * @param string[] $ids
      */
-    public function getByIds(array $ids)
+    public function getByIds(array $ids, array $storeViewCodes = []): array
     {
-        $products = $this->productRepository->get($ids);
+        $products = $this->productRepository->get($ids, $storeViewCodes);
         $data = [];
         foreach ($products as $product) {
             $data[] = $this->dataObjectProcessor->buildOutputDataArray($product, Product::class);
         }
         return $data;
-    }
-
-    /**
-     * @inheritDoc
-     *
-     * @param string[] $ids
-     * @return array
-     */
-    public function getDeleted(array $ids): array
-    {
-        return $this->productRepository->getDeleted($ids);
     }
 }

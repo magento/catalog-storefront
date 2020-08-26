@@ -9,7 +9,8 @@
         "magento/framework": "*",
         "magento/framework-message-queue": "*",
         "magento/module-catalog-export-api": "*",
-        "magento/module-catalog-data-exporter": "*"
+        "magento/module-catalog-data-exporter": "*",
+        "magento/module-data-exporter": "*"
     },
     "type": "magento2-module",
     "license": [

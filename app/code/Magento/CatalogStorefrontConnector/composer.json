@@ -15,7 +15,9 @@
         "magento/module-store": "*",
         "magento/module-catalog-message-broker": "*",
         "magento/module-catalog-data-exporter": "*",
-        "magento/module-catalog-storefront-api": "*"
+        "magento/module-catalog-storefront-api": "*",
+        "magento/module-catalog-export": "*",
+        "magento/module-data-exporter": "*"
     },
     "suggest": {
         "magento/module-catalog-inventory": "Allows use catalog inventory configuration"

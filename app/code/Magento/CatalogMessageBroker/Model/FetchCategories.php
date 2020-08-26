@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogMessageBroker\Model;
 
 use Magento\CatalogExportApi\Api\CategoryRepositoryInterface;
@@ -39,10 +41,10 @@ class FetchCategories implements FetchCategoriesInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $ids)
+    public function getByIds(array $ids, $storeViewCodes = []): array
     {
         $data = [];
-        $categories = $this->categoryRepository->get($ids);
+        $categories = $this->categoryRepository->get($ids, $storeViewCodes);
         foreach ($categories as $category) {
             $data[] = $this->dataObjectProcessor->buildOutputDataArray($category, Category::class);
         }

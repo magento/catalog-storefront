@@ -9,8 +9,6 @@ namespace Magento\CatalogStorefrontConnector\Model\Sync;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\Framework\Indexer\IndexerRegistry;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
 use Magento\CatalogStorefrontConnector\Plugin\CategoryUpdatesPublisher;
 use Magento\CatalogStorefrontConnector\Plugin\ProductUpdatesPublisher;
 
@@ -30,39 +28,23 @@ class SyncStorageOnStoreSave
     private $indexerRegistry;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @var CategoryUpdatesPublisher
      */
     private $categoryPublisher;
 
     /**
-     * @var CatalogEntityIdsProvider
-     */
-    private $catalogEntityIdsProvider;
-
-    /**
      * @param IndexerRegistry $indexerRegistry
      * @param ProductUpdatesPublisher $productPublisher
      * @param CategoryUpdatesPublisher $categoryPublisher
-     * @param StoreManagerInterface $storeManager
-     * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
      */
     public function __construct(
         IndexerRegistry $indexerRegistry,
         ProductUpdatesPublisher $productPublisher,
-        CategoryUpdatesPublisher $categoryPublisher,
-        StoreManagerInterface $storeManager,
-        CatalogEntityIdsProvider $catalogEntityIdsProvider
+        CategoryUpdatesPublisher $categoryPublisher
     ) {
         $this->productPublisher = $productPublisher;
         $this->indexerRegistry = $indexerRegistry;
         $this->categoryPublisher = $categoryPublisher;
-        $this->storeManager = $storeManager;
-        $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
     }
 
     /**
