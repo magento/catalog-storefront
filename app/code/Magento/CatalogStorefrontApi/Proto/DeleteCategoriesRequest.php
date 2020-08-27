@@ -14,9 +14,9 @@ use Google\Protobuf\Internal\GPBUtil;
 class DeleteCategoriesRequest extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Generated from protobuf field <code>repeated string productIds = 1;</code>
+     * Generated from protobuf field <code>repeated string categoryIds = 1;</code>
      */
-    private $productIds;
+    private $categoryIds;
     /**
      * Store code or id
      *
@@ -30,7 +30,7 @@ class DeleteCategoriesRequest extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type string[]|\Google\Protobuf\Internal\RepeatedField $productIds
+     *     @type string[]|\Google\Protobuf\Internal\RepeatedField $categoryIds
      *     @type string $store
      *           Store code or id
      * }
@@ -42,23 +42,23 @@ class DeleteCategoriesRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated string productIds = 1;</code>
+     * Generated from protobuf field <code>repeated string categoryIds = 1;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
      */
-    public function getProductIds()
+    public function getCategoryIds()
     {
-        return $this->productIds;
+        return $this->categoryIds;
     }
 
     /**
-     * Generated from protobuf field <code>repeated string productIds = 1;</code>
+     * Generated from protobuf field <code>repeated string categoryIds = 1;</code>
      * @param string[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
-    public function setProductIds($var)
+    public function setCategoryIds($var)
     {
         $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::STRING);
-        $this->productIds = $arr;
+        $this->categoryIds = $arr;
 
         return $this;
     }

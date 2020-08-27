@@ -23,7 +23,7 @@ final class DeleteCategoriesRequest implements DeleteCategoriesRequestInterface
     /**
      * @var array
      */
-    private $productIds;
+    private $categoryIds;
 
     /**
      * @var string
@@ -35,9 +35,9 @@ final class DeleteCategoriesRequest implements DeleteCategoriesRequestInterface
      *
      * @return string[]
      */
-    public function getProductIds(): array
+    public function getCategoryIds(): array
     {
-        return (array) $this->productIds;
+        return (array) $this->categoryIds;
     }
     
     /**
@@ -46,9 +46,9 @@ final class DeleteCategoriesRequest implements DeleteCategoriesRequestInterface
      * @param string[] $value
      * @return void
      */
-    public function setProductIds(array $value): void
+    public function setCategoryIds(array $value): void
     {
-        $this->productIds = $value;
+        $this->categoryIds = $value;
     }
     
     /**
