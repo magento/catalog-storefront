@@ -16,7 +16,6 @@
                 <item name="url_rewrites" xsi:type="string">Magento\CatalogExtractor\DataProvider\UrlRewrites\UrlRewritesDataProvider</item>
                 <item name="product_links" xsi:type="string">Magento\CatalogExtractor\DataProvider\Link\Provider</item>
                 <item name="url_suffix" xsi:type="string">Magento\CatalogExtractor\DataProvider\UrlRewrites\ProductUrlSuffix</item>
-                <item name="categories" xsi:type="string">Magento\CatalogExtractor\DataProvider\Category\ProductCategoriesDataProvider</item>
                 <item name="canonical_url" xsi:type="string">Magento\CatalogExtractor\DataProvider\CanonicalUrl\CanonicalUrlDataProvider</item>
             </argument>
         </arguments>
