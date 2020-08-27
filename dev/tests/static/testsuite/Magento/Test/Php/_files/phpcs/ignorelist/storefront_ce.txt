@@ -7,5 +7,3 @@
 app/code/Magento/CatalogStorefrontApi/Api
 app/code/Magento/CatalogStorefrontApi/Proto
 app/code/Magento/CatalogStorefrontApi/Metadata/Catalog.php
-app/code/Magento/CatalogExportApi/Api/Data/EnteredOption.php
-app/code/Magento/CatalogExportApi/Api/Data/ProductShopperInputOption.php
