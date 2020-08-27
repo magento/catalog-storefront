@@ -139,6 +139,9 @@ class Product
     /** @var array */
     private $categories;
 
+    /** @var array */
+    private $categoryIds;
+
     /** @var \Magento\CatalogExportApi\Api\Data\PriceRange */
     private $prices;
 
@@ -983,6 +986,27 @@ class Product
     public function setCategories(?array $categories = null): void
     {
         $this->categories = $categories;
+    }
+
+    /**
+     * Get category ids
+     *
+     * @return string[]
+     */
+    public function getCategoryIds(): ?array
+    {
+        return $this->categoryIds;
+    }
+
+    /**
+     * Set category ids
+     *
+     * @param string[] $categoryIds
+     * @return void
+     */
+    public function setCategoryIds(?array $categoryIds = null): void
+    {
+        $this->categoryIds = $categoryIds;
     }
 
     /**
