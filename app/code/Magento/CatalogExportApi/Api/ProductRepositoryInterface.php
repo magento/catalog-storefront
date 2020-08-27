@@ -15,15 +15,8 @@ interface ProductRepositoryInterface
      * Get products by ids
      *
      * @param string[] $ids
+     * @param string[] $storeViewCodes
      * @return \Magento\CatalogExportApi\Api\Data\Product[]
      */
-    public function get(array $ids);
-
-    /**
-     * Get deleted products by ids.
-     *
-     * @param string[] $ids
-     * @return array
-     */
-    public function getDeleted(array $ids): array;
+    public function get(array $ids, array $storeViewCodes = []);
 }

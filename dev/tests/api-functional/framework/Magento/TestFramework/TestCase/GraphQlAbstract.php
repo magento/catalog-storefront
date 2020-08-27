@@ -57,7 +57,7 @@ abstract class GraphQlAbstract extends WebapiAbstract
         foreach ($entityTypes as $entityType) {
             foreach ($availableStores as $store) {
                 try {
-                    $sourceName = $storageState->getCurrentDataSourceName([$store->getId(), $entityType]);
+                    $sourceName = $storageState->getCurrentDataSourceName([$store->getCode(), $entityType]);
                     $dataDefinition->deleteDataSource($sourceName);
                 } catch (\Exception $e) {
                     // Do nothing if no source

@@ -7,16 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Command;
 
-use Magento\CatalogMessageBroker\Model\FetchProductsInterface;
 use Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer;
-use Magento\CatalogMessageBroker\Model\MessageBus\CategoriesConsumer;
+use Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer;
+use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
+use Magento\CatalogMessageBroker\Model\MessageBus\Category\CategoriesConsumer;
+use Magento\CatalogMessageBroker\Model\MessageBus\Product\ProductsConsumer;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
-use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
+use Magento\DataExporter\Model\FeedPool;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Helper;
-use Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -51,11 +52,6 @@ class Sync extends Command
     private const ENTITY_TYPE_CATEGORY = 'category';
 
     /**
-     * @var ProductPublisher
-     */
-    private $productPublisher;
-
-    /**
      * @var StoreManagerInterface
      */
     private $storeManager;
@@ -80,36 +76,49 @@ class Sync extends Command
     private $categoryFeedIndexer;
 
     /**
-     * @var FetchProductsInterface
+     * @var FeedPool
      */
-    private $fetchProducts;
+    private $feedPool;
 
     /**
-     * @param ProductPublisher $productPublisher
+     * @var ChangedEntitiesMessageBuilder
+     */
+    private $messageBuilder;
+
+    /**
+     * @var ProductsConsumer
+     */
+    private $productsConsumer;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
      * @param CategoriesConsumer $categoriesConsumer
+     * @param ProductsConsumer $productsConsumer
      * @param ProductFeedIndexer $productFeedIndexer
      * @param CategoryFeedIndexer $categoryFeedIndexer
-     * @param FetchProductsInterface $fetchProducts
+     * @param FeedPool $feedPool
+     * @param ChangedEntitiesMessageBuilder $messageBuilder
      */
     public function __construct(
-        ProductPublisher $productPublisher,
         StoreManagerInterface $storeManager,
         CatalogEntityIdsProvider $catalogEntityIdsProvider,
         CategoriesConsumer $categoriesConsumer,
+        ProductsConsumer $productsConsumer,
         ProductFeedIndexer $productFeedIndexer,
         CategoryFeedIndexer $categoryFeedIndexer,
-        FetchProductsInterface $fetchProducts
+        FeedPool $feedPool,
+        ChangedEntitiesMessageBuilder $messageBuilder
     ) {
         parent::__construct();
-        $this->productPublisher = $productPublisher;
         $this->storeManager = $storeManager;
         $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
         $this->productFeedIndexer = $productFeedIndexer;
         $this->categoriesConsumer = $categoriesConsumer;
         $this->categoryFeedIndexer = $categoryFeedIndexer;
-        $this->fetchProducts = $fetchProducts;
+        $this->feedPool = $feedPool;
+        $this->messageBuilder = $messageBuilder;
+        $this->productsConsumer = $productsConsumer;
     }
 
     /**
@@ -174,10 +183,29 @@ class Sync extends Command
         $output->writeln("<info>Sync products for store {$store->getCode()}</info>");
         $this->measure(
             function () use ($output, $store) {
+                $productsFeed = $this->feedPool->getFeed('products');
                 $processedN = 0;
                 foreach ($this->catalogEntityIdsProvider->getProductIds((int)$store->getId()) as $productIds) {
-                    $newApiProducts = $this->fetchProducts->getByIds($productIds);
-                    $this->productPublisher->publish($productIds, $store->getCode(), $newApiProducts);
+                    $deleted = [];
+                    foreach ($productsFeed->getDeletedByIds($productIds, [$store->getCode()]) as $product) {
+                        $deleted[] = $product['productId'];
+                        unset($productIds[$product['productId']]);
+                    }
+
+                    $message = $this->messageBuilder->build(
+                        $deleted,
+                        ProductsConsumer::PRODUCTS_DELETED_EVENT_TYPE,
+                        $store->getCode()
+                    );
+                    $this->productsConsumer->processMessage($message);
+
+                    $message = $this->messageBuilder->build(
+                        $productIds,
+                        ProductsConsumer::PRODUCTS_UPDATED_EVENT_TYPE,
+                        $store->getCode()
+                    );
+                    $this->productsConsumer->processMessage($message);
+
                     $output->write('.');
                     $processedN += count($productIds);
                 }
@@ -198,9 +226,30 @@ class Sync extends Command
         $output->writeln("<info>Sync categories for store {$store->getCode()}</info>");
         $this->measure(
             function () use ($output, $store) {
+                $categoriesFeed = $this->feedPool->getFeed('categories');
+
                 $processedN = 0;
                 foreach ($this->catalogEntityIdsProvider->getCategoryIds((int)$store->getId()) as $categoryIds) {
-                    $this->categoriesConsumer->processMessage(json_encode($categoryIds));
+                    $deleted = [];
+                    foreach ($categoriesFeed->getDeletedByIds($categoryIds, [$store->getCode()]) as $category) {
+                        $deleted[] = $category['categoryId'];
+                        unset($categoryIds[$category['categoryId']]);
+                    }
+
+                    $message = $this->messageBuilder->build(
+                        $deleted,
+                        CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
+                        $store->getCode()
+                    );
+                    $this->categoriesConsumer->processMessage($message);
+
+                    $message = $this->messageBuilder->build(
+                        $categoryIds,
+                        CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
+                        $store->getCode()
+                    );
+                    $this->categoriesConsumer->processMessage($message);
+
                     $output->write('.');
                     $processedN += count($categoryIds);
                 }
