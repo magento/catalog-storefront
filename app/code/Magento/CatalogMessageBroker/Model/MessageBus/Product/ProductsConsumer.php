@@ -63,7 +63,14 @@ class ProductsConsumer
             $productsEvent = $this->consumerEventFactory->create($eventType);
             $productsEvent->execute($entityIds, $scope);
         } catch (\Throwable $e) {
-            $this->logger->critical('Unable to process collected product data for update/delete. ' . $e->getMessage());
+            $this->logger->error(
+                \sprintf(
+                    'Unable to process collected product data. Event type: "%s", ids:  "%s"',
+                    $eventType ?? '',
+                    \implode(',', $entityIds ?? [])
+                ),
+                ['exception' => $e]
+            );
         }
     }
 }

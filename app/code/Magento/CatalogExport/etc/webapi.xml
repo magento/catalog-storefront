@@ -10,13 +10,17 @@
     <route url="/V1/catalog-export/products" method="GET">
         <service class="Magento\CatalogExportApi\Api\ProductRepositoryInterface" method="get"/>
         <resources>
-            <resource ref="Magento_Catalog::products" />
+            <resource ref="anonymous" />
+<!--            TODO: permissions-->
+<!--            <resource ref="Magento_Catalog::products" />-->
         </resources>
     </route>
     <route url="/V1/catalog-export/categories" method="GET">
         <service class="Magento\CatalogExportApi\Api\CategoryRepositoryInterface" method="get"/>
         <resources>
-            <resource ref="Magento_Catalog::categories" />
+            <resource ref="anonymous" />
+<!--            TODO: permissions-->
+<!--            <resource ref="Magento_Catalog::categories" />-->
         </resources>
     </route>
 </routes>

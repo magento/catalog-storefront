@@ -64,7 +64,14 @@ class CategoriesConsumer
             $categoriesEvent = $this->consumerEventFactory->create($eventType);
             $categoriesEvent->execute($entityIds, $scope);
         } catch (\Throwable $e) {
-            $this->logger->critical('Unable to process collected category data for update/delete. ' . $e->getMessage());
+            $this->logger->error(
+                \sprintf(
+                    'Unable to process collected category data. Event type: "%s", ids:  "%s"',
+                    $eventType ?? '',
+                    \implode(',', $entityIds ?? [])
+                ),
+                ['exception' => $e]
+            );
         }
     }
 }

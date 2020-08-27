@@ -192,12 +192,14 @@ class Sync extends Command
                         unset($productIds[$product['productId']]);
                     }
 
-                    $message = $this->messageBuilder->build(
-                        $deleted,
-                        ProductsConsumer::PRODUCTS_DELETED_EVENT_TYPE,
-                        $store->getCode()
-                    );
-                    $this->productsConsumer->processMessage($message);
+                    if ($deleted) {
+                        $message = $this->messageBuilder->build(
+                            $deleted,
+                            ProductsConsumer::PRODUCTS_DELETED_EVENT_TYPE,
+                            $store->getCode()
+                        );
+                        $this->productsConsumer->processMessage($message);
+                    }
 
                     $message = $this->messageBuilder->build(
                         $productIds,
@@ -236,12 +238,14 @@ class Sync extends Command
                         unset($categoryIds[$category['categoryId']]);
                     }
 
-                    $message = $this->messageBuilder->build(
-                        $deleted,
-                        CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
-                        $store->getCode()
-                    );
-                    $this->categoriesConsumer->processMessage($message);
+                    if ($deleted) {
+                        $message = $this->messageBuilder->build(
+                            $deleted,
+                            CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
+                            $store->getCode()
+                        );
+                        $this->categoriesConsumer->processMessage($message);
+                    }
 
                     $message = $this->messageBuilder->build(
                         $categoryIds,
