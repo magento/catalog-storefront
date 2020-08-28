@@ -70,7 +70,7 @@ class DownloadableProductsTest extends AbstractProductTestHelper
     /**
      * Validate downloadable product data
      *
-     * @magentoDataFixture Magento/Downloadable/_files/product_downloadable_with_link_url_and_sample_url.php
+     * @magentoDataFixture Magento/DownloadableProducts/_files/product_downloadable_with_link_url_and_sample_url_override.php
      * @throws NoSuchEntityException
      * @throws \Throwable
      */
