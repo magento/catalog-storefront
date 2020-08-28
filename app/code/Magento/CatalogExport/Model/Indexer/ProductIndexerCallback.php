@@ -74,7 +74,8 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
         $productsFeed = $this->feedPool->getFeed('products');
         foreach ($productsFeed->getDeletedByIds($ids) as $product) {
             $deleted[$product['storeViewCode']][] = $product['productId'];
-            unset($ids[$product['productId']]);
+            $deleteProductIndex = array_search($product['productId'], $ids);
+            unset($ids[$deleteProductIndex]);
         }
 
         foreach ($deleted as $storeCode => $entityIds) {

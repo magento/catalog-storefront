@@ -74,7 +74,8 @@ class CategoryIndexerCallback implements CategoryIndexerCallbackInterface
         $categoriesFeed = $this->feedPool->getFeed('categories');
         foreach ($categoriesFeed->getDeletedByIds($ids) as $category) {
             $deleted[$category['storeViewCode']][] = $category['categoryId'];
-            unset($ids[$category['categoryId']]);
+            $deleteCategoryIndex = array_search($category['categoryId'], $ids);
+            unset($ids[$deleteCategoryIndex]);
         }
 
         foreach ($deleted as $storeCode => $entityIds) {
