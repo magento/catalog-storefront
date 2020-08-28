@@ -5,40 +5,44 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl;
+namespace Magento\CatalogStorefront\Model;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\MessageQueue\ConsumerFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\ConsumerInvoker;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Abstract class for Graphql tests
+ * Abstract Class for data exporter tests
  *
- * This class running consumers in setUp() and stops them in tearDown()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractGraphQl extends TestCase
+abstract class AbstractDataExporter extends TestCase
 {
     /**
-     * Process storefront consumers during test setup
+     * Process consumers before run test
      *
      * @throws LocalizedException
+     * @throws \ReflectionException
+     * @throws \Throwable
      */
-    protected function setUp(): void
+    protected function runTest()
     {
         $this->processCatalogQueueMessages();
+        return parent::runTest();
     }
 
     /**
-     * Process provided consumers list
      *
+     * @param TestCase $test
      * @throws LocalizedException
+     * @throws \ReflectionException
      */
     protected function processCatalogQueueMessages(): void
     {
         $objectManager = Bootstrap::getObjectManager();
-        /** @var \Magento\TestFramework\Workaround\ConsumerInvoker $consumerInvoker */
-        $consumerInvoker = $objectManager->get(\Magento\TestFramework\Workaround\ConsumerInvoker::class);
+        /** @var ConsumerInvoker $consumerInvoker */
+        $consumerInvoker = $objectManager->get(ConsumerInvoker::class);
         $consumerInvoker->invoke();
     }
 }

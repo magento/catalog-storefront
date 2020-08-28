@@ -12,7 +12,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\CatalogExtractor\DataProvider\UrlRewrites\Query\UrlRewritesQuery;
 
 /**
- * Url Rewrites data provider, used for GraphQL resolver processing.
+ * Url Rewrites data provider, used for Service Catalog Export processing.
  */
 class UrlRewritesDataProvider implements DataProviderInterface
 {
