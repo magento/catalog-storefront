@@ -276,6 +276,16 @@ class Product extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.GroupedItem grouped_items = 103;</code>
      */
     private $grouped_items;
+    /**
+     *TODO update to 'options' once all options would be covered
+     *
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOption options_v2 = 199;</code>
+     */
+    private $options_v2;
+    /**
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.ProductShopperInputOption shopper_input_options = 200;</code>
+     */
+    protected $shopper_input_options = null;
 
     /**
      * Constructor.
@@ -361,6 +371,9 @@ class Product extends \Google\Protobuf\Internal\Message
      *     @type \Magento\CatalogStorefrontApi\Proto\DownloadableSample[]|\Google\Protobuf\Internal\RepeatedField $downloadable_product_samples
      *     @type float $only_x_left_in_stock
      *     @type \Magento\CatalogStorefrontApi\Proto\GroupedItem[]|\Google\Protobuf\Internal\RepeatedField $grouped_items
+     *     @type \Magento\CatalogStorefrontApi\Proto\ProductOption[]|\Google\Protobuf\Internal\RepeatedField $options_v2
+     *          TODO update to 'options' once all options would be covered
+     *     @type \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption $shopper_input_options
      * }
      */
     public function __construct($data = null)
@@ -1703,6 +1716,54 @@ class Product extends \Google\Protobuf\Internal\Message
     {
         $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\GroupedItem::class);
         $this->grouped_items = $arr;
+
+        return $this;
+    }
+
+    /**
+     *TODO update to 'options' once all options would be covered
+     *
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOption options_v2 = 199;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getOptionsV2()
+    {
+        return $this->options_v2;
+    }
+
+    /**
+     *TODO update to 'options' once all options would be covered
+     *
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOption options_v2 = 199;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\ProductOption[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setOptionsV2($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\ProductOption::class);
+        $this->options_v2 = $arr;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.ProductShopperInputOption shopper_input_options = 200;</code>
+     * @return \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption
+     */
+    public function getShopperInputOptions()
+    {
+        return $this->shopper_input_options;
+    }
+
+    /**
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.ProductShopperInputOption shopper_input_options = 200;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption $var
+     * @return $this
+     */
+    public function setShopperInputOptions($var)
+    {
+        GPBUtil::checkMessage($var, \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption::class);
+        $this->shopper_input_options = $var;
 
         return $this;
     }

@@ -157,6 +157,12 @@ class Product
     /** @var \Magento\CatalogExportApi\Api\Data\MediaItem[]|null */
     private $mediaGallery;
 
+    /** @var \Magento\CatalogExportApi\Api\Data\ProductOption[]|null */
+    private $productOptions;
+
+    /** @var \Magento\CatalogExportApi\Api\Data\ProductShopperInputOption[]|null */
+    private $productShopperInputOptions;
+
     /** @var \Magento\CatalogExportApi\Api\Data\Variant[]|null */
     private $variants;
 
@@ -1112,6 +1118,48 @@ class Product
     public function setMediaGallery(?array $mediaGallery = null): void
     {
         $this->mediaGallery = $mediaGallery;
+    }
+
+    /**
+     * Get product options
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\ProductOption[]|null
+     */
+    public function getProductOptions(): ?array
+    {
+        return $this->productOptions;
+    }
+
+    /**
+     * Set product options
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\ProductOption[] $productOptions
+     * @return void
+     */
+    public function setProductOptions(?array $productOptions = null): void
+    {
+        $this->productOptions = $productOptions;
+    }
+
+    /**
+     * Get product shopper input options
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\ProductShopperInputOption[]|null
+     */
+    public function getProductShopperInputOptions(): ?array
+    {
+        return $this->productShopperInputOptions;
+    }
+
+    /**
+     * Set product shopper input options
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\ProductShopperInputOption[] $productShopperInputOptions
+     * @return void
+     */
+    public function setProductShopperInputOptions(?array $productShopperInputOptions = null): void
+    {
+        $this->productShopperInputOptions = $productShopperInputOptions;
     }
 
     /**
