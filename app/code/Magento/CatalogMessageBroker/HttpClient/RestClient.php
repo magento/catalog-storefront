@@ -65,7 +65,7 @@ class RestClient
      * @param array $data
      * @param array $headers
      * @return mixed
-     * @throws \Exception
+     * @throws \Throwable
      */
     public function get($resourcePath, $data = [], $headers = [])
     {
@@ -87,6 +87,7 @@ class RestClient
                 ),
                 ['exception' => $e]
             );
+            throw $e;
         }
     }
 
