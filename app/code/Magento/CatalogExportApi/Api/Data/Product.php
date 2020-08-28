@@ -139,6 +139,9 @@ class Product
     /** @var array */
     private $categories;
 
+    /** @var array */
+    private $categoryIds;
+
     /** @var \Magento\CatalogExportApi\Api\Data\PriceRange */
     private $prices;
 
@@ -154,8 +157,11 @@ class Product
     /** @var \Magento\CatalogExportApi\Api\Data\MediaItem[]|null */
     private $mediaGallery;
 
-    /** @var \Magento\CatalogExportApi\Api\Data\Samples[]|null */
-    private $samples;
+    /** @var \Magento\CatalogExportApi\Api\Data\ProductOption[]|null */
+    private $productOptions;
+
+    /** @var \Magento\CatalogExportApi\Api\Data\ProductShopperInputOption[]|null */
+    private $productShopperInputOptions;
 
     /** @var \Magento\CatalogExportApi\Api\Data\Variant[]|null */
     private $variants;
@@ -989,6 +995,27 @@ class Product
     }
 
     /**
+     * Get category ids
+     *
+     * @return string[]
+     */
+    public function getCategoryIds(): ?array
+    {
+        return $this->categoryIds;
+    }
+
+    /**
+     * Set category ids
+     *
+     * @param string[] $categoryIds
+     * @return void
+     */
+    public function setCategoryIds(?array $categoryIds = null): void
+    {
+        $this->categoryIds = $categoryIds;
+    }
+
+    /**
      * Get prices
      *
      * @return \Magento\CatalogExportApi\Api\Data\PriceRange
@@ -1094,24 +1121,45 @@ class Product
     }
 
     /**
-     * Get samples
+     * Get product options
      *
-     * @return \Magento\CatalogExportApi\Api\Data\Samples[]|null
+     * @return \Magento\CatalogExportApi\Api\Data\ProductOption[]|null
      */
-    public function getSamples(): ?array
+    public function getProductOptions(): ?array
     {
-        return $this->samples;
+        return $this->productOptions;
     }
 
     /**
-     * Set samples
+     * Set product options
      *
-     * @param \Magento\CatalogExportApi\Api\Data\Samples[] $samples
+     * @param \Magento\CatalogExportApi\Api\Data\ProductOption[] $productOptions
      * @return void
      */
-    public function setSamples(?array $samples = null): void
+    public function setProductOptions(?array $productOptions = null): void
     {
-        $this->samples = $samples;
+        $this->productOptions = $productOptions;
+    }
+
+    /**
+     * Get product shopper input options
+     *
+     * @return \Magento\CatalogExportApi\Api\Data\ProductShopperInputOption[]|null
+     */
+    public function getProductShopperInputOptions(): ?array
+    {
+        return $this->productShopperInputOptions;
+    }
+
+    /**
+     * Set product shopper input options
+     *
+     * @param \Magento\CatalogExportApi\Api\Data\ProductShopperInputOption[] $productShopperInputOptions
+     * @return void
+     */
+    public function setProductShopperInputOptions(?array $productShopperInputOptions = null): void
+    {
+        $this->productShopperInputOptions = $productShopperInputOptions;
     }
 
     /**

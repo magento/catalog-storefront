@@ -46,8 +46,7 @@ class ProductDataProcessor
         'updated_at' => 'updated_at',
         'attributes' => 'dynamic_attributes',
         // 'variants' => 'variants', // \Magento\CatalogStorefrontApi\Api\Data\VariantInterface[]
-        // 'categories' => 'categories', TODO category ids (create category_v2 field) must be returned instead of urls
-
+        'category_ids' => 'categories',
         // The following list of fields are present in Import API (proto schema) but absent in Export API (et_schema)
         // TODO: review list, move to ^^ after corresponding fields resolved in story
         'has_options', //type: bool
