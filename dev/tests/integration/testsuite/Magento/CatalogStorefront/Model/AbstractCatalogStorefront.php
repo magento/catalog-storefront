@@ -13,11 +13,11 @@ use Magento\TestFramework\Workaround\ConsumerInvoker;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Abstract Class for data exporter tests
+ * Abstract Class for catalog storefront tests
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractDataExporter extends TestCase
+abstract class AbstractCatalogStorefront extends TestCase
 {
     /**
      * Process consumers before run test
