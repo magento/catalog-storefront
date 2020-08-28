@@ -85,8 +85,8 @@ final class DeleteCategoriesRequestMapper
     private function setByKey(DeleteCategoriesRequest $dto, string $key, $value): void
     {
         switch ($key) {
-            case "categoryIds":
-                $dto->setCategoryIds((array) $value);
+            case "productIds":
+                $dto->setProductIds((array) $value);
                 break;
             case "store":
                 $dto->setStore((string) $value);

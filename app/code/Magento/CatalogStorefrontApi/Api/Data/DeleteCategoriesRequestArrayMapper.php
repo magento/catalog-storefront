@@ -47,7 +47,7 @@ final class DeleteCategoriesRequestArrayMapper
     public function convertToArray(DeleteCategoriesRequest $dto)
     {
         $result = [];
-        $result["categoryIds"] = $dto->getCategoryIds();
+        $result["productIds"] = $dto->getProductIds();
         $result["store"] = $dto->getStore();
         return $result;
     }

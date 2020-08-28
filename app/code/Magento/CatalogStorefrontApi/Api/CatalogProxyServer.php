@@ -530,24 +530,21 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     }
                     $r->setDownloadableProductLinks($res);
                     $res = [];
-                    foreach ($item1->getDownloadableProductSamples() as $item57) {
-                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\DownloadableSample
-                        // to \Magento\CatalogStorefrontApi\Proto\DownloadableSample
-                        /** @var \Magento\CatalogStorefrontApi\Api\Data\DownloadableSample $item57 **/
+                    foreach ($item1->getSamples() as $item57) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\Sample
+                        // to \Magento\CatalogStorefrontApi\Proto\Sample
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\Sample $item57 **/
                         $p = function () use ($item57) {
-                            $r = new \Magento\CatalogStorefrontApi\Proto\DownloadableSample();
-                            $r->setSampleUrl($item57->getSampleUrl());
-                            $r->setTitle($item57->getTitle());
+                            $r = new \Magento\CatalogStorefrontApi\Proto\Sample();
+                            $r->setUrl($item57->getUrl());
+                            $r->setLabel($item57->getLabel());
                             $r->setSortOrder($item57->getSortOrder());
-                            $r->setSampleType($item57->getSampleType());
-                            $r->setSampleFile($item57->getSampleFile());
-                            $r->setEntityId($item57->getEntityId());
                             return $r;
                         };
                         $proto = $p();
                         $res[] = $proto;
                     }
-                    $r->setDownloadableProductSamples($res);
+                    $r->setSamples($res);
                     $r->setOnlyXLeftInStock($item1->getOnlyXLeftInStock());
                     $res = [];
                     foreach ($item1->getGroupedItems() as $item59) {
@@ -1099,24 +1096,21 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     }
                     $r->setDownloadableProductLinks($res);
                     $res = [];
-                    foreach ($item1->getDownloadableProductSamples() as $item57) {
-                        // convert data from \Magento\CatalogStorefrontApi\Proto\DownloadableSample
-                        // to \Magento\CatalogStorefrontApi\Api\Data\DownloadableSample
-                        /** @var \Magento\CatalogStorefrontApi\Proto\DownloadableSample $item57 **/
+                    foreach ($item1->getSamples() as $item57) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\Sample
+                        // to \Magento\CatalogStorefrontApi\Api\Data\Sample
+                        /** @var \Magento\CatalogStorefrontApi\Proto\Sample $item57 **/
                         $p = function () use ($item57) {
-                            $r = new \Magento\CatalogStorefrontApi\Api\Data\DownloadableSample();
-                            $r->setSampleUrl($item57->getSampleUrl());
-                            $r->setTitle($item57->getTitle());
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\Sample();
+                            $r->setUrl($item57->getUrl());
+                            $r->setLabel($item57->getLabel());
                             $r->setSortOrder($item57->getSortOrder());
-                            $r->setSampleType($item57->getSampleType());
-                            $r->setSampleFile($item57->getSampleFile());
-                            $r->setEntityId($item57->getEntityId());
                             return $r;
                         };
                         $out = $p();
                         $res[] = $out;
                     }
-                    $r->setDownloadableProductSamples($res);
+                    $r->setSamples($res);
                     $r->setOnlyXLeftInStock($item1->getOnlyXLeftInStock());
                     $res = [];
                     foreach ($item1->getGroupedItems() as $item59) {
@@ -1380,10 +1374,10 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesRequest();
             $values = [];
-            foreach ($value->getCategoryIds() as $value) {
+            foreach ($value->getProductIds() as $value) {
                 $values[] = $value;
             }
-            $r->setCategoryIds($values);
+            $r->setProductIds($values);
             $r->setStore($value->getStore());
             return $r;
         };
