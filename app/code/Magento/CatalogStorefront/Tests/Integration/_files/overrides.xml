@@ -1,0 +1,5 @@
+<overrides>
+    <test class="Magento\Framework\MessageQueue\UseCase\MixSyncAndAsyncSingleQueueTest">
+        <method name="testMixSyncAndAsyncSingleQueue" skip="true"/>
+    </test>
+</overrides>

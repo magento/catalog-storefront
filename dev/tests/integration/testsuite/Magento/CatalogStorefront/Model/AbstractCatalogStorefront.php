@@ -14,8 +14,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Abstract Class for catalog storefront tests
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractCatalogStorefront extends TestCase
 {
@@ -33,6 +31,7 @@ abstract class AbstractCatalogStorefront extends TestCase
     }
 
     /**
+     * Invoke consumers to process catalog queue messages
      *
      * @param TestCase $test
      * @throws LocalizedException
