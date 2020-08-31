@@ -151,9 +151,6 @@ class Product
     /** @var \Magento\CatalogExportApi\Api\Data\Option[]|null */
     private $options;
 
-    /** @var \Magento\CatalogExportApi\Api\Data\EnteredOption[]|null */
-    private $enteredOptions;
-
     /** @var \Magento\CatalogExportApi\Api\Data\MediaItem[]|null */
     private $mediaGallery;
 
@@ -1076,27 +1073,6 @@ class Product
     public function setOptions(?array $options = null): void
     {
         $this->options = $options;
-    }
-
-    /**
-     * Get entered options
-     *
-     * @return \Magento\CatalogExportApi\Api\Data\EnteredOption[]|null
-     */
-    public function getEnteredOptions(): ?array
-    {
-        return $this->enteredOptions;
-    }
-
-    /**
-     * Set entered options
-     *
-     * @param \Magento\CatalogExportApi\Api\Data\EnteredOption[] $enteredOptions
-     * @return void
-     */
-    public function setEnteredOptions(?array $enteredOptions = null): void
-    {
-        $this->enteredOptions = $enteredOptions;
     }
 
     /**
