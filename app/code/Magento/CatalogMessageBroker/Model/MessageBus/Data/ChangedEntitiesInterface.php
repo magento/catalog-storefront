@@ -5,24 +5,24 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogExport\Model\Data;
+namespace Magento\CatalogMessageBroker\Model\MessageBus\Data;
 
 /**
- * Changed entities object interface
+ * ExportMessage object interface
  */
 interface ChangedEntitiesInterface
 {
     /**
      * Get changed entities metadata
      *
-     * @return \Magento\CatalogExport\Model\Data\MetaInterface
+     * @return \Magento\CatalogMessageBroker\Model\MessageBus\Data\MetaInterface
      */
     public function getMeta(): MetaInterface;
 
     /**
      * Get changed entities data
      *
-     * @return \Magento\CatalogExport\Model\Data\DataInterface
+     * @return \Magento\CatalogMessageBroker\Model\MessageBus\Data\DataInterface
      */
     public function getData(): DataInterface;
 }

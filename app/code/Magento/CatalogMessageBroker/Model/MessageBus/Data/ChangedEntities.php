@@ -5,10 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogExport\Model\Data;
+namespace Magento\CatalogMessageBroker\Model\MessageBus\Data;
 
 /**
  * Changed entities object
+ * TODO: Change the name
  */
 class ChangedEntities implements ChangedEntitiesInterface
 {

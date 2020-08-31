@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogMessageBroker\Model\MessageBus\Product;
 
-use Magento\CatalogExport\Model\Data\ChangedEntitiesInterface;
+use Magento\CatalogMessageBroker\Model\MessageBus\Data\ChangedEntitiesInterface;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterfaceFactory;
 use Psr\Log\LoggerInterface;
 
@@ -22,6 +22,9 @@ class ProductsConsumer
     const PRODUCTS_UPDATED_EVENT_TYPE = 'products_updated';
 
     const PRODUCTS_DELETED_EVENT_TYPE = 'products_deleted';
+
+    //TODO: ad-hoc Remove once the store codes are passed in the messages coming from ExportApi
+    const DEFAULT_STORE_CODE = 'default';
 
     /**
      * @var LoggerInterface
@@ -48,17 +51,23 @@ class ProductsConsumer
     /**
      * Process message
      *
-     * @param \Magento\CatalogExport\Model\Data\ChangedEntitiesInterface $message
+     * @param \Magento\CatalogMessageBroker\Model\MessageBus\Data\ChangedEntitiesInterface $message
      * @return void
      */
-    public function processMessage(ChangedEntitiesInterface $message): void
+    public function processMessage($message): void
     {
+
         try {
             $eventType = $message->getMeta() ? $message->getMeta()->getEventType() : null;
-            $scope = $message->getMeta() ? $message->getMeta()->getScope() : null;
+
+            //TODO: ad-hoc Remove DEFAULT_STORE_CODE to null once the store codes are passed
+            $scope = $message->getMeta() ? $message->getMeta()->getScope() ?? self::DEFAULT_STORE_CODE : null;
             $entityIds = $message->getData() ? $message->getData()->getIds() : null;
             if (empty($entityIds)) {
                 throw new \InvalidArgumentException('Product ids are missing in payload');
+            }
+            if (empty($scope)) {
+                throw new \InvalidArgumentException('Scope is missing from the payload');
             }
             $productsEvent = $this->consumerEventFactory->create($eventType);
             $productsEvent->execute($entityIds, $scope);

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogExport\Model\Data;
+namespace Magento\CatalogMessageBroker\Model\MessageBus\Data;
 
 /**
  * Data object for changed entities
