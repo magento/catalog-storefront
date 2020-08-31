@@ -15,14 +15,14 @@ class Data implements DataInterface
     /**
      * @var int[]
      */
-    private $entityIds;
+    private $ids;
 
     /**
-     * @param array $entityIds
+     * @param array $ids
      */
-    public function __construct(array $entityIds)
+    public function __construct(array $ids)
     {
-        $this->entityIds = $entityIds;
+        $this->ids = $ids;
     }
 
     /**
@@ -30,6 +30,6 @@ class Data implements DataInterface
      */
     public function getIds(): array
     {
-        return $this->entityIds;
+        return $this->ids;
     }
 }

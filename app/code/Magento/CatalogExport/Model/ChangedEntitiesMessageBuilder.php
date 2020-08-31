@@ -59,14 +59,14 @@ class ChangedEntitiesMessageBuilder
     {
         $meta = $this->metaFactory->create(
             [
+                'event_type' => $eventType,
                 'scope' => $scope,
-                'eventType' => $eventType
             ]
         );
 
         $data = $this->dataFactory->create(
             [
-                'entityIds' => $entityIds
+                'ids' => $entityIds
             ]
         );
 

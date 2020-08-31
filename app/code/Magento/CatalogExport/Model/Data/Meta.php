@@ -23,13 +23,13 @@ class Meta implements MetaInterface
     private $eventType;
 
     /**
+     * @param string $event_type
      * @param string|null $scope
-     * @param string $eventType
      */
-    public function __construct(?string $scope, string $eventType)
+    public function __construct(string $event_type, string $scope = null)
     {
         $this->scope = $scope;
-        $this->eventType = $eventType;
+        $this->eventType = $event_type;
     }
 
     /**
