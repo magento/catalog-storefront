@@ -146,7 +146,7 @@ class RequestBuilder
 
     /**
      * This will be used to map the GraphQL request fields to the ones in the data storage
-     * //TODO: Remove this once the mapper is ready
+     * //TODO: Remove this once the mapper is ready. https://github.com/magento/catalog-storefront/issues/258
      *
      * @param array $attributes
      * @return array
