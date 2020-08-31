@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogMessageBroker\Model\MessageBus\Category;
 
-use Magento\CatalogExport\Model\Data\ChangedEntitiesInterface;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterfaceFactory;
 use Psr\Log\LoggerInterface;
 
@@ -23,6 +22,11 @@ class CategoriesConsumer
     const CATEGORIES_UPDATED_EVENT_TYPE = 'categories_updated';
 
     const CATEGORIES_DELETED_EVENT_TYPE = 'categories_deleted';
+
+    /**
+     * TODO: ad-hoc Remove this once the store scope is consistently passed from ExportAPI
+     */
+    const DEFAULT_STORE_VIEW = 'default';
 
     /**
      * @var LoggerInterface
@@ -49,14 +53,15 @@ class CategoriesConsumer
     /**
      * Process message
      *
-     * @param \Magento\CatalogExport\Model\Data\ChangedEntitiesInterface $message
+     * @param \Magento\CatalogMessageBroker\Model\MessageBus\Data\ChangedEntitiesInterface $message
      * @return void
      */
-    public function processMessage(ChangedEntitiesInterface $message)
+    public function processMessage($message)
     {
+        /** @var \Magento\CatalogMessageBroker\Model\MessageBus\Data\ChangedEntitiesInterface $message */
         try {
             $eventType = $message->getMeta() ? $message->getMeta()->getEventType() : null;
-            $scope = $message->getMeta() ? $message->getMeta()->getScope() : null;
+            $scope = $message->getMeta() ? $message->getMeta()->getScope() ?? self::DEFAULT_STORE_VIEW : null;
             $entityIds = $message->getData() ? $message->getData()->getIds() : null;
             if (empty($entityIds)) {
                 throw new \InvalidArgumentException('Category Ids are missing in payload');
