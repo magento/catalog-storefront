@@ -22,14 +22,14 @@ use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\TestCase\WebapiAbstract;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Categories message bus
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CatergoriesTest extends WebapiAbstract
+class CatergoriesTest extends TestCase
 {
     private const CATEGORY_ID = '333';
     private const STORE_CODE = 'default';
@@ -101,8 +101,9 @@ class CatergoriesTest extends WebapiAbstract
     public function testSaveAndDeleteCategory() : void
     {
         $category = $this->categoryRepository->get(self::CATEGORY_ID);
-        $this->assertEquals(self::CATEGORY_ID, $category->getId());
+        self::assertEquals(self::CATEGORY_ID, $category->getId());
 
+        // TODO: do not call any code from Export API repo. Call list of consumers instead
         $message = $this->messageBuilder->build(
             [(int)$category->getId()],
             CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
@@ -113,14 +114,15 @@ class CatergoriesTest extends WebapiAbstract
         $this->categoriesGetRequestInterface->setIds([$category->getId()]);
         $this->categoriesGetRequestInterface->setStore(self::STORE_CODE);
         $catalogServiceItem = $this->catalogService->getCategories($this->categoriesGetRequestInterface);
-        $this->assertNotEmpty($catalogServiceItem->getItems());
+        self::assertNotEmpty($catalogServiceItem->getItems());
         $item = $catalogServiceItem->getItems()[0];
-        $this->assertEquals($item->getId(), $category->getId());
+        self::assertEquals($item->getId(), $category->getId());
 
         $this->deleteCategory((int)$category->getId());
         $deletedFeed = $this->categoryFeed->getDeletedByIds([$category->getId()], [self::STORE_CODE]);
-        $this->assertNotEmpty($deletedFeed);
+        self::assertNotEmpty($deletedFeed);
 
+        // TODO: do not call any code from Export API repo. Call list of consumers instead if needded
         $deleteMessage = $this->messageBuilder->build(
             [(int)$category->getId()],
             CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
@@ -128,7 +130,7 @@ class CatergoriesTest extends WebapiAbstract
         );
         $this->categoriesConsumer->processMessage($deleteMessage);
         $items = $this->catalogService->getCategories($this->categoriesGetRequestInterface)->getItems();
-        $this->assertEmpty($items);
+        self::assertEmpty($items);
     }
 
     /**
