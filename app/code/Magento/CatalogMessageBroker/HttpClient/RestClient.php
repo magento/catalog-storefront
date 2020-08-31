@@ -64,7 +64,7 @@ class RestClient
      * @param string $resourcePath Resource URL like /V1/Resource1/123
      * @param array $data
      * @param array $headers
-     * @return mixed
+     * @return array
      * @throws \Throwable
      */
     public function get($resourcePath, $data = [], $headers = [])
@@ -76,7 +76,7 @@ class RestClient
 
         try {
             $responseBody = $this->curlClient->get($url, $data, $headers);
-            return $this->jsonSerializer->unserialize($responseBody['body'] ?? '');
+            return !empty($responseBody['body']) ? $this->jsonSerializer->unserialize($responseBody['body']) : [];
         } catch (\Throwable $e) {
             $this->logger->error(
                 \sprintf(
