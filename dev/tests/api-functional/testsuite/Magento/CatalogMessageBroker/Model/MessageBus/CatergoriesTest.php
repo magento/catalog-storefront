@@ -22,14 +22,14 @@ use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit\Framework\TestCase;
+use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
  * Test class for Categories message bus
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CatergoriesTest extends TestCase
+class CatergoriesTest extends WebapiAbstract
 {
     private const CATEGORY_ID = '333';
     private const STORE_CODE = 'default';

@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogDataExporter\Test\Integration\AbstractProductTestHelper;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
 use Magento\CatalogMessageBroker\Model\MessageBus\Product\ProductsConsumer;
@@ -20,13 +21,14 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
  * Test class for Products message bus
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductsTest extends AbstractProductTestHelper
+class ProductsTest  extends WebapiAbstract
 {
     const TEST_SKU = 'in-stock-product';
     const STORE_CODE = 'default';
@@ -58,6 +60,11 @@ class ProductsTest extends AbstractProductTestHelper
     private $productFeed;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -68,6 +75,7 @@ class ProductsTest extends AbstractProductTestHelper
         $this->productsGetRequestInterface = Bootstrap::getObjectManager()->create(ProductsGetRequestInterface::class);
         $this->messageBuilder = Bootstrap::getObjectManager()->create(ChangedEntitiesMessageBuilder::class);
         $this->productFeed = Bootstrap::getObjectManager()->get(FeedPool::class)->getFeed('products');
+        $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
     }
 
     /**
