@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
+use Magento\CatalogExport\Model\ExportMessageBuilder;
 use Magento\CatalogMessageBroker\Model\MessageBus\Category\CategoriesConsumer;
 use Magento\CatalogStorefront\Model\CatalogService;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
@@ -50,7 +50,7 @@ class CatergoriesTest extends TestCase
     private $categoriesGetRequestInterface;
 
     /**
-     * @var ChangedEntitiesMessageBuilder
+     * @var ExportMessageBuilder
      */
     private $messageBuilder;
 
@@ -80,7 +80,7 @@ class CatergoriesTest extends TestCase
         $this->categoriesGetRequestInterface = Bootstrap::getObjectManager()->create(
             CategoriesGetRequestInterface::class
         );
-        $this->messageBuilder = Bootstrap::getObjectManager()->create(ChangedEntitiesMessageBuilder::class);
+        $this->messageBuilder = Bootstrap::getObjectManager()->create(ExportMessageBuilder::class);
         $this->categoryRepository = Bootstrap::getObjectManager()->create(CategoryRepositoryInterface::class);
         $this->categoryFeed = Bootstrap::getObjectManager()->get(FeedPool::class)->getFeed('categories');
         $this->registry = Bootstrap::getObjectManager()->get(Registry::class);

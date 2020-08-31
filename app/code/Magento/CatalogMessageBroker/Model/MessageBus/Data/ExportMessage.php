@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace Magento\CatalogMessageBroker\Model\MessageBus\Data;
 
 /**
- * Changed entities object
- * TODO: Change the name
+ * Structure of message processed by catalog storefront message broker
+ * TODO: Change name?
  */
-class ChangedEntities implements ChangedEntitiesInterface
+class ExportMessage implements ExportMessageInterface
 {
     /**
      * @var DataInterface

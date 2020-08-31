@@ -9,7 +9,7 @@ namespace Magento\CatalogStorefrontConnector\Command;
 
 use Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer;
 use Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer;
-use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
+use Magento\CatalogExport\Model\ExportMessageBuilder;
 use Magento\CatalogMessageBroker\Model\MessageBus\Category\CategoriesConsumer;
 use Magento\CatalogMessageBroker\Model\MessageBus\Product\ProductsConsumer;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
@@ -81,7 +81,7 @@ class Sync extends Command
     private $feedPool;
 
     /**
-     * @var ChangedEntitiesMessageBuilder
+     * @var ExportMessageBuilder
      */
     private $messageBuilder;
 
@@ -98,7 +98,7 @@ class Sync extends Command
      * @param ProductFeedIndexer $productFeedIndexer
      * @param CategoryFeedIndexer $categoryFeedIndexer
      * @param FeedPool $feedPool
-     * @param ChangedEntitiesMessageBuilder $messageBuilder
+     * @param ExportMessageBuilder $messageBuilder
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -108,7 +108,7 @@ class Sync extends Command
         ProductFeedIndexer $productFeedIndexer,
         CategoryFeedIndexer $categoryFeedIndexer,
         FeedPool $feedPool,
-        ChangedEntitiesMessageBuilder $messageBuilder
+        ExportMessageBuilder $messageBuilder
     ) {
         parent::__construct();
         $this->storeManager = $storeManager;

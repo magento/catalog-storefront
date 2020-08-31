@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\CatalogMessageBroker\Model\MessageBus\Data;
 
 /**
- * ExportMessage object interface
+ * Structure of message processed by catalog storefront message broker
  */
-interface ChangedEntitiesInterface
+interface ExportMessageInterface
 {
     /**
      * Get changed entities metadata

@@ -7,7 +7,7 @@
 namespace Magento\CatalogStorefrontConnector\Model;
 
 use Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer;
-use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
+use Magento\CatalogExport\Model\ExportMessageBuilder;
 use Magento\CatalogMessageBroker\Model\MessageBus\Product\ProductsConsumer;
 use Magento\CatalogStorefrontConnector\Helper\CustomStoreResolver;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
@@ -39,7 +39,7 @@ class ProductsQueueConsumer
     private $productFeedIndexer;
 
     /**
-     * @var ChangedEntitiesMessageBuilder
+     * @var ExportMessageBuilder
      */
     private $messageBuilder;
 
@@ -60,7 +60,7 @@ class ProductsQueueConsumer
     /**
      * @param ProductsConsumer $productsConsumer
      * @param ProductFeedIndexer $productFeedIndexer
-     * @param ChangedEntitiesMessageBuilder $messageBuilder
+     * @param ExportMessageBuilder $messageBuilder
      * @param CustomStoreResolver $storeResolver
      * @param LoggerInterface $logger
      * @param FeedPool $feedPool
@@ -69,7 +69,7 @@ class ProductsQueueConsumer
     public function __construct(
         ProductsConsumer $productsConsumer,
         ProductFeedIndexer $productFeedIndexer,
-        ChangedEntitiesMessageBuilder $messageBuilder,
+        ExportMessageBuilder $messageBuilder,
         CustomStoreResolver $storeResolver,
         LoggerInterface $logger,
         FeedPool $feedPool,

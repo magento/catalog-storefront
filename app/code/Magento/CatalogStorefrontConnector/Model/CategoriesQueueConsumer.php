@@ -7,7 +7,7 @@
 namespace Magento\CatalogStorefrontConnector\Model;
 
 use Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer;
-use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
+use Magento\CatalogExport\Model\ExportMessageBuilder;
 use Magento\CatalogMessageBroker\Model\MessageBus\Category\CategoriesConsumer;
 use Magento\CatalogStorefrontConnector\Helper\CustomStoreResolver;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
@@ -39,7 +39,7 @@ class CategoriesQueueConsumer
     private $categoryFeedIndexer;
 
     /**
-     * @var ChangedEntitiesMessageBuilder
+     * @var ExportMessageBuilder
      */
     private $messageBuilder;
 
@@ -59,7 +59,7 @@ class CategoriesQueueConsumer
     private $feedPool;
 
     /**
-     * @param ChangedEntitiesMessageBuilder $messageBuilder
+     * @param ExportMessageBuilder $messageBuilder
      * @param CategoriesConsumer $categoriesConsumer
      * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
      * @param CustomStoreResolver $storeResolver
@@ -68,7 +68,7 @@ class CategoriesQueueConsumer
      * @param CategoryFeedIndexer $categoryFeedIndexer
      */
     public function __construct(
-        ChangedEntitiesMessageBuilder $messageBuilder,
+        ExportMessageBuilder $messageBuilder,
         CategoriesConsumer $categoriesConsumer,
         CatalogEntityIdsProvider $catalogEntityIdsProvider,
         CustomStoreResolver $storeResolver,

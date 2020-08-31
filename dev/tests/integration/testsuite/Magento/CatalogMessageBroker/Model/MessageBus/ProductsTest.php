@@ -10,7 +10,7 @@ namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogDataExporter\Test\Integration\AbstractProductTestHelper;
-use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
+use Magento\CatalogExport\Model\ExportMessageBuilder;
 use Magento\CatalogMessageBroker\Model\MessageBus\Product\ProductsConsumer;
 use Magento\CatalogStorefront\Model\CatalogService;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
@@ -48,7 +48,7 @@ class ProductsTest extends AbstractProductTestHelper
     private $productsGetRequestInterface;
 
     /**
-     * @var ChangedEntitiesMessageBuilder
+     * @var ExportMessageBuilder
      */
     private $messageBuilder;
 
@@ -66,7 +66,7 @@ class ProductsTest extends AbstractProductTestHelper
         $this->productsConsumer = Bootstrap::getObjectManager()->create(ProductsConsumer::class);
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
         $this->productsGetRequestInterface = Bootstrap::getObjectManager()->create(ProductsGetRequestInterface::class);
-        $this->messageBuilder = Bootstrap::getObjectManager()->create(ChangedEntitiesMessageBuilder::class);
+        $this->messageBuilder = Bootstrap::getObjectManager()->create(ExportMessageBuilder::class);
         $this->productFeed = Bootstrap::getObjectManager()->get(FeedPool::class)->getFeed('products');
     }
 

@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogMessageBroker\Model\MessageBus\Product;
 
-use Magento\CatalogMessageBroker\Model\MessageBus\Data\ChangedEntitiesInterface;
+use Magento\CatalogMessageBroker\Model\MessageBus\Data\ExportMessageInterface;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterfaceFactory;
 use Psr\Log\LoggerInterface;
 
@@ -51,16 +51,15 @@ class ProductsConsumer
     /**
      * Process message
      *
-     * @param \Magento\CatalogMessageBroker\Model\MessageBus\Data\ChangedEntitiesInterface $message
+     * @param \Magento\CatalogMessageBroker\Model\MessageBus\Data\ExportMessageInterface $message
      * @return void
      */
     public function processMessage($message): void
     {
-
         try {
             $eventType = $message->getMeta() ? $message->getMeta()->getEventType() : null;
 
-            //TODO: ad-hoc Remove DEFAULT_STORE_CODE to null once the store codes are passed
+            //TODO: ad-hoc Remove DEFAULT_STORE_CODE once the store codes are passed consistently
             $scope = $message->getMeta() ? $message->getMeta()->getScope() ?? self::DEFAULT_STORE_CODE : null;
             $entityIds = $message->getData() ? $message->getData()->getIds() : null;
             if (empty($entityIds)) {
