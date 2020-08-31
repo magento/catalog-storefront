@@ -6,6 +6,7 @@
 
 namespace Magento\CatalogMessageBroker\Model\MessageBus\Product;
 
+use Magento\CatalogExport\Event\Data\ChangedEntities;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterfaceFactory;
 use Psr\Log\LoggerInterface;
 
@@ -52,12 +53,11 @@ class ProductsConsumer
     /**
      * Process message
      *
-     * @param $message
+     * @param ChangedEntities $message
      * @return void
      */
-    public function processMessage($message): void
+    public function processMessage(ChangedEntities $message): void
     {
-        /** @var \Magento\CatalogMessageBroker\Model\MessageBus\Data\ChangedEntitiesInterface $message */
         try {
             $eventType = $message->getMeta() ? $message->getMeta()->getEventType() : null;
             $scope = $message->getMeta() ? $message->getMeta()->getScope() ?? self::DEFAULT_STORE_VIEW : null;

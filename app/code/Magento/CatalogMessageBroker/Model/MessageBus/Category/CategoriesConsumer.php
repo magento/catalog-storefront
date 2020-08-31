@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogMessageBroker\Model\MessageBus\Category;
 
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterfaceFactory;
+use Magento\CatalogExport\Event\Data\ChangedEntities;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -53,12 +54,11 @@ class CategoriesConsumer
     /**
      * Process message
      *
-     * @param \Magento\CatalogMessageBroker\Model\MessageBus\Data\ChangedEntitiesInterface $message
+     * @param ChangedEntities $message
      * @return void
      */
-    public function processMessage($message)
+    public function processMessage(ChangedEntities $message)
     {
-        /** @var \Magento\CatalogMessageBroker\Model\MessageBus\Data\ChangedEntitiesInterface $message */
         try {
             $eventType = $message->getMeta() ? $message->getMeta()->getEventType() : null;
             $scope = $message->getMeta() ? $message->getMeta()->getScope() ?? self::DEFAULT_STORE_VIEW : null;
