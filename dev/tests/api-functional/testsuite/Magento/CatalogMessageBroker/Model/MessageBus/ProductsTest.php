@@ -21,14 +21,14 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\TestCase\WebapiAbstract;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Products message bus
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductsTest  extends WebapiAbstract
+class ProductsTest  extends TestCase
 {
     const TEST_SKU = 'in-stock-product';
     const STORE_CODE = 'default';
