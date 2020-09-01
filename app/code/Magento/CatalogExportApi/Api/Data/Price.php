@@ -23,30 +23,54 @@ namespace Magento\CatalogExportApi\Api\Data;
 class Price
 {
     /** @var float */
-    private $price;
+    private $regularPrice;
+
+    /** @var float */
+    private $finalPrice;
 
     /** @var string */
     private $scope;
 
     /**
-     * Get price
+     * Get regular price
      *
      * @return float
      */
-    public function getPrice(): ?float
+    public function getRegularPrice(): ?float
     {
-        return $this->price;
+        return $this->regularPrice;
     }
 
     /**
-     * Set price
+     * Set regular price
      *
-     * @param float $price
+     * @param float $regularPrice
      * @return void
      */
-    public function setPrice(?float $price): void
+    public function setRegularPrice(?float $regularPrice): void
     {
-        $this->price = $price;
+        $this->regularPrice = $regularPrice;
+    }
+
+    /**
+     * Get final price
+     *
+     * @return float
+     */
+    public function getFinalPrice(): ?float
+    {
+        return $this->finalPrice;
+    }
+
+    /**
+     * Set final price
+     *
+     * @param float $finalPrice
+     * @return void
+     */
+    public function setFinalPrice(?float $finalPrice): void
+    {
+        $this->finalPrice = $finalPrice;
     }
 
     /**
