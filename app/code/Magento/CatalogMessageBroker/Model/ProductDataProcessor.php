@@ -83,6 +83,7 @@ class ProductDataProcessor
         'downloadable_product_links', //type: \Magento\CatalogStorefrontApi\Api\Data\DownloadableLinkInterface[]
         'downloadable_product_samples', //type: \Magento\CatalogStorefrontApi\Api\Data\DownloadableSampleInterface[]
         'only_xleft_in_stock', //type: float
+        'product_shopper_input_options' => 'product_shopper_input_options'
     ];
 
     /**
