@@ -32,22 +32,12 @@ class ConsumerInvoker
     /**
      * Invoke consumers
      *
-     * @param bool $invokeInTestsOnly
      * @param array $consumersToProcess
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \ReflectionException
      */
-    public function invoke($invokeInTestsOnly = false, $consumersToProcess = []): void
+    public function invoke(array $consumersToProcess = []): void
     {
-        if ($invokeInTestsOnly) {
-            $trace = (new \Exception())->getTraceAsString();
-            if (false === strpos($trace, 'Magento\GraphQl')
-                || false === strpos($trace, 'src/Framework/TestCase.php')
-                || false !== strpos($trace, 'ApiDataFixture->startTest')) {
-                return;
-            }
-        }
         $objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\Framework\MessageQueue\ConsumerFactory $consumerFactory */
