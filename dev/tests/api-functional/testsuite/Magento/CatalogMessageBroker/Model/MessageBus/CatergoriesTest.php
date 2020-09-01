@@ -74,7 +74,6 @@ class CatergoriesTest extends StorefrontTestsAbstract
      */
     protected function setUp(): void
     {
-        var_dump('wor');
         parent::setUp();
         $this->categoriesConsumer = Bootstrap::getObjectManager()->create(CategoriesConsumer::class);
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);

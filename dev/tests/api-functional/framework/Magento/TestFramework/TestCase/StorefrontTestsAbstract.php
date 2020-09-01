@@ -28,7 +28,7 @@ abstract class StorefrontTestsAbstract extends TestCase
     ];
 
     /**
-     * @inheritdoc
+     * Catalog storage and feeds are need to be cleared after test execution to prevent "dependency" tests fail
      */
     protected function tearDown(): void
     {
@@ -86,7 +86,7 @@ abstract class StorefrontTestsAbstract extends TestCase
     }
 
     /**
-     * Initializing all consumers
+     * Runs consumers before test execution
      *
      * @throws \Throwable
      */
