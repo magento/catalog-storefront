@@ -21,7 +21,7 @@ class BundleItems implements DataMapperInterface
      */
     public function map(array $data) : array
     {
-        if ($data['type'] !== self::PRODUCT_TYPE_BUNDLE || empty($data['options'])) {
+        if (!isset($data['type']) || $data['type'] !== self::PRODUCT_TYPE_BUNDLE || empty($data['options'])) {
             return [];
         }
 

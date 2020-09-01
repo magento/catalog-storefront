@@ -55,9 +55,6 @@
         <arguments>
             <argument name="requiredAttributes" xsi:type="array">
                 <item name="product_id" xsi:type="string">productId</item>
-                <item name="sku" xsi:type="string">sku</item>
-                <item name="type" xsi:type="string">type</item>
-                <item name="store_view_code" xsi:type="string">storeViewCode</item>
                 <item name="store_code" xsi:type="string">storeCode</item>
             </argument>
         </arguments>

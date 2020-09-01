@@ -27,7 +27,7 @@ class ConfigurableOptions implements DataMapperInterface
      */
     public function map(array $data): array
     {
-        if ($data['type'] === self::CONFIGURABLE_TYPE_CODE && !empty($data['options'])) {
+        if (isset($data['type']) && $data['type'] === self::CONFIGURABLE_TYPE_CODE && !empty($data['options'])) {
             $configurableOptions = [];
 
             foreach ($data['options'] as $optionArray) {
