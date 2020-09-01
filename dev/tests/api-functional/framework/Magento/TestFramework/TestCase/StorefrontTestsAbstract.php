@@ -64,7 +64,6 @@ abstract class StorefrontTestsAbstract extends TestCase
                     // Do nothing if no source
                 }
             }
-
         }
     }
 
@@ -88,7 +87,7 @@ abstract class StorefrontTestsAbstract extends TestCase
 
     /**
      * Initializing all consumers
-     * 
+     *
      * @throws \Throwable
      */
     protected function runTest() :void
