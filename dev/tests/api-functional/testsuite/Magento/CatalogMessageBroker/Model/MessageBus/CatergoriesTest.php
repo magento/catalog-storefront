@@ -22,14 +22,14 @@ use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit\Framework\TestCase;
+use Magento\TestFramework\TestCase\StorefrontTestsAbstract;
 
 /**
  * Test class for Categories message bus
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CatergoriesTest extends TestCase
+class CatergoriesTest extends StorefrontTestsAbstract
 {
     private const CATEGORY_ID = '333';
     private const STORE_CODE = 'default';
@@ -74,6 +74,7 @@ class CatergoriesTest extends TestCase
      */
     protected function setUp(): void
     {
+        var_dump('wor');
         parent::setUp();
         $this->categoriesConsumer = Bootstrap::getObjectManager()->create(CategoriesConsumer::class);
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
@@ -103,14 +104,7 @@ class CatergoriesTest extends TestCase
         $category = $this->categoryRepository->get(self::CATEGORY_ID);
         self::assertEquals(self::CATEGORY_ID, $category->getId());
 
-        // TODO: do not call any code from Export API repo. Call list of consumers instead
-        $message = $this->messageBuilder->build(
-            [(int)$category->getId()],
-            CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
-            self::STORE_CODE
-        );
-        $this->categoriesConsumer->processMessage($message);
-
+        $this->runConsumers();
         $this->categoriesGetRequestInterface->setIds([$category->getId()]);
         $this->categoriesGetRequestInterface->setStore(self::STORE_CODE);
         $catalogServiceItem = $this->catalogService->getCategories($this->categoriesGetRequestInterface);
@@ -122,13 +116,7 @@ class CatergoriesTest extends TestCase
         $deletedFeed = $this->categoryFeed->getDeletedByIds([$category->getId()], [self::STORE_CODE]);
         self::assertNotEmpty($deletedFeed);
 
-        // TODO: do not call any code from Export API repo. Call list of consumers instead if needded
-        $deleteMessage = $this->messageBuilder->build(
-            [(int)$category->getId()],
-            CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
-            self::STORE_CODE
-        );
-        $this->categoriesConsumer->processMessage($deleteMessage);
+        $this->runConsumers();
         $items = $this->catalogService->getCategories($this->categoriesGetRequestInterface)->getItems();
         self::assertEmpty($items);
     }
