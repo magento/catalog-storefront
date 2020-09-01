@@ -28,7 +28,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductsTest  extends TestCase
+class ProductsTest extends TestCase
 {
     const TEST_SKU = 'in-stock-product';
     const STORE_CODE = 'default';
