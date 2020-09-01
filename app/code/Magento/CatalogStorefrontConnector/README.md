@@ -50,7 +50,7 @@ To enable existing tests work with new Storefront Storage we were forced to impl
     - *Needed to:* immediately update storefront data after making changes in the tests
     
   Extending of CatalogStorefront plugins added to support data submission to storage for products and categories create/update events:
-  `storefront-ce/dev/tests/integration/etc/di/preferences/graphql.php`:
+  `storefront-ce/dev/tests/integration/etc/di/preferences/storefront.php`:
   ```php
     ...
     \Magento\CatalogStorefrontConnector\Plugin\CollectCategoriesDataForUpdate::class
@@ -73,7 +73,7 @@ To enable existing tests work with new Storefront Storage we were forced to impl
   ```
   To prevent consumers execution during fixtures creation the `$invokeInTestsOnly` parameter added which is `false` by default. If this parameter is false - application will check it save/update procedure has been called it test or in fixture and consumers will not be executed in case of call from fixture.
   
-- Storage will be cleared after GraphQl related test execution.
+- Storage will be cleared after Catalog Storefront related test execution.
     - *Needed to:* prevent occasional data usage and logic exceptions in another tests
 
   Made by extending GraphQl related tests from the `\Magento\GraphQl\AbstractGraphQl` class and including logic of storage cleaning `\Magento\TestFramework\TestCase\GraphQlAbstract::clearCatalogStorage` to `TearDown()` method.
