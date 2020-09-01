@@ -12,7 +12,7 @@ use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
 
 /**
- * Product product links data provider, used for GraphQL resolver processing.
+ * Product product links data provider, used for Service Catalog Export processing.
  */
 class Provider implements DataProviderInterface
 {
