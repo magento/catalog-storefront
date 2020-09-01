@@ -44,6 +44,9 @@ use Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesResponseFactory;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesResponseInterfaceFactory;
 use Psr\Log\LoggerInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetResponse;
+use Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetResponseInterface;
 
 /**
  * Class for retrieving catalog data
@@ -465,6 +468,20 @@ class CatalogService implements CatalogServerInterface
             $items[] = $item;
         }
         $result->setItems($items);
+        return $result;
+    }
+
+    /**
+     * Get requested product variants.
+     *
+     * @param ProductVariantsGetRequestInterface $request
+     * @return ProductVariantsGetResponseInterface
+     */
+    public function getProductVariants(
+        ProductVariantsGetRequestInterface $request
+    ): ProductVariantsGetResponseInterface {
+        $result = new ProductVariantsGetResponse();
+
         return $result;
     }
 
