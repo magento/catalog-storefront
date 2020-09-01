@@ -21,14 +21,14 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit\Framework\TestCase;
+use Magento\TestFramework\TestCase\StorefrontTestsAbstract;
 
 /**
  * Test class for Products message bus
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductsTest extends TestCase
+class ProductsTest extends StorefrontTestsAbstract
 {
     const TEST_SKU = 'in-stock-product';
     const STORE_CODE = 'default';
@@ -94,13 +94,7 @@ class ProductsTest extends TestCase
 
         $productFeed = $this->productFeed->getFeedByIds([(int)$product->getId()], [self::STORE_CODE]);
         $this->assertNotEmpty($productFeed);
-
-        $updateMessage = $this->messageBuilder->build(
-            [(int)$product->getId()],
-            ProductsConsumer::PRODUCTS_UPDATED_EVENT_TYPE,
-            self::STORE_CODE
-        );
-        $this->productsConsumer->processMessage($updateMessage);
+        $this->runConsumers();
 
         $this->productsGetRequestInterface->setIds([$product->getId()]);
         $this->productsGetRequestInterface->setStore(self::STORE_CODE);
@@ -113,14 +107,7 @@ class ProductsTest extends TestCase
         $deletedFeed = $this->productFeed->getDeletedByIds([(int)$product->getId()], [self::STORE_CODE]);
         $this->assertNotEmpty($deletedFeed);
 
-        $deleteMessage = $this->messageBuilder->build(
-            [(int)$product->getId()],
-            ProductsConsumer::PRODUCTS_DELETED_EVENT_TYPE,
-            self::STORE_CODE
-        );
-
-        $this->productsConsumer->processMessage($deleteMessage);
-
+        $this->runConsumers();
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf(self::ERROR_MESSAGE, $product->getId()));
         $this->catalogService->getProducts($this->productsGetRequestInterface);
