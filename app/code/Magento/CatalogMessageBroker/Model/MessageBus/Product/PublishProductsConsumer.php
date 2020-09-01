@@ -7,8 +7,10 @@
 namespace Magento\CatalogMessageBroker\Model\MessageBus\Product;
 
 use Magento\CatalogMessageBroker\Model\FetchProductsInterface;
+use Magento\CatalogMessageBroker\Model\MessageBus\Event\EventData;
 use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterface;
+use Magento\Framework\Api\SimpleDataObjectConverter;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -16,6 +18,9 @@ use Psr\Log\LoggerInterface;
  */
 class PublishProductsConsumer implements ConsumerEventInterface
 {
+    public const ACTION_UPDATE = 'update';
+    public const ACTION_IMPORT = 'import';
+
     /**
      * @var LoggerInterface
      */
@@ -49,21 +54,33 @@ class PublishProductsConsumer implements ConsumerEventInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $entityIds, string $scope): void
+    public function execute(EventData $eventData): void
     {
-        $productsData = $this->fetchProducts->getByIds(
-            $entityIds,
-            array_filter([$scope])
-        );
-        if (!empty($productsData)) {
-            $productsPerStore = [];
-            foreach ($productsData as $productData) {
-                $productsPerStore[$productData['store_view_code']][$productData['product_id']] = $productData;
-            }
-            foreach ($productsPerStore as $storeCode => $products) {
-                $this->publishProducts($products, $storeCode);
+        $productsData = $this->fetchProducts->execute($eventData);
+        $eventEntities = $eventData->getEntities();
+        $importProducts = [];
+        $updateProducts = [];
+
+        foreach ($productsData as $productData) {
+            $eventProduct = $eventEntities[$productData['product_id']];
+
+            if (!empty($eventProduct->getAttributes())) {
+                $updateProducts[$productData['product_id']] = \array_filter(
+                    $productData,
+                    function ($code) use ($eventProduct) {
+                        return \in_array($code, \array_map(function ($attributeCode) {
+                            return SimpleDataObjectConverter::camelCaseToSnakeCase($attributeCode);
+                        }, $eventProduct->getAttributes()));
+                    },
+                    ARRAY_FILTER_USE_KEY
+                );
+            } else {
+                $importProducts[$productData['product_id']] = $productData;
             }
         }
+
+        $this->publishProducts($importProducts, $eventData->getScope(), self::ACTION_IMPORT);
+        $this->publishProducts($updateProducts, $eventData->getScope(), self::ACTION_UPDATE);
     }
 
     /**
@@ -71,12 +88,14 @@ class PublishProductsConsumer implements ConsumerEventInterface
      *
      * @param array $products
      * @param string $storeCode
+     * @param string $actionType
+     *
      * @return void
      */
-    private function publishProducts(array $products, string $storeCode):void
+    private function publishProducts(array $products, string $storeCode, string $actionType): void
     {
         try {
-            $this->productPublisher->publish(\array_keys($products), $storeCode, $products);
+            $this->productPublisher->publish(\array_keys($products), $storeCode, $actionType, $products);
         } catch (\Throwable $e) {
             $this->logger->critical(sprintf('Exception while publishing products: "%s"', $e));
         }

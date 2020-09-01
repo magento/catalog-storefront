@@ -9,6 +9,7 @@ namespace Magento\CatalogMessageBroker\Model\MessageBus\Category;
 
 use Magento\CatalogExport\Model\Data\ChangedEntitiesInterface;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterfaceFactory;
+use Magento\CatalogMessageBroker\Model\MessageBus\Event\EventDataBuilder;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -35,15 +36,23 @@ class CategoriesConsumer
     private $consumerEventFactory;
 
     /**
+     * @var EventDataBuilder
+     */
+    private $eventDataBuilder;
+
+    /**
      * @param LoggerInterface $logger
      * @param ConsumerEventInterfaceFactory $consumerEventFactory
+     * @param EventDataBuilder $eventDataBuilder
      */
     public function __construct(
         LoggerInterface $logger,
-        ConsumerEventInterfaceFactory $consumerEventFactory
+        ConsumerEventInterfaceFactory $consumerEventFactory,
+        EventDataBuilder $eventDataBuilder
     ) {
         $this->logger = $logger;
         $this->consumerEventFactory = $consumerEventFactory;
+        $this->eventDataBuilder = $eventDataBuilder;
     }
 
     /**
@@ -55,14 +64,10 @@ class CategoriesConsumer
     public function processMessage(ChangedEntitiesInterface $message)
     {
         try {
-            $eventType = $message->getMeta() ? $message->getMeta()->getEventType() : null;
-            $scope = $message->getMeta() ? $message->getMeta()->getScope() : null;
-            $entityIds = $message->getData() ? $message->getData()->getIds() : null;
-            if (empty($entityIds)) {
-                throw new \InvalidArgumentException('Category Ids are missing in payload');
-            }
-            $categoriesEvent = $this->consumerEventFactory->create($eventType);
-            $categoriesEvent->execute($entityIds, $scope);
+            $categoriesEvent = $this->consumerEventFactory->create(
+                $message->getMeta() ? $message->getMeta()->getEventType() : null
+            );
+            $categoriesEvent->execute($this->eventDataBuilder->execute($message));
         } catch (\Throwable $e) {
             $this->logger->critical('Unable to process collected category data for update/delete. ' . $e->getMessage());
         }

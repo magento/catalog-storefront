@@ -20,9 +20,27 @@ interface ChangedEntitiesInterface
     public function getMeta(): MetaInterface;
 
     /**
+     * Set entities meta
+     *
+     * @param \Magento\CatalogExport\Model\Data\MetaInterface $meta
+     *
+     * @return void
+     */
+    public function setMeta(MetaInterface $meta): void;
+
+    /**
      * Get changed entities data
      *
      * @return \Magento\CatalogExport\Model\Data\DataInterface
      */
     public function getData(): DataInterface;
+
+    /**
+     * Set entities data
+     *
+     * @param \Magento\CatalogExport\Model\Data\DataInterface $data
+     *
+     * @return void
+     */
+    public function setData(DataInterface $data): void;
 }

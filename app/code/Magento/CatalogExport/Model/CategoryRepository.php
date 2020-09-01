@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExport\Model;
 
+use Magento\CatalogExport\Api\Data\EntitiesRequestInterface;
 use Magento\CatalogExportApi\Api\CategoryRepositoryInterface;
 use Magento\CatalogExportApi\Api\Data\CategoryFactory;
 use Magento\DataExporter\Model\FeedPool;
@@ -58,8 +59,18 @@ class CategoryRepository implements CategoryRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function get(array $ids, array $storeViewCodes = []): array
+    public function get(EntitiesRequestInterface $request)
     {
+        $storeViewCodes = $request->getStoreViewCodes();
+
+        // Transform request data into entity_id => attributes relation
+        $productsRequestArray = [];
+        foreach ($request->getEntitiesRequestData() as $requestData) {
+            $productsRequestArray[$requestData->getEntityId()] = $requestData->getAttributeCodes();
+        }
+
+        $ids = \array_keys($productsRequestArray);
+
         if (count($ids) > $this->exportConfiguration->getMaxItemsInResponse()) {
             throw new \InvalidArgumentException(
                 'Max items in the response can\'t exceed '
@@ -69,7 +80,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         }
 
         $categories = [];
-        $feedData = $this->feedPool->getFeed('categories')->getFeedByIds($ids, $storeViewCodes);
+        $feedData = $this->feedPool->getFeed('categories')->getFeedByIds($ids, $storeViewCodes, $productsRequestArray);
 
         foreach ($feedData['feed'] as $feedItem) {
             $category = $this->categoryFactory->create();

@@ -13,23 +13,23 @@ namespace Magento\CatalogExport\Model\Data;
 class Data implements DataInterface
 {
     /**
-     * @var int[]
+     * @var Entity[]
      */
-    private $entityIds;
+    private $entities;
 
     /**
-     * @param array $entityIds
+     * @inheritdoc
      */
-    public function __construct(array $entityIds)
+    public function getEntities(): array
     {
-        $this->entityIds = $entityIds;
+        return $this->entities;
     }
 
     /**
      * @inheritdoc
      */
-    public function getIds(): array
+    public function setEntities(array $entities): void
     {
-        return $this->entityIds;
+        $this->entities = $entities;
     }
 }

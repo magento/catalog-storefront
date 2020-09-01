@@ -8,6 +8,7 @@ namespace Magento\CatalogMessageBroker\Model\MessageBus\Product;
 
 use Magento\CatalogExport\Model\Data\ChangedEntitiesInterface;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterfaceFactory;
+use Magento\CatalogMessageBroker\Model\MessageBus\Event\EventDataBuilder;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -34,15 +35,23 @@ class ProductsConsumer
     private $consumerEventFactory;
 
     /**
+     * @var EventDataBuilder
+     */
+    private $eventDataBuilder;
+
+    /**
      * @param LoggerInterface $logger
      * @param ConsumerEventInterfaceFactory $consumerEventFactory
+     * @param EventDataBuilder $eventDataBuilder
      */
     public function __construct(
         LoggerInterface $logger,
-        ConsumerEventInterfaceFactory $consumerEventFactory
+        ConsumerEventInterfaceFactory $consumerEventFactory,
+        EventDataBuilder $eventDataBuilder
     ) {
         $this->logger = $logger;
         $this->consumerEventFactory = $consumerEventFactory;
+        $this->eventDataBuilder = $eventDataBuilder;
     }
 
     /**
@@ -54,14 +63,10 @@ class ProductsConsumer
     public function processMessage(ChangedEntitiesInterface $message): void
     {
         try {
-            $eventType = $message->getMeta() ? $message->getMeta()->getEventType() : null;
-            $scope = $message->getMeta() ? $message->getMeta()->getScope() : null;
-            $entityIds = $message->getData() ? $message->getData()->getIds() : null;
-            if (empty($entityIds)) {
-                throw new \InvalidArgumentException('Product ids are missing in payload');
-            }
-            $productsEvent = $this->consumerEventFactory->create($eventType);
-            $productsEvent->execute($entityIds, $scope);
+            $productsEvent = $this->consumerEventFactory->create(
+                $message->getMeta() ? $message->getMeta()->getEventType() : null
+            );
+            $productsEvent->execute($this->eventDataBuilder->execute($message));
         } catch (\Throwable $e) {
             $this->logger->critical('Unable to process collected product data for update/delete. ' . $e->getMessage());
         }

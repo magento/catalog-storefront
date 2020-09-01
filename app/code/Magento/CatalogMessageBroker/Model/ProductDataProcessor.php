@@ -106,7 +106,7 @@ class ProductDataProcessor
     {
         $importProduct = [];
         foreach (self::$map as $nameInExport => $nameInImport) {
-            if (isset($product[$nameInExport])) {
+            if (\array_key_exists($nameInExport, $product)) {
                 $importProduct[$nameInImport] = $product[$nameInExport];
             }
             unset($oldExportDataProduct[$nameInExport]);

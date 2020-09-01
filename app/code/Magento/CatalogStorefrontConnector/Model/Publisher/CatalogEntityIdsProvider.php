@@ -21,7 +21,7 @@ class CatalogEntityIdsProvider
      * Default batch size
      * @var int
      */
-    private const BATCH_SIZE = 1000;
+    private const BATCH_SIZE = 4;
 
     /**
      * Product entity id field

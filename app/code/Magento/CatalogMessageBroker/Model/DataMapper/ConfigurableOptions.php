@@ -27,8 +27,9 @@ class ConfigurableOptions implements DataMapperInterface
      */
     public function map(array $data): array
     {
-        $configurableOptions = [];
         if ($data['type'] === self::CONFIGURABLE_TYPE_CODE && !empty($data['options'])) {
+            $configurableOptions = [];
+
             foreach ($data['options'] as $optionArray) {
                 if ($optionArray['type'] === self::CONFIGURABLE_RELATION_TYPE) {
                     $configurableOptions[$optionArray['id']] = [
@@ -45,8 +46,11 @@ class ConfigurableOptions implements DataMapperInterface
                     $configurableOptions[$optionArray['id']]['values'] = $this->mapOptionValues($optionArray);
                 }
             }
+
+            return ['configurable_options' => $configurableOptions];
         }
-        return ['configurable_options' => $configurableOptions];
+
+        return [];
     }
 
     /**

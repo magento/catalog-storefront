@@ -6,17 +6,19 @@
 
 namespace Magento\CatalogExportApi\Api;
 
+use Magento\CatalogExport\Api\Data\EntitiesRequestInterface;
+
 /**
  * Product entity repository
  */
 interface ProductRepositoryInterface
 {
     /**
-     * Get products by ids
+     * Get products by request
      *
-     * @param string[] $ids
-     * @param string[] $storeViewCodes
+     * @param \Magento\CatalogExport\Api\Data\EntitiesRequestInterface $request
+     *
      * @return \Magento\CatalogExportApi\Api\Data\Product[]
      */
-    public function get(array $ids, array $storeViewCodes = []);
+    public function get(EntitiesRequestInterface $request);
 }

@@ -82,6 +82,32 @@ class ElasticsearchCommand implements CommandInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function bulkUpdate(string $dataSourceName, string $entityName, array $entries): void
+    {
+        $query = $this->getDocsArrayInBulkIndexFormat($dataSourceName, $entityName, $entries, self::BULK_ACTION_UPDATE);
+
+        try {
+            $result = $this->getConnection()->bulk($query);
+            $error = $result['errors'] ?? false;
+            if ($error) {
+                $this->handleBulkError($result['items'] ?? [], self::BULK_ACTION_UPDATE);
+            }
+        } catch (\Throwable $throwable) {
+            throw new BulkException(
+                __(
+                    'Error occurred while bulk update to "%1" index. Entity ids: "%2". Error: %3',
+                    $dataSourceName,
+                    \array_column($entries, 'id'),
+                    $throwable->getMessage()
+                ),
+                $throwable
+            );
+        }
+    }
+
+    /**
      * Reformat documents array to bulk format.
      *
      * @param string $indexName
@@ -117,6 +143,10 @@ class ElasticsearchCommand implements CommandInterface
             ];
             if ($action === self::BULK_ACTION_INDEX) {
                 $bulkArray['body'][] = $document;
+            }
+
+            if ($action === self::BULK_ACTION_UPDATE) {
+                $bulkArray['body'][]['doc'] = $document;
             }
         }
 

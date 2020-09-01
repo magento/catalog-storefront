@@ -21,7 +21,7 @@ class SwatchImage implements DataMapperInterface
     public function map(array $data): array
     {
         if (empty($data['swatch_image'])) {
-            return ['swatch_image' => null];
+            return [];
         }
         // phpcs:disable
         $baseName = \basename($data['swatch_image']['url']);

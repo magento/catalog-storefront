@@ -34,7 +34,12 @@ final class ImportCategoriesRequest implements ImportCategoriesRequestInterface
      * @var \Magento\CatalogStorefrontApi\Api\Data\KeyValueInterface
      */
     private $params;
-    
+
+    /**
+     * @var array
+     */
+    private $attributes;
+
     /**
      * @inheritdoc
      *
@@ -44,7 +49,7 @@ final class ImportCategoriesRequest implements ImportCategoriesRequestInterface
     {
         return (array) $this->categories;
     }
-    
+
     /**
      * @inheritdoc
      *
@@ -55,7 +60,7 @@ final class ImportCategoriesRequest implements ImportCategoriesRequestInterface
     {
         $this->categories = $value;
     }
-    
+
     /**
      * @inheritdoc
      *
@@ -65,7 +70,7 @@ final class ImportCategoriesRequest implements ImportCategoriesRequestInterface
     {
         return (string) $this->store;
     }
-    
+
     /**
      * @inheritdoc
      *
@@ -76,7 +81,7 @@ final class ImportCategoriesRequest implements ImportCategoriesRequestInterface
     {
         $this->store = $value;
     }
-    
+
     /**
      * @inheritdoc
      *
@@ -86,7 +91,7 @@ final class ImportCategoriesRequest implements ImportCategoriesRequestInterface
     {
         return $this->params;
     }
-    
+
     /**
      * @inheritdoc
      *
@@ -96,5 +101,21 @@ final class ImportCategoriesRequest implements ImportCategoriesRequestInterface
     public function setParams(\Magento\CatalogStorefrontApi\Api\Data\KeyValueInterface $value): void
     {
         $this->params = $value;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAttributes(): ?array
+    {
+        return (array)$this->attributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setAttributes(array $attributes): void
+    {
+        $this->attributes = $attributes;
     }
 }

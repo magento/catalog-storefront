@@ -13,9 +13,18 @@ namespace Magento\CatalogExport\Model\Data;
 interface DataInterface
 {
     /**
-     * Get changed entities IDs
+     * Get entities array.
      *
-     * @return int[]
+     * @return \Magento\CatalogExport\Model\Data\Entity[];
      */
-    public function getIds(): array;
+    public function getEntities(): array;
+
+    /**
+     * Set entities array.
+     *
+     * @param \Magento\CatalogExport\Model\Data\Entity[] $entities
+     *
+     * @return void
+     */
+    public function setEntities(array $entities): void;
 }

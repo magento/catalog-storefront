@@ -6,6 +6,7 @@
 
 namespace Magento\CatalogMessageBroker\Model\MessageBus\Product;
 
+use Magento\CatalogMessageBroker\Model\MessageBus\Event\EventData;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequestInterfaceFactory;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterface;
@@ -49,11 +50,17 @@ class DeleteProductsConsumer implements ConsumerEventInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $entityIds, string $scope): void
+    public function execute(EventData $eventData): void
     {
+        $ids = [];
+
+        foreach ($eventData->getEntities() as $entity) {
+            $ids[] = $entity->getEntityId();
+        }
+
         $deleteProductRequest = $this->deleteProductsRequestInterfaceFactory->create();
-        $deleteProductRequest->setProductIds($entityIds);
-        $deleteProductRequest->setStore($scope);
+        $deleteProductRequest->setProductIds($ids);
+        $deleteProductRequest->setStore($eventData->getScope());
 
         try {
             $importResult = $this->catalogServer->deleteProducts($deleteProductRequest);

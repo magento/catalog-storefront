@@ -44,21 +44,34 @@
         </arguments>
     </type>
 
-    <type name="Magento\Framework\Console\CommandListInterface">
+    <type name="Magento\CatalogStorefrontConnector\Model\ProductsQueueConsumer">
         <arguments>
-            <argument name="commands" xsi:type="array">
-                <item name="storefront:catalog:sync" xsi:type="object">Magento\CatalogStorefrontConnector\Command\Sync</item>
-            </argument>
+            <argument name="productFeedIndexer" xsi:type="object">Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer</argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogStorefrontConnector\Command\Sync">
+
+    <type name="Magento\CatalogStorefrontConnector\Model\CategoriesQueueConsumer">
         <arguments>
-            <argument name="productFeedIndexer" xsi:type="object">Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer\Proxy</argument>
-            <argument name="categoryFeedIndexer" xsi:type="object">Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer\Proxy</argument>
-            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
-            <argument name="productPublisher" xsi:type="object">Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher\Proxy</argument>
+            <argument name="categoryFeedIndexer" xsi:type="object">Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer</argument>
         </arguments>
     </type>
+
+    <!-- TODO change product indexer & category indexer dependencies -->
+<!--    <type name="Magento\Framework\Console\CommandListInterface">-->
+<!--        <arguments>-->
+<!--            <argument name="commands" xsi:type="array">-->
+<!--                <item name="storefront:catalog:sync" xsi:type="object">Magento\CatalogStorefrontConnector\Command\Sync</item>-->
+<!--            </argument>-->
+<!--        </arguments>-->
+<!--    </type>-->
+<!--    <type name="Magento\CatalogStorefrontConnector\Command\Sync">-->
+<!--        <arguments>-->
+<!--            <argument name="productFeedIndexer" xsi:type="object">Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer\Proxy</argument>-->
+<!--            <argument name="categoryFeedIndexer" xsi:type="object">Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer\Proxy</argument>-->
+<!--            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>-->
+<!--            <argument name="productPublisher" xsi:type="object">Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher\Proxy</argument>-->
+<!--        </arguments>-->
+<!--    </type>-->
 
     <!-- Logger -->
     <virtualType name="CatalogStorefrontConnectorLogger" type="Magento\Framework\Logger\Monolog">

@@ -23,16 +23,6 @@ class ChangedEntities implements ChangedEntitiesInterface
     private $meta;
 
     /**
-     * @param MetaInterface $meta
-     * @param DataInterface $data
-     */
-    public function __construct(MetaInterface $meta, DataInterface $data)
-    {
-        $this->meta = $meta;
-        $this->data = $data;
-    }
-
-    /**
      * @inheritdoc
      */
     public function getMeta(): MetaInterface
@@ -43,8 +33,24 @@ class ChangedEntities implements ChangedEntitiesInterface
     /**
      * @inheritdoc
      */
+    public function setMeta(MetaInterface $meta): void
+    {
+        $this->meta = $meta;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getData(): DataInterface
     {
         return $this->data;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setData(DataInterface $data): void
+    {
+        $this->data = $data;
     }
 }

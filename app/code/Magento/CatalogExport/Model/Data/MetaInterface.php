@@ -15,9 +15,18 @@ interface MetaInterface
     /**
      * Get scope for changed entities
      *
-     * @return string|null
+     * @return string
      */
-    public function getScope(): ?string;
+    public function getScope(): string;
+
+    /**
+     * Set scope for changed entities
+     *
+     * @param string $scope
+     *
+     * @return void
+     */
+    public function setScope(string $scope): void;
 
     /**
      * Get changed entities event type
@@ -25,4 +34,13 @@ interface MetaInterface
      * @return string
      */
     public function getEventType(): string;
+
+    /**
+     * Set changed entities event type
+     *
+     * @param string $eventType
+     *
+     * @return void
+     */
+    public function setEventType(string $eventType): void;
 }

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExport\Model;
 
+use Magento\CatalogExport\Api\Data\EntitiesRequestInterface;
 use Magento\CatalogExportApi\Api\ProductRepositoryInterface;
 use Magento\DataExporter\Model\FeedPool;
 use Psr\Log\LoggerInterface;
@@ -70,8 +71,18 @@ class ProductRepository implements ProductRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function get(array $ids, array $storeViewCodes = [])
+    public function get(EntitiesRequestInterface $request)
     {
+        $storeViewCodes = $request->getStoreViewCodes();
+
+        // Transform request data into entity_id => attributes relation
+        $productsRequestArray = [];
+        foreach ($request->getEntitiesRequestData() as $requestData) {
+            $productsRequestArray[$requestData->getEntityId()] = $requestData->getAttributeCodes();
+        }
+
+        $ids = \array_keys($productsRequestArray);
+
         if (count($ids) > $this->getMaxItemsInResponse()) {
             throw new \InvalidArgumentException(
                 'Max items in the response can\'t exceed '
@@ -81,7 +92,7 @@ class ProductRepository implements ProductRepositoryInterface
         }
 
         $products = [];
-        $feedData = $this->feedPool->getFeed('products')->getFeedByIds($ids, $storeViewCodes);
+        $feedData = $this->feedPool->getFeed('products')->getFeedByIds($ids, $storeViewCodes, $productsRequestArray);
         if (empty($feedData['feed'])) {
             $this->logger->error(
                 \sprintf('Cannot find products data in catalog feed with ids "%s"', \implode(',', $ids))

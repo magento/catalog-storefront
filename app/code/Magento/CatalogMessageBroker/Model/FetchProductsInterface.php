@@ -5,6 +5,8 @@
  */
 namespace Magento\CatalogMessageBroker\Model;
 
+use Magento\CatalogMessageBroker\Model\MessageBus\Event\EventData;
+
 /**
  * Fetch product data
  */
@@ -13,9 +15,9 @@ interface FetchProductsInterface
     /**
      * Fetch product data
      *
-     * @param string[] $ids
-     * @param string[] $storeViewCodes
+     * @param EventData $eventData
+     *
      * @return array
      */
-    public function getByIds(array $ids, array $storeViewCodes = []): array;
+    public function execute(EventData $eventData): array;
 }

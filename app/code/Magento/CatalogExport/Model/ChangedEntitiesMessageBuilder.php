@@ -10,6 +10,7 @@ namespace Magento\CatalogExport\Model;
 use Magento\CatalogExport\Model\Data\ChangedEntitiesInterfaceFactory;
 use Magento\CatalogExport\Model\Data\DataInterfaceFactory;
 use Magento\CatalogExport\Model\Data\MetaInterfaceFactory;
+use Magento\CatalogExport\Model\Data\EntityFactory;
 use Magento\CatalogExport\Model\Data\ChangedEntitiesInterface;
 
 /**
@@ -33,48 +34,59 @@ class ChangedEntitiesMessageBuilder
     private $dataFactory;
 
     /**
+     * @var EntityFactory
+     */
+    private $entityFactory;
+
+    /**
      * @param ChangedEntitiesInterfaceFactory $changedEntitiesFactory
      * @param MetaInterfaceFactory $metaFactory
      * @param DataInterfaceFactory $dataFactory
+     * @param EntityFactory $entityFactory
      */
     public function __construct(
         ChangedEntitiesInterfaceFactory $changedEntitiesFactory,
         MetaInterfaceFactory $metaFactory,
-        DataInterfaceFactory $dataFactory
+        DataInterfaceFactory $dataFactory,
+        EntityFactory $entityFactory
     ) {
         $this->changedEntitiesFactory = $changedEntitiesFactory;
         $this->metaFactory = $metaFactory;
         $this->dataFactory = $dataFactory;
+        $this->entityFactory = $entityFactory;
     }
 
     /**
      * Build message object
      *
-     * @param int[] $entityIds
      * @param string $eventType
-     * @param string|null $scope
+     * @param array $entities
+     * @param string $scope
+     *
      * @return \Magento\CatalogExport\Model\Data\ChangedEntitiesInterface
      */
-    public function build(array $entityIds, string $eventType, ?string $scope): ChangedEntitiesInterface
+    public function build(string $eventType, array $entities, string $scope): ChangedEntitiesInterface
     {
-        $meta = $this->metaFactory->create(
-            [
-                'scope' => $scope,
-                'eventType' => $eventType
-            ]
-        );
+        $meta = $this->metaFactory->create();
+        $meta->setScope($scope);
+        $meta->setEventType($eventType);
 
-        $data = $this->dataFactory->create(
-            [
-                'entityIds' => $entityIds
-            ]
-        );
+        $entitiesArray = [];
+        foreach ($entities as $entityData) {
+            $entity = $this->entityFactory->create();
+            $entity->setEntityId($entityData['entity_id']);
+            $entity->setAttributes($entityData['attributes'] ?? []);
 
-        return $this->changedEntitiesFactory->create(
-            [
-                'meta' => $meta,
-                'data' => $data
-            ]
-        );
+            $entitiesArray[] = $entity;
+        }
+
+        $data = $this->dataFactory->create();
+        $data->setEntities($entitiesArray);
+
+        $changedEntities = $this->changedEntitiesFactory->create();
+        $changedEntities->setMeta($meta);
+        $changedEntities->setData($data);
+
+        return $changedEntities;
     }
 }

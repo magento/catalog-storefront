@@ -7,17 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\CatalogMessageBroker\Model;
 
+use Magento\CatalogMessageBroker\Model\MessageBus\Event\EventData;
+
 /**
  * Fetch categories data
  */
 interface FetchCategoriesInterface
 {
     /**
-     * Fetch categories data by Ids
+     * Fetch categories data
      *
-     * @param string[] $ids
-     * @param string[] $storeViewCodes
+     * @param EventData $eventData
+     *
      * @return array
      */
-    public function getByIds(array $ids, array $storeViewCodes = []): array;
+    public function execute(EventData $eventData): array;
 }

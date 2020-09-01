@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExport\Model\Indexer;
 
-use Magento\CatalogDataExporter\Model\Indexer\ProductIndexerCallbackInterface;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
 use Magento\DataExporter\Model\FeedPool;
+use Magento\DataExporter\Model\Indexer\FeedIndexerCallbackInterface;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Psr\Log\LoggerInterface;
 
@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
  * Publishes ids of updated products in queue
  * TODO: Move logic to Service Export
  */
-class ProductIndexerCallback implements ProductIndexerCallbackInterface
+class ProductIndexerCallback implements FeedIndexerCallbackInterface
 {
     private const BATCH_SIZE = 100;
 
@@ -68,17 +68,42 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $ids): void
+    public function execute(array $entityData) : void
     {
+        // TODO validate callback data structure
+        // Income message
+        // Changed attributes
+        //    [
+        //        [
+        //            'productId' => 4,
+        //            'storeViewCode' => 'second_store_view',
+        //            'attributes' => [
+        //                'name',
+        //                'visibility',
+        //            ],
+        //        ],
+        //    ];
+        //
+        // New product / full reindex
+        //    [
+        //        [
+        //            'productId' => 4,
+        //            'storeViewCode' => 'second_store_view',
+        //        ],
+        //    ];
+
         $deleted = [];
         $productsFeed = $this->feedPool->getFeed('products');
-        foreach ($productsFeed->getDeletedByIds($ids) as $product) {
-            $deleted[$product['storeViewCode']][] = $product['productId'];
-            unset($ids[$product['productId']]);
+        foreach ($productsFeed->getDeletedByIds(\array_column($entityData, 'productId')) as $product) {
+            $deleted[$product['storeViewCode']][] = ['entity_id' => (int)$product['productId']];
+
+            foreach (\array_keys(\array_column($entityData, 'productId'), $product['productId']) as $key) {
+                unset($entityData[$key]);
+            }
         }
 
         foreach ($deleted as $storeCode => $entityIds) {
-            foreach (array_chunk($entityIds, self::BATCH_SIZE) as $idsChunk) {
+            foreach (\array_chunk($entityIds, self::BATCH_SIZE) as $idsChunk) {
                 $this->publishMessage(
                     self::PRODUCTS_DELETED_EVENT_TYPE,
                     $idsChunk,
@@ -87,13 +112,23 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
             }
         }
 
-        //TODO: Add store codes to products_updated message here?
-        //Would cause redundant calls back to Service Export though.
-        foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
-            $this->publishMessage(
-                self::PRODUCTS_UPDATED_EVENT_TYPE,
-                $idsChunk,
-            );
+        $productsArray = [];
+
+        foreach ($entityData as $productData) {
+            $productsArray[$productData['storeViewCode']][] = [
+                'entity_id' => (int)$productData['productId'],
+                'attributes' => $productData['attributes'] ?? [],
+            ];
+        }
+
+        foreach ($productsArray as $storeCode => $products) {
+            foreach (\array_chunk($products, self::BATCH_SIZE) as $chunk) {
+                $this->publishMessage(
+                    self::PRODUCTS_UPDATED_EVENT_TYPE,
+                    $chunk,
+                    $storeCode
+                );
+            }
         }
     }
 
@@ -101,18 +136,15 @@ class ProductIndexerCallback implements ProductIndexerCallbackInterface
      * Publish deleted or updated message
      *
      * @param string $eventType
-     * @param int[] $ids
-     * @param null|string $scope
+     * @param array $products
+     * @param string $scope
      *
      * @return void
      */
-    private function publishMessage(string $eventType, array $ids, ?string $scope = null): void
+    private function publishMessage(string $eventType, array $products, string $scope): void
     {
-        $message = $this->messageBuilder->build(
-            $ids,
-            $eventType,
-            $scope
-        );
+        $message = $this->messageBuilder->build($eventType, $products, $scope);
+
         try {
             $this->queuePublisher->publish(self::TOPIC_NAME, $message);
         } catch (\Exception $e) {
