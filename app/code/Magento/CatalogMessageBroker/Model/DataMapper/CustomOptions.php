@@ -53,10 +53,7 @@ class CustomOptions implements DataMapperInterface
             $productShopperInputOptions = $data['product_shopper_input_options'];
             foreach ($productShopperInputOptions as $customOption) {
                 $customOption['option_id'] = $customOption['id'];
-                $customOption['title'] = $customOption['value'];
-                $customOption['required'] = $customOption['is_required'];
                 $customOption['type'] = $customOption['render_type'];
-                $customOption['price'] = $customOption['price']['price'];
                 $customOption['value'] = [$customOption];
                 $productCustomOptions[] = $customOption;
             }
