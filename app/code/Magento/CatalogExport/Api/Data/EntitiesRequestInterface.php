@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CatalogExport\Api\Data;
 
+/**
+ * Entities request object interface
+ */
 interface EntitiesRequestInterface
 {
     /**
