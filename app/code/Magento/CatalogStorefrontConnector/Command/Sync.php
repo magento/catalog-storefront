@@ -26,6 +26,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Sync Catalog data with Storefront storage. Collect product data and push it to the Message Bus
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * TODO: remove dependencies on Export API repo https://github.com/magento/catalog-storefront/issues/43
  */
 class Sync extends Command
 {
@@ -192,12 +193,14 @@ class Sync extends Command
                         unset($productIds[$product['productId']]);
                     }
 
-                    $message = $this->messageBuilder->build(
-                        $deleted,
-                        ProductsConsumer::PRODUCTS_DELETED_EVENT_TYPE,
-                        $store->getCode()
-                    );
-                    $this->productsConsumer->processMessage($message);
+                    if ($deleted) {
+                        $message = $this->messageBuilder->build(
+                            $deleted,
+                            ProductsConsumer::PRODUCTS_DELETED_EVENT_TYPE,
+                            $store->getCode()
+                        );
+                        $this->productsConsumer->processMessage($message);
+                    }
 
                     $message = $this->messageBuilder->build(
                         $productIds,
@@ -236,12 +239,14 @@ class Sync extends Command
                         unset($categoryIds[$category['categoryId']]);
                     }
 
-                    $message = $this->messageBuilder->build(
-                        $deleted,
-                        CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
-                        $store->getCode()
-                    );
-                    $this->categoriesConsumer->processMessage($message);
+                    if ($deleted) {
+                        $message = $this->messageBuilder->build(
+                            $deleted,
+                            CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
+                            $store->getCode()
+                        );
+                        $this->categoriesConsumer->processMessage($message);
+                    }
 
                     $message = $this->messageBuilder->build(
                         $categoryIds,
