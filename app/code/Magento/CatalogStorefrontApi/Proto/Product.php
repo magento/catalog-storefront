@@ -283,9 +283,9 @@ class Product extends \Google\Protobuf\Internal\Message
      */
     private $options_v2;
     /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.ProductShopperInputOption shopper_input_options = 200;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductShopperInputOption shopper_input_options = 200;</code>
      */
-    protected $shopper_input_options = null;
+    private $shopper_input_options;
 
     /**
      * Constructor.
@@ -373,7 +373,7 @@ class Product extends \Google\Protobuf\Internal\Message
      *     @type \Magento\CatalogStorefrontApi\Proto\GroupedItem[]|\Google\Protobuf\Internal\RepeatedField $grouped_items
      *     @type \Magento\CatalogStorefrontApi\Proto\ProductOption[]|\Google\Protobuf\Internal\RepeatedField $options_v2
      *          TODO update to 'options' once all options would be covered
-     *     @type \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption $shopper_input_options
+     *     @type \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption[]|\Google\Protobuf\Internal\RepeatedField $shopper_input_options
      * }
      */
     public function __construct($data = null)
@@ -1747,8 +1747,8 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.ProductShopperInputOption shopper_input_options = 200;</code>
-     * @return \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductShopperInputOption shopper_input_options = 200;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
      */
     public function getShopperInputOptions()
     {
@@ -1756,14 +1756,14 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.ProductShopperInputOption shopper_input_options = 200;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption $var
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductShopperInputOption shopper_input_options = 200;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
     public function setShopperInputOptions($var)
     {
-        GPBUtil::checkMessage($var, \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption::class);
-        $this->shopper_input_options = $var;
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption::class);
+        $this->shopper_input_options = $arr;
 
         return $this;
     }

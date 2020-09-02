@@ -604,20 +604,20 @@ class Catalog implements CatalogInterface
                         $res[] = $out;
                     }
                     $r->setOptionsV2($res);
-                    $prop61 = $item1->getShopperInputOptions();
-                    if ($prop61 !== null) {
+                    $res = [];
+                    foreach ($item1->getShopperInputOptions() as $item61) {
                         // convert data from \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption
                         // to \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOption
-                        /** @var \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption $prop61 **/
-                        $p = function () use ($prop61) {
+                        /** @var \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption $item61 **/
+                        $p = function () use ($item61) {
                             $r = new \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOption();
-                            $r->setId($prop61->getId());
-                            $r->setLabel($prop61->getLabel());
-                            $r->setSortOrder($prop61->getSortOrder());
-                            $r->setRequired($prop61->getRequired());
-                            $r->setRenderType($prop61->getRenderType());
+                            $r->setId($item61->getId());
+                            $r->setLabel($item61->getLabel());
+                            $r->setSortOrder($item61->getSortOrder());
+                            $r->setRequired($item61->getRequired());
+                            $r->setRenderType($item61->getRenderType());
                             $res = [];
-                            foreach ($prop61->getPrice() as $item67) {
+                            foreach ($item61->getPrice() as $item67) {
                                 // convert data from \Magento\CatalogStorefrontApi\Proto\Price
                                 // to \Magento\CatalogStorefrontApi\Api\Data\Price
                                 /** @var \Magento\CatalogStorefrontApi\Proto\Price $item67 **/
@@ -632,20 +632,21 @@ class Catalog implements CatalogInterface
                                 $res[] = $out;
                             }
                             $r->setPrice($res);
-                            $r->setValue($prop61->getValue());
-                            $r->setMaxCharacters($prop61->getMaxCharacters());
+                            $r->setValue($item61->getValue());
+                            $r->setMaxCharacters($item61->getMaxCharacters());
                             $values = [];
-                            foreach ($prop61->getFileExtension() as $value) {
+                            foreach ($item61->getFileExtension() as $value) {
                                 $values[] = $value;
                             }
                             $r->setFileExtension($values);
-                            $r->setImageSizeX($prop61->getImageSizeX());
-                            $r->setImageSizeY($prop61->getImageSizeY());
+                            $r->setImageSizeX($item61->getImageSizeX());
+                            $r->setImageSizeY($item61->getImageSizeY());
                             return $r;
                         };
                         $out = $p();
-                        $r->setShopperInputOptions($out);
+                        $res[] = $out;
                     }
+                    $r->setShopperInputOptions($res);
                     return $r;
                 };
                 $out = $p();
@@ -1166,20 +1167,20 @@ class Catalog implements CatalogInterface
                         $res[] = $proto;
                     }
                     $r->setOptionsV2($res);
-                    $prop61 = $item1->getShopperInputOptions();
-                    if ($prop61 !== null) {
+                    $res = [];
+                    foreach ($item1->getShopperInputOptions() as $item61) {
                         // convert data from \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOption
                         // to \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption
-                        /** @var \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOption $prop61 **/
-                        $p = function () use ($prop61) {
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOption $item61 **/
+                        $p = function () use ($item61) {
                             $r = new \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption();
-                            $r->setId($prop61->getId());
-                            $r->setLabel($prop61->getLabel());
-                            $r->setSortOrder($prop61->getSortOrder());
-                            $r->setRequired($prop61->getRequired());
-                            $r->setRenderType($prop61->getRenderType());
+                            $r->setId($item61->getId());
+                            $r->setLabel($item61->getLabel());
+                            $r->setSortOrder($item61->getSortOrder());
+                            $r->setRequired($item61->getRequired());
+                            $r->setRenderType($item61->getRenderType());
                             $res = [];
-                            foreach ($prop61->getPrice() as $item67) {
+                            foreach ($item61->getPrice() as $item67) {
                                 // convert data from \Magento\CatalogStorefrontApi\Api\Data\Price
                                 // to \Magento\CatalogStorefrontApi\Proto\Price
                                 /** @var \Magento\CatalogStorefrontApi\Api\Data\Price $item67 **/
@@ -1194,20 +1195,21 @@ class Catalog implements CatalogInterface
                                 $res[] = $proto;
                             }
                             $r->setPrice($res);
-                            $r->setValue($prop61->getValue());
-                            $r->setMaxCharacters($prop61->getMaxCharacters());
+                            $r->setValue($item61->getValue());
+                            $r->setMaxCharacters($item61->getMaxCharacters());
                             $values = [];
-                            foreach ($prop61->getFileExtension() as $value) {
+                            foreach ($item61->getFileExtension() as $value) {
                                 $values[] = $value;
                             }
                             $r->setFileExtension($values);
-                            $r->setImageSizeX($prop61->getImageSizeX());
-                            $r->setImageSizeY($prop61->getImageSizeY());
+                            $r->setImageSizeX($item61->getImageSizeX());
+                            $r->setImageSizeY($item61->getImageSizeY());
                             return $r;
                         };
                         $proto = $p();
-                        $r->setShopperInputOptions($proto);
+                        $res[] = $proto;
                     }
+                    $r->setShopperInputOptions($res);
                     return $r;
                 };
                 $proto = $p();
