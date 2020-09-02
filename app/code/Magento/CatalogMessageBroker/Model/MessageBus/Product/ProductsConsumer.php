@@ -6,7 +6,7 @@
 
 namespace Magento\CatalogMessageBroker\Model\MessageBus\Product;
 
-use Magento\CatalogExport\Model\Data\ChangedEntitiesInterface;
+use Magento\CatalogExport\Event\Data\ChangedEntities;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterfaceFactory;
 use Magento\CatalogMessageBroker\Model\MessageBus\Event\EventDataBuilder;
 use Psr\Log\LoggerInterface;
@@ -23,6 +23,11 @@ class ProductsConsumer
     const PRODUCTS_UPDATED_EVENT_TYPE = 'products_updated';
 
     const PRODUCTS_DELETED_EVENT_TYPE = 'products_deleted';
+
+    /**
+     * TODO: ad-hoc Remove this once the store scope is consistently passed from ExportAPI
+     */
+    const DEFAULT_STORE_VIEW = 'default';
 
     /**
      * @var LoggerInterface
@@ -57,10 +62,10 @@ class ProductsConsumer
     /**
      * Process message
      *
-     * @param \Magento\CatalogExport\Model\Data\ChangedEntitiesInterface $message
+     * @param ChangedEntities $message
      * @return void
      */
-    public function processMessage(ChangedEntitiesInterface $message): void
+    public function processMessage(ChangedEntities $message): void
     {
         try {
             $productsEvent = $this->consumerEventFactory->create(
@@ -68,7 +73,14 @@ class ProductsConsumer
             );
             $productsEvent->execute($this->eventDataBuilder->execute($message));
         } catch (\Throwable $e) {
-            $this->logger->critical('Unable to process collected product data for update/delete. ' . $e->getMessage());
+            $this->logger->error(
+                \sprintf(
+                    'Unable to process collected product data. Event type: "%s", ids:  "%s"',
+                    $eventType ?? '',
+                    \implode(',', $entityIds ?? [])
+                ),
+                ['exception' => $e]
+            );
         }
     }
 }

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogMessageBroker\Model;
 
+
 use Magento\CatalogExport\Api\Data\EntitiesRequestInterface;
 use Magento\CatalogExport\Api\Data\EntitiesRequestInterfaceFactory;
 use Magento\CatalogExport\Api\Data\EntityRequestDataInterfaceFactory;
@@ -14,6 +15,8 @@ use Magento\CatalogExportApi\Api\CategoryRepositoryInterface;
 use Magento\CatalogExportApi\Api\Data\Category;
 use Magento\CatalogMessageBroker\Model\MessageBus\Event\EventData;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\CatalogMessageBroker\HttpClient\RestClient;
+use Psr\Log\LoggerInterface;
 
 /**
  * @inheritdoc
@@ -21,14 +24,14 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 class FetchCategories implements FetchCategoriesInterface
 {
     /**
-     * @var CategoryRepositoryInterface
+     * Route to Export API categories retrieval
      */
-    private $categoryRepository;
+    private const EXPORT_API_GET_CATEGORIES = '/V1/catalog-export/categories';
 
     /**
-     * @var DataObjectProcessor
+     * @var RestClient
      */
-    private $dataObjectProcessor;
+    private $restClient;
 
     /**
      * @var EntitiesRequestInterfaceFactory
@@ -41,21 +44,21 @@ class FetchCategories implements FetchCategoriesInterface
     private $entityRequestDataInterfaceFactory;
 
     /**
-     * @param CategoryRepositoryInterface $categoryRepository
-     * @param DataObjectProcessor $dataObjectProcessor
-     * @param EntitiesRequestInterfaceFactory $entitiesRequestInterfaceFactory
-     * @param EntityRequestDataInterfaceFactory $entityRequestDataInterfaceFactory
+     * @var LoggerInterface
+     */
+    private $logger;
+
+
+    /**
+     * @param RestClient $restClient
+     * @param LoggerInterface $logger
      */
     public function __construct(
-        CategoryRepositoryInterface $categoryRepository,
-        DataObjectProcessor $dataObjectProcessor,
-        EntitiesRequestInterfaceFactory $entitiesRequestInterfaceFactory,
-        EntityRequestDataInterfaceFactory $entityRequestDataInterfaceFactory
+        RestClient $restClient,
+        LoggerInterface $logger
     ) {
-        $this->dataObjectProcessor = $dataObjectProcessor;
-        $this->categoryRepository = $categoryRepository;
-        $this->entitiesRequestInterfaceFactory = $entitiesRequestInterfaceFactory;
-        $this->entityRequestDataInterfaceFactory = $entityRequestDataInterfaceFactory;
+        $this->restClient = $restClient;
+        $this->logger = $logger;
     }
 
     /**
@@ -63,14 +66,24 @@ class FetchCategories implements FetchCategoriesInterface
      */
     public function execute(EventData $eventData): array
     {
-        $categories = $this->categoryRepository->get($this->buildCategoryRepositoryRequest($eventData));
-        $data = [];
-
-        foreach ($categories as $category) {
-            $data[] = $this->dataObjectProcessor->buildOutputDataArray($category, Category::class);
+        try {
+            $categories = $this->restClient->get(
+                self::EXPORT_API_GET_CATEGORIES,
+                ['ids' => $ids, 'storeViewCodes' => $storeViewCodes],
+            );
+        } catch (\Throwable $e) {
+            $this->logger->error(
+                \sprintf(
+                    'Cannot load categories via "%s" with ids "%s"',
+                    self::EXPORT_API_GET_CATEGORIES,
+                    \implode(',', $ids)
+                ),
+                ['exception' => $e]
+            );
+            return [];
         }
 
-        return $data;
+        return $categories;
     }
 
     /**

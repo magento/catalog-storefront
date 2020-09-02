@@ -105,6 +105,7 @@ class CategoriesQueueConsumer
                 foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $idsChunk) {
                     $ids = \array_merge($ids, $idsChunk);
                 }
+                $ids = \array_merge(...$ids);
             } else {
                 //TODO: move these reindexes to plugins to avoid calling them per store view?
                 $this->categoryFeedIndexer->executeList($ids);

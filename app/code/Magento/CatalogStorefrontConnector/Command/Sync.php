@@ -25,6 +25,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Sync Catalog data with Storefront storage. Collect product data and push it to the Message Bus
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * TODO: remove dependencies on Export API repo https://github.com/magento/catalog-storefront/issues/43
  */
 class Sync extends Command
 {

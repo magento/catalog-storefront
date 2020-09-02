@@ -104,6 +104,7 @@ class ProductsQueueConsumer
                 foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $idsChunk) {
                     $ids = \array_merge($ids, $idsChunk);
                 }
+                $ids = \array_merge(...$ids);
             } else {
                 //TODO: move this to plugins?
                 $this->productFeedIndexer->executeList($ids);

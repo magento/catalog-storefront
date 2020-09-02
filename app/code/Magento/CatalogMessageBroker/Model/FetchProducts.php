@@ -14,6 +14,8 @@ use Magento\CatalogExportApi\Api\Data\Product;
 use Magento\CatalogExportApi\Api\ProductRepositoryInterface;
 use Magento\CatalogMessageBroker\Model\MessageBus\Event\EventData;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\CatalogMessageBroker\HttpClient\RestClient;
+use Psr\Log\LoggerInterface;
 
 /**
  * @inheritdoc
@@ -21,14 +23,14 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 class FetchProducts implements FetchProductsInterface
 {
     /**
-     * @var ProductRepositoryInterface
+     * Route to Export API products retrieval
      */
-    private $productRepository;
+    private const EXPORT_API_GET_PRODUCTS = '/V1/catalog-export/products';
 
     /**
-     * @var DataObjectProcessor
+     * @var RestClient
      */
-    private $dataObjectProcessor;
+    private $restClient;
 
     /**
      * @var EntitiesRequestInterfaceFactory
@@ -41,21 +43,20 @@ class FetchProducts implements FetchProductsInterface
     private $entityRequestDataInterfaceFactory;
 
     /**
-     * @param ProductRepositoryInterface $productRepository
-     * @param DataObjectProcessor $dataObjectProcessor
-     * @param EntitiesRequestInterfaceFactory $entitiesRequestInterfaceFactory
-     * @param EntityRequestDataInterfaceFactory $entityRequestDataInterfaceFactory
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @param RestClient $restClient
+     * @param LoggerInterface $logger
      */
     public function __construct(
-        ProductRepositoryInterface $productRepository,
-        DataObjectProcessor $dataObjectProcessor,
-        EntitiesRequestInterfaceFactory $entitiesRequestInterfaceFactory,
-        EntityRequestDataInterfaceFactory $entityRequestDataInterfaceFactory
+        RestClient $restClient,
+        LoggerInterface $logger
     ) {
-        $this->productRepository = $productRepository;
-        $this->dataObjectProcessor = $dataObjectProcessor;
-        $this->entitiesRequestInterfaceFactory = $entitiesRequestInterfaceFactory;
-        $this->entityRequestDataInterfaceFactory = $entityRequestDataInterfaceFactory;
+        $this->restClient = $restClient;
+        $this->logger = $logger;
     }
 
     /**
@@ -63,14 +64,24 @@ class FetchProducts implements FetchProductsInterface
      */
     public function execute(EventData $eventData): array
     {
-        $products = $this->productRepository->get($this->buildProductRepositoryRequest($eventData));
-        $data = [];
-
-        foreach ($products as $product) {
-            $data[] = $this->dataObjectProcessor->buildOutputDataArray($product, Product::class);
+        try {
+            $products = $this->restClient->get(
+                self::EXPORT_API_GET_PRODUCTS,
+                ['ids' => $ids, 'storeViewCodes' => $storeViewCodes],
+            );
+        } catch (\Throwable $e) {
+            $this->logger->error(
+                \sprintf(
+                    'Cannot load products via "%s" with ids "%s"',
+                    self::EXPORT_API_GET_PRODUCTS,
+                    \implode(',', $ids)
+                ),
+                ['exception' => $e]
+            );
+            return [];
         }
 
-        return $data;
+        return $products;
     }
 
     /**
