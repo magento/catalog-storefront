@@ -49,13 +49,6 @@ class CustomOptions implements DataMapperInterface
             }
         }
 
-        if (!empty($data['product_shopper_input_options'])) {
-            $productShopperInputOptions = $data['product_shopper_input_options'];
-            foreach ($productShopperInputOptions as $customOption) {
-                $productCustomOptions[] = $customOption;
-            }
-        }
-
         return ['options' => $productCustomOptions];
     }
 }

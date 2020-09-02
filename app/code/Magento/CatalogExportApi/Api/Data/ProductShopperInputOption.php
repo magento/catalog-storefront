@@ -26,6 +26,9 @@ class ProductShopperInputOption
     private $id;
 
     /** @var string */
+    private $label;
+
+    /** @var string */
     private $value;
 
     /** @var bool */
@@ -71,6 +74,27 @@ class ProductShopperInputOption
     public function setId(string $id): void
     {
         $this->id = $id;
+    }
+
+    /**
+     * Get label
+     *
+     * @return string
+     */
+    public function getLabel(): ?string
+    {
+        return $this->label;
+    }
+
+    /**
+     * Set label
+     *
+     * @param string $label
+     * @return void
+     */
+    public function setLabel(?string $label): void
+    {
+        $this->label = $label;
     }
 
     /**
