@@ -6,11 +6,7 @@
     },
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/framework-message-queue": "*",
-        "magento/module-catalog-export-api": "*",
-        "magento/module-catalog-data-exporter": "*",
-        "magento/module-data-exporter": "*"
+        "magento/framework": "*"
     },
     "type": "magento2-module",
     "license": [
