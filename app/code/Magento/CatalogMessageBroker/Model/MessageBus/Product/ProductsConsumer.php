@@ -76,6 +76,7 @@ class ProductsConsumer
                 ),
                 ['exception' => $e]
             );
+            var_dump($e);
         }
     }
 }
