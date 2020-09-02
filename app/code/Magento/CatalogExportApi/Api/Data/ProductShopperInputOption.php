@@ -40,7 +40,7 @@ class ProductShopperInputOption
     /** @var string */
     private $renderType;
 
-    /** @var \Magento\CatalogExportApi\Api\Data\Price */
+    /** @var \Magento\CatalogExportApi\Api\Data\Price[]|null */
     private $price;
 
     /** @var int */
@@ -184,9 +184,9 @@ class ProductShopperInputOption
     /**
      * Get price
      *
-     * @return \Magento\CatalogExportApi\Api\Data\Price
+     * @return \Magento\CatalogExportApi\Api\Data\Price[]|null
      */
-    public function getPrice(): ?Price
+    public function getPrice(): ?array
     {
         return $this->price;
     }
@@ -194,10 +194,10 @@ class ProductShopperInputOption
     /**
      * Set price
      *
-     * @param \Magento\CatalogExportApi\Api\Data\Price $price
+     * @param \Magento\CatalogExportApi\Api\Data\Price[] $price
      * @return void
      */
-    public function setPrice(?Price $price): void
+    public function setPrice(?array $price = null): void
     {
         $this->price = $price;
     }
