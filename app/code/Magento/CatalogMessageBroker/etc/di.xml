@@ -53,39 +53,4 @@
             </argument>
         </arguments>
     </type>
-
-    <virtualType name="Magento\CatalogMessageBroker\Model\MessageBus\Event\ProductEventDataBuilder"
-                 type="Magento\CatalogMessageBroker\Model\MessageBus\Event\EventDataBuilder">
-        <arguments>
-            <argument name="requiredAttributes" xsi:type="array">
-                <item name="product_id" xsi:type="string">productId</item>
-                <item name="store_code" xsi:type="string">storeCode</item>
-            </argument>
-        </arguments>
-    </virtualType>
-
-    <type name="Magento\CatalogMessageBroker\Model\MessageBus\Product\ProductsConsumer">
-        <arguments>
-            <argument name="eventDataBuilder" xsi:type="object">
-                Magento\CatalogMessageBroker\Model\MessageBus\Event\ProductEventDataBuilder
-            </argument>
-        </arguments>
-    </type>
-
-    <virtualType name="Magento\CatalogMessageBroker\Model\MessageBus\Event\CategoryEventDataBuilder"
-                 type="Magento\CatalogMessageBroker\Model\MessageBus\Event\EventDataBuilder">
-        <arguments>
-            <argument name="requiredAttributes" xsi:type="array">
-                <item name="category_id" xsi:type="string">categoryId</item>
-            </argument>
-        </arguments>
-    </virtualType>
-
-    <type name="Magento\CatalogMessageBroker\Model\MessageBus\Category\CategoriesConsumer">
-        <arguments>
-            <argument name="eventDataBuilder" xsi:type="object">
-                Magento\CatalogMessageBroker\Model\MessageBus\Event\CategoryEventDataBuilder
-            </argument>
-        </arguments>
-    </type>
 </config>

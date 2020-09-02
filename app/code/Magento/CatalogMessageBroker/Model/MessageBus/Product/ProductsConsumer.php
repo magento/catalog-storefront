@@ -7,8 +7,8 @@
 namespace Magento\CatalogMessageBroker\Model\MessageBus\Product;
 
 use Magento\CatalogExport\Event\Data\ChangedEntities;
+use Magento\CatalogExport\Event\Data\Entity;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterfaceFactory;
-use Magento\CatalogMessageBroker\Model\MessageBus\Event\EventDataBuilder;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -25,11 +25,6 @@ class ProductsConsumer
     const PRODUCTS_DELETED_EVENT_TYPE = 'products_deleted';
 
     /**
-     * TODO: ad-hoc Remove this once the store scope is consistently passed from ExportAPI
-     */
-    const DEFAULT_STORE_VIEW = 'default';
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -40,23 +35,15 @@ class ProductsConsumer
     private $consumerEventFactory;
 
     /**
-     * @var EventDataBuilder
-     */
-    private $eventDataBuilder;
-
-    /**
      * @param LoggerInterface $logger
      * @param ConsumerEventInterfaceFactory $consumerEventFactory
-     * @param EventDataBuilder $eventDataBuilder
      */
     public function __construct(
         LoggerInterface $logger,
-        ConsumerEventInterfaceFactory $consumerEventFactory,
-        EventDataBuilder $eventDataBuilder
+        ConsumerEventInterfaceFactory $consumerEventFactory
     ) {
         $this->logger = $logger;
         $this->consumerEventFactory = $consumerEventFactory;
-        $this->eventDataBuilder = $eventDataBuilder;
     }
 
     /**
@@ -68,16 +55,23 @@ class ProductsConsumer
     public function processMessage(ChangedEntities $message): void
     {
         try {
-            $productsEvent = $this->consumerEventFactory->create(
-                $message->getMeta() ? $message->getMeta()->getEventType() : null
-            );
-            $productsEvent->execute($this->eventDataBuilder->execute($message));
+            $eventType = $message->getMeta() ? $message->getMeta()->getEventType() : null;
+            $entities = $message->getData() ? $message->getData()->getEntities() : null;
+
+            if (empty($entities)) {
+                throw new \InvalidArgumentException('Products data is missing in payload');
+            }
+
+            $productsEvent = $this->consumerEventFactory->create($eventType);
+            $productsEvent->execute($entities, $message->getMeta()->getScope());
         } catch (\Throwable $e) {
             $this->logger->error(
                 \sprintf(
                     'Unable to process collected product data. Event type: "%s", ids:  "%s"',
                     $eventType ?? '',
-                    \implode(',', $entityIds ?? [])
+                    \implode(',', \array_map(function (Entity $entity) {
+                        return $entity->getEntityId();
+                    }, $entities ?? []))
                 ),
                 ['exception' => $e]
             );

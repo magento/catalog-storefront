@@ -7,7 +7,6 @@
 namespace Magento\CatalogMessageBroker\Model\MessageBus\Category;
 
 use Magento\CatalogMessageBroker\Model\FetchCategoriesInterface;
-use Magento\CatalogMessageBroker\Model\MessageBus\Event\EventData;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterfaceFactory;
@@ -79,23 +78,28 @@ class PublishCategoriesConsumer implements ConsumerEventInterface
     /**
      * @inheritdoc
      */
-    public function execute(EventData $eventData): void
+    public function execute(array $entities, string $scope): void
     {
-        $categoriesData = $this->fetchCategories->execute($eventData);
-        $eventEntities = $eventData->getEntities();
+        $categoriesData = $this->fetchCategories->execute($entities, $scope);
         $importCategories = [];
         $updateCategories = [];
 
-        foreach ($categoriesData as $categoryData) {
-            $eventCategory = $eventEntities[$categoryData['category_id']];
+        // Transform entities data into entity_id => attributes relation
+        $attributesArray = [];
+        foreach ($entities as $entity) {
+            $attributesArray[$entity->getEntityId()] = $entity->getAttributes();
+        }
 
-            if (!empty($eventCategory->getAttributes())) {
+        foreach ($categoriesData as $categoryData) {
+            $attributes = $attributesArray[$categoryData['category_id']];
+
+            if (!empty($attributes)) {
                 $updateCategories[$categoryData['category_id']] = \array_filter(
                     $categoryData,
-                    function ($code) use ($eventCategory) {
+                    function ($code) use ($attributes) {
                         return \in_array($code, \array_map(function ($attributeCode) {
                             return SimpleDataObjectConverter::camelCaseToSnakeCase($attributeCode);
-                        }, $eventCategory->getAttributes()));
+                        }, $attributes)) || $code === 'category_id';
                     },
                     ARRAY_FILTER_USE_KEY
                 );
@@ -105,11 +109,11 @@ class PublishCategoriesConsumer implements ConsumerEventInterface
         }
 
         if (!empty($importCategories)) {
-            $this->importCategories($importCategories, $eventData->getScope());
+            $this->importCategories($importCategories, $scope);
         }
 
         if (!empty($updateCategories)) {
-            $this->updateCategories($updateCategories, $eventData->getScope());
+            $this->updateCategories($updateCategories, $scope);
         }
     }
 

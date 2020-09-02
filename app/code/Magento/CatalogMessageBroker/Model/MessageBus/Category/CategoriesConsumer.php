@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\CatalogMessageBroker\Model\MessageBus\Category;
 
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterfaceFactory;
-use Magento\CatalogMessageBroker\Model\MessageBus\Event\EventDataBuilder;
 use Magento\CatalogExport\Event\Data\ChangedEntities;
+use Magento\CatalogExport\Event\Data\Entity;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -26,11 +26,6 @@ class CategoriesConsumer
     const CATEGORIES_DELETED_EVENT_TYPE = 'categories_deleted';
 
     /**
-     * TODO: ad-hoc Remove this once the store scope is consistently passed from ExportAPI
-     */
-    const DEFAULT_STORE_VIEW = 'default';
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -41,23 +36,15 @@ class CategoriesConsumer
     private $consumerEventFactory;
 
     /**
-     * @var EventDataBuilder
-     */
-    private $eventDataBuilder;
-
-    /**
      * @param LoggerInterface $logger
      * @param ConsumerEventInterfaceFactory $consumerEventFactory
-     * @param EventDataBuilder $eventDataBuilder
      */
     public function __construct(
         LoggerInterface $logger,
-        ConsumerEventInterfaceFactory $consumerEventFactory,
-        EventDataBuilder $eventDataBuilder
+        ConsumerEventInterfaceFactory $consumerEventFactory
     ) {
         $this->logger = $logger;
         $this->consumerEventFactory = $consumerEventFactory;
-        $this->eventDataBuilder = $eventDataBuilder;
     }
 
     /**
@@ -69,16 +56,23 @@ class CategoriesConsumer
     public function processMessage(ChangedEntities $message)
     {
         try {
-            $categoriesEvent = $this->consumerEventFactory->create(
-                $message->getMeta() ? $message->getMeta()->getEventType() : null
-            );
-            $categoriesEvent->execute($this->eventDataBuilder->execute($message));
+            $eventType = $message->getMeta() ? $message->getMeta()->getEventType() : null;
+            $entities = $message->getData() ? $message->getData()->getEntities() : null;
+
+            if (empty($entities)) {
+                throw new \InvalidArgumentException('Categories data is missing in payload');
+            }
+
+            $productsEvent = $this->consumerEventFactory->create($eventType);
+            $productsEvent->execute($entities, $message->getMeta()->getScope());
         } catch (\Throwable $e) {
             $this->logger->error(
                 \sprintf(
                     'Unable to process collected category data. Event type: "%s", ids:  "%s"',
                     $eventType ?? '',
-                    \implode(',', $entityIds ?? [])
+                    \implode(',', \array_map(function (Entity $entity) {
+                        return $entity->getEntityId();
+                    }, $entities ?? []))
                 ),
                 ['exception' => $e]
             );

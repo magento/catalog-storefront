@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\CatalogExport\Model\Data;
+namespace Magento\CatalogExport\Event\Data;
 
 /**
  * Data object for entity data

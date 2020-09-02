@@ -7,14 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogMessageBroker\Model;
 
-use Magento\CatalogExport\Api\Data\EntityRequestDataInterfaceFactory;
-use Magento\CatalogExport\Api\Data\EntitiesRequestInterfaceFactory;
-use Magento\CatalogExport\Api\Data\EntitiesRequestInterface;
-use Magento\CatalogExportApi\Api\Data\Product;
-use Magento\CatalogExportApi\Api\ProductRepositoryInterface;
-use Magento\CatalogMessageBroker\Model\MessageBus\Event\EventData;
-use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\CatalogMessageBroker\HttpClient\RestClient;
+use Magento\CatalogExport\Event\Data\Entity;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -31,16 +25,6 @@ class FetchProducts implements FetchProductsInterface
      * @var RestClient
      */
     private $restClient;
-
-    /**
-     * @var EntitiesRequestInterfaceFactory
-     */
-    private $entitiesRequestInterfaceFactory;
-
-    /**
-     * @var EntityRequestDataInterfaceFactory
-     */
-    private $entityRequestDataInterfaceFactory;
 
     /**
      * @var LoggerInterface
@@ -62,19 +46,22 @@ class FetchProducts implements FetchProductsInterface
     /**
      * @inheritdoc
      */
-    public function execute(EventData $eventData): array
+    public function execute(array $entities, string $scope): array
     {
         try {
             $products = $this->restClient->get(
                 self::EXPORT_API_GET_PRODUCTS,
-                ['ids' => $ids, 'storeViewCodes' => $storeViewCodes],
+                $this->prepareRequestData($entities, $scope)
             );
         } catch (\Throwable $e) {
             $this->logger->error(
                 \sprintf(
-                    'Cannot load products via "%s" with ids "%s"',
+                    'Cannot load products via "%s" with ids "%s" for scope "%s"',
                     self::EXPORT_API_GET_PRODUCTS,
-                    \implode(',', $ids)
+                    \implode(',', \array_map(function (Entity $entity) {
+                        return $entity->getEntityId();
+                    }, $entities)),
+                    $scope
                 ),
                 ['exception' => $e]
             );
@@ -85,29 +72,29 @@ class FetchProducts implements FetchProductsInterface
     }
 
     /**
-     * Build product repository request
-     * TODO eliminate builder when moving to REST API request
+     * Prepare rest client request data
      *
-     * @param EventData $eventData
+     * @param Entity[] $entities
+     * @param string $storeCode
      *
-     * @return EntitiesRequestInterface
+     * @return array
      */
-    private function buildProductRepositoryRequest(EventData $eventData): EntitiesRequestInterface
+    private function prepareRequestData(array $entities, string $storeCode): array
     {
-        $entitiesRequestData = [];
+        $products = [];
 
-        foreach ($eventData->getEntities() as $entity) {
-            $entityRequestData = $this->entityRequestDataInterfaceFactory->create();
-            $entityRequestData->setEntityId($entity->getEntityId());
-            $entityRequestData->setAttributeCodes($entity->getAttributes());
-
-            $entitiesRequestData[] = $entityRequestData;
+        foreach ($entities as $entity) {
+            $products[] = [
+                'entity_id' => $entity->getEntityId(),
+                'attribute_codes' => $entity->getAttributes()
+            ];
         }
 
-        $entityRequest = $this->entitiesRequestInterfaceFactory->create();
-        $entityRequest->setEntitiesRequestData($entitiesRequestData);
-        $entityRequest->setStoreViewCodes([$eventData->getScope()]);
-
-        return $entityRequest;
+        return [
+            'request' => [
+                'entities' => $products,
+                'storeViewCodes' => [$storeCode],
+            ],
+        ];
     }
 }

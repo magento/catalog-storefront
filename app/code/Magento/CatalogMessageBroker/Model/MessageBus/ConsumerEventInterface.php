@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
-use Magento\CatalogMessageBroker\Model\MessageBus\Event\EventData;
+use Magento\CatalogExport\Event\Data\Entity;
 
 /**
  * Execute consumer event
@@ -17,9 +17,10 @@ interface ConsumerEventInterface
     /**
      * Execute consumers by ids for specified scope
      *
-     * @param EventData $eventData
+     * @param Entity[] $entities
+     * @param string $scope
      *
      * @return void
      */
-    public function execute(EventData $eventData): void;
+    public function execute(array $entities, string $scope): void;
 }

@@ -7,7 +7,6 @@
 namespace Magento\CatalogMessageBroker\Model\MessageBus\Product;
 
 use Magento\CatalogMessageBroker\Model\FetchProductsInterface;
-use Magento\CatalogMessageBroker\Model\MessageBus\Event\EventData;
 use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
@@ -54,23 +53,28 @@ class PublishProductsConsumer implements ConsumerEventInterface
     /**
      * @inheritdoc
      */
-    public function execute(EventData $eventData): void
+    public function execute(array $entities, string $scope): void
     {
-        $productsData = $this->fetchProducts->execute($eventData);
-        $eventEntities = $eventData->getEntities();
+        $productsData = $this->fetchProducts->execute($entities, $scope);
         $importProducts = [];
         $updateProducts = [];
 
-        foreach ($productsData as $productData) {
-            $eventProduct = $eventEntities[$productData['product_id']];
+        // Transform entities data into entity_id => attributes relation
+        $attributesArray = [];
+        foreach ($entities as $entity) {
+            $attributesArray[$entity->getEntityId()] = $entity->getAttributes();
+        }
 
-            if (!empty($eventProduct->getAttributes())) {
+        foreach ($productsData as $productData) {
+            $attributes = $attributesArray[$productData['product_id']];
+
+            if (!empty($attributes)) {
                 $updateProducts[$productData['product_id']] = \array_filter(
                     $productData,
-                    function ($code) use ($eventProduct) {
+                    function ($code) use ($attributes) {
                         return \in_array($code, \array_map(function ($attributeCode) {
                             return SimpleDataObjectConverter::camelCaseToSnakeCase($attributeCode);
-                        }, $eventProduct->getAttributes()));
+                        }, $attributes)) || $code === 'product_id';
                     },
                     ARRAY_FILTER_USE_KEY
                 );
@@ -79,8 +83,8 @@ class PublishProductsConsumer implements ConsumerEventInterface
             }
         }
 
-        $this->publishProducts($importProducts, $eventData->getScope(), self::ACTION_IMPORT);
-        $this->publishProducts($updateProducts, $eventData->getScope(), self::ACTION_UPDATE);
+        $this->publishProducts($importProducts, $scope, self::ACTION_IMPORT);
+        $this->publishProducts($updateProducts, $scope, self::ACTION_UPDATE);
     }
 
     /**

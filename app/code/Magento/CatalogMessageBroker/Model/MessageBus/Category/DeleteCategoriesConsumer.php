@@ -6,7 +6,6 @@
 
 namespace Magento\CatalogMessageBroker\Model\MessageBus\Category;
 
-use Magento\CatalogMessageBroker\Model\MessageBus\Event\EventData;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesRequestInterfaceFactory;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterface;
@@ -50,17 +49,17 @@ class DeleteCategoriesConsumer implements ConsumerEventInterface
     /**
      * @inheritdoc
      */
-    public function execute(EventData $eventData): void
+    public function execute(array $entities, string $scope): void
     {
         $ids = [];
 
-        foreach ($eventData->getEntities() as $entity) {
+        foreach ($entities as $entity) {
             $ids[] = $entity->getEntityId();
         }
 
         $deleteCategoryRequest = $this->deleteCategoriesRequestInterfaceFactory->create();
         $deleteCategoryRequest->setCategoryIds($ids);
-        $deleteCategoryRequest->setStore($eventData->getScope());
+        $deleteCategoryRequest->setStore($scope);
         $importResult = $this->catalogServer->deleteCategories($deleteCategoryRequest);
 
         if ($importResult->getStatus() === false) {

@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogMessageBroker\Model;
 
-use Magento\CatalogMessageBroker\Model\MessageBus\Event\EventData;
+use Magento\CatalogExport\Event\Data\Entity;
 
 /**
  * Fetch product data
@@ -15,9 +15,10 @@ interface FetchProductsInterface
     /**
      * Fetch product data
      *
-     * @param EventData $eventData
+     * @param Entity[] $entities
+     * @param string $scope
      *
      * @return array
      */
-    public function execute(EventData $eventData): array;
+    public function execute(array $entities, string $scope): array;
 }
