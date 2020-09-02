@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<overrides>
+    <test class="Magento\Framework\MessageQueue\UseCase\MixSyncAndAsyncSingleQueueTest">
+        <!--
+            Skipped due
+            This test requires consumers_wait_for_messages to be set to 1.
+            That is contradict with Catalog Store front initial configuration fro integration test.
+            And impossible to change on a fly.
+        -->
+        <method name="testMixSyncAndAsyncSingleQueue" skip="true"/>
+    </test>
+</overrides>
