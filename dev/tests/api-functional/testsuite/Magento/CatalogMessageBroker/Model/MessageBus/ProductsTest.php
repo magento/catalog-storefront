@@ -94,7 +94,13 @@ class ProductsTest extends StorefrontTestsAbstract
 
         $productFeed = $this->productFeed->getFeedByIds([(int)$product->getId()], [self::STORE_CODE]);
         $this->assertNotEmpty($productFeed);
-        $this->runConsumers();
+
+        $updateMessage = $this->messageBuilder->build(
+            [(int)$product->getId()],
+            ProductsConsumer::PRODUCTS_UPDATED_EVENT_TYPE,
+            self::STORE_CODE
+        );
+        $this->productsConsumer->processMessage($updateMessage);
 
         $this->productsGetRequestInterface->setIds([$product->getId()]);
         $this->productsGetRequestInterface->setStore(self::STORE_CODE);
@@ -107,7 +113,14 @@ class ProductsTest extends StorefrontTestsAbstract
         $deletedFeed = $this->productFeed->getDeletedByIds([(int)$product->getId()], [self::STORE_CODE]);
         $this->assertNotEmpty($deletedFeed);
 
-        $this->runConsumers();
+        $deleteMessage = $this->messageBuilder->build(
+            [(int)$product->getId()],
+            ProductsConsumer::PRODUCTS_DELETED_EVENT_TYPE,
+            self::STORE_CODE
+        );
+
+        $this->productsConsumer->processMessage($deleteMessage);
+
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf(self::ERROR_MESSAGE, $product->getId()));
         $this->catalogService->getProducts($this->productsGetRequestInterface);
