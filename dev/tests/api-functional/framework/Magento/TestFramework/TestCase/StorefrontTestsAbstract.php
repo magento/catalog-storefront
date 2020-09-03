@@ -90,7 +90,7 @@ abstract class StorefrontTestsAbstract extends TestCase
      *
      * @throws \Throwable
      */
-    protected function runTest() :void
+    protected function runTest()
     {
         $this->runConsumers();
         parent::runTest();
