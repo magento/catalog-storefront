@@ -203,7 +203,6 @@ class Sync extends Command
                         $this->productsConsumer->processMessage($message);
                     }
 
-
                     $productsArray = [];
                     foreach ($productIds as $id) {
                         $productsArray[] = [

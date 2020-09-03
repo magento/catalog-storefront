@@ -528,6 +528,8 @@ class CatalogService implements CatalogServerInterface
      *
      * @param ProductVariantsGetRequestInterface $request
      * @return ProductVariantsGetResponseInterface
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getProductVariants(
         ProductVariantsGetRequestInterface $request

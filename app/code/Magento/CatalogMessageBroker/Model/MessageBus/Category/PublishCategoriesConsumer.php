@@ -11,7 +11,6 @@ use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterfaceFactory;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterface;
-use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoryRequestAttributesMapper;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Psr\Log\LoggerInterface;
@@ -21,6 +20,16 @@ use Psr\Log\LoggerInterface;
  */
 class PublishCategoriesConsumer implements ConsumerEventInterface
 {
+    /**
+     * Action type update
+     */
+    public const ACTION_UPDATE = 'categories_update';
+
+    /**
+     * Action type import
+     */
+    public const ACTION_IMPORT = 'categories_import';
+
     /**
      * @var LoggerInterface
      */
@@ -109,11 +118,11 @@ class PublishCategoriesConsumer implements ConsumerEventInterface
         }
 
         if (!empty($importCategories)) {
-            $this->importCategories($importCategories, $scope);
+            $this->importCategories($importCategories, $scope, self::ACTION_IMPORT);
         }
 
         if (!empty($updateCategories)) {
-            $this->updateCategories($updateCategories, $scope);
+            $this->importCategories($updateCategories, $scope, self::ACTION_UPDATE);
         }
     }
 
@@ -122,33 +131,13 @@ class PublishCategoriesConsumer implements ConsumerEventInterface
      *
      * @param array $categories
      * @param string $storeCode
+     * @param string $actionType
+     *
      * @return void
+     *
      * @throws \Throwable
      */
-    private function importCategories(array $categories, string $storeCode): void
-    {
-        foreach ($categories as &$category) {
-            // be sure, that data passed to Import API in the expected format
-            $category['id'] = $category['category_id'];
-            $category = $this->categoryMapper->setData($category)->build();
-        }
-
-        $result = $this->import($categories, $storeCode);
-
-        if ($result->getStatus() === false) {
-            $this->logger->error(sprintf('Categories import is failed: "%s"', $result->getMessage()));
-        }
-    }
-
-    /**
-     * Update categories
-     *
-     * @param array $categories
-     * @param string $storeCode
-     *
-     * @return void
-     */
-    private function updateCategories(array $categories, string $storeCode): void
+    private function importCategories(array $categories, string $storeCode, string $actionType): void
     {
         $attributes = [];
 
@@ -156,40 +145,25 @@ class PublishCategoriesConsumer implements ConsumerEventInterface
             // be sure, that data passed to Import API in the expected format
             $category['id'] = $category['category_id'];
 
-            $attributes[] = $this->importCategoryRequestAttributesMapper->setData([
-                'entity_id' => $category['category_id'],
-                'attribute_codes' => \array_keys($category),
-            ])->build();
+            if ($actionType === self::ACTION_UPDATE) {
+                $attributes[] = $this->importCategoryRequestAttributesMapper->setData([
+                    'entity_id' => $category['category_id'],
+                    'attribute_codes' => \array_keys($category),
+                ])->build();
+            }
 
             $category = $this->categoryMapper->setData($category)->build();
         }
 
-        $result = $this->import($categories, $storeCode, $attributes);
-
-        if ($result->getStatus() === false) {
-            $this->logger->error(sprintf('Categories update is failed: "%s"', $result->getMessage()));
-        }
-    }
-
-    /**
-     * Perform category import / update
-     *
-     * @param array $categories
-     * @param string $storeCode
-     * @param array $attributes
-     *
-     * @return ImportCategoriesResponseInterface
-     */
-    private function import(
-        array $categories,
-        string $storeCode,
-        array $attributes = []
-    ): ImportCategoriesResponseInterface {
         $importCategoriesRequest = $this->importCategoriesRequestInterfaceFactory->create();
         $importCategoriesRequest->setCategories($categories);
         $importCategoriesRequest->setStore($storeCode);
         $importCategoriesRequest->setAttributes($attributes);
 
-        return $this->catalogServer->importCategories($importCategoriesRequest);
+        $importResult = $this->catalogServer->importCategories($importCategoriesRequest);
+
+        if ($importResult->getStatus() === false) {
+            $this->logger->error(sprintf('Categories import is failed: "%s"', $importResult->getMessage()));
+        }
     }
 }

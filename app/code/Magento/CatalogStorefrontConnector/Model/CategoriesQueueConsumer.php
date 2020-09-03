@@ -103,7 +103,7 @@ class CategoriesQueueConsumer
             if (empty($ids)) {
                 $this->categoryFeedIndexer->executeFull();
                 foreach ($this->catalogEntityIdsProvider->getCategoryIds($storeId) as $idsChunk) {
-                    $ids = \array_merge($ids, $idsChunk);
+                    $ids[] = $idsChunk;
                 }
                 $ids = \array_merge(...$ids);
             } else {

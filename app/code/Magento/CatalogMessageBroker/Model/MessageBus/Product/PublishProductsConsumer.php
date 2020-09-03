@@ -17,8 +17,15 @@ use Psr\Log\LoggerInterface;
  */
 class PublishProductsConsumer implements ConsumerEventInterface
 {
-    public const ACTION_UPDATE = 'update';
-    public const ACTION_IMPORT = 'import';
+    /**
+     * Action type update
+     */
+    public const ACTION_UPDATE = 'products_update';
+
+    /**
+     * Action type import
+     */
+    public const ACTION_IMPORT = 'products_import';
 
     /**
      * @var LoggerInterface

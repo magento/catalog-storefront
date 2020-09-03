@@ -102,7 +102,7 @@ class ProductsQueueConsumer
             if (empty($ids)) {
                 $this->productFeedIndexer->executeFull();
                 foreach ($this->catalogEntityIdsProvider->getProductIds($storeId) as $idsChunk) {
-                    $ids = \array_merge($ids, $idsChunk);
+                    $ids[] = $idsChunk;
                 }
                 $ids = \array_merge(...$ids);
             } else {
