@@ -56,7 +56,6 @@ class DownloadableProductsTest extends StorefrontTestsAbstract
      * Validate downloadable product data
      *
      * @magentoDataFixture Magento/DownloadableProducts/_files/product_downloadable_with_link_url_and_sample_url_override.php
-     * @magentoDbIsolation disabled
      * @throws NoSuchEntityException
      * @throws \Throwable
      */
@@ -80,7 +79,6 @@ class DownloadableProductsTest extends StorefrontTestsAbstract
      * Validate downloadable product data
      *
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
-     * @magentoDbIsolation disabled
      * @throws NoSuchEntityException
      * @throws \Throwable
      */
