@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogExport;
+namespace Magento\CatalogMessageBroker;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogStorefront\Model\CatalogService;
@@ -18,7 +18,7 @@ use Magento\TestFramework\TestCase\StorefrontTestsAbstract;
 
 /**
  * Tests shopper input options on the store front
- * @magentoAppIsolation enabled
+ *
  */
 class ShopperInputOptionsStoreFrontTest extends StorefrontTestsAbstract
 {
@@ -116,28 +116,6 @@ class ShopperInputOptionsStoreFrontTest extends StorefrontTestsAbstract
                         'required' => true,
                         'sort_order' => 0,
                         'render_type' => 'field',
-                        'price' => [
-                            [
-                                'scope' => 'NOT LOGGED IN',
-                                'regular_price' => 1.0,
-                                'final_price' => 1.0
-                            ],
-                            [
-                                'scope' => 'General',
-                                'regular_price' => 1.0,
-                                'final_price' => 1.0
-                            ],
-                            [
-                                'scope' => 'Wholesale',
-                                'regular_price' => 1.0,
-                                'final_price' => 1.0
-                            ],
-                            [
-                                'scope' => 'Retailer',
-                                'regular_price' => 1.0,
-                                'final_price' => 1.0
-                            ]
-                        ],
                         'value' => '',
                         'max_characters' => 100,
                         'file_extension' => [],
@@ -150,28 +128,6 @@ class ShopperInputOptionsStoreFrontTest extends StorefrontTestsAbstract
                         'required' => true,
                         'sort_order' => 0,
                         'render_type' => 'date_time',
-                        'price' => [
-                            [
-                                'scope' => 'NOT LOGGED IN',
-                                'regular_price' => 2.0,
-                                'final_price' => 2.0
-                            ],
-                            [
-                                'scope' => 'General',
-                                'regular_price' => 2.0,
-                                'final_price' => 2.0
-                            ],
-                            [
-                                'scope' => 'Wholesale',
-                                'regular_price' => 2.0,
-                                'final_price' => 2.0
-                            ],
-                            [
-                                'scope' => 'Retailer',
-                                'regular_price' => 2.0,
-                                'final_price' => 2.0
-                            ]
-                        ],
                         'value' => '',
                         'max_characters' => 0,
                         'file_extension' => [],
@@ -184,28 +140,6 @@ class ShopperInputOptionsStoreFrontTest extends StorefrontTestsAbstract
                         'required' => true,
                         'sort_order' => 2,
                         'render_type' => 'area',
-                        'price' => [
-                            [
-                                'scope' => 'NOT LOGGED IN',
-                                'regular_price' => 3.95,
-                                'final_price' => 3.95
-                            ],
-                            [
-                                'scope' => 'General',
-                                'regular_price' => 3.95,
-                                'final_price' => 3.95
-                            ],
-                            [
-                                'scope' => 'Wholesale',
-                                'regular_price' => 3.95,
-                                'final_price' => 3.95
-                            ],
-                            [
-                                'scope' => 'Retailer',
-                                'regular_price' => 3.95,
-                                'final_price' => 3.95
-                            ]
-                        ],
                         'value' => '',
                         'max_characters' => 20,
                         'file_extension' => [],
@@ -218,28 +152,6 @@ class ShopperInputOptionsStoreFrontTest extends StorefrontTestsAbstract
                         'required' => true,
                         'sort_order' => 3,
                         'render_type' => 'file',
-                        'price' => [
-                            [
-                                'scope' => 'NOT LOGGED IN',
-                                'regular_price' => 30.0,
-                                'final_price' => 30.0
-                            ],
-                            [
-                                'scope' => 'General',
-                                'regular_price' => 30.0,
-                                'final_price' => 30.0
-                            ],
-                            [
-                                'scope' => 'Wholesale',
-                                'regular_price' => 30.0,
-                                'final_price' => 30.0
-                            ],
-                            [
-                                'scope' => 'Retailer',
-                                'regular_price' => 30.0,
-                                'final_price' => 30.0
-                            ]
-                        ],
                         'value' => '',
                         'max_characters' => 0,
                         'file_extension' => ['jpg, png, gif'],
