@@ -1350,10 +1350,10 @@ class Catalog implements CatalogInterface
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Proto\DeleteCategoriesRequest();
             $values = [];
-            foreach ($value->getProductIds() as $value) {
+            foreach ($value->getCategoryIds() as $value) {
                 $values[] = $value;
             }
-            $r->setProductIds($values);
+            $r->setCategoryIds($values);
             $r->setStore($value->getStore());
             return $r;
         };

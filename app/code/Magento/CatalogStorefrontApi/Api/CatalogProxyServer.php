@@ -1374,10 +1374,10 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesRequest();
             $values = [];
-            foreach ($value->getProductIds() as $value) {
+            foreach ($value->getCategoryIds() as $value) {
                 $values[] = $value;
             }
-            $r->setProductIds($values);
+            $r->setCategoryIds($values);
             $r->setStore($value->getStore());
             return $r;
         };
