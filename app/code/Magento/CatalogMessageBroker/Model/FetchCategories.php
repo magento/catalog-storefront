@@ -7,9 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogMessageBroker\Model;
 
-use Magento\CatalogExportApi\Api\CategoryRepositoryInterface;
-use Magento\CatalogExportApi\Api\Data\Category;
-use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\CatalogMessageBroker\HttpClient\RestClient;
+use Psr\Log\LoggerInterface;
 
 /**
  * @inheritdoc
@@ -17,37 +16,54 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 class FetchCategories implements FetchCategoriesInterface
 {
     /**
-     * @var CategoryRepositoryInterface
+     * Route to Export API categories retrieval
      */
-    private $categoryRepository;
+    private const EXPORT_API_GET_CATEGORIES = '/V1/catalog-export/categories';
 
     /**
-     * @var DataObjectProcessor
+     * @var RestClient
      */
-    private $dataObjectProcessor;
+    private $restClient;
 
     /**
-     * @param CategoryRepositoryInterface $categoryRepository
-     * @param DataObjectProcessor $dataObjectProcessor
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @param RestClient $restClient
+     * @param LoggerInterface $logger
      */
     public function __construct(
-        CategoryRepositoryInterface $categoryRepository,
-        DataObjectProcessor $dataObjectProcessor
+        RestClient $restClient,
+        LoggerInterface $logger
     ) {
-        $this->dataObjectProcessor = $dataObjectProcessor;
-        $this->categoryRepository = $categoryRepository;
+        $this->restClient = $restClient;
+        $this->logger = $logger;
     }
 
     /**
      * @inheritdoc
      */
-    public function getByIds(array $ids, $storeViewCodes = []): array
+    public function getByIds(array $ids, array $storeViewCodes = []): array
     {
-        $data = [];
-        $categories = $this->categoryRepository->get($ids, $storeViewCodes);
-        foreach ($categories as $category) {
-            $data[] = $this->dataObjectProcessor->buildOutputDataArray($category, Category::class);
+        try {
+            $categories = $this->restClient->get(
+                self::EXPORT_API_GET_CATEGORIES,
+                ['ids' => $ids, 'storeViewCodes' => $storeViewCodes],
+            );
+        } catch (\Throwable $e) {
+            $this->logger->error(
+                \sprintf(
+                    'Cannot load categories via "%s" with ids "%s"',
+                    self::EXPORT_API_GET_CATEGORIES,
+                    \implode(',', $ids)
+                ),
+                ['exception' => $e]
+            );
+            return [];
         }
-        return $data;
+
+        return $categories;
     }
 }
