@@ -77,7 +77,6 @@ class CategoriesConsumer
                 ),
                 ['exception' => $e]
             );
-            var_dump($e);
         }
     }
 }

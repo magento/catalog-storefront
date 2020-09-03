@@ -8,6 +8,7 @@ namespace Magento\CatalogMessageBroker\HttpClient;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\UrlInterface;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 /**
  * Client for invoking REST API
@@ -75,6 +76,14 @@ class RestClient
         }
 
         try {
+            $this->logger->log(
+                LogLevel::CRITICAL,
+                \sprintf(
+                    'Sending CURL request to: "%s", with ids:  "%s"',
+                    $url,
+                    \implode(',', $data['ids'] ?? [])
+                )
+            );
             $responseBody = $this->curlClient->get($url, $data, $headers);
             return !empty($responseBody['body']) ? $this->jsonSerializer->unserialize($responseBody['body']) : [];
         } catch (\Throwable $e) {

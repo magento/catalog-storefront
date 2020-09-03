@@ -11,6 +11,7 @@ use Magento\CatalogStorefront\Model\Storage\Client\CommandInterface;
 use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
 use Magento\CatalogStorefront\Model\Storage\State;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 /**
  * Repository for storing data to data storage.
@@ -118,6 +119,11 @@ class CatalogRepository
         if (!$data) {
             return;
         }
+        $this->logger->log(
+            LogLevel::ERROR,
+            \sprintf('Save to storage "%s" %s record(s)', $sourceName, count($data)),
+            ['verbose' => $data]
+        );
         $this->logger->debug(
             \sprintf('Save to storage "%s" %s record(s)', $sourceName, count($data)),
             ['verbose' => $data]
