@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\DownloadableProductDataExporter\Test\Integration;
+namespace Magento\DownloadableProductDataExporter;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogStorefront\Model\CatalogService;
