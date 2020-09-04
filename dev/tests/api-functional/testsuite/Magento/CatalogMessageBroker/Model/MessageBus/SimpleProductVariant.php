@@ -28,7 +28,7 @@ class SimpleProductVariant extends StorefrontTestsAbstract
      * @var string[]
      */
     private $attributesToCompare = [
-        'shopper_input_options'
+        'attributes'
     ];
 
     /**
@@ -76,7 +76,6 @@ class SimpleProductVariant extends StorefrontTestsAbstract
     public function testStoreFrontData(): void
     {
         $product = $this->productRepository->get('simple');
-        
 
         $this->productsGetRequestInterface->setIds([$product->getId()]);
         $this->productsGetRequestInterface->setStore(self::STORE_CODE);
@@ -85,7 +84,6 @@ class SimpleProductVariant extends StorefrontTestsAbstract
 
         $this->assertNotEmpty($catalogServiceItem->getItems());
         $item = $catalogServiceItem->getItems()[0];
-        var_dump($item);
 
     }
 }
