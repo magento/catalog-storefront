@@ -20,7 +20,7 @@ use Magento\TestFramework\Helper\CompareArraysRecursively;
  * Tests shopper input options on the store front
  *
  */
-class CustomOptionsTest extends StorefrontTestsAbstract
+class ShopperInputOptionsTest extends StorefrontTestsAbstract
 {
     const STORE_CODE = 'default';
 
