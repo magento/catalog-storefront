@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\DownloadableProductDataExporter;
+namespace Magento\DownloadableProducts;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogStorefront\Model\CatalogService;
