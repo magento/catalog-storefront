@@ -81,10 +81,10 @@ class FetchCategories implements FetchCategoriesInterface
      */
     private function prepareRequestData(array $entities, string $storeCode): array
     {
-        $products = [];
+        $categories = [];
 
         foreach ($entities as $entity) {
-            $products[] = [
+            $categories[] = [
                 'entity_id' => $entity->getEntityId(),
                 'attribute_codes' => $entity->getAttributes()
             ];
@@ -92,7 +92,7 @@ class FetchCategories implements FetchCategoriesInterface
 
         return [
             'request' => [
-                'entities' => $products,
+                'entities' => $categories,
                 'storeViewCodes' => [$storeCode],
             ],
         ];
