@@ -55,7 +55,7 @@ class SamplesTest extends StorefrontTestsAbstract
     /**
      * Validate downloadable product data
      *
-     * @magentoDataFixture Magento/CatalogStorefront/Test/Api/Product/Downloadable/_files/product_downloadable_with_link_url_and_sample_url_override.php
+     * @magentoDataFixture Magento_CatalogStorefront::Test/Api/Product/Downloadable/_files/product_downloadable_with_link_url_and_sample_url_override.php
      * @magentoDbIsolation disabled
      * @throws NoSuchEntityException
      * @throws \Throwable

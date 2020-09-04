@@ -18,7 +18,6 @@ use Magento\TestFramework\Helper\CompareArraysRecursively;
 
 /**
  * Tests shopper input options on the store front
- *
  */
 class ShopperInputOptionsTest extends StorefrontTestsAbstract
 {
