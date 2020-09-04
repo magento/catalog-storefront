@@ -575,23 +575,21 @@ class Catalog implements CatalogInterface
                             $r->setRequired($item60->getRequired());
                             $r->setRenderType($item60->getRenderType());
                             $r->setType($item60->getType());
-                            $r->setLinksPurchasedSeparately($item60->getLinksPurchasedSeparately());
-                            $r->setUseDefault($item60->getUseDefault());
                             $res = [];
-                            foreach ($item60->getValues() as $item69) {
+                            foreach ($item60->getValues() as $item67) {
                                 // convert data from \Magento\CatalogStorefrontApi\Proto\ProductOptionValue
                                 // to \Magento\CatalogStorefrontApi\Api\Data\ProductOptionValue
-                                /** @var \Magento\CatalogStorefrontApi\Proto\ProductOptionValue $item69 **/
-                                $p = function () use ($item69) {
+                                /** @var \Magento\CatalogStorefrontApi\Proto\ProductOptionValue $item67 **/
+                                $p = function () use ($item67) {
                                     $r = new \Magento\CatalogStorefrontApi\Api\Data\ProductOptionValue();
-                                    $r->setId($item69->getId());
-                                    $r->setLabel($item69->getLabel());
-                                    $r->setSortOrder($item69->getSortOrder());
-                                    $r->setDefault($item69->getDefault());
-                                    $r->setImageUrl($item69->getImageUrl());
-                                    $r->setQtyMutability($item69->getQtyMutability());
-                                    $r->setQty($item69->getQty());
-                                    $r->setInfoUrl($item69->getInfoUrl());
+                                    $r->setId($item67->getId());
+                                    $r->setLabel($item67->getLabel());
+                                    $r->setSortOrder($item67->getSortOrder());
+                                    $r->setDefault($item67->getDefault());
+                                    $r->setImageUrl($item67->getImageUrl());
+                                    $r->setQtyMutability($item67->getQtyMutability());
+                                    $r->setQty($item67->getQty());
+                                    $r->setInfoUrl($item67->getInfoUrl());
                                     return $r;
                                 };
                                 $out = $p();
@@ -1137,23 +1135,21 @@ class Catalog implements CatalogInterface
                             $r->setRequired($item60->getRequired());
                             $r->setRenderType($item60->getRenderType());
                             $r->setType($item60->getType());
-                            $r->setLinksPurchasedSeparately($item60->getLinksPurchasedSeparately());
-                            $r->setUseDefault($item60->getUseDefault());
                             $res = [];
-                            foreach ($item60->getValues() as $item69) {
+                            foreach ($item60->getValues() as $item67) {
                                 // convert data from \Magento\CatalogStorefrontApi\Api\Data\ProductOptionValue
                                 // to \Magento\CatalogStorefrontApi\Proto\ProductOptionValue
-                                /** @var \Magento\CatalogStorefrontApi\Api\Data\ProductOptionValue $item69 **/
-                                $p = function () use ($item69) {
+                                /** @var \Magento\CatalogStorefrontApi\Api\Data\ProductOptionValue $item67 **/
+                                $p = function () use ($item67) {
                                     $r = new \Magento\CatalogStorefrontApi\Proto\ProductOptionValue();
-                                    $r->setId($item69->getId());
-                                    $r->setLabel($item69->getLabel());
-                                    $r->setSortOrder($item69->getSortOrder());
-                                    $r->setDefault($item69->getDefault());
-                                    $r->setImageUrl($item69->getImageUrl());
-                                    $r->setQtyMutability($item69->getQtyMutability());
-                                    $r->setQty($item69->getQty());
-                                    $r->setInfoUrl($item69->getInfoUrl());
+                                    $r->setId($item67->getId());
+                                    $r->setLabel($item67->getLabel());
+                                    $r->setSortOrder($item67->getSortOrder());
+                                    $r->setDefault($item67->getDefault());
+                                    $r->setImageUrl($item67->getImageUrl());
+                                    $r->setQtyMutability($item67->getQtyMutability());
+                                    $r->setQty($item67->getQty());
+                                    $r->setInfoUrl($item67->getInfoUrl());
                                     return $r;
                                 };
                                 $proto = $p();
