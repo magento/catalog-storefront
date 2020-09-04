@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\TestFramework\TestCase;
+namespace Magento\CatalogStorefront\Test\Api;
 
 use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
 use Magento\CatalogStorefront\Model\Storage\State;

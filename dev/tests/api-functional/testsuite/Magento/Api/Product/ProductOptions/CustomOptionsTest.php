@@ -5,22 +5,22 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogMessageBroker;
+namespace Magento\CatalogStorefront\Test\Api\Product\ProductOptions;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogStorefront\Model\CatalogService;
+use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionArrayMapper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CompareArraysRecursively;
-use Magento\TestFramework\TestCase\StorefrontTestsAbstract;
 
 /**
  * Tests shopper input options on the store front
  *
  */
-class ShopperInputOptionsStoreFrontTest extends StorefrontTestsAbstract
+class CustomOptionsTest extends StorefrontTestsAbstract
 {
     const STORE_CODE = 'default';
 
