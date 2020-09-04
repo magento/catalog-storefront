@@ -5,20 +5,20 @@
  */
 declare(strict_types=1);
 
-namespace Magento\DownloadableProducts;
+namespace Magento\CatalogStorefront\Test\Api\Product\Downloadable;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogStorefront\Model\CatalogService;
+use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\TestCase\StorefrontTestsAbstract;
 
 /**
  * Test for downloadable product exporter
  *
  */
-class DownloadableProductsTest extends StorefrontTestsAbstract
+class SamplesTest extends StorefrontTestsAbstract
 {
     /**
      * Test Constants
@@ -55,11 +55,11 @@ class DownloadableProductsTest extends StorefrontTestsAbstract
     /**
      * Validate downloadable product data
      *
-     * @magentoDataFixture Magento/DownloadableProducts/_files/product_downloadable_with_link_url_and_sample_url_override.php
+     * @magentoDataFixture Magento/CatalogStorefront/Test/Api/Product/Downloadable/_files/product_downloadable_with_link_url_and_sample_url_override.php
      * @throws NoSuchEntityException
      * @throws \Throwable
      */
-    public function testDownloadableProductsWithUrls() : void
+    public function testDownloadableProductsWithUrls(): void
     {
         $product = $this->productRepository->get(self::TEST_SKU);
         $productSampleData = $product->getExtensionAttributes()->getDownloadableProductSamples()[0];
@@ -82,7 +82,7 @@ class DownloadableProductsTest extends StorefrontTestsAbstract
      * @throws NoSuchEntityException
      * @throws \Throwable
      */
-    public function testDownloadableProductsWithFiles() : void
+    public function testDownloadableProductsWithFiles(): void
     {
         $product = $this->productRepository->get(self::TEST_SKU);
         $productSampleData = $product->getExtensionAttributes()->getDownloadableProductSamples()[0];

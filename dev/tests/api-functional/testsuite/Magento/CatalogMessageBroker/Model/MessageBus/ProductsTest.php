@@ -10,10 +10,10 @@ namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\CatalogDataExporter\Test\Integration\AbstractProductTestHelper;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
 use Magento\CatalogMessageBroker\Model\MessageBus\Product\ProductsConsumer;
 use Magento\CatalogStorefront\Model\CatalogService;
+use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\DataExporter\Model\FeedInterface;
 use Magento\DataExporter\Model\FeedPool;
@@ -21,8 +21,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\TestCase\StorefrontTestsAbstract;
-
 /**
  * Test class for Products message bus
  *
