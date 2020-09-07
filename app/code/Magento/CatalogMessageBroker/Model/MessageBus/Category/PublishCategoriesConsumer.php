@@ -103,15 +103,7 @@ class PublishCategoriesConsumer implements ConsumerEventInterface
             $attributes = $attributesArray[$categoryData['category_id']];
 
             if (!empty($attributes)) {
-                $updateCategories[$categoryData['category_id']] = \array_filter(
-                    $categoryData,
-                    function ($code) use ($attributes) {
-                        return \in_array($code, \array_map(function ($attributeCode) {
-                            return SimpleDataObjectConverter::camelCaseToSnakeCase($attributeCode);
-                        }, $attributes)) || $code === 'category_id';
-                    },
-                    ARRAY_FILTER_USE_KEY
-                );
+                $updateCategories[$categoryData['category_id']] = $this->filterAttributes($categoryData, $attributes);
             } else {
                 $importCategories[$categoryData['category_id']] = $categoryData;
             }
@@ -124,6 +116,27 @@ class PublishCategoriesConsumer implements ConsumerEventInterface
         if (!empty($updateCategories)) {
             $this->importCategories($updateCategories, $scope, self::ACTION_UPDATE);
         }
+    }
+
+    /**
+     * Filter attributes for entity update.
+     *
+     * @param array $categoryData
+     * @param array $attributes
+     *
+     * @return array
+     */
+    private function filterAttributes(array $categoryData, array $attributes): array
+    {
+        return \array_filter(
+            $categoryData,
+            function ($code) use ($attributes) {
+                return \in_array($code, \array_map(function ($attributeCode) {
+                    return SimpleDataObjectConverter::camelCaseToSnakeCase($attributeCode);
+                }, $attributes)) || $code === 'category_id';
+            },
+            ARRAY_FILTER_USE_KEY
+        );
     }
 
     /**

@@ -76,15 +76,7 @@ class PublishProductsConsumer implements ConsumerEventInterface
             $attributes = $attributesArray[$productData['product_id']];
 
             if (!empty($attributes)) {
-                $updateProducts[$productData['product_id']] = \array_filter(
-                    $productData,
-                    function ($code) use ($attributes) {
-                        return \in_array($code, \array_map(function ($attributeCode) {
-                            return SimpleDataObjectConverter::camelCaseToSnakeCase($attributeCode);
-                        }, $attributes)) || $code === 'product_id';
-                    },
-                    ARRAY_FILTER_USE_KEY
-                );
+                $updateProducts[$productData['product_id']] = $this->filterAttributes($productData, $attributes);
             } else {
                 $importProducts[$productData['product_id']] = $productData;
             }
@@ -92,6 +84,27 @@ class PublishProductsConsumer implements ConsumerEventInterface
 
         $this->publishProducts($importProducts, $scope, self::ACTION_IMPORT);
         $this->publishProducts($updateProducts, $scope, self::ACTION_UPDATE);
+    }
+
+    /**
+     * Filter attributes for entity update.
+     *
+     * @param array $productData
+     * @param array $attributes
+     *
+     * @return array
+     */
+    private function filterAttributes(array $productData, array $attributes): array
+    {
+        return \array_filter(
+            $productData,
+            function ($code) use ($attributes) {
+                return \in_array($code, \array_map(function ($attributeCode) {
+                    return SimpleDataObjectConverter::camelCaseToSnakeCase($attributeCode);
+                }, $attributes)) || $code === 'product_id';
+            },
+            ARRAY_FILTER_USE_KEY
+        );
     }
 
     /**
