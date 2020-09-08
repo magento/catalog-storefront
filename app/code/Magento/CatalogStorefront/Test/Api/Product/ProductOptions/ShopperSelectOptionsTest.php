@@ -19,7 +19,7 @@ use Magento\TestFramework\Helper\CompareArraysRecursively;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SimpleProductVariant extends StorefrontTestsAbstract
+class ShopperSelectOptionsTest extends StorefrontTestsAbstract
 {
     const STORE_CODE = 'default';
 
@@ -27,7 +27,7 @@ class SimpleProductVariant extends StorefrontTestsAbstract
      * @var string[]
      */
     private $attributesToCompare = [
-        'shopper_input_options'
+        'shopper_select_options'
     ];
 
     /**
@@ -71,7 +71,7 @@ class SimpleProductVariant extends StorefrontTestsAbstract
     /**
      * Test product shopper input options
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_custom_attribute.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_custom_options.php
      * @magentoDbIsolation disabled
      * @param array $expected
      * @throws NoSuchEntityException
