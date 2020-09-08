@@ -81,7 +81,7 @@ class ShopperSelectOptionsTest extends StorefrontTestsAbstract
     public function testShopperInputOptionData(array $expected): void
     {
         //TODO: Waiting for Ruslan Kostiv to finalize this testing, as I need to revise this based on his changes
-        $product = $this->productRepository->get('simple');
+        $product = $this->productRepository->get('simple_with_custom_options');
 
         $this->productsGetRequestInterface->setIds([$product->getId()]);
         $this->productsGetRequestInterface->setStore(self::STORE_CODE);
