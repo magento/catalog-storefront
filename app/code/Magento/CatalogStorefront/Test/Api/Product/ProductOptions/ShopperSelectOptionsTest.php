@@ -105,7 +105,7 @@ class ShopperSelectOptionsTest extends StorefrontTestsAbstract
      *
      * @return array[][]
      */
-    public function shopperInputOptionProvider(): array
+    public function shopperSelectOptionProvider(): array
     {
         /**
          * Drop-down
