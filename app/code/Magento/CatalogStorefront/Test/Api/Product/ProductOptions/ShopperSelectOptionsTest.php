@@ -69,7 +69,7 @@ class ShopperSelectOptionsTest extends StorefrontTestsAbstract
     }
 
     /**
-     * Test product shopper input options
+     * Test product shopper select options
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_custom_options.php
      * @magentoDbIsolation disabled
@@ -80,6 +80,7 @@ class ShopperSelectOptionsTest extends StorefrontTestsAbstract
      */
     public function testShopperInputOptionData(array $expected): void
     {
+        //TODO: Waiting for Ruslan Kostiv to finalize this testing, as I need to revise this based on his changes
         $product = $this->productRepository->get('simple');
 
         $this->productsGetRequestInterface->setIds([$product->getId()]);
@@ -107,12 +108,6 @@ class ShopperSelectOptionsTest extends StorefrontTestsAbstract
      */
     public function shopperSelectOptionProvider(): array
     {
-        /**
-         * Drop-down
-        Radio Buttons
-        Checkbox
-        Multiple Select
-         */
         return [
             [
                 [
