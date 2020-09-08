@@ -107,56 +107,44 @@ class ShopperSelectOptionsTest extends StorefrontTestsAbstract
      */
     public function shopperInputOptionProvider(): array
     {
+        /**
+         * Drop-down
+        Radio Buttons
+        Checkbox
+        Multiple Select
+         */
         return [
             [
                 [
                     [
                         //'id' => 'Y3VzdG9tLW9wdGlvbi8x',
-                        'label' => 'Test Field',
+                        'label' => 'Drop down',
                         'required' => true,
                         'sort_order' => 0,
-                        'render_type' => 'field',
-                        'value' => '',
-                        'max_characters' => 100,
-                        'file_extension' => [],
-                        'image_size_x' => 0,
-                        'image_size_y' => 0
+                        'render_type' => 'dropdown',
+
                     ],
                     [
                         //'id' => 'Y3VzdG9tLW9wdGlvbi82',
-                        'label' => 'Test Date and Time',
+                        'label' => 'Radio buttons',
                         'required' => true,
                         'sort_order' => 0,
-                        'render_type' => 'date_time',
-                        'value' => '',
-                        'max_characters' => 0,
-                        'file_extension' => [],
-                        'image_size_x' => 0,
-                        'image_size_y' => 0
+                        'render_type' => 'radio',
+
                     ],
                     [
                         //'id' => 'Y3VzdG9tLW9wdGlvbi81',
-                        'label' => 'area option',
+                        'label' => 'Checkbox',
                         'required' => true,
                         'sort_order' => 2,
-                        'render_type' => 'area',
-                        'value' => '',
-                        'max_characters' => 20,
-                        'file_extension' => [],
-                        'image_size_x' => 0,
-                        'image_size_y' => 0
+                        'render_type' => 'checkbox',
                     ],
                     [
                         //'id' => 'Y3VzdG9tLW9wdGlvbi8xMw==',
-                        'label' => 'File option',
+                        'label' => 'Multipleselect',
                         'required' => true,
                         'sort_order' => 3,
-                        'render_type' => 'file',
-                        'value' => '',
-                        'max_characters' => 0,
-                        'file_extension' => ['jpg, png, gif'],
-                        'image_size_x' => 10,
-                        'image_size_y' => 20
+                        'render_type' => 'multiselect',
                     ]
                 ]
             ]
