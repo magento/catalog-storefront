@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogMessageBroker\Model\MessageBus;
+namespace Magento\CatalogStorefront\Test\Api\Product\ProductOptions;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogStorefront\Model\CatalogService;
