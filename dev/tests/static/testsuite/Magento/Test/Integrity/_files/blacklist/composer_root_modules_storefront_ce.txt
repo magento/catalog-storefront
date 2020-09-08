@@ -12,3 +12,4 @@ magento/module-catalog-storefront-connector
 magento/module-catalog-storefront-graph-ql
 magento/module-configurable-product-extractor
 magento/module-storefront-graph-ql
+magento/module-downloadable-product-data-exporter
