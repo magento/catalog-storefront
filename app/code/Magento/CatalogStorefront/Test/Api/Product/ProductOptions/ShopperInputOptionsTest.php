@@ -102,8 +102,8 @@ class ShopperInputOptionsTest extends StorefrontTestsAbstract
 
     /**
      * Data provider for shopper input option
-     *
-     * @return array[][]
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return array
      */
     public function shopperInputOptionProvider(): array
     {
