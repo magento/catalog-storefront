@@ -113,33 +113,59 @@ class ShopperSelectOptionsTest extends StorefrontTestsAbstract
                 [
                     [
                         //'id' => 'Y3VzdG9tLW9wdGlvbi8x',
-                        'label' => 'Drop down',
+                        'label' => 'Test Select',
                         'required' => true,
                         'sort_order' => 0,
-                        'render_type' => 'dropdown',
-
+                        'render_type' => 'drop_down',
+                        'value' => [
+                            'option_type_id' => null,
+                            'title'         => 'Option 1',
+                            'price'         => 3,
+                            'price_type'    => 'fixed',
+                            'sku'           => '3-1-select',
+                        ],
                     ],
                     [
                         //'id' => 'Y3VzdG9tLW9wdGlvbi82',
-                        'label' => 'Radio buttons',
+                        'label' => 'Test Radio',
                         'required' => true,
                         'sort_order' => 0,
                         'render_type' => 'radio',
-
+                        'value' =>  [
+                            'option_type_id' => null,
+                            'title'         => 'Option 1',
+                            'price'         => 3,
+                            'price_type'    => 'fixed',
+                            'sku'           => '4-1-radio',
+                        ],
                     ],
                     [
                         //'id' => 'Y3VzdG9tLW9wdGlvbi81',
-                        'label' => 'Checkbox',
+                        'label' => 'checkbox option',
                         'required' => true,
-                        'sort_order' => 2,
+                        'sort_order' => 6,
                         'render_type' => 'checkbox',
+                        'value' =>     [
+                            'title' => 'checkbox option 1',
+                            'price' => 10,
+                            'price_type' => 'fixed',
+                            'sku' => 'checkbox option 1 sku',
+                            'sort_order' => 1,
+                        ],
                     ],
                     [
                         //'id' => 'Y3VzdG9tLW9wdGlvbi8xMw==',
-                        'label' => 'Multipleselect',
+                        'label' => 'multiple option',
                         'required' => true,
-                        'sort_order' => 3,
-                        'render_type' => 'multiselect',
+                        'sort_order' => 7,
+                        'render_type' => 'multiple',
+                        'value' => [
+                            'title' => 'multiple option 1',
+                            'price' => 10,
+                            'price_type' => 'fixed',
+                            'sku' => 'multiple option 1 sku',
+                            'sort_order' => 1,
+                        ],
                     ]
                 ]
             ]
