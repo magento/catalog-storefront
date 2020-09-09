@@ -47,7 +47,7 @@ class ShopperSelectOptionsTest extends StorefrontTestsAbstract
     protected $productRepository;
 
     /**
-     * @var ProductShopperInputOptionArrayMapper
+     * @var ProductOptionValueArrayMapper
      */
     protected $arrayMapper;
 
@@ -79,7 +79,7 @@ class ShopperSelectOptionsTest extends StorefrontTestsAbstract
      * @throws \Throwable
      * @dataProvider shopperSelectOptionProvider
      */
-    public function testShopperInputOptionData(array $expected): void
+    public function testShopperSelectOptionData(array $expected): void
     {
         //TODO: Waiting for Ruslan Kostiv to finalize this testing, as I need to revise this based on his changes
         $product = $this->productRepository->get('simple_with_custom_options');
@@ -106,7 +106,7 @@ class ShopperSelectOptionsTest extends StorefrontTestsAbstract
     }
 
     /**
-     * Data provider for shopper input option
+     * Data provider for shopper select option
      *
      * @return array[][]
      */
