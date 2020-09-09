@@ -10,12 +10,13 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogStorefront\Model\CatalogService;
 use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
-use Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionArrayMapper;
+use Magento\CatalogStorefrontApi\Api\Data\ProductOptionValueArrayMapper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CompareArraysRecursively;
+
 /**
- * Test class for ProductVariants message bus
+ * Test class for Select custom options
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -27,7 +28,7 @@ class ShopperSelectOptionsTest extends StorefrontTestsAbstract
      * @var string[]
      */
     private $attributesToCompare = [
-        'shopper_select_options'
+        'options_v2'
     ];
 
     /**
@@ -64,7 +65,7 @@ class ShopperSelectOptionsTest extends StorefrontTestsAbstract
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
         $this->productsGetRequestInterface = Bootstrap::getObjectManager()->create(ProductsGetRequestInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
-        $this->arrayMapper = Bootstrap::getObjectManager()->create(ProductShopperInputOptionArrayMapper::class);
+        $this->arrayMapper = Bootstrap::getObjectManager()->create(ProductOptionValueArrayMapper::class);
         $this->compareArraysRecursively = Bootstrap::getObjectManager()->create(CompareArraysRecursively::class);
     }
 
@@ -90,8 +91,12 @@ class ShopperSelectOptionsTest extends StorefrontTestsAbstract
         self::assertNotEmpty($catalogServiceItem->getItems());
 
         $actual = [];
-        foreach ($catalogServiceItem->getItems()[0]->getShopperInputOptions() as $item) {
-            $actual[] = $this->arrayMapper->convertToArray($item);
+        foreach ($catalogServiceItem->getItems()[0]->getOptionsV2() as $productOption) {
+            $optionValues = $productOption->getValues();
+            foreach ($optionValues as $productOptionValue) {
+                // TODO: use \Magento\CatalogStorefrontApi\Api\Data\ProductOptionValueArrayMapper mapper to convert object to array
+                $actual[] = $this->arrayMapper->convertToArray($productOptionValue);
+            }
         }
 
         $diff = $this->compareArraysRecursively->execute(
