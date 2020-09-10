@@ -20,7 +20,7 @@ use Magento\TestFramework\Helper\CompareArraysRecursively;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SelectOptionsTest extends StorefrontTestsAbstract
+class SelectedOptionsTest extends StorefrontTestsAbstract
 {
     const STORE_CODE = 'default';
 
@@ -117,7 +117,6 @@ class SelectOptionsTest extends StorefrontTestsAbstract
             [
                 [
                     [
-                        //'id' => 'Y3VzdG9tLW9wdGlvbi8x',
                         'label' => 'drop_down option 1',
                         'sort_order' => '1',
                         'default' => false,
@@ -127,7 +126,6 @@ class SelectOptionsTest extends StorefrontTestsAbstract
                         'info_url' => '',
                     ],
                     [
-                        //'id' => 'Y3VzdG9tLW9wdGlvbi8x',
                         'label' => 'drop_down option 2',
                         'sort_order' => '2',
                         'default' => false,
@@ -137,7 +135,6 @@ class SelectOptionsTest extends StorefrontTestsAbstract
                         'info_url' => '',
                     ],
                     [
-                        //'id' => 'Y3VzdG9tLW9wdGlvbi8x',
                         'label' => 'radio option 1',
                         'sort_order' => '1',
                         'default' => false,
