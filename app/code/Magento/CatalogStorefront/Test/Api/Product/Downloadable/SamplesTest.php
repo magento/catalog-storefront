@@ -39,7 +39,7 @@ class SamplesTest extends StorefrontTestsAbstract
     /**
      * @var ProductRepositoryInterface
      */
-    protected $productRepository;
+    private $productRepository;
 
     /**
      * @inheritdoc

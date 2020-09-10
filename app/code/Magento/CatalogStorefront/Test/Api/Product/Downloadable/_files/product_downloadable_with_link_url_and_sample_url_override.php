@@ -15,8 +15,7 @@ $domainManager->addDomains(
     [
         'example.com',
         'www.example.com',
-        'www.sample.example.com',
-        'google.com'
+        'www.sample.example.com'
     ]
 );
 
