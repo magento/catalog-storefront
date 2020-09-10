@@ -20,7 +20,7 @@ use Magento\TestFramework\Helper\CompareArraysRecursively;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ShopperSelectOptionsTest extends StorefrontTestsAbstract
+class SelectOptionsTest extends StorefrontTestsAbstract
 {
     const STORE_CODE = 'default';
 
@@ -70,16 +70,16 @@ class ShopperSelectOptionsTest extends StorefrontTestsAbstract
     }
 
     /**
-     * Test product shopper select options
+     * Test product select options
      *
      * @magentoDataFixture Magento/Catalog/_files/product_with_options.php
      * @magentoDbIsolation disabled
      * @param array $expected
      * @throws NoSuchEntityException
      * @throws \Throwable
-     * @dataProvider shopperSelectOptionValuesProvider
+     * @dataProvider selectOptionValuesProvider
      */
-    public function testShopperSelectOptionData(array $expected): void
+    public function testSelectOptionData(array $expected): void
     {
         $product = $this->productRepository->get('simple');
         $this->productsGetRequestInterface->setIds([$product->getId()]);
@@ -90,9 +90,9 @@ class ShopperSelectOptionsTest extends StorefrontTestsAbstract
 
         $actual = [];
         $index = 0;
-        foreach ($catalogServiceItem->getItems()[0]->getOptionsV2() as $key => $productOption) {
+        foreach ($catalogServiceItem->getItems()[0]->getOptionsV2() as $productOption) {
             $optionValues = $productOption->getValues();
-            foreach ($optionValues as $key => $productOptionValue) {
+            foreach ($optionValues as $productOptionValue) {
                 $actual[] = $this->arrayMapper->convertToArray($productOptionValue);
                 unset($actual[$index]['id']); //id generates randomly, don't need to compare
                 $index++;
@@ -107,11 +107,11 @@ class ShopperSelectOptionsTest extends StorefrontTestsAbstract
     }
 
     /**
-     * Data provider for shopper select option values
+     * Data provider for select option values
      *
      * @return array[][]
      */
-    public function shopperSelectOptionValuesProvider(): array
+    public function selectOptionValuesProvider(): array
     {
         return [
             [
