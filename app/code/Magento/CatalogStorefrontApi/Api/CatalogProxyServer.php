@@ -99,14 +99,14 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequest();
             $values = [];
-            foreach ($value->getIds() as $value) {
-                $values[] = $value;
+            foreach ($value->getIds() as $newValue) {
+                $values[] = $newValue;
             }
             $r->setIds($values);
             $r->setStore($value->getStore());
             $values = [];
-            foreach ($value->getAttributeCodes() as $value) {
-                $values[] = $value;
+            foreach ($value->getAttributeCodes() as $newValue) {
+                $values[] = $newValue;
             }
             $r->setAttributeCodes($values);
             return $r;
