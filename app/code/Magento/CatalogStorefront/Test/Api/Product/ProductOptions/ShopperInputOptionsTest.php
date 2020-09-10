@@ -75,7 +75,6 @@ class ShopperInputOptionsTest extends StorefrontTestsAbstract
      * @magentoDbIsolation disabled
      * @param array $expected
      * @throws NoSuchEntityException
-     * @throws \Throwable
      * @dataProvider shopperInputOptionProvider
      */
     public function testShopperInputOptionData(array $expected): void
