@@ -9,14 +9,14 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefront\Model\Storage\Client\Config;
 
 /**
- * Product entity type config.
+ * Variant entity type config.
  */
-class Product implements EntityConfigInterface
+class Variant implements EntityConfigInterface
 {
     /**
      * Entity name. Used to hold configuration for specific entity type and as a part of the storage name
      */
-    public const ENTITY_NAME = 'product';
+    public const ENTITY_NAME = 'variant';
 
     /**
      * @inheritdoc

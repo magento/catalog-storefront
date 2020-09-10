@@ -27,6 +27,7 @@ use Magento\CatalogStorefront\DataProvider\ProductDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponse;
 use Magento\CatalogStorefrontApi\Api\Data\UrlRewrite;
 use Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameter;
+use Magento\CatalogStorefrontApi\Api\Data\VariantInterface;
 use Magento\CatalogStorefrontApi\Api\Data\Video;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
@@ -47,6 +48,8 @@ use Psr\Log\LoggerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetResponse;
 use Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetResponseInterface;
+use Magento\CatalogStorefrontApi\Api\Data\Variant;
+use Magento\CatalogStorefront\DataProvider\VariantsDataProvider;
 
 /**
  * Class for retrieving catalog data
@@ -119,6 +122,11 @@ class CatalogService implements CatalogServerInterface
     private $categoryArrayMapper;
 
     /**
+     * @var VariantsDataProvider
+     */
+    private $variantsDataProvider;
+
+    /**
      * @param ProductDataProvider $dataProvider
      * @param DataObjectHelper $dataObjectHelper
      * @param CategoryDataProvider $categoryDataProvider
@@ -131,6 +139,7 @@ class CatalogService implements CatalogServerInterface
      * @param ProductArrayMapper $productArrayMapper
      * @param CategoryArrayMapper $categoryArrayMapper
      * @param LoggerInterface $logger
+     * @param VariantsDataProvider $variantsDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -145,7 +154,8 @@ class CatalogService implements CatalogServerInterface
         CatalogRepository $catalogRepository,
         ProductArrayMapper $productArrayMapper,
         CategoryArrayMapper $categoryArrayMapper,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        VariantsDataProvider $variantsDataProvider
     ) {
         $this->dataProvider = $dataProvider;
         $this->dataObjectHelper = $dataObjectHelper;
@@ -159,6 +169,7 @@ class CatalogService implements CatalogServerInterface
         $this->productArrayMapper = $productArrayMapper;
         $this->categoryArrayMapper = $categoryArrayMapper;
         $this->logger = $logger;
+        $this->variantsDataProvider  = $variantsDataProvider;
     }
 
     /**
@@ -481,6 +492,42 @@ class CatalogService implements CatalogServerInterface
         ProductVariantsGetRequestInterface $request
     ): ProductVariantsGetResponseInterface {
         $result = new ProductVariantsGetResponse();
+
+        if (empty($request->getStoreId()) || $request->getStoreId() === null) {
+            throw new \InvalidArgumentException('Store code is not present in request.');
+        }
+
+        if (empty($request->getIds())) {
+            return $result;
+        }
+
+        $variants = $this->variantsDataProvider->fetch(
+            $request->getIds(),
+            $request->getAttributeCodes(),
+            ['store' => $request->getStoreId()]
+        );
+
+        if (count($variants) !== count($request->getIds())) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Variants with the following ids are not found in catalog: %s',
+                    implode(', ', array_diff($request->getIds(), array_keys($variants)))
+                )
+            );
+        }
+
+        /** @var Variant[] $items */
+        $items = [];
+
+        foreach ($variants as $variant) {
+            $item = new Variant();
+            $variant = $this->cleanUpNullValues($variant);
+
+            $this->dataObjectHelper->populateWithArray($item, $variant, VariantInterface::class);
+            $items[] = $item;
+        }
+
+        $result->setItems($items);
 
         return $result;
     }

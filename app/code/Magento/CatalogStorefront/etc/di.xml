@@ -19,6 +19,7 @@
             <argument name="configs" xsi:type="array">
                 <item name="product" xsi:type="object">Magento\CatalogStorefront\Model\Storage\Client\Config\Product</item>
                 <item name="category" xsi:type="object">Magento\CatalogStorefront\Model\Storage\Client\Config\Category</item>
+                <item name="variant" xsi:type="object">Magento\CatalogStorefront\Model\Storage\Client\Config\Variant</item>
             </argument>
         </arguments>
     </type>
