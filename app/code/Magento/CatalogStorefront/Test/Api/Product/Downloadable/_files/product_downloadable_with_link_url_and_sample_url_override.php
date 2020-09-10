@@ -1,5 +1,6 @@
 <?php
-//TODO:: Revert data fixture once we can find and fix the issue with the original data fixture. https://github.com/magento/catalog-storefront/issues/302.
+//TODO:: Revert data fixture once we can find and fix the issue with the original data fixture.
+// https://github.com/magento/catalog-storefront/issues/302.
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
