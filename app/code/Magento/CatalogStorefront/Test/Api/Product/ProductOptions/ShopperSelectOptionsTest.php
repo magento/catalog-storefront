@@ -72,18 +72,16 @@ class ShopperSelectOptionsTest extends StorefrontTestsAbstract
     /**
      * Test product shopper select options
      *
-     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_custom_options.php
+     * @magentoDataFixture Magento/Catalog/_files/product_with_options.php
      * @magentoDbIsolation disabled
      * @param array $expected
      * @throws NoSuchEntityException
      * @throws \Throwable
-     * @dataProvider shopperSelectOptionProvider
+     * @dataProvider shopperSelectOptionValuesProvider
      */
     public function testShopperSelectOptionData(array $expected): void
     {
-        //TODO: Waiting for Ruslan Kostiv to finalize this testing, as I need to revise this based on his changes
-        $product = $this->productRepository->get('simple_with_custom_options');
-
+        $product = $this->productRepository->get('simple');
         $this->productsGetRequestInterface->setIds([$product->getId()]);
         $this->productsGetRequestInterface->setStore(self::STORE_CODE);
         $this->productsGetRequestInterface->setAttributeCodes($this->attributesToCompare);
@@ -91,10 +89,13 @@ class ShopperSelectOptionsTest extends StorefrontTestsAbstract
         self::assertNotEmpty($catalogServiceItem->getItems());
 
         $actual = [];
-        foreach ($catalogServiceItem->getItems()[0]->getOptionsV2() as $productOption) {
+        $index = 0;
+        foreach ($catalogServiceItem->getItems()[0]->getOptionsV2() as $key => $productOption) {
             $optionValues = $productOption->getValues();
-            foreach ($optionValues as $productOptionValue) {
+            foreach ($optionValues as $key => $productOptionValue) {
                 $actual[] = $this->arrayMapper->convertToArray($productOptionValue);
+                unset($actual[$index]['id']); //id generates randomly, don't need to compare
+                $index++;
             }
         }
 
@@ -106,71 +107,90 @@ class ShopperSelectOptionsTest extends StorefrontTestsAbstract
     }
 
     /**
-     * Data provider for shopper select option
+     * Data provider for shopper select option values
      *
      * @return array[][]
      */
-    public function shopperSelectOptionProvider(): array
+    public function shopperSelectOptionValuesProvider(): array
     {
         return [
             [
                 [
                     [
                         //'id' => 'Y3VzdG9tLW9wdGlvbi8x',
-                        'label' => 'Test Select',
-                        'required' => true,
-                        'sort_order' => 0,
-                        'render_type' => 'drop_down',
-                        'value' => [
-                            'option_type_id' => null,
-                            'title'         => 'Option 1',
-                            'price'         => 3,
-                            'price_type'    => 'fixed',
-                            'sku'           => '3-1-select',
-                        ],
+                        'label' => 'drop_down option 1',
+                        'sort_order' => '1',
+                        'default' => false,
+                        'image_url' => '',
+                        'qty_mutability' => false,
+                        'qty' => (float)0,
+                        'info_url' => '',
                     ],
                     [
-                        //'id' => 'Y3VzdG9tLW9wdGlvbi82',
-                        'label' => 'Test Radio',
-                        'required' => true,
-                        'sort_order' => 0,
-                        'render_type' => 'radio',
-                        'value' =>  [
-                            'option_type_id' => null,
-                            'title'         => 'Option 1',
-                            'price'         => 3,
-                            'price_type'    => 'fixed',
-                            'sku'           => '4-1-radio',
-                        ],
+                        //'id' => 'Y3VzdG9tLW9wdGlvbi8x',
+                        'label' => 'drop_down option 2',
+                        'sort_order' => '2',
+                        'default' => false,
+                        'image_url' => '',
+                        'qty_mutability' => false,
+                        'qty' => (float) 0,
+                        'info_url' => '',
                     ],
                     [
-                        //'id' => 'Y3VzdG9tLW9wdGlvbi81',
-                        'label' => 'checkbox option',
-                        'required' => true,
-                        'sort_order' => 6,
-                        'render_type' => 'checkbox',
-                        'value' =>     [
-                            'title' => 'checkbox option 1',
-                            'price' => 10,
-                            'price_type' => 'fixed',
-                            'sku' => 'checkbox option 1 sku',
-                            'sort_order' => 1,
-                        ],
+                        //'id' => 'Y3VzdG9tLW9wdGlvbi8x',
+                        'label' => 'radio option 1',
+                        'sort_order' => '1',
+                        'default' => false,
+                        'image_url' => '',
+                        'qty_mutability' => false,
+                        'qty' => (float)0,
+                        'info_url' => '',
                     ],
                     [
-                        //'id' => 'Y3VzdG9tLW9wdGlvbi8xMw==',
-                        'label' => 'multiple option',
-                        'required' => true,
-                        'sort_order' => 7,
-                        'render_type' => 'multiple',
-                        'value' => [
-                            'title' => 'multiple option 1',
-                            'price' => 10,
-                            'price_type' => 'fixed',
-                            'sku' => 'multiple option 1 sku',
-                            'sort_order' => 1,
-                        ],
-                    ]
+                        'label' => 'radio option 2',
+                        'sort_order' => '2',
+                        'default' => false,
+                        'image_url' => '',
+                        'qty_mutability' => false,
+                        'qty' => (float)0,
+                        'info_url' => '',
+                    ],
+                    [
+                        'label' => 'checkbox option 1',
+                        'sort_order' => '1',
+                        'default' => false,
+                        'image_url' => "",
+                        'qty_mutability' => false,
+                        'qty' => (float)0,
+                        'info_url' => '',
+                    ],
+                    [
+                        'label' => 'checkbox option 2',
+                        'sort_order' => '2',
+                        'default' => false,
+                        'image_url' => '',
+                        'qty_mutability' => false,
+                        'qty' => (float)0,
+                        'info_url' => '',
+                    ],
+                    [
+                        'label' => 'multiple option 1',
+                        'sort_order' => '1',
+                        'default' => false,
+                        'image_url' => '',
+                        'qty_mutability' => false,
+                        'qty' => (float)0,
+                        'info_url' => '',
+                    ],
+                    [
+                        'label' => 'multiple option 2',
+                        'sort_order' => '2',
+                        'default' => false,
+                        'image_url' => '2',
+                        'qty_mutability' => false,
+                        'qty' => (float)0,
+                        'info_url' => '',
+                    ],
                 ]
             ]
         ];
