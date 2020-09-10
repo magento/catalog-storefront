@@ -38,7 +38,7 @@ class ProductOption extends \Google\Protobuf\Internal\Message
      */
     protected $type = '';
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOptionValue values = 9;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOptionValue values = 7;</code>
      */
     private $values;
 
@@ -196,7 +196,7 @@ class ProductOption extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOptionValue values = 9;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOptionValue values = 7;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
      */
     public function getValues()
@@ -205,7 +205,7 @@ class ProductOption extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOptionValue values = 9;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductOptionValue values = 7;</code>
      * @param \Magento\CatalogStorefrontApi\Proto\ProductOptionValue[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */

@@ -313,7 +313,7 @@ final class Product implements ProductInterface
     /**
      * @var array
      */
-    private $optionsV2;
+    private $productOptions;
 
     /**
      * @var \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionInterface
@@ -1543,9 +1543,9 @@ final class Product implements ProductInterface
      *
      * @return \Magento\CatalogStorefrontApi\Api\Data\ProductOptionInterface[]
      */
-    public function getOptionsV2(): array
+    public function getProductOptions(): array
     {
-        return (array) $this->optionsV2;
+        return (array) $this->productOptions;
     }
     
     /**
@@ -1554,9 +1554,9 @@ final class Product implements ProductInterface
      * @param \Magento\CatalogStorefrontApi\Api\Data\ProductOptionInterface[] $value
      * @return void
      */
-    public function setOptionsV2(array $value): void
+    public function setProductOptions(array $value): void
     {
-        $this->optionsV2 = $value;
+        $this->productOptions = $value;
     }
     
     /**
