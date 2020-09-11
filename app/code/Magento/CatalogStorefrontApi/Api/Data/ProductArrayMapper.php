@@ -186,16 +186,12 @@ final class ProductArrayMapper
             $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ProductOptionArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
-        $result["options_v2"] = $fieldArray;
+        $result["product_options"] = $fieldArray;
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getShopperInputOptions() as $fieldArrayDto) {
             $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
-        $result["product_options"] = $fieldArray;
-        if ($dto->getShopperInputOptions() !== null) {
-            $result["shopper_input_options"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionArrayMapper::class)
-                ->convertToArray($dto->getShopperInputOptions());
         }
         $result["shopper_input_options"] = $fieldArray;
         return $result;
