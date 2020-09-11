@@ -298,7 +298,7 @@ final class Product implements ProductInterface
     /**
      * @var array
      */
-    private $downloadableProductSamples;
+    private $samples;
 
     /**
      * @var float
@@ -316,7 +316,7 @@ final class Product implements ProductInterface
     private $optionsV2;
 
     /**
-     * @var \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionInterface
+     * @var array
      */
     private $shopperInputOptions;
     
@@ -1478,22 +1478,22 @@ final class Product implements ProductInterface
     /**
      * @inheritdoc
      *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\DownloadableSampleInterface[]
+     * @return \Magento\CatalogStorefrontApi\Api\Data\SampleInterface[]
      */
-    public function getDownloadableProductSamples(): array
+    public function getSamples(): array
     {
-        return (array) $this->downloadableProductSamples;
+        return (array) $this->samples;
     }
     
     /**
      * @inheritdoc
      *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\DownloadableSampleInterface[] $value
+     * @param \Magento\CatalogStorefrontApi\Api\Data\SampleInterface[] $value
      * @return void
      */
-    public function setDownloadableProductSamples(array $value): void
+    public function setSamples(array $value): void
     {
-        $this->downloadableProductSamples = $value;
+        $this->samples = $value;
     }
     
     /**
@@ -1562,20 +1562,20 @@ final class Product implements ProductInterface
     /**
      * @inheritdoc
      *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionInterface|null
+     * @return \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionInterface[]
      */
-    public function getShopperInputOptions(): ?\Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionInterface
+    public function getShopperInputOptions(): array
     {
-        return $this->shopperInputOptions;
+        return (array) $this->shopperInputOptions;
     }
     
     /**
      * @inheritdoc
      *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionInterface $value
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionInterface[] $value
      * @return void
      */
-    public function setShopperInputOptions(\Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionInterface $value): void
+    public function setShopperInputOptions(array $value): void
     {
         $this->shopperInputOptions = $value;
     }
