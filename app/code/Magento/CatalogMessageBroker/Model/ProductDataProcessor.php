@@ -83,7 +83,7 @@ class ProductDataProcessor
         'downloadable_product_links', //type: \Magento\CatalogStorefrontApi\Api\Data\DownloadableLinkInterface[]
         'downloadable_product_samples', //type: \Magento\CatalogStorefrontApi\Api\Data\DownloadableSampleInterface[]
         'only_xleft_in_stock', //type: float
-        'product_options' => 'options_v2',
+        'product_options' => 'product_options',
     ];
 
     /**
@@ -106,6 +106,10 @@ class ProductDataProcessor
     public function merge(array $product, array $oldExportDataProduct): array
     {
         $importProduct = [];
+
+        unset($product['options']);
+        unset($product['entered_options']);
+
         foreach (self::$map as $nameInExport => $nameInImport) {
             if (isset($product[$nameInExport])) {
                 $importProduct[$nameInImport] = $product[$nameInExport];

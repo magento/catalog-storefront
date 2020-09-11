@@ -566,7 +566,7 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     }
                     $r->setGroupedItems($res);
                     $res = [];
-                    foreach ($item1->getOptionsV2() as $item60) {
+                    foreach ($item1->getProductOptions() as $item60) {
                         // convert data from \Magento\CatalogStorefrontApi\Api\Data\ProductOption
                         // to \Magento\CatalogStorefrontApi\Proto\ProductOption
                         /** @var \Magento\CatalogStorefrontApi\Api\Data\ProductOption $item60 **/
@@ -604,7 +604,7 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                         $proto = $p();
                         $res[] = $proto;
                     }
-                    $r->setOptionsV2($res);
+                    $r->setProductOptions($res);
                     $prop61 = $item1->getShopperInputOptions();
                     if ($prop61 !== null) {
                         // convert data from \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOption
@@ -1133,7 +1133,7 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     }
                     $r->setGroupedItems($res);
                     $res = [];
-                    foreach ($item1->getOptionsV2() as $item60) {
+                    foreach ($item1->getProductOptions() as $item60) {
                         // convert data from \Magento\CatalogStorefrontApi\Proto\ProductOption
                         // to \Magento\CatalogStorefrontApi\Api\Data\ProductOption
                         /** @var \Magento\CatalogStorefrontApi\Proto\ProductOption $item60 **/
@@ -1171,7 +1171,7 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                         $out = $p();
                         $res[] = $out;
                     }
-                    $r->setOptionsV2($res);
+                    $r->setProductOptions($res);
                     $prop61 = $item1->getShopperInputOptions();
                     if ($prop61 !== null) {
                         // convert data from \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption
