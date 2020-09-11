@@ -96,14 +96,14 @@ class Catalog implements CatalogInterface
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Proto\ProductsGetRequest();
             $values = [];
-            foreach ($value->getIds() as $value) {
-                $values[] = $value;
+            foreach ($value->getIds() as $newValue) {
+                $values[] = $newValue;
             }
             $r->setIds($values);
             $r->setStore($value->getStore());
             $values = [];
-            foreach ($value->getAttributeCodes() as $value) {
-                $values[] = $value;
+            foreach ($value->getAttributeCodes() as $newValue) {
+                $values[] = $newValue;
             }
             $r->setAttributeCodes($values);
             return $r;
@@ -248,8 +248,8 @@ class Catalog implements CatalogInterface
                     $r->setMetaKeyword($item1->getMetaKeyword());
                     $r->setMetaTitle($item1->getMetaTitle());
                     $values = [];
-                    foreach ($item1->getCategories() as $value) {
-                        $values[] = $value;
+                    foreach ($item1->getCategories() as $newValue) {
+                        $values[] = $newValue;
                     }
                     $r->setCategories($values);
                     $r->setRequiredOptions($item1->getRequiredOptions());
@@ -633,8 +633,8 @@ class Catalog implements CatalogInterface
                             $r->setValue($prop61->getValue());
                             $r->setMaxCharacters($prop61->getMaxCharacters());
                             $values = [];
-                            foreach ($prop61->getFileExtension() as $value) {
-                                $values[] = $value;
+                            foreach ($prop61->getFileExtension() as $newValue) {
+                                $values[] = $newValue;
                             }
                             $r->setFileExtension($values);
                             $r->setImageSizeX($prop61->getImageSizeX());
@@ -808,8 +808,8 @@ class Catalog implements CatalogInterface
                     $r->setMetaKeyword($item1->getMetaKeyword());
                     $r->setMetaTitle($item1->getMetaTitle());
                     $values = [];
-                    foreach ($item1->getCategories() as $value) {
-                        $values[] = $value;
+                    foreach ($item1->getCategories() as $newValue) {
+                        $values[] = $newValue;
                     }
                     $r->setCategories($values);
                     $r->setRequiredOptions($item1->getRequiredOptions());
@@ -1193,8 +1193,8 @@ class Catalog implements CatalogInterface
                             $r->setValue($prop61->getValue());
                             $r->setMaxCharacters($prop61->getMaxCharacters());
                             $values = [];
-                            foreach ($prop61->getFileExtension() as $value) {
-                                $values[] = $value;
+                            foreach ($prop61->getFileExtension() as $newValue) {
+                                $values[] = $newValue;
                             }
                             $r->setFileExtension($values);
                             $r->setImageSizeX($prop61->getImageSizeX());
@@ -1286,8 +1286,8 @@ class Catalog implements CatalogInterface
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Proto\DeleteProductsRequest();
             $values = [];
-            foreach ($value->getProductIds() as $value) {
-                $values[] = $value;
+            foreach ($value->getProductIds() as $newValue) {
+                $values[] = $newValue;
             }
             $r->setProductIds($values);
             $r->setStore($value->getStore());
@@ -1352,8 +1352,8 @@ class Catalog implements CatalogInterface
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Proto\DeleteCategoriesRequest();
             $values = [];
-            foreach ($value->getCategoryIds() as $value) {
-                $values[] = $value;
+            foreach ($value->getCategoryIds() as $newValue) {
+                $values[] = $newValue;
             }
             $r->setCategoryIds($values);
             $r->setStore($value->getStore());
@@ -1438,8 +1438,8 @@ class Catalog implements CatalogInterface
                     $r->setIsAnchor($item1->getIsAnchor());
                     $r->setIncludeInMenu($item1->getIncludeInMenu());
                     $values = [];
-                    foreach ($item1->getAvailableSortBy() as $value) {
-                        $values[] = $value;
+                    foreach ($item1->getAvailableSortBy() as $newValue) {
+                        $values[] = $newValue;
                     }
                     $r->setAvailableSortBy($values);
                     $res = [];
@@ -1464,8 +1464,8 @@ class Catalog implements CatalogInterface
                     $r->setCanonicalUrl($item1->getCanonicalUrl());
                     $r->setProductCount($item1->getProductCount());
                     $values = [];
-                    foreach ($item1->getChildren() as $value) {
-                        $values[] = $value;
+                    foreach ($item1->getChildren() as $newValue) {
+                        $values[] = $newValue;
                     }
                     $r->setChildren($values);
                     $r->setImage($item1->getImage());
@@ -1570,15 +1570,15 @@ class Catalog implements CatalogInterface
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Proto\CategoriesGetRequest();
             $values = [];
-            foreach ($value->getIds() as $value) {
-                $values[] = $value;
+            foreach ($value->getIds() as $newValue) {
+                $values[] = $newValue;
             }
             $r->setIds($values);
             $r->setLevel($value->getLevel());
             $r->setStore($value->getStore());
             $values = [];
-            foreach ($value->getAttributeCodes() as $value) {
-                $values[] = $value;
+            foreach ($value->getAttributeCodes() as $newValue) {
+                $values[] = $newValue;
             }
             $r->setAttributeCodes($values);
             return $r;
@@ -1623,8 +1623,8 @@ class Catalog implements CatalogInterface
                     $r->setIsAnchor($item1->getIsAnchor());
                     $r->setIncludeInMenu($item1->getIncludeInMenu());
                     $values = [];
-                    foreach ($item1->getAvailableSortBy() as $value) {
-                        $values[] = $value;
+                    foreach ($item1->getAvailableSortBy() as $newValue) {
+                        $values[] = $newValue;
                     }
                     $r->setAvailableSortBy($values);
                     $res = [];
@@ -1649,8 +1649,8 @@ class Catalog implements CatalogInterface
                     $r->setCanonicalUrl($item1->getCanonicalUrl());
                     $r->setProductCount($item1->getProductCount());
                     $values = [];
-                    foreach ($item1->getChildren() as $value) {
-                        $values[] = $value;
+                    foreach ($item1->getChildren() as $newValue) {
+                        $values[] = $newValue;
                     }
                     $r->setChildren($values);
                     $r->setImage($item1->getImage());
@@ -1717,14 +1717,14 @@ class Catalog implements CatalogInterface
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Proto\ProductVariantsGetRequest();
             $values = [];
-            foreach ($value->getIds() as $value) {
-                $values[] = $value;
+            foreach ($value->getIds() as $newValue) {
+                $values[] = $newValue;
             }
             $r->setIds($values);
             $r->setStoreId($value->getStoreId());
             $values = [];
-            foreach ($value->getAttributeCodes() as $value) {
-                $values[] = $value;
+            foreach ($value->getAttributeCodes() as $newValue) {
+                $values[] = $newValue;
             }
             $r->setAttributeCodes($values);
             return $r;

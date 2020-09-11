@@ -167,11 +167,11 @@ final class ProductArrayMapper
         $result["downloadable_product_links"] = $fieldArray;
         /** Convert complex Array field **/
         $fieldArray = [];
-        foreach ($dto->getDownloadableProductSamples() as $fieldArrayDto) {
-            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\DownloadableSampleArrayMapper::class)
+        foreach ($dto->getSamples() as $fieldArrayDto) {
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\SampleArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
-        $result["downloadable_product_samples"] = $fieldArray;
+        $result["samples"] = $fieldArray;
         $result["only_x_left_in_stock"] = $dto->getOnlyXLeftInStock();
         /** Convert complex Array field **/
         $fieldArray = [];
@@ -186,11 +186,18 @@ final class ProductArrayMapper
             $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ProductOptionArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
+        $result["options_v2"] = $fieldArray;
+        /** Convert complex Array field **/
+        $fieldArray = [];
+        foreach ($dto->getShopperInputOptions() as $fieldArrayDto) {
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionArrayMapper::class)
+                ->convertToArray($fieldArrayDto);
         $result["product_options"] = $fieldArray;
         if ($dto->getShopperInputOptions() !== null) {
             $result["shopper_input_options"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionArrayMapper::class)
                 ->convertToArray($dto->getShopperInputOptions());
         }
+        $result["shopper_input_options"] = $fieldArray;
         return $result;
     }
 }
