@@ -99,14 +99,14 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequest();
             $values = [];
-            foreach ($value->getIds() as $value) {
-                $values[] = $value;
+            foreach ($value->getIds() as $newValue) {
+                $values[] = $newValue;
             }
             $r->setIds($values);
             $r->setStore($value->getStore());
             $values = [];
-            foreach ($value->getAttributeCodes() as $value) {
-                $values[] = $value;
+            foreach ($value->getAttributeCodes() as $newValue) {
+                $values[] = $newValue;
             }
             $r->setAttributeCodes($values);
             return $r;
@@ -251,8 +251,8 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     $r->setMetaKeyword($item1->getMetaKeyword());
                     $r->setMetaTitle($item1->getMetaTitle());
                     $values = [];
-                    foreach ($item1->getCategories() as $value) {
-                        $values[] = $value;
+                    foreach ($item1->getCategories() as $newValue) {
+                        $values[] = $newValue;
                     }
                     $r->setCategories($values);
                     $r->setRequiredOptions($item1->getRequiredOptions());
@@ -530,21 +530,24 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     }
                     $r->setDownloadableProductLinks($res);
                     $res = [];
-                    foreach ($item1->getSamples() as $item57) {
-                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\Sample
-                        // to \Magento\CatalogStorefrontApi\Proto\Sample
-                        /** @var \Magento\CatalogStorefrontApi\Api\Data\Sample $item57 **/
+                    foreach ($item1->getDownloadableProductSamples() as $item57) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\DownloadableSample
+                        // to \Magento\CatalogStorefrontApi\Proto\DownloadableSample
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\DownloadableSample $item57 **/
                         $p = function () use ($item57) {
-                            $r = new \Magento\CatalogStorefrontApi\Proto\Sample();
-                            $r->setUrl($item57->getUrl());
-                            $r->setLabel($item57->getLabel());
+                            $r = new \Magento\CatalogStorefrontApi\Proto\DownloadableSample();
+                            $r->setSampleUrl($item57->getSampleUrl());
+                            $r->setTitle($item57->getTitle());
                             $r->setSortOrder($item57->getSortOrder());
+                            $r->setSampleType($item57->getSampleType());
+                            $r->setSampleFile($item57->getSampleFile());
+                            $r->setEntityId($item57->getEntityId());
                             return $r;
                         };
                         $proto = $p();
                         $res[] = $proto;
                     }
-                    $r->setSamples($res);
+                    $r->setDownloadableProductSamples($res);
                     $r->setOnlyXLeftInStock($item1->getOnlyXLeftInStock());
                     $res = [];
                     foreach ($item1->getGroupedItems() as $item59) {
@@ -604,20 +607,20 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                         $res[] = $proto;
                     }
                     $r->setOptionsV2($res);
-                    $res = [];
-                    foreach ($item1->getShopperInputOptions() as $item61) {
+                    $prop61 = $item1->getShopperInputOptions();
+                    if ($prop61 !== null) {
                         // convert data from \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOption
                         // to \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption
-                        /** @var \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOption $item61 **/
-                        $p = function () use ($item61) {
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOption $prop61 **/
+                        $p = function () use ($prop61) {
                             $r = new \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption();
-                            $r->setId($item61->getId());
-                            $r->setLabel($item61->getLabel());
-                            $r->setSortOrder($item61->getSortOrder());
-                            $r->setRequired($item61->getRequired());
-                            $r->setRenderType($item61->getRenderType());
+                            $r->setId($prop61->getId());
+                            $r->setLabel($prop61->getLabel());
+                            $r->setSortOrder($prop61->getSortOrder());
+                            $r->setRequired($prop61->getRequired());
+                            $r->setRenderType($prop61->getRenderType());
                             $res = [];
-                            foreach ($item61->getPrice() as $item67) {
+                            foreach ($prop61->getPrice() as $item67) {
                                 // convert data from \Magento\CatalogStorefrontApi\Api\Data\Price
                                 // to \Magento\CatalogStorefrontApi\Proto\Price
                                 /** @var \Magento\CatalogStorefrontApi\Api\Data\Price $item67 **/
@@ -632,21 +635,20 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                                 $res[] = $proto;
                             }
                             $r->setPrice($res);
-                            $r->setValue($item61->getValue());
-                            $r->setMaxCharacters($item61->getMaxCharacters());
+                            $r->setValue($prop61->getValue());
+                            $r->setMaxCharacters($prop61->getMaxCharacters());
                             $values = [];
-                            foreach ($item61->getFileExtension() as $value) {
-                                $values[] = $value;
+                            foreach ($prop61->getFileExtension() as $newValue) {
+                                $values[] = $newValue;
                             }
                             $r->setFileExtension($values);
-                            $r->setImageSizeX($item61->getImageSizeX());
-                            $r->setImageSizeY($item61->getImageSizeY());
+                            $r->setImageSizeX($prop61->getImageSizeX());
+                            $r->setImageSizeY($prop61->getImageSizeY());
                             return $r;
                         };
                         $proto = $p();
-                        $res[] = $proto;
+                        $r->setShopperInputOptions($proto);
                     }
-                    $r->setShopperInputOptions($res);
                     return $r;
                 };
                 $proto = $p();
@@ -818,8 +820,8 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     $r->setMetaKeyword($item1->getMetaKeyword());
                     $r->setMetaTitle($item1->getMetaTitle());
                     $values = [];
-                    foreach ($item1->getCategories() as $value) {
-                        $values[] = $value;
+                    foreach ($item1->getCategories() as $newValue) {
+                        $values[] = $newValue;
                     }
                     $r->setCategories($values);
                     $r->setRequiredOptions($item1->getRequiredOptions());
@@ -1097,21 +1099,24 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     }
                     $r->setDownloadableProductLinks($res);
                     $res = [];
-                    foreach ($item1->getSamples() as $item57) {
-                        // convert data from \Magento\CatalogStorefrontApi\Proto\Sample
-                        // to \Magento\CatalogStorefrontApi\Api\Data\Sample
-                        /** @var \Magento\CatalogStorefrontApi\Proto\Sample $item57 **/
+                    foreach ($item1->getDownloadableProductSamples() as $item57) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\DownloadableSample
+                        // to \Magento\CatalogStorefrontApi\Api\Data\DownloadableSample
+                        /** @var \Magento\CatalogStorefrontApi\Proto\DownloadableSample $item57 **/
                         $p = function () use ($item57) {
-                            $r = new \Magento\CatalogStorefrontApi\Api\Data\Sample();
-                            $r->setUrl($item57->getUrl());
-                            $r->setLabel($item57->getLabel());
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\DownloadableSample();
+                            $r->setSampleUrl($item57->getSampleUrl());
+                            $r->setTitle($item57->getTitle());
                             $r->setSortOrder($item57->getSortOrder());
+                            $r->setSampleType($item57->getSampleType());
+                            $r->setSampleFile($item57->getSampleFile());
+                            $r->setEntityId($item57->getEntityId());
                             return $r;
                         };
                         $out = $p();
                         $res[] = $out;
                     }
-                    $r->setSamples($res);
+                    $r->setDownloadableProductSamples($res);
                     $r->setOnlyXLeftInStock($item1->getOnlyXLeftInStock());
                     $res = [];
                     foreach ($item1->getGroupedItems() as $item59) {
@@ -1171,20 +1176,20 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                         $res[] = $out;
                     }
                     $r->setOptionsV2($res);
-                    $res = [];
-                    foreach ($item1->getShopperInputOptions() as $item61) {
+                    $prop61 = $item1->getShopperInputOptions();
+                    if ($prop61 !== null) {
                         // convert data from \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption
                         // to \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOption
-                        /** @var \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption $item61 **/
-                        $p = function () use ($item61) {
+                        /** @var \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption $prop61 **/
+                        $p = function () use ($prop61) {
                             $r = new \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOption();
-                            $r->setId($item61->getId());
-                            $r->setLabel($item61->getLabel());
-                            $r->setSortOrder($item61->getSortOrder());
-                            $r->setRequired($item61->getRequired());
-                            $r->setRenderType($item61->getRenderType());
+                            $r->setId($prop61->getId());
+                            $r->setLabel($prop61->getLabel());
+                            $r->setSortOrder($prop61->getSortOrder());
+                            $r->setRequired($prop61->getRequired());
+                            $r->setRenderType($prop61->getRenderType());
                             $res = [];
-                            foreach ($item61->getPrice() as $item67) {
+                            foreach ($prop61->getPrice() as $item67) {
                                 // convert data from \Magento\CatalogStorefrontApi\Proto\Price
                                 // to \Magento\CatalogStorefrontApi\Api\Data\Price
                                 /** @var \Magento\CatalogStorefrontApi\Proto\Price $item67 **/
@@ -1199,21 +1204,20 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                                 $res[] = $out;
                             }
                             $r->setPrice($res);
-                            $r->setValue($item61->getValue());
-                            $r->setMaxCharacters($item61->getMaxCharacters());
+                            $r->setValue($prop61->getValue());
+                            $r->setMaxCharacters($prop61->getMaxCharacters());
                             $values = [];
-                            foreach ($item61->getFileExtension() as $value) {
-                                $values[] = $value;
+                            foreach ($prop61->getFileExtension() as $newValue) {
+                                $values[] = $newValue;
                             }
                             $r->setFileExtension($values);
-                            $r->setImageSizeX($item61->getImageSizeX());
-                            $r->setImageSizeY($item61->getImageSizeY());
+                            $r->setImageSizeX($prop61->getImageSizeX());
+                            $r->setImageSizeY($prop61->getImageSizeY());
                             return $r;
                         };
                         $out = $p();
-                        $res[] = $out;
+                        $r->setShopperInputOptions($out);
                     }
-                    $r->setShopperInputOptions($res);
                     return $r;
                 };
                 $out = $p();
@@ -1303,8 +1307,8 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequest();
             $values = [];
-            foreach ($value->getProductIds() as $value) {
-                $values[] = $value;
+            foreach ($value->getProductIds() as $newValue) {
+                $values[] = $newValue;
             }
             $r->setProductIds($values);
             $r->setStore($value->getStore());
@@ -1376,8 +1380,8 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesRequest();
             $values = [];
-            foreach ($value->getCategoryIds() as $value) {
-                $values[] = $value;
+            foreach ($value->getCategoryIds() as $newValue) {
+                $values[] = $newValue;
             }
             $r->setCategoryIds($values);
             $r->setStore($value->getStore());
@@ -1469,8 +1473,8 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     $r->setIsAnchor($item1->getIsAnchor());
                     $r->setIncludeInMenu($item1->getIncludeInMenu());
                     $values = [];
-                    foreach ($item1->getAvailableSortBy() as $value) {
-                        $values[] = $value;
+                    foreach ($item1->getAvailableSortBy() as $newValue) {
+                        $values[] = $newValue;
                     }
                     $r->setAvailableSortBy($values);
                     $res = [];
@@ -1495,8 +1499,8 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     $r->setCanonicalUrl($item1->getCanonicalUrl());
                     $r->setProductCount($item1->getProductCount());
                     $values = [];
-                    foreach ($item1->getChildren() as $value) {
-                        $values[] = $value;
+                    foreach ($item1->getChildren() as $newValue) {
+                        $values[] = $newValue;
                     }
                     $r->setChildren($values);
                     $r->setImage($item1->getImage());
@@ -1608,15 +1612,15 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequest();
             $values = [];
-            foreach ($value->getIds() as $value) {
-                $values[] = $value;
+            foreach ($value->getIds() as $newValue) {
+                $values[] = $newValue;
             }
             $r->setIds($values);
             $r->setLevel($value->getLevel());
             $r->setStore($value->getStore());
             $values = [];
-            foreach ($value->getAttributeCodes() as $value) {
-                $values[] = $value;
+            foreach ($value->getAttributeCodes() as $newValue) {
+                $values[] = $newValue;
             }
             $r->setAttributeCodes($values);
             return $r;
@@ -1661,8 +1665,8 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     $r->setIsAnchor($item1->getIsAnchor());
                     $r->setIncludeInMenu($item1->getIncludeInMenu());
                     $values = [];
-                    foreach ($item1->getAvailableSortBy() as $value) {
-                        $values[] = $value;
+                    foreach ($item1->getAvailableSortBy() as $newValue) {
+                        $values[] = $newValue;
                     }
                     $r->setAvailableSortBy($values);
                     $res = [];
@@ -1687,8 +1691,8 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
                     $r->setCanonicalUrl($item1->getCanonicalUrl());
                     $r->setProductCount($item1->getProductCount());
                     $values = [];
-                    foreach ($item1->getChildren() as $value) {
-                        $values[] = $value;
+                    foreach ($item1->getChildren() as $newValue) {
+                        $values[] = $newValue;
                     }
                     $r->setChildren($values);
                     $r->setImage($item1->getImage());
@@ -1762,14 +1766,14 @@ class CatalogProxyServer implements \Magento\CatalogStorefrontApi\Proto\CatalogI
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetRequest();
             $values = [];
-            foreach ($value->getIds() as $value) {
-                $values[] = $value;
+            foreach ($value->getIds() as $newValue) {
+                $values[] = $newValue;
             }
             $r->setIds($values);
             $r->setStoreId($value->getStoreId());
             $values = [];
-            foreach ($value->getAttributeCodes() as $value) {
-                $values[] = $value;
+            foreach ($value->getAttributeCodes() as $newValue) {
+                $values[] = $newValue;
             }
             $r->setAttributeCodes($values);
             return $r;
