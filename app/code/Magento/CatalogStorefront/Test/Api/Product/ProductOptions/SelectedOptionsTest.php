@@ -88,6 +88,9 @@ class SelectedOptionsTest extends StorefrontTestsAbstract
      */
     public function testSelectOptionData(array $expected): void
     {
+        $this->markTestSkipped("This test skipped due to: https://github.com/magento/catalog-storefront/issues/304 
+        and https://github.com/magento/catalog-storefront/issues/27");
+        
         //product option value
         $product = $this->productRepository->get('simple');
         $this->productsGetRequestInterface->setIds([$product->getId()]);
@@ -96,7 +99,6 @@ class SelectedOptionsTest extends StorefrontTestsAbstract
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
         self::assertNotEmpty($catalogServiceItem->getItems());
 
-        var_dump($catalogServiceItem->getItems()[0]);
         $actual = [];
         $index = 0;
         foreach ($catalogServiceItem->getItems()[0]->getProductOptions() as $productOption) {
@@ -121,7 +123,6 @@ class SelectedOptionsTest extends StorefrontTestsAbstract
         $variants = $this->catalogService->getProductVariants($this->productVariantInterface);
         //TODO: check why this return empty array
 //        self::assertNotEmpty($variants->getItems());
-
     }
 
     /**
