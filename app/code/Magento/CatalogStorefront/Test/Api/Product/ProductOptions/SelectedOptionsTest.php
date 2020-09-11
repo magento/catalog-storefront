@@ -88,9 +88,6 @@ class SelectedOptionsTest extends StorefrontTestsAbstract
      */
     public function testSelectOptionData(array $expected): void
     {
-        $this->markTestSkipped("This test skipped due to: https://github.com/magento/catalog-storefront/issues/304 
-        and https://github.com/magento/catalog-storefront/issues/27");
-        
         //product option value
         $product = $this->productRepository->get('simple');
         $this->productsGetRequestInterface->setIds([$product->getId()]);
