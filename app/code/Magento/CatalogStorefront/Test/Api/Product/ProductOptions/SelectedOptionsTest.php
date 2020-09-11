@@ -29,7 +29,7 @@ class SelectedOptionsTest extends StorefrontTestsAbstract
      * @var string[]
      */
     private $attributesToCompare = [
-        'options_v2'
+        'product_options'
     ];
 
     /**
@@ -45,22 +45,22 @@ class SelectedOptionsTest extends StorefrontTestsAbstract
     /**
      * @var ProductRepositoryInterface
      */
-    protected $productRepository;
+    private $productRepository;
 
     /**
      * @var ProductOptionValueArrayMapper
      */
-    protected $arrayMapper;
+    private $arrayMapper;
 
     /**
      * @var CompareArraysRecursively
      */
-    protected $compareArraysRecursively;
+    private $compareArraysRecursively;
 
     /**
      * @var ProductVariantsGetRequest
      */
-    protected $productVariantInterface;
+    private $productVariantInterface;
 
     /**
      * @inheritdoc
@@ -88,6 +88,7 @@ class SelectedOptionsTest extends StorefrontTestsAbstract
      */
     public function testSelectOptionData(array $expected): void
     {
+        //product option value
         $product = $this->productRepository->get('simple');
         $this->productsGetRequestInterface->setIds([$product->getId()]);
         $this->productsGetRequestInterface->setStore(self::STORE_CODE);
@@ -95,30 +96,32 @@ class SelectedOptionsTest extends StorefrontTestsAbstract
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
         self::assertNotEmpty($catalogServiceItem->getItems());
 
+        var_dump($catalogServiceItem->getItems()[0]);
         $actual = [];
         $index = 0;
-        foreach ($catalogServiceItem->getItems()[0]->getOptionsV2() as $productOption) {
+        foreach ($catalogServiceItem->getItems()[0]->getProductOptions() as $productOption) {
             $optionValues = $productOption->getValues();
-
             foreach ($optionValues as $productOptionValue) {
                 $actual[] = $this->arrayMapper->convertToArray($productOptionValue);
                 unset($actual[$index]['id']); //id generates randomly, don't need to compare
                 $index++;
             }
         }
-        //product variants
-        $this->productVariantInterface->setIds([$product->getId()]);
-        $this->productVariantInterface->setStoreId(self::STORE_CODE);
-        $this->productVariantInterface->setAttributeCodes($this->attributesToCompare);
-        $variants = $this->catalogService->getProductVariants($this->productVariantInterface);
-        //TODO: check why this return empty array
-//        self::assertNotEmpty($variants->getItems();
 
         $diff = $this->compareArraysRecursively->execute(
             $expected,
             $actual
         );
         self::assertEquals([], $diff, "Actual response doesn't equal expected data");
+
+        //product variants
+        $this->productVariantInterface->setIds([$product->getId()]);
+        $this->productVariantInterface->setStoreId(self::STORE_CODE);
+        $this->productVariantInterface->setAttributeCodes($this->attributesToCompare);
+        $variants = $this->catalogService->getProductVariants($this->productVariantInterface);
+        //TODO: check why this return empty array
+//        self::assertNotEmpty($variants->getItems());
+
     }
 
     /**
