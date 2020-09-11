@@ -88,9 +88,6 @@ class SelectedOptionsTest extends StorefrontTestsAbstract
      */
     public function testSelectOptionData(array $expected): void
     {
-        $this->markTestSkipped("This test skipped due to: https://github.com/magento/catalog-storefront/issues/304 
-        and https://github.com/magento/catalog-storefront/issues/27");
-        
         //product option value
         $product = $this->productRepository->get('simple');
         $this->productsGetRequestInterface->setIds([$product->getId()]);
@@ -115,14 +112,36 @@ class SelectedOptionsTest extends StorefrontTestsAbstract
             $actual
         );
         self::assertEquals([], $diff, "Actual response doesn't equal expected data");
+    }
+
+    /**
+     * Test product variant
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_with_options.php
+     * @magentoDbIsolation disabled
+     * @param array $expected
+     * @throws NoSuchEntityException
+     * @throws \Throwable
+     * @dataProvider variantsProvider
+     */
+    public function testProductVariants()
+    {
+        $this->markTestSkipped("This test skipped due to: https://github.com/magento/catalog-storefront/issues/304
+        and https://github.com/magento/catalog-storefront/issues/27");
 
         //product variants
+        $product = $this->productRepository->get('simple');
         $this->productVariantInterface->setIds([$product->getId()]);
         $this->productVariantInterface->setStoreId(self::STORE_CODE);
         $this->productVariantInterface->setAttributeCodes($this->attributesToCompare);
-        $variants = $this->catalogService->getProductVariants($this->productVariantInterface);
+        $catalogServiceVariants = $this->catalogService->getProductVariants($this->productVariantInterface);
+        self::assertNotEmpty($catalogServiceVariants->getItems());
+
         //TODO: check why this return empty array
-//        self::assertNotEmpty($variants->getItems());
+        foreach ($catalogServiceVariants->getItems()[0]->getProduct() as $variant) {
+            $price = $variant->getPrice();
+            //TODO: Ask for array mapper for variants
+        }
     }
 
     /**
@@ -207,6 +226,25 @@ class SelectedOptionsTest extends StorefrontTestsAbstract
                         'qty' => (float)0,
                         'info_url' => '',
                     ],
+                ]
+            ]
+        ];
+    }
+
+    public function variantsProvider(): array
+    {
+        return [
+            [
+                [
+                    [
+                        'option_value_id' => '',
+                        'regular_price' => 1,
+                        'final_price' => '',
+                        'scope' => 'default'
+                    ],
+                    [
+
+                    ]
                 ]
             ]
         ];
