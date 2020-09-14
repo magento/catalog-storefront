@@ -32,7 +32,25 @@
 	For example if you need assistance with writing tests or would like some feedback on one of your development ideas
 -->
 
-### Contribution checklist (*)
- - [ ] Pull request has a meaningful description of its purpose
- - [ ] All new or changed code is covered with web-api/integration tests (if applicable)
- - [ ] All automated tests passed successfully (all builds are green)
+### Code Review Checklist (*)
+
+See dataied [checklist](https://github.com/magento/catalog-storefront/wiki/Code-Review-checklist)
+
+- [ ] Story AC is completed
+- [ ] proposed changes correspond to [Magento Technical Vision](https://devdocs.magento.com/guides/v2.2/coding-standards/technical-guidelines.html)
+- [ ] new or changed code is covered with web-api/integration tests (if applicable)
+  - expected results in test verified with data from fixture
+- [ ] no backward incompatibile changes
+- [ ] Export API (et_schema.xml) and SF API schemas (proto schema) are reflected in the codebase
+  - prerequisite: story branch created with all needed generated classes according to proposes schema-changes
+  - DTO classes do not contain any manual changes (Magento\CatalogExportApi\*, Magento\CatalogStorefrontApi\*)
+- [ ] Class usage: magento/catalog-storefront repo don't use directly classes from magento/saas-export repo and vise-verse
+  - Check composer.json dependencies
+- [ ] Legacy code is deleted
+  - Any Data Providers present in Connector part  (Magento\CatalogStorefrontConnector, Magento\*Extractor modules)
+  - And Data Providers from Export API (magento/saas-export repo) that is not relevant anymore
+  - Any DTO for Export API/SF API which does not reflect current schema: et_schema, proto schema
+  - Any “mapper” on Message Broker (between Export API and SF API)
+    - if mapper still needed, verify fields used in mapping, remove not relevant fields
+
+
