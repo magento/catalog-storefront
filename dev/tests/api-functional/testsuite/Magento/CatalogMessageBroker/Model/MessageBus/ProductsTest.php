@@ -91,13 +91,19 @@ class ProductsTest extends StorefrontTestsAbstract
     {
         $product = $this->getProduct(self::TEST_SKU);
         $this->assertEquals(self::TEST_SKU, $product->getSku());
-
+        $entitiesData = [
+            [
+                'entity_id' => (int) $product->getId(),
+                'attribute_ids' => null,
+                'store_id' => null,
+            ]
+        ];
         $productFeed = $this->productFeed->getFeedByIds([(int)$product->getId()], [self::STORE_CODE]);
         $this->assertNotEmpty($productFeed);
 
         $updateMessage = $this->messageBuilder->build(
-            [(int)$product->getId()],
             ProductsConsumer::PRODUCTS_UPDATED_EVENT_TYPE,
+            $entitiesData,
             self::STORE_CODE
         );
         $this->productsConsumer->processMessage($updateMessage);
@@ -114,8 +120,8 @@ class ProductsTest extends StorefrontTestsAbstract
         $this->assertNotEmpty($deletedFeed);
 
         $deleteMessage = $this->messageBuilder->build(
-            [(int)$product->getId()],
             ProductsConsumer::PRODUCTS_DELETED_EVENT_TYPE,
+            $entitiesData,
             self::STORE_CODE
         );
 
