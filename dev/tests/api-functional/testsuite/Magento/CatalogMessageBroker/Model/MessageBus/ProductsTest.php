@@ -93,8 +93,6 @@ class ProductsTest extends StorefrontTestsAbstract
         $entitiesData = [
             [
                 'entity_id' => (int) $product->getId(),
-                'attribute_ids' => null,
-                'store_id' => null,
             ]
         ];
         $productFeed = $this->productFeed->getFeedByIds([(int)$product->getId()], [self::STORE_CODE]);

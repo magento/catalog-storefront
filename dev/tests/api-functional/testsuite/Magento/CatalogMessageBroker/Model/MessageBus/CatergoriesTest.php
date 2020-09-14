@@ -105,8 +105,6 @@ class CatergoriesTest extends StorefrontTestsAbstract
         $entitiesData = [
             [
                 'entity_id' => (int) $category->getId(),
-                'attribute_ids' => null,
-                'store_id' => null,
             ]
         ];
         $message = $this->messageBuilder->build(
