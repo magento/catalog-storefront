@@ -351,7 +351,7 @@ final class ProductMapper
                 }
                 $dto->setGroupedItems($convertedArray);
                 break;
-            case "options_v2":
+            case "product_options":
                 $convertedArray = [];
                 foreach ($value as $element) {
                     $convertedArray[] = $this->objectManager
@@ -359,7 +359,7 @@ final class ProductMapper
                         ->setData($element)
                         ->build();
                 }
-                $dto->setOptionsV2($convertedArray);
+                $dto->setProductOptions($convertedArray);
                 break;
             case "shopper_input_options":
                 $convertedArray = [];
