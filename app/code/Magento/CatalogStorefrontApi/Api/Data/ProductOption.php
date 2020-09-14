@@ -51,16 +51,6 @@ final class ProductOption implements ProductOptionInterface
     private $type;
 
     /**
-     * @var bool
-     */
-    private $linksPurchasedSeparately;
-
-    /**
-     * @var bool
-     */
-    private $useDefault;
-
-    /**
      * @var array
      */
     private $values;
@@ -189,48 +179,6 @@ final class ProductOption implements ProductOptionInterface
     public function setType(string $value): void
     {
         $this->type = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return bool
-     */
-    public function getLinksPurchasedSeparately(): bool
-    {
-        return (bool) $this->linksPurchasedSeparately;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param bool $value
-     * @return void
-     */
-    public function setLinksPurchasedSeparately(bool $value): void
-    {
-        $this->linksPurchasedSeparately = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return bool
-     */
-    public function getUseDefault(): bool
-    {
-        return (bool) $this->useDefault;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param bool $value
-     * @return void
-     */
-    public function setUseDefault(bool $value): void
-    {
-        $this->useDefault = $value;
     }
     
     /**
