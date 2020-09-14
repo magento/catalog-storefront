@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\TestFramework\TestCase;
+namespace Magento\CatalogStorefront\Test\Api;
 
 use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
 use Magento\CatalogStorefront\Model\Storage\State;
@@ -16,6 +16,8 @@ use Magento\TestFramework\Workaround\ConsumerInvoker;
 
 /**
  * Test abstract class for store front tests
+ * Storefront API tests should be run as WebAPI test due to Message Broker do a REST call to the Export API to receive
+ * catalog data.
  */
 abstract class StorefrontTestsAbstract extends TestCase
 {
