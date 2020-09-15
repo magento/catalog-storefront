@@ -175,8 +175,8 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
             [
                 [
                     [
-                        'value_index' => '',
-                        'label' => '',
+                        'value_index' => '1',
+                        'label' => 'configurable',
                         'default_label' =>'',
                         'store_label' => '',
                         'use_default_value' => '',
