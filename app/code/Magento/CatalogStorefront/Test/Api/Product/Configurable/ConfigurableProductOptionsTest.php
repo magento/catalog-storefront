@@ -15,6 +15,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CompareArraysRecursively;
 use Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionValueArrayMapper;
+use Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetRequest;
+
+
 
 class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
 {
@@ -58,6 +61,11 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
     private $arrayMapper;
 
     /**
+     * @var ProductVariantsGetRequest
+     */
+    private $productVariantInterface;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -65,6 +73,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
         parent::setUp();
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
         $this->productsGetRequestInterface = Bootstrap::getObjectManager()->create(ProductsGetRequestInterface::class);
+        $this->productVariantInterface = Bootstrap::getObjectManager()->create(ProductVariantsGetRequest::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
@@ -91,8 +100,37 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
         $this->assertNotEmpty($catalogServiceItem->getItems());
 
-        $catalogService = $catalogServiceItem->getItems()[0]->getConfigurableOptions()[0];
+        $catalogService = $catalogServiceItem->getItems()[0]->getConfigurableOptions();
         $this->assertEquals($configurableOptions->getLabel(), $catalogService->getLabel());
+    }
+
+    /**
+     * Test product variant
+     *
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_two_child_products.php
+     * @magentoDbIsolation disabled
+     * @throws NoSuchEntityException
+     * @throws \Throwable
+     * @dataProvider variantsProvider
+     */
+    public function testConfigurableproductVariant(array $variantsProvider)
+    {
+        $this->markTestSkipped("This test skipped due to: https://github.com/magento/catalog-storefront/issues/304
+        and https://github.com/magento/catalog-storefront/issues/27");
+
+        //product variants
+        $product = $this->productRepository->get(self::TWO_CHILD_SKU);
+        $this->productVariantInterface->setIds([$product->getId()]);
+        $this->productVariantInterface->setStoreId(self::STORE_CODE);
+        $this->productVariantInterface->setAttributeCodes($this->attributesToCompare);
+        $catalogServiceVariants = $this->catalogService->getProductVariants($this->productVariantInterface);
+        self::assertNotEmpty($catalogServiceVariants->getItems());
+
+        //TODO: check why this return empty array
+        foreach ($catalogServiceVariants->getItems()[0]->getProduct() as $variant) {
+            $price = $variant->getPrice();
+            //TODO: Ask for array mapper for variants
+        }
     }
 
     /**
@@ -128,7 +166,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
     }
 
     /**
-     * //TODO:  ask for data provider
+     * //TODO:  ask for data provider values
      * @return array
      */
     public function getConfigurableProductOptionProvider()
@@ -137,7 +175,41 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
             [
                 [
                     [
-                        'test' => 'test'
+                        'value_index' => '',
+                        'label' => '',
+                        'default_label' =>'',
+                        'store_label' => '',
+                        'use_default_value' => '',
+                        'attribute_id' => '',
+                        'product_id' => ''
+                    ],
+                    [
+                        'value_index' => '',
+                        'label' => '',
+                        'default_label' =>'',
+                        'store_label' => '',
+                        'use_default_value' => '',
+                        'attribute_id' => '',
+                        'product_id' => ''
+                    ],
+                ]
+            ]
+        ];
+    }
+
+    public function variantsProvider(): array
+    {
+        return [
+            [
+                [
+                    [
+                        'option_value_id' => '',
+                        'regular_price' => 1,
+                        'final_price' => '',
+                        'scope' => 'default'
+                    ],
+                    [
+
                     ]
                 ]
             ]
