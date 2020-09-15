@@ -97,13 +97,12 @@ class SelectedOptionsTest extends StorefrontTestsAbstract
         self::assertNotEmpty($catalogServiceItem->getItems());
 
         $actual = [];
-        $index = 0;
         foreach ($catalogServiceItem->getItems()[0]->getProductOptions() as $productOption) {
             $optionValues = $productOption->getValues();
             foreach ($optionValues as $productOptionValue) {
-                $actual[] = $this->arrayMapper->convertToArray($productOptionValue);
-                unset($actual[$index]['id']); //id generates randomly, don't need to compare
-                $index++;
+                $convertedOptionValue = $this->arrayMapper->convertToArray($productOptionValue);
+                unset($convertedOptionValue['id']);
+                $actual[] = $convertedOptionValue;
             }
         }
 
