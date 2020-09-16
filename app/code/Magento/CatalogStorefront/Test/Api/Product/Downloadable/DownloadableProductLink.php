@@ -56,7 +56,7 @@ class DownloadableProductLink extends StorefrontTestsAbstract
     private $compareArraysRecursively;
 
     /**
-     * @var ConfigurableOptionValueArrayMapper
+     * @var DownloadableLinkArrayMapper
      */
     private $arrayMapper;
 
