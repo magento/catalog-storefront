@@ -70,8 +70,7 @@ message Product {
     // TODO: May need to be a complex type
     repeated Option options = 81;
     repeated UrlRewrite url_rewrites = 82;
-    repeated Variant variants = 83;
-    repeated ConfigurableOption configurable_options = 84;
+    repeated Variant variants = 83; //TODO: replace with ProductVariant
     string country_of_manufacture = 85;
     bool gift_message_available = 86;
     float special_price = 87;
@@ -271,39 +270,6 @@ message OptionValue {
     string price = 18;
     string price_type = 19;
     string option_type_id = 20;
-}
-
-message ConfigurableOption {
-    string id = 1;
-    string label = 2;
-    string position = 3;
-    string use_default = 4;
-    string product_id = 5;
-    string attribute_code = 6;
-    string attribute_id = 7;
-    repeated ConfigurableOptionValue values = 8;
-}
-
-message ConfigurableOptionValue {
-    string value_index = 1;
-    string label = 2;
-    string default_label = 3;
-    string store_label = 4;
-    string use_default_value = 5;
-    string attribute_id = 6;
-    string product_id = 7;
-}
-
-message Variant {
-    string product = 1;
-    repeated VariantAttribute attributes = 2;
-}
-
-message VariantAttribute {
-    string label = 1;
-    string code = 2;
-    string value_index = 3;
-    string attribute_id = 4;
 }
 
 message UrlRewrite {
