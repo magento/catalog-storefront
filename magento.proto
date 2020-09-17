@@ -124,6 +124,10 @@ message ProductOptionValue {
   bool qty_mutability = 6;
   float qty = 7;
   string info_url = 8;
+  int32 number_of_downloads = 9;
+  int32 is_shareable = 10;
+  string link_url = 11;
+  repeated Price price = 12;
 }
 
 message ProductOption {
