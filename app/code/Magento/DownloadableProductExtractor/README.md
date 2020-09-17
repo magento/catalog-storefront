@@ -1,3 +1,0 @@
-# Overview
-
-Magento_DownloadableProductExtractor module extracts Downloadable Product data which consumed by Magento_CatalogStorefrontConnector module 
