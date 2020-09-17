@@ -294,6 +294,18 @@ message DynamicAttributeValue
     string value = 2;
 }
 
+message Variant {
+    string product = 1;
+    repeated VariantAttribute attributes = 2;
+}
+
+message VariantAttribute {
+    string label = 1;
+    string code = 2;
+    string value_index = 3;
+    string attribute_id = 4;
+}
+
 message MediaGalleryItem {
     string url = 1;
     string label = 2;
