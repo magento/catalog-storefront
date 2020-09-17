@@ -86,7 +86,6 @@ message Product {
     bool dynamic_sku = 94;
     bool dynamic_price = 95;
     string price_view = 96;
-    repeated BundleItem items = 97;
 
     //DOWNLOADABLE
     bool links_purchased_separately = 98;
@@ -173,28 +172,6 @@ message DownloadableSample {
     string sample_type = 4;
     string sample_file = 5;
     string entity_id = 6;
-}
-
-message BundleItem {
-    string option_id = 1;
-    string title = 2;
-    bool required = 3;
-    string type = 4;
-    int32 position = 5;
-    string sku = 6;
-    repeated BundleItemOption options = 7;
-}
-
-message BundleItemOption {
-    string id = 1;
-    float quantity = 2;
-    bool is_default = 3;
-    float price = 4;
-    string price_type = 5;
-    bool can_change_quantity = 6;
-    string label = 7;
-    string entity_id = 8;
-    int32 position = 9;
 }
 
 message GroupedItem {
