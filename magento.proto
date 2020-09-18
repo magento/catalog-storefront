@@ -70,7 +70,7 @@ message Product {
     // TODO: May need to be a complex type
     repeated Option options = 81;
     repeated UrlRewrite url_rewrites = 82;
-    repeated Variant variants = 83; //TODO: replace with ProductVariant
+    repeated Variant variants = 83;
     string country_of_manufacture = 85;
     bool gift_message_available = 86;
     float special_price = 87;
@@ -272,6 +272,18 @@ message OptionValue {
     string option_type_id = 20;
 }
 
+message Variant {
+    string product = 1;
+    repeated VariantAttribute attributes = 2;
+}
+
+message VariantAttribute {
+    string label = 1;
+    string code = 2;
+    string value_index = 3;
+    string attribute_id = 4;
+}
+
 message UrlRewrite {
     string url = 1;
     repeated UrlRewriteParameter parameters = 2;
@@ -292,18 +304,6 @@ message DynamicAttributeValue
 {
     string code = 1;
     string value = 2;
-}
-
-message Variant {
-    string product = 1;
-    repeated VariantAttribute attributes = 2;
-}
-
-message VariantAttribute {
-    string label = 1;
-    string code = 2;
-    string value_index = 3;
-    string attribute_id = 4;
 }
 
 message MediaGalleryItem {
