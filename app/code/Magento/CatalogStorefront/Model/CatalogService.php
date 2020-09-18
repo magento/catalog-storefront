@@ -25,6 +25,8 @@ use Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseFactory;
 use Magento\CatalogStorefront\DataProvider\ProductDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponse;
+use Magento\CatalogStorefrontApi\Api\Data\Sample;
+use Magento\CatalogStorefrontApi\Api\Data\SampleInterface;
 use Magento\CatalogStorefrontApi\Api\Data\UrlRewrite;
 use Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameter;
 use Magento\CatalogStorefrontApi\Api\Data\Video;
@@ -536,6 +538,37 @@ class CatalogService implements CatalogServerInterface
     }
 
     /**
+     * Get samples data
+     *
+     * @param array $item
+     *
+     * @return Sample[]
+     */
+    private function getSamplesArray(array $item): array
+    {
+        $samplesData = $item['samples'] ?? [];
+        $samples = [];
+
+        foreach ($samplesData as $sampleDataItem) {
+            $sampleItem = new Sample;
+            $this->dataObjectHelper->populateWithArray($sampleItem, $sampleDataItem, SampleInterface::class);
+
+            if (!empty($sampleDataItem['resource'])) {
+                $resourceData = $sampleDataItem['resource'];
+                $resource = new MediaResource;
+                $resource->setLabel($resourceData['label'] ?? '');
+                $resource->setRoles($resourceData['roles'] ?? []);
+                $resource->setUrl($resourceData['url'] ?? '');
+                $sampleItem->setResource($resource);
+            }
+
+            $samples[] = $sampleItem;
+        }
+
+        return $samples;
+    }
+
+    /**
      * Prepare product from raw data
      *
      * @param array $item
@@ -583,6 +616,7 @@ class CatalogService implements CatalogServerInterface
         //PopulateWithArray doesn't work with non-array sub-objects which don't set properties using constructor
         $product->setVideos($this->getMediaGalleryVideosArray($item));
         $product->setImages($this->getMediaGalleryImagesArray($item));
+        $product->setSamples($this->getSamplesArray($item));
 
         $urlRewritesData = $item['url_rewrites'] ?? [];
         $urlRewrites = [];

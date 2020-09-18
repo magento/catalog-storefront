@@ -72,8 +72,8 @@ class SamplesTest extends StorefrontTestsAbstract
         $this->assertNotEmpty($catalogServiceItem->getItems());
 
         $catalogServiceSamples = $catalogServiceItem->getItems()[0]->getSamples()[0];
-        $this->assertEquals($productSampleData->getTitle(), $catalogServiceSamples->getLabel());
-        $this->assertEquals($productSampleData->getSampleUrl(), $catalogServiceSamples->getUrl());
+        $this->assertEquals($productSampleData->getTitle(), $catalogServiceSamples->getResource()->getLabel());
+        $this->assertEquals($productSampleData->getSampleUrl(), $catalogServiceSamples->getResource()->getUrl());
     }
 
     /**
@@ -96,7 +96,8 @@ class SamplesTest extends StorefrontTestsAbstract
         $this->assertNotEmpty($catalogServiceItem->getItems());
 
         $catalogServiceSamples = $catalogServiceItem->getItems()[0]->getSamples()[0];
-        $this->assertEquals($productSampleData->getTitle(), $catalogServiceSamples->getLabel());
-        $this->assertEquals($productSampleData->getSampleFile(), $catalogServiceSamples->getUrl());
+
+        $this->assertEquals($productSampleData->getTitle(), $catalogServiceSamples->getResource()->getLabel());
+        $this->assertEquals($productSampleData->getSampleFile(), $catalogServiceSamples->getResource()->getUrl());
     }
 }
