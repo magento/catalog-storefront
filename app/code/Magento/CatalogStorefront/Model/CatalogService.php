@@ -13,8 +13,8 @@ use Magento\CatalogStorefrontApi\Api\Data\Category;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryArrayMapper;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryInterface;
 use Magento\CatalogStorefrontApi\Api\Data\Image;
-use Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItem;
-use Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ImageInterface;
+use Magento\CatalogStorefrontApi\Api\Data\MediaResource;
 use Magento\CatalogStorefrontApi\Api\Data\ProductArrayMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ProductInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
@@ -28,6 +28,8 @@ use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponse;
 use Magento\CatalogStorefrontApi\Api\Data\UrlRewrite;
 use Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameter;
 use Magento\CatalogStorefrontApi\Api\Data\Video;
+use Magento\CatalogStorefrontApi\Api\Data\VideoInterface;
+use Magento\CatalogStorefrontApi\Api\Data\VideoItem;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
@@ -223,32 +225,6 @@ class CatalogService implements CatalogServerInterface
             $result[$key] = is_array($value) ? $this->cleanUpNullValues($value) : $value;
         }
         return $result;
-    }
-
-    /**
-     * Set product image
-     *
-     * @param string $key
-     * @param array $rawData
-     * @param ProductInterface $product
-     * @return ProductInterface
-     */
-    private function setImage(string $key, array $rawData, ProductInterface $product): ProductInterface
-    {
-        if (empty($rawData[$key])) {
-            return $product;
-        }
-
-        $image = new Image();
-        $image->setUrl($rawData[$key]['url'] ?? '');
-        $image->setLabel($rawData[$key]['label'] ?? '');
-        $parts = explode('_', $key);
-        $parts = array_map("ucfirst", $parts);
-        $methodName = 'set' . implode('', $parts);
-        if (method_exists($product, $methodName)) {
-            $product->$methodName($image);
-        }
-        return $product;
     }
 
     /**
@@ -488,30 +464,75 @@ class CatalogService implements CatalogServerInterface
     /**
      * Get video content for media gallery
      *
-     * @param array $mediaGalleryItemVideo
-     * @return Video
+     * @param array $item
+     *
+     * @return Video[]
      */
-    private function getMediaGalleryVideo(array $mediaGalleryItemVideo): Video
+    private function getMediaGalleryVideosArray(array $item): array
     {
-        $videoContent = new Video;
-        $videoContent->setMediaType($mediaGalleryItemVideo['media_type'] ?? '');
-        $videoContent->setVideoDescription(
-            $mediaGalleryItemVideo['video_description'] ?? ''
-        );
-        $videoContent->setVideoMetadata(
-            $mediaGalleryItemVideo['video_metadata'] ?? ''
-        );
-        $videoContent->setVideoProvider(
-            $mediaGalleryItemVideo['video_provider'] ?? ''
-        );
-        $videoContent->setVideoTitle(
-            $mediaGalleryItemVideo['video_title'] ?? ''
-        );
-        $videoContent->setVideoUrl(
-            $mediaGalleryItemVideo['video_url'] ?? ''
-        );
+        $videosData = $item['videos'] ?? [];
+        $videos = [];
 
-        return $videoContent;
+        foreach ($videosData as $videoDataItem) {
+            $videoItem = new Video;
+            $this->dataObjectHelper->populateWithArray($videoItem, $videoDataItem, VideoInterface::class);
+
+            if (!empty($videoDataItem['preview'])) {
+                $previewData = $videoDataItem['preview'];
+                $preview = new MediaResource;
+                $preview->setLabel($previewData['label'] ?? '');
+                $preview->setRoles($previewData['roles'] ?? []);
+                $preview->setUrl($previewData['url'] ?? '');
+                $videoItem->setPreview($preview);
+            }
+
+            if (!empty($videoDataItem['video'])) {
+                $videoData = $videoDataItem['video'];
+                $video = new VideoItem;
+                $video->setMediaType($videoData['media_type'] ?? '');
+                $video->setVideoDescription($videoData['video_description'] ?? '');
+                $video->setVideoMetadata($videoData['video_metadata'] ?? '');
+                $video->setVideoProvider($videoData['video_provider'] ?? '');
+                $video->setVideoTitle($videoData['video_title'] ?? '');
+                $video->setVideoUrl($videoData['video_url'] ?? '');
+                $videoItem->setVideo($video);
+            }
+
+            $videos[] = $videoItem;
+        }
+
+        return $videos;
+    }
+
+    /**
+     * Get images content for media gallery
+     *
+     * @param array $item
+     *
+     * @return Image[]
+     */
+    private function getMediaGalleryImagesArray(array $item): array
+    {
+        $imagesData = $item['images'] ?? [];
+        $images = [];
+
+        foreach ($imagesData as $imagesDataItem) {
+            $imageItem = new Image;
+            $this->dataObjectHelper->populateWithArray($imageItem, $imagesDataItem, ImageInterface::class);
+
+            if (!empty($imagesDataItem['resource'])) {
+                $resourceData = $imagesDataItem['resource'];
+                $resource = new MediaResource;
+                $resource->setLabel($resourceData['label'] ?? '');
+                $resource->setRoles($resourceData['roles'] ?? []);
+                $resource->setUrl($resourceData['url'] ?? '');
+                $imageItem->setResource($resource);
+            }
+
+            $images[] = $imageItem;
+        }
+
+        return $images;
     }
 
     /**
@@ -558,28 +579,10 @@ class CatalogService implements CatalogServerInterface
 
         $product = new \Magento\CatalogStorefrontApi\Api\Data\Product();
         $this->dataObjectHelper->populateWithArray($product, $item, ProductInterface::class);
-        $product = $this->setImage('image', $item, $product);
-        $product = $this->setImage('small_image', $item, $product);
-        $product = $this->setImage('thumbnail', $item, $product);
 
         //PopulateWithArray doesn't work with non-array sub-objects which don't set properties using constructor
-        $mediaGalleryData = $item['media_gallery'] ?? [];
-        $mediaGallery = [];
-        foreach ($mediaGalleryData as $mediaGalleryDataItem) {
-            $mediaGalleryItem = new MediaGalleryItem;
-            $this->dataObjectHelper->populateWithArray(
-                $mediaGalleryItem,
-                $mediaGalleryDataItem,
-                MediaGalleryItemInterface::class
-            );
-            if (!empty($mediaGalleryDataItem['video_content'])) {
-                $videoContent = $this->getMediaGalleryVideo($mediaGalleryDataItem['video_content']);
-                $mediaGalleryItem->setVideoContent($videoContent);
-            }
-
-            $mediaGallery[] = $mediaGalleryItem;
-        }
-        $product->setMediaGallery($mediaGallery);
+        $product->setVideos($this->getMediaGalleryVideosArray($item));
+        $product->setImages($this->getMediaGalleryImagesArray($item));
 
         $urlRewritesData = $item['url_rewrites'] ?? [];
         $urlRewrites = [];

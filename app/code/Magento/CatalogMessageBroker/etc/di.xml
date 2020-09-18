@@ -18,8 +18,6 @@
                 <item name="configurable_options" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\ConfigurableOptions</item>
                 <item name="items" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\BundleItems</item>
                 <item name="dynamic_attributes" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\DynamicAttribute</item>
-                <item name="media_gallery" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\MediaGallery</item>
-                <item name="swatch_image" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\SwatchImage</item>
             </argument>
         </arguments>
     </type>

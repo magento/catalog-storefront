@@ -34,10 +34,6 @@ class ProductDataProcessor
         'url_key' => 'url_key',
         'tax_class_id' => 'tax_class_id',
         'weight' => 'weight',
-        'swatch_image' => 'swatch_image',
-        'thumbnail' => 'thumbnail',
-        'image' => 'image',
-        'small_image' => 'small_image',
         'visibility' => 'visibility',
         'meta_description' => 'meta_description',
         'meta_keyword' => 'meta_keyword',
@@ -47,13 +43,14 @@ class ProductDataProcessor
         'attributes' => 'dynamic_attributes',
         // 'variants' => 'variants', // \Magento\CatalogStorefrontApi\Api\Data\VariantInterface[]
         'category_ids' => 'categories',
+        'images' => 'images', //type: \Magento\CatalogStorefrontApi\Api\Data\ImageInterface[]
+        'videos' => 'videos', //type: \Magento\CatalogStorefrontApi\Api\Data\VideoInterface[]
         // The following list of fields are present in Import API (proto schema) but absent in Export API (et_schema)
         // TODO: review list, move to ^^ after corresponding fields resolved in story
         'has_options', //type: bool
         'type_id', //type: string
         'stock_status', //type: string
         'qty', //type: float
-        'media_gallery', //type: \Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemInterface[]
         'dynamic_attributes', //type: \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface[]
         'required_options', //type: string
         'created_in', //type: string
