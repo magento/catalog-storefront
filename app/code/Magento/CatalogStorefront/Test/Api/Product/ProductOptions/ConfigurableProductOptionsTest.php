@@ -107,7 +107,6 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
             $expected,
             $actual
         );
-
         self::assertEquals([], $diff, "Actual response doesn't equal expected data");
     }
 
