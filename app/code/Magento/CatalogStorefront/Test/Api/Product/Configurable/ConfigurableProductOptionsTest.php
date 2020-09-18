@@ -14,25 +14,24 @@ use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CompareArraysRecursively;
-use Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionValueArrayMapper;
-use Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetRequest;
+use Magento\CatalogStorefrontApi\Api\Data\ProductOptionValueArrayMapper;
 
-
-
+/**
+ * Tests configurable product options on the storefront
+ */
 class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
 {
     /**
      * Test Constants
      */
-    const TEST_SKU = 'configurable';
-    const TWO_CHILD_SKU = 'Configurable product';
+    const TEST_SKU = 'Configurable product';
     const STORE_CODE = 'default';
 
     /**
      * @var string[]
      */
     private $attributesToCompare = [
-        'configurable_options' //TODO: confirm this attribute for comparision
+        'product_options'
     ];
 
     /**
@@ -56,14 +55,9 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
     private $compareArraysRecursively;
 
     /**
-     * @var ConfigurableOptionValueArrayMapper
+     * @var ProductOptionValueArrayMapper
      */
     private $arrayMapper;
-
-    /**
-     * @var ProductVariantsGetRequest
-     */
-    private $productVariantInterface;
 
     /**
      * @inheritdoc
@@ -73,64 +67,11 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
         parent::setUp();
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
         $this->productsGetRequestInterface = Bootstrap::getObjectManager()->create(ProductsGetRequestInterface::class);
-        $this->productVariantInterface = Bootstrap::getObjectManager()->create(ProductVariantsGetRequest::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
-        $this->arrayMapper = Bootstrap::getObjectManager()->create(ConfigurableOptionValueArrayMapper::class);
+        $this->arrayMapper = Bootstrap::getObjectManager()->create(ProductOptionValueArrayMapper::class);
         $this->compareArraysRecursively = Bootstrap::getObjectManager()->create(CompareArraysRecursively::class);
-    }
-
-    /**
-     * Validate configurable product data
-     *
-     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_products.php
-     * @magentoDbIsolation disabled
-     * @throws NoSuchEntityException
-     * @throws \Throwable
-     */
-    public function testConfigurableProduct(): void
-    {
-        $product = $this->productRepository->get(self::TEST_SKU);
-        $configurableOptions = $product->getExtensionAttributes()->getConfigurableProductOptions()[0];
-
-        $this->productsGetRequestInterface->setIds([$product->getId()]);
-        $this->productsGetRequestInterface->setStore(self::STORE_CODE);
-        $this->productsGetRequestInterface->setAttributeCodes($this->attributesToCompare);
-        $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
-        $this->assertNotEmpty($catalogServiceItem->getItems());
-
-        $catalogService = $catalogServiceItem->getItems()[0]->getConfigurableOptions();
-        $this->assertEquals($configurableOptions->getLabel(), $catalogService->getLabel());
-    }
-
-    /**
-     * Test product variant
-     *
-     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_two_child_products.php
-     * @magentoDbIsolation disabled
-     * @throws NoSuchEntityException
-     * @throws \Throwable
-     * @dataProvider variantsProvider
-     */
-    public function testConfigurableproductVariant(array $variantsProvider)
-    {
-        $this->markTestSkipped("This test skipped due to: https://github.com/magento/catalog-storefront/issues/304
-        and https://github.com/magento/catalog-storefront/issues/27");
-
-        //product variants
-        $product = $this->productRepository->get(self::TWO_CHILD_SKU);
-        $this->productVariantInterface->setIds([$product->getId()]);
-        $this->productVariantInterface->setStoreId(self::STORE_CODE);
-        $this->productVariantInterface->setAttributeCodes($this->attributesToCompare);
-        $catalogServiceVariants = $this->catalogService->getProductVariants($this->productVariantInterface);
-        self::assertNotEmpty($catalogServiceVariants->getItems());
-
-        //TODO: check why this return empty array
-        foreach ($catalogServiceVariants->getItems()[0]->getProduct() as $variant) {
-            $price = $variant->getPrice();
-            //TODO: Ask for array mapper for variants
-        }
     }
 
     /**
@@ -145,8 +86,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
      */
     public function testConfigurableProductOptions(array $expected)
     {
-        $product = $this->productRepository->get(self::TWO_CHILD_SKU);
-
+        $product = $this->productRepository->get(self::TEST_SKU);
         $this->productsGetRequestInterface->setIds([$product->getId()]);
         $this->productsGetRequestInterface->setStore(self::STORE_CODE);
         $this->productsGetRequestInterface->setAttributeCodes($this->attributesToCompare);
@@ -154,19 +94,26 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
         $this->assertNotEmpty($catalogServiceItem->getItems());
 
         $actual = [];
-        foreach ($catalogServiceItem->getItems()[0]->getConfigurableOptions() as $productOption) {
-            $actual[] = $this->arrayMapper->convertToArray($productOption);
+        foreach ($catalogServiceItem->getItems()[0]->getProductOptions() as $productOption) {
+            $productOptionValues = $productOption->getValues();
+            foreach ($productOptionValues as $productOptionValue) {
+                $convertedValues = $this->arrayMapper->convertToArray($productOptionValue);
+                unset($convertedValues['id']);
+                $actual[] = $convertedValues;
+            }
         }
 
         $diff = $this->compareArraysRecursively->execute(
             $expected,
             $actual
         );
+
         self::assertEquals([], $diff, "Actual response doesn't equal expected data");
     }
 
     /**
-     * //TODO:  ask for data provider values
+     * Data provider for configurable product options
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
     public function getConfigurableProductOptionProvider()
@@ -175,42 +122,23 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
             [
                 [
                     [
-                        'value_index' => '1',
-                        'label' => 'configurable',
-                        'default_label' =>'',
-                        'store_label' => '',
-                        'use_default_value' => '',
-                        'attribute_id' => '',
-                        'product_id' => ''
+                        'label' => 'Option 1',
+                        'sort_order' => '',
+                        'default' =>'',
+                        'image_url' => false,
+                        'qty_mutability' => false,
+                        'qty' => (float)0,
+                        'info_url' => ''
                     ],
                     [
-                        'value_index' => '',
-                        'label' => '',
-                        'default_label' =>'',
-                        'store_label' => '',
-                        'use_default_value' => '',
-                        'attribute_id' => '',
-                        'product_id' => ''
+                        'label' => 'Option 2',
+                        'sort_order' => '',
+                        'default' =>'',
+                        'image_url' => false,
+                        'qty_mutability' => false,
+                        'qty' => (float)0,
+                        'info_url' => ''
                     ],
-                ]
-            ]
-        ];
-    }
-
-    public function variantsProvider(): array
-    {
-        return [
-            [
-                [
-                    [
-                        'option_value_id' => '',
-                        'regular_price' => 1,
-                        'final_price' => '',
-                        'scope' => 'default'
-                    ],
-                    [
-
-                    ]
                 ]
             ]
         ];
