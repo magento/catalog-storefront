@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogStorefront\Test\Api\Product\Downloadable;
+namespace Magento\CatalogStorefront\Test\Api\Product\ProductOptions;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogStorefront\Model\CatalogService;
