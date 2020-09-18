@@ -54,11 +54,7 @@ class BundleFieldsTransformer implements TransformerInterface
         'shipment_type' => [
             'enumName' => 'ShipBundleItemsEnum',
             'attribute' => 'ship_bundle_items',
-        ],
-        'price_view' => [
-            'enumName' => 'PriceViewEnum',
-            'attribute' => 'price_view',
-        ],
+        ]
     ];
 
     /**
@@ -67,10 +63,6 @@ class BundleFieldsTransformer implements TransformerInterface
      * @var array
      */
     private $enumValues = [
-        'PriceViewEnum' => [
-            'PRICE_RANGE',
-            'AS_LOW_AS',
-        ],
         'ShipBundleItemsEnum' => [
             'TOGETHER',
             'SEPARATELY',

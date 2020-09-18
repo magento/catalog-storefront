@@ -9,7 +9,6 @@
     <type name="Magento\CatalogExtractor\DataProvider\Transformer">
         <arguments>
             <argument name="map" xsi:type="array">
-                <item name="price_view" xsi:type="string">Magento\BundleProductExtractor\DataProvider\BundleFieldsTransformer</item>
                 <item name="price_type" xsi:type="string">Magento\BundleProductExtractor\DataProvider\BundleFieldsTransformer</item>
                 <item name="sku_type" xsi:type="string">Magento\BundleProductExtractor\DataProvider\BundleFieldsTransformer</item>
                 <item name="shipment_type" xsi:type="string">Magento\BundleProductExtractor\DataProvider\BundleFieldsTransformer</item>
