@@ -69,7 +69,7 @@ class SamplesTest extends StorefrontTestsAbstract
     /**
      * Validate downloadable product data
      *
-     * @magentoDataFixture Magento/Downloadable/_files/product_downloadable_with_link_url_and_sample_url.php
+     * @magentoDataFixture Magento_CatalogStorefront::Test/Api/Product/Downloadable/_files/sf_product_downloadable_with_urls.php
      * @magentoDbIsolation disabled
      * @param array $expected
      * @throws NoSuchEntityException
@@ -133,8 +133,8 @@ class SamplesTest extends StorefrontTestsAbstract
             [
                 [
                     'url' => 'http://example.com/downloadable.txt',
-                    'label' => 'Downloadable Product Sample Title',
-                    'sort_order' => 0
+                    'label' => 'Downloadable Product Sample',
+                    'sort_order' => 10
                 ]
             ]
         ];
