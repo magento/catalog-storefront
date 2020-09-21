@@ -14,7 +14,7 @@ use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CompareArraysRecursively;
-use Magento\CatalogStorefrontApi\Api\Data\ProductOptionValueArrayMapper;
+use Magento\CatalogStorefrontApi\Api\Data\ProductOptionArrayMapper;
 
 class GroupedProductOptions extends StorefrontTestsAbstract
 {
@@ -52,7 +52,7 @@ class GroupedProductOptions extends StorefrontTestsAbstract
     private $compareArraysRecursively;
 
     /**
-     * @var ProductOptionValueArrayMapper
+     * @var ProductOptionArrayMapper
      */
     private $arrayMapper;
 
@@ -66,7 +66,7 @@ class GroupedProductOptions extends StorefrontTestsAbstract
         $this->productsGetRequestInterface = Bootstrap::getObjectManager()->create(ProductsGetRequestInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
-        $this->arrayMapper = Bootstrap::getObjectManager()->create(ProductOptionValueArrayMapper::class);
+        $this->arrayMapper = Bootstrap::getObjectManager()->create(ProductOptionArrayMapper::class);
         $this->compareArraysRecursively = Bootstrap::getObjectManager()->create(CompareArraysRecursively::class);
     }
 
@@ -90,21 +90,18 @@ class GroupedProductOptions extends StorefrontTestsAbstract
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
         $this->assertNotEmpty($catalogServiceItem->getItems());
 
-//        $actual = [];
-//        foreach ($catalogServiceItem->getItems()[0]->getProductOptions() as $productOption) {
-//            $productOptionValues = $productOption->getValues();
-//            foreach ($productOptionValues as $productOptionValue) {
-//                $convertedValues = $this->arrayMapper->convertToArray($productOptionValue);
-//                unset($convertedValues['id']);
-//                $actual[] = $convertedValues;
-//            }
-//        }
+        $actual = [];
+        foreach ($catalogServiceItem->getItems()[0]->getProductOptions() as $productOption) {
+            $convertedValues = $this->arrayMapper->convertToArray($productOption);
+            unset($convertedValues['id']);
+            $actual[] = $convertedValues;
+        }
 
-//        $diff = $this->compareArraysRecursively->execute(
-//            $expected,
-//            $actual
-//        );
-//        self::assertEquals([], $diff, "Actual response doesn't equal expected data");
+        $diff = $this->compareArraysRecursively->execute(
+            $expected,
+            $actual
+        );
+        self::assertEquals([], $diff, "Actual response doesn't equal expected data");
     }
 
     /**
@@ -118,14 +115,16 @@ class GroupedProductOptions extends StorefrontTestsAbstract
             [
                 [
                     [
-                        // message GroupedItemProductInfo {
-//   string sku = 1;
-//   string name = 2;
-//   string type_id = 3;
-//   string url_key = 4;
+                        'sku' => 'simple_11',
+                        'name' => 'Simple 11',
+                        'type_id' => 'simple',
+                        'url_key' => '',
                     ],
                     [
-
+                        'sku' => 'simple_22',
+                        'name' => 'Simple 22',
+                        'type_id' => 'simple',
+                        'url_key' => '',
                     ],
                 ]
             ]
