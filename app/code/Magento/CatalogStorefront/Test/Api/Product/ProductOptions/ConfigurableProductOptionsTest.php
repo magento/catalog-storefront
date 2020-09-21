@@ -14,7 +14,7 @@ use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CompareArraysRecursively;
-use Magento\CatalogStorefrontApi\Api\Data\ProductOptionValueArrayMapper;
+use Magento\CatalogStorefrontApi\Api\Data\ProductOptionArrayMapper;
 
 /**
  * Tests configurable product options on the storefront
@@ -55,7 +55,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
     private $compareArraysRecursively;
 
     /**
-     * @var ProductOptionValueArrayMapper
+     * @var ProductOptionArrayMapper
      */
     private $arrayMapper;
 
@@ -70,7 +70,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
-        $this->arrayMapper = Bootstrap::getObjectManager()->create(ProductOptionValueArrayMapper::class);
+        $this->arrayMapper = Bootstrap::getObjectManager()->create(ProductOptionArrayMapper::class);
         $this->compareArraysRecursively = Bootstrap::getObjectManager()->create(CompareArraysRecursively::class);
     }
 
@@ -95,12 +95,10 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
 
         $actual = [];
         foreach ($catalogServiceItem->getItems()[0]->getProductOptions() as $productOption) {
-            $productOptionValues = $productOption->getValues();
-            foreach ($productOptionValues as $productOptionValue) {
-                $convertedValues = $this->arrayMapper->convertToArray($productOptionValue);
-                unset($convertedValues['id']);
-                $actual[] = $convertedValues;
-            }
+            $convertedValues = $this->arrayMapper->convertToArray($productOption);
+            unset($convertedValues['values'][0]['id']);
+            unset($convertedValues['values'][1]['id']);
+            $actual[] = $convertedValues;
         }
 
         $diff = $this->compareArraysRecursively->execute(
@@ -121,22 +119,32 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
             [
                 [
                     [
-                        'label' => 'Option 1',
-                        'sort_order' => '',
-                        'default' =>'',
-                        'image_url' => false,
-                        'qty_mutability' => false,
-                        'qty' => (float)0,
-                        'info_url' => ''
-                    ],
-                    [
-                        'label' => 'Option 2',
-                        'sort_order' => '',
-                        'default' =>'',
-                        'image_url' => false,
-                        'qty_mutability' => false,
-                        'qty' => (float)0,
-                        'info_url' => ''
+                        'id' => 'test_configurable',
+                        'label' => 'Test Configurable',
+                        'sort_order' => 0,
+                        'required' => false,
+                        'render_type' => '',
+                        'type' => 'super',
+                        'values' => [
+                            [
+                            'label' => 'Option 1',
+                            'sort_order' => '',
+                            'default' => false,
+                            'image_url' => '',
+                            'qty_mutability' => false,
+                            'qty' => (float)0,
+                            'info_url' => ''
+                            ],
+                            [
+                                'label' => 'Option 2',
+                                'sort_order' => '',
+                                'default' => false,
+                                'image_url' => '',
+                                'qty_mutability' => false,
+                                'qty' => (float)0,
+                                'info_url' => ''
+                            ],
+                        ],
                     ],
                 ]
             ]
