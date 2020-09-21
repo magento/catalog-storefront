@@ -1,4 +1,4 @@
-# Overview
+# Overview.
 
 This repository responsible for 2 different services (will be split in future):
 - Message Broker: connects Backoffice and Storefront application.
