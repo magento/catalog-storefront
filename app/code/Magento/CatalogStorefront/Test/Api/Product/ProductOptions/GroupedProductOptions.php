@@ -14,7 +14,7 @@ use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CompareArraysRecursively;
-use Magento\CatalogStorefrontApi\Api\Data\ProductOptionArrayMapper;
+use Magento\CatalogStorefrontApi\Api\Data\ProductOptionMapper;
 
 class GroupedProductOptions extends StorefrontTestsAbstract
 {
@@ -52,7 +52,7 @@ class GroupedProductOptions extends StorefrontTestsAbstract
     private $compareArraysRecursively;
 
     /**
-     * @var ProductOptionArrayMapper
+     * @var ProductOptionMapper
      */
     private $arrayMapper;
 
@@ -66,7 +66,7 @@ class GroupedProductOptions extends StorefrontTestsAbstract
         $this->productsGetRequestInterface = Bootstrap::getObjectManager()->create(ProductsGetRequestInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
-        $this->arrayMapper = Bootstrap::getObjectManager()->create(ProductOptionArrayMapper::class);
+        $this->arrayMapper = Bootstrap::getObjectManager()->create(ProductOptionMapper::class);
         $this->compareArraysRecursively = Bootstrap::getObjectManager()->create(CompareArraysRecursively::class);
     }
 
@@ -93,7 +93,8 @@ class GroupedProductOptions extends StorefrontTestsAbstract
         $actual = [];
         foreach ($catalogServiceItem->getItems()[0]->getProductOptions() as $productOption) {
             $convertedValues = $this->arrayMapper->convertToArray($productOption);
-            unset($convertedValues['id']);
+            unset($convertedValues['values'][0]['id']);
+            unset($convertedValues['values'][1]['id']);
             $actual[] = $convertedValues;
         }
 
@@ -115,16 +116,32 @@ class GroupedProductOptions extends StorefrontTestsAbstract
             [
                 [
                     [
-                        'sku' => 'simple_11',
-                        'name' => 'Simple 11',
-                        'type_id' => 'simple',
-                        'url_key' => '',
-                    ],
-                    [
-                        'sku' => 'simple_22',
-                        'name' => 'Simple 22',
-                        'type_id' => 'simple',
-                        'url_key' => '',
+                        'id' => 'test_grouped',
+                        'label' => 'Grouped Product',
+                        'sort_order' => 0,
+                        'required' => false,
+                        'render_type' => '',
+                        'type' => 'super',
+                        'values' => [
+                            [
+                                'label' => 'Simple 11',
+                                'sort_order' => '',
+                                'default' => false,
+                                'image_url' => '',
+                                'qty_mutability' => false,
+                                'qty' => (float)0,
+                                'info_url' => ''
+                            ],
+                            [
+                                'label' => 'Simple 22',
+                                'sort_order' => '',
+                                'default' => false,
+                                'image_url' => '',
+                                'qty_mutability' => false,
+                                'qty' => (float)0,
+                                'info_url' => ''
+                            ],
+                        ],
                     ],
                 ]
             ]
