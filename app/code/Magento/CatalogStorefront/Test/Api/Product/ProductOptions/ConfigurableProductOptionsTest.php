@@ -73,12 +73,11 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
         $this->arrayMapper = Bootstrap::getObjectManager()->create(ProductOptionArrayMapper::class);
         $this->compareArraysRecursively = Bootstrap::getObjectManager()->create(CompareArraysRecursively::class);
     }
-
-//    * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_different_option_labeles_per_stores.php
+    
     /**
      * Validate configurable product data
      *
-     *
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_different_option_labeles_per_stores.php
      * @magentoDbIsolation disabled
      * @param array $expected
      * @throws NoSuchEntityException
@@ -103,7 +102,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
             unset($convertedValues['values'][2]['id']);
             $actual[] = $convertedValues;
         }
-        
+
         $diff = $this->compareArraysRecursively->execute(
             $expected,
             $actual
