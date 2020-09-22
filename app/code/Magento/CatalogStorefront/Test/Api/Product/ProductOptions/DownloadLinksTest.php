@@ -137,7 +137,6 @@ class DownloadLinksTest extends StorefrontTestsAbstract
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
         self::assertNotEmpty($catalogServiceItem->getItems());
 
-
         $expectedProductAttributes = [
             'linksPurchasedSeparately' => true,
             'linksTitle' => 'Product Links Title'
