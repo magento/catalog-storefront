@@ -17,7 +17,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CompareArraysRecursively;
 
 /**
- * Tests configurable product options on the storefront
+ * Tests bundle product options on the storefront
  */
 class BundleProductOptionsTest extends StorefrontTestsAbstract
 {
@@ -75,7 +75,7 @@ class BundleProductOptionsTest extends StorefrontTestsAbstract
     }
 
     /**
-     * Validate configurable product data
+     * Validate bundle product data
      *
      * @magentoDataFixture Magento/CatalogStorefront/_files/bundle_with_multiple_options_and_qty.php
      * @magentoDbIsolation disabled
@@ -96,8 +96,6 @@ class BundleProductOptionsTest extends StorefrontTestsAbstract
         $actual = [];
         foreach ($catalogServiceItem->getItems()[0]->getProductOptions() as $productOption) {
             $convertedValues = $this->arrayMapper->convertToArray($productOption);
-//            unset($convertedValues['values'][0]['id']);
-//            unset($convertedValues['values'][1]['id']);
             $actual[] = $convertedValues;
         }
 
@@ -109,7 +107,7 @@ class BundleProductOptionsTest extends StorefrontTestsAbstract
     }
 
     /**
-     * Data provider for configurable product options
+     * Data provider for bundle product options
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
