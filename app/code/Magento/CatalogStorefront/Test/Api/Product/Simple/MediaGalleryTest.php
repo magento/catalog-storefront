@@ -164,7 +164,7 @@ class MediaGalleryTest extends StorefrontTestsAbstract
      *
      * @param array $imageDataProvider
      *
-     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
+     * @magentoDataFixture Magento_CatalogStorefront::Test/Api/Product/Simple/_files/product_with_disabled_image.php
      * @dataProvider getImageDataProvider
      *
      * @magentoDbIsolation disabled
@@ -219,6 +219,7 @@ class MediaGalleryTest extends StorefrontTestsAbstract
                                 'image',
                                 'small_image',
                                 'thumbnail',
+                                'hide_from_pdp',
                             ],
                         ],
                         'sort_order' => '1',
