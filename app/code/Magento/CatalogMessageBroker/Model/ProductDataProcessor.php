@@ -73,10 +73,6 @@ class ProductDataProcessor
         'special_to_date', //type: string
         'product_links', //type: \Magento\CatalogStorefrontApi\Api\Data\ProductLinkInterface[]
         'canonical_url', //type: string
-        'ship_bundle_items', //type: string
-        'dynamic_weight', //type: bool
-        'dynamic_sku', //type: bool
-        'dynamic_price', //type: bool
         'items', //type: \Magento\CatalogStorefrontApi\Api\Data\BundleItemInterface[]
         'links_purchased_separately', //type: bool
         'links_title', //type: string
