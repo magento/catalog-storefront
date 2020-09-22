@@ -24,7 +24,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
     /**
      * Test Constants
      */
-    const TEST_SKU = 'Configurable product';
+    const TEST_SKU = 'configurable';
     const STORE_CODE = 'default';
 
     /**
@@ -74,10 +74,11 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
         $this->compareArraysRecursively = Bootstrap::getObjectManager()->create(CompareArraysRecursively::class);
     }
 
+//    * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_different_option_labeles_per_stores.php
     /**
      * Validate configurable product data
      *
-     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_two_child_products.php
+     *
      * @magentoDbIsolation disabled
      * @param array $expected
      * @throws NoSuchEntityException
@@ -87,6 +88,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
     public function testConfigurableProductOptions(array $expected)
     {
         $product = $this->productRepository->get(self::TEST_SKU);
+
         $this->productsGetRequestInterface->setIds([$product->getId()]);
         $this->productsGetRequestInterface->setStore(self::STORE_CODE);
         $this->productsGetRequestInterface->setAttributeCodes($this->attributesToCompare);
@@ -98,9 +100,10 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
             $convertedValues = $this->arrayMapper->convertToArray($productOption);
             unset($convertedValues['values'][0]['id']);
             unset($convertedValues['values'][1]['id']);
+            unset($convertedValues['values'][2]['id']);
             $actual[] = $convertedValues;
         }
-
+        
         $diff = $this->compareArraysRecursively->execute(
             $expected,
             $actual
@@ -119,24 +122,33 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
             [
                 [
                     [
-                        'id' => 'test_configurable',
-                        'label' => 'Test Configurable',
+                        'id' => 'different_labels_attribute',
+                        'label' => 'Different option labels dropdown attribute',
                         'sort_order' => 0,
                         'required' => false,
                         'render_type' => '',
                         'type' => 'super',
                         'values' => [
                             [
-                            'label' => 'Option 1',
-                            'sort_order' => '',
-                            'default' => false,
-                            'image_url' => '',
-                            'qty_mutability' => false,
-                            'qty' => (float)0,
-                            'info_url' => ''
+                                'label' => 'Option 1 Default Store',
+                                'sort_order' => '',
+                                'default' => false,
+                                'image_url' => '',
+                                'qty_mutability' => false,
+                                'qty' => (float)0,
+                                'info_url' => ''
                             ],
                             [
-                                'label' => 'Option 2',
+                                'label' => 'Option 2 Default Store',
+                                'sort_order' => '',
+                                'default' => false,
+                                'image_url' => '',
+                                'qty_mutability' => false,
+                                'qty' => (float)0,
+                                'info_url' => ''
+                            ],
+                            [
+                                'label' => 'Option 3 Default Store',
                                 'sort_order' => '',
                                 'default' => false,
                                 'image_url' => '',
