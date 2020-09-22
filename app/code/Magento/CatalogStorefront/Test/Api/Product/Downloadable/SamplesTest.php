@@ -11,8 +11,10 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogStorefront\Model\CatalogService;
 use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\SampleArrayMapper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\CompareArraysRecursively;
 
 /**
  * Test for downloadable product exporter
@@ -42,6 +44,16 @@ class SamplesTest extends StorefrontTestsAbstract
     private $productRepository;
 
     /**
+     * @var SampleArrayMapper
+     */
+    private $arrayMapper;
+
+    /**
+     * @var CompareArraysRecursively
+     */
+    private $compareArraysRecursively;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -50,20 +62,22 @@ class SamplesTest extends StorefrontTestsAbstract
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
         $this->productsGetRequestInterface = Bootstrap::getObjectManager()->create(ProductsGetRequestInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
+        $this->arrayMapper = Bootstrap::getObjectManager()->create(SampleArrayMapper::class);
+        $this->compareArraysRecursively = Bootstrap::getObjectManager()->create(CompareArraysRecursively::class);
     }
 
     /**
      * Validate downloadable product data
      *
-     * @magentoDataFixture Magento/Downloadable/_files/product_downloadable_with_link_url_and_sample_url.php
+     * @magentoDataFixture Magento_CatalogStorefront::Test/Api/Product/Downloadable/_files/sf_product_downloadable_with_urls.php
      * @magentoDbIsolation disabled
+     * @param array $expected
      * @throws NoSuchEntityException
-     * @throws \Throwable
+     * @dataProvider downloadableUrlsProvider
      */
-    public function testDownloadableProductsWithUrls(): void
+    public function testDownloadableProductsWithUrls(array $expected): void
     {
         $product = $this->productRepository->get(self::TEST_SKU);
-        $productSampleData = $product->getExtensionAttributes()->getDownloadableProductSamples()[0];
 
         $this->productsGetRequestInterface->setIds([$product->getId()]);
         $this->productsGetRequestInterface->setStore(self::STORE_CODE);
@@ -71,9 +85,13 @@ class SamplesTest extends StorefrontTestsAbstract
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
         $this->assertNotEmpty($catalogServiceItem->getItems());
 
-        $catalogServiceSamples = $catalogServiceItem->getItems()[0]->getSamples()[0];
-        $this->assertEquals($productSampleData->getTitle(), $catalogServiceSamples->getResource()->getLabel());
-        $this->assertEquals($productSampleData->getSampleUrl(), $catalogServiceSamples->getResource()->getUrl());
+        $actual = $this->arrayMapper->convertToArray($catalogServiceItem->getItems()[0]->getSamples()[0]);
+
+        $diff = $this->compareArraysRecursively->execute(
+            $expected,
+            $actual
+        );
+        self::assertEquals([], $diff, "Actual response doesn't equal expected data");
     }
 
     /**
@@ -81,13 +99,13 @@ class SamplesTest extends StorefrontTestsAbstract
      *
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
      * @magentoDbIsolation disabled
+     * @param array $expected
      * @throws NoSuchEntityException
-     * @throws \Throwable
+     * @dataProvider downloadableFilesProvider
      */
-    public function testDownloadableProductsWithFiles(): void
+    public function testDownloadableProductsWithFiles(array $expected): void
     {
         $product = $this->productRepository->get(self::TEST_SKU);
-        $productSampleData = $product->getExtensionAttributes()->getDownloadableProductSamples()[0];
 
         $this->productsGetRequestInterface->setIds([$product->getId()]);
         $this->productsGetRequestInterface->setStore(self::STORE_CODE);
@@ -95,9 +113,48 @@ class SamplesTest extends StorefrontTestsAbstract
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
         $this->assertNotEmpty($catalogServiceItem->getItems());
 
-        $catalogServiceSamples = $catalogServiceItem->getItems()[0]->getSamples()[0];
+        $actual = $this->arrayMapper->convertToArray($catalogServiceItem->getItems()[0]->getSamples()[0]);
 
-        $this->assertEquals($productSampleData->getTitle(), $catalogServiceSamples->getResource()->getLabel());
-        $this->assertEquals($productSampleData->getSampleFile(), $catalogServiceSamples->getResource()->getUrl());
+        $diff = $this->compareArraysRecursively->execute(
+            $expected,
+            $actual
+        );
+        self::assertEquals([], $diff, "Actual response doesn't equal expected data");
+    }
+
+    /**
+     * Data provider for downloadable URLs
+     *
+     * @return array
+     */
+    public function downloadableUrlsProvider(): array
+    {
+        return [
+            [
+                [
+                    'url' => 'http://example.com/downloadable.txt',
+                    'label' => 'Downloadable Product Sample',
+                    'sort_order' => 10
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Data provider for downloadable files
+     *
+     * @return array
+     */
+    public function downloadableFilesProvider(): array
+    {
+        return [
+            [
+                [
+                    'url' => '/j/e/jellyfish_1_4.jpg',
+                    'label' => 'Downloadable Product Sample Title',
+                    'sort_order' => 0
+                ]
+            ]
+        ];
     }
 }
