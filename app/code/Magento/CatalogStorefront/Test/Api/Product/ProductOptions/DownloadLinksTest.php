@@ -31,7 +31,9 @@ class DownloadLinksTest extends StorefrontTestsAbstract
      * @var string[]
      */
     private $attributesToCompare = [
-        'product_options'
+        'product_options',
+        'links_title',
+        'links_purchased_separately'
     ];
 
     /**
@@ -75,7 +77,7 @@ class DownloadLinksTest extends StorefrontTestsAbstract
     /**
      * Validate downloadable URL product data
      *
-     * @magentoDataFixture Magento/Downloadable/_files/product_downloadable_with_link_url_and_sample_url.php
+     * @magentoDataFixture Magento_CatalogStorefront::Test/Api/Product/Downloadable/_files/sf_product_downloadable_with_urls.php
      * @magentoDbIsolation disabled
      * @dataProvider downloadableLinkUrlProvider
      * @param array $expected
@@ -91,11 +93,24 @@ class DownloadLinksTest extends StorefrontTestsAbstract
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
         self::assertNotEmpty($catalogServiceItem->getItems());
 
+        $expectedProductAttributes = [
+            'linksPurchasedSeparately' => true,
+            'linksTitle' => 'Product Links Title'
+        ];
+        $actualProductAttributes = [
+            'linksPurchasedSeparately' => $catalogServiceItem->getItems()[0]->getLinksPurchasedSeparately(),
+            'linksTitle' => $catalogServiceItem->getItems()[0]->getLinksTitle()
+        ];
+        $diffProductAttributes  = $this->compareArraysRecursively->execute(
+            $expectedProductAttributes,
+            $actualProductAttributes
+        );
+        self::assertEquals([], $diffProductAttributes, "Actual response doesn't equal expected data");
+
         $actual = [];
         foreach ($catalogServiceItem->getItems()[0]->getProductOptions() as $item) {
             $actual[] = $this->arrayMapper->convertToArray($item);
         }
-
         $diff = $this->compareArraysRecursively->execute(
             $expected,
             $actual
@@ -106,7 +121,7 @@ class DownloadLinksTest extends StorefrontTestsAbstract
     /**
      * Validate downloadable file product data
      *
-     * @magentoDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
+     * @magentoDataFixture Magento_CatalogStorefront::Test/Api/Product/Downloadable/_files/sf_product_downloadable_with_files.php
      * @magentoDbIsolation disabled
      * @dataProvider downloadableLinkFileProvider
      * @param array $expected
@@ -122,11 +137,25 @@ class DownloadLinksTest extends StorefrontTestsAbstract
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
         self::assertNotEmpty($catalogServiceItem->getItems());
 
+
+        $expectedProductAttributes = [
+            'linksPurchasedSeparately' => true,
+            'linksTitle' => 'Product Links Title'
+        ];
+        $actualProductAttributes = [
+            'linksPurchasedSeparately' => $catalogServiceItem->getItems()[0]->getLinksPurchasedSeparately(),
+            'linksTitle' => $catalogServiceItem->getItems()[0]->getLinksTitle()
+        ];
+        $diffProductAttributes  = $this->compareArraysRecursively->execute(
+            $expectedProductAttributes,
+            $actualProductAttributes
+        );
+        self::assertEquals([], $diffProductAttributes, "Actual response doesn't equal expected data");
+
         $actual = [];
         foreach ($catalogServiceItem->getItems()[0]->getProductOptions() as $item) {
             $actual[] = $this->arrayMapper->convertToArray($item);
         }
-
         $diff = $this->compareArraysRecursively->execute(
             $expected,
             $actual
@@ -145,7 +174,7 @@ class DownloadLinksTest extends StorefrontTestsAbstract
             [
                 [
                     [
-                        'id' => '1',
+                        'id' => 'link:1',
                         'label' => '',
                         'sort_order' => 0,
                         'required' => false,
@@ -153,39 +182,15 @@ class DownloadLinksTest extends StorefrontTestsAbstract
                         'type' => '',
                         'values' => [
                             [
-                                'id' => 'ZG93bmxvYWRhYmxlLzE1',
+                                //'id' => 'ZG93bmxvYWRhYmxlLzE1',
                                 'label' =>  'Downloadable Product Link',
                                 'sort_order' =>  '1',
                                 'default' => false,
                                 'image_url' => '',
                                 'qty_mutability' => false,
                                 'qty' => 0.0,
-                                'number_of_downloads' =>  '15',
-                                'is_shareable' =>  '2',
-                                'link_url' =>  'http://example.com/downloadable.txt',
-                                'info_url' =>  'http://example.com/downloadable.txt',
-                                'price' => [
-                                    [
-                                        'scope' => 'NOT LOGGED IN',
-                                        'regular_price' => 15.0,
-                                        'final_price' => 15.0
-                                    ],
-                                    [
-                                        'scope' => 'General',
-                                        'regular_price' => 15.0,
-                                        'final_price' => 15.0
-                                    ],
-                                    [
-                                        'scope' => 'Wholesale',
-                                        'regular_price' => 15.0,
-                                        'final_price' => 15.0
-                                    ],
-                                    [
-                                        'scope' => 'Retailer',
-                                        'regular_price' => 15.0,
-                                        'final_price' => 15.0
-                                    ]
-                                ]
+                                'info_url' =>  '',
+                                'price' => 15.0
                             ]
                         ]
                     ]
@@ -205,47 +210,22 @@ class DownloadLinksTest extends StorefrontTestsAbstract
             [
                 [
                     [
-                        'id' => '1',
-                        'label' => '',
+                        'id' => 'link:1',
                         'sort_order' => 0,
                         'required' => false,
                         'render_type' => '',
                         'type' => '',
                         'values' => [
                             [
-                                'id' => 'ZG93bmxvYWRhYmxlLzE0',
+                                //'id' => 'ZG93bmxvYWRhYmxlLzE5',
                                 'label' =>  'Downloadable Product Link',
                                 'sort_order' =>  '1',
                                 'default' => false,
                                 'image_url' => '',
                                 'qty_mutability' => false,
                                 'qty' => 0.0,
-                                'number_of_downloads' =>  '15',
-                                'is_shareable' =>  '2',
-                                'link_url' =>  '/j/e/jellyfish_2_4_1.jpg',
                                 'info_url' =>  '/j/e/jellyfish_1_3.jpg',
-                                'price' => [
-                                    [
-                                        'scope' => 'NOT LOGGED IN',
-                                        'regular_price' => 15.0,
-                                        'final_price' => 15.0
-                                    ],
-                                    [
-                                        'scope' => 'General',
-                                        'regular_price' => 15.0,
-                                        'final_price' => 15.0
-                                    ],
-                                    [
-                                        'scope' => 'Wholesale',
-                                        'regular_price' => 15.0,
-                                        'final_price' => 15.0
-                                    ],
-                                    [
-                                        'scope' => 'Retailer',
-                                        'regular_price' => 15.0,
-                                        'final_price' => 15.0
-                                    ]
-                                ]
+                                'price' => 15.0
                             ]
                         ]
                     ]
