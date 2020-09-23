@@ -138,8 +138,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
             unset($convertedValues['values'][2]['id']);
             $actual[] = $convertedValues;
         }
-
-        var_dump($actual);
+        
         $diff = $this->compareArraysRecursively->execute(
             $expected,
             $actual
