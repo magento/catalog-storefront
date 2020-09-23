@@ -32,7 +32,6 @@ class DownloadLinksTest extends StorefrontTestsAbstract
      */
     private $attributesToCompare = [
         'product_options',
-        'links_title',
         'links_purchased_separately'
     ];
 
@@ -94,12 +93,10 @@ class DownloadLinksTest extends StorefrontTestsAbstract
         self::assertNotEmpty($catalogServiceItem->getItems());
 
         $expectedProductAttributes = [
-            'linksPurchasedSeparately' => true,
-            'linksTitle' => 'Product Links Title'
+            'linksPurchasedSeparately' => true
         ];
         $actualProductAttributes = [
-            'linksPurchasedSeparately' => $catalogServiceItem->getItems()[0]->getLinksPurchasedSeparately(),
-            'linksTitle' => $catalogServiceItem->getItems()[0]->getLinksTitle()
+            'linksPurchasedSeparately' => $catalogServiceItem->getItems()[0]->getLinksPurchasedSeparately()
         ];
         $diffProductAttributes  = $this->compareArraysRecursively->execute(
             $expectedProductAttributes,
@@ -138,12 +135,10 @@ class DownloadLinksTest extends StorefrontTestsAbstract
         self::assertNotEmpty($catalogServiceItem->getItems());
 
         $expectedProductAttributes = [
-            'linksPurchasedSeparately' => true,
-            'linksTitle' => 'Product Links Title'
+            'linksPurchasedSeparately' => true
         ];
         $actualProductAttributes = [
-            'linksPurchasedSeparately' => $catalogServiceItem->getItems()[0]->getLinksPurchasedSeparately(),
-            'linksTitle' => $catalogServiceItem->getItems()[0]->getLinksTitle()
+            'linksPurchasedSeparately' => $catalogServiceItem->getItems()[0]->getLinksPurchasedSeparately()
         ];
         $diffProductAttributes  = $this->compareArraysRecursively->execute(
             $expectedProductAttributes,
@@ -174,11 +169,11 @@ class DownloadLinksTest extends StorefrontTestsAbstract
                 [
                     [
                         'id' => 'link:1',
-                        'label' => '',
+                        'label' => 'Product Links Title',
                         'sort_order' => 0,
                         'required' => false,
                         'render_type' => '',
-                        'type' => '',
+                        'type' => 'downloadable',
                         'values' => [
                             [
                                 //'id' => 'ZG93bmxvYWRhYmxlLzE1',
@@ -210,10 +205,11 @@ class DownloadLinksTest extends StorefrontTestsAbstract
                 [
                     [
                         'id' => 'link:1',
+                        'label' => 'Product Links Title',
                         'sort_order' => 0,
                         'required' => false,
                         'render_type' => '',
-                        'type' => '',
+                        'type' => 'downloadable',
                         'values' => [
                             [
                                 //'id' => 'ZG93bmxvYWRhYmxlLzE5',

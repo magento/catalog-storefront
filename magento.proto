@@ -90,7 +90,6 @@ message Product {
 
     //DOWNLOADABLE
     bool links_purchased_separately = 98;
-    string links_title = 99;
 
     float only_x_left_in_stock = 102;
 
