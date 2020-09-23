@@ -26,6 +26,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
      */
     const TEST_SKU = 'configurable';
     const STORE_CODE = 'default';
+    const FIXTURE_STORE = 'fixturestore';
 
     /**
      * @var string[]
@@ -73,29 +74,28 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
         $this->arrayMapper = Bootstrap::getObjectManager()->create(ProductOptionArrayMapper::class);
         $this->compareArraysRecursively = Bootstrap::getObjectManager()->create(CompareArraysRecursively::class);
     }
-    
+
     /**
      * Validate configurable product data
      *
-     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_different_option_labeles_per_stores.php
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_different_option_labeles_per_stores.php
      * @magentoDbIsolation disabled
      * @param array $expected
      * @throws NoSuchEntityException
      * @throws \Throwable
-     * @dataProvider getConfigurableProductOptionProvider
+     * @dataProvider getConfigurableProductOptionDefaultStoreProvider
      */
-    public function testConfigurableProductOptions(array $expected)
+    public function testConfigurableProductOptionsDefaultStore(array $expected)
     {
         $product = $this->productRepository->get(self::TEST_SKU);
-
         $this->productsGetRequestInterface->setIds([$product->getId()]);
         $this->productsGetRequestInterface->setStore(self::STORE_CODE);
         $this->productsGetRequestInterface->setAttributeCodes($this->attributesToCompare);
-        $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
-        $this->assertNotEmpty($catalogServiceItem->getItems());
+        $catalogServiceItemDefaultStore = $this->catalogService->getProducts($this->productsGetRequestInterface);
+        $this->assertNotEmpty($catalogServiceItemDefaultStore->getItems());
 
         $actual = [];
-        foreach ($catalogServiceItem->getItems()[0]->getProductOptions() as $productOption) {
+        foreach ($catalogServiceItemDefaultStore->getItems()[0]->getProductOptions() as $productOption) {
             $convertedValues = $this->arrayMapper->convertToArray($productOption);
             unset($convertedValues['values'][0]['id']);
             unset($convertedValues['values'][1]['id']);
@@ -111,18 +111,107 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
     }
 
     /**
+     * Validate configurable product data
+     *
+     *
+     * @magentoDbIsolation disabled
+     * @param array $expected
+     * @throws NoSuchEntityException
+     * @throws \Throwable
+     * @dataProvider getConfigurableProductOptionFixtureStoreProvider
+     */
+    public function testConfigurableProductOptionsFixtureStore(array $expected)
+    {
+        $product = $this->productRepository->get(self::TEST_SKU);
+
+        $this->productsGetRequestInterface->setIds([$product->getId()]);
+        $this->productsGetRequestInterface->setStore(self::FIXTURE_STORE);
+        $this->productsGetRequestInterface->setAttributeCodes($this->attributesToCompare);
+        $catalogServiceItemDefaultStore = $this->catalogService->getProducts($this->productsGetRequestInterface);
+        $this->assertNotEmpty($catalogServiceItemDefaultStore->getItems());
+
+        $actual = [];
+        foreach ($catalogServiceItemDefaultStore->getItems()[0]->getProductOptions() as $productOption) {
+            $convertedValues = $this->arrayMapper->convertToArray($productOption);
+            unset($convertedValues['values'][0]['id']);
+            unset($convertedValues['values'][1]['id']);
+            unset($convertedValues['values'][2]['id']);
+            $actual[] = $convertedValues;
+        }
+
+        var_dump($actual);
+        $diff = $this->compareArraysRecursively->execute(
+            $expected,
+            $actual
+        );
+        self::assertEquals([], $diff, "Actual response doesn't equal expected data");
+    }
+
+    /**
      * Data provider for configurable product options
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function getConfigurableProductOptionProvider()
+    public function getConfigurableProductOptionDefaultStoreProvider()
     {
         return [
             [
                 [
                     [
                         'id' => 'different_labels_attribute',
-                        'label' => 'Different option labels dropdown attribute',
+                        'label' => 'Default store label',
+                        'sort_order' => 0,
+                        'required' => false,
+                        'render_type' => '',
+                        'type' => 'super',
+                        'values' => [
+                            [
+                                'label' => 'Option 1 Default Store',
+                                'sort_order' => '',
+                                'default' => false,
+                                'image_url' => '',
+                                'qty_mutability' => false,
+                                'qty' => (float)0,
+                                'info_url' => ''
+                            ],
+                            [
+                                'label' => 'Option 2 Default Store',
+                                'sort_order' => '',
+                                'default' => false,
+                                'image_url' => '',
+                                'qty_mutability' => false,
+                                'qty' => (float)0,
+                                'info_url' => ''
+                            ],
+                            [
+                                'label' => 'Option 3 Default Store',
+                                'sort_order' => '',
+                                'default' => false,
+                                'image_url' => '',
+                                'qty_mutability' => false,
+                                'qty' => (float)0,
+                                'info_url' => ''
+                            ],
+                        ],
+                    ],
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Data provider for configurable product options
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return array
+     */
+    public function getConfigurableProductOptionFixtureStoreProvider()
+    {
+        return [
+            [
+                [
+                    [
+                        'id' => 'different_labels_attribute',
+                        'label' => 'Fixture store label',
                         'sort_order' => 0,
                         'required' => false,
                         'render_type' => '',
