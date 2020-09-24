@@ -45,6 +45,7 @@ class ProductDataProcessor
         'created_at' => 'created_at',
         'updated_at' => 'updated_at',
         'attributes' => 'dynamic_attributes',
+        'price_view' => 'price_view',
         // 'variants' => 'variants', // \Magento\CatalogStorefrontApi\Api\Data\VariantInterface[]
         'category_ids' => 'categories',
         // The following list of fields are present in Import API (proto schema) but absent in Export API (et_schema)
@@ -72,11 +73,6 @@ class ProductDataProcessor
         'special_to_date', //type: string
         'product_links', //type: \Magento\CatalogStorefrontApi\Api\Data\ProductLinkInterface[]
         'canonical_url', //type: string
-        'ship_bundle_items', //type: string
-        'dynamic_weight', //type: bool
-        'dynamic_sku', //type: bool
-        'dynamic_price', //type: bool
-        'price_view', //type: string
         'items', //type: \Magento\CatalogStorefrontApi\Api\Data\BundleItemInterface[]
         'links_purchased_separately', //type: bool
         'samples' => 'samples', //type: \Magento\CatalogStorefrontApi\Api\Data\Sample[]

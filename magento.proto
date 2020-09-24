@@ -81,15 +81,12 @@ message Product {
     string canonical_url = 91;
 
     //BUNDLE
-    string ship_bundle_items = 92;
-    bool dynamic_weight = 93;
-    bool dynamic_sku = 94;
-    bool dynamic_price = 95;
     string price_view = 96;
-    repeated BundleItem items = 97;
 
     //DOWNLOADABLE
     bool links_purchased_separately = 98;
+    string links_title = 99;
+    repeated DownloadableLink downloadable_product_links = 100;
     repeated Sample samples = 101;
 
     float only_x_left_in_stock = 102;
@@ -122,7 +119,6 @@ message ProductOptionValue {
   bool qty_mutability = 6;
   float qty = 7;
   string info_url = 8;
-  float price = 9;
 }
 
 message ProductOption {
@@ -149,32 +145,24 @@ message ProductShopperInputOption {
   int32 image_size_y = 11;
 }
 
+message DownloadableLink {
+    string sample_url = 1;
+    string title = 2;
+    int32 sort_order = 3;
+    string sample_type = 4;
+    string sample_file = 5;
+    int32 link_id = 6;
+    float price = 7;
+    string link_type = 8;
+    bool is_shareable = 9;
+    int32 number_of_downloads = 10;
+    string entity_id = 11;
+}
+
 message Sample {
     string url = 1;
     string label = 2;
     int32 sort_order = 3;
-}
-
-message BundleItem {
-    string option_id = 1;
-    string title = 2;
-    bool required = 3;
-    string type = 4;
-    int32 position = 5;
-    string sku = 6;
-    repeated BundleItemOption options = 7;
-}
-
-message BundleItemOption {
-    string id = 1;
-    float quantity = 2;
-    bool is_default = 3;
-    float price = 4;
-    string price_type = 5;
-    bool can_change_quantity = 6;
-    string label = 7;
-    string entity_id = 8;
-    int32 position = 9;
 }
 
 message GroupedItem {

@@ -144,18 +144,7 @@ final class ProductArrayMapper
         }
         $result["product_links"] = $fieldArray;
         $result["canonical_url"] = $dto->getCanonicalUrl();
-        $result["ship_bundle_items"] = $dto->getShipBundleItems();
-        $result["dynamic_weight"] = $dto->getDynamicWeight();
-        $result["dynamic_sku"] = $dto->getDynamicSku();
-        $result["dynamic_price"] = $dto->getDynamicPrice();
         $result["price_view"] = $dto->getPriceView();
-        /** Convert complex Array field **/
-        $fieldArray = [];
-        foreach ($dto->getItems() as $fieldArrayDto) {
-            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\BundleItemArrayMapper::class)
-                ->convertToArray($fieldArrayDto);
-        }
-        $result["items"] = $fieldArray;
         $result["links_purchased_separately"] = $dto->getLinksPurchasedSeparately();
         /** Convert complex Array field **/
         $fieldArray = [];
