@@ -87,14 +87,14 @@ message Product {
     bool links_purchased_separately = 98;
     string links_title = 99;
     repeated DownloadableLink downloadable_product_links = 100;
-    repeated DownloadableSample downloadable_product_samples = 101;
+    repeated Sample samples = 101;
 
     float only_x_left_in_stock = 102;
 
     repeated GroupedItem grouped_items = 103;
 
-    repeated ProductOption options_v2 = 199; //TODO update to 'options' once all options would be covered
-    ProductShopperInputOption shopper_input_options = 200;
+    repeated ProductOption product_options = 199; //TODO update to 'options' once all options would be covered
+    repeated ProductShopperInputOption shopper_input_options = 200;
 }
 
 message ProductVariant {
@@ -128,9 +128,7 @@ message ProductOption {
   bool required = 4;
   string render_type = 5;
   string type = 6;
-  bool links_purchased_separately = 7;
-  bool use_default = 8;
-  repeated ProductOptionValue values = 9;
+  repeated ProductOptionValue values = 7;
 }
 
 message ProductShopperInputOption {
@@ -161,13 +159,10 @@ message DownloadableLink {
     string entity_id = 11;
 }
 
-message DownloadableSample {
-    string sample_url = 1;
-    string title = 2;
+message Sample {
+    string url = 1;
+    string label = 2;
     int32 sort_order = 3;
-    string sample_type = 4;
-    string sample_file = 5;
-    string entity_id = 6;
 }
 
 message GroupedItem {
