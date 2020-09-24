@@ -43,17 +43,17 @@ class ShopperInputOptionsTest extends StorefrontTestsAbstract
     /**
      * @var ProductRepositoryInterface
      */
-    protected $productRepository;
+    private $productRepository;
 
     /**
      * @var ProductShopperInputOptionArrayMapper
      */
-    protected $arrayMapper;
+    private $arrayMapper;
 
     /**
      * @var CompareArraysRecursively
      */
-    protected $compareArraysRecursively;
+    private $compareArraysRecursively;
 
     /**
      * @inheritdoc
@@ -186,23 +186,23 @@ class ShopperInputOptionsTest extends StorefrontTestsAbstract
                         'price' => [
                             [
                                 'scope' => 'NOT LOGGED IN',
-                                'regular_price' => 9.605,
-                                'final_price' => 9.605
+                                'regular_price' => 0.395,
+                                'final_price' => 0.395
                             ],
                             [
                                 'scope' => 'General',
-                                'regular_price' => 9.605,
-                                'final_price' => 9.605
+                                'regular_price' => 0.395,
+                                'final_price' => 0.395
                             ],
                             [
                                 'scope' => 'Wholesale',
-                                'regular_price' => 9.605,
-                                'final_price' => 9.605
+                                'regular_price' => 0.395,
+                                'final_price' => 0.395
                             ],
                             [
                                 'scope' => 'Retailer',
-                                'regular_price' => 9.605,
-                                'final_price' => 9.605
+                                'regular_price' => 0.395,
+                                'final_price' => 0.395
                             ]
                         ],
                         'value' => '',
@@ -220,23 +220,23 @@ class ShopperInputOptionsTest extends StorefrontTestsAbstract
                         'price' => [
                             [
                                 'scope' => 'NOT LOGGED IN',
-                                'regular_price' => 7.0,
-                                'final_price' => 7.0
+                                'regular_price' => 3.0,
+                                'final_price' => 3.0
                             ],
                             [
                                 'scope' => 'General',
-                                'regular_price' => 7.0,
-                                'final_price' => 7.0
+                                'regular_price' => 3.0,
+                                'final_price' => 3.0
                             ],
                             [
                                 'scope' => 'Wholesale',
-                                'regular_price' => 7.0,
-                                'final_price' => 7.0
+                                'regular_price' => 3.0,
+                                'final_price' => 3.0
                             ],
                             [
                                 'scope' => 'Retailer',
-                                'regular_price' => 7.0,
-                                'final_price' => 7.0
+                                'regular_price' => 3.0,
+                                'final_price' => 3.0
                             ]
                         ],
                         'value' => '',
