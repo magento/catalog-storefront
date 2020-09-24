@@ -19,7 +19,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 Resolver::getInstance()->requireDataFixture(
-    'Magento/ConfigurableProduct/_files/configurable_attribute_different_labels_per_stores.php'
+    'Magento/ConfigurableProduct/_files/configurable_attribute_different_labels_per_store_views.php'
 );
 
 $objectManager = Bootstrap::getObjectManager();
