@@ -17,7 +17,7 @@ class ConsumerInvoker
     /**
      * Batch size
      */
-    private const BATCHSIZE = 500;
+    private const BATCHSIZE = 3000;
 
     /**
      * List of storefront consumers
@@ -46,7 +46,7 @@ class ConsumerInvoker
 
         foreach ($consumersToProcess as $consumerName) {
             $consumer = $consumerFactory->get($consumerName, self::BATCHSIZE);
-            $consumer->process();
+            $consumer->process(self::BATCHSIZE);
         }
     }
 }

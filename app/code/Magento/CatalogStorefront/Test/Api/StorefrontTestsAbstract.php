@@ -94,6 +94,11 @@ abstract class StorefrontTestsAbstract extends TestCase
      */
     protected function runTest()
     {
+        $output = [];
+        exec("ps ax | grep -v grep | grep 'queue:consumers:start' | awk '{print $0}'", $output);
+        echo "\n" . '::test::' . "\n";
+        print_r($output);
+
         $this->runConsumers();
         parent::runTest();
     }
