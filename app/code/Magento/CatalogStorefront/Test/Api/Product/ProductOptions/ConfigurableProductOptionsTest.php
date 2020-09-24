@@ -96,11 +96,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
 
         $actual = [];
         foreach ($catalogServiceItemDefaultStore->getItems()[0]->getProductOptions() as $productOption) {
-            $convertedValues = $this->arrayMapper->convertToArray($productOption);
-            unset($convertedValues['values'][0]['id']);
-            unset($convertedValues['values'][1]['id']);
-            unset($convertedValues['values'][2]['id']);
-            $actual[] = $convertedValues;
+            $actual[] = $this->arrayMapper->convertToArray($productOption);
         }
 
         $diff = $this->compareArraysRecursively->execute(
@@ -132,11 +128,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
 
         $actual = [];
         foreach ($catalogServiceItemDefaultStore->getItems()[0]->getProductOptions() as $productOption) {
-            $convertedValues = $this->arrayMapper->convertToArray($productOption);
-            unset($convertedValues['values'][0]['id']);
-            unset($convertedValues['values'][1]['id']);
-            unset($convertedValues['values'][2]['id']);
-            $actual[] = $convertedValues;
+            $actual[] = $this->arrayMapper->convertToArray($productOption);
         }
 
         $diff = $this->compareArraysRecursively->execute(
