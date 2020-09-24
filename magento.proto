@@ -81,25 +81,20 @@ message Product {
     string canonical_url = 91;
 
     //BUNDLE
-    string ship_bundle_items = 92;
-    bool dynamic_weight = 93;
-    bool dynamic_sku = 94;
-    bool dynamic_price = 95;
     string price_view = 96;
-    repeated BundleItem items = 97;
 
     //DOWNLOADABLE
     bool links_purchased_separately = 98;
     string links_title = 99;
     repeated DownloadableLink downloadable_product_links = 100;
-    repeated DownloadableSample downloadable_product_samples = 101;
+    repeated Sample samples = 101;
 
     float only_x_left_in_stock = 102;
 
     repeated GroupedItem grouped_items = 103;
 
-    repeated ProductOption options_v2 = 199; //TODO update to 'options' once all options would be covered
-    ProductShopperInputOption shopper_input_options = 200;
+    repeated ProductOption product_options = 199; //TODO update to 'options' once all options would be covered
+    repeated ProductShopperInputOption shopper_input_options = 200;
 }
 
 message ProductVariant {
@@ -133,9 +128,7 @@ message ProductOption {
   bool required = 4;
   string render_type = 5;
   string type = 6;
-  bool links_purchased_separately = 7;
-  bool use_default = 8;
-  repeated ProductOptionValue values = 9;
+  repeated ProductOptionValue values = 7;
 }
 
 message ProductShopperInputOption {
@@ -166,35 +159,10 @@ message DownloadableLink {
     string entity_id = 11;
 }
 
-message DownloadableSample {
-    string sample_url = 1;
-    string title = 2;
+message Sample {
+    string url = 1;
+    string label = 2;
     int32 sort_order = 3;
-    string sample_type = 4;
-    string sample_file = 5;
-    string entity_id = 6;
-}
-
-message BundleItem {
-    string option_id = 1;
-    string title = 2;
-    bool required = 3;
-    string type = 4;
-    int32 position = 5;
-    string sku = 6;
-    repeated BundleItemOption options = 7;
-}
-
-message BundleItemOption {
-    string id = 1;
-    float quantity = 2;
-    bool is_default = 3;
-    float price = 4;
-    string price_type = 5;
-    bool can_change_quantity = 6;
-    string label = 7;
-    string entity_id = 8;
-    int32 position = 9;
 }
 
 message GroupedItem {
