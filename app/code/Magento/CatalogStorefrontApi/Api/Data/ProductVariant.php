@@ -28,12 +28,12 @@ final class ProductVariant implements ProductVariantInterface
     /**
      * @var array
      */
-    private $optionValueId;
+    private $optionValue;
 
     /**
-     * @var array
+     * @var string
      */
-    private $price;
+    private $productId;
     
     /**
      * @inheritdoc
@@ -61,9 +61,9 @@ final class ProductVariant implements ProductVariantInterface
      *
      * @return string[]
      */
-    public function getOptionValueId(): array
+    public function getOptionValue(): array
     {
-        return (array) $this->optionValueId;
+        return (array) $this->optionValue;
     }
     
     /**
@@ -72,29 +72,29 @@ final class ProductVariant implements ProductVariantInterface
      * @param string[] $value
      * @return void
      */
-    public function setOptionValueId(array $value): void
+    public function setOptionValue(array $value): void
     {
-        $this->optionValueId = $value;
+        $this->optionValue = $value;
     }
     
     /**
      * @inheritdoc
      *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\PriceInterface[]
+     * @return string
      */
-    public function getPrice(): array
+    public function getProductId(): string
     {
-        return (array) $this->price;
+        return (string) $this->productId;
     }
     
     /**
      * @inheritdoc
      *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\PriceInterface[] $value
+     * @param string $value
      * @return void
      */
-    public function setPrice(array $value): void
+    public function setProductId(string $value): void
     {
-        $this->price = $value;
+        $this->productId = $value;
     }
 }

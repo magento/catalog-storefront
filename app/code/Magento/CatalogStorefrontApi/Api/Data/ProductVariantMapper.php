@@ -88,18 +88,11 @@ final class ProductVariantMapper
             case "id":
                 $dto->setId((string) $value);
                 break;
-            case "option_value_id":
-                $dto->setOptionValueId((array) $value);
+            case "option_value":
+                $dto->setOptionValue((array) $value);
                 break;
-            case "price":
-                $convertedArray = [];
-                foreach ($value as $element) {
-                    $convertedArray[] = $this->objectManager
-                        ->create(\Magento\CatalogStorefrontApi\Api\Data\PriceMapper::class)
-                        ->setData($element)
-                        ->build();
-                }
-                $dto->setPrice($convertedArray);
+            case "product_id":
+                $dto->setProductId((string) $value);
                 break;
         }
     }

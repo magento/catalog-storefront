@@ -48,14 +48,8 @@ final class ProductVariantArrayMapper
     {
         $result = [];
         $result["id"] = $dto->getId();
-        $result["option_value_id"] = $dto->getOptionValueId();
-        /** Convert complex Array field **/
-        $fieldArray = [];
-        foreach ($dto->getPrice() as $fieldArrayDto) {
-            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\PriceArrayMapper::class)
-                ->convertToArray($fieldArrayDto);
-        }
-        $result["price"] = $fieldArray;
+        $result["option_value"] = $dto->getOptionValue();
+        $result["product_id"] = $dto->getProductId();
         return $result;
     }
 }

@@ -206,16 +206,6 @@ final class Product implements ProductInterface
     private $urlRewrites;
 
     /**
-     * @var array
-     */
-    private $variants;
-
-    /**
-     * @var array
-     */
-    private $configurableOptions;
-
-    /**
      * @var string
      */
     private $countryOfManufacture;
@@ -253,7 +243,32 @@ final class Product implements ProductInterface
     /**
      * @var string
      */
+    private $shipBundleItems;
+
+    /**
+     * @var bool
+     */
+    private $dynamicWeight;
+
+    /**
+     * @var bool
+     */
+    private $dynamicSku;
+
+    /**
+     * @var bool
+     */
+    private $dynamicPrice;
+
+    /**
+     * @var string
+     */
     private $priceView;
+
+    /**
+     * @var array
+     */
+    private $items;
 
     /**
      * @var bool
@@ -1075,48 +1090,6 @@ final class Product implements ProductInterface
     /**
      * @inheritdoc
      *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\VariantInterface[]
-     */
-    public function getVariants(): array
-    {
-        return (array) $this->variants;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\VariantInterface[] $value
-     * @return void
-     */
-    public function setVariants(array $value): void
-    {
-        $this->variants = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionInterface[]
-     */
-    public function getConfigurableOptions(): array
-    {
-        return (array) $this->configurableOptions;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionInterface[] $value
-     * @return void
-     */
-    public function setConfigurableOptions(array $value): void
-    {
-        $this->configurableOptions = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
      * @return string
      */
     public function getCountryOfManufacture(): string
@@ -1266,6 +1239,90 @@ final class Product implements ProductInterface
      *
      * @return string
      */
+    public function getShipBundleItems(): string
+    {
+        return (string) $this->shipBundleItems;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setShipBundleItems(string $value): void
+    {
+        $this->shipBundleItems = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return bool
+     */
+    public function getDynamicWeight(): bool
+    {
+        return (bool) $this->dynamicWeight;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param bool $value
+     * @return void
+     */
+    public function setDynamicWeight(bool $value): void
+    {
+        $this->dynamicWeight = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return bool
+     */
+    public function getDynamicSku(): bool
+    {
+        return (bool) $this->dynamicSku;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param bool $value
+     * @return void
+     */
+    public function setDynamicSku(bool $value): void
+    {
+        $this->dynamicSku = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return bool
+     */
+    public function getDynamicPrice(): bool
+    {
+        return (bool) $this->dynamicPrice;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param bool $value
+     * @return void
+     */
+    public function setDynamicPrice(bool $value): void
+    {
+        $this->dynamicPrice = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return string
+     */
     public function getPriceView(): string
     {
         return (string) $this->priceView;
@@ -1280,6 +1337,27 @@ final class Product implements ProductInterface
     public function setPriceView(string $value): void
     {
         $this->priceView = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return \Magento\CatalogStorefrontApi\Api\Data\BundleItemInterface[]
+     */
+    public function getItems(): array
+    {
+        return (array) $this->items;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param \Magento\CatalogStorefrontApi\Api\Data\BundleItemInterface[] $value
+     * @return void
+     */
+    public function setItems(array $value): void
+    {
+        $this->items = $value;
     }
     
     /**

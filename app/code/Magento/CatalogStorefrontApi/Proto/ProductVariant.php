@@ -14,17 +14,23 @@ use Google\Protobuf\Internal\GPBUtil;
 class ProductVariant extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Generated from protobuf field <code>string id = 2;</code>
+     * variant identifier following the convention :prefix:/:parentId:/:entityId:
+     *
+     * Generated from protobuf field <code>string id = 1;</code>
      */
     protected $id = '';
     /**
-     * Generated from protobuf field <code>repeated string option_value_id = 1;</code>
+     * parent_id:option_id/optionValue.uid
+     *
+     * Generated from protobuf field <code>repeated string option_value = 2;</code>
      */
-    private $option_value_id;
+    private $option_value;
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Price price = 3;</code>
+     * link to product id that represents variant, for custom option must be null
+     *
+     * Generated from protobuf field <code>string product_id = 3;</code>
      */
-    private $price;
+    protected $product_id = '';
 
     /**
      * Constructor.
@@ -33,8 +39,11 @@ class ProductVariant extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type string $id
-     *     @type string[]|\Google\Protobuf\Internal\RepeatedField $option_value_id
-     *     @type \Magento\CatalogStorefrontApi\Proto\Price[]|\Google\Protobuf\Internal\RepeatedField $price
+     *           variant identifier following the convention :prefix:/:parentId:/:entityId:
+     *     @type string[]|\Google\Protobuf\Internal\RepeatedField $option_value
+     *           parent_id:option_id/optionValue.uid
+     *     @type string $product_id
+     *           link to product id that represents variant, for custom option must be null
      * }
      */
     public function __construct($data = null)
@@ -44,7 +53,9 @@ class ProductVariant extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>string id = 2;</code>
+     * variant identifier following the convention :prefix:/:parentId:/:entityId:
+     *
+     * Generated from protobuf field <code>string id = 1;</code>
      * @return string
      */
     public function getId()
@@ -53,7 +64,9 @@ class ProductVariant extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>string id = 2;</code>
+     * variant identifier following the convention :prefix:/:parentId:/:entityId:
+     *
+     * Generated from protobuf field <code>string id = 1;</code>
      * @param string $var
      * @return $this
      */
@@ -66,45 +79,53 @@ class ProductVariant extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated string option_value_id = 1;</code>
+     * parent_id:option_id/optionValue.uid
+     *
+     * Generated from protobuf field <code>repeated string option_value = 2;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
      */
-    public function getOptionValueId()
+    public function getOptionValue()
     {
-        return $this->option_value_id;
+        return $this->option_value;
     }
 
     /**
-     * Generated from protobuf field <code>repeated string option_value_id = 1;</code>
+     * parent_id:option_id/optionValue.uid
+     *
+     * Generated from protobuf field <code>repeated string option_value = 2;</code>
      * @param string[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
-    public function setOptionValueId($var)
+    public function setOptionValue($var)
     {
         $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::STRING);
-        $this->option_value_id = $arr;
+        $this->option_value = $arr;
 
         return $this;
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Price price = 3;</code>
-     * @return \Google\Protobuf\Internal\RepeatedField
+     * link to product id that represents variant, for custom option must be null
+     *
+     * Generated from protobuf field <code>string product_id = 3;</code>
+     * @return string
      */
-    public function getPrice()
+    public function getProductId()
     {
-        return $this->price;
+        return $this->product_id;
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Price price = 3;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\Price[]|\Google\Protobuf\Internal\RepeatedField $var
+     * link to product id that represents variant, for custom option must be null
+     *
+     * Generated from protobuf field <code>string product_id = 3;</code>
+     * @param string $var
      * @return $this
      */
-    public function setPrice($var)
+    public function setProductId($var)
     {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\Price::class);
-        $this->price = $arr;
+        GPBUtil::checkString($var, true);
+        $this->product_id = $var;
 
         return $this;
     }

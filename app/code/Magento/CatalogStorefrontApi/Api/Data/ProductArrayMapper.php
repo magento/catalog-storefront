@@ -117,20 +117,6 @@ final class ProductArrayMapper
                 ->convertToArray($fieldArrayDto);
         }
         $result["url_rewrites"] = $fieldArray;
-        /** Convert complex Array field **/
-        $fieldArray = [];
-        foreach ($dto->getVariants() as $fieldArrayDto) {
-            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\VariantArrayMapper::class)
-                ->convertToArray($fieldArrayDto);
-        }
-        $result["variants"] = $fieldArray;
-        /** Convert complex Array field **/
-        $fieldArray = [];
-        foreach ($dto->getConfigurableOptions() as $fieldArrayDto) {
-            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionArrayMapper::class)
-                ->convertToArray($fieldArrayDto);
-        }
-        $result["configurable_options"] = $fieldArray;
         $result["country_of_manufacture"] = $dto->getCountryOfManufacture();
         $result["gift_message_available"] = $dto->getGiftMessageAvailable();
         $result["special_price"] = $dto->getSpecialPrice();
@@ -144,7 +130,18 @@ final class ProductArrayMapper
         }
         $result["product_links"] = $fieldArray;
         $result["canonical_url"] = $dto->getCanonicalUrl();
+        $result["ship_bundle_items"] = $dto->getShipBundleItems();
+        $result["dynamic_weight"] = $dto->getDynamicWeight();
+        $result["dynamic_sku"] = $dto->getDynamicSku();
+        $result["dynamic_price"] = $dto->getDynamicPrice();
         $result["price_view"] = $dto->getPriceView();
+        /** Convert complex Array field **/
+        $fieldArray = [];
+        foreach ($dto->getItems() as $fieldArrayDto) {
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\BundleItemArrayMapper::class)
+                ->convertToArray($fieldArrayDto);
+        }
+        $result["items"] = $fieldArray;
         $result["links_purchased_separately"] = $dto->getLinksPurchasedSeparately();
         $result["links_title"] = $dto->getLinksTitle();
         /** Convert complex Array field **/

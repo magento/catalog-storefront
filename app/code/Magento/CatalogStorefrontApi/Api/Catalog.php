@@ -22,8 +22,6 @@ use \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface;
 use \Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface;
 use \Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use \Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
-use \Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetRequestInterface;
-use \Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetResponseInterface;
 use \Magento\CatalogStorefrontApi\Proto\ProductsGetRequest;
 use \Magento\CatalogStorefrontApi\Proto\ProductsGetResult;
 use \Magento\CatalogStorefrontApi\Proto\ImportProductsRequest;
@@ -36,8 +34,6 @@ use \Magento\CatalogStorefrontApi\Proto\ImportCategoriesRequest;
 use \Magento\CatalogStorefrontApi\Proto\ImportCategoriesResponse;
 use \Magento\CatalogStorefrontApi\Proto\CategoriesGetRequest;
 use \Magento\CatalogStorefrontApi\Proto\CategoriesGetResponse;
-use \Magento\CatalogStorefrontApi\Proto\ProductVariantsGetRequest;
-use \Magento\CatalogStorefrontApi\Proto\ProductVariantsGetResponse;
 use \Magento\CatalogStorefrontApi\Proto\CatalogClient;
 
 /**
@@ -356,97 +352,26 @@ class Catalog implements CatalogInterface
                         $res[] = $out;
                     }
                     $r->setUrlRewrites($res);
-                    $res = [];
-                    foreach ($item1->getVariants() as $item39) {
-                        // convert data from \Magento\CatalogStorefrontApi\Proto\Variant
-                        // to \Magento\CatalogStorefrontApi\Api\Data\Variant
-                        /** @var \Magento\CatalogStorefrontApi\Proto\Variant $item39 **/
-                        $p = function () use ($item39) {
-                            $r = new \Magento\CatalogStorefrontApi\Api\Data\Variant();
-                            $r->setProduct($item39->getProduct());
-                            $res = [];
-                            foreach ($item39->getAttributes() as $item41) {
-                                // convert data from \Magento\CatalogStorefrontApi\Proto\VariantAttribute
-                                // to \Magento\CatalogStorefrontApi\Api\Data\VariantAttribute
-                                /** @var \Magento\CatalogStorefrontApi\Proto\VariantAttribute $item41 **/
-                                $p = function () use ($item41) {
-                                    $r = new \Magento\CatalogStorefrontApi\Api\Data\VariantAttribute();
-                                    $r->setLabel($item41->getLabel());
-                                    $r->setCode($item41->getCode());
-                                    $r->setValueIndex($item41->getValueIndex());
-                                    $r->setAttributeId($item41->getAttributeId());
-                                    return $r;
-                                };
-                                $out = $p();
-                                $res[] = $out;
-                            }
-                            $r->setAttributes($res);
-                            return $r;
-                        };
-                        $out = $p();
-                        $res[] = $out;
-                    }
-                    $r->setVariants($res);
-                    $res = [];
-                    foreach ($item1->getConfigurableOptions() as $item40) {
-                        // convert data from \Magento\CatalogStorefrontApi\Proto\ConfigurableOption
-                        // to \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOption
-                        /** @var \Magento\CatalogStorefrontApi\Proto\ConfigurableOption $item40 **/
-                        $p = function () use ($item40) {
-                            $r = new \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOption();
-                            $r->setId($item40->getId());
-                            $r->setLabel($item40->getLabel());
-                            $r->setPosition($item40->getPosition());
-                            $r->setUseDefault($item40->getUseDefault());
-                            $r->setProductId($item40->getProductId());
-                            $r->setAttributeCode($item40->getAttributeCode());
-                            $r->setAttributeId($item40->getAttributeId());
-                            $res = [];
-                            foreach ($item40->getValues() as $item48) {
-                                // convert data from \Magento\CatalogStorefrontApi\Proto\ConfigurableOptionValue
-                                // to \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionValue
-                                /** @var \Magento\CatalogStorefrontApi\Proto\ConfigurableOptionValue $item48 **/
-                                $p = function () use ($item48) {
-                                    $r = new \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionValue();
-                                    $r->setValueIndex($item48->getValueIndex());
-                                    $r->setLabel($item48->getLabel());
-                                    $r->setDefaultLabel($item48->getDefaultLabel());
-                                    $r->setStoreLabel($item48->getStoreLabel());
-                                    $r->setUseDefaultValue($item48->getUseDefaultValue());
-                                    $r->setAttributeId($item48->getAttributeId());
-                                    $r->setProductId($item48->getProductId());
-                                    return $r;
-                                };
-                                $out = $p();
-                                $res[] = $out;
-                            }
-                            $r->setValues($res);
-                            return $r;
-                        };
-                        $out = $p();
-                        $res[] = $out;
-                    }
-                    $r->setConfigurableOptions($res);
                     $r->setCountryOfManufacture($item1->getCountryOfManufacture());
                     $r->setGiftMessageAvailable($item1->getGiftMessageAvailable());
                     $r->setSpecialPrice($item1->getSpecialPrice());
                     $r->setSpecialFromDate($item1->getSpecialFromDate());
                     $r->setSpecialToDate($item1->getSpecialToDate());
                     $res = [];
-                    foreach ($item1->getProductLinks() as $item46) {
+                    foreach ($item1->getProductLinks() as $item44) {
                         // convert data from \Magento\CatalogStorefrontApi\Proto\ProductLink
                         // to \Magento\CatalogStorefrontApi\Api\Data\ProductLink
-                        /** @var \Magento\CatalogStorefrontApi\Proto\ProductLink $item46 **/
-                        $p = function () use ($item46) {
+                        /** @var \Magento\CatalogStorefrontApi\Proto\ProductLink $item44 **/
+                        $p = function () use ($item44) {
                             $r = new \Magento\CatalogStorefrontApi\Api\Data\ProductLink();
-                            $r->setLinkedProductSku($item46->getLinkedProductSku());
-                            $r->setTypeId($item46->getTypeId());
-                            $r->setLinkedProductType($item46->getLinkedProductType());
-                            $r->setLinkTypeId($item46->getLinkTypeId());
-                            $r->setPosition($item46->getPosition());
-                            $r->setSku($item46->getSku());
-                            $r->setProductId($item46->getProductId());
-                            $r->setLinkType($item46->getLinkType());
+                            $r->setLinkedProductSku($item44->getLinkedProductSku());
+                            $r->setTypeId($item44->getTypeId());
+                            $r->setLinkedProductType($item44->getLinkedProductType());
+                            $r->setLinkTypeId($item44->getLinkTypeId());
+                            $r->setPosition($item44->getPosition());
+                            $r->setSku($item44->getSku());
+                            $r->setProductId($item44->getProductId());
+                            $r->setLinkType($item44->getLinkType());
                             return $r;
                         };
                         $out = $p();
@@ -454,27 +379,72 @@ class Catalog implements CatalogInterface
                     }
                     $r->setProductLinks($res);
                     $r->setCanonicalUrl($item1->getCanonicalUrl());
+                    $r->setShipBundleItems($item1->getShipBundleItems());
+                    $r->setDynamicWeight($item1->getDynamicWeight());
+                    $r->setDynamicSku($item1->getDynamicSku());
+                    $r->setDynamicPrice($item1->getDynamicPrice());
                     $r->setPriceView($item1->getPriceView());
+                    $res = [];
+                    foreach ($item1->getItems() as $item51) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\BundleItem
+                        // to \Magento\CatalogStorefrontApi\Api\Data\BundleItem
+                        /** @var \Magento\CatalogStorefrontApi\Proto\BundleItem $item51 **/
+                        $p = function () use ($item51) {
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\BundleItem();
+                            $r->setOptionId($item51->getOptionId());
+                            $r->setTitle($item51->getTitle());
+                            $r->setRequired($item51->getRequired());
+                            $r->setType($item51->getType());
+                            $r->setPosition($item51->getPosition());
+                            $r->setSku($item51->getSku());
+                            $res = [];
+                            foreach ($item51->getOptions() as $item58) {
+                                // convert data from \Magento\CatalogStorefrontApi\Proto\BundleItemOption
+                                // to \Magento\CatalogStorefrontApi\Api\Data\BundleItemOption
+                                /** @var \Magento\CatalogStorefrontApi\Proto\BundleItemOption $item58 **/
+                                $p = function () use ($item58) {
+                                    $r = new \Magento\CatalogStorefrontApi\Api\Data\BundleItemOption();
+                                    $r->setId($item58->getId());
+                                    $r->setQuantity($item58->getQuantity());
+                                    $r->setIsDefault($item58->getIsDefault());
+                                    $r->setPrice($item58->getPrice());
+                                    $r->setPriceType($item58->getPriceType());
+                                    $r->setCanChangeQuantity($item58->getCanChangeQuantity());
+                                    $r->setLabel($item58->getLabel());
+                                    $r->setEntityId($item58->getEntityId());
+                                    $r->setPosition($item58->getPosition());
+                                    return $r;
+                                };
+                                $out = $p();
+                                $res[] = $out;
+                            }
+                            $r->setOptions($res);
+                            return $r;
+                        };
+                        $out = $p();
+                        $res[] = $out;
+                    }
+                    $r->setItems($res);
                     $r->setLinksPurchasedSeparately($item1->getLinksPurchasedSeparately());
                     $r->setLinksTitle($item1->getLinksTitle());
                     $res = [];
-                    foreach ($item1->getDownloadableProductLinks() as $item51) {
+                    foreach ($item1->getDownloadableProductLinks() as $item54) {
                         // convert data from \Magento\CatalogStorefrontApi\Proto\DownloadableLink
                         // to \Magento\CatalogStorefrontApi\Api\Data\DownloadableLink
-                        /** @var \Magento\CatalogStorefrontApi\Proto\DownloadableLink $item51 **/
-                        $p = function () use ($item51) {
+                        /** @var \Magento\CatalogStorefrontApi\Proto\DownloadableLink $item54 **/
+                        $p = function () use ($item54) {
                             $r = new \Magento\CatalogStorefrontApi\Api\Data\DownloadableLink();
-                            $r->setSampleUrl($item51->getSampleUrl());
-                            $r->setTitle($item51->getTitle());
-                            $r->setSortOrder($item51->getSortOrder());
-                            $r->setSampleType($item51->getSampleType());
-                            $r->setSampleFile($item51->getSampleFile());
-                            $r->setLinkId($item51->getLinkId());
-                            $r->setPrice($item51->getPrice());
-                            $r->setLinkType($item51->getLinkType());
-                            $r->setIsShareable($item51->getIsShareable());
-                            $r->setNumberOfDownloads($item51->getNumberOfDownloads());
-                            $r->setEntityId($item51->getEntityId());
+                            $r->setSampleUrl($item54->getSampleUrl());
+                            $r->setTitle($item54->getTitle());
+                            $r->setSortOrder($item54->getSortOrder());
+                            $r->setSampleType($item54->getSampleType());
+                            $r->setSampleFile($item54->getSampleFile());
+                            $r->setLinkId($item54->getLinkId());
+                            $r->setPrice($item54->getPrice());
+                            $r->setLinkType($item54->getLinkType());
+                            $r->setIsShareable($item54->getIsShareable());
+                            $r->setNumberOfDownloads($item54->getNumberOfDownloads());
+                            $r->setEntityId($item54->getEntityId());
                             return $r;
                         };
                         $out = $p();
@@ -482,15 +452,15 @@ class Catalog implements CatalogInterface
                     }
                     $r->setDownloadableProductLinks($res);
                     $res = [];
-                    foreach ($item1->getSamples() as $item52) {
+                    foreach ($item1->getSamples() as $item55) {
                         // convert data from \Magento\CatalogStorefrontApi\Proto\Sample
                         // to \Magento\CatalogStorefrontApi\Api\Data\Sample
-                        /** @var \Magento\CatalogStorefrontApi\Proto\Sample $item52 **/
-                        $p = function () use ($item52) {
+                        /** @var \Magento\CatalogStorefrontApi\Proto\Sample $item55 **/
+                        $p = function () use ($item55) {
                             $r = new \Magento\CatalogStorefrontApi\Api\Data\Sample();
-                            $r->setUrl($item52->getUrl());
-                            $r->setLabel($item52->getLabel());
-                            $r->setSortOrder($item52->getSortOrder());
+                            $r->setUrl($item55->getUrl());
+                            $r->setLabel($item55->getLabel());
+                            $r->setSortOrder($item55->getSortOrder());
                             return $r;
                         };
                         $out = $p();
@@ -499,15 +469,15 @@ class Catalog implements CatalogInterface
                     $r->setSamples($res);
                     $r->setOnlyXLeftInStock($item1->getOnlyXLeftInStock());
                     $res = [];
-                    foreach ($item1->getGroupedItems() as $item54) {
+                    foreach ($item1->getGroupedItems() as $item57) {
                         // convert data from \Magento\CatalogStorefrontApi\Proto\GroupedItem
                         // to \Magento\CatalogStorefrontApi\Api\Data\GroupedItem
-                        /** @var \Magento\CatalogStorefrontApi\Proto\GroupedItem $item54 **/
-                        $p = function () use ($item54) {
+                        /** @var \Magento\CatalogStorefrontApi\Proto\GroupedItem $item57 **/
+                        $p = function () use ($item57) {
                             $r = new \Magento\CatalogStorefrontApi\Api\Data\GroupedItem();
-                            $r->setQty($item54->getQty());
-                            $r->setPosition($item54->getPosition());
-                            $r->setProduct($item54->getProduct());
+                            $r->setQty($item57->getQty());
+                            $r->setPosition($item57->getPosition());
+                            $r->setProduct($item57->getProduct());
                             return $r;
                         };
                         $out = $p();
@@ -515,33 +485,33 @@ class Catalog implements CatalogInterface
                     }
                     $r->setGroupedItems($res);
                     $res = [];
-                    foreach ($item1->getProductOptions() as $item55) {
+                    foreach ($item1->getProductOptions() as $item58) {
                         // convert data from \Magento\CatalogStorefrontApi\Proto\ProductOption
                         // to \Magento\CatalogStorefrontApi\Api\Data\ProductOption
-                        /** @var \Magento\CatalogStorefrontApi\Proto\ProductOption $item55 **/
-                        $p = function () use ($item55) {
+                        /** @var \Magento\CatalogStorefrontApi\Proto\ProductOption $item58 **/
+                        $p = function () use ($item58) {
                             $r = new \Magento\CatalogStorefrontApi\Api\Data\ProductOption();
-                            $r->setId($item55->getId());
-                            $r->setLabel($item55->getLabel());
-                            $r->setSortOrder($item55->getSortOrder());
-                            $r->setRequired($item55->getRequired());
-                            $r->setRenderType($item55->getRenderType());
-                            $r->setType($item55->getType());
+                            $r->setId($item58->getId());
+                            $r->setLabel($item58->getLabel());
+                            $r->setSortOrder($item58->getSortOrder());
+                            $r->setRequired($item58->getRequired());
+                            $r->setRenderType($item58->getRenderType());
+                            $r->setType($item58->getType());
                             $res = [];
-                            foreach ($item55->getValues() as $item62) {
+                            foreach ($item58->getValues() as $item65) {
                                 // convert data from \Magento\CatalogStorefrontApi\Proto\ProductOptionValue
                                 // to \Magento\CatalogStorefrontApi\Api\Data\ProductOptionValue
-                                /** @var \Magento\CatalogStorefrontApi\Proto\ProductOptionValue $item62 **/
-                                $p = function () use ($item62) {
+                                /** @var \Magento\CatalogStorefrontApi\Proto\ProductOptionValue $item65 **/
+                                $p = function () use ($item65) {
                                     $r = new \Magento\CatalogStorefrontApi\Api\Data\ProductOptionValue();
-                                    $r->setId($item62->getId());
-                                    $r->setLabel($item62->getLabel());
-                                    $r->setSortOrder($item62->getSortOrder());
-                                    $r->setDefault($item62->getDefault());
-                                    $r->setImageUrl($item62->getImageUrl());
-                                    $r->setQtyMutability($item62->getQtyMutability());
-                                    $r->setQty($item62->getQty());
-                                    $r->setInfoUrl($item62->getInfoUrl());
+                                    $r->setId($item65->getId());
+                                    $r->setLabel($item65->getLabel());
+                                    $r->setSortOrder($item65->getSortOrder());
+                                    $r->setDefault($item65->getDefault());
+                                    $r->setImageUrl($item65->getImageUrl());
+                                    $r->setQtyMutability($item65->getQtyMutability());
+                                    $r->setQty($item65->getQty());
+                                    $r->setInfoUrl($item65->getInfoUrl());
                                     return $r;
                                 };
                                 $out = $p();
@@ -555,42 +525,42 @@ class Catalog implements CatalogInterface
                     }
                     $r->setProductOptions($res);
                     $res = [];
-                    foreach ($item1->getShopperInputOptions() as $item56) {
+                    foreach ($item1->getShopperInputOptions() as $item59) {
                         // convert data from \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption
                         // to \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOption
-                        /** @var \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption $item56 **/
-                        $p = function () use ($item56) {
+                        /** @var \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption $item59 **/
+                        $p = function () use ($item59) {
                             $r = new \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOption();
-                            $r->setId($item56->getId());
-                            $r->setLabel($item56->getLabel());
-                            $r->setSortOrder($item56->getSortOrder());
-                            $r->setRequired($item56->getRequired());
-                            $r->setRenderType($item56->getRenderType());
+                            $r->setId($item59->getId());
+                            $r->setLabel($item59->getLabel());
+                            $r->setSortOrder($item59->getSortOrder());
+                            $r->setRequired($item59->getRequired());
+                            $r->setRenderType($item59->getRenderType());
                             $res = [];
-                            foreach ($item56->getPrice() as $item62) {
+                            foreach ($item59->getPrice() as $item65) {
                                 // convert data from \Magento\CatalogStorefrontApi\Proto\Price
                                 // to \Magento\CatalogStorefrontApi\Api\Data\Price
-                                /** @var \Magento\CatalogStorefrontApi\Proto\Price $item62 **/
-                                $p = function () use ($item62) {
+                                /** @var \Magento\CatalogStorefrontApi\Proto\Price $item65 **/
+                                $p = function () use ($item65) {
                                     $r = new \Magento\CatalogStorefrontApi\Api\Data\Price();
-                                    $r->setRegularPrice($item62->getRegularPrice());
-                                    $r->setFinalPrice($item62->getFinalPrice());
-                                    $r->setScope($item62->getScope());
+                                    $r->setRegularPrice($item65->getRegularPrice());
+                                    $r->setFinalPrice($item65->getFinalPrice());
+                                    $r->setScope($item65->getScope());
                                     return $r;
                                 };
                                 $out = $p();
                                 $res[] = $out;
                             }
                             $r->setPrice($res);
-                            $r->setValue($item56->getValue());
-                            $r->setMaxCharacters($item56->getMaxCharacters());
+                            $r->setValue($item59->getValue());
+                            $r->setMaxCharacters($item59->getMaxCharacters());
                             $values = [];
-                            foreach ($item56->getFileExtension() as $newValue) {
+                            foreach ($item59->getFileExtension() as $newValue) {
                                 $values[] = $newValue;
                             }
                             $r->setFileExtension($values);
-                            $r->setImageSizeX($item56->getImageSizeX());
-                            $r->setImageSizeY($item56->getImageSizeY());
+                            $r->setImageSizeX($item59->getImageSizeX());
+                            $r->setImageSizeY($item59->getImageSizeY());
                             return $r;
                         };
                         $out = $p();
@@ -869,97 +839,26 @@ class Catalog implements CatalogInterface
                         $res[] = $proto;
                     }
                     $r->setUrlRewrites($res);
-                    $res = [];
-                    foreach ($item1->getVariants() as $item39) {
-                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\Variant
-                        // to \Magento\CatalogStorefrontApi\Proto\Variant
-                        /** @var \Magento\CatalogStorefrontApi\Api\Data\Variant $item39 **/
-                        $p = function () use ($item39) {
-                            $r = new \Magento\CatalogStorefrontApi\Proto\Variant();
-                            $r->setProduct($item39->getProduct());
-                            $res = [];
-                            foreach ($item39->getAttributes() as $item41) {
-                                // convert data from \Magento\CatalogStorefrontApi\Api\Data\VariantAttribute
-                                // to \Magento\CatalogStorefrontApi\Proto\VariantAttribute
-                                /** @var \Magento\CatalogStorefrontApi\Api\Data\VariantAttribute $item41 **/
-                                $p = function () use ($item41) {
-                                    $r = new \Magento\CatalogStorefrontApi\Proto\VariantAttribute();
-                                    $r->setLabel($item41->getLabel());
-                                    $r->setCode($item41->getCode());
-                                    $r->setValueIndex($item41->getValueIndex());
-                                    $r->setAttributeId($item41->getAttributeId());
-                                    return $r;
-                                };
-                                $proto = $p();
-                                $res[] = $proto;
-                            }
-                            $r->setAttributes($res);
-                            return $r;
-                        };
-                        $proto = $p();
-                        $res[] = $proto;
-                    }
-                    $r->setVariants($res);
-                    $res = [];
-                    foreach ($item1->getConfigurableOptions() as $item40) {
-                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOption
-                        // to \Magento\CatalogStorefrontApi\Proto\ConfigurableOption
-                        /** @var \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOption $item40 **/
-                        $p = function () use ($item40) {
-                            $r = new \Magento\CatalogStorefrontApi\Proto\ConfigurableOption();
-                            $r->setId($item40->getId());
-                            $r->setLabel($item40->getLabel());
-                            $r->setPosition($item40->getPosition());
-                            $r->setUseDefault($item40->getUseDefault());
-                            $r->setProductId($item40->getProductId());
-                            $r->setAttributeCode($item40->getAttributeCode());
-                            $r->setAttributeId($item40->getAttributeId());
-                            $res = [];
-                            foreach ($item40->getValues() as $item48) {
-                                // convert data from \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionValue
-                                // to \Magento\CatalogStorefrontApi\Proto\ConfigurableOptionValue
-                                /** @var \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionValue $item48 **/
-                                $p = function () use ($item48) {
-                                    $r = new \Magento\CatalogStorefrontApi\Proto\ConfigurableOptionValue();
-                                    $r->setValueIndex($item48->getValueIndex());
-                                    $r->setLabel($item48->getLabel());
-                                    $r->setDefaultLabel($item48->getDefaultLabel());
-                                    $r->setStoreLabel($item48->getStoreLabel());
-                                    $r->setUseDefaultValue($item48->getUseDefaultValue());
-                                    $r->setAttributeId($item48->getAttributeId());
-                                    $r->setProductId($item48->getProductId());
-                                    return $r;
-                                };
-                                $proto = $p();
-                                $res[] = $proto;
-                            }
-                            $r->setValues($res);
-                            return $r;
-                        };
-                        $proto = $p();
-                        $res[] = $proto;
-                    }
-                    $r->setConfigurableOptions($res);
                     $r->setCountryOfManufacture($item1->getCountryOfManufacture());
                     $r->setGiftMessageAvailable($item1->getGiftMessageAvailable());
                     $r->setSpecialPrice($item1->getSpecialPrice());
                     $r->setSpecialFromDate($item1->getSpecialFromDate());
                     $r->setSpecialToDate($item1->getSpecialToDate());
                     $res = [];
-                    foreach ($item1->getProductLinks() as $item46) {
+                    foreach ($item1->getProductLinks() as $item44) {
                         // convert data from \Magento\CatalogStorefrontApi\Api\Data\ProductLink
                         // to \Magento\CatalogStorefrontApi\Proto\ProductLink
-                        /** @var \Magento\CatalogStorefrontApi\Api\Data\ProductLink $item46 **/
-                        $p = function () use ($item46) {
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\ProductLink $item44 **/
+                        $p = function () use ($item44) {
                             $r = new \Magento\CatalogStorefrontApi\Proto\ProductLink();
-                            $r->setLinkedProductSku($item46->getLinkedProductSku());
-                            $r->setTypeId($item46->getTypeId());
-                            $r->setLinkedProductType($item46->getLinkedProductType());
-                            $r->setLinkTypeId($item46->getLinkTypeId());
-                            $r->setPosition($item46->getPosition());
-                            $r->setSku($item46->getSku());
-                            $r->setProductId($item46->getProductId());
-                            $r->setLinkType($item46->getLinkType());
+                            $r->setLinkedProductSku($item44->getLinkedProductSku());
+                            $r->setTypeId($item44->getTypeId());
+                            $r->setLinkedProductType($item44->getLinkedProductType());
+                            $r->setLinkTypeId($item44->getLinkTypeId());
+                            $r->setPosition($item44->getPosition());
+                            $r->setSku($item44->getSku());
+                            $r->setProductId($item44->getProductId());
+                            $r->setLinkType($item44->getLinkType());
                             return $r;
                         };
                         $proto = $p();
@@ -967,27 +866,72 @@ class Catalog implements CatalogInterface
                     }
                     $r->setProductLinks($res);
                     $r->setCanonicalUrl($item1->getCanonicalUrl());
+                    $r->setShipBundleItems($item1->getShipBundleItems());
+                    $r->setDynamicWeight($item1->getDynamicWeight());
+                    $r->setDynamicSku($item1->getDynamicSku());
+                    $r->setDynamicPrice($item1->getDynamicPrice());
                     $r->setPriceView($item1->getPriceView());
+                    $res = [];
+                    foreach ($item1->getItems() as $item51) {
+                        // convert data from \Magento\CatalogStorefrontApi\Api\Data\BundleItem
+                        // to \Magento\CatalogStorefrontApi\Proto\BundleItem
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\BundleItem $item51 **/
+                        $p = function () use ($item51) {
+                            $r = new \Magento\CatalogStorefrontApi\Proto\BundleItem();
+                            $r->setOptionId($item51->getOptionId());
+                            $r->setTitle($item51->getTitle());
+                            $r->setRequired($item51->getRequired());
+                            $r->setType($item51->getType());
+                            $r->setPosition($item51->getPosition());
+                            $r->setSku($item51->getSku());
+                            $res = [];
+                            foreach ($item51->getOptions() as $item58) {
+                                // convert data from \Magento\CatalogStorefrontApi\Api\Data\BundleItemOption
+                                // to \Magento\CatalogStorefrontApi\Proto\BundleItemOption
+                                /** @var \Magento\CatalogStorefrontApi\Api\Data\BundleItemOption $item58 **/
+                                $p = function () use ($item58) {
+                                    $r = new \Magento\CatalogStorefrontApi\Proto\BundleItemOption();
+                                    $r->setId($item58->getId());
+                                    $r->setQuantity($item58->getQuantity());
+                                    $r->setIsDefault($item58->getIsDefault());
+                                    $r->setPrice($item58->getPrice());
+                                    $r->setPriceType($item58->getPriceType());
+                                    $r->setCanChangeQuantity($item58->getCanChangeQuantity());
+                                    $r->setLabel($item58->getLabel());
+                                    $r->setEntityId($item58->getEntityId());
+                                    $r->setPosition($item58->getPosition());
+                                    return $r;
+                                };
+                                $proto = $p();
+                                $res[] = $proto;
+                            }
+                            $r->setOptions($res);
+                            return $r;
+                        };
+                        $proto = $p();
+                        $res[] = $proto;
+                    }
+                    $r->setItems($res);
                     $r->setLinksPurchasedSeparately($item1->getLinksPurchasedSeparately());
                     $r->setLinksTitle($item1->getLinksTitle());
                     $res = [];
-                    foreach ($item1->getDownloadableProductLinks() as $item51) {
+                    foreach ($item1->getDownloadableProductLinks() as $item54) {
                         // convert data from \Magento\CatalogStorefrontApi\Api\Data\DownloadableLink
                         // to \Magento\CatalogStorefrontApi\Proto\DownloadableLink
-                        /** @var \Magento\CatalogStorefrontApi\Api\Data\DownloadableLink $item51 **/
-                        $p = function () use ($item51) {
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\DownloadableLink $item54 **/
+                        $p = function () use ($item54) {
                             $r = new \Magento\CatalogStorefrontApi\Proto\DownloadableLink();
-                            $r->setSampleUrl($item51->getSampleUrl());
-                            $r->setTitle($item51->getTitle());
-                            $r->setSortOrder($item51->getSortOrder());
-                            $r->setSampleType($item51->getSampleType());
-                            $r->setSampleFile($item51->getSampleFile());
-                            $r->setLinkId($item51->getLinkId());
-                            $r->setPrice($item51->getPrice());
-                            $r->setLinkType($item51->getLinkType());
-                            $r->setIsShareable($item51->getIsShareable());
-                            $r->setNumberOfDownloads($item51->getNumberOfDownloads());
-                            $r->setEntityId($item51->getEntityId());
+                            $r->setSampleUrl($item54->getSampleUrl());
+                            $r->setTitle($item54->getTitle());
+                            $r->setSortOrder($item54->getSortOrder());
+                            $r->setSampleType($item54->getSampleType());
+                            $r->setSampleFile($item54->getSampleFile());
+                            $r->setLinkId($item54->getLinkId());
+                            $r->setPrice($item54->getPrice());
+                            $r->setLinkType($item54->getLinkType());
+                            $r->setIsShareable($item54->getIsShareable());
+                            $r->setNumberOfDownloads($item54->getNumberOfDownloads());
+                            $r->setEntityId($item54->getEntityId());
                             return $r;
                         };
                         $proto = $p();
@@ -995,15 +939,15 @@ class Catalog implements CatalogInterface
                     }
                     $r->setDownloadableProductLinks($res);
                     $res = [];
-                    foreach ($item1->getSamples() as $item52) {
+                    foreach ($item1->getSamples() as $item55) {
                         // convert data from \Magento\CatalogStorefrontApi\Api\Data\Sample
                         // to \Magento\CatalogStorefrontApi\Proto\Sample
-                        /** @var \Magento\CatalogStorefrontApi\Api\Data\Sample $item52 **/
-                        $p = function () use ($item52) {
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\Sample $item55 **/
+                        $p = function () use ($item55) {
                             $r = new \Magento\CatalogStorefrontApi\Proto\Sample();
-                            $r->setUrl($item52->getUrl());
-                            $r->setLabel($item52->getLabel());
-                            $r->setSortOrder($item52->getSortOrder());
+                            $r->setUrl($item55->getUrl());
+                            $r->setLabel($item55->getLabel());
+                            $r->setSortOrder($item55->getSortOrder());
                             return $r;
                         };
                         $proto = $p();
@@ -1012,15 +956,15 @@ class Catalog implements CatalogInterface
                     $r->setSamples($res);
                     $r->setOnlyXLeftInStock($item1->getOnlyXLeftInStock());
                     $res = [];
-                    foreach ($item1->getGroupedItems() as $item54) {
+                    foreach ($item1->getGroupedItems() as $item57) {
                         // convert data from \Magento\CatalogStorefrontApi\Api\Data\GroupedItem
                         // to \Magento\CatalogStorefrontApi\Proto\GroupedItem
-                        /** @var \Magento\CatalogStorefrontApi\Api\Data\GroupedItem $item54 **/
-                        $p = function () use ($item54) {
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\GroupedItem $item57 **/
+                        $p = function () use ($item57) {
                             $r = new \Magento\CatalogStorefrontApi\Proto\GroupedItem();
-                            $r->setQty($item54->getQty());
-                            $r->setPosition($item54->getPosition());
-                            $r->setProduct($item54->getProduct());
+                            $r->setQty($item57->getQty());
+                            $r->setPosition($item57->getPosition());
+                            $r->setProduct($item57->getProduct());
                             return $r;
                         };
                         $proto = $p();
@@ -1028,33 +972,33 @@ class Catalog implements CatalogInterface
                     }
                     $r->setGroupedItems($res);
                     $res = [];
-                    foreach ($item1->getProductOptions() as $item55) {
+                    foreach ($item1->getProductOptions() as $item58) {
                         // convert data from \Magento\CatalogStorefrontApi\Api\Data\ProductOption
                         // to \Magento\CatalogStorefrontApi\Proto\ProductOption
-                        /** @var \Magento\CatalogStorefrontApi\Api\Data\ProductOption $item55 **/
-                        $p = function () use ($item55) {
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\ProductOption $item58 **/
+                        $p = function () use ($item58) {
                             $r = new \Magento\CatalogStorefrontApi\Proto\ProductOption();
-                            $r->setId($item55->getId());
-                            $r->setLabel($item55->getLabel());
-                            $r->setSortOrder($item55->getSortOrder());
-                            $r->setRequired($item55->getRequired());
-                            $r->setRenderType($item55->getRenderType());
-                            $r->setType($item55->getType());
+                            $r->setId($item58->getId());
+                            $r->setLabel($item58->getLabel());
+                            $r->setSortOrder($item58->getSortOrder());
+                            $r->setRequired($item58->getRequired());
+                            $r->setRenderType($item58->getRenderType());
+                            $r->setType($item58->getType());
                             $res = [];
-                            foreach ($item55->getValues() as $item62) {
+                            foreach ($item58->getValues() as $item65) {
                                 // convert data from \Magento\CatalogStorefrontApi\Api\Data\ProductOptionValue
                                 // to \Magento\CatalogStorefrontApi\Proto\ProductOptionValue
-                                /** @var \Magento\CatalogStorefrontApi\Api\Data\ProductOptionValue $item62 **/
-                                $p = function () use ($item62) {
+                                /** @var \Magento\CatalogStorefrontApi\Api\Data\ProductOptionValue $item65 **/
+                                $p = function () use ($item65) {
                                     $r = new \Magento\CatalogStorefrontApi\Proto\ProductOptionValue();
-                                    $r->setId($item62->getId());
-                                    $r->setLabel($item62->getLabel());
-                                    $r->setSortOrder($item62->getSortOrder());
-                                    $r->setDefault($item62->getDefault());
-                                    $r->setImageUrl($item62->getImageUrl());
-                                    $r->setQtyMutability($item62->getQtyMutability());
-                                    $r->setQty($item62->getQty());
-                                    $r->setInfoUrl($item62->getInfoUrl());
+                                    $r->setId($item65->getId());
+                                    $r->setLabel($item65->getLabel());
+                                    $r->setSortOrder($item65->getSortOrder());
+                                    $r->setDefault($item65->getDefault());
+                                    $r->setImageUrl($item65->getImageUrl());
+                                    $r->setQtyMutability($item65->getQtyMutability());
+                                    $r->setQty($item65->getQty());
+                                    $r->setInfoUrl($item65->getInfoUrl());
                                     return $r;
                                 };
                                 $proto = $p();
@@ -1068,42 +1012,42 @@ class Catalog implements CatalogInterface
                     }
                     $r->setProductOptions($res);
                     $res = [];
-                    foreach ($item1->getShopperInputOptions() as $item56) {
+                    foreach ($item1->getShopperInputOptions() as $item59) {
                         // convert data from \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOption
                         // to \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption
-                        /** @var \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOption $item56 **/
-                        $p = function () use ($item56) {
+                        /** @var \Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOption $item59 **/
+                        $p = function () use ($item59) {
                             $r = new \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption();
-                            $r->setId($item56->getId());
-                            $r->setLabel($item56->getLabel());
-                            $r->setSortOrder($item56->getSortOrder());
-                            $r->setRequired($item56->getRequired());
-                            $r->setRenderType($item56->getRenderType());
+                            $r->setId($item59->getId());
+                            $r->setLabel($item59->getLabel());
+                            $r->setSortOrder($item59->getSortOrder());
+                            $r->setRequired($item59->getRequired());
+                            $r->setRenderType($item59->getRenderType());
                             $res = [];
-                            foreach ($item56->getPrice() as $item62) {
+                            foreach ($item59->getPrice() as $item65) {
                                 // convert data from \Magento\CatalogStorefrontApi\Api\Data\Price
                                 // to \Magento\CatalogStorefrontApi\Proto\Price
-                                /** @var \Magento\CatalogStorefrontApi\Api\Data\Price $item62 **/
-                                $p = function () use ($item62) {
+                                /** @var \Magento\CatalogStorefrontApi\Api\Data\Price $item65 **/
+                                $p = function () use ($item65) {
                                     $r = new \Magento\CatalogStorefrontApi\Proto\Price();
-                                    $r->setRegularPrice($item62->getRegularPrice());
-                                    $r->setFinalPrice($item62->getFinalPrice());
-                                    $r->setScope($item62->getScope());
+                                    $r->setRegularPrice($item65->getRegularPrice());
+                                    $r->setFinalPrice($item65->getFinalPrice());
+                                    $r->setScope($item65->getScope());
                                     return $r;
                                 };
                                 $proto = $p();
                                 $res[] = $proto;
                             }
                             $r->setPrice($res);
-                            $r->setValue($item56->getValue());
-                            $r->setMaxCharacters($item56->getMaxCharacters());
+                            $r->setValue($item59->getValue());
+                            $r->setMaxCharacters($item59->getMaxCharacters());
                             $values = [];
-                            foreach ($item56->getFileExtension() as $newValue) {
+                            foreach ($item59->getFileExtension() as $newValue) {
                                 $values[] = $newValue;
                             }
                             $r->setFileExtension($values);
-                            $r->setImageSizeX($item56->getImageSizeX());
-                            $r->setImageSizeY($item56->getImageSizeY());
+                            $r->setImageSizeX($item59->getImageSizeX());
+                            $r->setImageSizeY($item59->getImageSizeY());
                             return $r;
                         };
                         $proto = $p();
@@ -1579,106 +1523,6 @@ class Catalog implements CatalogInterface
                         $res[] = $out;
                     }
                     $r->setDynamicAttributes($res);
-                    return $r;
-                };
-                $out = $p();
-                $res[] = $out;
-            }
-            $r->setItems($res);
-            return $r;
-        };
-        $out = $p();
-
-        return $out;
-    }
-
-    /**
-     * @inheritdoc
-     *
-     * @param ProductVariantsGetRequestInterface $request
-     * @return ProductVariantsGetResponseInterface
-     * @throws \Throwable
-     */
-    public function getProductVariants(ProductVariantsGetRequestInterface $request): ProductVariantsGetResponseInterface
-    {
-        $protoRequest = $this->getProductVariantsToProto($request);
-        [$protoResult, $status] = $this->protoClient->getProductVariants($protoRequest)->wait();
-        if ($status->code !== 0) {
-            throw new \RuntimeException($status->details, $status->code);
-        }
-        return $this->getProductVariantsFromProto($protoResult);
-    }
-
-    /**
-     * Autogenerated description for getProductVariants method
-     *
-     * @param ProductVariantsGetRequestInterface $value
-     * @return ProductVariantsGetRequest
-     */
-    private function getProductVariantsToProto(ProductVariantsGetRequestInterface $value): ProductVariantsGetRequest
-    {
-        // convert data from \Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetRequest
-        // to \Magento\CatalogStorefrontApi\Proto\ProductVariantsGetRequest
-        /** @var \Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetRequest $value **/
-        $p = function () use ($value) {
-            $r = new \Magento\CatalogStorefrontApi\Proto\ProductVariantsGetRequest();
-            $values = [];
-            foreach ($value->getIds() as $newValue) {
-                $values[] = $newValue;
-            }
-            $r->setIds($values);
-            $r->setStoreId($value->getStoreId());
-            $values = [];
-            foreach ($value->getAttributeCodes() as $newValue) {
-                $values[] = $newValue;
-            }
-            $r->setAttributeCodes($values);
-            return $r;
-        };
-        $proto = $p();
-
-        return $proto;
-    }
-
-    /**
-     * Autogenerated description for getProductVariants method
-     *
-     * @param ProductVariantsGetResponse $value
-     * @return ProductVariantsGetResponseInterface
-     * phpcs:disable Generic.Metrics.NestingLevel.TooHigh
-     */
-    private function getProductVariantsFromProto(ProductVariantsGetResponse $value): ProductVariantsGetResponseInterface
-    {
-        // convert data from \Magento\CatalogStorefrontApi\Proto\ProductVariantsGetResponse
-        // to \Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetResponse
-        /** @var \Magento\CatalogStorefrontApi\Proto\ProductVariantsGetResponse $value **/
-        $p = function () use ($value) {
-            $r = new \Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetResponse();
-            $res = [];
-            foreach ($value->getItems() as $item1) {
-                // convert data from \Magento\CatalogStorefrontApi\Proto\Variant
-                // to \Magento\CatalogStorefrontApi\Api\Data\Variant
-                /** @var \Magento\CatalogStorefrontApi\Proto\Variant $item1 **/
-                $p = function () use ($item1) {
-                    $r = new \Magento\CatalogStorefrontApi\Api\Data\Variant();
-                    $r->setProduct($item1->getProduct());
-                    $res = [];
-                    foreach ($item1->getAttributes() as $item3) {
-                        // convert data from \Magento\CatalogStorefrontApi\Proto\VariantAttribute
-                        // to \Magento\CatalogStorefrontApi\Api\Data\VariantAttribute
-                        /** @var \Magento\CatalogStorefrontApi\Proto\VariantAttribute $item3 **/
-                        $p = function () use ($item3) {
-                            $r = new \Magento\CatalogStorefrontApi\Api\Data\VariantAttribute();
-                            $r->setLabel($item3->getLabel());
-                            $r->setCode($item3->getCode());
-                            $r->setValueIndex($item3->getValueIndex());
-                            $r->setAttributeId($item3->getAttributeId());
-                            return $r;
-                        };
-                        $out = $p();
-                        $res[] = $out;
-                    }
-                    $r->setAttributes($res);
                     return $r;
                 };
                 $out = $p();
