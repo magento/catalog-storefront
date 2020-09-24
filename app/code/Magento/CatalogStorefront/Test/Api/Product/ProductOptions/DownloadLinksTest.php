@@ -184,7 +184,7 @@ class DownloadLinksTest extends StorefrontTestsAbstract
                                 'qty_mutability' => false,
                                 'qty' => 0.0,
                                 'info_url' =>  '',
-                                'price' => 15.0
+                                'price' => 0.0
                             ]
                         ]
                     ]
