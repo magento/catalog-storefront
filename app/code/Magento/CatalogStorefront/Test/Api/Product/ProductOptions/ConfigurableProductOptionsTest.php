@@ -103,6 +103,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
             $expected,
             $actual
         );
+
         self::assertEquals([], $diff, "Actual response doesn't equal expected data");
     }
 
@@ -135,6 +136,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
             $expected,
             $actual
         );
+        
         self::assertEquals([], $diff, "Actual response doesn't equal expected data");
     }
 
@@ -209,7 +211,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
                         'type' => 'super',
                         'values' => [
                             [
-                                'label' => 'Option 1 Default Store',
+                                'label' => 'Option 1 Second Store',
                                 'sort_order' => '',
                                 'default' => false,
                                 'image_url' => '',
@@ -218,7 +220,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
                                 'info_url' => ''
                             ],
                             [
-                                'label' => 'Option 2 Default Store',
+                                'label' => 'Option 2 Second Store',
                                 'sort_order' => '',
                                 'default' => false,
                                 'image_url' => '',
@@ -227,7 +229,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
                                 'info_url' => ''
                             ],
                             [
-                                'label' => 'Option 3 Default Store',
+                                'label' => 'Option 3 Second Store',
                                 'sort_order' => '',
                                 'default' => false,
                                 'image_url' => '',
