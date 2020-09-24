@@ -93,7 +93,7 @@ class DownloadLinksTest extends StorefrontTestsAbstract
         self::assertNotEmpty($catalogServiceItem->getItems());
 
         $expectedProductAttributes = [
-            'linksPurchasedSeparately' => true
+            'linksPurchasedSeparately' => false
         ];
         $actualProductAttributes = [
             'linksPurchasedSeparately' => $catalogServiceItem->getItems()[0]->getLinksPurchasedSeparately()
