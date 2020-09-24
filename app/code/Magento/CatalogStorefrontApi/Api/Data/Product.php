@@ -211,11 +211,6 @@ final class Product implements ProductInterface
     private $variants;
 
     /**
-     * @var array
-     */
-    private $configurableOptions;
-
-    /**
      * @var string
      */
     private $countryOfManufacture;
@@ -1091,27 +1086,6 @@ final class Product implements ProductInterface
     public function setVariants(array $value): void
     {
         $this->variants = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionInterface[]
-     */
-    public function getConfigurableOptions(): array
-    {
-        return (array) $this->configurableOptions;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionInterface[] $value
-     * @return void
-     */
-    public function setConfigurableOptions(array $value): void
-    {
-        $this->configurableOptions = $value;
     }
     
     /**

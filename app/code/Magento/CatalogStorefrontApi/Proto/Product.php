@@ -193,10 +193,6 @@ class Product extends \Google\Protobuf\Internal\Message
      */
     private $variants;
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ConfigurableOption configurable_options = 84;</code>
-     */
-    private $configurable_options;
-    /**
      * Generated from protobuf field <code>string country_of_manufacture = 85;</code>
      */
     protected $country_of_manufacture = '';
@@ -329,7 +325,6 @@ class Product extends \Google\Protobuf\Internal\Message
      *           TODO: May need to be a complex type
      *     @type \Magento\CatalogStorefrontApi\Proto\UrlRewrite[]|\Google\Protobuf\Internal\RepeatedField $url_rewrites
      *     @type \Magento\CatalogStorefrontApi\Proto\Variant[]|\Google\Protobuf\Internal\RepeatedField $variants
-     *     @type \Magento\CatalogStorefrontApi\Proto\ConfigurableOption[]|\Google\Protobuf\Internal\RepeatedField $configurable_options
      *     @type string $country_of_manufacture
      *     @type bool $gift_message_available
      *     @type float $special_price
@@ -1243,28 +1238,6 @@ class Product extends \Google\Protobuf\Internal\Message
     {
         $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\Variant::class);
         $this->variants = $arr;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ConfigurableOption configurable_options = 84;</code>
-     * @return \Google\Protobuf\Internal\RepeatedField
-     */
-    public function getConfigurableOptions()
-    {
-        return $this->configurable_options;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ConfigurableOption configurable_options = 84;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\ConfigurableOption[]|\Google\Protobuf\Internal\RepeatedField $var
-     * @return $this
-     */
-    public function setConfigurableOptions($var)
-    {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\ConfigurableOption::class);
-        $this->configurable_options = $arr;
 
         return $this;
     }
