@@ -78,7 +78,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
     /**
      * Validate configurable product data
      *
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_different_option_labels_per_stores.php
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_different_option_labels_per_store_views.php
      * @magentoDbIsolation disabled
      * @param array $expected
      * @throws NoSuchEntityException
@@ -131,7 +131,8 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
         foreach ($catalogServiceItemDefaultStore->getItems()[0]->getProductOptions() as $productOption) {
             $actual[] = $this->arrayMapper->convertToArray($productOption);
         }
-        
+
+
         $diff = $this->compareArraysRecursively->execute(
             $expected,
             $actual
