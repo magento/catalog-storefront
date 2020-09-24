@@ -46,7 +46,7 @@ class ConsumerInvoker
 
         foreach ($consumersToProcess as $consumerName) {
             $consumer = $consumerFactory->get($consumerName, self::BATCHSIZE);
-            $consumer->process(self::BATCHSIZE);
+            $consumer->process();
         }
     }
 }

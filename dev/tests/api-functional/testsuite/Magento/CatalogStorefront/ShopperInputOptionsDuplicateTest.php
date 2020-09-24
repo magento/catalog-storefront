@@ -72,7 +72,6 @@ class ShopperInputOptionsDuplicateTest extends StorefrontTestsAbstract
      * Test product shopper input options
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_custom_attribute.php
-     * @magentoDbIsolation disabled
      * @param array $expected
      * @throws NoSuchEntityException
      * @dataProvider shopperInputOptionProvider
