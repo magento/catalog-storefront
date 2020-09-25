@@ -98,7 +98,7 @@ message ProductVariant {
   // variant identifier following the convention :prefix:/:parentId:/:entityId:
   string id = 1;
   // parent_id:option_id/optionValue.uid
-  repeated string option_value = 2;
+  repeated string option_values = 2;
   // link to product id that represents variant, for custom option must be null
   string product_id = 3;
 }
@@ -107,7 +107,7 @@ message ProductVariantImport {
   // variant identifier following the convention :prefix:/:parentId:/:entityId:
   string id = 1;
   // list of option values intersections, which represent this variant, parent_id:option_id/optionValue.uid
-  repeated string option_value = 2;
+  repeated string option_values = 2;
 }
 
 // Temp solution for prices
@@ -170,28 +170,6 @@ message Sample {
   string url = 1;
   string label = 2;
   int32 sort_order = 3;
-}
-
-message BundleItem {
-  string option_id = 1;
-  string title = 2;
-  bool required = 3;
-  string type = 4;
-  int32 position = 5;
-  string sku = 6;
-  repeated BundleItemOption options = 7;
-}
-
-message BundleItemOption {
-  string id = 1;
-  float quantity = 2;
-  bool is_default = 3;
-  float price = 4;
-  string price_type = 5;
-  bool can_change_quantity = 6;
-  string label = 7;
-  string entity_id = 8;
-  int32 position = 9;
 }
 
 message GroupedItem {
@@ -489,7 +467,7 @@ message OptionSelectionRequest
 {
   string store = 1;
   // array of option_values with the following format parent_id:option_id/optionValue.uid
-  // @see ProductValue.option_value
+  // @see ProductValue.option_values
   repeated string values = 2;
 }
 
