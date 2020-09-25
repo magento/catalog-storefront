@@ -17,6 +17,7 @@ use Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItem;
 use Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductArrayMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ProductInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResult;
@@ -117,6 +118,7 @@ class CatalogService implements CatalogServerInterface
      * @var CategoryArrayMapper
      */
     private $categoryArrayMapper;
+    private ProductMapper $productMapper;
 
     /**
      * @param ProductDataProvider $dataProvider
@@ -145,6 +147,7 @@ class CatalogService implements CatalogServerInterface
         CatalogRepository $catalogRepository,
         ProductArrayMapper $productArrayMapper,
         CategoryArrayMapper $categoryArrayMapper,
+        ProductMapper $productMapper,
         LoggerInterface $logger
     ) {
         $this->dataProvider = $dataProvider;
@@ -159,6 +162,7 @@ class CatalogService implements CatalogServerInterface
         $this->productArrayMapper = $productArrayMapper;
         $this->categoryArrayMapper = $categoryArrayMapper;
         $this->logger = $logger;
+        $this->productMapper = $productMapper;
     }
 
     /**
@@ -556,8 +560,8 @@ class CatalogService implements CatalogServerInterface
             }
         }
 
-        $product = new \Magento\CatalogStorefrontApi\Api\Data\Product();
-        $this->dataObjectHelper->populateWithArray($product, $item, ProductInterface::class);
+        $product = $this->productMapper->setData($item)->build();
+
         $product = $this->setImage('image', $item, $product);
         $product = $this->setImage('small_image', $item, $product);
         $product = $this->setImage('thumbnail', $item, $product);

@@ -51,11 +51,6 @@ class ShopperInputOptionsTest extends StorefrontTestsAbstract
     private $arrayMapper;
 
     /**
-     * @var CompareArraysRecursively
-     */
-    private $compareArraysRecursively;
-
-    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -65,7 +60,6 @@ class ShopperInputOptionsTest extends StorefrontTestsAbstract
         $this->productsGetRequestInterface = Bootstrap::getObjectManager()->create(ProductsGetRequestInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
         $this->arrayMapper = Bootstrap::getObjectManager()->create(ProductShopperInputOptionArrayMapper::class);
-        $this->compareArraysRecursively = Bootstrap::getObjectManager()->create(CompareArraysRecursively::class);
     }
 
     /**
@@ -92,11 +86,7 @@ class ShopperInputOptionsTest extends StorefrontTestsAbstract
             $actual[] = $this->arrayMapper->convertToArray($item);
         }
 
-        $diff = $this->compareArraysRecursively->execute(
-            $expected,
-            $actual
-        );
-        self::assertEquals([], $diff, "Actual response doesn't equal expected data");
+        $this->compare($expected, $actual);
     }
 
     /**
@@ -137,8 +127,9 @@ class ShopperInputOptionsTest extends StorefrontTestsAbstract
                                 'final_price' => 1.0
                             ]
                         ],
-                        'value' => '',
-                        'max_characters' => 100,
+                        'interval' => [
+                            'to' => 100.0,
+                        ],
                         'file_extension' => [],
                         'image_size_x' => 0,
                         'image_size_y' => 0
@@ -171,8 +162,9 @@ class ShopperInputOptionsTest extends StorefrontTestsAbstract
                                 'final_price' => 2.0
                             ]
                         ],
-                        'value' => '',
-                        'max_characters' => 0,
+                        'interval' => [
+                            'to' => 0.0,
+                        ],
                         'file_extension' => [],
                         'image_size_x' => 0,
                         'image_size_y' => 0
@@ -205,8 +197,9 @@ class ShopperInputOptionsTest extends StorefrontTestsAbstract
                                 'final_price' => 0.395
                             ]
                         ],
-                        'value' => '',
-                        'max_characters' => 20,
+                        'interval' => [
+                            'to' => 20.0,
+                        ],
                         'file_extension' => [],
                         'image_size_x' => 0,
                         'image_size_y' => 0
@@ -239,8 +232,9 @@ class ShopperInputOptionsTest extends StorefrontTestsAbstract
                                 'final_price' => 3.0
                             ]
                         ],
-                        'value' => '',
-                        'max_characters' => 0,
+                        'interval' => [
+                            'to' => 0.0,
+                        ],
                         'file_extension' => ['jpg, png, gif'],
                         'image_size_x' => 10,
                         'image_size_y' => 20
