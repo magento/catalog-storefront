@@ -218,29 +218,9 @@ class Product extends \Google\Protobuf\Internal\Message
     /**
      *BUNDLE
      *
-     * Generated from protobuf field <code>string ship_bundle_items = 92;</code>
-     */
-    protected $ship_bundle_items = '';
-    /**
-     * Generated from protobuf field <code>bool dynamic_weight = 93;</code>
-     */
-    protected $dynamic_weight = false;
-    /**
-     * Generated from protobuf field <code>bool dynamic_sku = 94;</code>
-     */
-    protected $dynamic_sku = false;
-    /**
-     * Generated from protobuf field <code>bool dynamic_price = 95;</code>
-     */
-    protected $dynamic_price = false;
-    /**
      * Generated from protobuf field <code>string price_view = 96;</code>
      */
     protected $price_view = '';
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.BundleItem items = 97;</code>
-     */
-    private $items;
     /**
      *DOWNLOADABLE
      *
@@ -345,13 +325,8 @@ class Product extends \Google\Protobuf\Internal\Message
      *     @type string $special_to_date
      *     @type \Magento\CatalogStorefrontApi\Proto\ProductLink[]|\Google\Protobuf\Internal\RepeatedField $product_links
      *     @type string $canonical_url
-     *     @type string $ship_bundle_items
-     *          BUNDLE
-     *     @type bool $dynamic_weight
-     *     @type bool $dynamic_sku
-     *     @type bool $dynamic_price
      *     @type string $price_view
-     *     @type \Magento\CatalogStorefrontApi\Proto\BundleItem[]|\Google\Protobuf\Internal\RepeatedField $items
+     *          BUNDLE
      *     @type bool $links_purchased_separately
      *          DOWNLOADABLE
      *     @type string $links_title
@@ -1393,96 +1368,6 @@ class Product extends \Google\Protobuf\Internal\Message
     /**
      *BUNDLE
      *
-     * Generated from protobuf field <code>string ship_bundle_items = 92;</code>
-     * @return string
-     */
-    public function getShipBundleItems()
-    {
-        return $this->ship_bundle_items;
-    }
-
-    /**
-     *BUNDLE
-     *
-     * Generated from protobuf field <code>string ship_bundle_items = 92;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setShipBundleItems($var)
-    {
-        GPBUtil::checkString($var, true);
-        $this->ship_bundle_items = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>bool dynamic_weight = 93;</code>
-     * @return bool
-     */
-    public function getDynamicWeight()
-    {
-        return $this->dynamic_weight;
-    }
-
-    /**
-     * Generated from protobuf field <code>bool dynamic_weight = 93;</code>
-     * @param bool $var
-     * @return $this
-     */
-    public function setDynamicWeight($var)
-    {
-        GPBUtil::checkBool($var);
-        $this->dynamic_weight = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>bool dynamic_sku = 94;</code>
-     * @return bool
-     */
-    public function getDynamicSku()
-    {
-        return $this->dynamic_sku;
-    }
-
-    /**
-     * Generated from protobuf field <code>bool dynamic_sku = 94;</code>
-     * @param bool $var
-     * @return $this
-     */
-    public function setDynamicSku($var)
-    {
-        GPBUtil::checkBool($var);
-        $this->dynamic_sku = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>bool dynamic_price = 95;</code>
-     * @return bool
-     */
-    public function getDynamicPrice()
-    {
-        return $this->dynamic_price;
-    }
-
-    /**
-     * Generated from protobuf field <code>bool dynamic_price = 95;</code>
-     * @param bool $var
-     * @return $this
-     */
-    public function setDynamicPrice($var)
-    {
-        GPBUtil::checkBool($var);
-        $this->dynamic_price = $var;
-
-        return $this;
-    }
-
-    /**
      * Generated from protobuf field <code>string price_view = 96;</code>
      * @return string
      */
@@ -1492,6 +1377,8 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     *BUNDLE
+     *
      * Generated from protobuf field <code>string price_view = 96;</code>
      * @param string $var
      * @return $this
@@ -1500,28 +1387,6 @@ class Product extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, true);
         $this->price_view = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.BundleItem items = 97;</code>
-     * @return \Google\Protobuf\Internal\RepeatedField
-     */
-    public function getItems()
-    {
-        return $this->items;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.BundleItem items = 97;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\BundleItem[]|\Google\Protobuf\Internal\RepeatedField $var
-     * @return $this
-     */
-    public function setItems($var)
-    {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\BundleItem::class);
-        $this->items = $arr;
 
         return $this;
     }

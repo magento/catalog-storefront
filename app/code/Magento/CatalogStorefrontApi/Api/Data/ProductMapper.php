@@ -267,30 +267,8 @@ final class ProductMapper
             case "canonical_url":
                 $dto->setCanonicalUrl((string) $value);
                 break;
-            case "ship_bundle_items":
-                $dto->setShipBundleItems((string) $value);
-                break;
-            case "dynamic_weight":
-                $dto->setDynamicWeight((bool) $value);
-                break;
-            case "dynamic_sku":
-                $dto->setDynamicSku((bool) $value);
-                break;
-            case "dynamic_price":
-                $dto->setDynamicPrice((bool) $value);
-                break;
             case "price_view":
                 $dto->setPriceView((string) $value);
-                break;
-            case "items":
-                $convertedArray = [];
-                foreach ($value as $element) {
-                    $convertedArray[] = $this->objectManager
-                        ->create(\Magento\CatalogStorefrontApi\Api\Data\BundleItemMapper::class)
-                        ->setData($element)
-                        ->build();
-                }
-                $dto->setItems($convertedArray);
                 break;
             case "links_purchased_separately":
                 $dto->setLinksPurchasedSeparately((bool) $value);
