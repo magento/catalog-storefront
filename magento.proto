@@ -78,12 +78,7 @@ message Product {
   string canonical_url = 91;
 
   //BUNDLE
-  string ship_bundle_items = 92;
-  bool dynamic_weight = 93;
-  bool dynamic_sku = 94;
-  bool dynamic_price = 95;
   string price_view = 96;
-  repeated BundleItem items = 97;
 
   //DOWNLOADABLE
   bool links_purchased_separately = 98;
