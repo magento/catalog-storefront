@@ -1,6 +1,5 @@
 magento/module-downloadable-product-extractor
 magento/module-grouped-product-extractor
-magento/module-bundle-product-extractor
 magento/module-catalog-export
 magento/module-catalog-export-api
 magento/module-catalog-extractor
