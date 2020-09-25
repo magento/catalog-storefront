@@ -19,7 +19,7 @@ class OptionSelectionRequest extends \Google\Protobuf\Internal\Message
     protected $store = '';
     /**
      * array of option_values with the following format parent_id:option_id/optionValue.uid
-     * &#64;see ProductValue.option_value
+     * &#64;see ProductValue.option_values
      *
      * Generated from protobuf field <code>repeated string values = 2;</code>
      */
@@ -34,7 +34,7 @@ class OptionSelectionRequest extends \Google\Protobuf\Internal\Message
      *     @type string $store
      *     @type string[]|\Google\Protobuf\Internal\RepeatedField $values
      *           array of option_values with the following format parent_id:option_id/optionValue.uid
-     *           &#64;see ProductValue.option_value
+     *           &#64;see ProductValue.option_values
      * }
      */
     public function __construct($data = null)
@@ -67,7 +67,7 @@ class OptionSelectionRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * array of option_values with the following format parent_id:option_id/optionValue.uid
-     * &#64;see ProductValue.option_value
+     * &#64;see ProductValue.option_values
      *
      * Generated from protobuf field <code>repeated string values = 2;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
@@ -79,7 +79,7 @@ class OptionSelectionRequest extends \Google\Protobuf\Internal\Message
 
     /**
      * array of option_values with the following format parent_id:option_id/optionValue.uid
-     * &#64;see ProductValue.option_value
+     * &#64;see ProductValue.option_values
      *
      * Generated from protobuf field <code>repeated string values = 2;</code>
      * @param string[]|\Google\Protobuf\Internal\RepeatedField $var

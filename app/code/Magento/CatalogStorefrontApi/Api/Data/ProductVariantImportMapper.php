@@ -88,8 +88,8 @@ final class ProductVariantImportMapper
             case "id":
                 $dto->setId((string) $value);
                 break;
-            case "option_value":
-                $dto->setOptionValue((array) $value);
+            case "option_values":
+                $dto->setOptionValues((array) $value);
                 break;
         }
     }

@@ -28,7 +28,7 @@ final class ProductVariant implements ProductVariantInterface
     /**
      * @var array
      */
-    private $optionValue;
+    private $optionValues;
 
     /**
      * @var string
@@ -61,9 +61,9 @@ final class ProductVariant implements ProductVariantInterface
      *
      * @return string[]
      */
-    public function getOptionValue(): array
+    public function getOptionValues(): array
     {
-        return (array) $this->optionValue;
+        return (array) $this->optionValues;
     }
     
     /**
@@ -72,9 +72,9 @@ final class ProductVariant implements ProductVariantInterface
      * @param string[] $value
      * @return void
      */
-    public function setOptionValue(array $value): void
+    public function setOptionValues(array $value): void
     {
-        $this->optionValue = $value;
+        $this->optionValues = $value;
     }
     
     /**

@@ -93,10 +93,10 @@ class VariantServiceProxyServer implements \Magento\CatalogStorefrontApi\Proto\V
                     $r = new \Magento\CatalogStorefrontApi\Api\Data\ProductVariantImport();
                     $r->setId($item1->getId());
                     $values = [];
-                    foreach ($item1->getOptionValue() as $newValue) {
+                    foreach ($item1->getOptionValues() as $newValue) {
                         $values[] = $newValue;
                     }
-                    $r->setOptionValue($values);
+                    $r->setOptionValues($values);
                     return $r;
                 };
                 $out = $p();
@@ -274,10 +274,10 @@ class VariantServiceProxyServer implements \Magento\CatalogStorefrontApi\Proto\V
                     $r = new \Magento\CatalogStorefrontApi\Proto\ProductVariant();
                     $r->setId($item1->getId());
                     $values = [];
-                    foreach ($item1->getOptionValue() as $newValue) {
+                    foreach ($item1->getOptionValues() as $newValue) {
                         $values[] = $newValue;
                     }
-                    $r->setOptionValue($values);
+                    $r->setOptionValues($values);
                     $r->setProductId($item1->getProductId());
                     return $r;
                 };
@@ -365,10 +365,10 @@ class VariantServiceProxyServer implements \Magento\CatalogStorefrontApi\Proto\V
                     $r = new \Magento\CatalogStorefrontApi\Proto\ProductVariant();
                     $r->setId($item1->getId());
                     $values = [];
-                    foreach ($item1->getOptionValue() as $newValue) {
+                    foreach ($item1->getOptionValues() as $newValue) {
                         $values[] = $newValue;
                     }
-                    $r->setOptionValue($values);
+                    $r->setOptionValues($values);
                     $r->setProductId($item1->getProductId());
                     return $r;
                 };

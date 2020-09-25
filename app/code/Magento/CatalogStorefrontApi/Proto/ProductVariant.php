@@ -22,9 +22,9 @@ class ProductVariant extends \Google\Protobuf\Internal\Message
     /**
      * parent_id:option_id/optionValue.uid
      *
-     * Generated from protobuf field <code>repeated string option_value = 2;</code>
+     * Generated from protobuf field <code>repeated string option_values = 2;</code>
      */
-    private $option_value;
+    private $option_values;
     /**
      * link to product id that represents variant, for custom option must be null
      *
@@ -40,7 +40,7 @@ class ProductVariant extends \Google\Protobuf\Internal\Message
      *
      *     @type string $id
      *           variant identifier following the convention :prefix:/:parentId:/:entityId:
-     *     @type string[]|\Google\Protobuf\Internal\RepeatedField $option_value
+     *     @type string[]|\Google\Protobuf\Internal\RepeatedField $option_values
      *           parent_id:option_id/optionValue.uid
      *     @type string $product_id
      *           link to product id that represents variant, for custom option must be null
@@ -81,25 +81,25 @@ class ProductVariant extends \Google\Protobuf\Internal\Message
     /**
      * parent_id:option_id/optionValue.uid
      *
-     * Generated from protobuf field <code>repeated string option_value = 2;</code>
+     * Generated from protobuf field <code>repeated string option_values = 2;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
      */
-    public function getOptionValue()
+    public function getOptionValues()
     {
-        return $this->option_value;
+        return $this->option_values;
     }
 
     /**
      * parent_id:option_id/optionValue.uid
      *
-     * Generated from protobuf field <code>repeated string option_value = 2;</code>
+     * Generated from protobuf field <code>repeated string option_values = 2;</code>
      * @param string[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
-    public function setOptionValue($var)
+    public function setOptionValues($var)
     {
         $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::STRING);
-        $this->option_value = $arr;
+        $this->option_values = $arr;
 
         return $this;
     }

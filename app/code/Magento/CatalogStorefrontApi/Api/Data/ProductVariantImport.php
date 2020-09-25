@@ -28,7 +28,7 @@ final class ProductVariantImport implements ProductVariantImportInterface
     /**
      * @var array
      */
-    private $optionValue;
+    private $optionValues;
     
     /**
      * @inheritdoc
@@ -56,9 +56,9 @@ final class ProductVariantImport implements ProductVariantImportInterface
      *
      * @return string[]
      */
-    public function getOptionValue(): array
+    public function getOptionValues(): array
     {
-        return (array) $this->optionValue;
+        return (array) $this->optionValues;
     }
     
     /**
@@ -67,8 +67,8 @@ final class ProductVariantImport implements ProductVariantImportInterface
      * @param string[] $value
      * @return void
      */
-    public function setOptionValue(array $value): void
+    public function setOptionValues(array $value): void
     {
-        $this->optionValue = $value;
+        $this->optionValues = $value;
     }
 }

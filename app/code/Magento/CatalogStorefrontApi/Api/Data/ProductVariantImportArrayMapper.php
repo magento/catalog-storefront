@@ -48,7 +48,7 @@ final class ProductVariantImportArrayMapper
     {
         $result = [];
         $result["id"] = $dto->getId();
-        $result["option_value"] = $dto->getOptionValue();
+        $result["option_values"] = $dto->getOptionValues();
         return $result;
     }
 }
