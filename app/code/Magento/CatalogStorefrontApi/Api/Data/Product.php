@@ -251,16 +251,6 @@ final class Product implements ProductInterface
     private $linksPurchasedSeparately;
 
     /**
-     * @var string
-     */
-    private $linksTitle;
-
-    /**
-     * @var array
-     */
-    private $downloadableProductLinks;
-
-    /**
      * @var array
      */
     private $samples;
@@ -1249,48 +1239,6 @@ final class Product implements ProductInterface
     public function setLinksPurchasedSeparately(bool $value): void
     {
         $this->linksPurchasedSeparately = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return string
-     */
-    public function getLinksTitle(): string
-    {
-        return (string) $this->linksTitle;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setLinksTitle(string $value): void
-    {
-        $this->linksTitle = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\DownloadableLinkInterface[]
-     */
-    public function getDownloadableProductLinks(): array
-    {
-        return (array) $this->downloadableProductLinks;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\DownloadableLinkInterface[] $value
-     * @return void
-     */
-    public function setDownloadableProductLinks(array $value): void
-    {
-        $this->downloadableProductLinks = $value;
     }
     
     /**

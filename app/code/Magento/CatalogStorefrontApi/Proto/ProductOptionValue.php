@@ -45,6 +45,10 @@ class ProductOptionValue extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string info_url = 8;</code>
      */
     protected $info_url = '';
+    /**
+     * Generated from protobuf field <code>float price = 9;</code>
+     */
+    protected $price = 0.0;
 
     /**
      * Constructor.
@@ -60,6 +64,7 @@ class ProductOptionValue extends \Google\Protobuf\Internal\Message
      *     @type bool $qty_mutability
      *     @type float $qty
      *     @type string $info_url
+     *     @type float $price
      * }
      */
     public function __construct($data = null)
@@ -240,6 +245,28 @@ class ProductOptionValue extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, true);
         $this->info_url = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>float price = 9;</code>
+     * @return float
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * Generated from protobuf field <code>float price = 9;</code>
+     * @param float $var
+     * @return $this
+     */
+    public function setPrice($var)
+    {
+        GPBUtil::checkFloat($var);
+        $this->price = $var;
 
         return $this;
     }

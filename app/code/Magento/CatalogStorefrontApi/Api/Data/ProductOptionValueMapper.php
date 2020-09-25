@@ -109,6 +109,9 @@ final class ProductOptionValueMapper
             case "info_url":
                 $dto->setInfoUrl((string) $value);
                 break;
+            case "price":
+                $dto->setPrice((float) $value);
+                break;
         }
     }
 }
