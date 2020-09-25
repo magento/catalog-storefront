@@ -146,14 +146,6 @@ final class ProductArrayMapper
         $result["canonical_url"] = $dto->getCanonicalUrl();
         $result["price_view"] = $dto->getPriceView();
         $result["links_purchased_separately"] = $dto->getLinksPurchasedSeparately();
-        $result["links_title"] = $dto->getLinksTitle();
-        /** Convert complex Array field **/
-        $fieldArray = [];
-        foreach ($dto->getDownloadableProductLinks() as $fieldArrayDto) {
-            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\DownloadableLinkArrayMapper::class)
-                ->convertToArray($fieldArrayDto);
-        }
-        $result["downloadable_product_links"] = $fieldArray;
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getSamples() as $fieldArrayDto) {

@@ -10,7 +10,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 Resolver::getInstance()->requireDataFixture(
-    'Magento/Downloadable/_files/product_downloadable_with_link_url_and_sample_url.php'
+    'Magento/Downloadable/_files/product_downloadable_with_files.php'
 );
 
 $objectManager = Bootstrap::getObjectManager();
@@ -18,7 +18,6 @@ $objectManager = Bootstrap::getObjectManager();
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 $downloadableProduct = $productRepository->get('downloadable-product');
-$downloadableProduct->setWebsiteIds([1]);
-$downloadableProduct->setLinksPurchasedSeparately(false);
 $downloadableProduct->setLinksTitle('Product Links Title');
+$downloadableProduct->setLinksPurchasedSeparately(true);
 $productRepository->save($downloadableProduct);

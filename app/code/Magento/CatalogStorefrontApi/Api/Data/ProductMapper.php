@@ -293,19 +293,6 @@ final class ProductMapper
             case "links_purchased_separately":
                 $dto->setLinksPurchasedSeparately((bool) $value);
                 break;
-            case "links_title":
-                $dto->setLinksTitle((string) $value);
-                break;
-            case "downloadable_product_links":
-                $convertedArray = [];
-                foreach ($value as $element) {
-                    $convertedArray[] = $this->objectManager
-                        ->create(\Magento\CatalogStorefrontApi\Api\Data\DownloadableLinkMapper::class)
-                        ->setData($element)
-                        ->build();
-                }
-                $dto->setDownloadableProductLinks($convertedArray);
-                break;
             case "samples":
                 $convertedArray = [];
                 foreach ($value as $element) {

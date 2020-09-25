@@ -237,14 +237,6 @@ class Product extends \Google\Protobuf\Internal\Message
      */
     protected $links_purchased_separately = false;
     /**
-     * Generated from protobuf field <code>string links_title = 99;</code>
-     */
-    protected $links_title = '';
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DownloadableLink downloadable_product_links = 100;</code>
-     */
-    private $downloadable_product_links;
-    /**
      * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Sample samples = 101;</code>
      */
     private $samples;
@@ -341,8 +333,6 @@ class Product extends \Google\Protobuf\Internal\Message
      *          BUNDLE
      *     @type bool $links_purchased_separately
      *          DOWNLOADABLE
-     *     @type string $links_title
-     *     @type \Magento\CatalogStorefrontApi\Proto\DownloadableLink[]|\Google\Protobuf\Internal\RepeatedField $downloadable_product_links
      *     @type \Magento\CatalogStorefrontApi\Proto\Sample[]|\Google\Protobuf\Internal\RepeatedField $samples
      *     @type float $only_x_left_in_stock
      *     @type \Magento\CatalogStorefrontApi\Proto\GroupedItem[]|\Google\Protobuf\Internal\RepeatedField $grouped_items
@@ -1471,50 +1461,6 @@ class Product extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkBool($var);
         $this->links_purchased_separately = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>string links_title = 99;</code>
-     * @return string
-     */
-    public function getLinksTitle()
-    {
-        return $this->links_title;
-    }
-
-    /**
-     * Generated from protobuf field <code>string links_title = 99;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setLinksTitle($var)
-    {
-        GPBUtil::checkString($var, true);
-        $this->links_title = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DownloadableLink downloadable_product_links = 100;</code>
-     * @return \Google\Protobuf\Internal\RepeatedField
-     */
-    public function getDownloadableProductLinks()
-    {
-        return $this->downloadable_product_links;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DownloadableLink downloadable_product_links = 100;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\DownloadableLink[]|\Google\Protobuf\Internal\RepeatedField $var
-     * @return $this
-     */
-    public function setDownloadableProductLinks($var)
-    {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\DownloadableLink::class);
-        $this->downloadable_product_links = $arr;
 
         return $this;
     }
