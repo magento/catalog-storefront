@@ -12,11 +12,9 @@ use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\Category;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryArrayMapper;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryInterface;
-use Magento\CatalogStorefrontApi\Api\Data\Image;
-use Magento\CatalogStorefrontApi\Api\Data\ImageInterface;
-use Magento\CatalogStorefrontApi\Api\Data\MediaResource;
 use Magento\CatalogStorefrontApi\Api\Data\ProductArrayMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ProductInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResult;
@@ -25,13 +23,8 @@ use Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseFactory;
 use Magento\CatalogStorefront\DataProvider\ProductDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponse;
-use Magento\CatalogStorefrontApi\Api\Data\Sample;
-use Magento\CatalogStorefrontApi\Api\Data\SampleInterface;
 use Magento\CatalogStorefrontApi\Api\Data\UrlRewrite;
 use Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameter;
-use Magento\CatalogStorefrontApi\Api\Data\Video;
-use Magento\CatalogStorefrontApi\Api\Data\VideoInterface;
-use Magento\CatalogStorefrontApi\Api\Data\VideoItem;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
@@ -121,6 +114,10 @@ class CatalogService implements CatalogServerInterface
      * @var CategoryArrayMapper
      */
     private $categoryArrayMapper;
+    /**
+     * @var ProductMapper
+     */
+    private ProductMapper $productMapper;
 
     /**
      * @param ProductDataProvider $dataProvider
@@ -149,6 +146,7 @@ class CatalogService implements CatalogServerInterface
         CatalogRepository $catalogRepository,
         ProductArrayMapper $productArrayMapper,
         CategoryArrayMapper $categoryArrayMapper,
+        ProductMapper $productMapper,
         LoggerInterface $logger
     ) {
         $this->dataProvider = $dataProvider;
@@ -163,6 +161,7 @@ class CatalogService implements CatalogServerInterface
         $this->productArrayMapper = $productArrayMapper;
         $this->categoryArrayMapper = $categoryArrayMapper;
         $this->logger = $logger;
+        $this->productMapper = $productMapper;
     }
 
     /**
@@ -467,111 +466,6 @@ class CatalogService implements CatalogServerInterface
     }
 
     /**
-     * Get video content for media gallery
-     *
-     * @param array $item
-     *
-     * @return Video[]
-     */
-    private function getMediaGalleryVideosArray(array $item): array
-    {
-        $videosData = $item['videos'] ?? [];
-        $videos = [];
-
-        foreach ($videosData as $videoDataItem) {
-            $videoItem = new Video;
-            $this->dataObjectHelper->populateWithArray($videoItem, $videoDataItem, VideoInterface::class);
-
-            if (!empty($videoDataItem['preview'])) {
-                $previewData = $videoDataItem['preview'];
-                $preview = new MediaResource;
-                $preview->setLabel($previewData['label'] ?? '');
-                $preview->setRoles($previewData['roles'] ?? []);
-                $preview->setUrl($previewData['url'] ?? '');
-                $videoItem->setPreview($preview);
-            }
-
-            if (!empty($videoDataItem['video'])) {
-                $videoData = $videoDataItem['video'];
-                $video = new VideoItem;
-                $video->setMediaType($videoData['media_type'] ?? '');
-                $video->setVideoDescription($videoData['video_description'] ?? '');
-                $video->setVideoMetadata($videoData['video_metadata'] ?? '');
-                $video->setVideoProvider($videoData['video_provider'] ?? '');
-                $video->setVideoTitle($videoData['video_title'] ?? '');
-                $video->setVideoUrl($videoData['video_url'] ?? '');
-                $videoItem->setVideo($video);
-            }
-
-            $videos[] = $videoItem;
-        }
-
-        return $videos;
-    }
-
-    /**
-     * Get images content for media gallery
-     *
-     * @param array $item
-     *
-     * @return Image[]
-     */
-    private function getMediaGalleryImagesArray(array $item): array
-    {
-        $imagesData = $item['images'] ?? [];
-        $images = [];
-
-        foreach ($imagesData as $imagesDataItem) {
-            $imageItem = new Image;
-            $this->dataObjectHelper->populateWithArray($imageItem, $imagesDataItem, ImageInterface::class);
-
-            if (!empty($imagesDataItem['resource'])) {
-                $resourceData = $imagesDataItem['resource'];
-                $resource = new MediaResource;
-                $resource->setLabel($resourceData['label'] ?? '');
-                $resource->setRoles($resourceData['roles'] ?? []);
-                $resource->setUrl($resourceData['url'] ?? '');
-                $imageItem->setResource($resource);
-            }
-
-            $images[] = $imageItem;
-        }
-
-        return $images;
-    }
-
-    /**
-     * Get samples data
-     *
-     * @param array $item
-     *
-     * @return Sample[]
-     */
-    private function getSamplesArray(array $item): array
-    {
-        $samplesData = $item['samples'] ?? [];
-        $samples = [];
-
-        foreach ($samplesData as $sampleDataItem) {
-            $sampleItem = new Sample;
-            $this->dataObjectHelper->populateWithArray($sampleItem, $sampleDataItem, SampleInterface::class);
-
-            if (!empty($sampleDataItem['resource'])) {
-                $resourceData = $sampleDataItem['resource'];
-                $resource = new MediaResource;
-                $resource->setLabel($resourceData['label'] ?? '');
-                $resource->setRoles($resourceData['roles'] ?? []);
-                $resource->setUrl($resourceData['url'] ?? '');
-                $sampleItem->setResource($resource);
-            }
-
-            $samples[] = $sampleItem;
-        }
-
-        return $samples;
-    }
-
-    /**
      * Prepare product from raw data
      *
      * @param array $item
@@ -613,13 +507,7 @@ class CatalogService implements CatalogServerInterface
             }
         }
 
-        $product = new \Magento\CatalogStorefrontApi\Api\Data\Product();
-        $this->dataObjectHelper->populateWithArray($product, $item, ProductInterface::class);
-
-        //PopulateWithArray doesn't work with non-array sub-objects which don't set properties using constructor
-        $product->setVideos($this->getMediaGalleryVideosArray($item));
-        $product->setImages($this->getMediaGalleryImagesArray($item));
-        $product->setSamples($this->getSamplesArray($item));
+        $product = $this->productMapper->setData($item)->build();
 
         $urlRewritesData = $item['url_rewrites'] ?? [];
         $urlRewrites = [];
