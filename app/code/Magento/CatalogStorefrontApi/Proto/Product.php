@@ -73,6 +73,12 @@ class Product extends \Google\Protobuf\Internal\Message
      */
     protected $url_key = '';
     /**
+     * Type of Gift Card: either "virtual", "physical", or "combined"
+     *
+     * Generated from protobuf field <code>string giftcard_type = 21;</code>
+     */
+    protected $giftcard_type = '';
+    /**
      * TODO: qty is missing for only-x-left-in-stock functionality
      *
      * Generated from protobuf field <code>float qty = 27;</code>
@@ -284,6 +290,8 @@ class Product extends \Google\Protobuf\Internal\Message
      *     @type string $description
      *     @type string $short_description
      *     @type string $url_key
+     *     @type string $giftcard_type
+     *           Type of Gift Card: either "virtual", "physical", or "combined"
      *     @type float $qty
      *           TODO: qty is missing for only-x-left-in-stock functionality
      *     @type string $tax_class_id
@@ -643,6 +651,32 @@ class Product extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, true);
         $this->url_key = $var;
+
+        return $this;
+    }
+
+    /**
+     * Type of Gift Card: either "virtual", "physical", or "combined"
+     *
+     * Generated from protobuf field <code>string giftcard_type = 21;</code>
+     * @return string
+     */
+    public function getGiftcardType()
+    {
+        return $this->giftcard_type;
+    }
+
+    /**
+     * Type of Gift Card: either "virtual", "physical", or "combined"
+     *
+     * Generated from protobuf field <code>string giftcard_type = 21;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setGiftcardType($var)
+    {
+        GPBUtil::checkString($var, true);
+        $this->giftcard_type = $var;
 
         return $this;
     }

@@ -60,6 +60,7 @@ final class ProductArrayMapper
         $result["description"] = $dto->getDescription();
         $result["short_description"] = $dto->getShortDescription();
         $result["url_key"] = $dto->getUrlKey();
+        $result["giftcard_type"] = $dto->getGiftcardType();
         $result["qty"] = $dto->getQty();
         $result["tax_class_id"] = $dto->getTaxClassId();
         $result["weight"] = $dto->getWeight();

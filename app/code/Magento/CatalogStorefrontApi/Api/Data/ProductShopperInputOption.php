@@ -51,19 +51,14 @@ final class ProductShopperInputOption implements ProductShopperInputOptionInterf
     private $price;
 
     /**
-     * @var string
-     */
-    private $value;
-
-    /**
-     * @var int
-     */
-    private $maxCharacters;
-
-    /**
      * @var array
      */
     private $fileExtension;
+
+    /**
+     * @var \Magento\CatalogStorefrontApi\Api\Data\ValueIntervalInterface
+     */
+    private $interval;
 
     /**
      * @var int
@@ -204,48 +199,6 @@ final class ProductShopperInputOption implements ProductShopperInputOptionInterf
     /**
      * @inheritdoc
      *
-     * @return string
-     */
-    public function getValue(): string
-    {
-        return (string) $this->value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setValue(string $value): void
-    {
-        $this->value = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return int
-     */
-    public function getMaxCharacters(): int
-    {
-        return (int) $this->maxCharacters;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param int $value
-     * @return void
-     */
-    public function setMaxCharacters(int $value): void
-    {
-        $this->maxCharacters = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
      * @return string[]
      */
     public function getFileExtension(): array
@@ -262,6 +215,27 @@ final class ProductShopperInputOption implements ProductShopperInputOptionInterf
     public function setFileExtension(array $value): void
     {
         $this->fileExtension = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return \Magento\CatalogStorefrontApi\Api\Data\ValueIntervalInterface|null
+     */
+    public function getInterval(): ?\Magento\CatalogStorefrontApi\Api\Data\ValueIntervalInterface
+    {
+        return $this->interval;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ValueIntervalInterface $value
+     * @return void
+     */
+    public function setInterval(\Magento\CatalogStorefrontApi\Api\Data\ValueIntervalInterface $value): void
+    {
+        $this->interval = $value;
     }
     
     /**

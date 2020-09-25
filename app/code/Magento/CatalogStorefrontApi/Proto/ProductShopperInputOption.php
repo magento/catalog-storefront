@@ -38,23 +38,19 @@ class ProductShopperInputOption extends \Google\Protobuf\Internal\Message
      */
     private $price;
     /**
-     * Generated from protobuf field <code>string value = 7;</code>
-     */
-    protected $value = '';
-    /**
-     * Generated from protobuf field <code>int32 max_characters = 8;</code>
-     */
-    protected $max_characters = 0;
-    /**
-     * Generated from protobuf field <code>repeated string file_extension = 9;</code>
+     * Generated from protobuf field <code>repeated string file_extension = 7;</code>
      */
     private $file_extension;
     /**
-     * Generated from protobuf field <code>int32 image_size_x = 10;</code>
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.ValueInterval interval = 8;</code>
+     */
+    protected $interval = null;
+    /**
+     * Generated from protobuf field <code>int32 image_size_x = 9;</code>
      */
     protected $image_size_x = 0;
     /**
-     * Generated from protobuf field <code>int32 image_size_y = 11;</code>
+     * Generated from protobuf field <code>int32 image_size_y = 10;</code>
      */
     protected $image_size_y = 0;
 
@@ -70,9 +66,8 @@ class ProductShopperInputOption extends \Google\Protobuf\Internal\Message
      *     @type bool $required
      *     @type string $render_type
      *     @type \Magento\CatalogStorefrontApi\Proto\Price[]|\Google\Protobuf\Internal\RepeatedField $price
-     *     @type string $value
-     *     @type int $max_characters
      *     @type string[]|\Google\Protobuf\Internal\RepeatedField $file_extension
+     *     @type \Magento\CatalogStorefrontApi\Proto\ValueInterval $interval
      *     @type int $image_size_x
      *     @type int $image_size_y
      * }
@@ -216,51 +211,7 @@ class ProductShopperInputOption extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>string value = 7;</code>
-     * @return string
-     */
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    /**
-     * Generated from protobuf field <code>string value = 7;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setValue($var)
-    {
-        GPBUtil::checkString($var, true);
-        $this->value = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>int32 max_characters = 8;</code>
-     * @return int
-     */
-    public function getMaxCharacters()
-    {
-        return $this->max_characters;
-    }
-
-    /**
-     * Generated from protobuf field <code>int32 max_characters = 8;</code>
-     * @param int $var
-     * @return $this
-     */
-    public function setMaxCharacters($var)
-    {
-        GPBUtil::checkInt32($var);
-        $this->max_characters = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated string file_extension = 9;</code>
+     * Generated from protobuf field <code>repeated string file_extension = 7;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
      */
     public function getFileExtension()
@@ -269,7 +220,7 @@ class ProductShopperInputOption extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated string file_extension = 9;</code>
+     * Generated from protobuf field <code>repeated string file_extension = 7;</code>
      * @param string[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
@@ -282,7 +233,29 @@ class ProductShopperInputOption extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>int32 image_size_x = 10;</code>
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.ValueInterval interval = 8;</code>
+     * @return \Magento\CatalogStorefrontApi\Proto\ValueInterval
+     */
+    public function getInterval()
+    {
+        return $this->interval;
+    }
+
+    /**
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.ValueInterval interval = 8;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\ValueInterval $var
+     * @return $this
+     */
+    public function setInterval($var)
+    {
+        GPBUtil::checkMessage($var, \Magento\CatalogStorefrontApi\Proto\ValueInterval::class);
+        $this->interval = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>int32 image_size_x = 9;</code>
      * @return int
      */
     public function getImageSizeX()
@@ -291,7 +264,7 @@ class ProductShopperInputOption extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>int32 image_size_x = 10;</code>
+     * Generated from protobuf field <code>int32 image_size_x = 9;</code>
      * @param int $var
      * @return $this
      */
@@ -304,7 +277,7 @@ class ProductShopperInputOption extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>int32 image_size_y = 11;</code>
+     * Generated from protobuf field <code>int32 image_size_y = 10;</code>
      * @return int
      */
     public function getImageSizeY()
@@ -313,7 +286,7 @@ class ProductShopperInputOption extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>int32 image_size_y = 11;</code>
+     * Generated from protobuf field <code>int32 image_size_y = 10;</code>
      * @param int $var
      * @return $this
      */

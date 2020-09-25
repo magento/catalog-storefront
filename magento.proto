@@ -28,6 +28,8 @@ message Product {
     string description = 18;
     string short_description = 19;
     string url_key = 20;
+    // Type of Gift Card: either "virtual", "physical", or "combined"
+    string giftcard_type = 21;
 
     // TODO: qty is missing for only-x-left-in-stock functionality
     float qty = 27;
@@ -137,11 +139,16 @@ message ProductShopperInputOption {
     bool required = 4;
     string render_type = 5;
     repeated Price price = 6;
-    string value = 7;
-    int32 max_characters = 8;
-    repeated string file_extension = 9;
-    int32 image_size_x = 10;
-    int32 image_size_y = 11;
+    repeated string file_extension = 7;
+    ValueInterval interval = 8;
+    int32 image_size_x = 9;
+    int32 image_size_y = 10;
+}
+
+// Interval of some value, e.g. min/max characters of text field or min/max amount of a gift card
+message ValueInterval {
+    float from = 1;
+    float to = 2;
 }
 
 message Sample {
