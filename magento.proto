@@ -82,8 +82,6 @@ message Product {
 
   //DOWNLOADABLE
   bool links_purchased_separately = 98;
-  string links_title = 99;
-  repeated DownloadableLink downloadable_product_links = 100;
   repeated Sample samples = 101;
 
   float only_x_left_in_stock = 102;
@@ -126,6 +124,7 @@ message ProductOptionValue {
   bool qty_mutability = 6;
   float qty = 7;
   string info_url = 8;
+  float price = 9;
 }
 
 message ProductOption {
@@ -150,20 +149,6 @@ message ProductShopperInputOption {
   repeated string file_extension = 9;
   int32 image_size_x = 10;
   int32 image_size_y = 11;
-}
-
-message DownloadableLink {
-  string sample_url = 1;
-  string title = 2;
-  int32 sort_order = 3;
-  string sample_type = 4;
-  string sample_file = 5;
-  int32 link_id = 6;
-  float price = 7;
-  string link_type = 8;
-  bool is_shareable = 9;
-  int32 number_of_downloads = 10;
-  string entity_id = 11;
 }
 
 message Sample {
