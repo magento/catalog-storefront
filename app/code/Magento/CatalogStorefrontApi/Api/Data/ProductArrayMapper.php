@@ -117,20 +117,6 @@ final class ProductArrayMapper
                 ->convertToArray($fieldArrayDto);
         }
         $result["url_rewrites"] = $fieldArray;
-        /** Convert complex Array field **/
-        $fieldArray = [];
-        foreach ($dto->getVariants() as $fieldArrayDto) {
-            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\VariantArrayMapper::class)
-                ->convertToArray($fieldArrayDto);
-        }
-        $result["variants"] = $fieldArray;
-        /** Convert complex Array field **/
-        $fieldArray = [];
-        foreach ($dto->getConfigurableOptions() as $fieldArrayDto) {
-            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionArrayMapper::class)
-                ->convertToArray($fieldArrayDto);
-        }
-        $result["configurable_options"] = $fieldArray;
         $result["country_of_manufacture"] = $dto->getCountryOfManufacture();
         $result["gift_message_available"] = $dto->getGiftMessageAvailable();
         $result["special_price"] = $dto->getSpecialPrice();

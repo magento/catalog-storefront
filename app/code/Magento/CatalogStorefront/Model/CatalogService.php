@@ -523,25 +523,6 @@ class CatalogService implements CatalogServerInterface
     private function prepareProduct(array $item): ProductInterface
     {
         $item = $this->cleanUpNullValues($item);
-        $variants = [];
-        foreach ($item['variants'] ?? [] as $variantData) {
-            if (!isset($variantData['product'])) {
-                $attribute = current($variantData['attributes']);
-                throw new \RuntimeException(
-                    \sprintf(
-                        'Cannot find product id for product variant with code "%s" and label "%s"',
-                        $attribute['code'],
-                        $attribute['label']
-                    )
-                );
-            }
-            $variant = [
-                'product' => $variantData['product'],
-                'attributes' => $variantData['attributes']
-            ];
-            $variants[] = $variant;
-        }
-        $item['variants'] = $variants;
 
         $item['description'] = $item['description']['html'] ?? '';
         $item['short_description'] = $item['short_description']['html'] ?? '';

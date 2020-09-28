@@ -9,9 +9,9 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- * Generated from protobuf message <code>magento.catalogStorefrontApi.proto.ProductVariant</code>
+ * Generated from protobuf message <code>magento.catalogStorefrontApi.proto.ProductVariantImport</code>
  */
-class ProductVariant extends \Google\Protobuf\Internal\Message
+class ProductVariantImport extends \Google\Protobuf\Internal\Message
 {
     /**
      * variant identifier following the convention :prefix:/:parentId:/:entityId:
@@ -20,17 +20,11 @@ class ProductVariant extends \Google\Protobuf\Internal\Message
      */
     protected $id = '';
     /**
-     * parent_id:option_id/optionValue.uid
+     * list of option values intersections, which represent this variant, parent_id:option_id/optionValue.uid
      *
      * Generated from protobuf field <code>repeated string option_values = 2;</code>
      */
     private $option_values;
-    /**
-     * link to product id that represents variant, for custom option must be null
-     *
-     * Generated from protobuf field <code>string product_id = 3;</code>
-     */
-    protected $product_id = '';
 
     /**
      * Constructor.
@@ -41,9 +35,7 @@ class ProductVariant extends \Google\Protobuf\Internal\Message
      *     @type string $id
      *           variant identifier following the convention :prefix:/:parentId:/:entityId:
      *     @type string[]|\Google\Protobuf\Internal\RepeatedField $option_values
-     *           parent_id:option_id/optionValue.uid
-     *     @type string $product_id
-     *           link to product id that represents variant, for custom option must be null
+     *           list of option values intersections, which represent this variant, parent_id:option_id/optionValue.uid
      * }
      */
     public function __construct($data = null)
@@ -79,7 +71,7 @@ class ProductVariant extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * parent_id:option_id/optionValue.uid
+     * list of option values intersections, which represent this variant, parent_id:option_id/optionValue.uid
      *
      * Generated from protobuf field <code>repeated string option_values = 2;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
@@ -90,7 +82,7 @@ class ProductVariant extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * parent_id:option_id/optionValue.uid
+     * list of option values intersections, which represent this variant, parent_id:option_id/optionValue.uid
      *
      * Generated from protobuf field <code>repeated string option_values = 2;</code>
      * @param string[]|\Google\Protobuf\Internal\RepeatedField $var
@@ -100,32 +92,6 @@ class ProductVariant extends \Google\Protobuf\Internal\Message
     {
         $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::STRING);
         $this->option_values = $arr;
-
-        return $this;
-    }
-
-    /**
-     * link to product id that represents variant, for custom option must be null
-     *
-     * Generated from protobuf field <code>string product_id = 3;</code>
-     * @return string
-     */
-    public function getProductId()
-    {
-        return $this->product_id;
-    }
-
-    /**
-     * link to product id that represents variant, for custom option must be null
-     *
-     * Generated from protobuf field <code>string product_id = 3;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setProductId($var)
-    {
-        GPBUtil::checkString($var, true);
-        $this->product_id = $var;
 
         return $this;
     }

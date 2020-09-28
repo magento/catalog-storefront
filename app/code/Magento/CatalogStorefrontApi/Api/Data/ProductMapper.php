@@ -239,26 +239,6 @@ final class ProductMapper
                 }
                 $dto->setUrlRewrites($convertedArray);
                 break;
-            case "variants":
-                $convertedArray = [];
-                foreach ($value as $element) {
-                    $convertedArray[] = $this->objectManager
-                        ->create(\Magento\CatalogStorefrontApi\Api\Data\VariantMapper::class)
-                        ->setData($element)
-                        ->build();
-                }
-                $dto->setVariants($convertedArray);
-                break;
-            case "configurable_options":
-                $convertedArray = [];
-                foreach ($value as $element) {
-                    $convertedArray[] = $this->objectManager
-                        ->create(\Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionMapper::class)
-                        ->setData($element)
-                        ->build();
-                }
-                $dto->setConfigurableOptions($convertedArray);
-                break;
             case "country_of_manufacture":
                 $dto->setCountryOfManufacture((string) $value);
                 break;
