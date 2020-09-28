@@ -27,30 +27,29 @@ class ConfigurableOptions implements DataMapperInterface
      */
     public function map(array $data): array
     {
-        if (isset($data['type']) && $data['type'] === self::CONFIGURABLE_TYPE_CODE && !empty($data['options'])) {
-            $configurableOptions = [];
-
-            foreach ($data['options'] as $optionArray) {
-                if ($optionArray['type'] === self::CONFIGURABLE_RELATION_TYPE) {
-                    $configurableOptions[$optionArray['id']] = [
-                        'id' => $optionArray['id'],
-                        'type' => $optionArray['type'],
-                        'label' => $optionArray['title'],
-                        'position' => $optionArray['sort_order'],
-                        'product_id' => $data['product_id'],
-                        'attribute_id' => $optionArray['attribute_id'],
-                        'attribute_code' => $optionArray['attribute_code'],
-                        'use_default' => $optionArray['use_default'],
-                    ];
-
-                    $configurableOptions[$optionArray['id']]['values'] = $this->mapOptionValues($optionArray);
-                }
-            }
-
-            return ['configurable_options' => $configurableOptions];
+        if (!isset($data['type']) || $data['type'] !== self::CONFIGURABLE_TYPE_CODE || empty($data['options'])) {
+            return [];
         }
 
-        return [];
+        $configurableOptions = [];
+        foreach ($data['options'] as $optionArray) {
+            if ($optionArray['type'] === self::CONFIGURABLE_RELATION_TYPE) {
+                $configurableOptions[$optionArray['id']] = [
+                    'id' => $optionArray['id'],
+                    'type' => $optionArray['type'],
+                    'label' => $optionArray['title'],
+                    'position' => $optionArray['sort_order'],
+                    'product_id' => $data['product_id'],
+                    'attribute_id' => $optionArray['attribute_id'],
+                    'attribute_code' => $optionArray['attribute_code'],
+                    'use_default' => $optionArray['use_default'],
+                ];
+
+                $configurableOptions[$optionArray['id']]['values'] = $this->mapOptionValues($optionArray);
+            }
+        }
+
+        return ['configurable_options' => $configurableOptions];
     }
 
     /**

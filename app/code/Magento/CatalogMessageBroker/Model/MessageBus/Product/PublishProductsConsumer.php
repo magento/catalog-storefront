@@ -6,6 +6,7 @@
 
 namespace Magento\CatalogMessageBroker\Model\MessageBus\Product;
 
+use Magento\CatalogExport\Event\Data\Entity;
 use Magento\CatalogMessageBroker\Model\FetchProductsInterface;
 use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterface;
@@ -63,14 +64,9 @@ class PublishProductsConsumer implements ConsumerEventInterface
     public function execute(array $entities, string $scope): void
     {
         $productsData = $this->fetchProducts->execute($entities, $scope);
+        $attributesArray = $this->getAttributesArray($entities);
         $importProducts = [];
         $updateProducts = [];
-
-        // Transform entities data into entity_id => attributes relation
-        $attributesArray = [];
-        foreach ($entities as $entity) {
-            $attributesArray[$entity->getEntityId()] = $entity->getAttributes();
-        }
 
         foreach ($productsData as $productData) {
             $attributes = $attributesArray[$productData['product_id']];
@@ -84,6 +80,23 @@ class PublishProductsConsumer implements ConsumerEventInterface
 
         $this->publishProducts($importProducts, $scope, self::ACTION_IMPORT);
         $this->publishProducts($updateProducts, $scope, self::ACTION_UPDATE);
+    }
+
+    /**
+     * Retrieve entities attributes array
+     *
+     * @param Entity[] $entities
+     *
+     * @return array
+     */
+    private function getAttributesArray(array $entities): array
+    {
+        $attributesArray = [];
+        foreach ($entities as $entity) {
+            $attributesArray[$entity->getEntityId()] = $entity->getAttributes();
+        }
+
+        return $attributesArray;
     }
 
     /**

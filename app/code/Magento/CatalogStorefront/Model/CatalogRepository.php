@@ -139,7 +139,7 @@ class CatalogRepository
     }
 
     /**
-     * Update bulk of entities by data, source name and entity type
+     * Update bulk of entities by source name and entity type
      *
      * @param array $data
      * @param string $sourceName
@@ -151,7 +151,7 @@ class CatalogRepository
      */
     private function updateEntities(array $data, string $sourceName, string $entityType): void
     {
-        if (!$data) {
+        if (empty($data)) {
             return;
         }
 

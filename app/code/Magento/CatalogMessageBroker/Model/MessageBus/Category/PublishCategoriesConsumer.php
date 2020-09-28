@@ -6,6 +6,7 @@
 
 namespace Magento\CatalogMessageBroker\Model\MessageBus\Category;
 
+use Magento\CatalogExport\Event\Data\Entity;
 use Magento\CatalogMessageBroker\Model\FetchCategoriesInterface;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryMapper;
@@ -90,14 +91,9 @@ class PublishCategoriesConsumer implements ConsumerEventInterface
     public function execute(array $entities, string $scope): void
     {
         $categoriesData = $this->fetchCategories->execute($entities, $scope);
+        $attributesArray = $this->getAttributesArray($entities);
         $importCategories = [];
         $updateCategories = [];
-
-        // Transform entities data into entity_id => attributes relation
-        $attributesArray = [];
-        foreach ($entities as $entity) {
-            $attributesArray[$entity->getEntityId()] = $entity->getAttributes();
-        }
 
         foreach ($categoriesData as $categoryData) {
             $attributes = $attributesArray[$categoryData['category_id']];
@@ -116,6 +112,23 @@ class PublishCategoriesConsumer implements ConsumerEventInterface
         if (!empty($updateCategories)) {
             $this->importCategories($updateCategories, $scope, self::ACTION_UPDATE);
         }
+    }
+
+    /**
+     * Retrieve entities attributes array
+     *
+     * @param Entity[] $entities
+     *
+     * @return array
+     */
+    private function getAttributesArray(array $entities): array
+    {
+        $attributesArray = [];
+        foreach ($entities as $entity) {
+            $attributesArray[$entity->getEntityId()] = $entity->getAttributes();
+        }
+
+        return $attributesArray;
     }
 
     /**
