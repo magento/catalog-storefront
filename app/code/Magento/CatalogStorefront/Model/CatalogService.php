@@ -114,10 +114,11 @@ class CatalogService implements CatalogServerInterface
      * @var CategoryArrayMapper
      */
     private $categoryArrayMapper;
+
     /**
      * @var ProductMapper
      */
-    private ProductMapper $productMapper;
+    private $productMapper;
 
     /**
      * @param ProductDataProvider $dataProvider
@@ -131,6 +132,7 @@ class CatalogService implements CatalogServerInterface
      * @param CatalogRepository $catalogRepository
      * @param ProductArrayMapper $productArrayMapper
      * @param CategoryArrayMapper $categoryArrayMapper
+     * @param ProductMapper $productMapper
      * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -160,8 +162,8 @@ class CatalogService implements CatalogServerInterface
         $this->dynamicAttributeFactory = $dynamicAttributeFactory;
         $this->productArrayMapper = $productArrayMapper;
         $this->categoryArrayMapper = $categoryArrayMapper;
-        $this->logger = $logger;
         $this->productMapper = $productMapper;
+        $this->logger = $logger;
     }
 
     /**
