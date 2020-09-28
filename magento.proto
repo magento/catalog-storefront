@@ -34,12 +34,11 @@ message Product {
   // TODO: Why missing meta fields?
   string tax_class_id = 28;
   float weight = 29;
-  Image image = 31;
-  Image small_image = 32;
-  // TODO: Rename to thumbnail_image?
-  Image thumbnail = 33;
-  string swatch_image = 34;
-  repeated MediaGalleryItem media_gallery = 35;
+
+  repeated Image images = 30;
+  repeated Video videos = 31;
+  repeated Sample samples = 32;
+
   // where to display product
   string visibility = 37;
 
@@ -82,7 +81,6 @@ message Product {
 
   //DOWNLOADABLE
   bool links_purchased_separately = 98;
-  repeated Sample samples = 101;
 
   float only_x_left_in_stock = 102;
 
@@ -149,12 +147,6 @@ message ProductShopperInputOption {
   repeated string file_extension = 9;
   int32 image_size_x = 10;
   int32 image_size_y = 11;
-}
-
-message Sample {
-  string url = 1;
-  string label = 2;
-  int32 sort_order = 3;
 }
 
 message GroupedItem {
@@ -255,26 +247,36 @@ message DynamicAttributeValue
   string value = 2;
 }
 
-message MediaGalleryItem {
+message MediaResource {
   string url = 1;
   string label = 2;
-  string media_type = 3;
-  int32 position = 4;
-  Video video_content = 5;
+  // list of media roles "small", "swatch"... To hide product from PDP use role "hide_from_pdp"
+  repeated string roles = 3;
+}
+
+message Image {
+  MediaResource resource = 1;
+  string sort_order = 2;
+}
+
+message Sample {
+  MediaResource resource = 1;
+  string sort_order = 2;
 }
 
 message Video {
+  MediaResource preview = 1;
+  VideoItem video = 2;
+  string sort_order = 3;
+}
+
+message VideoItem {
   string video_provider = 1;
   string video_url = 2;
   string video_title = 3;
   string video_description = 4;
   string video_metadata = 5;
   string media_type = 6;
-}
-
-message Image {
-  string url = 1;
-  string label = 2;
 }
 
 message ProductsGetRequest {
