@@ -19,4 +19,6 @@ $objectManager = Bootstrap::getObjectManager();
 $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 $downloadableProduct = $productRepository->get('downloadable-product');
 $downloadableProduct->setWebsiteIds([1]);
+$downloadableProduct->setLinksPurchasedSeparately(false);
+$downloadableProduct->setLinksTitle('Product Links Title');
 $productRepository->save($downloadableProduct);

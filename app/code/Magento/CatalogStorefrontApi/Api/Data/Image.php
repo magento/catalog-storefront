@@ -21,23 +21,44 @@ final class Image implements ImageInterface
 {
 
     /**
-     * @var string
+     * @var \Magento\CatalogStorefrontApi\Api\Data\MediaResourceInterface
      */
-    private $url;
+    private $resource;
 
     /**
      * @var string
      */
-    private $label;
+    private $sortOrder;
+    
+    /**
+     * @inheritdoc
+     *
+     * @return \Magento\CatalogStorefrontApi\Api\Data\MediaResourceInterface|null
+     */
+    public function getResource(): ?\Magento\CatalogStorefrontApi\Api\Data\MediaResourceInterface
+    {
+        return $this->resource;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param \Magento\CatalogStorefrontApi\Api\Data\MediaResourceInterface $value
+     * @return void
+     */
+    public function setResource(\Magento\CatalogStorefrontApi\Api\Data\MediaResourceInterface $value): void
+    {
+        $this->resource = $value;
+    }
     
     /**
      * @inheritdoc
      *
      * @return string
      */
-    public function getUrl(): string
+    public function getSortOrder(): string
     {
-        return (string) $this->url;
+        return (string) $this->sortOrder;
     }
     
     /**
@@ -46,29 +67,8 @@ final class Image implements ImageInterface
      * @param string $value
      * @return void
      */
-    public function setUrl(string $value): void
+    public function setSortOrder(string $value): void
     {
-        $this->url = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return string
-     */
-    public function getLabel(): string
-    {
-        return (string) $this->label;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setLabel(string $value): void
-    {
-        $this->label = $value;
+        $this->sortOrder = $value;
     }
 }

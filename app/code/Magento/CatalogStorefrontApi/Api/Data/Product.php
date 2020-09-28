@@ -101,29 +101,19 @@ final class Product implements ProductInterface
     private $weight;
 
     /**
-     * @var \Magento\CatalogStorefrontApi\Api\Data\ImageInterface
+     * @var array
      */
-    private $image;
-
-    /**
-     * @var \Magento\CatalogStorefrontApi\Api\Data\ImageInterface
-     */
-    private $smallImage;
-
-    /**
-     * @var \Magento\CatalogStorefrontApi\Api\Data\ImageInterface
-     */
-    private $thumbnail;
-
-    /**
-     * @var string
-     */
-    private $swatchImage;
+    private $images;
 
     /**
      * @var array
      */
-    private $mediaGallery;
+    private $videos;
+
+    /**
+     * @var array
+     */
+    private $samples;
 
     /**
      * @var string
@@ -206,11 +196,6 @@ final class Product implements ProductInterface
     private $urlRewrites;
 
     /**
-     * @var array
-     */
-    private $variants;
-
-    /**
      * @var string
      */
     private $countryOfManufacture;
@@ -254,21 +239,6 @@ final class Product implements ProductInterface
      * @var bool
      */
     private $linksPurchasedSeparately;
-
-    /**
-     * @var string
-     */
-    private $linksTitle;
-
-    /**
-     * @var array
-     */
-    private $downloadableProductLinks;
-
-    /**
-     * @var array
-     */
-    private $samples;
 
     /**
      * @var float
@@ -629,106 +599,64 @@ final class Product implements ProductInterface
     /**
      * @inheritdoc
      *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\ImageInterface|null
+     * @return \Magento\CatalogStorefrontApi\Api\Data\ImageInterface[]
      */
-    public function getImage(): ?\Magento\CatalogStorefrontApi\Api\Data\ImageInterface
+    public function getImages(): array
     {
-        return $this->image;
+        return (array) $this->images;
     }
     
     /**
      * @inheritdoc
      *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\ImageInterface $value
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ImageInterface[] $value
      * @return void
      */
-    public function setImage(\Magento\CatalogStorefrontApi\Api\Data\ImageInterface $value): void
+    public function setImages(array $value): void
     {
-        $this->image = $value;
+        $this->images = $value;
     }
     
     /**
      * @inheritdoc
      *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\ImageInterface|null
+     * @return \Magento\CatalogStorefrontApi\Api\Data\VideoInterface[]
      */
-    public function getSmallImage(): ?\Magento\CatalogStorefrontApi\Api\Data\ImageInterface
+    public function getVideos(): array
     {
-        return $this->smallImage;
+        return (array) $this->videos;
     }
     
     /**
      * @inheritdoc
      *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\ImageInterface $value
+     * @param \Magento\CatalogStorefrontApi\Api\Data\VideoInterface[] $value
      * @return void
      */
-    public function setSmallImage(\Magento\CatalogStorefrontApi\Api\Data\ImageInterface $value): void
+    public function setVideos(array $value): void
     {
-        $this->smallImage = $value;
+        $this->videos = $value;
     }
     
     /**
      * @inheritdoc
      *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\ImageInterface|null
+     * @return \Magento\CatalogStorefrontApi\Api\Data\SampleInterface[]
      */
-    public function getThumbnail(): ?\Magento\CatalogStorefrontApi\Api\Data\ImageInterface
+    public function getSamples(): array
     {
-        return $this->thumbnail;
+        return (array) $this->samples;
     }
     
     /**
      * @inheritdoc
      *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\ImageInterface $value
+     * @param \Magento\CatalogStorefrontApi\Api\Data\SampleInterface[] $value
      * @return void
      */
-    public function setThumbnail(\Magento\CatalogStorefrontApi\Api\Data\ImageInterface $value): void
+    public function setSamples(array $value): void
     {
-        $this->thumbnail = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return string
-     */
-    public function getSwatchImage(): string
-    {
-        return (string) $this->swatchImage;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setSwatchImage(string $value): void
-    {
-        $this->swatchImage = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemInterface[]
-     */
-    public function getMediaGallery(): array
-    {
-        return (array) $this->mediaGallery;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemInterface[] $value
-     * @return void
-     */
-    public function setMediaGallery(array $value): void
-    {
-        $this->mediaGallery = $value;
+        $this->samples = $value;
     }
     
     /**
@@ -1070,27 +998,6 @@ final class Product implements ProductInterface
     /**
      * @inheritdoc
      *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\VariantInterface[]
-     */
-    public function getVariants(): array
-    {
-        return (array) $this->variants;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\VariantInterface[] $value
-     * @return void
-     */
-    public function setVariants(array $value): void
-    {
-        $this->variants = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
      * @return string
      */
     public function getCountryOfManufacture(): string
@@ -1275,69 +1182,6 @@ final class Product implements ProductInterface
     public function setLinksPurchasedSeparately(bool $value): void
     {
         $this->linksPurchasedSeparately = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return string
-     */
-    public function getLinksTitle(): string
-    {
-        return (string) $this->linksTitle;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setLinksTitle(string $value): void
-    {
-        $this->linksTitle = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\DownloadableLinkInterface[]
-     */
-    public function getDownloadableProductLinks(): array
-    {
-        return (array) $this->downloadableProductLinks;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\DownloadableLinkInterface[] $value
-     * @return void
-     */
-    public function setDownloadableProductLinks(array $value): void
-    {
-        $this->downloadableProductLinks = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\SampleInterface[]
-     */
-    public function getSamples(): array
-    {
-        return (array) $this->samples;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\SampleInterface[] $value
-     * @return void
-     */
-    public function setSamples(array $value): void
-    {
-        $this->samples = $value;
     }
     
     /**
