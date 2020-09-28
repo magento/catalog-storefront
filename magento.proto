@@ -9,153 +9,152 @@ package magento.catalogStorefrontApi.proto;
 option php_metadata_namespace = "Magento\\CatalogStorefrontApi\\Metadata";
 
 message Product {
-    string id = 1;
-    string attribute_set_id = 2;
-    bool has_options = 3;
-    string created_at = 5;
-    string updated_at = 6;
-    // TODO: has_options most of the fields below are taken from DB?
-    // TODO: required_options ?
-    // TODO: row_id ? - should be moved to staging service
-    // TODO: created_in ? - should be moved to staging service
-    // TODO: updated_in ? - should be moved to staging service
-    // TODO: entity_id vs id, id is used in elastic?
-    string sku = 7;
-    string type_id = 8;
-    string status = 9;
-    string stock_status = 10;
-    string name = 17;
-    string description = 18;
-    string short_description = 19;
-    string url_key = 20;
+  string id = 1;
+  string attribute_set_id = 2;
+  bool has_options = 3;
+  string created_at = 5;
+  string updated_at = 6;
+  // TODO: has_options most of the fields below are taken from DB?
+  // TODO: required_options ?
+  // TODO: row_id ? - should be moved to staging service
+  // TODO: created_in ? - should be moved to staging service
+  // TODO: updated_in ? - should be moved to staging service
+  // TODO: entity_id vs id, id is used in elastic?
+  string sku = 7;
+  string type_id = 8;
+  string status = 9;
+  string stock_status = 10;
+  string name = 17;
+  string description = 18;
+  string short_description = 19;
+  string url_key = 20;
 
-    // TODO: qty is missing for only-x-left-in-stock functionality
-    float qty = 27;
-    // TODO: Why missing meta fields?
-    string tax_class_id = 28;
-    float weight = 29;
-    Image image = 31;
-    Image small_image = 32;
-    // TODO: Rename to thumbnail_image?
-    Image thumbnail = 33;
-    string swatch_image = 34;
-    repeated MediaGalleryItem media_gallery = 35;
-    // where to display product
-    string visibility = 37;
+  // TODO: qty is missing for only-x-left-in-stock functionality
+  float qty = 27;
+  // TODO: Why missing meta fields?
+  string tax_class_id = 28;
+  float weight = 29;
 
-    // TODO: Add variants as separate API
+  repeated Image images = 30;
+  repeated Video videos = 31;
+  repeated Sample samples = 32;
 
-    //    PriceRange prices = 44;//-
-    // TODO: Uncomment options
-    //    repeated Option options = 46;
-    //    repeated Variant variants = 47;//-
-    repeated DynamicAttributeValue dynamic_attributes = 50;
+  // where to display product
+  string visibility = 37;
 
-    // TODO: qty is missing for only-x-left-in-stock functionality
-    // TODO: Meta fields not populated by catalog SF app
-    string meta_description = 22;
-    string meta_keyword = 23;
-    string meta_title = 24;
-    repeated string categories = 25;
+  // TODO: Add variants as separate API
 
-    // TODO: Questionable attributes go below for compatibility with existing catalog SF branch during refactoring
-    string required_options = 70;
-    string created_in = 74;
-    string updated_in = 75;
-    string quantity_and_stock_status = 76;
-    string options_container = 77;
-    string msrp_display_actual_price_type = 78;
-    string is_returnable = 79;
-    string url_suffix = 80;
-    // TODO: May need to be a complex type
-    repeated Option options = 81;
-    repeated UrlRewrite url_rewrites = 82;
-    repeated Variant variants = 83;
-    repeated ConfigurableOption configurable_options = 84;
-    string country_of_manufacture = 85;
-    bool gift_message_available = 86;
-    float special_price = 87;
-    string special_from_date = 88;
-    string special_to_date = 89;
-    repeated ProductLink product_links = 90;
-    string canonical_url = 91;
+  //    PriceRange prices = 44;//-
+  // TODO: Uncomment options
+  //    repeated Option options = 46;
+  repeated DynamicAttributeValue dynamic_attributes = 50;
 
-    //BUNDLE
-    string price_view = 96;
+  // TODO: qty is missing for only-x-left-in-stock functionality
+  // TODO: Meta fields not populated by catalog SF app
+  string meta_description = 22;
+  string meta_keyword = 23;
+  string meta_title = 24;
+  repeated string categories = 25;
 
-    //DOWNLOADABLE
-    bool links_purchased_separately = 98;
-    repeated Sample samples = 101;
+  // TODO: Questionable attributes go below for compatibility with existing catalog SF branch during refactoring
+  string required_options = 70;
+  string created_in = 74;
+  string updated_in = 75;
+  string quantity_and_stock_status = 76;
+  string options_container = 77;
+  string msrp_display_actual_price_type = 78;
+  string is_returnable = 79;
+  string url_suffix = 80;
+  // TODO: May need to be a complex type
+  repeated Option options = 81;
+  repeated UrlRewrite url_rewrites = 82;
+  string country_of_manufacture = 85;
+  bool gift_message_available = 86;
+  float special_price = 87;
+  string special_from_date = 88;
+  string special_to_date = 89;
+  repeated ProductLink product_links = 90;
+  string canonical_url = 91;
 
-    float only_x_left_in_stock = 102;
+  //BUNDLE
+  string price_view = 96;
 
-    repeated GroupedItem grouped_items = 103;
+  //DOWNLOADABLE
+  bool links_purchased_separately = 98;
 
-    repeated ProductOption product_options = 199; //TODO update to 'options' once all options would be covered
-    repeated ProductShopperInputOption shopper_input_options = 200;
+  float only_x_left_in_stock = 102;
+
+  repeated GroupedItem grouped_items = 103;
+
+  repeated ProductOption product_options = 199; //TODO update to 'options' once all options would be covered
+  repeated ProductShopperInputOption shopper_input_options = 200;
 }
 
 message ProductVariant {
-    string id = 2;
-    repeated string option_value_id = 1;
-    repeated Price price = 3;
+  // variant identifier following the convention :prefix:/:parentId:/:entityId:
+  string id = 1;
+  // parent_id:option_id/optionValue.uid
+  repeated string option_values = 2;
+  // link to product id that represents variant, for custom option must be null
+  string product_id = 3;
+}
+
+message ProductVariantImport {
+  // variant identifier following the convention :prefix:/:parentId:/:entityId:
+  string id = 1;
+  // list of option values intersections, which represent this variant, parent_id:option_id/optionValue.uid
+  repeated string option_values = 2;
 }
 
 // Temp solution for prices
 message Price {
-    float regular_price = 1;
-    float final_price = 2;
-    string scope = 3;
+  float regular_price = 1;
+  float final_price = 2;
+  string scope = 3;
 }
 
 message ProductOptionValue {
-    string id = 1;
-    string label = 2;
-    string sort_order = 3;
-    bool default = 4;
-    string image_url = 5;
-    bool qty_mutability = 6;
-    float qty = 7;
-    string info_url = 8;
-    float price = 9;
+  string id = 1;
+  string label = 2;
+  string sort_order = 3;
+  bool default = 4;
+  string image_url = 5;
+  bool qty_mutability = 6;
+  float qty = 7;
+  string info_url = 8;
+  float price = 9;
 }
 
 message ProductOption {
-    string id = 1;
-    string label = 2;
-    int32 sort_order = 3;
-    bool required = 4;
-    string render_type = 5;
-    string type = 6;
-    repeated ProductOptionValue values = 7;
+  string id = 1;
+  string label = 2;
+  int32 sort_order = 3;
+  bool required = 4;
+  string render_type = 5;
+  string type = 6;
+  repeated ProductOptionValue values = 7;
 }
 
 message ProductShopperInputOption {
-    string id = 1;
-    string label = 2;
-    int32 sort_order = 3;
-    bool required = 4;
-    string render_type = 5;
-    repeated Price price = 6;
-    string value = 7;
-    int32 max_characters = 8;
-    repeated string file_extension = 9;
-    int32 image_size_x = 10;
-    int32 image_size_y = 11;
-}
-
-message Sample {
-    string url = 1;
-    string label = 2;
-    int32 sort_order = 3;
+  string id = 1;
+  string label = 2;
+  int32 sort_order = 3;
+  bool required = 4;
+  string render_type = 5;
+  repeated Price price = 6;
+  string value = 7;
+  int32 max_characters = 8;
+  repeated string file_extension = 9;
+  int32 image_size_x = 10;
+  int32 image_size_y = 11;
 }
 
 message GroupedItem {
-    float qty = 1;
-    int32 position = 2;
-    string product = 3;
+  float qty = 1;
+  int32 position = 2;
+  string product = 3;
 
-    // GroupedItemProductInfo product = 3;
+  // GroupedItemProductInfo product = 3;
 }
 
 // TODO: review grouped product
@@ -167,292 +166,310 @@ message GroupedItem {
 // }
 
 message ProductLink {
-    string linked_product_sku = 1;
-    string type_id = 2;
-    string linked_product_type = 3;
-    string link_type_id = 4;
-    int32 position = 5;
-    string sku = 6;
-    string product_id = 7;
-    string link_type = 8;
+  string linked_product_sku = 1;
+  string type_id = 2;
+  string linked_product_type = 3;
+  string link_type_id = 4;
+  int32 position = 5;
+  string sku = 6;
+  string product_id = 7;
+  string link_type = 8;
 }
 
 message Option {
-    string option_id = 1;
-    string product_id = 2;
-    string type = 3;
-    string is_require = 4;
-    string sku = 5;
-    string max_characters = 6;
-    string file_extension = 7;
-    string image_size_x = 8;
-    string image_size_y = 9;
-    string sort_order = 10;
-    string default_title = 11;
-    string store_title = 12;
-    string title = 13;
-    string default_price = 14;
-    string default_price_type = 15;
-    string store_price = 16;
-    string store_price_type = 17;
-    string price = 18;
-    string price_type = 19;
-    string required = 20;
-    string product_sku = 21;
-    // TODO: Why not 'values'?
-    repeated OptionValue value = 22;
+  string option_id = 1;
+  string product_id = 2;
+  string type = 3;
+  string is_require = 4;
+  string sku = 5;
+  string max_characters = 6;
+  string file_extension = 7;
+  string image_size_x = 8;
+  string image_size_y = 9;
+  string sort_order = 10;
+  string default_title = 11;
+  string store_title = 12;
+  string title = 13;
+  string default_price = 14;
+  string default_price_type = 15;
+  string store_price = 16;
+  string store_price_type = 17;
+  string price = 18;
+  string price_type = 19;
+  string required = 20;
+  string product_sku = 21;
+  // TODO: Why not 'values'?
+  repeated OptionValue value = 22;
 }
 
 message OptionValue {
-    string option_id = 1;
-    string product_id = 2;
-    string type = 3;
-    string is_require = 4;
-    string sku = 5;
-    string max_characters = 6;
-    string file_extension = 7;
-    string image_size_x = 8;
-    string image_size_y = 9;
-    string sort_order = 10;
-    string default_title = 11;
-    string store_title = 12;
-    string title = 13;
-    string default_price = 14;
-    string default_price_type = 15;
-    string store_price = 16;
-    string store_price_type = 17;
-    string price = 18;
-    string price_type = 19;
-    string option_type_id = 20;
-}
-
-message ConfigurableOption {
-    string id = 1;
-    string label = 2;
-    string position = 3;
-    string use_default = 4;
-    string product_id = 5;
-    string attribute_code = 6;
-    string attribute_id = 7;
-    repeated ConfigurableOptionValue values = 8;
-}
-
-message ConfigurableOptionValue {
-    string value_index = 1;
-    string label = 2;
-    string default_label = 3;
-    string store_label = 4;
-    string use_default_value = 5;
-    string attribute_id = 6;
-    string product_id = 7;
-}
-
-message Variant {
-    string product = 1;
-    repeated VariantAttribute attributes = 2;
-}
-
-message VariantAttribute {
-    string label = 1;
-    string code = 2;
-    string value_index = 3;
-    string attribute_id = 4;
+  string option_id = 1;
+  string product_id = 2;
+  string type = 3;
+  string is_require = 4;
+  string sku = 5;
+  string max_characters = 6;
+  string file_extension = 7;
+  string image_size_x = 8;
+  string image_size_y = 9;
+  string sort_order = 10;
+  string default_title = 11;
+  string store_title = 12;
+  string title = 13;
+  string default_price = 14;
+  string default_price_type = 15;
+  string store_price = 16;
+  string store_price_type = 17;
+  string price = 18;
+  string price_type = 19;
+  string option_type_id = 20;
 }
 
 message UrlRewrite {
-    string url = 1;
-    repeated UrlRewriteParameter parameters = 2;
+  string url = 1;
+  repeated UrlRewriteParameter parameters = 2;
 }
 
 message UrlRewriteParameter {
-    string name = 1;
-    string value = 2;
+  string name = 1;
+  string value = 2;
 }
 
 // Emulation of hashmap, until it is supported
 message KeyValue {
-    string key = 1;
-    string value = 2;
+  string key = 1;
+  string value = 2;
 }
 
 message DynamicAttributeValue
 {
-    string code = 1;
-    string value = 2;
+  string code = 1;
+  string value = 2;
 }
 
-message MediaGalleryItem {
-    string url = 1;
-    string label = 2;
-    string media_type = 3;
-    int32 position = 4;
-    Video video_content = 5;
-}
-
-message Video {
-    string video_provider = 1;
-    string video_url = 2;
-    string video_title = 3;
-    string video_description = 4;
-    string video_metadata = 5;
-    string media_type = 6;
+message MediaResource {
+  string url = 1;
+  string label = 2;
+  // list of media roles "small", "swatch"... To hide product from PDP use role "hide_from_pdp"
+  repeated string roles = 3;
 }
 
 message Image {
-    string url = 1;
-    string label = 2;
+  MediaResource resource = 1;
+  string sort_order = 2;
+}
+
+message Sample {
+  MediaResource resource = 1;
+  string sort_order = 2;
+}
+
+message Video {
+  MediaResource preview = 1;
+  VideoItem video = 2;
+  string sort_order = 3;
+}
+
+message VideoItem {
+  string video_provider = 1;
+  string video_url = 2;
+  string video_title = 3;
+  string video_description = 4;
+  string video_metadata = 5;
+  string media_type = 6;
 }
 
 message ProductsGetRequest {
-    // Ids of the products to extract
-    //
-    // The implementation will verify the ids, and return an
-    // `INVALID_ARGUMENT` error if any products are missing
-    repeated string ids = 1;
+  // Ids of the products to extract
+  //
+  // The implementation will verify the ids, and return an
+  // `INVALID_ARGUMENT` error if any products are missing
+  repeated string ids = 1;
 
-    // Store code or id
-    string store = 2;
+  // Store code or id
+  string store = 2;
 
-    // A list of attributes to extract
-    // Use dot notation in order to extract nested or complex attributes
-    repeated string attribute_codes = 3;
+  // A list of attributes to extract
+  // Use dot notation in order to extract nested or complex attributes
+  repeated string attribute_codes = 3;
 
 
-    // A map of request parameters
-    // Could be useful to identify customer group or any other request-specific data
-    // Temporary disabled due to lack of "map" support in php Magento generator
-    //map<string, string> params = 6;
+  // A map of request parameters
+  // Could be useful to identify customer group or any other request-specific data
+  // Temporary disabled due to lack of "map" support in php Magento generator
+  //map<string, string> params = 6;
 }
 
 message ProductsGetResult {
-    repeated Product items = 1;
+  repeated Product items = 1;
 }
 
 message ImportProductsRequest {
-    repeated Product products = 1;
-    // Store code or id
-    string store = 2;
-    // A map of request parameters
-    // Could be useful to identify customer group or any other request-specific data
-    KeyValue params = 6;
+  repeated Product products = 1;
+  // Store code or id
+  string store = 2;
+  // A map of request parameters
+  // Could be useful to identify customer group or any other request-specific data
+  KeyValue params = 6;
 }
 
 message DeleteProductsRequest {
-    repeated string productIds = 1;
-    // Store code or id
-    string store = 2;
+  repeated string productIds = 1;
+  // Store code or id
+  string store = 2;
 }
 
 message DeleteCategoriesRequest {
-    repeated string categoryIds = 1;
-    // Store code or id
-    string store = 2;
+  repeated string categoryIds = 1;
+  // Store code or id
+  string store = 2;
 }
 
 message DeleteCategoriesResponse {
-    bool status = 1;
-    string message = 2;
+  bool status = 1;
+  string message = 2;
 }
 message ImportProductsResponse {
-    bool status = 1;
-    string message = 2;
+  bool status = 1;
+  string message = 2;
 }
 
 message DeleteProductsResponse {
-    bool status = 1;
-    string message = 2;
+  bool status = 1;
+  string message = 2;
 }
 
 message ImportCategoriesRequest {
-    repeated Category categories = 1;
-    // Store code or id
-    string store = 2;
-    // A map of request parameters
-    // Could be useful to identify customer group or any other request-specific data
-    KeyValue params = 6;
+  repeated Category categories = 1;
+  // Store code or id
+  string store = 2;
+  // A map of request parameters
+  // Could be useful to identify customer group or any other request-specific data
+  KeyValue params = 6;
 }
 
 message ImportCategoriesResponse {
-    bool status = 1;
-    string message = 2;
+  bool status = 1;
+  string message = 2;
 }
 
 message Category {
-    string id = 1;
-    string path = 2;
-    int32 position = 3;
-    int32 level = 4;
-    int32 children_count = 5;
-    string name = 6;
-    string display_mode = 7;
-    string default_sort_by = 8;
-    string url_key = 9;
-    string url_path = 10;
-    bool is_active = 11;
-    bool is_anchor = 12;
-    bool include_in_menu = 13;
-    repeated string available_sort_by = 14;
-    repeated Breadcrumb breadcrumbs = 15;
-    string description = 16;
-    string canonical_url = 17;
-    int64 product_count = 18;
-    repeated string children = 19;
-    string image = 20;
-    string parent_id = 21;
-    string meta_title = 22;
-    string meta_description = 23;
-    string meta_keywords = 24;
+  string id = 1;
+  string path = 2;
+  int32 position = 3;
+  int32 level = 4;
+  int32 children_count = 5;
+  string name = 6;
+  string display_mode = 7;
+  string default_sort_by = 8;
+  string url_key = 9;
+  string url_path = 10;
+  bool is_active = 11;
+  bool is_anchor = 12;
+  bool include_in_menu = 13;
+  repeated string available_sort_by = 14;
+  repeated Breadcrumb breadcrumbs = 15;
+  string description = 16;
+  string canonical_url = 17;
+  int64 product_count = 18;
+  repeated string children = 19;
+  string image = 20;
+  string parent_id = 21;
+  string meta_title = 22;
+  string meta_description = 23;
+  string meta_keywords = 24;
 
-    repeated DynamicAttributeValue dynamic_attributes = 50;
+  repeated DynamicAttributeValue dynamic_attributes = 50;
 }
 
 message Breadcrumb {
-    string category_id = 1;
-    string category_name = 2;
-    int32 category_level = 3;
-    string category_url_key = 4;
-    string category_url_path = 5;
+  string category_id = 1;
+  string category_name = 2;
+  int32 category_level = 3;
+  string category_url_key = 4;
+  string category_url_path = 5;
 }
 
 message CategoriesGetRequest {
-    // Ids of the categories to extract. Returns all categories if no ids provided.
-    //
-    // The implementation will verify the ids, and return an
-    // `INVALID_ARGUMENT` error if any categories are missing or post filtered by level filter
-    repeated string ids = 1;
+  // Ids of the categories to extract. Returns all categories if no ids provided.
+  //
+  // The implementation will verify the ids, and return an
+  // `INVALID_ARGUMENT` error if any categories are missing or post filtered by level filter
+  repeated string ids = 1;
 
-    // Filter category list by level. Could be useful for progressive tree load
-    // Intersects with optional ids parameter
-    int32 level = 2;
+  // Filter category list by level. Could be useful for progressive tree load
+  // Intersects with optional ids parameter
+  int32 level = 2;
 
-    // Store code or id
-    string store = 3;
+  // Store code or id
+  string store = 3;
 
-    // A list of attributes to extract
-    // Use dot notation in order to extract nested or complex attributes
-    repeated string attribute_codes = 4;
+  // A list of attributes to extract
+  // Use dot notation in order to extract nested or complex attributes
+  repeated string attribute_codes = 4;
 }
 
 message CategoriesGetResponse {
-    repeated Category items = 1;
-}
-
-message ProductVariantsGetRequest {
-    repeated string ids = 1;
-    string storeId = 2;
-    repeated string attribute_codes = 3;
-}
-
-message ProductVariantsGetResponse {
-    repeated Variant items = 1;
+  repeated Category items = 1;
 }
 
 service Catalog {
-    rpc getProducts (ProductsGetRequest) returns (ProductsGetResult) {}
-    rpc importProducts (ImportProductsRequest) returns (ImportProductsResponse) {}
-    rpc deleteProducts (DeleteProductsRequest) returns (DeleteProductsResponse) {}
-    rpc deleteCategories (DeleteCategoriesRequest) returns (DeleteCategoriesResponse) {}
-    rpc importCategories (ImportCategoriesRequest) returns (ImportCategoriesResponse) {}
-    rpc getCategories (CategoriesGetRequest) returns (CategoriesGetResponse) {}
-    rpc getProductVariants (ProductVariantsGetRequest) returns (ProductVariantsGetResponse) {}
+  rpc getProducts (ProductsGetRequest) returns (ProductsGetResult) {}
+  rpc importProducts (ImportProductsRequest) returns (ImportProductsResponse) {}
+  rpc deleteProducts (DeleteProductsRequest) returns (DeleteProductsResponse) {}
+  rpc deleteCategories (DeleteCategoriesRequest) returns (DeleteCategoriesResponse) {}
+  rpc importCategories (ImportCategoriesRequest) returns (ImportCategoriesResponse) {}
+  rpc getCategories (CategoriesGetRequest) returns (CategoriesGetResponse) {}
+}
+
+message ProductVariantResponse {
+  repeated ProductVariant matched_variants = 3;
+}
+
+message ProductVariantRequest {
+  string product_Id = 1;
+  string store = 2;
+}
+
+message ImportVariantsRequest {
+  repeated ProductVariantImport variants = 1;
+}
+
+message ImportVariantsResponse {
+  bool status = 1;
+  string message = 2;
+}
+
+message DeleteVariantsRequest {
+  // list of ProductVariant.id
+  repeated string id = 1;
+}
+
+message DeleteVariantsResponse {
+  bool status = 1;
+  string message = 2;
+}
+
+message OptionSelectionRequest
+{
+  string store = 1;
+  // array of option_values with the following format parent_id:option_id/optionValue.uid
+  // @see ProductValue.option_values
+  repeated string values = 2;
+}
+
+service VariantService {
+  rpc ImportProductVariants (ImportVariantsRequest) returns (ImportVariantsResponse)  {}
+  rpc DeleteProductVariants (DeleteVariantsRequest) returns (DeleteVariantsResponse) {}
+  // get all variants that belong to a product
+  rpc GetProductVariants (ProductVariantRequest) returns (ProductVariantResponse) {}
+
+  // match the variants which correspond, and do not contradict, the merchant selection (%like operation)
+  rpc GetVariantsMatch (OptionSelectionRequest) returns (ProductVariantResponse) {}
+
+  // will be implemented in future
+  // match the variants which exactly matched with merchant selection (&& operation)
+  //rpc GetVariantsExactlyMatch (OptionSelectionRequest) returns (ProductVariantResponse) {}
+  // get all variants which contain at least one of merchant selection (|| operation)
+  //rpc GetVariantsInclude (OptionSelectionRequest) returns (ProductVariantResponse) {}
 }

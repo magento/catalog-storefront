@@ -14,17 +14,13 @@ use Google\Protobuf\Internal\GPBUtil;
 class Sample extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Generated from protobuf field <code>string url = 1;</code>
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.MediaResource resource = 1;</code>
      */
-    protected $url = '';
+    protected $resource = null;
     /**
-     * Generated from protobuf field <code>string label = 2;</code>
+     * Generated from protobuf field <code>string sort_order = 2;</code>
      */
-    protected $label = '';
-    /**
-     * Generated from protobuf field <code>int32 sort_order = 3;</code>
-     */
-    protected $sort_order = 0;
+    protected $sort_order = '';
 
     /**
      * Constructor.
@@ -32,9 +28,8 @@ class Sample extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type string $url
-     *     @type string $label
-     *     @type int $sort_order
+     *     @type \Magento\CatalogStorefrontApi\Proto\MediaResource $resource
+     *     @type string $sort_order
      * }
      */
     public function __construct($data = null)
@@ -44,52 +39,30 @@ class Sample extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>string url = 1;</code>
-     * @return string
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.MediaResource resource = 1;</code>
+     * @return \Magento\CatalogStorefrontApi\Proto\MediaResource
      */
-    public function getUrl()
+    public function getResource()
     {
-        return $this->url;
+        return $this->resource;
     }
 
     /**
-     * Generated from protobuf field <code>string url = 1;</code>
-     * @param string $var
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.MediaResource resource = 1;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\MediaResource $var
      * @return $this
      */
-    public function setUrl($var)
+    public function setResource($var)
     {
-        GPBUtil::checkString($var, true);
-        $this->url = $var;
+        GPBUtil::checkMessage($var, \Magento\CatalogStorefrontApi\Proto\MediaResource::class);
+        $this->resource = $var;
 
         return $this;
     }
 
     /**
-     * Generated from protobuf field <code>string label = 2;</code>
+     * Generated from protobuf field <code>string sort_order = 2;</code>
      * @return string
-     */
-    public function getLabel()
-    {
-        return $this->label;
-    }
-
-    /**
-     * Generated from protobuf field <code>string label = 2;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setLabel($var)
-    {
-        GPBUtil::checkString($var, true);
-        $this->label = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>int32 sort_order = 3;</code>
-     * @return int
      */
     public function getSortOrder()
     {
@@ -97,13 +70,13 @@ class Sample extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>int32 sort_order = 3;</code>
-     * @param int $var
+     * Generated from protobuf field <code>string sort_order = 2;</code>
+     * @param string $var
      * @return $this
      */
     public function setSortOrder($var)
     {
-        GPBUtil::checkInt32($var);
+        GPBUtil::checkString($var, true);
         $this->sort_order = $var;
 
         return $this;
