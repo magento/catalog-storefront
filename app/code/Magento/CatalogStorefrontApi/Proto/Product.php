@@ -110,7 +110,6 @@ class Product extends \Google\Protobuf\Internal\Message
      *    PriceRange prices = 44;//-
      * TODO: Uncomment options
      *    repeated Option options = 46;
-     *    repeated Variant variants = 47;//-
      *
      * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DynamicAttributeValue dynamic_attributes = 50;</code>
      */
@@ -178,14 +177,6 @@ class Product extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.UrlRewrite url_rewrites = 82;</code>
      */
     private $url_rewrites;
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Variant variants = 83;</code>
-     */
-    private $variants;
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ConfigurableOption configurable_options = 84;</code>
-     */
-    private $configurable_options;
     /**
      * Generated from protobuf field <code>string country_of_manufacture = 85;</code>
      */
@@ -284,7 +275,6 @@ class Product extends \Google\Protobuf\Internal\Message
      *              PriceRange prices = 44;//-
      *           TODO: Uncomment options
      *              repeated Option options = 46;
-     *              repeated Variant variants = 47;//-
      *     @type string $meta_description
      *           TODO: qty is missing for only-x-left-in-stock functionality
      *           TODO: Meta fields not populated by catalog SF app
@@ -303,8 +293,6 @@ class Product extends \Google\Protobuf\Internal\Message
      *     @type \Magento\CatalogStorefrontApi\Proto\Option[]|\Google\Protobuf\Internal\RepeatedField $options
      *           TODO: May need to be a complex type
      *     @type \Magento\CatalogStorefrontApi\Proto\UrlRewrite[]|\Google\Protobuf\Internal\RepeatedField $url_rewrites
-     *     @type \Magento\CatalogStorefrontApi\Proto\Variant[]|\Google\Protobuf\Internal\RepeatedField $variants
-     *     @type \Magento\CatalogStorefrontApi\Proto\ConfigurableOption[]|\Google\Protobuf\Internal\RepeatedField $configurable_options
      *     @type string $country_of_manufacture
      *     @type bool $gift_message_available
      *     @type float $special_price
@@ -799,7 +787,6 @@ class Product extends \Google\Protobuf\Internal\Message
      *    PriceRange prices = 44;//-
      * TODO: Uncomment options
      *    repeated Option options = 46;
-     *    repeated Variant variants = 47;//-
      *
      * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DynamicAttributeValue dynamic_attributes = 50;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
@@ -813,7 +800,6 @@ class Product extends \Google\Protobuf\Internal\Message
      *    PriceRange prices = 44;//-
      * TODO: Uncomment options
      *    repeated Option options = 46;
-     *    repeated Variant variants = 47;//-
      *
      * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DynamicAttributeValue dynamic_attributes = 50;</code>
      * @param \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue[]|\Google\Protobuf\Internal\RepeatedField $var
@@ -1145,50 +1131,6 @@ class Product extends \Google\Protobuf\Internal\Message
     {
         $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\UrlRewrite::class);
         $this->url_rewrites = $arr;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Variant variants = 83;</code>
-     * @return \Google\Protobuf\Internal\RepeatedField
-     */
-    public function getVariants()
-    {
-        return $this->variants;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Variant variants = 83;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\Variant[]|\Google\Protobuf\Internal\RepeatedField $var
-     * @return $this
-     */
-    public function setVariants($var)
-    {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\Variant::class);
-        $this->variants = $arr;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ConfigurableOption configurable_options = 84;</code>
-     * @return \Google\Protobuf\Internal\RepeatedField
-     */
-    public function getConfigurableOptions()
-    {
-        return $this->configurable_options;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ConfigurableOption configurable_options = 84;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\ConfigurableOption[]|\Google\Protobuf\Internal\RepeatedField $var
-     * @return $this
-     */
-    public function setConfigurableOptions($var)
-    {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\ConfigurableOption::class);
-        $this->configurable_options = $arr;
 
         return $this;
     }
