@@ -89,7 +89,7 @@ final class ImportCategoriesRequestMapper
                 $convertedArray = [];
                 foreach ($value as $element) {
                     $convertedArray[] = $this->objectManager
-                        ->create(\Magento\CatalogStorefrontApi\Api\Data\ImportCategoryRequest::class)
+                        ->create(\Magento\CatalogStorefrontApi\Api\Data\CategoryMapper::class)
                         ->setData($element)
                         ->build();
                 }
