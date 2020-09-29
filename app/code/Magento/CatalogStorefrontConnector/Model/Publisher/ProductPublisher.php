@@ -189,6 +189,7 @@ class ProductPublisher
                 $product = $this->productDataProcessor->merge($newApiProducts[$product['entity_id']], $product);
             }
 
+            // be sure, that data passed to Import API in the expected format
             $productsRequestData[] = $this->importProductDataRequestMapper->setData(
                 [
                     'product' => $product,
