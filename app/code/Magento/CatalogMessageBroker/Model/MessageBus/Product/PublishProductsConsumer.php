@@ -20,11 +20,15 @@ class PublishProductsConsumer implements ConsumerEventInterface
 {
     /**
      * Action type update
+     * TODO eliminate together with calling old API
+     * @see \Magento\CatalogMessageBroker\Model\MessageBus\Category\PublishCategoriesConsumer
      */
     public const ACTION_UPDATE = 'products_update';
 
     /**
      * Action type import
+     * TODO eliminate together with calling old API
+     * @see \Magento\CatalogMessageBroker\Model\MessageBus\Category\PublishCategoriesConsumer
      */
     public const ACTION_IMPORT = 'products_import';
 

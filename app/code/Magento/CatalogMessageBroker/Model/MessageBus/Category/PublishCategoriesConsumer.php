@@ -10,10 +10,10 @@ use Magento\CatalogExport\Event\Data\Entity;
 use Magento\CatalogMessageBroker\Model\Converter\AttributeCodesConverter;
 use Magento\CatalogMessageBroker\Model\FetchCategoriesInterface;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
-use Magento\CatalogStorefrontApi\Api\Data\CategoryMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterfaceFactory;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterface;
-use Magento\CatalogStorefrontApi\Api\Data\ImportRequestAttributesMapper;
+use Magento\CatalogStorefrontApi\Api\Data\ImportCategoryDataRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ImportCategoryDataRequestMapper;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -21,16 +21,6 @@ use Psr\Log\LoggerInterface;
  */
 class PublishCategoriesConsumer implements ConsumerEventInterface
 {
-    /**
-     * Action type update
-     */
-    public const ACTION_UPDATE = 'categories_update';
-
-    /**
-     * Action type import
-     */
-    public const ACTION_IMPORT = 'categories_import';
-
     /**
      * @var LoggerInterface
      */
@@ -52,45 +42,37 @@ class PublishCategoriesConsumer implements ConsumerEventInterface
     private $importCategoriesRequestInterfaceFactory;
 
     /**
-     * @var CategoryMapper
-     */
-    private $categoryMapper;
-
-    /**
      * @var AttributeCodesConverter
      */
     private $attributeCodesConverter;
 
     /**
-     * @var ImportRequestAttributesMapper
+     * @var ImportCategoryDataRequestMapper
      */
-    private $importRequestAttributesMapper;
+    private $importCategoryDataRequestMapper;
 
     /**
      * @param LoggerInterface $logger
      * @param FetchCategoriesInterface $fetchCategories
      * @param CatalogServerInterface $catalogServer
      * @param ImportCategoriesRequestInterfaceFactory $importCategoriesRequestInterfaceFactory
-     * @param CategoryMapper $categoryMapper
      * @param AttributeCodesConverter $attributeCodesConverter
-     * @param ImportRequestAttributesMapper $importRequestAttributesMapper
+     * @param ImportCategoryDataRequestMapper $importCategoryDataRequestMapper
      */
     public function __construct(
         LoggerInterface $logger,
         FetchCategoriesInterface $fetchCategories,
         CatalogServerInterface $catalogServer,
         ImportCategoriesRequestInterfaceFactory $importCategoriesRequestInterfaceFactory,
-        CategoryMapper $categoryMapper,
         AttributeCodesConverter $attributeCodesConverter,
-        ImportRequestAttributesMapper $importRequestAttributesMapper
+        ImportCategoryDataRequestMapper $importCategoryDataRequestMapper
     ) {
         $this->logger = $logger;
         $this->fetchCategories = $fetchCategories;
         $this->catalogServer = $catalogServer;
         $this->importCategoriesRequestInterfaceFactory = $importCategoriesRequestInterfaceFactory;
-        $this->categoryMapper = $categoryMapper;
         $this->attributeCodesConverter = $attributeCodesConverter;
-        $this->importRequestAttributesMapper = $importRequestAttributesMapper;
+        $this->importCategoryDataRequestMapper = $importCategoryDataRequestMapper;
     }
 
     /**
@@ -100,25 +82,22 @@ class PublishCategoriesConsumer implements ConsumerEventInterface
     {
         $categoriesData = $this->fetchCategories->execute($entities, $scope);
         $attributesArray = $this->getAttributesArray($entities);
-        $importCategories = [];
-        $updateCategories = [];
+        $categories = [];
 
         foreach ($categoriesData as $categoryData) {
             $attributes = $attributesArray[$categoryData['category_id']];
+            $categoryData['id'] = $categoryData['category_id'];
 
             if (!empty($attributes)) {
-                $updateCategories[$categoryData['category_id']] = $this->filterAttributes($categoryData, $attributes);
+                $categoryData = $this->filterAttributes($categoryData, $attributes);
+                $categories[] = $this->buildCategoryDataRequest($categoryData, \array_keys($categoryData));
             } else {
-                $importCategories[$categoryData['category_id']] = $categoryData;
+                $categories[] = $this->buildCategoryDataRequest($categoryData, []);
             }
         }
 
-        if (!empty($importCategories)) {
-            $this->importCategories($importCategories, $scope, self::ACTION_IMPORT);
-        }
-
-        if (!empty($updateCategories)) {
-            $this->importCategories($updateCategories, $scope, self::ACTION_UPDATE);
+        if (!empty($categories)) {
+            $this->importCategories($categories, $scope);
         }
     }
 
@@ -154,47 +133,45 @@ class PublishCategoriesConsumer implements ConsumerEventInterface
             function ($code) use ($attributes) {
                 $attributes = $this->attributeCodesConverter->convertFromCamelCaseToSnakeCase($attributes);
 
-                return \in_array($code, $attributes) || $code === 'category_id';
+                return \in_array($code, $attributes) || $code === 'id';
             },
             ARRAY_FILTER_USE_KEY
         );
     }
 
     /**
+     * Build category data request
+     *
+     * @param array $category
+     * @param array $attributes
+     *
+     * @return ImportCategoryDataRequestInterface
+     */
+    private function buildCategoryDataRequest(array $category, array $attributes): ImportCategoryDataRequestInterface
+    {
+        return $this->importCategoryDataRequestMapper->setData(
+            [
+                'category' => $category,
+                'attributes' => $attributes,
+            ]
+        )->build();
+    }
+
+    /**
      * Import categories
      *
-     * @param array $categories
+     * @param ImportCategoryDataRequestInterface[] $categoriesRequestData
      * @param string $storeCode
-     * @param string $actionType
      *
      * @return void
      *
      * @throws \Throwable
      */
-    private function importCategories(array $categories, string $storeCode, string $actionType): void
+    private function importCategories(array $categoriesRequestData, string $storeCode): void
     {
-        $attributes = [];
-
-        foreach ($categories as &$category) {
-            // be sure, that data passed to Import API in the expected format
-            $category['id'] = $category['category_id'];
-
-            if ($actionType === self::ACTION_UPDATE) {
-                $attributes[] = $this->importRequestAttributesMapper->setData(
-                    [
-                        'entity_id' => $category['category_id'],
-                        'attribute_codes' => \array_keys($category),
-                    ]
-                )->build();
-            }
-
-            $category = $this->categoryMapper->setData($category)->build();
-        }
-
         $importCategoriesRequest = $this->importCategoriesRequestInterfaceFactory->create();
-        $importCategoriesRequest->setCategories($categories);
+        $importCategoriesRequest->setCategories($categoriesRequestData);
         $importCategoriesRequest->setStore($storeCode);
-        $importCategoriesRequest->setAttributes($attributes);
 
         $importResult = $this->catalogServer->importCategories($importCategoriesRequest);
 

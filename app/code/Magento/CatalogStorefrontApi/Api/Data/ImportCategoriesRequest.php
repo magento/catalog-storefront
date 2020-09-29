@@ -37,14 +37,9 @@ final class ImportCategoriesRequest implements ImportCategoriesRequestInterface
     private $params;
 
     /**
-     * @var array
-     */
-    private $attributes;
-
-    /**
      * @inheritdoc
      *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\CategoryInterface[]
+     * @return \Magento\CatalogStorefrontApi\Api\Data\ImportCategoryDataRequestInterface[]
      */
     public function getCategories(): array
     {
@@ -54,7 +49,7 @@ final class ImportCategoriesRequest implements ImportCategoriesRequestInterface
     /**
      * @inheritdoc
      *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\CategoryInterface[] $value
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ImportCategoryDataRequestInterface[] $value
      * @return void
      */
     public function setCategories(array $value): void
@@ -102,21 +97,5 @@ final class ImportCategoriesRequest implements ImportCategoriesRequestInterface
     public function setParams(\Magento\CatalogStorefrontApi\Api\Data\KeyValueInterface $value): void
     {
         $this->params = $value;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getAttributes(): ?array
-    {
-        return (array)$this->attributes;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setAttributes(array $attributes): void
-    {
-        $this->attributes = $attributes;
     }
 }

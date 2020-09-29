@@ -10,10 +10,9 @@ use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
 use Magento\CatalogMessageBroker\Model\MessageBus\Product\PublishProductsConsumer;
 use Magento\CatalogMessageBroker\Model\ProductDataProcessor;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ImportProductDataRequestMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterfaceFactory;
-use Magento\CatalogStorefrontApi\Api\Data\ImportRequestAttributesMapper;
-use Magento\CatalogStorefrontApi\Api\Data\ProductMapper;
 use Magento\Framework\App\State;
 use Psr\Log\LoggerInterface;
 
@@ -61,14 +60,9 @@ class ProductPublisher
     private $productDataProcessor;
 
     /**
-     * @var ProductMapper
+     * @var ImportProductDataRequestMapper
      */
-    private $productMapper;
-
-    /**
-     * @var ImportRequestAttributesMapper
-     */
-    private $importRequestAttributesMapper;
+    private $importProductDataRequestMapper;
 
     /**
      * @param DataProviderInterface $productsDataProvider
@@ -77,8 +71,7 @@ class ProductPublisher
      * @param CatalogServerInterface $catalogServer
      * @param ImportProductsRequestInterfaceFactory $importProductsRequestInterfaceFactory
      * @param ProductDataProcessor $productDataProcessor
-     * @param ProductMapper $productMapper
-     * @param ImportRequestAttributesMapper $importRequestAttributesMapper
+     * @param ImportProductDataRequestMapper $importProductDataRequestMapper
      * @param int $batchSize
      */
     public function __construct(
@@ -88,8 +81,7 @@ class ProductPublisher
         CatalogServerInterface $catalogServer,
         ImportProductsRequestInterfaceFactory $importProductsRequestInterfaceFactory,
         ProductDataProcessor $productDataProcessor,
-        ProductMapper $productMapper,
-        ImportRequestAttributesMapper $importRequestAttributesMapper,
+        ImportProductDataRequestMapper $importProductDataRequestMapper,
         int $batchSize
     ) {
         $this->productsDataProvider = $productsDataProvider;
@@ -99,8 +91,7 @@ class ProductPublisher
         $this->catalogServer = $catalogServer;
         $this->importProductsRequestInterfaceFactory = $importProductsRequestInterfaceFactory;
         $this->productDataProcessor = $productDataProcessor;
-        $this->productMapper = $productMapper;
-        $this->importRequestAttributesMapper = $importRequestAttributesMapper;
+        $this->importProductDataRequestMapper = $importProductDataRequestMapper;
     }
 
     /**
@@ -187,36 +178,29 @@ class ProductPublisher
         array $overrideProducts = []
     ): void {
         $newApiProducts = [];
-        $attributes = [];
+        $productsRequestData = [];
 
         foreach ($overrideProducts as $product) {
             $newApiProducts[$product['product_id']] = $product;
         }
 
-        foreach ($products as &$product) {
+        foreach ($products as $product) {
             if (isset($newApiProducts[$product['entity_id']])) {
                 $product = $this->productDataProcessor->merge($newApiProducts[$product['entity_id']], $product);
             }
 
-            if ($actionType === PublishProductsConsumer::ACTION_UPDATE) {
-                $attributes[] = $this->importRequestAttributesMapper->setData(
-                    [
-                        'entity_id' => $product['entity_id'],
-                        'attribute_codes' => \array_keys($product),
-                    ]
-                )->build();
-            }
-
-            // be sure, that data passed to Import API in the expected format
-            $product = $this->productMapper->setData($product)->build();
+            $productsRequestData[] = $this->importProductDataRequestMapper->setData(
+                [
+                    'product' => $product,
+                    'attributes' => $actionType === PublishProductsConsumer::ACTION_UPDATE ? \array_keys($product) : [],
+                ]
+            )->build();
         }
-        unset($product);
 
         /** @var ImportProductsRequestInterface $importProductRequest */
         $importProductRequest = $this->importProductsRequestInterfaceFactory->create();
-        $importProductRequest->setProducts($products);
+        $importProductRequest->setProducts($productsRequestData);
         $importProductRequest->setStore($storeCode);
-        $importProductRequest->setAttributes($attributes);
 
         $importResult = $this->catalogServer->importProducts($importProductRequest);
 
