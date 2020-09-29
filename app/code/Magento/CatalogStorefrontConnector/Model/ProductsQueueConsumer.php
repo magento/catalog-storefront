@@ -117,19 +117,8 @@ class ProductsQueueConsumer
                 unset($ids[$product['productId']]);
             }
 
-            $productsArray = [];
-            foreach ($ids as $id) {
-                $productsArray[] = [
-                    'entity_id' => (int)$id,
-                ];
-            }
-
-            $deletedArray = [];
-            foreach ($deletedIds as $id) {
-                $deletedArray[] = [
-                    'entity_id' => (int)$id,
-                ];
-            }
+            $productsArray = $this->buildMessageEntitiesArray($ids);
+            $deletedArray = $this->buildMessageEntitiesArray($deletedIds);
 
             if (!empty($productsArray)) {
                 $this->passMessage(
@@ -149,6 +138,25 @@ class ProductsQueueConsumer
         } catch (\Throwable $e) {
             $this->logger->critical('Unable to process collected product data for update/delete. ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Build message entities array
+     *
+     * @param array $entityIds
+     *
+     * @return array
+     */
+    private function buildMessageEntitiesArray(array $entityIds): array
+    {
+        $entitiesArray = [];
+        foreach ($entityIds as $id) {
+            $entitiesArray[] = [
+                'entity_id' => (int)$id,
+            ];
+        }
+
+        return $entitiesArray;
     }
 
     /**

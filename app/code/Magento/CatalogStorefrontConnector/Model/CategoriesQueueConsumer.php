@@ -118,19 +118,8 @@ class CategoriesQueueConsumer
                 unset($ids[$category['categoryId']]);
             }
 
-            $categoriesArray = [];
-            foreach ($ids as $id) {
-                $categoriesArray[] = [
-                    'entity_id' => (int)$id,
-                ];
-            }
-
-            $deletedArray = [];
-            foreach ($deletedIds as $id) {
-                $deletedArray[] = [
-                    'entity_id' => (int)$id,
-                ];
-            }
+            $categoriesArray = $this->buildMessageEntitiesArray($ids);
+            $deletedArray = $this->buildMessageEntitiesArray($deletedIds);
 
             if (!empty($categoriesArray)) {
                 $this->passMessage(
@@ -150,6 +139,25 @@ class CategoriesQueueConsumer
         } catch (\Throwable $e) {
             $this->logger->critical('Unable to process collected category data for update/delete. ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Build message entities array
+     *
+     * @param array $entityIds
+     *
+     * @return array
+     */
+    private function buildMessageEntitiesArray(array $entityIds): array
+    {
+        $entitiesArray = [];
+        foreach ($entityIds as $id) {
+            $entitiesArray[] = [
+                'entity_id' => (int)$id,
+            ];
+        }
+
+        return $entitiesArray;
     }
 
     /**

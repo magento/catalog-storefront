@@ -203,16 +203,9 @@ class Sync extends Command
                         $this->productsConsumer->processMessage($message);
                     }
 
-                    $productsArray = [];
-                    foreach ($productIds as $id) {
-                        $productsArray[] = [
-                            'entity_id' => (int)$id,
-                        ];
-                    }
-
                     $message = $this->messageBuilder->build(
                         ProductsConsumer::PRODUCTS_UPDATED_EVENT_TYPE,
-                        $productsArray,
+                        $this->buildMessageEntitiesArray($productIds),
                         $store->getCode()
                     );
                     $this->productsConsumer->processMessage($message);
@@ -256,16 +249,9 @@ class Sync extends Command
                         $this->categoriesConsumer->processMessage($message);
                     }
 
-                    $categoriesArray = [];
-                    foreach ($categoryIds as $id) {
-                        $categoriesArray[] = [
-                            'entity_id' => (int)$id,
-                        ];
-                    }
-
                     $message = $this->messageBuilder->build(
                         CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
-                        $categoriesArray,
+                        $this->buildMessageEntitiesArray($categoryIds),
                         $store->getCode()
                     );
                     $this->categoriesConsumer->processMessage($message);
@@ -277,6 +263,25 @@ class Sync extends Command
             },
             $output
         );
+    }
+
+    /**
+     * Build message entities array
+     *
+     * @param array $entityIds
+     *
+     * @return array
+     */
+    private function buildMessageEntitiesArray(array $entityIds): array
+    {
+        $entitiesArray = [];
+        foreach ($entityIds as $id) {
+            $entitiesArray[] = [
+                'entity_id' => (int)$id,
+            ];
+        }
+
+        return $entitiesArray;
     }
 
     /**
