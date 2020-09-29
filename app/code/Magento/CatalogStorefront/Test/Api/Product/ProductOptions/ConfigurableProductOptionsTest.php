@@ -120,7 +120,6 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
     public function testConfigurableProductOptionsFixtureStore(array $expected)
     {
         $product = $this->productRepository->get(self::TEST_SKU);
-
         $this->productsGetRequestInterface->setIds([$product->getId()]);
         $this->productsGetRequestInterface->setStore(self::FIXTURE_STORE);
         $this->productsGetRequestInterface->setAttributeCodes($this->attributesToCompare);
@@ -131,7 +130,6 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
         foreach ($catalogServiceItemDefaultStore->getItems()[0]->getProductOptions() as $productOption) {
             $actual[] = $this->arrayMapper->convertToArray($productOption);
         }
-
 
         $diff = $this->compareArraysRecursively->execute(
             $expected,
