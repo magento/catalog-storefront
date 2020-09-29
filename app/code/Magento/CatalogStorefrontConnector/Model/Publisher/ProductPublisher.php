@@ -8,14 +8,14 @@ namespace Magento\CatalogStorefrontConnector\Model\Publisher;
 
 use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
 use Magento\CatalogMessageBroker\Model\MessageBus\Product\PublishProductsConsumer;
+use Magento\CatalogMessageBroker\Model\ProductDataProcessor;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
-use Magento\CatalogStorefrontApi\Api\Data\ImportProductRequestAttributesMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterfaceFactory;
+use Magento\CatalogStorefrontApi\Api\Data\ImportRequestAttributesMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ProductMapper;
 use Magento\Framework\App\State;
 use Psr\Log\LoggerInterface;
-use Magento\CatalogMessageBroker\Model\ProductDataProcessor;
 
 /**
  * Product publisher
@@ -66,9 +66,9 @@ class ProductPublisher
     private $productMapper;
 
     /**
-     * @var ImportProductRequestAttributesMapper
+     * @var ImportRequestAttributesMapper
      */
-    private $importProductRequestAttributesMapper;
+    private $importRequestAttributesMapper;
 
     /**
      * @param DataProviderInterface $productsDataProvider
@@ -78,7 +78,7 @@ class ProductPublisher
      * @param ImportProductsRequestInterfaceFactory $importProductsRequestInterfaceFactory
      * @param ProductDataProcessor $productDataProcessor
      * @param ProductMapper $productMapper
-     * @param ImportProductRequestAttributesMapper $importProductRequestAttributesMapper
+     * @param ImportRequestAttributesMapper $importRequestAttributesMapper
      * @param int $batchSize
      */
     public function __construct(
@@ -89,7 +89,7 @@ class ProductPublisher
         ImportProductsRequestInterfaceFactory $importProductsRequestInterfaceFactory,
         ProductDataProcessor $productDataProcessor,
         ProductMapper $productMapper,
-        ImportProductRequestAttributesMapper $importProductRequestAttributesMapper,
+        ImportRequestAttributesMapper $importRequestAttributesMapper,
         int $batchSize
     ) {
         $this->productsDataProvider = $productsDataProvider;
@@ -100,7 +100,7 @@ class ProductPublisher
         $this->importProductsRequestInterfaceFactory = $importProductsRequestInterfaceFactory;
         $this->productDataProcessor = $productDataProcessor;
         $this->productMapper = $productMapper;
-        $this->importProductRequestAttributesMapper = $importProductRequestAttributesMapper;
+        $this->importRequestAttributesMapper = $importRequestAttributesMapper;
     }
 
     /**
@@ -199,10 +199,12 @@ class ProductPublisher
             }
 
             if ($actionType === PublishProductsConsumer::ACTION_UPDATE) {
-                $attributes[] = $this->importProductRequestAttributesMapper->setData([
-                    'entity_id' => $product['entity_id'],
-                    'attribute_codes' => \array_keys($product),
-                ])->build();
+                $attributes[] = $this->importRequestAttributesMapper->setData(
+                    [
+                        'entity_id' => $product['entity_id'],
+                        'attribute_codes' => \array_keys($product),
+                    ]
+                )->build();
             }
 
             // be sure, that data passed to Import API in the expected format

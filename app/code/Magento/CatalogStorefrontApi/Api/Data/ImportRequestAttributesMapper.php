@@ -13,14 +13,14 @@ namespace Magento\CatalogStorefrontApi\Api\Data;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * TODO should be generated
+ * TODO should be generated https://github.com/magento/catalog-storefront/issues/41
  */
-final class ImportProductRequestAttributesMapper
+final class ImportRequestAttributesMapper
 {
     /**
      * @var string
      */
-    private static $dtoClassName = ImportProductRequestAttributesInterface::class;
+    private static $dtoClassName = ImportRequestAttributes::class;
 
     /**
      * @var mixed
@@ -72,18 +72,18 @@ final class ImportProductRequestAttributesMapper
     * In case if the field is object, the corresponding Mapper would be create and DTO representing the field data
     * would be built
     *
-    * @param ImportProductRequestAttributes $dto
+    * @param ImportRequestAttributes $dto
     * @param string $key
     * @param mixed $value
     */
-    private function setByKey(ImportProductRequestAttributes $dto, string $key, $value): void
+    private function setByKey(ImportRequestAttributes $dto, string $key, $value): void
     {
         switch ($key) {
             case "entity_id":
-                $dto->setEntityId((int) $value);
+                $dto->setEntityId((string)$value);
                 break;
             case "attribute_codes":
-                $dto->setAttributeCodes((array) $value);
+                $dto->setAttributeCodes((array)$value);
                 break;
         }
     }

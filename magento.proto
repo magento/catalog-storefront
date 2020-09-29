@@ -308,9 +308,16 @@ message ImportProductsRequest {
   repeated Product products = 1;
   // Store code or id
   string store = 2;
+  // Changed product attributes data
+  repeated ImportRequestAttributes attributes = 3;
   // A map of request parameters
   // Could be useful to identify customer group or any other request-specific data
   KeyValue params = 6;
+}
+
+message ImportRequestAttributes {
+    string entity_id = 1;
+    repeated string attribute_codes = 2;
 }
 
 message DeleteProductsRequest {
@@ -343,6 +350,8 @@ message ImportCategoriesRequest {
   repeated Category categories = 1;
   // Store code or id
   string store = 2;
+  // Changed category attributes data
+  repeated ImportRequestAttributes attributes = 3;
   // A map of request parameters
   // Could be useful to identify customer group or any other request-specific data
   KeyValue params = 6;

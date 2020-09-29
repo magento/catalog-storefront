@@ -155,11 +155,11 @@ class CatalogRepository
             return;
         }
 
+        $this->storageWriteSource->bulkUpdate($sourceName, $entityType, $data);
+
         $this->logger->debug(
-            \sprintf('Save to storage "%s" %s record(s)', $sourceName, count($data)),
+            \sprintf('Save to storage "%s" %s record(s)', $sourceName, \count($data)),
             ['verbose' => $data]
         );
-
-        $this->storageWriteSource->bulkUpdate($sourceName, $entityType, $data);
     }
 }

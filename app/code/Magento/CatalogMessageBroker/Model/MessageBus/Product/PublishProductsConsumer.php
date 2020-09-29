@@ -7,10 +7,10 @@
 namespace Magento\CatalogMessageBroker\Model\MessageBus\Product;
 
 use Magento\CatalogExport\Event\Data\Entity;
+use Magento\CatalogMessageBroker\Model\Converter\AttributeCodesConverter;
 use Magento\CatalogMessageBroker\Model\FetchProductsInterface;
 use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterface;
-use Magento\Framework\Api\SimpleDataObjectConverter;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -44,18 +44,26 @@ class PublishProductsConsumer implements ConsumerEventInterface
     private $productPublisher;
 
     /**
+     * @var AttributeCodesConverter
+     */
+    private $attributeCodesConverter;
+
+    /**
      * @param LoggerInterface $logger
      * @param FetchProductsInterface $fetchProducts
      * @param ProductPublisher $productPublisher
+     * @param AttributeCodesConverter $attributeCodesConverter
      */
     public function __construct(
         LoggerInterface $logger,
         FetchProductsInterface $fetchProducts,
-        ProductPublisher $productPublisher
+        ProductPublisher $productPublisher,
+        AttributeCodesConverter $attributeCodesConverter
     ) {
         $this->logger = $logger;
         $this->fetchProducts = $fetchProducts;
         $this->productPublisher = $productPublisher;
+        $this->attributeCodesConverter = $attributeCodesConverter;
     }
 
     /**
@@ -83,7 +91,7 @@ class PublishProductsConsumer implements ConsumerEventInterface
     }
 
     /**
-     * Retrieve entities attributes array
+     * Retrieve transformed entities attributes data (entity_id => attributes)
      *
      * @param Entity[] $entities
      *
@@ -112,9 +120,9 @@ class PublishProductsConsumer implements ConsumerEventInterface
         return \array_filter(
             $productData,
             function ($code) use ($attributes) {
-                return \in_array($code, \array_map(function ($attributeCode) {
-                    return SimpleDataObjectConverter::camelCaseToSnakeCase($attributeCode);
-                }, $attributes)) || $code === 'product_id';
+                $attributes = $this->attributeCodesConverter->convertFromCamelCaseToSnakeCase($attributes);
+
+                return \in_array($code, $attributes) || $code === 'product_id';
             },
             ARRAY_FILTER_USE_KEY
         );

@@ -12,6 +12,7 @@ use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\Category;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryArrayMapper;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ImportRequestAttributesInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductArrayMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ProductInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductMapper;
@@ -231,6 +232,23 @@ class CatalogService implements CatalogServerInterface
     }
 
     /**
+     * Transform entities attributes data into entity_id => attributes format
+     *
+     * @param ImportRequestAttributesInterface[] $attributes
+     *
+     * @return array
+     */
+    private function transformImportRequestAttributes(array $attributes): array
+    {
+        $attributesArray = [];
+        foreach ($attributes as $attribute) {
+            $attributesArray[$attribute->getEntityId()] = $attribute->getAttributeCodes();
+        }
+
+        return $attributesArray;
+    }
+
+    /**
      * Import requested products
      *
      * @param \Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface $request
@@ -243,12 +261,7 @@ class CatalogService implements CatalogServerInterface
         $importProductsResponse = $this->importProductsResponseFactory->create();
 
         try {
-            // Transform request attributes data into entity_id => attributes relation
-            $attributes = [];
-            foreach ($request->getAttributes() as $attribute) {
-                $attributes[$attribute->getEntityId()] = $attribute->getAttributeCodes();
-            }
-
+            $attributes = $this->transformImportRequestAttributes($request->getAttributes());
             $products = \array_map(
                 function ($product) use ($attributes) {
                     $product = $this->productArrayMapper->convertToArray($product);
@@ -364,12 +377,7 @@ class CatalogService implements CatalogServerInterface
     public function importCategories(ImportCategoriesRequestInterface $request): ImportCategoriesResponseInterface
     {
         try {
-            // Transform request attributes data into entity_id => attributes relation
-            $attributes = [];
-            foreach ($request->getAttributes() as $attribute) {
-                $attributes[$attribute->getEntityId()] = $attribute->getAttributeCodes();
-            }
-
+            $attributes = $this->transformImportRequestAttributes($request->getAttributes());
             $categories = \array_map(
                 function ($category) use ($attributes) {
                     $category = $this->categoryArrayMapper->convertToArray($category);

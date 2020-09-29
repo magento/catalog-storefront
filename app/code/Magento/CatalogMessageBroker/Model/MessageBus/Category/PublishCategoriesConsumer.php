@@ -7,13 +7,13 @@
 namespace Magento\CatalogMessageBroker\Model\MessageBus\Category;
 
 use Magento\CatalogExport\Event\Data\Entity;
+use Magento\CatalogMessageBroker\Model\Converter\AttributeCodesConverter;
 use Magento\CatalogMessageBroker\Model\FetchCategoriesInterface;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterfaceFactory;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterface;
-use Magento\CatalogStorefrontApi\Api\Data\ImportCategoryRequestAttributesMapper;
-use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\CatalogStorefrontApi\Api\Data\ImportRequestAttributesMapper;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -57,9 +57,14 @@ class PublishCategoriesConsumer implements ConsumerEventInterface
     private $categoryMapper;
 
     /**
-     * @var ImportCategoryRequestAttributesMapper
+     * @var AttributeCodesConverter
      */
-    private $importCategoryRequestAttributesMapper;
+    private $attributeCodesConverter;
+
+    /**
+     * @var ImportRequestAttributesMapper
+     */
+    private $importRequestAttributesMapper;
 
     /**
      * @param LoggerInterface $logger
@@ -67,7 +72,8 @@ class PublishCategoriesConsumer implements ConsumerEventInterface
      * @param CatalogServerInterface $catalogServer
      * @param ImportCategoriesRequestInterfaceFactory $importCategoriesRequestInterfaceFactory
      * @param CategoryMapper $categoryMapper
-     * @param ImportCategoryRequestAttributesMapper $importCategoryRequestAttributesMapper
+     * @param AttributeCodesConverter $attributeCodesConverter
+     * @param ImportRequestAttributesMapper $importRequestAttributesMapper
      */
     public function __construct(
         LoggerInterface $logger,
@@ -75,14 +81,16 @@ class PublishCategoriesConsumer implements ConsumerEventInterface
         CatalogServerInterface $catalogServer,
         ImportCategoriesRequestInterfaceFactory $importCategoriesRequestInterfaceFactory,
         CategoryMapper $categoryMapper,
-        ImportCategoryRequestAttributesMapper $importCategoryRequestAttributesMapper
+        AttributeCodesConverter $attributeCodesConverter,
+        ImportRequestAttributesMapper $importRequestAttributesMapper
     ) {
         $this->logger = $logger;
         $this->fetchCategories = $fetchCategories;
         $this->catalogServer = $catalogServer;
         $this->importCategoriesRequestInterfaceFactory = $importCategoriesRequestInterfaceFactory;
         $this->categoryMapper = $categoryMapper;
-        $this->importCategoryRequestAttributesMapper = $importCategoryRequestAttributesMapper;
+        $this->attributeCodesConverter = $attributeCodesConverter;
+        $this->importRequestAttributesMapper = $importRequestAttributesMapper;
     }
 
     /**
@@ -115,7 +123,7 @@ class PublishCategoriesConsumer implements ConsumerEventInterface
     }
 
     /**
-     * Retrieve entities attributes array
+     * Retrieve transformed entities attributes data (entity_id => attributes)
      *
      * @param Entity[] $entities
      *
@@ -144,9 +152,9 @@ class PublishCategoriesConsumer implements ConsumerEventInterface
         return \array_filter(
             $categoryData,
             function ($code) use ($attributes) {
-                return \in_array($code, \array_map(function ($attributeCode) {
-                    return SimpleDataObjectConverter::camelCaseToSnakeCase($attributeCode);
-                }, $attributes)) || $code === 'category_id';
+                $attributes = $this->attributeCodesConverter->convertFromCamelCaseToSnakeCase($attributes);
+
+                return \in_array($code, $attributes) || $code === 'category_id';
             },
             ARRAY_FILTER_USE_KEY
         );
@@ -172,10 +180,12 @@ class PublishCategoriesConsumer implements ConsumerEventInterface
             $category['id'] = $category['category_id'];
 
             if ($actionType === self::ACTION_UPDATE) {
-                $attributes[] = $this->importCategoryRequestAttributesMapper->setData([
-                    'entity_id' => $category['category_id'],
-                    'attribute_codes' => \array_keys($category),
-                ])->build();
+                $attributes[] = $this->importRequestAttributesMapper->setData(
+                    [
+                        'entity_id' => $category['category_id'],
+                        'attribute_codes' => \array_keys($category),
+                    ]
+                )->build();
             }
 
             $category = $this->categoryMapper->setData($category)->build();
