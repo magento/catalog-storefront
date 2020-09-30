@@ -24,5 +24,8 @@
             "Magento\\Grpc\\": ""
         }
     },
-    "bin": ["bin/grpc-server", "bin/grpc-workers"]
+    "bin": [
+        "bin/grpc-server",
+        "bin/grpc-workers"
+    ]
 }

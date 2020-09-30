@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Grpc\Console\Command;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Module\Dir;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
@@ -16,6 +17,8 @@ use Magento\Framework\Module\ModuleList;
 
 /**
  * Command for marshaling proto files from modules
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProtoMarshalCommand extends Command
 {
@@ -28,16 +31,18 @@ class ProtoMarshalCommand extends Command
      * @var ModuleList
      */
     private $moduleList;
+
     /**
      * @var Dir
      */
     private $dir;
 
     /**
-     * ProtoMarshalCommand constructor.
      * @param Filesystem $fileSystem
      * @param ModuleList $moduleList
      * @param Dir $dir
+     * @param \Symfony\Component\Console\Input\ArgvInput $input
+     * @param \Symfony\Component\Console\Output\ConsoleOutput $output
      */
     public function __construct(
         Filesystem $fileSystem,
@@ -67,13 +72,12 @@ class ProtoMarshalCommand extends Command
             } catch (\Exception $e) {
                 $errorOutput = $output->getErrorOutput();
                 $errorOutput->writeln('<error>' . $e->getMessage() . '</error>');
-                exit(117);
             }
         }
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function configure()
     {
@@ -90,10 +94,13 @@ class ProtoMarshalCommand extends Command
      * @throws \RuntimeException if binary is not found
      * @return string
      */
-    private function getBinaryPath(string $binaryName): string {
+    private function getBinaryPath(string $binaryName): string
+    {
+        // phpcs:ignore Magento2.Exceptions.Superglobal
         $paths = explode(':', $_SERVER['PATH']);
         foreach ($paths as $path) {
             $filePath = $path . DIRECTORY_SEPARATOR . $binaryName;
+            // phpcs:disable Magento2.Functions.DiscouragedFunction
             if (file_exists($filePath)) {
                 return $filePath;
             }
@@ -105,7 +112,9 @@ class ProtoMarshalCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -157,6 +166,8 @@ class ProtoMarshalCommand extends Command
      * @param OutputInterface $output
      *
      * @return string[] Array of proto files found in Magento
+     *
+     * phpcs:disable Magento2.Functions.DiscouragedFunction
      */
     private function generatePhpClasses(
         string $rootDirectory,
@@ -185,7 +196,6 @@ class ProtoMarshalCommand extends Command
             $output->writeln('No proto files detected. Existing');
             exit(0);
         }
-
 
         $command = "$protocBinary $includesStr --php_out={$rootDirectory}" . DirectoryList::GENERATED . "/code/"
             . " --php-grpc_out={$rootDirectory}" . DirectoryList::GENERATED . "/code/"
@@ -220,13 +230,18 @@ class ProtoMarshalCommand extends Command
         return $protos;
     }
 
-    private function findServices($rootDirectory)
+    /**
+     * Find GRPC services
+     *
+     * @param string $rootDirectory
+     * @return array
+     */
+    private function findServices($rootDirectory): array
     {
         $services = [];
         $filesIterator = new \RecursiveDirectoryIterator($rootDirectory . DirectoryList::GENERATED . '/code');
         /** @var \SplFileInfo $file */
-        foreach(new \RecursiveIteratorIterator($filesIterator) as $file)
-        {
+        foreach (new \RecursiveIteratorIterator($filesIterator) as $file) {
             $realPath = $file->getRealPath();
             if (!$realPath) {
                 continue;
@@ -236,13 +251,12 @@ class ProtoMarshalCommand extends Command
                 $content = file_get_contents($realPath);
                 if (preg_match(
                     '~namespace ([^;]+).*interface ([^ ]+) extends GRPC\\\ServiceInterface~si',
-                    $content, $matches
+                    $content,
+                    $matches
                 )) {
                     $services[] = $matches[1] . '\\' . $matches[2];
-
                 }
             }
-
         }
 
         return $services;

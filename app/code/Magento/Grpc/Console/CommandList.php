@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Grpc\Console;
 
 use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class CommandList
+ *
+ * Provides list of commands to be available for application
  */
 class CommandList implements \Magento\Framework\Console\CommandListInterface
 {
@@ -32,7 +36,7 @@ class CommandList implements \Magento\Framework\Console\CommandListInterface
      *
      * @return string[]
      */
-    protected function getCommandsClasses()
+    private function getCommandsClasses(): array
     {
         return [
             \Magento\Grpc\Console\Command\ProtoMarshalCommand::class
@@ -40,7 +44,7 @@ class CommandList implements \Magento\Framework\Console\CommandListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getCommands()
     {
@@ -49,6 +53,7 @@ class CommandList implements \Magento\Framework\Console\CommandListInterface
             if (class_exists($class)) {
                 $commands[] = $this->objectManager->get($class);
             } else {
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception('Class ' . $class . ' does not exist');
             }
         }

@@ -1,16 +1,16 @@
 <?php
-declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Grpc\App;
 
 use Magento\Framework\App;
 use Magento\Framework\App\State;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Event\Manager;
 use Spiral\Goridge;
 use Spiral\RoadRunner;
 
@@ -45,17 +45,18 @@ class Grpc implements \Magento\Framework\AppInterface
      * @var ObjectManagerInterface
      */
     private $objectManager;
+
     /**
      * @var \Psr\Log\LoggerInterface
      */
     private $logger;
+
     /**
      * @var App\ResponseInterface
      */
     private $appResponse;
 
     /**
-     * Grpc constructor.
      * @param ObjectManagerInterface $objectManager
      * @param ConfigLoaderInterface $configLoader
      * @param State $state
@@ -81,6 +82,9 @@ class Grpc implements \Magento\Framework\AppInterface
 
     /**
      * Run application
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * phpcs:disable Magento2.Functions.DiscouragedFunction
      */
     public function launch()
     {
@@ -111,9 +115,13 @@ class Grpc implements \Magento\Framework\AppInterface
     }
 
     /**
-     * Writes errors to stdout
+     * Ability to handle exceptions that may have occurred during bootstrap and launch
      *
      * @inheritDoc
+     *
+     * @param App\Bootstrap $bootstrap
+     * @param \Exception $exception
+     * @return bool
      */
     public function catchException(App\Bootstrap $bootstrap, \Exception $exception)
     {
