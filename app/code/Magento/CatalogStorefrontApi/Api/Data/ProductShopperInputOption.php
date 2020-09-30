@@ -56,9 +56,9 @@ final class ProductShopperInputOption implements ProductShopperInputOptionInterf
     private $fileExtension;
 
     /**
-     * @var \Magento\CatalogStorefrontApi\Api\Data\ValueIntervalInterface
+     * @var \Magento\CatalogStorefrontApi\Api\Data\ValueRangeInterface
      */
-    private $interval;
+    private $range;
 
     /**
      * @var int
@@ -220,22 +220,22 @@ final class ProductShopperInputOption implements ProductShopperInputOptionInterf
     /**
      * @inheritdoc
      *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\ValueIntervalInterface|null
+     * @return \Magento\CatalogStorefrontApi\Api\Data\ValueRangeInterface|null
      */
-    public function getInterval(): ?\Magento\CatalogStorefrontApi\Api\Data\ValueIntervalInterface
+    public function getRange(): ?\Magento\CatalogStorefrontApi\Api\Data\ValueRangeInterface
     {
-        return $this->interval;
+        return $this->range;
     }
     
     /**
      * @inheritdoc
      *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\ValueIntervalInterface $value
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ValueRangeInterface $value
      * @return void
      */
-    public function setInterval(\Magento\CatalogStorefrontApi\Api\Data\ValueIntervalInterface $value): void
+    public function setRange(\Magento\CatalogStorefrontApi\Api\Data\ValueRangeInterface $value): void
     {
-        $this->interval = $value;
+        $this->range = $value;
     }
     
     /**

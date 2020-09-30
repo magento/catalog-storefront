@@ -42,9 +42,9 @@ class ProductShopperInputOption extends \Google\Protobuf\Internal\Message
      */
     private $file_extension;
     /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.ValueInterval interval = 8;</code>
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.ValueRange range = 8;</code>
      */
-    protected $interval = null;
+    protected $range = null;
     /**
      * Generated from protobuf field <code>int32 image_size_x = 9;</code>
      */
@@ -67,7 +67,7 @@ class ProductShopperInputOption extends \Google\Protobuf\Internal\Message
      *     @type string $render_type
      *     @type \Magento\CatalogStorefrontApi\Proto\Price[]|\Google\Protobuf\Internal\RepeatedField $price
      *     @type string[]|\Google\Protobuf\Internal\RepeatedField $file_extension
-     *     @type \Magento\CatalogStorefrontApi\Proto\ValueInterval $interval
+     *     @type \Magento\CatalogStorefrontApi\Proto\ValueRange $range
      *     @type int $image_size_x
      *     @type int $image_size_y
      * }
@@ -233,23 +233,23 @@ class ProductShopperInputOption extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.ValueInterval interval = 8;</code>
-     * @return \Magento\CatalogStorefrontApi\Proto\ValueInterval
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.ValueRange range = 8;</code>
+     * @return \Magento\CatalogStorefrontApi\Proto\ValueRange
      */
-    public function getInterval()
+    public function getRange()
     {
-        return $this->interval;
+        return $this->range;
     }
 
     /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.ValueInterval interval = 8;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\ValueInterval $var
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.ValueRange range = 8;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\ValueRange $var
      * @return $this
      */
-    public function setInterval($var)
+    public function setRange($var)
     {
-        GPBUtil::checkMessage($var, \Magento\CatalogStorefrontApi\Proto\ValueInterval::class);
-        $this->interval = $var;
+        GPBUtil::checkMessage($var, \Magento\CatalogStorefrontApi\Proto\ValueRange::class);
+        $this->range = $var;
 
         return $this;
     }

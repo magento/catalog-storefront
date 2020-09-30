@@ -113,10 +113,10 @@ final class ProductShopperInputOptionMapper
             case "file_extension":
                 $dto->setFileExtension((array) $value);
                 break;
-            case "interval":
-                $dto->setInterval(
+            case "range":
+                $dto->setRange(
                     $this->objectManager
-                       ->create(\Magento\CatalogStorefrontApi\Api\Data\ValueIntervalMapper::class)
+                       ->create(\Magento\CatalogStorefrontApi\Api\Data\ValueRangeMapper::class)
                        ->setData($value)
                        ->build()
                 );

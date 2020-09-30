@@ -60,9 +60,9 @@ final class ProductShopperInputOptionArrayMapper
         }
         $result["price"] = $fieldArray;
         $result["file_extension"] = $dto->getFileExtension();
-        if ($dto->getInterval() !== null) {
-            $result["interval"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ValueIntervalArrayMapper::class)
-                ->convertToArray($dto->getInterval());
+        if ($dto->getRange() !== null) {
+            $result["range"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ValueRangeArrayMapper::class)
+                ->convertToArray($dto->getRange());
         }
         $result["image_size_x"] = $dto->getImageSizeX();
         $result["image_size_y"] = $dto->getImageSizeY();

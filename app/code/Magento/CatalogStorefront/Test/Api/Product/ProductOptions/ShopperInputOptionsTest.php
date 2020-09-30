@@ -127,7 +127,7 @@ class ShopperInputOptionsTest extends StorefrontTestsAbstract
                                 'final_price' => 1.0
                             ]
                         ],
-                        'interval' => [
+                        'range' => [
                             'to' => 100.0,
                         ],
                         'file_extension' => [],
@@ -162,7 +162,7 @@ class ShopperInputOptionsTest extends StorefrontTestsAbstract
                                 'final_price' => 2.0
                             ]
                         ],
-                        'interval' => [
+                        'range' => [
                             'to' => 0.0,
                         ],
                         'file_extension' => [],
@@ -197,7 +197,7 @@ class ShopperInputOptionsTest extends StorefrontTestsAbstract
                                 'final_price' => 0.395
                             ]
                         ],
-                        'interval' => [
+                        'range' => [
                             'to' => 20.0,
                         ],
                         'file_extension' => [],
@@ -232,7 +232,7 @@ class ShopperInputOptionsTest extends StorefrontTestsAbstract
                                 'final_price' => 3.0
                             ]
                         ],
-                        'interval' => [
+                        'range' => [
                             'to' => 0.0,
                         ],
                         'file_extension' => ['jpg, png, gif'],

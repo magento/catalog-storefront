@@ -145,13 +145,13 @@ message ProductShopperInputOption {
   string render_type = 5;
   repeated Price price = 6;
   repeated string file_extension = 7;
-  ValueInterval interval = 8;
+  ValueRange range = 8;
   int32 image_size_x = 9;
   int32 image_size_y = 10;
 }
 
-// Interval of some value, e.g. min/max characters of text field or min/max amount of a gift card
-message ValueInterval {
+// Range of some value, e.g. min/max characters of text field or min/max amount of a gift card
+message ValueRange {
   float from = 1;
   float to = 2;
 }
