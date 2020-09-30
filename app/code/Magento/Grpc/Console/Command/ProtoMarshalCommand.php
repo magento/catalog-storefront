@@ -93,6 +93,8 @@ class ProtoMarshalCommand extends Command
      *
      * @throws \RuntimeException if binary is not found
      * @return string
+     *
+     * phpcs:disable Magento2.Security.Superglobal
      */
     private function getBinaryPath(string $binaryName): string
     {
@@ -152,7 +154,6 @@ class ProtoMarshalCommand extends Command
         $output->writeln(
             "<info>" .$directoryWrite->getAbsolutePath() . "magento.proto file is created."
             . " Launch gRPC server using <fg=magenta>rr-grpc serve -v</></info>"
-
         );
     }
 
@@ -194,6 +195,7 @@ class ProtoMarshalCommand extends Command
 
         if (!$protoStr) {
             $output->writeln('No proto files detected. Existing');
+            // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
             exit(0);
         }
 
@@ -210,11 +212,12 @@ class ProtoMarshalCommand extends Command
         $output->writeln("<info>Parsing protobuf files</info>");
 
         $out = '';
+        // phpcs:ignore Magento2.Security.InsecureFunction
         exec($command, $out, $code);
 
         if ($code !== 0) {
-            throw new \RuntimeException("Can't execute '$command' with output '"
-                . implode("\n", $out) . "'"
+            throw new \RuntimeException(
+                "Can't execute '$command' with output '" . implode("\n", $out) . "'"
             );
         }
 

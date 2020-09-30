@@ -16,6 +16,8 @@ use Spiral\RoadRunner;
 
 /**
  * Grpc application. Called from grpc worker to serve grpc requests.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Grpc implements \Magento\Framework\AppInterface
 {
@@ -85,6 +87,7 @@ class Grpc implements \Magento\Framework\AppInterface
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * phpcs:disable Magento2.Functions.DiscouragedFunction
+     * phpcs:disable Magento2.Functions.IncludeFile
      */
     public function launch()
     {
@@ -100,6 +103,7 @@ class Grpc implements \Magento\Framework\AppInterface
                 . 'Di compile command may cleanup generated directory. "-s" flag will skip cleanup during di:compile'
             );
         }
+
         $services = require($servicesFile);
         foreach ($services as $serviceInterface) {
             $serviceInstance = $this->objectManager->get($serviceInterface);
@@ -115,9 +119,9 @@ class Grpc implements \Magento\Framework\AppInterface
     }
 
     /**
-     * Ability to handle exceptions that may have occurred during bootstrap and launch
-     *
      * @inheritDoc
+     *
+     * Ability to handle exceptions that may have occurred during bootstrap and launch.
      *
      * @param App\Bootstrap $bootstrap
      * @param \Exception $exception
