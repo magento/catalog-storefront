@@ -90,10 +90,10 @@ class PublishCategoriesConsumer implements ConsumerEventInterface
 
             if (!empty($attributes)) {
                 $categoryData = $this->filterAttributes($categoryData, $attributes);
-                $categories[] = $this->buildCategoryDataRequest($categoryData, \array_keys($categoryData));
-            } else {
-                $categories[] = $this->buildCategoryDataRequest($categoryData, []);
+                $attributes = \array_keys($categoryData);
             }
+
+            $categories[] = $this->buildCategoryDataRequest($categoryData, $attributes);
         }
 
         if (!empty($categories)) {
@@ -122,7 +122,7 @@ class PublishCategoriesConsumer implements ConsumerEventInterface
      * Filter attributes for entity update.
      *
      * @param array $categoryData
-     * @param array $attributes
+     * @param string[] $attributes
      *
      * @return array
      */
