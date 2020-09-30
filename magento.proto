@@ -314,8 +314,9 @@ message ImportProductsRequest {
 }
 
 message ImportProductDataRequest {
-    Product product = 1;
-    repeated string attributes = 2;
+  Product product = 1;
+  // List of imported attributes. Support patch update for set of top-level attributes
+  repeated string attributes = 2;
 }
 
 message DeleteProductsRequest {
@@ -354,8 +355,9 @@ message ImportCategoriesRequest {
 }
 
 message ImportCategoryDataRequest {
-    Category category = 1;
-    repeated string attributes = 2;
+  Category category = 1;
+  // List of imported attributes. Support patch update for set of top-level attributes
+  repeated string attributes = 2;
 }
 
 message ImportCategoriesResponse {
