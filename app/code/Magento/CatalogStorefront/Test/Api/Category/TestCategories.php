@@ -23,7 +23,6 @@ class TestCategories extends StorefrontTestsAbstract
     /**
      * Test Constants
      */
-    const TEST_SKU = 'bundle-product';
     const STORE_CODE = 'default';
 
     /**
@@ -37,7 +36,7 @@ class TestCategories extends StorefrontTestsAbstract
     private $categoriesGetRequestInterface;
 
     /**
-     * @var ProductRepositoryInterface
+     * @var CategoryFactory
      */
     private $categoryFactory;
 
@@ -69,23 +68,34 @@ class TestCategories extends StorefrontTestsAbstract
      */
     public function testCategoriesTree()
     {
-        $collection = $this->categoryFactory->create()->getCollection()
-            ->addAttributeToFilter('name',['in' => ['Category 1'] ])->setPageSize(1);
-
-        if ($collection->getSize()) {
-            $category = $collection->getFirstItem();
-        }
-
-        $this->categoriesGetRequestInterface->setIds([$category->getId()]);
+        $this->categoriesGetRequestInterface->setIds([400, 402]);
         $this->categoriesGetRequestInterface->setStore(self::STORE_CODE);
         $catalogServiceItem = $this->catalogService->getCategories($this->categoriesGetRequestInterface);
         $this->assertNotEmpty($catalogServiceItem->getItems());
 
-        self::assertEquals($category->getId(), $catalogServiceItem->getItems()[0]->getId());
-        self::assertEquals($category->getName(), $catalogServiceItem->getItems()[0]->getName());
-        self::assertEquals($category->getPath(), $catalogServiceItem->getItems()[0]->getPath());
-        self::assertEquals($category->getLevel(), $catalogServiceItem->getItems()[0]->getLevel());
-        self::assertTrue($category->getIsActive(), $catalogServiceItem->getItems()[0]->getIsActive());
+        self::assertEquals(400, $catalogServiceItem->getItems()[0]->getId());
+        self::assertEquals('Category 1', $catalogServiceItem->getItems()[0]->getName());
+        self::assertEquals(2, $catalogServiceItem->getItems()[0]->getParentId());
+        self::assertEquals('1/2/400', $catalogServiceItem->getItems()[0]->getPath());
+        self::assertEquals(2, $catalogServiceItem->getItems()[0]->getLevel());
+        self::assertTrue(true, $catalogServiceItem->getItems()[0]->getIsActive());
+        self::assertEquals('name', $catalogServiceItem->getItems()[0]->getAvailableSortBy());
+        self::assertEquals('name', $catalogServiceItem->getItems()[0]->getDefaultSortBy());
+        self::assertEquals(1, $catalogServiceItem->getItems()[0]->getPosition());
+        self::assertEquals([], $catalogServiceItem->getItems()[0]->getChildren());
+        self::assertEquals([], $catalogServiceItem->getItems()[1]->getBreadcrumbs());
+
+        self::assertEquals(401, $catalogServiceItem->getItems()[1]->getId());
+        self::assertEquals('Category 1.1.1', $catalogServiceItem->getItems()[1]->getName());
+        self::assertEquals(401, $catalogServiceItem->getItems()[1]->getParentId());
+        self::assertEquals('1/2/400/401/402', $catalogServiceItem->getItems()[1]->getPath());
+        self::assertEquals(4, $catalogServiceItem->getItems()[1]->getLevel());
+        self::assertTrue(true, $catalogServiceItem->getItems()[1]->getIsActive());
+        self::assertEquals('name', $catalogServiceItem->getItems()[1]->getAvailableSortBy());
+        self::assertEquals('name', $catalogServiceItem->getItems()[1]->getDefaultSortBy());
+        self::assertEquals(1, $catalogServiceItem->getItems()[1]->getPosition());
+        self::assertEquals([], $catalogServiceItem->getItems()[1]->getChildren());
+        self::assertEquals([], $catalogServiceItem->getItems()[1]->getBreadcrumbs());
     }
 
     /**
@@ -98,22 +108,17 @@ class TestCategories extends StorefrontTestsAbstract
      */
     public function testCategoryAnchor()
     {
-        $collection = $this->categoryFactory->create()->getCollection()
-            ->addAttributeToFilter('name',['in' => ['Category_Anchor'] ])->setPageSize(1);
-
-        if ($collection->getSize()) {
-            $category = $collection->getFirstItem();
-        }
-
-        $this->categoriesGetRequestInterface->setIds([$category->getId()]);
+        $this->categoriesGetRequestInterface->setIds([22]);
         $this->categoriesGetRequestInterface->setStore(self::STORE_CODE);
         $catalogServiceItem = $this->catalogService->getCategories($this->categoriesGetRequestInterface);
         $this->assertNotEmpty($catalogServiceItem->getItems());
 
-        self::assertEquals($category->getId(), $catalogServiceItem->getItems()[0]->getId());
-        self::assertEquals($category->getName(), $catalogServiceItem->getItems()[0]->getName());
-        self::assertEquals($category->getPath(), $catalogServiceItem->getItems()[0]->getPath());
-        self::assertEquals($category->getLevel(), $catalogServiceItem->getItems()[0]->getLevel());
-        self::assertTrue($category->getIsActive(), $catalogServiceItem->getItems()[0]->getIsActive());
+        self::assertEquals(22, $catalogServiceItem->getItems()[0]->getId());
+        self::assertEquals('Category_Anchor', $catalogServiceItem->getItems()[0]->getName());
+        self::assertEquals('1/2/22', $catalogServiceItem->getItems()[0]->getPath());
+        self::assertEquals('2', $catalogServiceItem->getItems()[0]->getLevel());
+        self::assertEquals('name', $catalogServiceItem->getItems()[0]->getAvailableSortBy());
+        self::assertEquals('name', $catalogServiceItem->getItems()[0]->getDefaultSortBy());
+        self::assertTrue(true, $catalogServiceItem->getItems()[0]->getIsActive());
     }
 }
