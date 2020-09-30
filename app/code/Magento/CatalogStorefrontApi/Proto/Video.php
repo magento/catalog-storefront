@@ -14,29 +14,17 @@ use Google\Protobuf\Internal\GPBUtil;
 class Video extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Generated from protobuf field <code>string video_provider = 1;</code>
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.MediaResource preview = 1;</code>
      */
-    protected $video_provider = '';
+    protected $preview = null;
     /**
-     * Generated from protobuf field <code>string video_url = 2;</code>
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.VideoItem video = 2;</code>
      */
-    protected $video_url = '';
+    protected $video = null;
     /**
-     * Generated from protobuf field <code>string video_title = 3;</code>
+     * Generated from protobuf field <code>string sort_order = 3;</code>
      */
-    protected $video_title = '';
-    /**
-     * Generated from protobuf field <code>string video_description = 4;</code>
-     */
-    protected $video_description = '';
-    /**
-     * Generated from protobuf field <code>string video_metadata = 5;</code>
-     */
-    protected $video_metadata = '';
-    /**
-     * Generated from protobuf field <code>string media_type = 6;</code>
-     */
-    protected $media_type = '';
+    protected $sort_order = '';
 
     /**
      * Constructor.
@@ -44,12 +32,9 @@ class Video extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type string $video_provider
-     *     @type string $video_url
-     *     @type string $video_title
-     *     @type string $video_description
-     *     @type string $video_metadata
-     *     @type string $media_type
+     *     @type \Magento\CatalogStorefrontApi\Proto\MediaResource $preview
+     *     @type \Magento\CatalogStorefrontApi\Proto\VideoItem $video
+     *     @type string $sort_order
      * }
      */
     public function __construct($data = null)
@@ -59,133 +44,67 @@ class Video extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>string video_provider = 1;</code>
-     * @return string
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.MediaResource preview = 1;</code>
+     * @return \Magento\CatalogStorefrontApi\Proto\MediaResource
      */
-    public function getVideoProvider()
+    public function getPreview()
     {
-        return $this->video_provider;
+        return $this->preview;
     }
 
     /**
-     * Generated from protobuf field <code>string video_provider = 1;</code>
-     * @param string $var
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.MediaResource preview = 1;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\MediaResource $var
      * @return $this
      */
-    public function setVideoProvider($var)
+    public function setPreview($var)
     {
-        GPBUtil::checkString($var, true);
-        $this->video_provider = $var;
+        GPBUtil::checkMessage($var, \Magento\CatalogStorefrontApi\Proto\MediaResource::class);
+        $this->preview = $var;
 
         return $this;
     }
 
     /**
-     * Generated from protobuf field <code>string video_url = 2;</code>
-     * @return string
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.VideoItem video = 2;</code>
+     * @return \Magento\CatalogStorefrontApi\Proto\VideoItem
      */
-    public function getVideoUrl()
+    public function getVideo()
     {
-        return $this->video_url;
+        return $this->video;
     }
 
     /**
-     * Generated from protobuf field <code>string video_url = 2;</code>
-     * @param string $var
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.VideoItem video = 2;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\VideoItem $var
      * @return $this
      */
-    public function setVideoUrl($var)
+    public function setVideo($var)
     {
-        GPBUtil::checkString($var, true);
-        $this->video_url = $var;
+        GPBUtil::checkMessage($var, \Magento\CatalogStorefrontApi\Proto\VideoItem::class);
+        $this->video = $var;
 
         return $this;
     }
 
     /**
-     * Generated from protobuf field <code>string video_title = 3;</code>
+     * Generated from protobuf field <code>string sort_order = 3;</code>
      * @return string
      */
-    public function getVideoTitle()
+    public function getSortOrder()
     {
-        return $this->video_title;
+        return $this->sort_order;
     }
 
     /**
-     * Generated from protobuf field <code>string video_title = 3;</code>
+     * Generated from protobuf field <code>string sort_order = 3;</code>
      * @param string $var
      * @return $this
      */
-    public function setVideoTitle($var)
+    public function setSortOrder($var)
     {
         GPBUtil::checkString($var, true);
-        $this->video_title = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>string video_description = 4;</code>
-     * @return string
-     */
-    public function getVideoDescription()
-    {
-        return $this->video_description;
-    }
-
-    /**
-     * Generated from protobuf field <code>string video_description = 4;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setVideoDescription($var)
-    {
-        GPBUtil::checkString($var, true);
-        $this->video_description = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>string video_metadata = 5;</code>
-     * @return string
-     */
-    public function getVideoMetadata()
-    {
-        return $this->video_metadata;
-    }
-
-    /**
-     * Generated from protobuf field <code>string video_metadata = 5;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setVideoMetadata($var)
-    {
-        GPBUtil::checkString($var, true);
-        $this->video_metadata = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>string media_type = 6;</code>
-     * @return string
-     */
-    public function getMediaType()
-    {
-        return $this->media_type;
-    }
-
-    /**
-     * Generated from protobuf field <code>string media_type = 6;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setMediaType($var)
-    {
-        GPBUtil::checkString($var, true);
-        $this->media_type = $var;
+        $this->sort_order = $var;
 
         return $this;
     }
