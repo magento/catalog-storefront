@@ -39,7 +39,6 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
      * @var CatalogService
      */
     private $catalogService;
-
     /**
      * @var ProductsGetRequestInterface
      */
@@ -155,7 +154,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
                         'sort_order' => 0,
                         'required' => false,
                         'render_type' => '',
-                        'type' => 'super',
+                        'type' => 'configurable',
                         'values' => [
                             [
                                 'label' => 'Option 1 Default Store',
@@ -207,7 +206,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
                         'sort_order' => 0,
                         'required' => false,
                         'render_type' => '',
-                        'type' => 'super',
+                        'type' => 'configurable',
                         'values' => [
                             [
                                 'label' => 'Option 1 Second Store',
