@@ -24,11 +24,6 @@ class Grpc implements \Magento\Framework\AppInterface
     const AREA = 'storefront';
 
     /**
-     * @var ObjectManagerInterface
-     */
-    protected $_objectManager;
-
-    /**
      * @var State
      */
     private $state;
