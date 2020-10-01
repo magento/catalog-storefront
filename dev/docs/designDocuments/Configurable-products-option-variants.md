@@ -267,4 +267,4 @@ As final result product variants that related to products #1 and #3.
 ]
 ```
 
-For explanation of other service refer to this document https://github.com/magento/catalog-storefront/dev/docs/designDocuments/Product-Variants-services.md
+For explanation of other service refer to this document https://github.com/magento/catalog-storefront/blob/develop/dev/docs/designDocuments/Product-Variants-services.md

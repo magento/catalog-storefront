@@ -1,14 +1,14 @@
 **Update** source of truth: https://airtable.com/tbljIPtXfyyENuY7H/viw5uN7n9xF7LlUlp?blocks=hide
 
 The goal of this document:
-- provide details about the left amount of work for [Phase 1](https://github.com/magento/catalog-storefront/dev/docs/home/Home.md) Scope for Phase1 section
+- provide details about the left amount of work for [Phase 1](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/home/Home.md) Scope for Phase1 section
 - create milestones 
 
 Below the list of all un-finished work which we need to organise in milestone 
 
 ### Existing Catalog GraphQL Coverage
 
-**Note:** all items related to GQL Coverage sections related only to SF API. The same tasks have to be done in scope of GraphQL Server part (see [diagram](https://github.com/magento/catalog-storefront/dev/docs/onboarding/Services-responsibilities.md))
+**Note:** all items related to GQL Coverage sections related only to SF API. The same tasks have to be done in scope of GraphQL Server part (see [diagram](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/onboarding/Services-responsibilities.md))
 
 1. Complex products & product options ([design document](https://github.com/magento/architecture/pull/411/))
     1. Downloadable product

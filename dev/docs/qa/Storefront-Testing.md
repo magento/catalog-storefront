@@ -3,7 +3,7 @@
 To run tests for the Storefront Application project we use [GitHub App](https://github.com/magento-commerce/engcom-githubapp-pr-mts-builds) which allows configuring repositories, environment settings and other things to run tests from PR on GitHub 
 
 #### Flow:
-- add a comment in PR, e.g. `@magento run all tests` (see [full list](https://github.com/magento/catalog-storefront/wiki/Running-tests-on-PR))
+- add a comment in PR, e.g. `@magento run all tests` (see [full list](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/development/Running-tests-on-PR.md))
  - Currently, it's configured only for next repos: https://github.com/magento/catalog-storefront, https://github.com/magento/saas-export
 GitHub App will ask “Magento Test API” to run tests in PR with [configuration](https://github.com/magento-commerce/engcom-githubapp-pr-mts-builds/blob/master/app/repo-config.js#L652) for SF project
 - Test results will be provided in PR
