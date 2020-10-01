@@ -71,7 +71,6 @@ message Product {
   repeated Option options = 81;
   repeated UrlRewrite url_rewrites = 82;
   string country_of_manufacture = 85;
-  bool gift_message_available = 86;
   float special_price = 87;
   string special_from_date = 88;
   string special_to_date = 89;
