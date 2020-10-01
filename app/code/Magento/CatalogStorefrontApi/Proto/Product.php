@@ -89,27 +89,17 @@ class Product extends \Google\Protobuf\Internal\Message
      */
     protected $weight = 0.0;
     /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.Image image = 31;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Image images = 30;</code>
      */
-    protected $image = null;
+    private $images;
     /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.Image small_image = 32;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Video videos = 31;</code>
      */
-    protected $small_image = null;
+    private $videos;
     /**
-     * TODO: Rename to thumbnail_image?
-     *
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.Image thumbnail = 33;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Sample samples = 32;</code>
      */
-    protected $thumbnail = null;
-    /**
-     * Generated from protobuf field <code>string swatch_image = 34;</code>
-     */
-    protected $swatch_image = '';
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.MediaGalleryItem media_gallery = 35;</code>
-     */
-    private $media_gallery;
+    private $samples;
     /**
      * where to display product
      *
@@ -120,7 +110,6 @@ class Product extends \Google\Protobuf\Internal\Message
      *    PriceRange prices = 44;//-
      * TODO: Uncomment options
      *    repeated Option options = 46;
-     *    repeated Variant variants = 47;//-
      *
      * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DynamicAttributeValue dynamic_attributes = 50;</code>
      */
@@ -189,14 +178,6 @@ class Product extends \Google\Protobuf\Internal\Message
      */
     private $url_rewrites;
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Variant variants = 83;</code>
-     */
-    private $variants;
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ConfigurableOption configurable_options = 84;</code>
-     */
-    private $configurable_options;
-    /**
      * Generated from protobuf field <code>string country_of_manufacture = 85;</code>
      */
     protected $country_of_manufacture = '';
@@ -227,47 +208,15 @@ class Product extends \Google\Protobuf\Internal\Message
     /**
      *BUNDLE
      *
-     * Generated from protobuf field <code>string ship_bundle_items = 92;</code>
-     */
-    protected $ship_bundle_items = '';
-    /**
-     * Generated from protobuf field <code>bool dynamic_weight = 93;</code>
-     */
-    protected $dynamic_weight = false;
-    /**
-     * Generated from protobuf field <code>bool dynamic_sku = 94;</code>
-     */
-    protected $dynamic_sku = false;
-    /**
-     * Generated from protobuf field <code>bool dynamic_price = 95;</code>
-     */
-    protected $dynamic_price = false;
-    /**
      * Generated from protobuf field <code>string price_view = 96;</code>
      */
     protected $price_view = '';
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.BundleItem items = 97;</code>
-     */
-    private $items;
     /**
      *DOWNLOADABLE
      *
      * Generated from protobuf field <code>bool links_purchased_separately = 98;</code>
      */
     protected $links_purchased_separately = false;
-    /**
-     * Generated from protobuf field <code>string links_title = 99;</code>
-     */
-    protected $links_title = '';
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DownloadableLink downloadable_product_links = 100;</code>
-     */
-    private $downloadable_product_links;
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DownloadableSample downloadable_product_samples = 101;</code>
-     */
-    private $downloadable_product_samples;
     /**
      * Generated from protobuf field <code>float only_x_left_in_stock = 102;</code>
      */
@@ -283,9 +232,9 @@ class Product extends \Google\Protobuf\Internal\Message
      */
     private $product_options;
     /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.ProductShopperInputOption shopper_input_options = 200;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductShopperInputOption shopper_input_options = 200;</code>
      */
-    protected $shopper_input_options = null;
+    private $shopper_input_options;
 
     /**
      * Constructor.
@@ -317,19 +266,15 @@ class Product extends \Google\Protobuf\Internal\Message
      *     @type string $tax_class_id
      *           TODO: Why missing meta fields?
      *     @type float $weight
-     *     @type \Magento\CatalogStorefrontApi\Proto\Image $image
-     *     @type \Magento\CatalogStorefrontApi\Proto\Image $small_image
-     *     @type \Magento\CatalogStorefrontApi\Proto\Image $thumbnail
-     *           TODO: Rename to thumbnail_image?
-     *     @type string $swatch_image
-     *     @type \Magento\CatalogStorefrontApi\Proto\MediaGalleryItem[]|\Google\Protobuf\Internal\RepeatedField $media_gallery
+     *     @type \Magento\CatalogStorefrontApi\Proto\Image[]|\Google\Protobuf\Internal\RepeatedField $images
+     *     @type \Magento\CatalogStorefrontApi\Proto\Video[]|\Google\Protobuf\Internal\RepeatedField $videos
+     *     @type \Magento\CatalogStorefrontApi\Proto\Sample[]|\Google\Protobuf\Internal\RepeatedField $samples
      *     @type string $visibility
      *           where to display product
      *     @type \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue[]|\Google\Protobuf\Internal\RepeatedField $dynamic_attributes
      *              PriceRange prices = 44;//-
      *           TODO: Uncomment options
      *              repeated Option options = 46;
-     *              repeated Variant variants = 47;//-
      *     @type string $meta_description
      *           TODO: qty is missing for only-x-left-in-stock functionality
      *           TODO: Meta fields not populated by catalog SF app
@@ -348,8 +293,6 @@ class Product extends \Google\Protobuf\Internal\Message
      *     @type \Magento\CatalogStorefrontApi\Proto\Option[]|\Google\Protobuf\Internal\RepeatedField $options
      *           TODO: May need to be a complex type
      *     @type \Magento\CatalogStorefrontApi\Proto\UrlRewrite[]|\Google\Protobuf\Internal\RepeatedField $url_rewrites
-     *     @type \Magento\CatalogStorefrontApi\Proto\Variant[]|\Google\Protobuf\Internal\RepeatedField $variants
-     *     @type \Magento\CatalogStorefrontApi\Proto\ConfigurableOption[]|\Google\Protobuf\Internal\RepeatedField $configurable_options
      *     @type string $country_of_manufacture
      *     @type bool $gift_message_available
      *     @type float $special_price
@@ -357,23 +300,15 @@ class Product extends \Google\Protobuf\Internal\Message
      *     @type string $special_to_date
      *     @type \Magento\CatalogStorefrontApi\Proto\ProductLink[]|\Google\Protobuf\Internal\RepeatedField $product_links
      *     @type string $canonical_url
-     *     @type string $ship_bundle_items
-     *          BUNDLE
-     *     @type bool $dynamic_weight
-     *     @type bool $dynamic_sku
-     *     @type bool $dynamic_price
      *     @type string $price_view
-     *     @type \Magento\CatalogStorefrontApi\Proto\BundleItem[]|\Google\Protobuf\Internal\RepeatedField $items
+     *          BUNDLE
      *     @type bool $links_purchased_separately
      *          DOWNLOADABLE
-     *     @type string $links_title
-     *     @type \Magento\CatalogStorefrontApi\Proto\DownloadableLink[]|\Google\Protobuf\Internal\RepeatedField $downloadable_product_links
-     *     @type \Magento\CatalogStorefrontApi\Proto\DownloadableSample[]|\Google\Protobuf\Internal\RepeatedField $downloadable_product_samples
      *     @type float $only_x_left_in_stock
      *     @type \Magento\CatalogStorefrontApi\Proto\GroupedItem[]|\Google\Protobuf\Internal\RepeatedField $grouped_items
      *     @type \Magento\CatalogStorefrontApi\Proto\ProductOption[]|\Google\Protobuf\Internal\RepeatedField $product_options
      *          TODO update to 'options' once all options would be covered
-     *     @type \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption $shopper_input_options
+     *     @type \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption[]|\Google\Protobuf\Internal\RepeatedField $shopper_input_options
      * }
      */
     public function __construct($data = null)
@@ -757,115 +692,67 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.Image image = 31;</code>
-     * @return \Magento\CatalogStorefrontApi\Proto\Image
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.Image image = 31;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\Image $var
-     * @return $this
-     */
-    public function setImage($var)
-    {
-        GPBUtil::checkMessage($var, \Magento\CatalogStorefrontApi\Proto\Image::class);
-        $this->image = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.Image small_image = 32;</code>
-     * @return \Magento\CatalogStorefrontApi\Proto\Image
-     */
-    public function getSmallImage()
-    {
-        return $this->small_image;
-    }
-
-    /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.Image small_image = 32;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\Image $var
-     * @return $this
-     */
-    public function setSmallImage($var)
-    {
-        GPBUtil::checkMessage($var, \Magento\CatalogStorefrontApi\Proto\Image::class);
-        $this->small_image = $var;
-
-        return $this;
-    }
-
-    /**
-     * TODO: Rename to thumbnail_image?
-     *
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.Image thumbnail = 33;</code>
-     * @return \Magento\CatalogStorefrontApi\Proto\Image
-     */
-    public function getThumbnail()
-    {
-        return $this->thumbnail;
-    }
-
-    /**
-     * TODO: Rename to thumbnail_image?
-     *
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.Image thumbnail = 33;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\Image $var
-     * @return $this
-     */
-    public function setThumbnail($var)
-    {
-        GPBUtil::checkMessage($var, \Magento\CatalogStorefrontApi\Proto\Image::class);
-        $this->thumbnail = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>string swatch_image = 34;</code>
-     * @return string
-     */
-    public function getSwatchImage()
-    {
-        return $this->swatch_image;
-    }
-
-    /**
-     * Generated from protobuf field <code>string swatch_image = 34;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setSwatchImage($var)
-    {
-        GPBUtil::checkString($var, true);
-        $this->swatch_image = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.MediaGalleryItem media_gallery = 35;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Image images = 30;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
      */
-    public function getMediaGallery()
+    public function getImages()
     {
-        return $this->media_gallery;
+        return $this->images;
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.MediaGalleryItem media_gallery = 35;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\MediaGalleryItem[]|\Google\Protobuf\Internal\RepeatedField $var
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Image images = 30;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\Image[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
-    public function setMediaGallery($var)
+    public function setImages($var)
     {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\MediaGalleryItem::class);
-        $this->media_gallery = $arr;
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\Image::class);
+        $this->images = $arr;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Video videos = 31;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getVideos()
+    {
+        return $this->videos;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Video videos = 31;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\Video[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setVideos($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\Video::class);
+        $this->videos = $arr;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Sample samples = 32;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getSamples()
+    {
+        return $this->samples;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Sample samples = 32;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\Sample[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setSamples($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\Sample::class);
+        $this->samples = $arr;
 
         return $this;
     }
@@ -900,7 +787,6 @@ class Product extends \Google\Protobuf\Internal\Message
      *    PriceRange prices = 44;//-
      * TODO: Uncomment options
      *    repeated Option options = 46;
-     *    repeated Variant variants = 47;//-
      *
      * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DynamicAttributeValue dynamic_attributes = 50;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
@@ -914,7 +800,6 @@ class Product extends \Google\Protobuf\Internal\Message
      *    PriceRange prices = 44;//-
      * TODO: Uncomment options
      *    repeated Option options = 46;
-     *    repeated Variant variants = 47;//-
      *
      * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DynamicAttributeValue dynamic_attributes = 50;</code>
      * @param \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue[]|\Google\Protobuf\Internal\RepeatedField $var
@@ -1251,50 +1136,6 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Variant variants = 83;</code>
-     * @return \Google\Protobuf\Internal\RepeatedField
-     */
-    public function getVariants()
-    {
-        return $this->variants;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Variant variants = 83;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\Variant[]|\Google\Protobuf\Internal\RepeatedField $var
-     * @return $this
-     */
-    public function setVariants($var)
-    {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\Variant::class);
-        $this->variants = $arr;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ConfigurableOption configurable_options = 84;</code>
-     * @return \Google\Protobuf\Internal\RepeatedField
-     */
-    public function getConfigurableOptions()
-    {
-        return $this->configurable_options;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ConfigurableOption configurable_options = 84;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\ConfigurableOption[]|\Google\Protobuf\Internal\RepeatedField $var
-     * @return $this
-     */
-    public function setConfigurableOptions($var)
-    {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\ConfigurableOption::class);
-        $this->configurable_options = $arr;
-
-        return $this;
-    }
-
-    /**
      * Generated from protobuf field <code>string country_of_manufacture = 85;</code>
      * @return string
      */
@@ -1451,96 +1292,6 @@ class Product extends \Google\Protobuf\Internal\Message
     /**
      *BUNDLE
      *
-     * Generated from protobuf field <code>string ship_bundle_items = 92;</code>
-     * @return string
-     */
-    public function getShipBundleItems()
-    {
-        return $this->ship_bundle_items;
-    }
-
-    /**
-     *BUNDLE
-     *
-     * Generated from protobuf field <code>string ship_bundle_items = 92;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setShipBundleItems($var)
-    {
-        GPBUtil::checkString($var, true);
-        $this->ship_bundle_items = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>bool dynamic_weight = 93;</code>
-     * @return bool
-     */
-    public function getDynamicWeight()
-    {
-        return $this->dynamic_weight;
-    }
-
-    /**
-     * Generated from protobuf field <code>bool dynamic_weight = 93;</code>
-     * @param bool $var
-     * @return $this
-     */
-    public function setDynamicWeight($var)
-    {
-        GPBUtil::checkBool($var);
-        $this->dynamic_weight = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>bool dynamic_sku = 94;</code>
-     * @return bool
-     */
-    public function getDynamicSku()
-    {
-        return $this->dynamic_sku;
-    }
-
-    /**
-     * Generated from protobuf field <code>bool dynamic_sku = 94;</code>
-     * @param bool $var
-     * @return $this
-     */
-    public function setDynamicSku($var)
-    {
-        GPBUtil::checkBool($var);
-        $this->dynamic_sku = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>bool dynamic_price = 95;</code>
-     * @return bool
-     */
-    public function getDynamicPrice()
-    {
-        return $this->dynamic_price;
-    }
-
-    /**
-     * Generated from protobuf field <code>bool dynamic_price = 95;</code>
-     * @param bool $var
-     * @return $this
-     */
-    public function setDynamicPrice($var)
-    {
-        GPBUtil::checkBool($var);
-        $this->dynamic_price = $var;
-
-        return $this;
-    }
-
-    /**
      * Generated from protobuf field <code>string price_view = 96;</code>
      * @return string
      */
@@ -1550,6 +1301,8 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
+     *BUNDLE
+     *
      * Generated from protobuf field <code>string price_view = 96;</code>
      * @param string $var
      * @return $this
@@ -1558,28 +1311,6 @@ class Product extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, true);
         $this->price_view = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.BundleItem items = 97;</code>
-     * @return \Google\Protobuf\Internal\RepeatedField
-     */
-    public function getItems()
-    {
-        return $this->items;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.BundleItem items = 97;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\BundleItem[]|\Google\Protobuf\Internal\RepeatedField $var
-     * @return $this
-     */
-    public function setItems($var)
-    {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\BundleItem::class);
-        $this->items = $arr;
 
         return $this;
     }
@@ -1606,72 +1337,6 @@ class Product extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkBool($var);
         $this->links_purchased_separately = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>string links_title = 99;</code>
-     * @return string
-     */
-    public function getLinksTitle()
-    {
-        return $this->links_title;
-    }
-
-    /**
-     * Generated from protobuf field <code>string links_title = 99;</code>
-     * @param string $var
-     * @return $this
-     */
-    public function setLinksTitle($var)
-    {
-        GPBUtil::checkString($var, true);
-        $this->links_title = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DownloadableLink downloadable_product_links = 100;</code>
-     * @return \Google\Protobuf\Internal\RepeatedField
-     */
-    public function getDownloadableProductLinks()
-    {
-        return $this->downloadable_product_links;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DownloadableLink downloadable_product_links = 100;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\DownloadableLink[]|\Google\Protobuf\Internal\RepeatedField $var
-     * @return $this
-     */
-    public function setDownloadableProductLinks($var)
-    {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\DownloadableLink::class);
-        $this->downloadable_product_links = $arr;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DownloadableSample downloadable_product_samples = 101;</code>
-     * @return \Google\Protobuf\Internal\RepeatedField
-     */
-    public function getDownloadableProductSamples()
-    {
-        return $this->downloadable_product_samples;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DownloadableSample downloadable_product_samples = 101;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\DownloadableSample[]|\Google\Protobuf\Internal\RepeatedField $var
-     * @return $this
-     */
-    public function setDownloadableProductSamples($var)
-    {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\DownloadableSample::class);
-        $this->downloadable_product_samples = $arr;
 
         return $this;
     }
@@ -1747,8 +1412,8 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.ProductShopperInputOption shopper_input_options = 200;</code>
-     * @return \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductShopperInputOption shopper_input_options = 200;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
      */
     public function getShopperInputOptions()
     {
@@ -1756,14 +1421,14 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.ProductShopperInputOption shopper_input_options = 200;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption $var
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductShopperInputOption shopper_input_options = 200;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
     public function setShopperInputOptions($var)
     {
-        GPBUtil::checkMessage($var, \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption::class);
-        $this->shopper_input_options = $var;
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption::class);
+        $this->shopper_input_options = $arr;
 
         return $this;
     }

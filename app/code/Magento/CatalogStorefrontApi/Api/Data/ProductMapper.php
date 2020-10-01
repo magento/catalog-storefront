@@ -133,42 +133,35 @@ final class ProductMapper
             case "weight":
                 $dto->setWeight((float) $value);
                 break;
-            case "image":
-                $dto->setImage(
-                    $this->objectManager
-                       ->create(\Magento\CatalogStorefrontApi\Api\Data\ImageMapper::class)
-                       ->setData($value)
-                       ->build()
-                );
-                break;
-            case "small_image":
-                $dto->setSmallImage(
-                    $this->objectManager
-                       ->create(\Magento\CatalogStorefrontApi\Api\Data\ImageMapper::class)
-                       ->setData($value)
-                       ->build()
-                );
-                break;
-            case "thumbnail":
-                $dto->setThumbnail(
-                    $this->objectManager
-                       ->create(\Magento\CatalogStorefrontApi\Api\Data\ImageMapper::class)
-                       ->setData($value)
-                       ->build()
-                );
-                break;
-            case "swatch_image":
-                $dto->setSwatchImage((string) $value);
-                break;
-            case "media_gallery":
+            case "images":
                 $convertedArray = [];
                 foreach ($value as $element) {
                     $convertedArray[] = $this->objectManager
-                        ->create(\Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemMapper::class)
+                        ->create(\Magento\CatalogStorefrontApi\Api\Data\ImageMapper::class)
                         ->setData($element)
                         ->build();
                 }
-                $dto->setMediaGallery($convertedArray);
+                $dto->setImages($convertedArray);
+                break;
+            case "videos":
+                $convertedArray = [];
+                foreach ($value as $element) {
+                    $convertedArray[] = $this->objectManager
+                        ->create(\Magento\CatalogStorefrontApi\Api\Data\VideoMapper::class)
+                        ->setData($element)
+                        ->build();
+                }
+                $dto->setVideos($convertedArray);
+                break;
+            case "samples":
+                $convertedArray = [];
+                foreach ($value as $element) {
+                    $convertedArray[] = $this->objectManager
+                        ->create(\Magento\CatalogStorefrontApi\Api\Data\SampleMapper::class)
+                        ->setData($element)
+                        ->build();
+                }
+                $dto->setSamples($convertedArray);
                 break;
             case "visibility":
                 $dto->setVisibility((string) $value);
@@ -239,26 +232,6 @@ final class ProductMapper
                 }
                 $dto->setUrlRewrites($convertedArray);
                 break;
-            case "variants":
-                $convertedArray = [];
-                foreach ($value as $element) {
-                    $convertedArray[] = $this->objectManager
-                        ->create(\Magento\CatalogStorefrontApi\Api\Data\VariantMapper::class)
-                        ->setData($element)
-                        ->build();
-                }
-                $dto->setVariants($convertedArray);
-                break;
-            case "configurable_options":
-                $convertedArray = [];
-                foreach ($value as $element) {
-                    $convertedArray[] = $this->objectManager
-                        ->create(\Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionMapper::class)
-                        ->setData($element)
-                        ->build();
-                }
-                $dto->setConfigurableOptions($convertedArray);
-                break;
             case "country_of_manufacture":
                 $dto->setCountryOfManufacture((string) $value);
                 break;
@@ -287,56 +260,11 @@ final class ProductMapper
             case "canonical_url":
                 $dto->setCanonicalUrl((string) $value);
                 break;
-            case "ship_bundle_items":
-                $dto->setShipBundleItems((string) $value);
-                break;
-            case "dynamic_weight":
-                $dto->setDynamicWeight((bool) $value);
-                break;
-            case "dynamic_sku":
-                $dto->setDynamicSku((bool) $value);
-                break;
-            case "dynamic_price":
-                $dto->setDynamicPrice((bool) $value);
-                break;
             case "price_view":
                 $dto->setPriceView((string) $value);
                 break;
-            case "items":
-                $convertedArray = [];
-                foreach ($value as $element) {
-                    $convertedArray[] = $this->objectManager
-                        ->create(\Magento\CatalogStorefrontApi\Api\Data\BundleItemMapper::class)
-                        ->setData($element)
-                        ->build();
-                }
-                $dto->setItems($convertedArray);
-                break;
             case "links_purchased_separately":
                 $dto->setLinksPurchasedSeparately((bool) $value);
-                break;
-            case "links_title":
-                $dto->setLinksTitle((string) $value);
-                break;
-            case "downloadable_product_links":
-                $convertedArray = [];
-                foreach ($value as $element) {
-                    $convertedArray[] = $this->objectManager
-                        ->create(\Magento\CatalogStorefrontApi\Api\Data\DownloadableLinkMapper::class)
-                        ->setData($element)
-                        ->build();
-                }
-                $dto->setDownloadableProductLinks($convertedArray);
-                break;
-            case "downloadable_product_samples":
-                $convertedArray = [];
-                foreach ($value as $element) {
-                    $convertedArray[] = $this->objectManager
-                        ->create(\Magento\CatalogStorefrontApi\Api\Data\DownloadableSampleMapper::class)
-                        ->setData($element)
-                        ->build();
-                }
-                $dto->setDownloadableProductSamples($convertedArray);
                 break;
             case "only_x_left_in_stock":
                 $dto->setOnlyXLeftInStock((float) $value);
@@ -362,12 +290,14 @@ final class ProductMapper
                 $dto->setProductOptions($convertedArray);
                 break;
             case "shopper_input_options":
-                $dto->setShopperInputOptions(
-                    $this->objectManager
-                       ->create(\Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionMapper::class)
-                       ->setData($value)
-                       ->build()
-                );
+                $convertedArray = [];
+                foreach ($value as $element) {
+                    $convertedArray[] = $this->objectManager
+                        ->create(\Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionMapper::class)
+                        ->setData($element)
+                        ->build();
+                }
+                $dto->setShopperInputOptions($convertedArray);
                 break;
         }
     }

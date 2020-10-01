@@ -64,13 +64,4 @@ interface CatalogInterface extends GRPC\ServiceInterface
     * @throws GRPC\Exception\InvokeException
     */
     public function getCategories(GRPC\ContextInterface $ctx, CategoriesGetRequest $in): CategoriesGetResponse;
-
-    /**
-    * @param GRPC\ContextInterface $ctx
-    * @param ProductVariantsGetRequest $in
-    * @return ProductVariantsGetResponse
-    *
-    * @throws GRPC\Exception\InvokeException
-    */
-    public function getProductVariants(GRPC\ContextInterface $ctx, ProductVariantsGetRequest $in): ProductVariantsGetResponse;
 }

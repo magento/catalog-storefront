@@ -85,11 +85,16 @@ final class ImageMapper
     private function setByKey(Image $dto, string $key, $value): void
     {
         switch ($key) {
-            case "url":
-                $dto->setUrl((string) $value);
+            case "resource":
+                $dto->setResource(
+                    $this->objectManager
+                       ->create(\Magento\CatalogStorefrontApi\Api\Data\MediaResourceMapper::class)
+                       ->setData($value)
+                       ->build()
+                );
                 break;
-            case "label":
-                $dto->setLabel((string) $value);
+            case "sort_order":
+                $dto->setSortOrder((string) $value);
                 break;
         }
     }

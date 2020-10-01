@@ -147,25 +147,4 @@ class CatalogClient extends \Grpc\BaseStub
             $options
         );
     }
-
-    /**
-     * @param \Magento\CatalogStorefrontApi\Proto\ProductVariantsGetRequest $argument input argument
-     * @param array $metadata metadata
-     * @param array $options call options
-     * @return \Magento\CatalogStorefrontApi\Proto\ProductVariantsGetResponse
-     */
-    public function getProductVariants(
-        \Magento\CatalogStorefrontApi\Proto\ProductVariantsGetRequest $argument,
-        $metadata = [],
-        $options = []
-    )
-    {
-        return $this->_simpleRequest(
-            '/magento.catalogStorefrontApi.proto.Catalog/getProductVariants',
-            $argument,
-            ['\Magento\CatalogStorefrontApi\Proto\ProductVariantsGetResponse', 'decode'],
-            $metadata,
-            $options
-        );
-    }
 }
