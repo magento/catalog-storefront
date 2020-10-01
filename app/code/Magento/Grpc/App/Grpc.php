@@ -82,7 +82,7 @@ class Grpc implements \Magento\Framework\AppInterface
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * phpcs:disable Magento2.Functions.DiscouragedFunction
-     * phpcs:disable Magento2.Functions.IncludeFile
+     * phpcs:disable Magento2.Security.IncludeFile
      */
     public function launch()
     {
