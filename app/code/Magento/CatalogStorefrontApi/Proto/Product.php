@@ -198,9 +198,9 @@ class Product extends \Google\Protobuf\Internal\Message
      */
     protected $special_to_date = '';
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductLink product_links = 90;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Link links = 90;</code>
      */
-    private $product_links;
+    private $links;
     /**
      * Generated from protobuf field <code>string canonical_url = 91;</code>
      */
@@ -221,10 +221,6 @@ class Product extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>float only_x_left_in_stock = 102;</code>
      */
     protected $only_x_left_in_stock = 0.0;
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.GroupedItem grouped_items = 103;</code>
-     */
-    private $grouped_items;
     /**
      *TODO update to 'options' once all options would be covered
      *
@@ -298,14 +294,13 @@ class Product extends \Google\Protobuf\Internal\Message
      *     @type float $special_price
      *     @type string $special_from_date
      *     @type string $special_to_date
-     *     @type \Magento\CatalogStorefrontApi\Proto\ProductLink[]|\Google\Protobuf\Internal\RepeatedField $product_links
+     *     @type \Magento\CatalogStorefrontApi\Proto\Link[]|\Google\Protobuf\Internal\RepeatedField $links
      *     @type string $canonical_url
      *     @type string $price_view
      *          BUNDLE
      *     @type bool $links_purchased_separately
      *          DOWNLOADABLE
      *     @type float $only_x_left_in_stock
-     *     @type \Magento\CatalogStorefrontApi\Proto\GroupedItem[]|\Google\Protobuf\Internal\RepeatedField $grouped_items
      *     @type \Magento\CatalogStorefrontApi\Proto\ProductOption[]|\Google\Protobuf\Internal\RepeatedField $product_options
      *          TODO update to 'options' once all options would be covered
      *     @type \Magento\CatalogStorefrontApi\Proto\ProductShopperInputOption[]|\Google\Protobuf\Internal\RepeatedField $shopper_input_options
@@ -1246,23 +1241,23 @@ class Product extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductLink product_links = 90;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Link links = 90;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
      */
-    public function getProductLinks()
+    public function getLinks()
     {
-        return $this->product_links;
+        return $this->links;
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductLink product_links = 90;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\ProductLink[]|\Google\Protobuf\Internal\RepeatedField $var
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Link links = 90;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\Link[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
-    public function setProductLinks($var)
+    public function setLinks($var)
     {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\ProductLink::class);
-        $this->product_links = $arr;
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\Link::class);
+        $this->links = $arr;
 
         return $this;
     }
@@ -1359,28 +1354,6 @@ class Product extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkFloat($var);
         $this->only_x_left_in_stock = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.GroupedItem grouped_items = 103;</code>
-     * @return \Google\Protobuf\Internal\RepeatedField
-     */
-    public function getGroupedItems()
-    {
-        return $this->grouped_items;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.GroupedItem grouped_items = 103;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\GroupedItem[]|\Google\Protobuf\Internal\RepeatedField $var
-     * @return $this
-     */
-    public function setGroupedItems($var)
-    {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\GroupedItem::class);
-        $this->grouped_items = $arr;
 
         return $this;
     }
