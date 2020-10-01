@@ -245,12 +245,7 @@ class CatalogService implements CatalogServerInterface
         try {
             $products = \array_map(
                 function ($product) {
-                    $product = $this->productArrayMapper->convertToArray($product);
-                    // TODO: handle grouped products
-                    if (!empty($product['grouped_items'])) {
-                        $product['items'] = $product['grouped_items'];
-                    }
-                    return $product;
+                    return $this->productArrayMapper->convertToArray($product);
                 },
                 $request->getProducts()
             );
@@ -497,16 +492,8 @@ class CatalogService implements CatalogServerInterface
         foreach ($urlRewritesData as $urlRewriteData) {
             $urlRewrites[] = $this->prepareUrlRewrite($urlRewriteData);
         }
+
         $product->setUrlRewrites($urlRewrites);
-
-        /**
-         * FIXME: Ugly way to populate child items for Grouped product.
-         * It should be refactored to general approach how to work with variations. Probably, in scope of MC-31164.
-         */
-        if ($product->getTypeId() == 'grouped') {
-            $this->setGroupedItems($product, $item);
-        }
-
         $product = $this->setDynamicAttributes($item, $product);
 
         return $product;
@@ -542,28 +529,6 @@ class CatalogService implements CatalogServerInterface
         $product->setDynamicAttributes($dynamicAttributes);
 
         return $product;
-    }
-
-    /**
-     * Temporary fix for nested items of Grouped product.
-     *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\Product $product
-     * @param array $data
-     */
-    private function setGroupedItems(\Magento\CatalogStorefrontApi\Api\Data\Product $product, array $data)
-    {
-        if (!isset($data['items'])) {
-            return;
-        }
-        $items = [];
-        foreach ($data['items'] as $item) {
-            $groupedItem = new \Magento\CatalogStorefrontApi\Api\Data\GroupedItem();
-            $groupedItem->setPosition((int)$item['position']);
-            $groupedItem->setQty((float)$item['qty']);
-            $groupedItem->setProduct((string)$item['product']);
-            $items[] = $groupedItem;
-        }
-        $product->setItems($items);
     }
 
     /**

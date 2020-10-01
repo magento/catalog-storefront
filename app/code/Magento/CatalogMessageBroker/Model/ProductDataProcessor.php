@@ -113,12 +113,6 @@ class ProductDataProcessor
             // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $importProduct = \array_merge($importProduct, $dataMapper->map($product));
         }
-        // TODO: handle grouped product
-        if (\array_key_exists('type_id', $oldExportDataProduct)
-            && $oldExportDataProduct['type_id'] === 'grouped'
-        ) {
-            $importProduct['grouped_items'] = $oldExportDataProduct['items'];
-        }
 
         // TODO: only $importProduct must be returned https://github.com/magento/catalog-storefront/issues/165
         return array_merge($oldExportDataProduct, $importProduct);
