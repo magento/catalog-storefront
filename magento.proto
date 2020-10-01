@@ -73,7 +73,7 @@ message Product {
   float special_price = 87;
   string special_from_date = 88;
   string special_to_date = 89;
-  repeated ProductLink product_links = 90;
+  repeated Link links = 90;
   string canonical_url = 91;
 
   //BUNDLE
@@ -83,8 +83,6 @@ message Product {
   bool links_purchased_separately = 98;
 
   float only_x_left_in_stock = 102;
-
-  repeated GroupedItem grouped_items = 103;
 
   repeated ProductOption product_options = 199; //TODO update to 'options' once all options would be covered
   repeated ProductShopperInputOption shopper_input_options = 200;
@@ -149,31 +147,11 @@ message ProductShopperInputOption {
   int32 image_size_y = 11;
 }
 
-message GroupedItem {
-  float qty = 1;
-  int32 position = 2;
-  string product = 3;
-
-  // GroupedItemProductInfo product = 3;
-}
-
-// TODO: review grouped product
-// message GroupedItemProductInfo {
-//   string sku = 1;
-//   string name = 2;
-//   string type_id = 3;
-//   string url_key = 4;
-// }
-
-message ProductLink {
-  string linked_product_sku = 1;
-  string type_id = 2;
-  string linked_product_type = 3;
-  string link_type_id = 4;
-  int32 position = 5;
-  string sku = 6;
-  string product_id = 7;
-  string link_type = 8;
+message Link {
+  string product_id = 1;
+  string position = 2;
+  string type = 3;
+  float qty = 4;
 }
 
 message Option {
