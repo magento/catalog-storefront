@@ -155,6 +155,7 @@ class ProtoMarshalCommand extends Command
             "<info>" .$directoryWrite->getAbsolutePath() . "magento.proto file is created."
             . " Launch gRPC server using <fg=magenta>rr-grpc serve -v</></info>"
         );
+        return 0;
     }
 
     /**
