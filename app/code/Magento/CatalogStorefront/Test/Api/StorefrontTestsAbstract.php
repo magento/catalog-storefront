@@ -95,7 +95,7 @@ abstract class StorefrontTestsAbstract extends TestCase
     protected function runTest()
     {
         $output = [];
-        exec("lsof -n -itcp | wc -l", $output);
+        exec("ulimit -n 100000", $output);
         echo "\n" . '::test::' . "\n";
         print_r($output);
 
