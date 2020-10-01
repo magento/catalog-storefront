@@ -188,10 +188,6 @@ class Product extends \Google\Protobuf\Internal\Message
      */
     protected $country_of_manufacture = '';
     /**
-     * Generated from protobuf field <code>bool gift_message_available = 86;</code>
-     */
-    protected $gift_message_available = false;
-    /**
      * Generated from protobuf field <code>float special_price = 87;</code>
      */
     protected $special_price = 0.0;
@@ -302,7 +298,6 @@ class Product extends \Google\Protobuf\Internal\Message
      *           TODO: May need to be a complex type
      *     @type \Magento\CatalogStorefrontApi\Proto\UrlRewrite[]|\Google\Protobuf\Internal\RepeatedField $url_rewrites
      *     @type string $country_of_manufacture
-     *     @type bool $gift_message_available
      *     @type float $special_price
      *     @type string $special_from_date
      *     @type string $special_to_date
@@ -1187,28 +1182,6 @@ class Product extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, true);
         $this->country_of_manufacture = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>bool gift_message_available = 86;</code>
-     * @return bool
-     */
-    public function getGiftMessageAvailable()
-    {
-        return $this->gift_message_available;
-    }
-
-    /**
-     * Generated from protobuf field <code>bool gift_message_available = 86;</code>
-     * @param bool $var
-     * @return $this
-     */
-    public function setGiftMessageAvailable($var)
-    {
-        GPBUtil::checkBool($var);
-        $this->gift_message_available = $var;
 
         return $this;
     }

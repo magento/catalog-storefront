@@ -26,7 +26,6 @@ class CatalogClient extends \Grpc\BaseStub
      * @param \Magento\CatalogStorefrontApi\Proto\ProductsGetRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Magento\CatalogStorefrontApi\Proto\ProductsGetResult
      */
     public function getProducts(
         \Magento\CatalogStorefrontApi\Proto\ProductsGetRequest $argument,
@@ -47,7 +46,6 @@ class CatalogClient extends \Grpc\BaseStub
      * @param \Magento\CatalogStorefrontApi\Proto\ImportProductsRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Magento\CatalogStorefrontApi\Proto\ImportProductsResponse
      */
     public function importProducts(
         \Magento\CatalogStorefrontApi\Proto\ImportProductsRequest $argument,
@@ -68,7 +66,6 @@ class CatalogClient extends \Grpc\BaseStub
      * @param \Magento\CatalogStorefrontApi\Proto\DeleteProductsRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Magento\CatalogStorefrontApi\Proto\DeleteProductsResponse
      */
     public function deleteProducts(
         \Magento\CatalogStorefrontApi\Proto\DeleteProductsRequest $argument,
@@ -89,7 +86,6 @@ class CatalogClient extends \Grpc\BaseStub
      * @param \Magento\CatalogStorefrontApi\Proto\DeleteCategoriesRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Magento\CatalogStorefrontApi\Proto\DeleteCategoriesResponse
      */
     public function deleteCategories(
         \Magento\CatalogStorefrontApi\Proto\DeleteCategoriesRequest $argument,
@@ -110,7 +106,6 @@ class CatalogClient extends \Grpc\BaseStub
      * @param \Magento\CatalogStorefrontApi\Proto\ImportCategoriesRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Magento\CatalogStorefrontApi\Proto\ImportCategoriesResponse
      */
     public function importCategories(
         \Magento\CatalogStorefrontApi\Proto\ImportCategoriesRequest $argument,
@@ -131,7 +126,6 @@ class CatalogClient extends \Grpc\BaseStub
      * @param \Magento\CatalogStorefrontApi\Proto\CategoriesGetRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Magento\CatalogStorefrontApi\Proto\CategoriesGetResponse
      */
     public function getCategories(
         \Magento\CatalogStorefrontApi\Proto\CategoriesGetRequest $argument,
