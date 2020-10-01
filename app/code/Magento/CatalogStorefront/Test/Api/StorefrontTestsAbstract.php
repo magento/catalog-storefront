@@ -95,7 +95,7 @@ abstract class StorefrontTestsAbstract extends TestCase
     protected function runTest()
     {
         $output = [];
-        exec("lsof -i:5672 | wc -l", $output);
+        exec("lsof -n -itcp | wc -l", $output);
         echo "\n" . '::test::' . "\n";
         print_r($output);
 
