@@ -1,4 +1,4 @@
-See https://github.com/magento/catalog-storefront/wiki/Configurable-products-option-variants as base document
+See https://github.com/magento/catalog-storefront/dev/docs/designDocuments/Configurable-products-option-variants.md as base document
 
 Let's assume we have configurable product [id=42] with 2 options:
 

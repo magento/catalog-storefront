@@ -3,7 +3,7 @@ This document describes a deprecation policy for GraphQL schema in scope of Stor
 
 ## How to deal with fields deprecated in GQL?
 
-- GraphQL Server (NodeJS) will proxy requests to Magento Monolith GQL (see diagram [here](https://github.com/magento/catalog-storefront/wiki/Services-responsibilities)) to retrieve fields marked as deprecated in GQL
+- GraphQL Server (NodeJS) will proxy requests to Magento Monolith GQL (see diagram [here](https://github.com/magento/catalog-storefront/dev/docs/onboarding/Services-responsibilities.md)) to retrieve fields marked as deprecated in GQL
 - Deprecated in GQL fields should not be exposed through Storefront API
 
 
