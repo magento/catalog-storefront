@@ -37,9 +37,6 @@ use Magento\CatalogStorefrontApi\Api\Data\ProductMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResult;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
-use Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetRequestInterface;
-use Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetResponse;
-use Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\UrlRewrite;
 use Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameter;
 use Magento\Framework\Api\DataObjectHelper;
@@ -461,23 +458,6 @@ class CatalogService implements CatalogServerInterface
             $items[] = $item;
         }
         $result->setItems($items);
-        return $result;
-    }
-
-    /**
-     * Get requested product variants.
-     *
-     * @param ProductVariantsGetRequestInterface $request
-     *
-     * @return ProductVariantsGetResponseInterface
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getProductVariants(
-        ProductVariantsGetRequestInterface $request
-    ): ProductVariantsGetResponseInterface {
-        $result = new ProductVariantsGetResponse();
-
         return $result;
     }
 
