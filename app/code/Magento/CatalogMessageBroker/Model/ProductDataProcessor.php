@@ -46,6 +46,7 @@ class ProductDataProcessor
         'category_ids' => 'categories',
         'images' => 'images', //type: \Magento\CatalogStorefrontApi\Api\Data\ImageInterface[]
         'videos' => 'videos', //type: \Magento\CatalogStorefrontApi\Api\Data\VideoInterface[]
+        'links' => 'links', //type: \Magento\CatalogStorefrontApi\Api\Data\Link[]
         // The following list of fields are present in Import API (proto schema) but absent in Export API (et_schema)
         // TODO: review list, move to ^^ after corresponding fields resolved in story
         'has_options', //type: bool
@@ -67,7 +68,6 @@ class ProductDataProcessor
         'special_price', //type: float
         'special_from_date', //type: string
         'special_to_date', //type: string
-        'product_links', //type: \Magento\CatalogStorefrontApi\Api\Data\ProductLinkInterface[]
         'canonical_url', //type: string
         'items', //type: \Magento\CatalogStorefrontApi\Api\Data\BundleItemInterface[]
         'links_purchased_separately', //type: bool
