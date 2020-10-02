@@ -6,7 +6,8 @@ This module provides gRPC entry point for Magento. Additionally, it provides pos
 * Install `rr-grpc` server - https://github.com/spiral/php-grpc. Put the binary in some directory registered in PATH system variable
 * Install `protoc-gen-php-grpc` protoc plugin - https://github.com/spiral/php-grpc. Put the binary in some directory registered in PATH system variable.
 * Install `protoc` (protocol compiler) - https://github.com/protocolbuffers/protobuf#protocol-compiler-installation. Put the binary in some directory registered in PATH system variable
-* `composer require magento/module-grpc:0.0.1`. Please make sure the package is present in packagist. Alternatively, connect the git repository.
+* Alternatively module `module-grpc` can be installed via composer if not installed via git yet.
+`composer require magento/module-grpc:0.0.1`. Please make sure the package is present in packagist. 
 
 # Usage
 * Launch `/bin/magento proto:marshal` CLI command. The command is doing the following actions:

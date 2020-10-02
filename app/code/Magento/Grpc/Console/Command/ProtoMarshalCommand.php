@@ -38,6 +38,11 @@ class ProtoMarshalCommand extends Command
     private $dir;
 
     /**
+     * @var string
+     */
+    private $moduleName = 'Magento_Grpc';
+
+    /**
      * @param Filesystem $fileSystem
      * @param ModuleList $moduleList
      * @param Dir $dir
@@ -57,6 +62,7 @@ class ProtoMarshalCommand extends Command
         $this->moduleList = $moduleList;
         $this->dir = $dir;
 
+        $this->copyBinToVendor();
         /**
          * Injecting in setup:di:compile command
          * This is required because setup:di:compile command cleans the generated directory.
@@ -73,6 +79,46 @@ class ProtoMarshalCommand extends Command
                 $errorOutput = $output->getErrorOutput();
                 $errorOutput->writeln('<error>' . $e->getMessage() . '</error>');
             }
+        }
+    }
+
+    /**
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    private function copyBinToVendor(): void
+    {
+        /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $directoryWrite */
+        $directoryWrite = $this->fileSystem->getDirectoryWrite(DirectoryList::ROOT);
+        $magentoRoot = $directoryWrite->getAbsolutePath();
+        $moduleRoot = $this->dir->getDir($this->moduleName);
+
+        $grpcServerModuleBinPath = $moduleRoot . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'grpc-server';
+        $grpcServerVendorBinPath = $magentoRoot . DIRECTORY_SEPARATOR . 'vendor/bin/grpc-server';
+        $this->copyBinFile($directoryWrite, $grpcServerModuleBinPath, $grpcServerVendorBinPath);
+
+        $grpcWorkersModuleBinPath = $moduleRoot . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'grpc-workers';
+        $grpcWorkersVendorBinPath = $magentoRoot . DIRECTORY_SEPARATOR . 'vendor/bin/grpc-workers';
+        $this->copyBinFile($directoryWrite, $grpcWorkersModuleBinPath, $grpcWorkersVendorBinPath);
+    }
+
+    /**
+     * Copy bin file from module to vendor.
+     *
+     * @param Filesystem\Directory\WriteInterface $directoryWrite
+     * @param string $source
+     * @param string $destination
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    private function copyBinFile(
+        \Magento\Framework\Filesystem\Directory\WriteInterface $directoryWrite,
+        string $source,
+        string $destination
+    ) {
+        /** @var \Magento\Framework\Filesystem\DriverInterface $writeDriver */
+        $writeDriver = $directoryWrite->getDriver();
+        if (!$writeDriver->isExists($destination)) {
+            $writeDriver->copy($source, $destination);
+            @chmod($destination, 0666);
         }
     }
 
