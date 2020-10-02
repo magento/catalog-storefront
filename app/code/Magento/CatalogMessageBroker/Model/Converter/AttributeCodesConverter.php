@@ -49,6 +49,6 @@ class AttributeCodesConverter
      */
     private function camelCaseToSnakeCase(string $string): string
     {
-        return \strtolower(\preg_replace('/(.)([A-Z])/', "$1_$2", $string));
+        return \strtolower(\preg_replace('/(.)([A-Z])/', '$1_$2', $string));
     }
 }
