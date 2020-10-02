@@ -25,6 +25,7 @@
     },
     "bin": [
         "bin/grpc-server",
-        "bin/grpc-workers"
+        "bin/grpc-workers",
+        "bin/worker"
     ]
 }

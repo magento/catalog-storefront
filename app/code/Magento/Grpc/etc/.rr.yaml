@@ -2,6 +2,6 @@ grpc:
     listen: "tcp://:9001"
     proto: "magento.proto"
     workers:
-        command: "./vendor/magento/module-grpc/bin/worker"
+        command: "./vendor/bin/worker"
         pool:
             numWorkers: 4

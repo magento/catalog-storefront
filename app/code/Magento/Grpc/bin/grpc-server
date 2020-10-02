@@ -7,7 +7,7 @@ cd $SCRIPT_RELATIVE_DIR
 SCRIPT_ABSOLUTE_DIR=$(pwd)
 SCRIPT_ABSOLUTE_PATH=${SCRIPT_ABSOLUTE_DIR}/grpc-server
 
-if [ -L "$SCRIPT_ABSOLUTE_PATH" ]; then #Symlink in vendor/bin
+if [ -L "$SCRIPT_ABSOLUTE_PATH" ]; then #Symlink in vendor/bin from vendor/magento/module-grpc/bin/grpc-server
   cd ${SCRIPT_ABSOLUTE_PATH}/../../../
   MAGENTO_ROOT=$(pwd)
   cd ${SCRIPT_ABSOLUTE_DIR}/../magento/module-grpc/etc/
@@ -17,13 +17,12 @@ else #Direct launch from vendor/magento/module-grpc or copied file from Magento/
     cd ${SCRIPT_ABSOLUTE_DIR}/../../
     MAGENTO_ROOT=$(pwd)
     cd ${MAGENTO_ROOT}/app/code/Magento/Grpc/etc
-    CONFIG_PATH="$(pwd)/git/.rr.yaml"
   else
     cd ${SCRIPT_ABSOLUTE_PATH}/../../../../../
     MAGENTO_ROOT=$(pwd)
     cd ${SCRIPT_ABSOLUTE_DIR}/../etc/
-    CONFIG_PATH="$(pwd)/.rr.yaml"
   fi
+  CONFIG_PATH="$(pwd)/.rr.yaml"
 fi
 
 rr-grpc serve -w $MAGENTO_ROOT -c $CONFIG_PATH -v -d
