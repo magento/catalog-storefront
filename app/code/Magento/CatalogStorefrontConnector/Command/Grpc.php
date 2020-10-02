@@ -155,7 +155,7 @@ class Grpc extends Command
                 $writeDriver->createDirectory($writeDriver->getParentDirectory($destination));
             }
             $writeDriver->copy($source, $destination);
-            $writeDriver->changePermissions($destination, 0666);
+            $writeDriver->changePermissions($destination, 0555);
             $output->writeln(
                 \sprintf('<info>"%s" successfully copied to bin folder</info>', $destination)
             );
