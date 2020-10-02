@@ -10,6 +10,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="proto-marshal" xsi:type="object">Magento\Grpc\Console\Command\ProtoMarshalCommand</item>
+                <item name="grpc-init" xsi:type="object">Magento\Grpc\Console\Command\Grpc</item>
             </argument>
         </arguments>
     </type>

@@ -48,7 +48,6 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="storefront:catalog:sync" xsi:type="object">Magento\CatalogStorefrontConnector\Command\Sync</item>
-                <item name="storefront:grpc:init" xsi:type="object">Magento\CatalogStorefrontConnector\Command\Grpc</item>
             </argument>
         </arguments>
     </type>

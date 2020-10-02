@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogStorefrontConnector\Command;
+namespace Magento\Grpc\Console\Command;
 
 use Composer\Config as ComposerConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
