@@ -72,7 +72,9 @@ class GiftCardProductTest extends StorefrontTestsAbstract
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
         $this->optionArrayMapper = Bootstrap::getObjectManager()->create(ProductOptionArrayMapper::class);
-        $this->shopperInputOptionArrayMapper = Bootstrap::getObjectManager()->create(ProductShopperInputOptionArrayMapper::class);
+        $this->shopperInputOptionArrayMapper = Bootstrap::getObjectManager()->create(
+            ProductShopperInputOptionArrayMapper::class
+        );
     }
 
     /**
@@ -102,7 +104,6 @@ class GiftCardProductTest extends StorefrontTestsAbstract
             $actualOptions[] = $convertedValues;
         }
         $this->compare($expectedOptions, $actualOptions);
-
 
         $actualShopperInputOptions = [];
         foreach ($catalogServiceItem->getItems()[0]->getShopperInputOptions() as $option) {
