@@ -149,7 +149,7 @@ message ProductShopperInputOption {
 
 message Link {
   string product_id = 1;
-  string position = 2;
+  int32 position = 2;
   string type = 3;
   float qty = 4;
 }

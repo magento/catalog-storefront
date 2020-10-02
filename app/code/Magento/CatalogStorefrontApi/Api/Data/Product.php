@@ -223,7 +223,7 @@ final class Product implements ProductInterface
     /**
      * @var array
      */
-    private $productLinks;
+    private $links;
 
     /**
      * @var string
@@ -244,11 +244,6 @@ final class Product implements ProductInterface
      * @var float
      */
     private $onlyXLeftInStock;
-
-    /**
-     * @var array
-     */
-    private $groupedItems;
 
     /**
      * @var array
@@ -1103,22 +1098,22 @@ final class Product implements ProductInterface
     /**
      * @inheritdoc
      *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\ProductLinkInterface[]
+     * @return \Magento\CatalogStorefrontApi\Api\Data\LinkInterface[]
      */
-    public function getProductLinks(): array
+    public function getLinks(): array
     {
-        return (array) $this->productLinks;
+        return (array) $this->links;
     }
     
     /**
      * @inheritdoc
      *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\ProductLinkInterface[] $value
+     * @param \Magento\CatalogStorefrontApi\Api\Data\LinkInterface[] $value
      * @return void
      */
-    public function setProductLinks(array $value): void
+    public function setLinks(array $value): void
     {
-        $this->productLinks = $value;
+        $this->links = $value;
     }
     
     /**
@@ -1203,27 +1198,6 @@ final class Product implements ProductInterface
     public function setOnlyXLeftInStock(float $value): void
     {
         $this->onlyXLeftInStock = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\GroupedItemInterface[]
-     */
-    public function getGroupedItems(): array
-    {
-        return (array) $this->groupedItems;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\GroupedItemInterface[] $value
-     * @return void
-     */
-    public function setGroupedItems(array $value): void
-    {
-        $this->groupedItems = $value;
     }
     
     /**

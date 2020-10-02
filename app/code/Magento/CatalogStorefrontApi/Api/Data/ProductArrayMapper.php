@@ -125,22 +125,15 @@ final class ProductArrayMapper
         $result["special_to_date"] = $dto->getSpecialToDate();
         /** Convert complex Array field **/
         $fieldArray = [];
-        foreach ($dto->getProductLinks() as $fieldArrayDto) {
-            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ProductLinkArrayMapper::class)
+        foreach ($dto->getLinks() as $fieldArrayDto) {
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\LinkArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
-        $result["product_links"] = $fieldArray;
+        $result["links"] = $fieldArray;
         $result["canonical_url"] = $dto->getCanonicalUrl();
         $result["price_view"] = $dto->getPriceView();
         $result["links_purchased_separately"] = $dto->getLinksPurchasedSeparately();
         $result["only_x_left_in_stock"] = $dto->getOnlyXLeftInStock();
-        /** Convert complex Array field **/
-        $fieldArray = [];
-        foreach ($dto->getGroupedItems() as $fieldArrayDto) {
-            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\GroupedItemArrayMapper::class)
-                ->convertToArray($fieldArrayDto);
-        }
-        $result["grouped_items"] = $fieldArray;
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getProductOptions() as $fieldArrayDto) {
