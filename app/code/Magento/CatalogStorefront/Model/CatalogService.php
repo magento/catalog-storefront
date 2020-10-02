@@ -12,11 +12,9 @@ use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\Category;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryArrayMapper;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryInterface;
-use Magento\CatalogStorefrontApi\Api\Data\Image;
-use Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItem;
-use Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductArrayMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ProductInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResult;
@@ -27,7 +25,6 @@ use Magento\CatalogStorefront\DataProvider\ProductDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponse;
 use Magento\CatalogStorefrontApi\Api\Data\UrlRewrite;
 use Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameter;
-use Magento\CatalogStorefrontApi\Api\Data\Video;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
@@ -119,6 +116,11 @@ class CatalogService implements CatalogServerInterface
     private $categoryArrayMapper;
 
     /**
+     * @var ProductMapper
+     */
+    private $productMapper;
+
+    /**
      * @param ProductDataProvider $dataProvider
      * @param DataObjectHelper $dataObjectHelper
      * @param CategoryDataProvider $categoryDataProvider
@@ -130,6 +132,7 @@ class CatalogService implements CatalogServerInterface
      * @param CatalogRepository $catalogRepository
      * @param ProductArrayMapper $productArrayMapper
      * @param CategoryArrayMapper $categoryArrayMapper
+     * @param ProductMapper $productMapper
      * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -145,6 +148,7 @@ class CatalogService implements CatalogServerInterface
         CatalogRepository $catalogRepository,
         ProductArrayMapper $productArrayMapper,
         CategoryArrayMapper $categoryArrayMapper,
+        ProductMapper $productMapper,
         LoggerInterface $logger
     ) {
         $this->dataProvider = $dataProvider;
@@ -158,6 +162,7 @@ class CatalogService implements CatalogServerInterface
         $this->dynamicAttributeFactory = $dynamicAttributeFactory;
         $this->productArrayMapper = $productArrayMapper;
         $this->categoryArrayMapper = $categoryArrayMapper;
+        $this->productMapper = $productMapper;
         $this->logger = $logger;
     }
 
@@ -223,32 +228,6 @@ class CatalogService implements CatalogServerInterface
             $result[$key] = is_array($value) ? $this->cleanUpNullValues($value) : $value;
         }
         return $result;
-    }
-
-    /**
-     * Set product image
-     *
-     * @param string $key
-     * @param array $rawData
-     * @param ProductInterface $product
-     * @return ProductInterface
-     */
-    private function setImage(string $key, array $rawData, ProductInterface $product): ProductInterface
-    {
-        if (empty($rawData[$key])) {
-            return $product;
-        }
-
-        $image = new Image();
-        $image->setUrl($rawData[$key]['url'] ?? '');
-        $image->setLabel($rawData[$key]['label'] ?? '');
-        $parts = explode('_', $key);
-        $parts = array_map("ucfirst", $parts);
-        $methodName = 'set' . implode('', $parts);
-        if (method_exists($product, $methodName)) {
-            $product->$methodName($image);
-        }
-        return $product;
     }
 
     /**
@@ -475,7 +454,10 @@ class CatalogService implements CatalogServerInterface
      * Get requested product variants.
      *
      * @param ProductVariantsGetRequestInterface $request
+     *
      * @return ProductVariantsGetResponseInterface
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getProductVariants(
         ProductVariantsGetRequestInterface $request
@@ -483,35 +465,6 @@ class CatalogService implements CatalogServerInterface
         $result = new ProductVariantsGetResponse();
 
         return $result;
-    }
-
-    /**
-     * Get video content for media gallery
-     *
-     * @param array $mediaGalleryItemVideo
-     * @return Video
-     */
-    private function getMediaGalleryVideo(array $mediaGalleryItemVideo): Video
-    {
-        $videoContent = new Video;
-        $videoContent->setMediaType($mediaGalleryItemVideo['media_type'] ?? '');
-        $videoContent->setVideoDescription(
-            $mediaGalleryItemVideo['video_description'] ?? ''
-        );
-        $videoContent->setVideoMetadata(
-            $mediaGalleryItemVideo['video_metadata'] ?? ''
-        );
-        $videoContent->setVideoProvider(
-            $mediaGalleryItemVideo['video_provider'] ?? ''
-        );
-        $videoContent->setVideoTitle(
-            $mediaGalleryItemVideo['video_title'] ?? ''
-        );
-        $videoContent->setVideoUrl(
-            $mediaGalleryItemVideo['video_url'] ?? ''
-        );
-
-        return $videoContent;
     }
 
     /**
@@ -523,25 +476,6 @@ class CatalogService implements CatalogServerInterface
     private function prepareProduct(array $item): ProductInterface
     {
         $item = $this->cleanUpNullValues($item);
-        $variants = [];
-        foreach ($item['variants'] ?? [] as $variantData) {
-            if (!isset($variantData['product'])) {
-                $attribute = current($variantData['attributes']);
-                throw new \RuntimeException(
-                    \sprintf(
-                        'Cannot find product id for product variant with code "%s" and label "%s"',
-                        $attribute['code'],
-                        $attribute['label']
-                    )
-                );
-            }
-            $variant = [
-                'product' => $variantData['product'],
-                'attributes' => $variantData['attributes']
-            ];
-            $variants[] = $variant;
-        }
-        $item['variants'] = $variants;
 
         $item['description'] = $item['description']['html'] ?? '';
         $item['short_description'] = $item['short_description']['html'] ?? '';
@@ -556,30 +490,7 @@ class CatalogService implements CatalogServerInterface
             }
         }
 
-        $product = new \Magento\CatalogStorefrontApi\Api\Data\Product();
-        $this->dataObjectHelper->populateWithArray($product, $item, ProductInterface::class);
-        $product = $this->setImage('image', $item, $product);
-        $product = $this->setImage('small_image', $item, $product);
-        $product = $this->setImage('thumbnail', $item, $product);
-
-        //PopulateWithArray doesn't work with non-array sub-objects which don't set properties using constructor
-        $mediaGalleryData = $item['media_gallery'] ?? [];
-        $mediaGallery = [];
-        foreach ($mediaGalleryData as $mediaGalleryDataItem) {
-            $mediaGalleryItem = new MediaGalleryItem;
-            $this->dataObjectHelper->populateWithArray(
-                $mediaGalleryItem,
-                $mediaGalleryDataItem,
-                MediaGalleryItemInterface::class
-            );
-            if (!empty($mediaGalleryDataItem['video_content'])) {
-                $videoContent = $this->getMediaGalleryVideo($mediaGalleryDataItem['video_content']);
-                $mediaGalleryItem->setVideoContent($videoContent);
-            }
-
-            $mediaGallery[] = $mediaGalleryItem;
-        }
-        $product->setMediaGallery($mediaGallery);
+        $product = $this->productMapper->setData($item)->build();
 
         $urlRewritesData = $item['url_rewrites'] ?? [];
         $urlRewrites = [];

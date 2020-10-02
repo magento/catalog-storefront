@@ -47,8 +47,10 @@ final class SampleArrayMapper
     public function convertToArray(Sample $dto)
     {
         $result = [];
-        $result["url"] = $dto->getUrl();
-        $result["label"] = $dto->getLabel();
+        if ($dto->getResource() !== null) {
+            $result["resource"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\MediaResourceArrayMapper::class)
+                ->convertToArray($dto->getResource());
+        }
         $result["sort_order"] = $dto->getSortOrder();
         return $result;
     }

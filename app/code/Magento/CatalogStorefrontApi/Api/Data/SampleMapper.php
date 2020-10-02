@@ -85,14 +85,16 @@ final class SampleMapper
     private function setByKey(Sample $dto, string $key, $value): void
     {
         switch ($key) {
-            case "url":
-                $dto->setUrl((string) $value);
-                break;
-            case "label":
-                $dto->setLabel((string) $value);
+            case "resource":
+                $dto->setResource(
+                    $this->objectManager
+                       ->create(\Magento\CatalogStorefrontApi\Api\Data\MediaResourceMapper::class)
+                       ->setData($value)
+                       ->build()
+                );
                 break;
             case "sort_order":
-                $dto->setSortOrder((int) $value);
+                $dto->setSortOrder((string) $value);
                 break;
         }
     }

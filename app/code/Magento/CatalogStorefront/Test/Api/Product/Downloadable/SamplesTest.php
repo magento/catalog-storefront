@@ -132,11 +132,14 @@ class SamplesTest extends StorefrontTestsAbstract
         return [
             [
                 [
-                    'url' => 'http://example.com/downloadable.txt',
-                    'label' => 'Downloadable Product Sample',
-                    'sort_order' => 10
-                ]
-            ]
+                    'resource' => [
+                        'url' => 'http://example.com/downloadable.txt',
+                        'label' => 'Downloadable Product Sample',
+                        'roles' => [],
+                    ],
+                    'sort_order' => '10',
+                ],
+            ],
         ];
     }
 
@@ -150,11 +153,14 @@ class SamplesTest extends StorefrontTestsAbstract
         return [
             [
                 [
-                    'url' => '/j/e/jellyfish_1_4.jpg',
-                    'label' => 'Downloadable Product Sample Title',
-                    'sort_order' => 0
-                ]
-            ]
+                    'resource' => [
+                        'url' => '/j/e/jellyfish_1_4.jpg',
+                        'label' => 'Downloadable Product Sample Title',
+                        'roles' => [],
+                    ],
+                    'sort_order' => '0',
+                ],
+            ],
         ];
     }
 }

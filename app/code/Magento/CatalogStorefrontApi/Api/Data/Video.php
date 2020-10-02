@@ -21,43 +21,70 @@ final class Video implements VideoInterface
 {
 
     /**
-     * @var string
+     * @var \Magento\CatalogStorefrontApi\Api\Data\MediaResourceInterface
      */
-    private $videoProvider;
+    private $preview;
+
+    /**
+     * @var \Magento\CatalogStorefrontApi\Api\Data\VideoItemInterface
+     */
+    private $video;
 
     /**
      * @var string
      */
-    private $videoUrl;
-
+    private $sortOrder;
+    
     /**
-     * @var string
+     * @inheritdoc
+     *
+     * @return \Magento\CatalogStorefrontApi\Api\Data\MediaResourceInterface|null
      */
-    private $videoTitle;
-
+    public function getPreview(): ?\Magento\CatalogStorefrontApi\Api\Data\MediaResourceInterface
+    {
+        return $this->preview;
+    }
+    
     /**
-     * @var string
+     * @inheritdoc
+     *
+     * @param \Magento\CatalogStorefrontApi\Api\Data\MediaResourceInterface $value
+     * @return void
      */
-    private $videoDescription;
-
+    public function setPreview(\Magento\CatalogStorefrontApi\Api\Data\MediaResourceInterface $value): void
+    {
+        $this->preview = $value;
+    }
+    
     /**
-     * @var string
+     * @inheritdoc
+     *
+     * @return \Magento\CatalogStorefrontApi\Api\Data\VideoItemInterface|null
      */
-    private $videoMetadata;
-
+    public function getVideo(): ?\Magento\CatalogStorefrontApi\Api\Data\VideoItemInterface
+    {
+        return $this->video;
+    }
+    
     /**
-     * @var string
+     * @inheritdoc
+     *
+     * @param \Magento\CatalogStorefrontApi\Api\Data\VideoItemInterface $value
+     * @return void
      */
-    private $mediaType;
+    public function setVideo(\Magento\CatalogStorefrontApi\Api\Data\VideoItemInterface $value): void
+    {
+        $this->video = $value;
+    }
     
     /**
      * @inheritdoc
      *
      * @return string
      */
-    public function getVideoProvider(): string
+    public function getSortOrder(): string
     {
-        return (string) $this->videoProvider;
+        return (string) $this->sortOrder;
     }
     
     /**
@@ -66,113 +93,8 @@ final class Video implements VideoInterface
      * @param string $value
      * @return void
      */
-    public function setVideoProvider(string $value): void
+    public function setSortOrder(string $value): void
     {
-        $this->videoProvider = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return string
-     */
-    public function getVideoUrl(): string
-    {
-        return (string) $this->videoUrl;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setVideoUrl(string $value): void
-    {
-        $this->videoUrl = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return string
-     */
-    public function getVideoTitle(): string
-    {
-        return (string) $this->videoTitle;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setVideoTitle(string $value): void
-    {
-        $this->videoTitle = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return string
-     */
-    public function getVideoDescription(): string
-    {
-        return (string) $this->videoDescription;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setVideoDescription(string $value): void
-    {
-        $this->videoDescription = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return string
-     */
-    public function getVideoMetadata(): string
-    {
-        return (string) $this->videoMetadata;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setVideoMetadata(string $value): void
-    {
-        $this->videoMetadata = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return string
-     */
-    public function getMediaType(): string
-    {
-        return (string) $this->mediaType;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param string $value
-     * @return void
-     */
-    public function setMediaType(string $value): void
-    {
-        $this->mediaType = $value;
+        $this->sortOrder = $value;
     }
 }
