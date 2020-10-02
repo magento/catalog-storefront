@@ -62,7 +62,6 @@ class ProductDataProcessor
         'is_returnable', //type: string
         'url_suffix', //type: string
         'url_rewrites', //type: \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteInterface[]
-        'configurable_options', //type: \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionInterface[]
         'country_of_manufacture', //type: string
         'special_price', //type: float
         'special_from_date', //type: string

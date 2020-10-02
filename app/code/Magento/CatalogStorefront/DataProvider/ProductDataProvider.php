@@ -91,9 +91,6 @@ class ProductDataProvider
         $products = $entities->toArray();
         // TODO: MC-31164 ad-hoc fix to handle issue with mapping on configurable product creation in elasticsearch
         foreach ($products as &$product) {
-            if (isset($product['configurable_options']) && is_string($product['configurable_options'])) {
-                $product['configurable_options'] = \json_decode($product['configurable_options'], true);
-            }
             if (isset($product['variants']) && is_string($product['variants'])) {
                 $product['variants'] = \json_decode($product['variants'], true);
             }
