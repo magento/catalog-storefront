@@ -10,7 +10,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogStorefront\Model\CatalogService;
 use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
-use Magento\CatalogStorefrontApi\Api\Data\ProductOptionValueArrayMapper;
+use Magento\CatalogStorefrontApi\Api\Data\ProductOptionArrayMapper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CompareArraysRecursively;
@@ -47,9 +47,9 @@ class SelectedOptionsTest extends StorefrontTestsAbstract
     private $productRepository;
 
     /**
-     * @var ProductOptionValueArrayMapper
+     * @var ProductOptionArrayMapper
      */
-    private $arrayMapper;
+    private $productOptionArrayMapper;
 
     /**
      * @var CompareArraysRecursively
@@ -65,8 +65,8 @@ class SelectedOptionsTest extends StorefrontTestsAbstract
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
         $this->productsGetRequestInterface = Bootstrap::getObjectManager()->create(ProductsGetRequestInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
-        $this->arrayMapper = Bootstrap::getObjectManager()->create(ProductOptionValueArrayMapper::class);
         $this->compareArraysRecursively = Bootstrap::getObjectManager()->create(CompareArraysRecursively::class);
+        $this->productOptionArrayMapper = Bootstrap::getObjectManager()->create(ProductOptionArrayMapper::class);
     }
 
     /**
@@ -89,19 +89,16 @@ class SelectedOptionsTest extends StorefrontTestsAbstract
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
         self::assertNotEmpty($catalogServiceItem->getItems());
 
-        $actual = [];
+        $actualOptions = [];
         foreach ($catalogServiceItem->getItems()[0]->getProductOptions() as $productOption) {
-            $optionValues = $productOption->getValues();
-            foreach ($optionValues as $productOptionValue) {
-                $convertedOptionValue = $this->arrayMapper->convertToArray($productOptionValue);
-                unset($convertedOptionValue['id']);
-                $actual[] = $convertedOptionValue;
-            }
+            /** @var \Magento\CatalogStorefrontApi\Api\Data\ProductOption $convertedOptions */
+            $convertedOptions = $this->productOptionArrayMapper->convertToArray($productOption);
+            $actualOptions[] = $convertedOptions;
         }
 
         $diff = $this->compareArraysRecursively->execute(
             $expected,
-            $actual
+            $actualOptions
         );
         self::assertEquals([], $diff, "Actual response doesn't equal expected data");
     }
@@ -110,6 +107,7 @@ class SelectedOptionsTest extends StorefrontTestsAbstract
      * Data provider for select option values
      *
      * @return array[][]
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function selectOptionValuesProvider(): array
     {
@@ -117,76 +115,121 @@ class SelectedOptionsTest extends StorefrontTestsAbstract
             [
                 [
                     [
-                        'label' => 'drop_down option 1',
-                        'sort_order' => '1',
-                        'default' => false,
-                        'image_url' => '',
-                        'qty_mutability' => false,
-                        'qty' => (float)0,
-                        'info_url' => '',
+                        'label' => 'drop_down option',
+                        'sort_order' => 4,
+                        'required' => true,
+                        'render_type' => 'drop_down',
+                        'type' => 'custom_option',
+                        'values' => [
+                            [
+                                'label' => 'drop_down option 1',
+                                'sort_order' => '1',
+                                'default' => false,
+                                'image_url' => '',
+                                'qty_mutability' => false,
+                                'qty' => 0.0,
+                                'info_url' => '',
+                                'price' => 0.0,
+                            ],
+
+                            [
+                                'label' => 'drop_down option 2',
+                                'sort_order' => '2',
+                                'default' => false,
+                                'image_url' => '',
+                                'qty_mutability' => false,
+                                'qty' => 0.0,
+                                'info_url' => '',
+                                'price' => 0.0,
+                            ],
+                        ],
                     ],
                     [
-                        'label' => 'drop_down option 2',
-                        'sort_order' => '2',
-                        'default' => false,
-                        'image_url' => '',
-                        'qty_mutability' => false,
-                        'qty' => (float)0,
-                        'info_url' => '',
+                        'label' => 'radio option',
+                        'sort_order' => 5,
+                        'required' => true,
+                        'render_type' => 'radio',
+                        'type' => 'custom_option',
+                        'values' => [
+                            [
+                                'label' => 'radio option 1',
+                                'sort_order' => '1',
+                                'default' => false,
+                                'image_url' => '',
+                                'qty_mutability' => false,
+                                'qty' => 0.0,
+                                'info_url' => '',
+                                'price' => 0.0,
+                            ],
+                            [
+                                'label' => 'radio option 2',
+                                'sort_order' => '2',
+                                'default' => false,
+                                'image_url' => '',
+                                'qty_mutability' => false,
+                                'qty' => 0.0,
+                                'info_url' => '',
+                                'price' => 0.0,
+                            ],
+                        ],
                     ],
                     [
-                        'label' => 'radio option 1',
-                        'sort_order' => '1',
-                        'default' => false,
-                        'image_url' => '',
-                        'qty_mutability' => false,
-                        'qty' => (float)0,
-                        'info_url' => '',
+                        'label' => 'checkbox option',
+                        'sort_order' => 6,
+                        'required' => true,
+                        'render_type' => 'checkbox',
+                        'type' => 'custom_option',
+                        'values' => [
+                            [
+                                'label' => 'checkbox option 1',
+                                'sort_order' => '1',
+                                'default' => false,
+                                'image_url' => '',
+                                'qty_mutability' => false,
+                                'qty' => 0.0,
+                                'info_url' => '',
+                                'price' => 0.0,
+                            ],
+                            [
+                                'label' => 'checkbox option 2',
+                                'sort_order' => '2',
+                                'default' => false,
+                                'image_url' => '',
+                                'qty_mutability' => false,
+                                'qty' => 0.0,
+                                'info_url' => '',
+                                'price' => 0.0,
+                            ],
+                        ],
                     ],
                     [
-                        'label' => 'radio option 2',
-                        'sort_order' => '2',
-                        'default' => false,
-                        'image_url' => '',
-                        'qty_mutability' => false,
-                        'qty' => (float)0,
-                        'info_url' => '',
-                    ],
-                    [
-                        'label' => 'checkbox option 1',
-                        'sort_order' => '1',
-                        'default' => false,
-                        'image_url' => "",
-                        'qty_mutability' => false,
-                        'qty' => (float)0,
-                        'info_url' => '',
-                    ],
-                    [
-                        'label' => 'checkbox option 2',
-                        'sort_order' => '2',
-                        'default' => false,
-                        'image_url' => '',
-                        'qty_mutability' => false,
-                        'qty' => (float)0,
-                        'info_url' => '',
-                    ],
-                    [
-                        'label' => 'multiple option 1',
-                        'sort_order' => '1',
-                        'default' => false,
-                        'image_url' => '',
-                        'qty_mutability' => false,
-                        'qty' => (float)0,
-                        'info_url' => '',
-                    ],
-                    [
-                        'label' => 'multiple option 2',
-                        'sort_order' => '2',
-                        'default' => false,
-                        'image_url' => '2',
-                        'qty_mutability' => false,
-                        'qty' => (float)0,
-                        'info_url' => '',
+                        'label' => 'multiple option',
+                        'sort_order' => 7,
+                        'required' => true,
+                        'render_type' => 'multiple',
+                        'type' => 'custom_option',
+                        'values' => [
+                            [
+                                'label' => 'multiple option 1',
+                                'sort_order' => '1',
+                                'default' => false,
+                                'image_url' => '',
+                                'qty_mutability' => false,
+                                'qty' => 0.0,
+                                'info_url' => '',
+                                'price' => 0.0,
+                            ],
+                            [
+                                'label' => 'multiple option 2',
+                                'sort_order' => '2',
+                                'default' => false,
+                                'image_url' => '',
+                                'qty_mutability' => false,
+                                'qty' => 0.0,
+                                'info_url' => '',
+                                'price' => 0.0,
+                            ],
+                        ],
                     ],
                 ],
             ],
