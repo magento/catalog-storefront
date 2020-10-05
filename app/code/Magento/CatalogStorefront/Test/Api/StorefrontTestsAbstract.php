@@ -94,9 +94,8 @@ abstract class StorefrontTestsAbstract extends TestCase
      */
     protected function runTest()
     {
-        $this->runConsumers();
-
         if (TESTS_WEB_API_ADAPTER !== 'soap') {
+            $this->runConsumers();
             parent::runTest();
         }
     }
