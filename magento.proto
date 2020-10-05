@@ -305,12 +305,18 @@ message ProductsGetResult {
 }
 
 message ImportProductsRequest {
-  repeated Product products = 1;
+  repeated ImportProductDataRequest products = 1;
   // Store code or id
   string store = 2;
   // A map of request parameters
   // Could be useful to identify customer group or any other request-specific data
   KeyValue params = 6;
+}
+
+message ImportProductDataRequest {
+  Product product = 1;
+  // List of imported attributes. Support patch update for set of top-level attributes
+  repeated string attributes = 2;
 }
 
 message DeleteProductsRequest {
@@ -340,12 +346,18 @@ message DeleteProductsResponse {
 }
 
 message ImportCategoriesRequest {
-  repeated Category categories = 1;
+  repeated ImportCategoryDataRequest categories = 1;
   // Store code or id
   string store = 2;
   // A map of request parameters
   // Could be useful to identify customer group or any other request-specific data
   KeyValue params = 6;
+}
+
+message ImportCategoryDataRequest {
+  Category category = 1;
+  // List of imported attributes. Support patch update for set of top-level attributes
+  repeated string attributes = 2;
 }
 
 message ImportCategoriesResponse {

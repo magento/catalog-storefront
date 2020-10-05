@@ -14,7 +14,7 @@ use Google\Protobuf\Internal\GPBUtil;
 class ImportCategoriesRequest extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Category categories = 1;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ImportCategoryDataRequest categories = 1;</code>
      */
     private $categories;
     /**
@@ -37,7 +37,7 @@ class ImportCategoriesRequest extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type \Magento\CatalogStorefrontApi\Proto\Category[]|\Google\Protobuf\Internal\RepeatedField $categories
+     *     @type \Magento\CatalogStorefrontApi\Proto\ImportCategoryDataRequest[]|\Google\Protobuf\Internal\RepeatedField $categories
      *     @type string $store
      *           Store code or id
      *     @type \Magento\CatalogStorefrontApi\Proto\KeyValue $params
@@ -52,7 +52,7 @@ class ImportCategoriesRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Category categories = 1;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ImportCategoryDataRequest categories = 1;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
      */
     public function getCategories()
@@ -61,13 +61,13 @@ class ImportCategoriesRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Category categories = 1;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\Category[]|\Google\Protobuf\Internal\RepeatedField $var
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ImportCategoryDataRequest categories = 1;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\ImportCategoryDataRequest[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
     public function setCategories($var)
     {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\Category::class);
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\ImportCategoryDataRequest::class);
         $this->categories = $arr;
 
         return $this;

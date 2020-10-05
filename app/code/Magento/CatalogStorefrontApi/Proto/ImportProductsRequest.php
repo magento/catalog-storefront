@@ -14,7 +14,7 @@ use Google\Protobuf\Internal\GPBUtil;
 class ImportProductsRequest extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Product products = 1;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ImportProductDataRequest products = 1;</code>
      */
     private $products;
     /**
@@ -37,7 +37,7 @@ class ImportProductsRequest extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type \Magento\CatalogStorefrontApi\Proto\Product[]|\Google\Protobuf\Internal\RepeatedField $products
+     *     @type \Magento\CatalogStorefrontApi\Proto\ImportProductDataRequest[]|\Google\Protobuf\Internal\RepeatedField $products
      *     @type string $store
      *           Store code or id
      *     @type \Magento\CatalogStorefrontApi\Proto\KeyValue $params
@@ -52,7 +52,7 @@ class ImportProductsRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Product products = 1;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ImportProductDataRequest products = 1;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
      */
     public function getProducts()
@@ -61,13 +61,13 @@ class ImportProductsRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Product products = 1;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\Product[]|\Google\Protobuf\Internal\RepeatedField $var
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ImportProductDataRequest products = 1;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\ImportProductDataRequest[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
     public function setProducts($var)
     {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\Product::class);
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\ImportProductDataRequest::class);
         $this->products = $arr;
 
         return $this;
