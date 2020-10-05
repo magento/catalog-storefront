@@ -10,9 +10,12 @@ namespace Magento\CatalogStorefront\Test\Api\Product\ProductOptions;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogStorefront\Model\CatalogService;
 use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
+use Magento\CatalogStorefrontApi\Api\Data\ProductOption;
 use Magento\CatalogStorefrontApi\Api\Data\ProductOptionArrayMapper;
-use Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionArrayMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOption;
+use Magento\CatalogStorefrontApi\Api\Data\ProductShopperInputOptionArrayMapper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -21,12 +24,6 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class GiftCardProductTest extends StorefrontTestsAbstract
 {
-    /**
-     * Test Constants
-     */
-    const TEST_SKU = 'gift-card-with-fixed-amount-10';
-    const STORE_CODE = 'default';
-
     /**
      * @var string[]
      */
@@ -69,8 +66,6 @@ class GiftCardProductTest extends StorefrontTestsAbstract
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
         $this->productsGetRequestInterface = Bootstrap::getObjectManager()->create(ProductsGetRequestInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
-        $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
-        $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
         $this->optionArrayMapper = Bootstrap::getObjectManager()->create(ProductOptionArrayMapper::class);
         $this->shopperInputOptionArrayMapper = Bootstrap::getObjectManager()->create(
             ProductShopperInputOptionArrayMapper::class
@@ -78,39 +73,110 @@ class GiftCardProductTest extends StorefrontTestsAbstract
     }
 
     /**
-     * Validate gift card product data
+     * Validate physical gift card product data
      *
      * @magentoApiDataFixture Magento/GiftCard/_files/gift_card_physical_with_fixed_amount_10.php
-     * @magentoConfigFixture default_store giftcard/general/allow_message 1
-     * @magentoConfigFixture default_store giftcard/general/message_max_length 266
      * @magentoDbIsolation disabled
-     * @param array $expected
+     * @param array $expectedOptions
+     * @param array $expectedShopperInputOptions
+     * @dataProvider getGiftCardProductProvider
      * @throws NoSuchEntityException
      * @throws \Throwable
-     * @dataProvider getGiftCardProductProvider
      */
-    public function testGiftCardProduct(array $expectedOptions, array $expectedShopperInputOptions)
+    public function testPhysicalGiftCard(array $expectedOptions, array $expectedShopperInputOptions): void
     {
-        $product = $this->productRepository->get(self::TEST_SKU);
+        $product = $this->productRepository->get('gift-card-with-fixed-amount-10');
         $this->productsGetRequestInterface->setIds([$product->getId()]);
-        $this->productsGetRequestInterface->setStore(self::STORE_CODE);
+        $this->productsGetRequestInterface->setStore('default');
+        $this->productsGetRequestInterface->setAttributeCodes($this->attributesToCompare);
+        $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
+
+        self::assertNotEmpty($catalogServiceItem->getItems());
+
+        $actualOptions = $this->getOptions($catalogServiceItem);
+        $this->compare($expectedOptions, $actualOptions);
+        $actualShopperInputOptions = $this->getInputOptions($catalogServiceItem);
+        $this->compare($expectedShopperInputOptions, $actualShopperInputOptions);
+    }
+
+    /**
+     * Validate virtual gift card product data in multiple websites
+     *
+     * @magentoApiDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     * @magentoApiDataFixture Magento/GiftCard/_files/gift_card_with_amount_multiple_websites.php
+     * @magentoConfigFixture default_store giftcard/general/allow_message 1
+     * @magentoConfigFixture default_store giftcard/general/message_max_length 255
+     * @magentoDbIsolation disabled
+     * @param array $defaultWebsiteOptions
+     * @param array $defaultWebsiteInputOptions
+     * @param array $secondWebsiteOptions
+     * @param array $secondWebsiteInputOptions
+     * @throws NoSuchEntityException
+     * @throws \Throwable
+     * @dataProvider getVirtualMultiWebsiteDataProvider
+     */
+    public function testVirtualGiftCardMultiWebsite(
+        array $defaultWebsiteOptions,
+        array $defaultWebsiteInputOptions,
+        array $secondWebsiteOptions,
+        array $secondWebsiteInputOptions
+    ): void {
+        $product = $this->productRepository->get('gift-card-with-amount');
+        $this->productsGetRequestInterface->setIds([$product->getId()]);
+        $this->productsGetRequestInterface->setStore('default');
         $this->productsGetRequestInterface->setAttributeCodes($this->attributesToCompare);
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
         self::assertNotEmpty($catalogServiceItem->getItems());
+        $actualOptions = $this->getOptions($catalogServiceItem);
+        $this->compare($defaultWebsiteOptions, $actualOptions);
+        $actualShopperInputOptions = $this->getInputOptions($catalogServiceItem);
+        $this->compare($defaultWebsiteInputOptions, $actualShopperInputOptions);
 
-        $actualOptions = [];
+        $this->productsGetRequestInterface->setStore('fixture_second_store');
+        $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
+        self::assertNotEmpty($catalogServiceItem->getItems());
+        $actualOptions = $this->getOptions($catalogServiceItem);
+        $this->compare($secondWebsiteOptions, $actualOptions);
+        $actualShopperInputOptions = $this->getInputOptions($catalogServiceItem);
+        $this->compare($secondWebsiteInputOptions, $actualShopperInputOptions);
+    }
+
+    /**
+     * Get options array
+     *
+     * @param ProductsGetResultInterface $catalogServiceItem
+     * @return array
+     */
+    private function getOptions(ProductsGetResultInterface $catalogServiceItem): array
+    {
+        $options = [];
         foreach ($catalogServiceItem->getItems()[0]->getProductOptions() as $option) {
+            /**
+             * @var $option ProductOption
+             */
             $convertedValues = $this->optionArrayMapper->convertToArray($option);
-            $actualOptions[] = $convertedValues;
+            $options[] = $convertedValues;
         }
-        $this->compare($expectedOptions, $actualOptions);
+        return $options;
+    }
 
-        $actualShopperInputOptions = [];
+    /**
+     * Get shopper input options array
+     *
+     * @param ProductsGetResultInterface $catalogServiceItem
+     * @return array
+     */
+    private function getInputOptions(ProductsGetResultInterface $catalogServiceItem): array
+    {
+        $shopperInputOptions = [];
         foreach ($catalogServiceItem->getItems()[0]->getShopperInputOptions() as $option) {
+            /**
+             * @var $option ProductShopperInputOption
+             */
             $convertedValues = $this->shopperInputOptionArrayMapper->convertToArray($option);
-            $actualShopperInputOptions[] = $convertedValues;
+            $shopperInputOptions[] = $convertedValues;
         }
-        $this->compare($expectedShopperInputOptions, $actualShopperInputOptions);
+        return $shopperInputOptions;
     }
 
     /**
@@ -118,34 +184,113 @@ class GiftCardProductTest extends StorefrontTestsAbstract
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function getGiftCardProductProvider()
+    public function getGiftCardProductProvider(): array
     {
         return [
-                [
-                    'productOptions' => [
-                        [
-                            'type' => 'giftcard',
-                            'values' => [
-                                // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                                ['id' => \base64_encode('giftcard/giftcard_amount/10.0000')]
-                            ]
+            [
+                'productOptions' => [
+                    [
+                        'type' => 'giftcard',
+                        'values' => [
+                            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                            ['id' => \base64_encode('giftcard/giftcard_amount/10.0000')]
+                        ]
+                    ]
+                ],
+                'productShopperInputOptions' => [
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    ['id' => \base64_encode('giftcard/giftcard_recipient_name')],
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    ['id' => \base64_encode('giftcard/giftcard_sender_name')]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Virtual gift card with fixed and open amount data provider
+     *
+     * @return array
+     */
+    public function getVirtualMultiWebsiteDataProvider(): array
+    {
+        return [
+            [
+                'defaultWebsiteOptions' => [
+                    [
+                        'type' => 'giftcard',
+                        'values' => [
+                            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                            ['id' => \base64_encode('giftcard/giftcard_amount/7.0000')],
+                            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                            ['id' => \base64_encode('giftcard/giftcard_amount/17.0000')]
+                        ]
+                    ]
+                ],
+                'defaultWebsiteInputOptions' => [
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    ['id' => \base64_encode('giftcard/giftcard_recipient_name')],
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    ['id' => \base64_encode('giftcard/giftcard_sender_name')],
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    ['id' => \base64_encode('giftcard/giftcard_recipient_email')],
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    ['id' => \base64_encode('giftcard/giftcard_sender_email')],
+                    [
+                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        'id' => \base64_encode('giftcard/giftcard_message'),
+                        'range' => [
+                            'from' => 0.0,
+                            'to' => 255.0
                         ]
                     ],
-                    'productShopperInputOptions' => [
+                    [
                         // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                        ['id' => \base64_encode('giftcard/giftcard_recipient_name')],
-                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                        ['id' => \base64_encode('giftcard/giftcard_sender_name')],
-                        [
+                        'id' => \base64_encode('giftcard/custom_giftcard_amount'),
+                        'range' => [
+                            'from' => 100.0,
+                            'to' => 150.0
+                        ]
+                    ]
+                ],
+                'secondWebsiteOptions' => [
+                    [
+                        'type' => 'giftcard',
+                        'values' => [
                             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                            'id' => \base64_encode('giftcard/giftcard_message'),
-                            'range' => [
-                                'from' => 0.0,
-                                'to' => 266.0
-                            ]
+                            ['id' => \base64_encode('giftcard/giftcard_amount/7.0000')],
+                            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                            ['id' => \base64_encode('giftcard/giftcard_amount/17.0000')]
+                        ]
+                    ]
+                ],
+                'secondWebsiteInputOptions' => [
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    ['id' => \base64_encode('giftcard/giftcard_recipient_name')],
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    ['id' => \base64_encode('giftcard/giftcard_sender_name')],
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    ['id' => \base64_encode('giftcard/giftcard_recipient_email')],
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    ['id' => \base64_encode('giftcard/giftcard_sender_email')],
+                    [
+                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        'id' => \base64_encode('giftcard/giftcard_message'),
+                        'range' => [
+                            'from' => 0.0,
+                            'to' => 255.0
+                        ]
+                    ],
+                    [
+                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        'id' => \base64_encode('giftcard/custom_giftcard_amount'),
+                        'range' => [
+                            'from' => 100.0,
+                            'to' => 150.0
                         ]
                     ]
                 ]
+            ]
         ];
     }
 }
