@@ -206,6 +206,11 @@ final class Product implements ProductInterface
     private $countryOfManufacture;
 
     /**
+     * @var bool
+     */
+    private $giftMessageAvailable;
+
+    /**
      * @var float
      */
     private $specialPrice;
@@ -1035,6 +1040,27 @@ final class Product implements ProductInterface
     public function setCountryOfManufacture(string $value): void
     {
         $this->countryOfManufacture = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return bool
+     */
+    public function getGiftMessageAvailable(): bool
+    {
+        return (bool) $this->giftMessageAvailable;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param bool $value
+     * @return void
+     */
+    public function setGiftMessageAvailable(bool $value): void
+    {
+        $this->giftMessageAvailable = $value;
     }
     
     /**

@@ -93,8 +93,8 @@ class VariantServiceProxyServer implements \Magento\CatalogStorefrontApi\Proto\V
                     $r = new \Magento\CatalogStorefrontApi\Api\Data\ProductVariantImport();
                     $r->setId($item1->getId());
                     $values = [];
-                    foreach ($item1->getOptionValues() as $newValue) {
-                        $values[] = $newValue;
+                    foreach ($item1->getOptionValues() as $value) {
+                        $values[] = $value;
                     }
                     $r->setOptionValues($values);
                     return $r;
@@ -171,8 +171,8 @@ class VariantServiceProxyServer implements \Magento\CatalogStorefrontApi\Proto\V
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Api\Data\DeleteVariantsRequest();
             $values = [];
-            foreach ($value->getId() as $newValue) {
-                $values[] = $newValue;
+            foreach ($value->getId() as $value) {
+                $values[] = $value;
             }
             $r->setId($values);
             return $r;
@@ -274,8 +274,8 @@ class VariantServiceProxyServer implements \Magento\CatalogStorefrontApi\Proto\V
                     $r = new \Magento\CatalogStorefrontApi\Proto\ProductVariant();
                     $r->setId($item1->getId());
                     $values = [];
-                    foreach ($item1->getOptionValues() as $newValue) {
-                        $values[] = $newValue;
+                    foreach ($item1->getOptionValues() as $value) {
+                        $values[] = $value;
                     }
                     $r->setOptionValues($values);
                     $r->setProductId($item1->getProductId());
@@ -331,8 +331,8 @@ class VariantServiceProxyServer implements \Magento\CatalogStorefrontApi\Proto\V
             $r = new \Magento\CatalogStorefrontApi\Api\Data\OptionSelectionRequest();
             $r->setStore($value->getStore());
             $values = [];
-            foreach ($value->getValues() as $newValue) {
-                $values[] = $newValue;
+            foreach ($value->getValues() as $value) {
+                $values[] = $value;
             }
             $r->setValues($values);
             return $r;
@@ -365,8 +365,8 @@ class VariantServiceProxyServer implements \Magento\CatalogStorefrontApi\Proto\V
                     $r = new \Magento\CatalogStorefrontApi\Proto\ProductVariant();
                     $r->setId($item1->getId());
                     $values = [];
-                    foreach ($item1->getOptionValues() as $newValue) {
-                        $values[] = $newValue;
+                    foreach ($item1->getOptionValues() as $value) {
+                        $values[] = $value;
                     }
                     $r->setOptionValues($values);
                     $r->setProductId($item1->getProductId());

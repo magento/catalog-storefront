@@ -238,6 +238,9 @@ final class ProductMapper
             case "country_of_manufacture":
                 $dto->setCountryOfManufacture((string) $value);
                 break;
+            case "gift_message_available":
+                $dto->setGiftMessageAvailable((bool) $value);
+                break;
             case "special_price":
                 $dto->setSpecialPrice((float) $value);
                 break;

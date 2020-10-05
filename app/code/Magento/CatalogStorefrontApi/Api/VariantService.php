@@ -90,8 +90,8 @@ class VariantService implements VariantServiceInterface
                     $r = new \Magento\CatalogStorefrontApi\Proto\ProductVariantImport();
                     $r->setId($item1->getId());
                     $values = [];
-                    foreach ($item1->getOptionValues() as $newValue) {
-                        $values[] = $newValue;
+                    foreach ($item1->getOptionValues() as $value) {
+                        $values[] = $value;
                     }
                     $r->setOptionValues($values);
                     return $r;
@@ -161,8 +161,8 @@ class VariantService implements VariantServiceInterface
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Proto\DeleteVariantsRequest();
             $values = [];
-            foreach ($value->getId() as $newValue) {
-                $values[] = $newValue;
+            foreach ($value->getId() as $value) {
+                $values[] = $value;
             }
             $r->setId($values);
             return $r;
@@ -257,8 +257,8 @@ class VariantService implements VariantServiceInterface
                     $r = new \Magento\CatalogStorefrontApi\Api\Data\ProductVariant();
                     $r->setId($item1->getId());
                     $values = [];
-                    foreach ($item1->getOptionValues() as $newValue) {
-                        $values[] = $newValue;
+                    foreach ($item1->getOptionValues() as $value) {
+                        $values[] = $value;
                     }
                     $r->setOptionValues($values);
                     $r->setProductId($item1->getProductId());
@@ -307,8 +307,8 @@ class VariantService implements VariantServiceInterface
             $r = new \Magento\CatalogStorefrontApi\Proto\OptionSelectionRequest();
             $r->setStore($value->getStore());
             $values = [];
-            foreach ($value->getValues() as $newValue) {
-                $values[] = $newValue;
+            foreach ($value->getValues() as $value) {
+                $values[] = $value;
             }
             $r->setValues($values);
             return $r;
@@ -341,8 +341,8 @@ class VariantService implements VariantServiceInterface
                     $r = new \Magento\CatalogStorefrontApi\Api\Data\ProductVariant();
                     $r->setId($item1->getId());
                     $values = [];
-                    foreach ($item1->getOptionValues() as $newValue) {
-                        $values[] = $newValue;
+                    foreach ($item1->getOptionValues() as $value) {
+                        $values[] = $value;
                     }
                     $r->setOptionValues($values);
                     $r->setProductId($item1->getProductId());
