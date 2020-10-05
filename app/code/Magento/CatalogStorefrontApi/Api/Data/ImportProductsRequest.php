@@ -38,7 +38,7 @@ final class ImportProductsRequest implements ImportProductsRequestInterface
     /**
      * @inheritdoc
      *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\ProductInterface[]
+     * @return \Magento\CatalogStorefrontApi\Api\Data\ImportProductDataRequestInterface[]
      */
     public function getProducts(): array
     {
@@ -48,7 +48,7 @@ final class ImportProductsRequest implements ImportProductsRequestInterface
     /**
      * @inheritdoc
      *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\ProductInterface[] $value
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ImportProductDataRequestInterface[] $value
      * @return void
      */
     public function setProducts(array $value): void

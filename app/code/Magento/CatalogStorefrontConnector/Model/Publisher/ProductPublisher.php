@@ -7,12 +7,14 @@
 namespace Magento\CatalogStorefrontConnector\Model\Publisher;
 
 use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
+use Magento\CatalogMessageBroker\Model\MessageBus\Product\PublishProductsConsumer;
+use Magento\CatalogMessageBroker\Model\ProductDataProcessor;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ImportProductDataRequestMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterfaceFactory;
 use Magento\Framework\App\State;
 use Psr\Log\LoggerInterface;
-use Magento\CatalogMessageBroker\Model\ProductDataProcessor;
 
 /**
  * Product publisher
@@ -58,9 +60,9 @@ class ProductPublisher
     private $productDataProcessor;
 
     /**
-     * @var \Magento\CatalogStorefrontApi\Api\Data\ProductMapper
+     * @var ImportProductDataRequestMapper
      */
-    private $productMapper;
+    private $importProductDataRequestMapper;
 
     /**
      * @param DataProviderInterface $productsDataProvider
@@ -69,7 +71,7 @@ class ProductPublisher
      * @param CatalogServerInterface $catalogServer
      * @param ImportProductsRequestInterfaceFactory $importProductsRequestInterfaceFactory
      * @param ProductDataProcessor $productDataProcessor
-     * @param \Magento\CatalogStorefrontApi\Api\Data\ProductMapper $productMapper
+     * @param ImportProductDataRequestMapper $importProductDataRequestMapper
      * @param int $batchSize
      */
     public function __construct(
@@ -79,7 +81,7 @@ class ProductPublisher
         CatalogServerInterface $catalogServer,
         ImportProductsRequestInterfaceFactory $importProductsRequestInterfaceFactory,
         ProductDataProcessor $productDataProcessor,
-        \Magento\CatalogStorefrontApi\Api\Data\ProductMapper $productMapper,
+        ImportProductDataRequestMapper $importProductDataRequestMapper,
         int $batchSize
     ) {
         $this->productsDataProvider = $productsDataProvider;
@@ -89,7 +91,7 @@ class ProductPublisher
         $this->catalogServer = $catalogServer;
         $this->importProductsRequestInterfaceFactory = $importProductsRequestInterfaceFactory;
         $this->productDataProcessor = $productDataProcessor;
-        $this->productMapper = $productMapper;
+        $this->importProductDataRequestMapper = $importProductDataRequestMapper;
     }
 
     /**
@@ -97,6 +99,7 @@ class ProductPublisher
      *
      * @param array $productIds
      * @param string $storeCode
+     * @param string $actionType
      * @param array $overrideProducts Temporary variables to support transition period between new and old Export API
      *
      * @return void
@@ -104,13 +107,17 @@ class ProductPublisher
      * @throws \Exception
      * @deprecated
      */
-    public function publish(array $productIds, string $storeCode, $overrideProducts = []): void
-    {
+    public function publish(
+        array $productIds,
+        string $storeCode,
+        string $actionType,
+        array $overrideProducts = []
+    ): void {
         $this->state->emulateAreaCode(
             \Magento\Framework\App\Area::AREA_FRONTEND,
-            function () use ($productIds, $storeCode, $overrideProducts) {
+            function () use ($productIds, $storeCode, $actionType, $overrideProducts) {
                 try {
-                    $this->publishEntities($productIds, $storeCode, $overrideProducts);
+                    $this->publishEntities($productIds, $storeCode, $actionType, $overrideProducts);
                 } catch (\Throwable $e) {
                     $this->logger->critical(
                         \sprintf(
@@ -130,12 +137,17 @@ class ProductPublisher
      *
      * @param array $productIds
      * @param string $storeCode
+     * @param string $actionType
      * @param array $overrideProducts
      *
      * @return void
      */
-    private function publishEntities(array $productIds, string $storeCode, $overrideProducts = []): void
-    {
+    private function publishEntities(
+        array $productIds,
+        string $storeCode,
+        string $actionType,
+        array $overrideProducts = []
+    ): void {
         foreach (\array_chunk($productIds, $this->batchSize) as $idsBunch) {
             // @todo eliminate calling old API when new API can provide all of the necessary data
             $productsData = $this->productsDataProvider->fetch($idsBunch, [], ['store' => $storeCode]);
@@ -144,7 +156,7 @@ class ProductPublisher
                 ['verbose' => $productsData]
             );
             if (count($productsData)) {
-                $this->importProducts($storeCode, array_values($productsData), $overrideProducts);
+                $this->importProducts($storeCode, array_values($productsData), $actionType, $overrideProducts);
             }
         }
     }
@@ -154,31 +166,45 @@ class ProductPublisher
      *
      * @param string $storeCode
      * @param array $products
+     * @param string $actionType
      * @param array $overrideProducts
      *
      * @throws \Throwable
      */
-    private function importProducts(string $storeCode, array $products, $overrideProducts = []): void
-    {
+    private function importProducts(
+        string $storeCode,
+        array $products,
+        string $actionType,
+        array $overrideProducts = []
+    ): void {
         $newApiProducts = [];
+        $productsRequestData = [];
+
         foreach ($overrideProducts as $product) {
             $newApiProducts[$product['product_id']] = $product;
         }
 
-        foreach ($products as &$product) {
+        foreach ($products as $product) {
             if (isset($newApiProducts[$product['entity_id']])) {
                 $product = $this->productDataProcessor->merge($newApiProducts[$product['entity_id']], $product);
             }
+
             // be sure, that data passed to Import API in the expected format
-            $product = $this->productMapper->setData($product)->build();
+            $productsRequestData[] = $this->importProductDataRequestMapper->setData(
+                [
+                    'product' => $product,
+                    'attributes' => $actionType === PublishProductsConsumer::ACTION_UPDATE ? \array_keys($product) : [],
+                ]
+            )->build();
         }
-        unset($product);
 
         /** @var ImportProductsRequestInterface $importProductRequest */
         $importProductRequest = $this->importProductsRequestInterfaceFactory->create();
-        $importProductRequest->setProducts($products);
+        $importProductRequest->setProducts($productsRequestData);
         $importProductRequest->setStore($storeCode);
+
         $importResult = $this->catalogServer->importProducts($importProductRequest);
+
         if ($importResult->getStatus() === false) {
             $this->logger->error(sprintf('Products import is failed: "%s"', $importResult->getMessage()));
         }

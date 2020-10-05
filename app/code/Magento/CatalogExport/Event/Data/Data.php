@@ -13,28 +13,29 @@ namespace Magento\CatalogExport\Event\Data;
 class Data
 {
     /**
-     * @var int[]
+     * @var Entity[]
      */
-    private $entityIds;
+    private $entities;
 
     /**
-     * Get changed entities IDs
+     * Get entities.
      *
-     * @return int[]
+     * @return \Magento\CatalogExport\Event\Data\Entity[]
      */
-    public function getIds(): array
+    public function getEntities(): array
     {
-        return $this->entityIds;
+        return $this->entities;
     }
 
     /**
-     * Set changed entities IDs
+     * Set entities.
      *
-     * @param array $ids
+     * @param \Magento\CatalogExport\Event\Data\Entity[] $entities
+     *
      * @return void
      */
-    public function setIds(array $ids): void
+    public function setEntities(array $entities): void
     {
-        $this->entityIds = $ids;
+        $this->entities = $entities;
     }
 }
