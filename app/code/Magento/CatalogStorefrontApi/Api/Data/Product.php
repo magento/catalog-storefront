@@ -86,6 +86,11 @@ final class Product implements ProductInterface
     private $urlKey;
 
     /**
+     * @var string
+     */
+    private $giftcardType;
+
+    /**
      * @var float
      */
     private $qty;
@@ -531,6 +536,27 @@ final class Product implements ProductInterface
     public function setUrlKey(string $value): void
     {
         $this->urlKey = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return string
+     */
+    public function getGiftcardType(): string
+    {
+        return (string) $this->giftcardType;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setGiftcardType(string $value): void
+    {
+        $this->giftcardType = $value;
     }
     
     /**

@@ -42,6 +42,6 @@ class DynamicAttribute implements DataMapperInterface
             ];
         }
 
-        return ['dynamic_attributes' => $dynamicAttributes];
+        return $dynamicAttributes ? ['dynamic_attributes' => $dynamicAttributes] : [];
     }
 }
