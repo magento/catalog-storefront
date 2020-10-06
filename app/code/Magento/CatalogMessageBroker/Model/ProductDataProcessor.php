@@ -63,7 +63,6 @@ class ProductDataProcessor
         'url_suffix', //type: string
         'url_rewrites', //type: \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteInterface[]
         'country_of_manufacture', //type: string
-        'gift_message_available', //type: bool
         'special_price', //type: float
         'special_from_date', //type: string
         'special_to_date', //type: string
