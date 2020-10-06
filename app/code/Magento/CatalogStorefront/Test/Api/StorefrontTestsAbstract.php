@@ -31,6 +31,16 @@ abstract class StorefrontTestsAbstract extends TestCase
     ];
 
     /**
+     * @var array
+     */
+    private const QUEUES = [
+        'catalog.category.export.queue',
+        'catalog.product.export.queue',
+        'storefront.catalog.product.connector',
+        'storefront.catalog.category.connector',
+    ];
+
+    /**
      * @var CompareArraysRecursively
      */
     private $compareArraysRecursively;
@@ -52,6 +62,7 @@ abstract class StorefrontTestsAbstract extends TestCase
         parent::tearDown();
         $this->clearCatalogStorage();
         $this->cleanFeeds();
+        $this->cleanOldMessages();
     }
 
     /**
@@ -99,6 +110,22 @@ abstract class StorefrontTestsAbstract extends TestCase
         foreach (self::FEEDS as $feed) {
             $feedTable = $resourceConnection->getTableName($feed);
             $connection->delete($feedTable);
+        }
+    }
+
+    /**
+     * Clean old messages from rabbitmq
+     *
+     * @return void
+     */
+    private function cleanOldMessages(): void
+    {
+        /** @var \Magento\Framework\Amqp\Config $amqpConfig */
+        $amqpConfig = Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\Amqp\Config::class);
+
+        foreach (self::QUEUES as $queue) {
+            $amqpConfig->getChannel()->queue_purge($queue);
         }
     }
 
