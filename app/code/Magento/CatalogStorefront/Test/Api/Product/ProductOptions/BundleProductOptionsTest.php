@@ -14,7 +14,6 @@ use Magento\CatalogStorefrontApi\Api\Data\ProductOptionArrayMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\Helper\CompareArraysRecursively;
 
 /**
  * Tests bundle product options on the storefront
@@ -50,11 +49,6 @@ class BundleProductOptionsTest extends StorefrontTestsAbstract
     private $productRepository;
 
     /**
-     * @var CompareArraysRecursively
-     */
-    private $compareArraysRecursively;
-
-    /**
      * @var ProductOptionArrayMapper
      */
     private $arrayMapper;
@@ -71,7 +65,6 @@ class BundleProductOptionsTest extends StorefrontTestsAbstract
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
         $this->arrayMapper = Bootstrap::getObjectManager()->create(ProductOptionArrayMapper::class);
-        $this->compareArraysRecursively = Bootstrap::getObjectManager()->create(CompareArraysRecursively::class);
     }
 
     /**
@@ -91,7 +84,7 @@ class BundleProductOptionsTest extends StorefrontTestsAbstract
         $this->productsGetRequestInterface->setStore(self::STORE_CODE);
         $this->productsGetRequestInterface->setAttributeCodes($this->attributesToCompare);
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
-        $this->assertNotEmpty($catalogServiceItem->getItems());
+        self::assertNotEmpty($catalogServiceItem->getItems());
 
         $actual = [];
         foreach ($catalogServiceItem->getItems()[0]->getProductOptions() as $productOption) {
@@ -99,11 +92,7 @@ class BundleProductOptionsTest extends StorefrontTestsAbstract
             $actual[] = $convertedValues;
         }
 
-        $diff = $this->compareArraysRecursively->execute(
-            $expected,
-            $actual
-        );
-        self::assertEquals([], $diff, "Actual response doesn't equal expected data");
+        $this->compare($expected, $actual);
     }
 
     /**
