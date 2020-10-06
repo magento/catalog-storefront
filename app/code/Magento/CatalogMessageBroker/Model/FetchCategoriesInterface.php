@@ -7,17 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\CatalogMessageBroker\Model;
 
+use Magento\CatalogExport\Event\Data\Entity;
+
 /**
  * Fetch categories data
  */
 interface FetchCategoriesInterface
 {
     /**
-     * Fetch categories data by Ids
+     * Fetch categories data
      *
-     * @param string[] $ids
-     * @param string[] $storeViewCodes
+     * @param Entity[] $entities
+     * @param string $scope
+     *
      * @return array
      */
-    public function getByIds(array $ids, array $storeViewCodes = []): array;
+    public function execute(array $entities, string $scope): array;
 }

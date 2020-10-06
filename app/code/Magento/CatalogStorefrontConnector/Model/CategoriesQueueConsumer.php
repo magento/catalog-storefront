@@ -6,12 +6,12 @@
 
 namespace Magento\CatalogStorefrontConnector\Model;
 
-use Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
 use Magento\CatalogMessageBroker\Model\MessageBus\Category\CategoriesConsumer;
 use Magento\CatalogStorefrontConnector\Helper\CustomStoreResolver;
 use Magento\CatalogStorefrontConnector\Model\Data\UpdatedEntitiesDataInterface;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
+use Magento\DataExporter\Model\Indexer\FeedIndexer;
 use Magento\DataExporter\Model\FeedPool;
 use Psr\Log\LoggerInterface;
 
@@ -34,7 +34,7 @@ class CategoriesQueueConsumer
     private $catalogEntityIdsProvider;
 
     /**
-     * @var CategoryFeedIndexer
+     * @var FeedIndexer
      */
     private $categoryFeedIndexer;
 
@@ -65,7 +65,7 @@ class CategoriesQueueConsumer
      * @param CustomStoreResolver $storeResolver
      * @param LoggerInterface $logger
      * @param FeedPool $feedPool
-     * @param CategoryFeedIndexer $categoryFeedIndexer
+     * @param FeedIndexer $categoryFeedIndexer
      */
     public function __construct(
         ChangedEntitiesMessageBuilder $messageBuilder,
@@ -74,7 +74,7 @@ class CategoriesQueueConsumer
         CustomStoreResolver $storeResolver,
         LoggerInterface $logger,
         FeedPool $feedPool,
-        CategoryFeedIndexer $categoryFeedIndexer
+        FeedIndexer $categoryFeedIndexer
     ) {
         $this->categoriesConsumer = $categoriesConsumer;
         $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
@@ -118,18 +118,21 @@ class CategoriesQueueConsumer
                 unset($ids[$category['categoryId']]);
             }
 
-            if (!empty($ids)) {
+            $categoriesArray = $this->buildMessageEntitiesArray($ids);
+            $deletedArray = $this->buildMessageEntitiesArray($deletedIds);
+
+            if (!empty($categoriesArray)) {
                 $this->passMessage(
                     CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
-                    $ids,
+                    $categoriesArray,
                     $storeCode
                 );
             }
 
-            if (!empty($deletedIds)) {
+            if (!empty($deletedArray)) {
                 $this->passMessage(
                     CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
-                    $deletedIds,
+                    $deletedArray,
                     $storeCode
                 );
             }
@@ -139,18 +142,37 @@ class CategoriesQueueConsumer
     }
 
     /**
+     * Build message entities array
+     *
+     * @param array $entityIds
+     *
+     * @return array
+     */
+    private function buildMessageEntitiesArray(array $entityIds): array
+    {
+        $entitiesArray = [];
+        foreach ($entityIds as $id) {
+            $entitiesArray[] = [
+                'entity_id' => (int)$id,
+            ];
+        }
+
+        return $entitiesArray;
+    }
+
+    /**
      * Publish deleted or updated message
      *
      * @param string $eventType
-     * @param int[] $ids
+     * @param array $products
      * @param string $storeCode
      */
-    private function passMessage(string $eventType, array $ids, string $storeCode)
+    private function passMessage(string $eventType, array $products, string $storeCode)
     {
-        foreach (array_chunk($ids, self::BATCH_SIZE) as $idsChunk) {
+        foreach (array_chunk($products, self::BATCH_SIZE) as $chunk) {
             $message = $this->messageBuilder->build(
-                $idsChunk,
                 $eventType,
+                $chunk,
                 $storeCode
             );
             try {

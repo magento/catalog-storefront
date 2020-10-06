@@ -124,6 +124,9 @@ final class ProductMapper
             case "url_key":
                 $dto->setUrlKey((string) $value);
                 break;
+            case "giftcard_type":
+                $dto->setGiftcardType((string) $value);
+                break;
             case "qty":
                 $dto->setQty((float) $value);
                 break;

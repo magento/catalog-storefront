@@ -50,7 +50,7 @@ final class ImportCategoriesRequestArrayMapper
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getCategories() as $fieldArrayDto) {
-            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\CategoryArrayMapper::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ImportCategoryDataRequestArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["categories"] = $fieldArray;
