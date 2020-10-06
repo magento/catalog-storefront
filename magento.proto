@@ -492,6 +492,76 @@ service VariantService {
   //rpc GetVariantsInclude (OptionSelectionRequest) returns (ProductVariantResponse) {}
 }
 
+service ProductReviews {
+    rpc ImportProductReviews (ImportReviewsRequest) returns (ImportReviewsResponse) {}
+    rpc DeleteProductReviews (DeleteReviewsRequest) returns (DeleteReviewsResponse) {}
+    rpc GetProductReviews (ProductReviewRequest) returns (ProductReviewResponse) {}
+}
+
+message ImportReviewsRequest {
+    repeated Review reviews = 1;
+    string store = 2;
+}
+
+message ImportReviewsResponse {
+    bool status = 1;
+    string message = 2;
+}
+
+message DeleteReviewsRequest {
+    repeated string reviewIds = 1;
+    string store = 2;
+}
+
+message DeleteReviewsResponse {
+    bool status = 1;
+    string message = 2;
+}
+
+message ProductReviewRequest {
+    string product_Id = 1;
+    string store = 2;
+}
+
+message ProductReviewResponse {
+    repeated Review items = 1;
+}
+
+service RatingsMetadata {
+    rpc ImportRatingsMetadata (ImportRatingsMetadataRequest) returns (ImportRatingsMetadataResponse) {}
+    rpc DeleteRatingsMetadata (DeleteRatingsMetadataRequest) returns (DeleteRatingsMetadataResponse) {}
+    rpc GetRatingsMetadata (RatingsMetadataRequest) returns (RatingsMetadataResponse) {}
+}
+
+message ImportRatingsMetadataRequest {
+    repeated RatingMetadata metadata = 1;
+    string store = 2;
+}
+
+message ImportRatingsMetadataResponse {
+    bool status = 1;
+    string message = 2;
+}
+
+message DeleteRatingsMetadataRequest {
+    repeated string ratingIds = 1;
+    string store = 2;
+}
+
+message DeleteRatingsMetadataResponse {
+    bool status = 1;
+    string message = 2;
+}
+
+message RatingsMetadataRequest {
+    string rating_id = 1;
+    string store = 2;
+}
+
+message RatingsMetadataResponse {
+    repeated RatingMetadata items = 1;
+}
+
 // catalog_data_exporter_product_reviews
 message Review {
     string review_id = 1;
