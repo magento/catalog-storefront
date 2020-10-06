@@ -13,7 +13,6 @@ use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductOptionArrayMapper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\Helper\CompareArraysRecursively;
 
 /**
  * Test class for Select custom options
@@ -52,11 +51,6 @@ class SelectedOptionsTest extends StorefrontTestsAbstract
     private $productOptionArrayMapper;
 
     /**
-     * @var CompareArraysRecursively
-     */
-    private $compareArraysRecursively;
-
-    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -65,7 +59,6 @@ class SelectedOptionsTest extends StorefrontTestsAbstract
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
         $this->productsGetRequestInterface = Bootstrap::getObjectManager()->create(ProductsGetRequestInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
-        $this->compareArraysRecursively = Bootstrap::getObjectManager()->create(CompareArraysRecursively::class);
         $this->productOptionArrayMapper = Bootstrap::getObjectManager()->create(ProductOptionArrayMapper::class);
     }
 
@@ -96,11 +89,7 @@ class SelectedOptionsTest extends StorefrontTestsAbstract
             $actualOptions[] = $convertedOptions;
         }
 
-        $diff = $this->compareArraysRecursively->execute(
-            $expected,
-            $actualOptions
-        );
-        self::assertEquals([], $diff, "Actual response doesn't equal expected data");
+        $this->compare($expected, $actualOptions);
     }
 
     /**
