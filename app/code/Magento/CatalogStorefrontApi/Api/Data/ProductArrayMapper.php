@@ -120,7 +120,6 @@ final class ProductArrayMapper
         }
         $result["url_rewrites"] = $fieldArray;
         $result["country_of_manufacture"] = $dto->getCountryOfManufacture();
-        $result["gift_message_available"] = $dto->getGiftMessageAvailable();
         $result["special_price"] = $dto->getSpecialPrice();
         $result["special_from_date"] = $dto->getSpecialFromDate();
         $result["special_to_date"] = $dto->getSpecialToDate();
