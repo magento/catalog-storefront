@@ -519,7 +519,7 @@ message DeleteReviewsResponse {
 }
 
 message ProductReviewRequest {
-    string product_Id = 1;
+    string product_id = 1;
     string store = 2;
 }
 
