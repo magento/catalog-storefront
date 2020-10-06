@@ -66,7 +66,7 @@ class ProtoMarshalCommand extends Command
          * TODO: better support for symfony command abbreviations
          * TODO: probably we need to have a dedicated extension point in setup:di:compile for code generation
          *
-         * Currently is not used, use cli command `storefront:grpc:init` instead
+         * Currently is not used, use cli command `bin/magento storefront:grpc:init \\Magento\\CatalogStorefrontApi\\Api\\CatalogProxyServer` instead
          */
 
 //        if (\Magento\Setup\Console\Command\DiCompileCommand::NAME == $input->getFirstArgument()) {
