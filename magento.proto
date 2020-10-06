@@ -491,3 +491,32 @@ service VariantService {
   // get all variants which contain at least one of merchant selection (|| operation)
   //rpc GetVariantsInclude (OptionSelectionRequest) returns (ProductVariantResponse) {}
 }
+
+// catalog_data_exporter_product_reviews
+message Review {
+    string review_id = 1;
+    string product_id = 2;
+    string title = 3;
+    string nickname = 4;
+    string text = 5;
+    string customer_id = 6;
+    repeated Rating ratings = 7;
+}
+
+message Rating {
+    string rating_id = 1; // Base64 encoded rating ID
+    string value = 2; // Rating Value
+}
+
+// catalog_data_exporter_rating_metadata
+message RatingMetadata {
+    string rating_id = 1;  // Base64 encoded rating ID
+    string name = 2; // The label assigned to an aspect of a product that is being rated, such as quality or price
+    repeated RatingValue values = 3; // List of product review ratings
+}
+
+message RatingValue {
+    string value_id = 1; // Base 64 encoded rating value id
+    string value = 2; // e.g 3, 4, 5
+    int32 position = 3;
+}
