@@ -240,19 +240,12 @@ SERVICE;
             }
         }
 
-        if (\count($classesList) > 1) {
-            throw new \InvalidArgumentException(
-                \sprintf(
-                    'Only one service class is supported, %s classes given',
-                    \count($classesList)
-                )
-            );
-        }
-
         return \implode(",\n\t", $classesList);
     }
 
     /**
+     * Validate service
+     *
      * @param string $service
      * @return bool
      *
