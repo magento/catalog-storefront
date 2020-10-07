@@ -61,7 +61,7 @@ class ProductDataProcessor
         'msrp_display_actual_price_type', //type: string
         'is_returnable', //type: string
         'url_suffix', //type: string
-        'url_rewrites', //type: \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteInterface[]
+        'url_rewrites' => 'url_rewrites', //type: \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteInterface[]
         'country_of_manufacture', //type: string
         'special_price', //type: float
         'special_from_date', //type: string
