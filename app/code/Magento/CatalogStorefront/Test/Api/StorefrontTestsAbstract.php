@@ -63,7 +63,6 @@ abstract class StorefrontTestsAbstract extends TestCase
         parent::tearDown();
         $this->clearCatalogStorage();
         $this->cleanFeeds();
-        $this->cleanOldMessages();
     }
 
     /**
@@ -132,7 +131,6 @@ abstract class StorefrontTestsAbstract extends TestCase
 
     public function run(TestResult $result = null): TestResult
     {
-        $this->cleanOldMessages();
         return parent::run($result);
     }
 
@@ -144,6 +142,7 @@ abstract class StorefrontTestsAbstract extends TestCase
     protected function runTest()
     {
         if (TESTS_WEB_API_ADAPTER !== 'soap') {
+            $this->cleanOldMessages();
             $this->runConsumers();
             parent::runTest();
         }
