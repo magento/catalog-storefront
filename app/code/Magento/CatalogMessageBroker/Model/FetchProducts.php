@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogMessageBroker\Model;
 
 use Magento\CatalogMessageBroker\HttpClient\RestClient;
+use Magento\CatalogExport\Event\Data\Entity;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -45,19 +46,22 @@ class FetchProducts implements FetchProductsInterface
     /**
      * @inheritdoc
      */
-    public function getByIds(array $ids, array $storeViewCodes = []): array
+    public function execute(array $entities, string $scope): array
     {
         try {
             $products = $this->restClient->get(
                 self::EXPORT_API_GET_PRODUCTS,
-                ['ids' => $ids, 'storeViewCodes' => $storeViewCodes],
+                $this->prepareRequestData($entities, $scope)
             );
         } catch (\Throwable $e) {
             $this->logger->error(
                 \sprintf(
-                    'Cannot load products via "%s" with ids "%s"',
+                    'Cannot load products via "%s" with ids "%s" for scope "%s"',
                     self::EXPORT_API_GET_PRODUCTS,
-                    \implode(',', $ids)
+                    \implode(',', \array_map(function (Entity $entity) {
+                        return $entity->getEntityId();
+                    }, $entities)),
+                    $scope
                 ),
                 ['exception' => $e]
             );
@@ -65,5 +69,32 @@ class FetchProducts implements FetchProductsInterface
         }
 
         return $products;
+    }
+
+    /**
+     * Prepare client request data
+     *
+     * @param Entity[] $entities
+     * @param string $storeCode
+     *
+     * @return array
+     */
+    private function prepareRequestData(array $entities, string $storeCode): array
+    {
+        $products = [];
+
+        foreach ($entities as $entity) {
+            $products[] = [
+                'entity_id' => $entity->getEntityId(),
+                'attribute_codes' => $entity->getAttributes()
+            ];
+        }
+
+        return [
+            'request' => [
+                'entities' => $products,
+                'storeViewCodes' => [$storeCode],
+            ],
+        ];
     }
 }

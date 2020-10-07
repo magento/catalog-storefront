@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogMessageBroker\Model;
 
 use Magento\CatalogMessageBroker\HttpClient\RestClient;
+use Magento\CatalogExport\Event\Data\Entity;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -45,19 +46,22 @@ class FetchCategories implements FetchCategoriesInterface
     /**
      * @inheritdoc
      */
-    public function getByIds(array $ids, array $storeViewCodes = []): array
+    public function execute(array $entities, string $scope): array
     {
         try {
             $categories = $this->restClient->get(
                 self::EXPORT_API_GET_CATEGORIES,
-                ['ids' => $ids, 'storeViewCodes' => $storeViewCodes],
+                $this->prepareRequestData($entities, $scope)
             );
         } catch (\Throwable $e) {
             $this->logger->error(
                 \sprintf(
-                    'Cannot load categories via "%s" with ids "%s"',
+                    'Cannot load categories via "%s" with ids "%s" for scope "%s"',
                     self::EXPORT_API_GET_CATEGORIES,
-                    \implode(',', $ids)
+                    \implode(',', \array_map(function (Entity $entity) {
+                        return $entity->getEntityId();
+                    }, $entities)),
+                    $scope
                 ),
                 ['exception' => $e]
             );
@@ -65,5 +69,32 @@ class FetchCategories implements FetchCategoriesInterface
         }
 
         return $categories;
+    }
+
+    /**
+     * Prepare client request data
+     *
+     * @param Entity[] $entities
+     * @param string $storeCode
+     *
+     * @return array
+     */
+    private function prepareRequestData(array $entities, string $storeCode): array
+    {
+        $categories = [];
+
+        foreach ($entities as $entity) {
+            $categories[] = [
+                'entity_id' => $entity->getEntityId(),
+                'attribute_codes' => $entity->getAttributes()
+            ];
+        }
+
+        return [
+            'request' => [
+                'entities' => $categories,
+                'storeViewCodes' => [$storeCode],
+            ],
+        ];
     }
 }

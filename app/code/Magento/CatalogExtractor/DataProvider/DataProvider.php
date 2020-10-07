@@ -40,11 +40,6 @@ class DataProvider implements DataProviderInterface
     private $objectManager;
 
     /**
-     * @var Transformer
-     */
-    private $transformer;
-
-    /**
      * @var StoreManagerInterface
      */
     private $storeManager;
@@ -57,7 +52,6 @@ class DataProvider implements DataProviderInterface
     /**
      * @param string $defaultDataProvider
      * @param ObjectManagerInterface $objectManager
-     * @param Transformer $transformer
      * @param StoreManagerInterface $storeManager
      * @param array $dataProviders
      * @param array $productTypesMap
@@ -65,7 +59,6 @@ class DataProvider implements DataProviderInterface
     public function __construct(
         string $defaultDataProvider,
         ObjectManagerInterface $objectManager,
-        Transformer $transformer,
         StoreManagerInterface $storeManager,
         array $dataProviders = [],
         array $productTypesMap = []
@@ -73,7 +66,6 @@ class DataProvider implements DataProviderInterface
         $this->dataProviders = $dataProviders;
         $this->defaultDataProvider = $defaultDataProvider;
         $this->objectManager = $objectManager;
-        $this->transformer = $transformer;
         $this->storeManager = $storeManager;
         $this->productTypesMap = $productTypesMap;
     }
@@ -147,22 +139,20 @@ class DataProvider implements DataProviderInterface
             $items[] = $dataProvider->fetch($productIdsPerType, $mergedAttributes, $scopes);
         }
 
-        return $this->prepareItemsOutput($items, $attributes, $productIds);
+        return $this->prepareItemsOutput($items, $productIds);
     }
 
     /**
      * Process fetched data and prepare it for output format.
      *
      * @param array $items
-     * @param array $attributes
      * @param int[] $productIds
      * @return array
      */
-    private function prepareItemsOutput(array $items, array $attributes, array $productIds): array
+    private function prepareItemsOutput(array $items, array $productIds): array
     {
         if ($items) {
             $items = \array_replace_recursive(...$items);
-            $items = $this->transformer->transform($items, $attributes);
         } else {
             $items = \array_combine($productIds, \array_fill(0, \count($productIds), []));
         }

@@ -63,7 +63,6 @@ class ProductDataProcessor
         'url_suffix', //type: string
         'url_rewrites', //type: \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteInterface[]
         'country_of_manufacture', //type: string
-        'gift_message_available', //type: bool
         'special_price', //type: float
         'special_from_date', //type: string
         'special_to_date', //type: string
@@ -102,7 +101,7 @@ class ProductDataProcessor
         unset($product['entered_options']);
 
         foreach (self::$map as $nameInExport => $nameInImport) {
-            if (isset($product[$nameInExport])) {
+            if (\array_key_exists($nameInExport, $product)) {
                 $importProduct[$nameInImport] = $product[$nameInExport];
             }
             unset($oldExportDataProduct[$nameInExport]);

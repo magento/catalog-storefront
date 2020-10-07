@@ -49,10 +49,16 @@ class DeleteProductsConsumer implements ConsumerEventInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $entityIds, string $scope): void
+    public function execute(array $entities, string $scope): void
     {
+        $ids = [];
+
+        foreach ($entities as $entity) {
+            $ids[] = $entity->getEntityId();
+        }
+
         $deleteProductRequest = $this->deleteProductsRequestInterfaceFactory->create();
-        $deleteProductRequest->setProductIds($entityIds);
+        $deleteProductRequest->setProductIds($ids);
         $deleteProductRequest->setStore($scope);
 
         try {
