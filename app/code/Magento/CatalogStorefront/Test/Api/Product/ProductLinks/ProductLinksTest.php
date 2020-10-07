@@ -14,7 +14,6 @@ use Magento\CatalogStorefront\Model\CatalogService;
 use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
 use Magento\CatalogStorefrontApi\Api\Data\LinkArrayMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
-use Magento\Framework\Stdlib\ArrayUtils;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -43,11 +42,6 @@ class ProductLinksTest extends StorefrontTestsAbstract
     private $productRepository;
 
     /**
-     * @var ArrayUtils
-     */
-    private $arrayUtils;
-
-    /**
      * @var LinkArrayMapper
      */
     private $linkArrayMapper;
@@ -62,7 +56,6 @@ class ProductLinksTest extends StorefrontTestsAbstract
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
         $this->productsGetRequestInterface = Bootstrap::getObjectManager()->create(ProductsGetRequestInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
-        $this->arrayUtils = Bootstrap::getObjectManager()->create(ArrayUtils::class);
         $this->linkArrayMapper = Bootstrap::getObjectManager()->create(LinkArrayMapper::class);
     }
 
@@ -172,8 +165,7 @@ class ProductLinksTest extends StorefrontTestsAbstract
             $actualData[] = $this->linkArrayMapper->convertToArray($link);
         }
 
-        $diff = $this->arrayUtils->recursiveDiff($dataProvider, $actualData);
-        self::assertEquals([], $diff, 'Actual response data doesn\'t equal to expected data');
+        $this->compare($dataProvider, $actualData);
     }
 
     /**
@@ -189,7 +181,7 @@ class ProductLinksTest extends StorefrontTestsAbstract
                     [
                         'position' => 1,
                         'type' => 'crosssell',
-                        'qty' => 0,
+                        'qty' => 0.0,
                     ],
                 ],
             ],
@@ -210,7 +202,7 @@ class ProductLinksTest extends StorefrontTestsAbstract
                         'product_id' => '1',
                         'position' => 1,
                         'type' => 'upsell',
-                        'qty' => 0,
+                        'qty' => 0.0,
                     ],
                 ],
             ],
@@ -231,13 +223,13 @@ class ProductLinksTest extends StorefrontTestsAbstract
                         'product_id' => '1',
                         'position' => 1,
                         'type' => 'related',
-                        'qty' => 0,
+                        'qty' => 0.0,
                     ],
                     [
                         'product_id' => '3',
                         'position' => 1,
                         'type' => 'related',
-                        'qty' => 0,
+                        'qty' => 0.0,
                     ],
                 ],
             ],
@@ -258,13 +250,13 @@ class ProductLinksTest extends StorefrontTestsAbstract
                         'product_id' => '11',
                         'position' => 1,
                         'type' => 'associated',
-                        'qty' => 1,
+                        'qty' => 1.0,
                     ],
                     [
                         'product_id' => '22',
                         'position' => 2,
                         'type' => 'associated',
-                        'qty' => 1,
+                        'qty' => 1.0,
                     ],
                 ],
             ],
