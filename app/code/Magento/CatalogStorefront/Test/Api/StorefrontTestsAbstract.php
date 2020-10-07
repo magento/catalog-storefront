@@ -14,6 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Workaround\ConsumerInvoker;
 use Magento\TestFramework\Helper\CompareArraysRecursively;
+use PHPUnit\Framework\TestResult;
 
 /**
  * Test abstract class for store front tests
@@ -127,6 +128,12 @@ abstract class StorefrontTestsAbstract extends TestCase
         foreach (self::QUEUES as $queue) {
             $amqpConfig->getChannel()->queue_purge($queue);
         }
+    }
+
+    public function run(TestResult $result = null): TestResult
+    {
+        $this->cleanOldMessages();
+        return parent::run($result);
     }
 
     /**
