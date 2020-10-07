@@ -68,7 +68,7 @@ class ProductDataProcessor
         'special_from_date', //type: string
         'special_to_date', //type: string
         'product_links', //type: \Magento\CatalogStorefrontApi\Api\Data\ProductLinkInterface[]
-        'canonical_url', //type: string
+        'url' => 'canonical_url', //type: string
         'items', //type: \Magento\CatalogStorefrontApi\Api\Data\BundleItemInterface[]
         'links_purchased_separately', //type: bool
         'samples' => 'samples', //type: \Magento\CatalogStorefrontApi\Api\Data\Sample[]
