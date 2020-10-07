@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefront;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer;
 use Magento\CatalogStorefront\Model\CatalogService;
 use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
@@ -136,8 +137,8 @@ class ShopperInputOptionsDuplicateTest extends StorefrontTestsAbstract
                                 'final_price' => 1.0
                             ]
                         ],
-                        'value' => '',
-                        'max_characters' => 100,
+//                        'value' => '',
+//                        'max_characters' => 100,
                         'file_extension' => [],
                         'image_size_x' => 0,
                         'image_size_y' => 0
@@ -170,8 +171,8 @@ class ShopperInputOptionsDuplicateTest extends StorefrontTestsAbstract
                                 'final_price' => 2.0
                             ]
                         ],
-                        'value' => '',
-                        'max_characters' => 0,
+//                        'value' => '',
+//                        'max_characters' => 0,
                         'file_extension' => [],
                         'image_size_x' => 0,
                         'image_size_y' => 0
@@ -204,8 +205,8 @@ class ShopperInputOptionsDuplicateTest extends StorefrontTestsAbstract
                                 'final_price' => 0.395
                             ]
                         ],
-                        'value' => '',
-                        'max_characters' => 20,
+//                        'value' => '',
+//                        'max_characters' => 20,
                         'file_extension' => [],
                         'image_size_x' => 0,
                         'image_size_y' => 0
@@ -238,8 +239,8 @@ class ShopperInputOptionsDuplicateTest extends StorefrontTestsAbstract
                                 'final_price' => 3.0
                             ]
                         ],
-                        'value' => '',
-                        'max_characters' => 0,
+//                        'value' => '',
+//                        'max_characters' => 0,
                         'file_extension' => ['jpg, png, gif'],
                         'image_size_x' => 10,
                         'image_size_y' => 20
