@@ -77,6 +77,8 @@ class ProductLinksTest extends StorefrontTestsAbstract
      * @magentoDbIsolation disabled
      *
      * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Throwable
      */
     public function testCrosssellData(array $dataProvider) : void
     {
@@ -95,6 +97,8 @@ class ProductLinksTest extends StorefrontTestsAbstract
      * @magentoDbIsolation disabled
      *
      * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Throwable
      */
     public function testRelatedData(array $dataProvider) : void
     {
@@ -113,6 +117,8 @@ class ProductLinksTest extends StorefrontTestsAbstract
      * @magentoDbIsolation disabled
      *
      * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Throwable
      */
     public function testUpsellData(array $dataProvider) : void
     {
@@ -131,6 +137,8 @@ class ProductLinksTest extends StorefrontTestsAbstract
      * @magentoDbIsolation disabled
      *
      * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Throwable
      */
     public function testGroupedData(array $dataProvider) : void
     {
@@ -145,6 +153,7 @@ class ProductLinksTest extends StorefrontTestsAbstract
      * @param array $dataProvider
      *
      * @return void
+     * @throws \Throwable
      */
     private function validateLinkData(ProductInterface $product, array $dataProvider) : void
     {
@@ -158,6 +167,7 @@ class ProductLinksTest extends StorefrontTestsAbstract
         $item = \array_shift($catalogServiceItems);
         $actualData = [];
 
+        /** @var \Magento\CatalogStorefrontApi\Api\Data\Link $link */
         foreach ($item->getLinks() as $link) {
             $actualData[] = $this->linkArrayMapper->convertToArray($link);
         }
@@ -228,7 +238,7 @@ class ProductLinksTest extends StorefrontTestsAbstract
                         'position' => 1,
                         'type' => 'related',
                         'qty' => 0,
-                    ]
+                    ],
                 ],
             ],
         ];
@@ -255,7 +265,7 @@ class ProductLinksTest extends StorefrontTestsAbstract
                         'position' => 2,
                         'type' => 'associated',
                         'qty' => 1,
-                    ]
+                    ],
                 ],
             ],
         ];
