@@ -7,13 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefrontConnector\Command;
 
-use Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer;
-use Magento\CatalogDataExporter\Model\Indexer\ProductFeedIndexer;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
 use Magento\CatalogMessageBroker\Model\MessageBus\Category\CategoriesConsumer;
 use Magento\CatalogMessageBroker\Model\MessageBus\Product\ProductsConsumer;
 use Magento\CatalogStorefrontConnector\Model\Publisher\CatalogEntityIdsProvider;
 use Magento\DataExporter\Model\FeedPool;
+use Magento\DataExporter\Model\Indexer\FeedIndexer;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -63,7 +62,7 @@ class Sync extends Command
     private $catalogEntityIdsProvider;
 
     /**
-     * @var ProductFeedIndexer
+     * @var FeedIndexer
      */
     private $productFeedIndexer;
 
@@ -71,8 +70,9 @@ class Sync extends Command
      * @var CategoriesConsumer
      */
     private $categoriesConsumer;
+
     /**
-     * @var CategoryFeedIndexer
+     * @var FeedIndexer
      */
     private $categoryFeedIndexer;
 
@@ -96,8 +96,8 @@ class Sync extends Command
      * @param CatalogEntityIdsProvider $catalogEntityIdsProvider
      * @param CategoriesConsumer $categoriesConsumer
      * @param ProductsConsumer $productsConsumer
-     * @param ProductFeedIndexer $productFeedIndexer
-     * @param CategoryFeedIndexer $categoryFeedIndexer
+     * @param FeedIndexer $productFeedIndexer
+     * @param FeedIndexer $categoryFeedIndexer
      * @param FeedPool $feedPool
      * @param ChangedEntitiesMessageBuilder $messageBuilder
      */
@@ -106,12 +106,13 @@ class Sync extends Command
         CatalogEntityIdsProvider $catalogEntityIdsProvider,
         CategoriesConsumer $categoriesConsumer,
         ProductsConsumer $productsConsumer,
-        ProductFeedIndexer $productFeedIndexer,
-        CategoryFeedIndexer $categoryFeedIndexer,
+        FeedIndexer $productFeedIndexer,
+        FeedIndexer $categoryFeedIndexer,
         FeedPool $feedPool,
         ChangedEntitiesMessageBuilder $messageBuilder
     ) {
         parent::__construct();
+
         $this->storeManager = $storeManager;
         $this->catalogEntityIdsProvider = $catalogEntityIdsProvider;
         $this->productFeedIndexer = $productFeedIndexer;
@@ -189,22 +190,22 @@ class Sync extends Command
                 foreach ($this->catalogEntityIdsProvider->getProductIds((int)$store->getId()) as $productIds) {
                     $deleted = [];
                     foreach ($productsFeed->getDeletedByIds($productIds, [$store->getCode()]) as $product) {
-                        $deleted[] = $product['productId'];
+                        $deleted[] = ['entity_id' => (int)$product['productId']];
                         unset($productIds[$product['productId']]);
                     }
 
-                    if ($deleted) {
+                    if (!empty($deleted)) {
                         $message = $this->messageBuilder->build(
-                            $deleted,
                             ProductsConsumer::PRODUCTS_DELETED_EVENT_TYPE,
+                            $deleted,
                             $store->getCode()
                         );
                         $this->productsConsumer->processMessage($message);
                     }
 
                     $message = $this->messageBuilder->build(
-                        $productIds,
                         ProductsConsumer::PRODUCTS_UPDATED_EVENT_TYPE,
+                        $this->buildMessageEntitiesArray($productIds),
                         $store->getCode()
                     );
                     $this->productsConsumer->processMessage($message);
@@ -235,22 +236,22 @@ class Sync extends Command
                 foreach ($this->catalogEntityIdsProvider->getCategoryIds((int)$store->getId()) as $categoryIds) {
                     $deleted = [];
                     foreach ($categoriesFeed->getDeletedByIds($categoryIds, [$store->getCode()]) as $category) {
-                        $deleted[] = $category['categoryId'];
+                        $deleted[] = ['entity_id' => $category['categoryId']];
                         unset($categoryIds[$category['categoryId']]);
                     }
 
-                    if ($deleted) {
+                    if (!empty($deleted)) {
                         $message = $this->messageBuilder->build(
-                            $deleted,
                             CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
+                            $deleted,
                             $store->getCode()
                         );
                         $this->categoriesConsumer->processMessage($message);
                     }
 
                     $message = $this->messageBuilder->build(
-                        $categoryIds,
                         CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
+                        $this->buildMessageEntitiesArray($categoryIds),
                         $store->getCode()
                     );
                     $this->categoriesConsumer->processMessage($message);
@@ -262,6 +263,25 @@ class Sync extends Command
             },
             $output
         );
+    }
+
+    /**
+     * Build message entities array
+     *
+     * @param array $entityIds
+     *
+     * @return array
+     */
+    private function buildMessageEntitiesArray(array $entityIds): array
+    {
+        $entitiesArray = [];
+        foreach ($entityIds as $id) {
+            $entitiesArray[] = [
+                'entity_id' => (int)$id,
+            ];
+        }
+
+        return $entitiesArray;
     }
 
     /**

@@ -102,10 +102,14 @@ class CatergoriesTest extends StorefrontTestsAbstract
     {
         $category = $this->categoryRepository->get(self::CATEGORY_ID);
         self::assertEquals(self::CATEGORY_ID, $category->getId());
-
+        $entitiesData = [
+            [
+                'entity_id' => (int) $category->getId(),
+            ]
+        ];
         $message = $this->messageBuilder->build(
-            [(int)$category->getId()],
             CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
+            $entitiesData,
             self::STORE_CODE
         );
         $this->categoriesConsumer->processMessage($message);
@@ -122,8 +126,8 @@ class CatergoriesTest extends StorefrontTestsAbstract
         self::assertNotEmpty($deletedFeed);
 
         $deleteMessage = $this->messageBuilder->build(
-            [(int)$category->getId()],
             CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
+            $entitiesData,
             self::STORE_CODE
         );
         $this->categoriesConsumer->processMessage($deleteMessage);

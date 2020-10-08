@@ -28,6 +28,8 @@ message Product {
   string description = 18;
   string short_description = 19;
   string url_key = 20;
+  // Type of Gift Card: either "virtual", "physical", or "combined"
+  string giftcard_type = 21;
 
   // TODO: qty is missing for only-x-left-in-stock functionality
   float qty = 27;
@@ -69,7 +71,6 @@ message Product {
   repeated Option options = 81;
   repeated UrlRewrite url_rewrites = 82;
   string country_of_manufacture = 85;
-  bool gift_message_available = 86;
   float special_price = 87;
   string special_from_date = 88;
   string special_to_date = 89;
@@ -142,11 +143,16 @@ message ProductShopperInputOption {
   bool required = 4;
   string render_type = 5;
   repeated Price price = 6;
-  string value = 7;
-  int32 max_characters = 8;
-  repeated string file_extension = 9;
-  int32 image_size_x = 10;
-  int32 image_size_y = 11;
+  repeated string file_extension = 7;
+  ValueRange range = 8;
+  int32 image_size_x = 9;
+  int32 image_size_y = 10;
+}
+
+// Range of some value, e.g. min/max characters of text field or min/max amount of a gift card
+message ValueRange {
+  float from = 1;
+  float to = 2;
 }
 
 message GroupedItem {
@@ -305,12 +311,18 @@ message ProductsGetResult {
 }
 
 message ImportProductsRequest {
-  repeated Product products = 1;
+  repeated ImportProductDataRequest products = 1;
   // Store code or id
   string store = 2;
   // A map of request parameters
   // Could be useful to identify customer group or any other request-specific data
   KeyValue params = 6;
+}
+
+message ImportProductDataRequest {
+  Product product = 1;
+  // List of imported attributes. Support patch update for set of top-level attributes
+  repeated string attributes = 2;
 }
 
 message DeleteProductsRequest {
@@ -340,12 +352,18 @@ message DeleteProductsResponse {
 }
 
 message ImportCategoriesRequest {
-  repeated Category categories = 1;
+  repeated ImportCategoryDataRequest categories = 1;
   // Store code or id
   string store = 2;
   // A map of request parameters
   // Could be useful to identify customer group or any other request-specific data
   KeyValue params = 6;
+}
+
+message ImportCategoryDataRequest {
+  Category category = 1;
+  // List of imported attributes. Support patch update for set of top-level attributes
+  repeated string attributes = 2;
 }
 
 message ImportCategoriesResponse {

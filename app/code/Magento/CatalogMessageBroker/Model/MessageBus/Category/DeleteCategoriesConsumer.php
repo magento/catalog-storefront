@@ -49,10 +49,16 @@ class DeleteCategoriesConsumer implements ConsumerEventInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $entityIds, string $scope): void
+    public function execute(array $entities, string $scope): void
     {
+        $ids = [];
+
+        foreach ($entities as $entity) {
+            $ids[] = $entity->getEntityId();
+        }
+
         $deleteCategoryRequest = $this->deleteCategoriesRequestInterfaceFactory->create();
-        $deleteCategoryRequest->setCategoryIds($entityIds);
+        $deleteCategoryRequest->setCategoryIds($ids);
         $deleteCategoryRequest->setStore($scope);
         $importResult = $this->catalogServer->deleteCategories($deleteCategoryRequest);
 

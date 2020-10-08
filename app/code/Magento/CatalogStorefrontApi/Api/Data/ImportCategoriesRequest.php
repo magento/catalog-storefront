@@ -38,7 +38,7 @@ final class ImportCategoriesRequest implements ImportCategoriesRequestInterface
     /**
      * @inheritdoc
      *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\CategoryInterface[]
+     * @return \Magento\CatalogStorefrontApi\Api\Data\ImportCategoryDataRequestInterface[]
      */
     public function getCategories(): array
     {
@@ -48,7 +48,7 @@ final class ImportCategoriesRequest implements ImportCategoriesRequestInterface
     /**
      * @inheritdoc
      *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\CategoryInterface[] $value
+     * @param \Magento\CatalogStorefrontApi\Api\Data\ImportCategoryDataRequestInterface[] $value
      * @return void
      */
     public function setCategories(array $value): void

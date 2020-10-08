@@ -13,6 +13,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Workaround\ConsumerInvoker;
+use Magento\TestFramework\Helper\CompareArraysRecursively;
 
 /**
  * Test abstract class for store front tests
@@ -28,6 +29,20 @@ abstract class StorefrontTestsAbstract extends TestCase
         'catalog_data_exporter_categories',
         'catalog_data_exporter_products'
     ];
+
+    /**
+     * @var CompareArraysRecursively
+     */
+    private $compareArraysRecursively;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->compareArraysRecursively = Bootstrap::getObjectManager()->create(CompareArraysRecursively::class);
+    }
 
     /**
      * Catalog storage and feeds are need to be cleared after test execution to prevent "dependency" tests fail
@@ -107,5 +122,26 @@ abstract class StorefrontTestsAbstract extends TestCase
     {
         $consumerInvoker = Bootstrap::getObjectManager()->create(ConsumerInvoker::class);
         $consumerInvoker->invoke($consumers);
+    }
+
+    /**
+     * Compare expected and actual results
+     *
+     * @param array $expected
+     * @param array $actual
+     * @param string|null $message
+     */
+    protected function compare(array $expected, array $actual, string $message = null): void
+    {
+        $diff = $this->compareArraysRecursively->execute(
+            $expected,
+            $actual
+        );
+        if (!empty($diff)) {
+            $message = $message ?? "Actual response doesn't equal expected data";
+            $message .= "\n Diff:\n" . var_export($diff, true);
+            $message .= "\n Actual:\n" . var_export($actual, true);
+            self::fail($message);
+        }
     }
 }

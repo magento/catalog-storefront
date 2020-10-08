@@ -38,6 +38,19 @@ interface CommandInterface
     public function bulkInsert(string $dataSourceName, string $entityName, array $entries): void;
 
     /**
+     * Performs bulk update operation.
+     *
+     * @param string $dataSourceName
+     * @param string $entityName
+     * @param array $entries
+     *
+     * @return void
+     *
+     * @throws BulkException
+     */
+    public function bulkUpdate(string $dataSourceName, string $entityName, array $entries): void;
+
+    /**
      * Performs bulk delete.
      *
      * @param string $dataSourceName
