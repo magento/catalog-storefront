@@ -121,7 +121,7 @@ abstract class StorefrontTestsAbstract extends TestCase
      */
     private function cleanOldMessages(): void
     {
-        if (TESTS_WEB_API_ADAPTER !== 'soap') {
+        if (TESTS_WEB_API_ADAPTER === 'soap') {
             return;
         }
 
