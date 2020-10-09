@@ -47,12 +47,15 @@ final class VideoArrayMapper
     public function convertToArray(Video $dto)
     {
         $result = [];
-        $result["video_provider"] = $dto->getVideoProvider();
-        $result["video_url"] = $dto->getVideoUrl();
-        $result["video_title"] = $dto->getVideoTitle();
-        $result["video_description"] = $dto->getVideoDescription();
-        $result["video_metadata"] = $dto->getVideoMetadata();
-        $result["media_type"] = $dto->getMediaType();
+        if ($dto->getPreview() !== null) {
+            $result["preview"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\MediaResourceArrayMapper::class)
+                ->convertToArray($dto->getPreview());
+        }
+        if ($dto->getVideo() !== null) {
+            $result["video"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\VideoItemArrayMapper::class)
+                ->convertToArray($dto->getVideo());
+        }
+        $result["sort_order"] = $dto->getSortOrder();
         return $result;
     }
 }

@@ -9,6 +9,7 @@ namespace Magento\CatalogMessageBroker\Model\MessageBus\Category;
 
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterfaceFactory;
 use Magento\CatalogExport\Event\Data\ChangedEntities;
+use Magento\CatalogExport\Event\Data\Entity;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -23,11 +24,6 @@ class CategoriesConsumer
     const CATEGORIES_UPDATED_EVENT_TYPE = 'categories_updated';
 
     const CATEGORIES_DELETED_EVENT_TYPE = 'categories_deleted';
-
-    /**
-     * TODO: ad-hoc Remove this once the store scope is consistently passed from ExportAPI
-     */
-    const DEFAULT_STORE_VIEW = 'default';
 
     /**
      * @var LoggerInterface
@@ -61,19 +57,22 @@ class CategoriesConsumer
     {
         try {
             $eventType = $message->getMeta() ? $message->getMeta()->getEventType() : null;
-            $scope = $message->getMeta() ? $message->getMeta()->getScope() ?? self::DEFAULT_STORE_VIEW : null;
-            $entityIds = $message->getData() ? $message->getData()->getIds() : null;
-            if (empty($entityIds)) {
-                throw new \InvalidArgumentException('Category Ids are missing in payload');
+            $entities = $message->getData() ? $message->getData()->getEntities() : null;
+
+            if (empty($entities)) {
+                throw new \InvalidArgumentException('Categories data is missing in payload');
             }
-            $categoriesEvent = $this->consumerEventFactory->create($eventType);
-            $categoriesEvent->execute($entityIds, $scope);
+
+            $productsEvent = $this->consumerEventFactory->create($eventType);
+            $productsEvent->execute($entities, $message->getMeta()->getScope());
         } catch (\Throwable $e) {
             $this->logger->error(
                 \sprintf(
                     'Unable to process collected category data. Event type: "%s", ids:  "%s"',
                     $eventType ?? '',
-                    \implode(',', $entityIds ?? [])
+                    \implode(',', \array_map(function (Entity $entity) {
+                        return $entity->getEntityId();
+                    }, $entities ?? []))
                 ),
                 ['exception' => $e]
             );

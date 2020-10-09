@@ -10,6 +10,8 @@ namespace Magento\CatalogStorefront\Model;
 use Magento\CatalogStorefront\Model\Storage\Client\CommandInterface;
 use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
 use Magento\CatalogStorefront\Model\Storage\State;
+use Magento\Framework\Exception\BulkException;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -19,6 +21,7 @@ class CatalogRepository
 {
     protected const DELETE = 'delete';
     protected const SAVE = 'save';
+    protected const UPDATE = 'update';
 
     /**
      * @var CommandInterface
@@ -62,8 +65,8 @@ class CatalogRepository
      * Save catalog data to the internal storage
      *
      * @param array $dataPerType
-     * @throws \Magento\Framework\Exception\BulkException
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws BulkException
+     * @throws CouldNotSaveException
      */
     public function saveToStorage(array $dataPerType): void
     {
@@ -72,6 +75,7 @@ class CatalogRepository
                 $sourceName = $this->storageState->getCurrentDataSourceName([$storeCode, $entityType]);
                 $this->deleteEntities($data[self::DELETE] ?? [], $sourceName, $entityType);
                 $this->saveEntities($data[self::SAVE] ?? [], $sourceName, $entityType);
+                $this->updateEntities($data[self::UPDATE] ?? [], $sourceName, $entityType);
             }
         }
     }
@@ -109,8 +113,8 @@ class CatalogRepository
      * @param array $data
      * @param string $sourceName
      * @param string $entityType
-     * @throws \Magento\Framework\Exception\BulkException
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws BulkException
+     * @throws CouldNotSaveException
      * @return void
      */
     private function saveEntities(array $data, string $sourceName, string $entityType): void
@@ -132,5 +136,30 @@ class CatalogRepository
 
         //TODO batching
         $this->storageWriteSource->bulkInsert($sourceName, $entityType, $data);
+    }
+
+    /**
+     * Update bulk of entities by source name and entity type
+     *
+     * @param array $data
+     * @param string $sourceName
+     * @param string $entityType
+     *
+     * @return void
+     *
+     * @throws BulkException
+     */
+    private function updateEntities(array $data, string $sourceName, string $entityType): void
+    {
+        if (empty($data)) {
+            return;
+        }
+
+        $this->storageWriteSource->bulkUpdate($sourceName, $entityType, $data);
+
+        $this->logger->debug(
+            \sprintf('Save to storage "%s" %s record(s)', $sourceName, \count($data)),
+            ['verbose' => $data]
+        );
     }
 }

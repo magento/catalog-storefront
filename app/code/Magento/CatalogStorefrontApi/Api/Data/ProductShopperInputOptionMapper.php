@@ -110,14 +110,16 @@ final class ProductShopperInputOptionMapper
                 }
                 $dto->setPrice($convertedArray);
                 break;
-            case "value":
-                $dto->setValue((string) $value);
-                break;
-            case "max_characters":
-                $dto->setMaxCharacters((int) $value);
-                break;
             case "file_extension":
                 $dto->setFileExtension((array) $value);
+                break;
+            case "range":
+                $dto->setRange(
+                    $this->objectManager
+                       ->create(\Magento\CatalogStorefrontApi\Api\Data\ValueRangeMapper::class)
+                       ->setData($value)
+                       ->build()
+                );
                 break;
             case "image_size_x":
                 $dto->setImageSizeX((int) $value);

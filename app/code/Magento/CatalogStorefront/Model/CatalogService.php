@@ -7,46 +7,40 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefront\Model;
 
+use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
+use Magento\CatalogStorefront\DataProvider\ProductDataProvider;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
+use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponse;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\Category;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryArrayMapper;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryInterface;
-use Magento\CatalogStorefrontApi\Api\Data\Image;
-use Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItem;
-use Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemInterface;
-use Magento\CatalogStorefrontApi\Api\Data\ProductArrayMapper;
-use Magento\CatalogStorefrontApi\Api\Data\ProductInterface;
-use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
-use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface;
-use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResult;
-use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
-use Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseInterface;
-use Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseFactory;
-use Magento\CatalogStorefront\DataProvider\ProductDataProvider;
-use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponse;
-use Magento\CatalogStorefrontApi\Api\Data\UrlRewrite;
-use Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameter;
-use Magento\CatalogStorefrontApi\Api\Data\Video;
-use Magento\Framework\Api\DataObjectHelper;
-use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
-use Magento\CatalogStorefront\DataProvider\CategoryDataProvider;
-use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface;
-use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface;
-use Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterfaceFactory;
-use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseFactory;
-use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequestInterface;
-use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseFactory;
-use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseInterfaceFactory;
-use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesResponseFactory;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesResponseInterfaceFactory;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseFactory;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseInterface;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseInterfaceFactory;
+use Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterfaceFactory;
+use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseFactory;
+use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseFactory;
+use Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductArrayMapper;
+use Magento\CatalogStorefrontApi\Api\Data\ProductInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductMapper;
+use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResult;
+use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
+use Magento\CatalogStorefrontApi\Api\Data\UrlRewrite;
+use Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameter;
+use Magento\Framework\Api\DataObjectHelper;
 use Psr\Log\LoggerInterface;
-use Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetRequestInterface;
-use Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetResponse;
-use Magento\CatalogStorefrontApi\Api\Data\ProductVariantsGetResponseInterface;
 
 /**
  * Class for retrieving catalog data
@@ -119,6 +113,11 @@ class CatalogService implements CatalogServerInterface
     private $categoryArrayMapper;
 
     /**
+     * @var ProductMapper
+     */
+    private $productMapper;
+
+    /**
      * @param ProductDataProvider $dataProvider
      * @param DataObjectHelper $dataObjectHelper
      * @param CategoryDataProvider $categoryDataProvider
@@ -130,6 +129,7 @@ class CatalogService implements CatalogServerInterface
      * @param CatalogRepository $catalogRepository
      * @param ProductArrayMapper $productArrayMapper
      * @param CategoryArrayMapper $categoryArrayMapper
+     * @param ProductMapper $productMapper
      * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -145,6 +145,7 @@ class CatalogService implements CatalogServerInterface
         CatalogRepository $catalogRepository,
         ProductArrayMapper $productArrayMapper,
         CategoryArrayMapper $categoryArrayMapper,
+        ProductMapper $productMapper,
         LoggerInterface $logger
     ) {
         $this->dataProvider = $dataProvider;
@@ -158,6 +159,7 @@ class CatalogService implements CatalogServerInterface
         $this->dynamicAttributeFactory = $dynamicAttributeFactory;
         $this->productArrayMapper = $productArrayMapper;
         $this->categoryArrayMapper = $categoryArrayMapper;
+        $this->productMapper = $productMapper;
         $this->logger = $logger;
     }
 
@@ -226,32 +228,6 @@ class CatalogService implements CatalogServerInterface
     }
 
     /**
-     * Set product image
-     *
-     * @param string $key
-     * @param array $rawData
-     * @param ProductInterface $product
-     * @return ProductInterface
-     */
-    private function setImage(string $key, array $rawData, ProductInterface $product): ProductInterface
-    {
-        if (empty($rawData[$key])) {
-            return $product;
-        }
-
-        $image = new Image();
-        $image->setUrl($rawData[$key]['url'] ?? '');
-        $image->setLabel($rawData[$key]['label'] ?? '');
-        $parts = explode('_', $key);
-        $parts = array_map("ucfirst", $parts);
-        $methodName = 'set' . implode('', $parts);
-        if (method_exists($product, $methodName)) {
-            $product->$methodName($image);
-        }
-        return $product;
-    }
-
-    /**
      * Import requested products
      *
      * @param \Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface $request
@@ -264,37 +240,47 @@ class CatalogService implements CatalogServerInterface
         $importProductsResponse = $this->importProductsResponseFactory->create();
 
         try {
-            $products = \array_map(
-                function ($product) {
-                    $product = $this->productArrayMapper->convertToArray($product);
-                    // TODO: handle grouped products
-                    if (!empty($product['grouped_items'])) {
-                        $product['items'] = $product['grouped_items'];
-                    }
-                    return $product;
-                },
-                $request->getProducts()
-            );
-
             $storeCode = $request->getStore();
-
             $productsInElasticFormat = [];
-            foreach ($products as $product) {
+
+            foreach ($request->getProducts() as $productData) {
+                $product = $this->productArrayMapper->convertToArray($productData->getProduct());
+
+                if (!empty($productData->getAttributes())) {
+                    $product = \array_filter($product, function ($code) use ($productData) {
+                        return \in_array($code, $productData->getAttributes());
+                    }, ARRAY_FILTER_USE_KEY);
+                }
+
                 if (empty($product)) {
                     continue;
                 }
+
                 $productInElasticFormat = $product;
                 $productInElasticFormat['store_code'] = $storeCode;
-                foreach ($productInElasticFormat['dynamic_attributes'] as $dynamicAttribute) {
-                    $productInElasticFormat[$dynamicAttribute['code']] = $dynamicAttribute['value'];
-                }
-                unset($productInElasticFormat['dynamic_attributes']);
-                $productInElasticFormat['short_description'] = [
-                    'html' => $productInElasticFormat['short_description']
-                ];
-                $productInElasticFormat['description'] = ['html' => $productInElasticFormat['description']];
 
-                $productsInElasticFormat['product'][$storeCode]['save'][] = $productInElasticFormat;
+                if (isset($productInElasticFormat['dynamic_attributes'])) {
+                    foreach ($productInElasticFormat['dynamic_attributes'] as $dynamicAttribute) {
+                        $productInElasticFormat[$dynamicAttribute['code']] = $dynamicAttribute['value'];
+                    }
+                    unset($productInElasticFormat['dynamic_attributes']);
+                }
+
+                if (isset($productInElasticFormat['short_description'])) {
+                    $productInElasticFormat['short_description'] = [
+                        'html' => $productInElasticFormat['short_description']
+                    ];
+                }
+
+                if (isset($productInElasticFormat['description'])) {
+                    $productInElasticFormat['description'] = ['html' => $productInElasticFormat['description']];
+                }
+
+                if (!empty($productData->getAttributes())) {
+                    $productsInElasticFormat['product'][$storeCode]['update'][] = $productInElasticFormat;
+                } else {
+                    $productsInElasticFormat['product'][$storeCode]['save'][] = $productInElasticFormat;
+                }
             }
 
             $this->catalogRepository->saveToStorage($productsInElasticFormat);
@@ -357,25 +343,24 @@ class CatalogService implements CatalogServerInterface
     public function importCategories(ImportCategoriesRequestInterface $request): ImportCategoriesResponseInterface
     {
         try {
-            $categories = \array_map(
-                function ($category) {
-                    return $this->categoryArrayMapper->convertToArray($category);
-                },
-                $request->getCategories()
-            );
             $storeCode = $request->getStore();
-
             $categoriesInElasticFormat = [];
 
-            foreach ($categories as $category) {
-                $categoryInElasticFormat = $category;
-                if (empty($categoryInElasticFormat)) {
-                    continue;
-                }
+            foreach ($request->getCategories() as $categoryData) {
+                $category = $this->categoryArrayMapper->convertToArray($categoryData->getCategory());
+                $category['store_code'] = $storeCode;
 
-                $categoryInElasticFormat['store_code'] = $storeCode;
-                $categoriesInElasticFormat['category'][$storeCode]['save'][] = $categoryInElasticFormat;
+                if (!empty($categoryData->getAttributes())) {
+                    $category = \array_filter($category, function ($code) use ($categoryData) {
+                        return \in_array($code, $categoryData->getAttributes());
+                    }, ARRAY_FILTER_USE_KEY);
+
+                    $categoriesInElasticFormat['category'][$storeCode]['update'][] = $category;
+                } else {
+                    $categoriesInElasticFormat['category'][$storeCode]['save'][] = $category;
+                }
             }
+
             $this->catalogRepository->saveToStorage($categoriesInElasticFormat);
 
             $importCategoriesResponse = $this->importCategoriesResponseFactory->create();
@@ -472,49 +457,6 @@ class CatalogService implements CatalogServerInterface
     }
 
     /**
-     * Get requested product variants.
-     *
-     * @param ProductVariantsGetRequestInterface $request
-     * @return ProductVariantsGetResponseInterface
-     */
-    public function getProductVariants(
-        ProductVariantsGetRequestInterface $request
-    ): ProductVariantsGetResponseInterface {
-        $result = new ProductVariantsGetResponse();
-
-        return $result;
-    }
-
-    /**
-     * Get video content for media gallery
-     *
-     * @param array $mediaGalleryItemVideo
-     * @return Video
-     */
-    private function getMediaGalleryVideo(array $mediaGalleryItemVideo): Video
-    {
-        $videoContent = new Video;
-        $videoContent->setMediaType($mediaGalleryItemVideo['media_type'] ?? '');
-        $videoContent->setVideoDescription(
-            $mediaGalleryItemVideo['video_description'] ?? ''
-        );
-        $videoContent->setVideoMetadata(
-            $mediaGalleryItemVideo['video_metadata'] ?? ''
-        );
-        $videoContent->setVideoProvider(
-            $mediaGalleryItemVideo['video_provider'] ?? ''
-        );
-        $videoContent->setVideoTitle(
-            $mediaGalleryItemVideo['video_title'] ?? ''
-        );
-        $videoContent->setVideoUrl(
-            $mediaGalleryItemVideo['video_url'] ?? ''
-        );
-
-        return $videoContent;
-    }
-
-    /**
      * Prepare product from raw data
      *
      * @param array $item
@@ -523,25 +465,6 @@ class CatalogService implements CatalogServerInterface
     private function prepareProduct(array $item): ProductInterface
     {
         $item = $this->cleanUpNullValues($item);
-        $variants = [];
-        foreach ($item['variants'] ?? [] as $variantData) {
-            if (!isset($variantData['product'])) {
-                $attribute = current($variantData['attributes']);
-                throw new \RuntimeException(
-                    \sprintf(
-                        'Cannot find product id for product variant with code "%s" and label "%s"',
-                        $attribute['code'],
-                        $attribute['label']
-                    )
-                );
-            }
-            $variant = [
-                'product' => $variantData['product'],
-                'attributes' => $variantData['attributes']
-            ];
-            $variants[] = $variant;
-        }
-        $item['variants'] = $variants;
 
         $item['description'] = $item['description']['html'] ?? '';
         $item['short_description'] = $item['short_description']['html'] ?? '';
@@ -556,46 +479,15 @@ class CatalogService implements CatalogServerInterface
             }
         }
 
-        $product = new \Magento\CatalogStorefrontApi\Api\Data\Product();
-        $this->dataObjectHelper->populateWithArray($product, $item, ProductInterface::class);
-        $product = $this->setImage('image', $item, $product);
-        $product = $this->setImage('small_image', $item, $product);
-        $product = $this->setImage('thumbnail', $item, $product);
-
-        //PopulateWithArray doesn't work with non-array sub-objects which don't set properties using constructor
-        $mediaGalleryData = $item['media_gallery'] ?? [];
-        $mediaGallery = [];
-        foreach ($mediaGalleryData as $mediaGalleryDataItem) {
-            $mediaGalleryItem = new MediaGalleryItem;
-            $this->dataObjectHelper->populateWithArray(
-                $mediaGalleryItem,
-                $mediaGalleryDataItem,
-                MediaGalleryItemInterface::class
-            );
-            if (!empty($mediaGalleryDataItem['video_content'])) {
-                $videoContent = $this->getMediaGalleryVideo($mediaGalleryDataItem['video_content']);
-                $mediaGalleryItem->setVideoContent($videoContent);
-            }
-
-            $mediaGallery[] = $mediaGalleryItem;
-        }
-        $product->setMediaGallery($mediaGallery);
+        $product = $this->productMapper->setData($item)->build();
 
         $urlRewritesData = $item['url_rewrites'] ?? [];
         $urlRewrites = [];
         foreach ($urlRewritesData as $urlRewriteData) {
             $urlRewrites[] = $this->prepareUrlRewrite($urlRewriteData);
         }
+
         $product->setUrlRewrites($urlRewrites);
-
-        /**
-         * FIXME: Ugly way to populate child items for Grouped product.
-         * It should be refactored to general approach how to work with variations. Probably, in scope of MC-31164.
-         */
-        if ($product->getTypeId() == 'grouped') {
-            $this->setGroupedItems($product, $item);
-        }
-
         $product = $this->setDynamicAttributes($item, $product);
 
         return $product;
@@ -631,28 +523,6 @@ class CatalogService implements CatalogServerInterface
         $product->setDynamicAttributes($dynamicAttributes);
 
         return $product;
-    }
-
-    /**
-     * Temporary fix for nested items of Grouped product.
-     *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\Product $product
-     * @param array $data
-     */
-    private function setGroupedItems(\Magento\CatalogStorefrontApi\Api\Data\Product $product, array $data)
-    {
-        if (!isset($data['items'])) {
-            return;
-        }
-        $items = [];
-        foreach ($data['items'] as $item) {
-            $groupedItem = new \Magento\CatalogStorefrontApi\Api\Data\GroupedItem();
-            $groupedItem->setPosition((int)$item['position']);
-            $groupedItem->setQty((float)$item['qty']);
-            $groupedItem->setProduct((string)$item['product']);
-            $items[] = $groupedItem;
-        }
-        $product->setItems($items);
     }
 
     /**

@@ -14,7 +14,6 @@ use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\SampleArrayMapper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\Helper\CompareArraysRecursively;
 
 /**
  * Test for downloadable product exporter
@@ -49,11 +48,6 @@ class SamplesTest extends StorefrontTestsAbstract
     private $arrayMapper;
 
     /**
-     * @var CompareArraysRecursively
-     */
-    private $compareArraysRecursively;
-
-    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -63,7 +57,6 @@ class SamplesTest extends StorefrontTestsAbstract
         $this->productsGetRequestInterface = Bootstrap::getObjectManager()->create(ProductsGetRequestInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
         $this->arrayMapper = Bootstrap::getObjectManager()->create(SampleArrayMapper::class);
-        $this->compareArraysRecursively = Bootstrap::getObjectManager()->create(CompareArraysRecursively::class);
     }
 
     /**
@@ -83,15 +76,11 @@ class SamplesTest extends StorefrontTestsAbstract
         $this->productsGetRequestInterface->setStore(self::STORE_CODE);
         $this->productsGetRequestInterface->setAttributeCodes(['samples']);
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
-        $this->assertNotEmpty($catalogServiceItem->getItems());
+        self::assertNotEmpty($catalogServiceItem->getItems());
 
         $actual = $this->arrayMapper->convertToArray($catalogServiceItem->getItems()[0]->getSamples()[0]);
 
-        $diff = $this->compareArraysRecursively->execute(
-            $expected,
-            $actual
-        );
-        self::assertEquals([], $diff, "Actual response doesn't equal expected data");
+        $this->compare($expected, $actual);
     }
 
     /**
@@ -111,15 +100,11 @@ class SamplesTest extends StorefrontTestsAbstract
         $this->productsGetRequestInterface->setStore(self::STORE_CODE);
         $this->productsGetRequestInterface->setAttributeCodes(['samples']);
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
-        $this->assertNotEmpty($catalogServiceItem->getItems());
+        self::assertNotEmpty($catalogServiceItem->getItems());
 
         $actual = $this->arrayMapper->convertToArray($catalogServiceItem->getItems()[0]->getSamples()[0]);
 
-        $diff = $this->compareArraysRecursively->execute(
-            $expected,
-            $actual
-        );
-        self::assertEquals([], $diff, "Actual response doesn't equal expected data");
+        $this->compare($expected, $actual);
     }
 
     /**
@@ -132,11 +117,14 @@ class SamplesTest extends StorefrontTestsAbstract
         return [
             [
                 [
-                    'url' => 'http://example.com/downloadable.txt',
-                    'label' => 'Downloadable Product Sample',
-                    'sort_order' => 10
-                ]
-            ]
+                    'resource' => [
+                        'url' => 'http://example.com/downloadable.txt',
+                        'label' => 'Downloadable Product Sample',
+                        'roles' => [],
+                    ],
+                    'sort_order' => '10',
+                ],
+            ],
         ];
     }
 
@@ -150,11 +138,14 @@ class SamplesTest extends StorefrontTestsAbstract
         return [
             [
                 [
-                    'url' => '/j/e/jellyfish_1_4.jpg',
-                    'label' => 'Downloadable Product Sample Title',
-                    'sort_order' => 0
-                ]
-            ]
+                    'resource' => [
+                        'url' => '/j/e/jellyfish_1_4.jpg',
+                        'label' => 'Downloadable Product Sample Title',
+                        'roles' => [],
+                    ],
+                    'sort_order' => '0',
+                ],
+            ],
         ];
     }
 }
