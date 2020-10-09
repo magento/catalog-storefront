@@ -46,6 +46,7 @@ class ProductDataProcessor
         'category_ids' => 'categories',
         'images' => 'images', //type: \Magento\CatalogStorefrontApi\Api\Data\ImageInterface[]
         'videos' => 'videos', //type: \Magento\CatalogStorefrontApi\Api\Data\VideoInterface[]
+        'links' => 'links', //type: \Magento\CatalogStorefrontApi\Api\Data\Link[]
         // The following list of fields are present in Import API (proto schema) but absent in Export API (et_schema)
         // TODO: review list, move to ^^ after corresponding fields resolved in story
         'has_options', //type: bool
@@ -110,12 +111,6 @@ class ProductDataProcessor
         foreach ($this->dataMappers as $nameInExport => $dataMapper) {
             // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $importProduct = \array_merge($importProduct, $dataMapper->map($product));
-        }
-        // TODO: handle grouped product
-        if (\array_key_exists('type_id', $oldExportDataProduct)
-            && $oldExportDataProduct['type_id'] === 'grouped'
-        ) {
-            $importProduct['grouped_items'] = $oldExportDataProduct['items'];
         }
 
         // TODO: only $importProduct must be returned https://github.com/magento/catalog-storefront/issues/165
