@@ -17,7 +17,7 @@ class ConsumerInvoker
     /**
      * Batch size
      */
-    private const BATCHSIZE = 3000;
+    private const BATCHSIZE = 1000;
 
     /**
      * List of storefront consumers

@@ -121,7 +121,7 @@ abstract class StorefrontTestsAbstract extends TestCase
      */
     private function cleanOldMessages(): void
     {
-        if (TESTS_WEB_API_ADAPTER === 'soap') {
+        if ($this->isSoap()) {
             return;
         }
 
@@ -134,6 +134,12 @@ abstract class StorefrontTestsAbstract extends TestCase
         }
     }
 
+    /**
+     * Run tests and clean old messages before running other tests
+     *
+     * @param TestResult|null $result
+     * @return TestResult
+     */
     public function run(TestResult $result = null): TestResult
     {
         $this->cleanOldMessages();
@@ -147,10 +153,20 @@ abstract class StorefrontTestsAbstract extends TestCase
      */
     protected function runTest()
     {
-        if (TESTS_WEB_API_ADAPTER !== 'soap') {
+        if ($this->isSoap()) {
             $this->runConsumers();
             parent::runTest();
         }
+    }
+
+    /**
+     * Check if it is SOAP request
+     *
+     * @return bool
+     */
+    private function isSoap(): bool
+    {
+        return TESTS_WEB_API_ADAPTER !== 'soap';
     }
 
     /**
