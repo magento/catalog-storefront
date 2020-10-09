@@ -136,6 +136,12 @@ class DownloadLinksTest extends StorefrontTestsAbstract
         }
 
         $this->compare($expected, $actual);
+
+        $link = $product->getExtensionAttributes()->getDownloadableProductLinks()[0];
+        self::assertStringEndsWith(
+            \sprintf('/downloadable/download/linkSample/link_id/%s', $link->getId()),
+            $actual[0]['values'][0]['info_url']
+        );
     }
 
     /**
@@ -200,7 +206,6 @@ class DownloadLinksTest extends StorefrontTestsAbstract
                                 'image_url' => '',
                                 'qty_mutability' => false,
                                 'qty' => 0.0,
-                                'info_url' =>  '/j/e/jellyfish_1_3.jpg',
                                 'price' => 15.0
                             ]
                         ]
