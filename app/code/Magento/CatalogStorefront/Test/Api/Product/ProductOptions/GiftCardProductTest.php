@@ -220,6 +220,7 @@ class GiftCardProductTest extends StorefrontTestsAbstract
     /**
      * Virtual gift card with fixed and open amount data provider
      *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
     public function getVirtualMultiWebsiteDataProvider(): array
