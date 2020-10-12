@@ -471,119 +471,119 @@ service VariantService {
 }
 
 service ProductReviews {
-    rpc ImportProductReviews (ImportReviewsRequest) returns (ImportReviewsResponse) {}
-    rpc DeleteProductReviews (DeleteReviewsRequest) returns (DeleteReviewsResponse) {}
-    rpc GetProductReviews (ProductReviewRequest) returns (ProductReviewResponse) {}
-    rpc GetCustomerProductReviews (CustomerProductReviewRequest) returns (CustomerProductReviewResponse) {}
+  rpc ImportProductReviews (ImportReviewsRequest) returns (ImportReviewsResponse) {}
+  rpc DeleteProductReviews (DeleteReviewsRequest) returns (DeleteReviewsResponse) {}
+  rpc GetProductReviews (ProductReviewRequest) returns (ProductReviewResponse) {}
+  rpc GetCustomerProductReviews (CustomerProductReviewRequest) returns (CustomerProductReviewResponse) {}
 }
 
 message ImportReviewsRequest {
-    repeated ImportReview reviews = 1;
-    string store = 2;
+  repeated ImportReview reviews = 1;
+  string store = 2;
 }
 
 message ImportReviewsResponse {
-    bool status = 1;
-    string message = 2;
+  bool status = 1;
+  string message = 2;
 }
 
 message DeleteReviewsRequest {
-    repeated string reviewIds = 1;
-    string store = 2;
+  repeated string reviewIds = 1;
+  string store = 2;
 }
 
 message DeleteReviewsResponse {
-    bool status = 1;
-    string message = 2;
+  bool status = 1;
+  string message = 2;
 }
 
 message ProductReviewRequest {
-    string product_id = 1;
-    string store = 2;
+  string product_id = 1;
+  string store = 2;
 }
 
 message ProductReviewResponse {
-    repeated ReadReview items = 1;
+  repeated ReadReview items = 1;
 }
 
 message CustomerProductReviewRequest {
-    string customer_id = 1;
-    string store = 2;
+  string customer_id = 1;
+  string store = 2;
 }
 
 message CustomerProductReviewResponse {
-    repeated ReadReview items = 1;
+  repeated ReadReview items = 1;
 }
 
 service RatingsMetadata {
-    rpc ImportRatingsMetadata (ImportRatingsMetadataRequest) returns (ImportRatingsMetadataResponse) {}
-    rpc DeleteRatingsMetadata (DeleteRatingsMetadataRequest) returns (DeleteRatingsMetadataResponse) {}
-    rpc GetRatingsMetadata (RatingsMetadataRequest) returns (RatingsMetadataResponse) {}
+  rpc ImportRatingsMetadata (ImportRatingsMetadataRequest) returns (ImportRatingsMetadataResponse) {}
+  rpc DeleteRatingsMetadata (DeleteRatingsMetadataRequest) returns (DeleteRatingsMetadataResponse) {}
+  rpc GetRatingsMetadata (RatingsMetadataRequest) returns (RatingsMetadataResponse) {}
 }
 
 message ImportRatingsMetadataRequest {
-    repeated RatingMetadata metadata = 1;
-    string store = 2;
+  repeated RatingMetadata metadata = 1;
+  string store = 2;
 }
 
 message ImportRatingsMetadataResponse {
-    bool status = 1;
-    string message = 2;
+  bool status = 1;
+  string message = 2;
 }
 
 message DeleteRatingsMetadataRequest {
-    repeated string ratingIds = 1;
-    string store = 2;
+  repeated string ratingIds = 1;
+  string store = 2;
 }
 
 message DeleteRatingsMetadataResponse {
-    bool status = 1;
-    string message = 2;
+  bool status = 1;
+  string message = 2;
 }
 
 message RatingsMetadataRequest {
-    string rating_id = 1;
-    string store = 2;
+  string rating_id = 1;
+  string store = 2;
 }
 
 message RatingsMetadataResponse {
-    repeated RatingMetadata items = 1;
+  repeated RatingMetadata items = 1;
 }
 
 // catalog_data_exporter_product_reviews
 message ImportReview {
-    string review_id = 1;
-    string product_id = 2;
-    string title = 3;
-    string nickname = 4;
-    string text = 5;
-    string customer_id = 6;
-    repeated Rating ratings = 7;
+  string review_id = 1;
+  string product_id = 2;
+  string title = 3;
+  string nickname = 4;
+  string text = 5;
+  string customer_id = 6;
+  repeated Rating ratings = 7;
 }
 
 message ReadReview {
-    string review_id = 1;
-    string product_id = 2;
-    string title = 3;
-    string nickname = 4;
-    string text = 5;
-    repeated Rating ratings = 6;
+  string review_id = 1;
+  string product_id = 2;
+  string title = 3;
+  string nickname = 4;
+  string text = 5;
+  repeated Rating ratings = 6;
 }
 
 message Rating {
-    string rating_id = 1; // Base64 encoded rating ID
-    string value = 2; // Rating Value
+  string rating_id = 1; // Base64 encoded rating ID
+  string value = 2; // Rating Value
 }
 
 // catalog_data_exporter_rating_metadata
 message RatingMetadata {
-    string rating_id = 1;  // Base64 encoded rating ID
-    string name = 2; // The label assigned to an aspect of a product that is being rated, such as quality or price
-    repeated RatingValue values = 3; // List of product review ratings
+  string rating_id = 1;  // Base64 encoded rating ID
+  string name = 2; // The label assigned to an aspect of a product that is being rated, such as quality or price
+  repeated RatingValue values = 3; // List of product review ratings
 }
 
 message RatingValue {
-    string value_id = 1; // Base 64 encoded rating value id
-    string value = 2; // e.g 3, 4, 5
-    int32 position = 3;
+  string value_id = 1; // Base 64 encoded rating value id
+  string value = 2; // e.g 3, 4, 5
+  int32 position = 3;
 }

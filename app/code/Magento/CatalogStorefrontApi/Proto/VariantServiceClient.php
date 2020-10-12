@@ -26,6 +26,7 @@ class VariantServiceClient extends \Grpc\BaseStub
      * @param \Magento\CatalogStorefrontApi\Proto\ImportVariantsRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
+     * @return \Magento\CatalogStorefrontApi\Proto\ImportVariantsResponse
      */
     public function ImportProductVariants(
         \Magento\CatalogStorefrontApi\Proto\ImportVariantsRequest $argument,
@@ -46,6 +47,7 @@ class VariantServiceClient extends \Grpc\BaseStub
      * @param \Magento\CatalogStorefrontApi\Proto\DeleteVariantsRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
+     * @return \Magento\CatalogStorefrontApi\Proto\DeleteVariantsResponse
      */
     public function DeleteProductVariants(
         \Magento\CatalogStorefrontApi\Proto\DeleteVariantsRequest $argument,
@@ -67,6 +69,7 @@ class VariantServiceClient extends \Grpc\BaseStub
      * @param \Magento\CatalogStorefrontApi\Proto\ProductVariantRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
+     * @return \Magento\CatalogStorefrontApi\Proto\ProductVariantResponse
      */
     public function GetProductVariants(
         \Magento\CatalogStorefrontApi\Proto\ProductVariantRequest $argument,
@@ -88,6 +91,7 @@ class VariantServiceClient extends \Grpc\BaseStub
      * @param \Magento\CatalogStorefrontApi\Proto\OptionSelectionRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
+     * @return \Magento\CatalogStorefrontApi\Proto\ProductVariantResponse
      */
     public function GetVariantsMatch(
         \Magento\CatalogStorefrontApi\Proto\OptionSelectionRequest $argument,
