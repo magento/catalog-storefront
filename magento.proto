@@ -547,8 +547,7 @@ message Review {
     string title = 3;
     string nickname = 4;
     string text = 5;
-    string customer_id = 6;
-    repeated Rating ratings = 7;
+    repeated Rating ratings = 6;
 }
 
 message Rating {
