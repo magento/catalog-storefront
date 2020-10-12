@@ -474,10 +474,11 @@ service ProductReviews {
     rpc ImportProductReviews (ImportReviewsRequest) returns (ImportReviewsResponse) {}
     rpc DeleteProductReviews (DeleteReviewsRequest) returns (DeleteReviewsResponse) {}
     rpc GetProductReviews (ProductReviewRequest) returns (ProductReviewResponse) {}
+    rpc GetCustomerProductReviews (CustomerProductReviewRequest) returns (CustomerProductReviewResponse) {}
 }
 
 message ImportReviewsRequest {
-    repeated Review reviews = 1;
+    repeated ImportReview reviews = 1;
     string store = 2;
 }
 
@@ -502,7 +503,16 @@ message ProductReviewRequest {
 }
 
 message ProductReviewResponse {
-    repeated Review items = 1;
+    repeated ReadReview items = 1;
+}
+
+message CustomerProductReviewRequest {
+    string customer_id = 1;
+    string store = 2;
+}
+
+message CustomerProductReviewResponse {
+    repeated ReadReview items = 1;
 }
 
 service RatingsMetadata {
@@ -541,7 +551,17 @@ message RatingsMetadataResponse {
 }
 
 // catalog_data_exporter_product_reviews
-message Review {
+message ImportReview {
+    string review_id = 1;
+    string product_id = 2;
+    string title = 3;
+    string nickname = 4;
+    string text = 5;
+    string customer_id = 6;
+    repeated Rating ratings = 7;
+}
+
+message ReadReview {
     string review_id = 1;
     string product_id = 2;
     string title = 3;
