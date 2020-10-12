@@ -13,6 +13,8 @@ use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductOptionArrayMapper;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -55,6 +57,11 @@ class DownloadLinksTest extends StorefrontTestsAbstract
     protected $arrayMapper;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -64,6 +71,7 @@ class DownloadLinksTest extends StorefrontTestsAbstract
         $this->productsGetRequestInterface = Bootstrap::getObjectManager()->create(ProductsGetRequestInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
         $this->arrayMapper = Bootstrap::getObjectManager()->create(ProductOptionArrayMapper::class);
+        $this->storeManager = Bootstrap::getObjectManager()->create(StoreManagerInterface::class);
     }
 
     /**
@@ -137,9 +145,11 @@ class DownloadLinksTest extends StorefrontTestsAbstract
 
         $this->compare($expected, $actual);
 
+        $baseUrl = $this->storeManager->getStore(self::STORE_CODE)->getBaseUrl(UrlInterface::URL_TYPE_WEB);
         $link = $product->getExtensionAttributes()->getDownloadableProductLinks()[0];
-        self::assertStringEndsWith(
-            \sprintf('/downloadable/download/linkSample/link_id/%s', $link->getId()),
+
+        self::assertEquals(
+            \sprintf('%sdownloadable/download/linkSample/link_id/%s', $baseUrl, $link->getId()),
             $actual[0]['values'][0]['info_url']
         );
     }
