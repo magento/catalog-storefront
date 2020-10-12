@@ -238,9 +238,6 @@ final class ProductMapper
             case "country_of_manufacture":
                 $dto->setCountryOfManufacture((string) $value);
                 break;
-            case "gift_message_available":
-                $dto->setGiftMessageAvailable((bool) $value);
-                break;
             case "special_price":
                 $dto->setSpecialPrice((float) $value);
                 break;
@@ -250,15 +247,15 @@ final class ProductMapper
             case "special_to_date":
                 $dto->setSpecialToDate((string) $value);
                 break;
-            case "product_links":
+            case "links":
                 $convertedArray = [];
                 foreach ($value as $element) {
                     $convertedArray[] = $this->objectManager
-                        ->create(\Magento\CatalogStorefrontApi\Api\Data\ProductLinkMapper::class)
+                        ->create(\Magento\CatalogStorefrontApi\Api\Data\LinkMapper::class)
                         ->setData($element)
                         ->build();
                 }
-                $dto->setProductLinks($convertedArray);
+                $dto->setLinks($convertedArray);
                 break;
             case "canonical_url":
                 $dto->setCanonicalUrl((string) $value);
@@ -271,16 +268,6 @@ final class ProductMapper
                 break;
             case "only_x_left_in_stock":
                 $dto->setOnlyXLeftInStock((float) $value);
-                break;
-            case "grouped_items":
-                $convertedArray = [];
-                foreach ($value as $element) {
-                    $convertedArray[] = $this->objectManager
-                        ->create(\Magento\CatalogStorefrontApi\Api\Data\GroupedItemMapper::class)
-                        ->setData($element)
-                        ->build();
-                }
-                $dto->setGroupedItems($convertedArray);
                 break;
             case "product_options":
                 $convertedArray = [];

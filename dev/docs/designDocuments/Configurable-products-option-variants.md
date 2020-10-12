@@ -117,7 +117,7 @@ Parent id can be parsed from `option_values` too
 
 | product_id   | id | feed_data    |
 |----:|:---:|----|
-| 1 | `configurable/42/1` | `{"id":"configurable/42/1","product_id": 1,"parent_id": 42,"option_values":["42:color/Y29uZmlndXJhYmxlLzpjb2xvci1pZDovOmJsdWUtaWQ6==", "42:size/Y29uZmlndXJhYmxlLzpzaXplLWlkOi86eGwtaWQ6"]}` |
+| 1 | `configurable/42/1` | `{"id":"configurable/42/1","product_id": 1,"option_values":["42:color/Y29uZmlndXJhYmxlLzpjb2xvci1pZDovOmJsdWUtaWQ6==", "42:size/Y29uZmlndXJhYmxlLzpzaXplLWlkOi86eGwtaWQ6"]}` |
 becomes
 
  | id                                      |  option_value | product_id   | parent_id
