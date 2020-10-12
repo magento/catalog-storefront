@@ -85,23 +85,24 @@ final class VideoMapper
     private function setByKey(Video $dto, string $key, $value): void
     {
         switch ($key) {
-            case "video_provider":
-                $dto->setVideoProvider((string) $value);
+            case "preview":
+                $dto->setPreview(
+                    $this->objectManager
+                       ->create(\Magento\CatalogStorefrontApi\Api\Data\MediaResourceMapper::class)
+                       ->setData($value)
+                       ->build()
+                );
                 break;
-            case "video_url":
-                $dto->setVideoUrl((string) $value);
+            case "video":
+                $dto->setVideo(
+                    $this->objectManager
+                       ->create(\Magento\CatalogStorefrontApi\Api\Data\VideoItemMapper::class)
+                       ->setData($value)
+                       ->build()
+                );
                 break;
-            case "video_title":
-                $dto->setVideoTitle((string) $value);
-                break;
-            case "video_description":
-                $dto->setVideoDescription((string) $value);
-                break;
-            case "video_metadata":
-                $dto->setVideoMetadata((string) $value);
-                break;
-            case "media_type":
-                $dto->setMediaType((string) $value);
+            case "sort_order":
+                $dto->setSortOrder((string) $value);
                 break;
         }
     }

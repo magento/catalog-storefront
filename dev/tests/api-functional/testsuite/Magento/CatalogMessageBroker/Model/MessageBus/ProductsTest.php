@@ -10,10 +10,10 @@ namespace Magento\CatalogMessageBroker\Model\MessageBus;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\CatalogDataExporter\Test\Integration\AbstractProductTestHelper;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
 use Magento\CatalogMessageBroker\Model\MessageBus\Product\ProductsConsumer;
 use Magento\CatalogStorefront\Model\CatalogService;
+use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\DataExporter\Model\FeedInterface;
 use Magento\DataExporter\Model\FeedPool;
@@ -21,7 +21,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\TestCase\StorefrontTestsAbstract;
 
 /**
  * Test class for Products message bus
@@ -91,13 +90,17 @@ class ProductsTest extends StorefrontTestsAbstract
     {
         $product = $this->getProduct(self::TEST_SKU);
         $this->assertEquals(self::TEST_SKU, $product->getSku());
-
+        $entitiesData = [
+            [
+                'entity_id' => (int) $product->getId(),
+            ]
+        ];
         $productFeed = $this->productFeed->getFeedByIds([(int)$product->getId()], [self::STORE_CODE]);
         $this->assertNotEmpty($productFeed);
 
         $updateMessage = $this->messageBuilder->build(
-            [(int)$product->getId()],
             ProductsConsumer::PRODUCTS_UPDATED_EVENT_TYPE,
+            $entitiesData,
             self::STORE_CODE
         );
         $this->productsConsumer->processMessage($updateMessage);
@@ -114,8 +117,8 @@ class ProductsTest extends StorefrontTestsAbstract
         $this->assertNotEmpty($deletedFeed);
 
         $deleteMessage = $this->messageBuilder->build(
-            [(int)$product->getId()],
             ProductsConsumer::PRODUCTS_DELETED_EVENT_TYPE,
+            $entitiesData,
             self::STORE_CODE
         );
 

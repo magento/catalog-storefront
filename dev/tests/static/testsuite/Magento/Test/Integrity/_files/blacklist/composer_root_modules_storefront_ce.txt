@@ -1,6 +1,5 @@
 magento/module-downloadable-product-extractor
 magento/module-grouped-product-extractor
-magento/module-bundle-product-extractor
 magento/module-catalog-export
 magento/module-catalog-export-api
 magento/module-catalog-extractor
@@ -12,3 +11,4 @@ magento/module-catalog-storefront-connector
 magento/module-catalog-storefront-graph-ql
 magento/module-configurable-product-extractor
 magento/module-storefront-graph-ql
+magento/module-downloadable-product-data-exporter

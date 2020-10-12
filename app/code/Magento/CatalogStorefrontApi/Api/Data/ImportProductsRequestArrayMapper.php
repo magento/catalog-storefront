@@ -50,7 +50,7 @@ final class ImportProductsRequestArrayMapper
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getProducts() as $fieldArrayDto) {
-            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ProductArrayMapper::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ImportProductDataRequestArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["products"] = $fieldArray;

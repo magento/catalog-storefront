@@ -139,7 +139,7 @@ class CatalogRepository
     }
 
     /**
-     * Update bulk of entities by data, source name and entity type
+     * Update bulk of entities by source name and entity type
      *
      * @param array $data
      * @param string $sourceName
@@ -151,15 +151,15 @@ class CatalogRepository
      */
     private function updateEntities(array $data, string $sourceName, string $entityType): void
     {
-        if (!$data) {
+        if (empty($data)) {
             return;
         }
 
+        $this->storageWriteSource->bulkUpdate($sourceName, $entityType, $data);
+
         $this->logger->debug(
-            \sprintf('Save to storage "%s" %s record(s)', $sourceName, count($data)),
+            \sprintf('Save to storage "%s" %s record(s)', $sourceName, \count($data)),
             ['verbose' => $data]
         );
-
-        $this->storageWriteSource->bulkUpdate($sourceName, $entityType, $data);
     }
 }

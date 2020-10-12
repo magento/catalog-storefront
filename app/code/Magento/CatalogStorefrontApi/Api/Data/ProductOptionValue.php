@@ -59,6 +59,11 @@ final class ProductOptionValue implements ProductOptionValueInterface
      * @var string
      */
     private $infoUrl;
+
+    /**
+     * @var float
+     */
+    private $price;
     
     /**
      * @inheritdoc
@@ -226,5 +231,26 @@ final class ProductOptionValue implements ProductOptionValueInterface
     public function setInfoUrl(string $value): void
     {
         $this->infoUrl = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return float
+     */
+    public function getPrice(): float
+    {
+        return (float) $this->price;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param float $value
+     * @return void
+     */
+    public function setPrice(float $value): void
+    {
+        $this->price = $value;
     }
 }

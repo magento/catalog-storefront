@@ -141,11 +141,10 @@ class ElasticsearchCommand implements CommandInterface
             $bulkArray['body'][] = [
                 $action => $metaInfo
             ];
+
             if ($action === self::BULK_ACTION_INDEX) {
                 $bulkArray['body'][] = $document;
-            }
-
-            if ($action === self::BULK_ACTION_UPDATE) {
+            } elseif ($action === self::BULK_ACTION_UPDATE) {
                 $bulkArray['body'][]['doc'] = $document;
             }
         }

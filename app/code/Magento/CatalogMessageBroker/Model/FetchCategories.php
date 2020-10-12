@@ -72,7 +72,7 @@ class FetchCategories implements FetchCategoriesInterface
     }
 
     /**
-     * Prepare rest client request data
+     * Prepare client request data
      *
      * @param Entity[] $entities
      * @param string $storeCode

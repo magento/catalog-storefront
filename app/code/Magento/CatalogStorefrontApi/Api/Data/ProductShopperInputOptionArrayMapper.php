@@ -59,9 +59,11 @@ final class ProductShopperInputOptionArrayMapper
                 ->convertToArray($fieldArrayDto);
         }
         $result["price"] = $fieldArray;
-        $result["value"] = $dto->getValue();
-        $result["max_characters"] = $dto->getMaxCharacters();
         $result["file_extension"] = $dto->getFileExtension();
+        if ($dto->getRange() !== null) {
+            $result["range"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\ValueRangeArrayMapper::class)
+                ->convertToArray($dto->getRange());
+        }
         $result["image_size_x"] = $dto->getImageSizeX();
         $result["image_size_y"] = $dto->getImageSizeY();
         return $result;

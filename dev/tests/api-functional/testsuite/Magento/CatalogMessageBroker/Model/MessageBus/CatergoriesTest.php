@@ -12,6 +12,7 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
 use Magento\CatalogMessageBroker\Model\MessageBus\Category\CategoriesConsumer;
 use Magento\CatalogStorefront\Model\CatalogService;
+use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use Magento\DataExporter\Model\FeedInterface;
 use Magento\DataExporter\Model\FeedPool;
@@ -22,7 +23,6 @@ use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\TestCase\StorefrontTestsAbstract;
 
 /**
  * Test class for Categories message bus
@@ -102,10 +102,14 @@ class CatergoriesTest extends StorefrontTestsAbstract
     {
         $category = $this->categoryRepository->get(self::CATEGORY_ID);
         self::assertEquals(self::CATEGORY_ID, $category->getId());
-
+        $entitiesData = [
+            [
+                'entity_id' => (int) $category->getId(),
+            ]
+        ];
         $message = $this->messageBuilder->build(
-            [(int)$category->getId()],
             CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
+            $entitiesData,
             self::STORE_CODE
         );
         $this->categoriesConsumer->processMessage($message);
@@ -122,8 +126,8 @@ class CatergoriesTest extends StorefrontTestsAbstract
         self::assertNotEmpty($deletedFeed);
 
         $deleteMessage = $this->messageBuilder->build(
-            [(int)$category->getId()],
             CategoriesConsumer::CATEGORIES_DELETED_EVENT_TYPE,
+            $entitiesData,
             self::STORE_CODE
         );
         $this->categoriesConsumer->processMessage($deleteMessage);

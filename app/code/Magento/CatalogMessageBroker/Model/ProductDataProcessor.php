@@ -34,10 +34,6 @@ class ProductDataProcessor
         'url_key' => 'url_key',
         'tax_class_id' => 'tax_class_id',
         'weight' => 'weight',
-        'swatch_image' => 'swatch_image',
-        'thumbnail' => 'thumbnail',
-        'image' => 'image',
-        'small_image' => 'small_image',
         'visibility' => 'visibility',
         'meta_description' => 'meta_description',
         'meta_keyword' => 'meta_keyword',
@@ -45,15 +41,18 @@ class ProductDataProcessor
         'created_at' => 'created_at',
         'updated_at' => 'updated_at',
         'attributes' => 'dynamic_attributes',
+        'price_view' => 'price_view',
         // 'variants' => 'variants', // \Magento\CatalogStorefrontApi\Api\Data\VariantInterface[]
         'category_ids' => 'categories',
+        'images' => 'images', //type: \Magento\CatalogStorefrontApi\Api\Data\ImageInterface[]
+        'videos' => 'videos', //type: \Magento\CatalogStorefrontApi\Api\Data\VideoInterface[]
+        'links' => 'links', //type: \Magento\CatalogStorefrontApi\Api\Data\Link[]
         // The following list of fields are present in Import API (proto schema) but absent in Export API (et_schema)
         // TODO: review list, move to ^^ after corresponding fields resolved in story
         'has_options', //type: bool
         'type_id', //type: string
         'stock_status', //type: string
         'qty', //type: float
-        'media_gallery', //type: \Magento\CatalogStorefrontApi\Api\Data\MediaGalleryItemInterface[]
         'dynamic_attributes', //type: \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface[]
         'required_options', //type: string
         'created_in', //type: string
@@ -64,25 +63,17 @@ class ProductDataProcessor
         'is_returnable', //type: string
         'url_suffix', //type: string
         'url_rewrites', //type: \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteInterface[]
-        'configurable_options', //type: \Magento\CatalogStorefrontApi\Api\Data\ConfigurableOptionInterface[]
         'country_of_manufacture', //type: string
-        'gift_message_available', //type: bool
         'special_price', //type: float
         'special_from_date', //type: string
         'special_to_date', //type: string
-        'product_links', //type: \Magento\CatalogStorefrontApi\Api\Data\ProductLinkInterface[]
         'canonical_url', //type: string
-        'ship_bundle_items', //type: string
-        'dynamic_weight', //type: bool
-        'dynamic_sku', //type: bool
-        'dynamic_price', //type: bool
-        'price_view', //type: string
         'items', //type: \Magento\CatalogStorefrontApi\Api\Data\BundleItemInterface[]
         'links_purchased_separately', //type: bool
-        'links_title', //type: string
-        'downloadable_product_links', //type: \Magento\CatalogStorefrontApi\Api\Data\DownloadableLinkInterface[]
-        'downloadable_product_samples', //type: \Magento\CatalogStorefrontApi\Api\Data\DownloadableSampleInterface[]
+        'samples' => 'samples', //type: \Magento\CatalogStorefrontApi\Api\Data\Sample[]
         'only_xleft_in_stock', //type: float
+        'product_options' => 'product_options',
+        'product_shopper_input_options' => 'shopper_input_options'
     ];
 
     /**
@@ -105,6 +96,10 @@ class ProductDataProcessor
     public function merge(array $product, array $oldExportDataProduct): array
     {
         $importProduct = [];
+
+        unset($product['options']);
+        unset($product['entered_options']);
+
         foreach (self::$map as $nameInExport => $nameInImport) {
             if (\array_key_exists($nameInExport, $product)) {
                 $importProduct[$nameInImport] = $product[$nameInExport];
@@ -116,12 +111,6 @@ class ProductDataProcessor
         foreach ($this->dataMappers as $nameInExport => $dataMapper) {
             // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $importProduct = \array_merge($importProduct, $dataMapper->map($product));
-        }
-        // TODO: handle grouped product
-        if (\array_key_exists('type_id', $oldExportDataProduct)
-            && $oldExportDataProduct['type_id'] === 'grouped'
-        ) {
-            $importProduct['grouped_items'] = $oldExportDataProduct['items'];
         }
 
         // TODO: only $importProduct must be returned https://github.com/magento/catalog-storefront/issues/165
