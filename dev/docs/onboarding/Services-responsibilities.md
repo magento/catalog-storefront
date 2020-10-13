@@ -37,7 +37,7 @@ Source: https://github.com/magento/catalog-storefront/tree/develop/app/code/Mage
 Responsibilities:
 - do callback request (REST) for actual data to Export API
 - map Export API format to Storefront API format
-- Write data (gRPC) to Storefront API
+- write data (gRPC) to Storefront API
 
 
 ### Storefront Application. 
@@ -45,15 +45,9 @@ Source: https://github.com/magento/catalog-storefront/tree/develop/app/code/Mage
 **Provides Read/Write API**   
 Responsibilities:
 - provide Read API for specific attributes, scope
-- store data in an efficient way in own databases
+- store data in efficient way in own databases
 
 ## Modules that will be eliminated (transition period)
-
-### Extension for Backoffice dependent on saas-export repo
-Source: [CatalogExport](https://github.com/magento/catalog-storefront/tree/develop/app/code/Magento/CatalogExport), [CatalogExportAPI](https://github.com/magento/catalog-storefront/tree/develop/app/code/Magento/CatalogExportAPI)   
-Will be eliminated in https://github.com/magento/catalog-storefront/issues/185
-
-
 
 ### Old Export API
 Source: [CatalogExtractor](https://github.com/magento/catalog-storefront/tree/develop/app/code/Magento/CatalogExtractor), any "*Extractor" module   
