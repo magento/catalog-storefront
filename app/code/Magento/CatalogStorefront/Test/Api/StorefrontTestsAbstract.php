@@ -144,4 +144,46 @@ abstract class StorefrontTestsAbstract extends TestCase
             self::fail($message);
         }
     }
+
+    /**
+     * Compare expected and actual results in pairs key => value
+     *
+     * @param array $expected
+     * @param array $actual
+     * @param string|null $message
+     */
+    protected function compareKeyValuesPairs(array $expected, array $actual, string $message = null): void
+    {
+        $diff = $this->compareArraysRecursivelyWithKeyPair($expected, $actual);
+
+        if (!empty($diff)) {
+            $message = $message ?? "Actual response doesn't equal expected data";
+            $message .= "\n Diff:\n" . var_export($diff, true);
+            $message .= "\n Actual:\n" . var_export($actual, true);
+            self::fail($message);
+        }
+    }
+
+    private function compareArraysRecursivelyWithKeyPair(array $expected, array $actual) : array
+    {
+        $diffResult = [];
+        foreach ($expected as $key => $value) {
+            if (array_key_exists($key, $actual)) {
+                if (is_array($value)) {
+                    $recursiveDiff = $this->compareArraysRecursivelyWithKeyPair($value, $actual[$key]);
+                    if (!empty($recursiveDiff)) {
+                        $diffResult[$key] = $recursiveDiff;
+                    }
+                } else {
+                    if ($expected[$key] !== $actual[$key]) {
+                        $diffResult[$key] = $value;
+                    }
+                }
+            } else {
+                $diffResult[$key] = $value;
+            }
+        }
+
+        return $diffResult;
+    }
 }

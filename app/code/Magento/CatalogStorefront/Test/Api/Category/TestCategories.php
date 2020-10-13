@@ -3,27 +3,66 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\CatalogStorefront\Test\Api\Category;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
+use Magento\CatalogMessageBroker\Model\MessageBus\Category\CategoriesConsumer;
 use Magento\CatalogStorefront\Model\CatalogService;
 use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\CategoryArrayMapper;
+use Magento\DataExporter\Model\FeedInterface;
+use Magento\DataExporter\Model\FeedPool;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\Helper\CompareArraysRecursively;
-use Magento\Catalog\Model\CategoryFactory;
 
 /**
- * Test for categories from store front api
+ * Test class for Categories message bus
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TestCategories extends StorefrontTestsAbstract
 {
+    private const STORE_CODE = 'default';
+
+    private $attributeCodes = [
+        'id',
+        'path',
+        'position',
+        'level',
+        'children_count',
+        'name',
+        'display_mode',
+        'default_sort_by',
+        'url_key',
+        'url_path',
+        'is_active',
+        'is_anchor',
+        'include_in_menu',
+        'available_sort_by',
+        'breadcrumbs',
+        'description',
+        'canonical_url',
+        'product_count',
+        'children',
+        'image',
+        'parent_id',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+        'dynamic_attributes'
+    ];
+
     /**
-     * Test Constants
+     * @var CategoriesConsumer
      */
-    const STORE_CODE = 'default';
+    private $categoriesConsumer;
 
     /**
      * @var CatalogService
@@ -36,14 +75,24 @@ class TestCategories extends StorefrontTestsAbstract
     private $categoriesGetRequestInterface;
 
     /**
-     * @var CategoryFactory
+     * @var ChangedEntitiesMessageBuilder
      */
-    private $categoryFactory;
+    private $messageBuilder;
 
     /**
-     * @var CompareArraysRecursively
+     * @var CategoryRepositoryInterface
      */
-    private $compareArraysRecursively;
+    private $categoryRepository;
+
+    /**
+     * @var FeedInterface
+     */
+    private $categoryFeed;
+
+    /**
+     * @var CategoryArrayMapper
+     */
+    private $arrayMapper;
 
     /**
      * @inheritdoc
@@ -51,74 +100,94 @@ class TestCategories extends StorefrontTestsAbstract
     protected function setUp(): void
     {
         parent::setUp();
+        $this->categoriesConsumer = Bootstrap::getObjectManager()->create(CategoriesConsumer::class);
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
-        $this->categoriesGetRequestInterface = Bootstrap::getObjectManager()->create(CategoriesGetRequestInterface::class);
-        $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
-        $this->categoryFactory = Bootstrap::getObjectManager()->create(CategoryFactory::class);
-        $this->compareArraysRecursively = Bootstrap::getObjectManager()->create(CompareArraysRecursively::class);
+        $this->categoriesGetRequestInterface = Bootstrap::getObjectManager()->create(
+            CategoriesGetRequestInterface::class
+        );
+        $this->messageBuilder = Bootstrap::getObjectManager()->create(ChangedEntitiesMessageBuilder::class);
+        $this->categoryRepository = Bootstrap::getObjectManager()->create(CategoryRepositoryInterface::class);
+        $this->categoryFeed = Bootstrap::getObjectManager()->get(FeedPool::class)->getFeed('categories');
+        $this->arrayMapper = Bootstrap::getObjectManager()->get(CategoryArrayMapper::class);
     }
 
     /**
      * Validate category data
      *
-     * @magentoDataFixture Magento/Catalog/_files/category_tree.php
+     * @magentoDataFixture Magento_CatalogStorefront::Test/Api/Category/_files/category_specific_fields.php
      * @magentoDbIsolation disabled
+     * @param array $expected
+     * @throws FileSystemException
      * @throws NoSuchEntityException
+     * @throws RuntimeException
      * @throws \Throwable
+     * @dataProvider categoryDataProvider
      */
-    public function testCategoriesTree()
+    public function testCategoryData(array $expected): void
     {
-        $this->categoriesGetRequestInterface->setIds([400, 402]);
+        $expectedCategoryId = 10;
+        $category = $this->categoryRepository->get($expectedCategoryId);
+        self::assertEquals($expectedCategoryId, $category->getId());
+        $entitiesData = [
+            [
+                'entity_id' => (int)$category->getId(),
+            ]
+        ];
+        $message = $this->messageBuilder->build(
+            CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
+            $entitiesData,
+            self::STORE_CODE
+        );
+        $this->categoriesConsumer->processMessage($message);
+
+        $this->categoriesGetRequestInterface->setIds([$category->getId()]);
         $this->categoriesGetRequestInterface->setStore(self::STORE_CODE);
+        $this->categoriesGetRequestInterface->setAttributeCodes($this->attributeCodes);
         $catalogServiceItem = $this->catalogService->getCategories($this->categoriesGetRequestInterface);
-        $this->assertNotEmpty($catalogServiceItem->getItems());
+        self::assertNotEmpty($catalogServiceItem->getItems());
+        $item = $catalogServiceItem->getItems()[0];
+        self::assertEquals($item->getId(), $category->getId());
 
-        self::assertEquals(400, $catalogServiceItem->getItems()[0]->getId());
-        self::assertEquals('Category 1', $catalogServiceItem->getItems()[0]->getName());
-        self::assertEquals(2, $catalogServiceItem->getItems()[0]->getParentId());
-        self::assertEquals('1/2/400', $catalogServiceItem->getItems()[0]->getPath());
-        self::assertEquals(2, $catalogServiceItem->getItems()[0]->getLevel());
-        self::assertTrue(true, $catalogServiceItem->getItems()[0]->getIsActive());
-        self::assertEquals('name', $catalogServiceItem->getItems()[0]->getAvailableSortBy());
-        self::assertEquals('name', $catalogServiceItem->getItems()[0]->getDefaultSortBy());
-        self::assertEquals(1, $catalogServiceItem->getItems()[0]->getPosition());
-        self::assertEquals([], $catalogServiceItem->getItems()[0]->getChildren());
-        self::assertEquals([], $catalogServiceItem->getItems()[1]->getBreadcrumbs());
+        $actual = $this->arrayMapper->convertToArray($item);
 
-        self::assertEquals(401, $catalogServiceItem->getItems()[1]->getId());
-        self::assertEquals('Category 1.1.1', $catalogServiceItem->getItems()[1]->getName());
-        self::assertEquals(401, $catalogServiceItem->getItems()[1]->getParentId());
-        self::assertEquals('1/2/400/401/402', $catalogServiceItem->getItems()[1]->getPath());
-        self::assertEquals(4, $catalogServiceItem->getItems()[1]->getLevel());
-        self::assertTrue(true, $catalogServiceItem->getItems()[1]->getIsActive());
-        self::assertEquals('name', $catalogServiceItem->getItems()[1]->getAvailableSortBy());
-        self::assertEquals('name', $catalogServiceItem->getItems()[1]->getDefaultSortBy());
-        self::assertEquals(1, $catalogServiceItem->getItems()[1]->getPosition());
-        self::assertEquals([], $catalogServiceItem->getItems()[1]->getChildren());
-        self::assertEquals([], $catalogServiceItem->getItems()[1]->getBreadcrumbs());
+        $this->compareKeyValuesPairs($expected, $actual);
     }
 
-    /**
-     * Validate category data
-     *
-     * @magentoDataFixture Magento/Catalog/_files/category_anchor.php
-     * @magentoDbIsolation disabled
-     * @throws NoSuchEntityException
-     * @throws \Throwable
-     */
-    public function testCategoryAnchor()
+    public function categoryDataProvider(): array
     {
-        $this->categoriesGetRequestInterface->setIds([22]);
-        $this->categoriesGetRequestInterface->setStore(self::STORE_CODE);
-        $catalogServiceItem = $this->catalogService->getCategories($this->categoriesGetRequestInterface);
-        $this->assertNotEmpty($catalogServiceItem->getItems());
-
-        self::assertEquals(22, $catalogServiceItem->getItems()[0]->getId());
-        self::assertEquals('Category_Anchor', $catalogServiceItem->getItems()[0]->getName());
-        self::assertEquals('1/2/22', $catalogServiceItem->getItems()[0]->getPath());
-        self::assertEquals('2', $catalogServiceItem->getItems()[0]->getLevel());
-        self::assertEquals('name', $catalogServiceItem->getItems()[0]->getAvailableSortBy());
-        self::assertEquals('name', $catalogServiceItem->getItems()[0]->getDefaultSortBy());
-        self::assertTrue(true, $catalogServiceItem->getItems()[0]->getIsActive());
+        return [
+            [
+                [
+                    'id' => '10',
+                    'path' => '1/2/3',
+                    'position' => 1,
+                    'level' => 2,
+                    'children_count' => 0,
+                    'name' => 'Category_en',
+                    'display_mode' => 'PRODUCTS_AND_PAGE',
+                    'default_sort_by' => 'price',
+                    'url_key' => 'category-en',
+                    'url_path' => 'category-en',
+                    'is_active' => true,
+                    'is_anchor' => true,
+                    'include_in_menu' => false,
+                    'available_sort_by' => [
+                            0 => 'name',
+                            1 => 'price',
+                        ],
+                    'breadcrumbs' => [],
+                    'description' => 'Category_en Description',
+                    'canonical_url' => '',
+                    'product_count' => 0,
+                    'children' => [],
+                    'image' => '',
+                    'parent_id' => '2',
+                    'meta_title' => 'Category_en Meta Title',
+                    'meta_description' => 'Category_en Meta Description',
+                    'meta_keywords' => 'Category_en Meta Keywords',
+                    'dynamic_attributes' => []
+                ]
+            ]
+        ];
     }
 }
