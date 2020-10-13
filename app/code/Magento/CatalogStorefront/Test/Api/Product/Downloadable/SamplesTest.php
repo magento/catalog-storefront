@@ -13,6 +13,8 @@ use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\SampleArrayMapper;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -48,6 +50,11 @@ class SamplesTest extends StorefrontTestsAbstract
     private $arrayMapper;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -57,42 +64,56 @@ class SamplesTest extends StorefrontTestsAbstract
         $this->productsGetRequestInterface = Bootstrap::getObjectManager()->create(ProductsGetRequestInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
         $this->arrayMapper = Bootstrap::getObjectManager()->create(SampleArrayMapper::class);
+        $this->storeManager = Bootstrap::getObjectManager()->create(StoreManagerInterface::class);
     }
 
     /**
      * Validate downloadable product data
      *
      * @magentoDataFixture Magento_CatalogStorefront::Test/Api/Product/Downloadable/_files/sf_product_downloadable_with_urls.php
-     * @magentoDbIsolation disabled
-     * @param array $expected
-     * @throws NoSuchEntityException
      * @dataProvider downloadableUrlsProvider
+     *
+     * @magentoDbIsolation disabled
+     *
+     * @param array $expected
+     *
+     * @throws NoSuchEntityException
+     * @throws \Throwable
      */
     public function testDownloadableProductsWithUrls(array $expected): void
     {
-        $product = $this->productRepository->get(self::TEST_SKU);
-
-        $this->productsGetRequestInterface->setIds([$product->getId()]);
-        $this->productsGetRequestInterface->setStore(self::STORE_CODE);
-        $this->productsGetRequestInterface->setAttributeCodes(['samples']);
-        $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
-        self::assertNotEmpty($catalogServiceItem->getItems());
-
-        $actual = $this->arrayMapper->convertToArray($catalogServiceItem->getItems()[0]->getSamples()[0]);
-
-        $this->compare($expected, $actual);
+        $this->validateSampleData($expected);
     }
 
     /**
      * Validate downloadable product data
      *
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
-     * @magentoDbIsolation disabled
-     * @param array $expected
-     * @throws NoSuchEntityException
      * @dataProvider downloadableFilesProvider
+     *
+     * @magentoDbIsolation disabled
+     *
+     * @param array $expected
+     *
+     * @throws NoSuchEntityException
+     * @throws \Throwable
      */
     public function testDownloadableProductsWithFiles(array $expected): void
+    {
+        $this->validateSampleData($expected);
+    }
+
+    /**
+     * Validate sample data
+     *
+     * @param array $dataProvider
+     *
+     * @return void
+     *
+     * @throws NoSuchEntityException
+     * @throws \Throwable
+     */
+    private function validateSampleData(array $dataProvider) : void
     {
         $product = $this->productRepository->get(self::TEST_SKU);
 
@@ -104,7 +125,15 @@ class SamplesTest extends StorefrontTestsAbstract
 
         $actual = $this->arrayMapper->convertToArray($catalogServiceItem->getItems()[0]->getSamples()[0]);
 
-        $this->compare($expected, $actual);
+        $this->compare($dataProvider, $actual);
+
+        $baseUrl = $this->storeManager->getStore(self::STORE_CODE)->getBaseUrl(UrlInterface::URL_TYPE_WEB);
+        $sample = $product->getExtensionAttributes()->getDownloadableProductSamples()[0];
+
+        self::assertEquals(
+            \sprintf('%sdownloadable/download/sample/sample_id/%s', $baseUrl, $sample->getId()),
+            $actual['resource']['url']
+        );
     }
 
     /**
@@ -118,7 +147,6 @@ class SamplesTest extends StorefrontTestsAbstract
             [
                 [
                     'resource' => [
-                        'url' => 'http://example.com/downloadable.txt',
                         'label' => 'Downloadable Product Sample',
                         'roles' => [],
                     ],
@@ -139,7 +167,6 @@ class SamplesTest extends StorefrontTestsAbstract
             [
                 [
                     'resource' => [
-                        'url' => '/j/e/jellyfish_1_4.jpg',
                         'label' => 'Downloadable Product Sample Title',
                         'roles' => [],
                     ],
