@@ -114,7 +114,7 @@ class TestCategories extends StorefrontTestsAbstract
     /**
      * Validate category data
      *
-     * @magentoDataFixture Magento_CatalogStorefront::Test/Api/Category/_files/category_specific_fields.php
+     * @magentoDataFixture Magento/Catalog/_files/category_specific_fields.php
      * @magentoDbIsolation disabled
      * @param array $expected
      * @throws FileSystemException
@@ -153,6 +153,49 @@ class TestCategories extends StorefrontTestsAbstract
         $this->compareKeyValuesPairs($expected, $actual);
     }
 
+    /**
+     * Validate category data
+     *
+     * @magentoDataFixture Magento/Catalog/_files/category_tree.php
+     * @magentoDbIsolation disabled
+     * @param array $expected
+     * @throws FileSystemException
+     * @throws NoSuchEntityException
+     * @throws RuntimeException
+     * @throws \Throwable
+     * @dataProvider categoryUrlRewritesProvider
+     */
+    public function testCategoryUrlRewriteData(array $expected): void
+    {
+        $expectedCategoryId = 402;
+        $category = $this->categoryRepository->get($expectedCategoryId);
+        self::assertEquals($expectedCategoryId, $category->getId());
+        $entitiesData = [
+            [
+                'entity_id' => (int)$category->getId(),
+            ]
+        ];
+        $message = $this->messageBuilder->build(
+            CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
+            $entitiesData,
+            self::STORE_CODE
+        );
+        $this->categoriesConsumer->processMessage($message);
+
+        $this->categoriesGetRequestInterface->setIds([$category->getId()]);
+        $this->categoriesGetRequestInterface->setStore(self::STORE_CODE);
+        $this->categoriesGetRequestInterface->setAttributeCodes(['breadcrumbs']);
+        $catalogServiceItem = $this->catalogService->getCategories($this->categoriesGetRequestInterface);
+        self::assertNotEmpty($catalogServiceItem->getItems());
+        $item = $catalogServiceItem->getItems()[0];
+        self::assertEquals($item->getId(), $category->getId());
+
+        $actual = $this->arrayMapper->convertToArray($item);
+        self::assertArrayHasKey('breadcrumbs', $actual);
+
+        $this->compareKeyValuesPairs($expected, $actual['breadcrumbs']);
+    }
+
     public function categoryDataProvider(): array
     {
         return [
@@ -172,9 +215,9 @@ class TestCategories extends StorefrontTestsAbstract
                     'is_anchor' => true,
                     'include_in_menu' => false,
                     'available_sort_by' => [
-                            0 => 'name',
-                            1 => 'price',
-                        ],
+                        0 => 'name',
+                        1 => 'price',
+                    ],
                     'breadcrumbs' => [],
                     'description' => 'Category_en Description',
                     'canonical_url' => '',
@@ -186,6 +229,30 @@ class TestCategories extends StorefrontTestsAbstract
                     'meta_description' => 'Category_en Meta Description',
                     'meta_keywords' => 'Category_en Meta Keywords',
                     'dynamic_attributes' => []
+                ]
+            ]
+        ];
+    }
+
+    public function categoryUrlRewritesProvider(): array
+    {
+        return [
+            [
+                [
+                    [
+                        "category_id" => "400",
+                        "category_name" => "Category 1",
+                        "category_level" => 2,
+                        "category_url_key" => "category-1",
+                        "category_url_path" => "category-1"
+                    ],
+                    [
+                        "category_id" => "401",
+                        "category_name" => "Category 1.1",
+                        "category_level" => 3,
+                        "category_url_key" => "category-1-1",
+                        "category_url_path" => "category-1/category-1-1"
+                    ]
                 ]
             ]
         ];
