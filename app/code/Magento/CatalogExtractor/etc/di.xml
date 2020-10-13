@@ -12,9 +12,6 @@
     <type name="Magento\CatalogExtractor\DataProvider\DataProvider">
         <arguments>
             <argument name="defaultDataProvider" xsi:type="string">Magento\CatalogExtractor\DataProvider\EavAttributeProvider</argument>
-            <argument name="dataProviders" xsi:type="array">
-                <item name="product_links" xsi:type="string">Magento\CatalogExtractor\DataProvider\Link\Provider</item>
-            </argument>
         </arguments>
     </type>
 </config>
