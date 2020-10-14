@@ -46,4 +46,13 @@ interface ProductReviewsInterface extends GRPC\ServiceInterface
     * @throws GRPC\Exception\InvokeException
     */
     public function GetCustomerProductReviews(GRPC\ContextInterface $ctx, CustomerProductReviewRequest $in): CustomerProductReviewResponse;
+
+    /**
+    * @param GRPC\ContextInterface $ctx
+    * @param ProductReviewCountRequest $in
+    * @return ProductReviewCountResponse
+    *
+    * @throws GRPC\Exception\InvokeException
+    */
+    public function GetProductReviewCount(GRPC\ContextInterface $ctx, ProductReviewCountRequest $in): ProductReviewCountResponse;
 }

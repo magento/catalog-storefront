@@ -40,7 +40,13 @@ class ImportReview extends \Google\Protobuf\Internal\Message
      */
     protected $customer_id = '';
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Rating ratings = 7;</code>
+     * array of scope codes
+     *
+     * Generated from protobuf field <code>repeated string visibility = 7;</code>
+     */
+    private $visibility;
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Rating ratings = 8;</code>
      */
     private $ratings;
 
@@ -56,6 +62,8 @@ class ImportReview extends \Google\Protobuf\Internal\Message
      *     @type string $nickname
      *     @type string $text
      *     @type string $customer_id
+     *     @type string[]|\Google\Protobuf\Internal\RepeatedField $visibility
+     *           array of scope codes
      *     @type \Magento\CatalogStorefrontApi\Proto\Rating[]|\Google\Protobuf\Internal\RepeatedField $ratings
      * }
      */
@@ -198,7 +206,33 @@ class ImportReview extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Rating ratings = 7;</code>
+     * array of scope codes
+     *
+     * Generated from protobuf field <code>repeated string visibility = 7;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getVisibility()
+    {
+        return $this->visibility;
+    }
+
+    /**
+     * array of scope codes
+     *
+     * Generated from protobuf field <code>repeated string visibility = 7;</code>
+     * @param string[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setVisibility($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::STRING);
+        $this->visibility = $arr;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Rating ratings = 8;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
      */
     public function getRatings()
@@ -207,7 +241,7 @@ class ImportReview extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Rating ratings = 7;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Rating ratings = 8;</code>
      * @param \Magento\CatalogStorefrontApi\Proto\Rating[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */

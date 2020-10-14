@@ -103,6 +103,9 @@ final class ImportReviewMapper
             case "customer_id":
                 $dto->setCustomerId((string) $value);
                 break;
+            case "visibility":
+                $dto->setVisibility((array) $value);
+                break;
             case "ratings":
                 $convertedArray = [];
                 foreach ($value as $element) {

@@ -53,6 +53,7 @@ final class ImportReviewArrayMapper
         $result["nickname"] = $dto->getNickname();
         $result["text"] = $dto->getText();
         $result["customer_id"] = $dto->getCustomerId();
+        $result["visibility"] = $dto->getVisibility();
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getRatings() as $fieldArrayDto) {

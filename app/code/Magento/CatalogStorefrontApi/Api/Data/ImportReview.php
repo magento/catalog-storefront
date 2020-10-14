@@ -53,6 +53,11 @@ final class ImportReview implements ImportReviewInterface
     /**
      * @var array
      */
+    private $visibility;
+
+    /**
+     * @var array
+     */
     private $ratings;
     
     /**
@@ -179,6 +184,27 @@ final class ImportReview implements ImportReviewInterface
     public function setCustomerId(string $value): void
     {
         $this->customerId = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return string[]
+     */
+    public function getVisibility(): array
+    {
+        return (array) $this->visibility;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param string[] $value
+     * @return void
+     */
+    public function setVisibility(array $value): void
+    {
+        $this->visibility = $value;
     }
     
     /**

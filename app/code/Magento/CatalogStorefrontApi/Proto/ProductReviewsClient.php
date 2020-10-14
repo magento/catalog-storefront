@@ -105,4 +105,25 @@ class ProductReviewsClient extends \Grpc\BaseStub
             $options
         );
     }
+
+    /**
+     * @param \Magento\CatalogStorefrontApi\Proto\ProductReviewCountRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Magento\CatalogStorefrontApi\Proto\ProductReviewCountResponse
+     */
+    public function GetProductReviewCount(
+        \Magento\CatalogStorefrontApi\Proto\ProductReviewCountRequest $argument,
+        $metadata = [],
+        $options = []
+    )
+    {
+        return $this->_simpleRequest(
+            '/magento.catalogStorefrontApi.proto.ProductReviews/GetProductReviewCount',
+            $argument,
+            ['\Magento\CatalogStorefrontApi\Proto\ProductReviewCountResponse', 'decode'],
+            $metadata,
+            $options
+        );
+    }
 }
