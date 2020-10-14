@@ -54,6 +54,10 @@ final class ProductVariantResponseArrayMapper
                 ->convertToArray($fieldArrayDto);
         }
         $result["matched_variants"] = $fieldArray;
+        if ($dto->getPagination() !== null) {
+            $result["pagination"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\PaginationResponseArrayMapper::class)
+                ->convertToArray($dto->getPagination());
+        }
         return $result;
     }
 }

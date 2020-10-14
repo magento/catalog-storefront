@@ -282,10 +282,12 @@ message ProductsGetRequest {
   // Could be useful to identify customer group or any other request-specific data
   // Temporary disabled due to lack of "map" support in php Magento generator
   //map<string, string> params = 6;
+  repeated PaginationRequest pagination = 7;
 }
 
 message ProductsGetResult {
   repeated Product items = 1;
+  PaginationResponse pagination = 2;
 }
 
 message ImportProductsRequest {
@@ -403,10 +405,25 @@ message CategoriesGetRequest {
   // A list of attributes to extract
   // Use dot notation in order to extract nested or complex attributes
   repeated string attribute_codes = 4;
+
+  repeated PaginationRequest pagination = 7;
 }
 
 message CategoriesGetResponse {
   repeated Category items = 1;
+  PaginationResponse pagination = 2;
+}
+
+message PaginationRequest {
+  // cursor, page, size
+  string name = 1;
+  string value = 2;
+}
+
+message PaginationResponse {
+  int32 page_size = 1;
+  int32 current_page = 2;
+  int32 total_pages = 3;
 }
 
 service Catalog {
@@ -420,11 +437,13 @@ service Catalog {
 
 message ProductVariantResponse {
   repeated ProductVariant matched_variants = 3;
+  PaginationResponse pagination = 2;
 }
 
 message ProductVariantRequest {
   string product_Id = 1;
   string store = 2;
+  repeated PaginationRequest pagination = 3;
 }
 
 message ImportVariantsRequest {
@@ -452,6 +471,8 @@ message OptionSelectionRequest
   // array of option_values with the following format parent_id:option_id/optionValue.uid
   // @see ProductValue.option_values
   repeated string values = 2;
+
+  repeated PaginationRequest pagination = 3;
 }
 
 service VariantService {
@@ -504,15 +525,18 @@ message ProductReviewRequest {
 
 message ProductReviewResponse {
   repeated ReadReview items = 1;
+  PaginationResponse pagination = 2;
 }
 
 message CustomerProductReviewRequest {
   string customer_id = 1;
   string store = 2;
+  repeated PaginationRequest pagination = 3;
 }
 
 message CustomerProductReviewResponse {
   repeated ReadReview items = 1;
+  PaginationResponse pagination = 2;
 }
 
 service RatingsMetadata {
@@ -544,10 +568,12 @@ message DeleteRatingsMetadataResponse {
 message RatingsMetadataRequest {
   string rating_id = 1;
   string store = 2;
+  repeated PaginationRequest pagination = 3;
 }
 
 message RatingsMetadataResponse {
   repeated RatingMetadata items = 1;
+  PaginationResponse pagination = 2;
 }
 
 // catalog_data_exporter_product_reviews

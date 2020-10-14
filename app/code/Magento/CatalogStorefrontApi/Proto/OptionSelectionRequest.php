@@ -24,6 +24,10 @@ class OptionSelectionRequest extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>repeated string values = 2;</code>
      */
     private $values;
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.PaginationRequest pagination = 3;</code>
+     */
+    private $pagination;
 
     /**
      * Constructor.
@@ -35,6 +39,7 @@ class OptionSelectionRequest extends \Google\Protobuf\Internal\Message
      *     @type string[]|\Google\Protobuf\Internal\RepeatedField $values
      *           array of option_values with the following format parent_id:option_id/optionValue.uid
      *           &#64;see ProductValue.option_values
+     *     @type \Magento\CatalogStorefrontApi\Proto\PaginationRequest[]|\Google\Protobuf\Internal\RepeatedField $pagination
      * }
      */
     public function __construct($data = null)
@@ -89,6 +94,28 @@ class OptionSelectionRequest extends \Google\Protobuf\Internal\Message
     {
         $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::STRING);
         $this->values = $arr;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.PaginationRequest pagination = 3;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getPagination()
+    {
+        return $this->pagination;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.PaginationRequest pagination = 3;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\PaginationRequest[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setPagination($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\PaginationRequest::class);
+        $this->pagination = $arr;
 
         return $this;
     }

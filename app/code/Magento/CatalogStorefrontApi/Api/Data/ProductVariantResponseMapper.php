@@ -95,6 +95,14 @@ final class ProductVariantResponseMapper
                 }
                 $dto->setMatchedVariants($convertedArray);
                 break;
+            case "pagination":
+                $dto->setPagination(
+                    $this->objectManager
+                       ->create(\Magento\CatalogStorefrontApi\Api\Data\PaginationResponseMapper::class)
+                       ->setData($value)
+                       ->build()
+                );
+                break;
         }
     }
 }

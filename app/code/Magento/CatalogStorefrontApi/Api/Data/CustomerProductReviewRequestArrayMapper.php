@@ -49,6 +49,13 @@ final class CustomerProductReviewRequestArrayMapper
         $result = [];
         $result["customer_id"] = $dto->getCustomerId();
         $result["store"] = $dto->getStore();
+        /** Convert complex Array field **/
+        $fieldArray = [];
+        foreach ($dto->getPagination() as $fieldArrayDto) {
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\PaginationRequestArrayMapper::class)
+                ->convertToArray($fieldArrayDto);
+        }
+        $result["pagination"] = $fieldArray;
         return $result;
     }
 }

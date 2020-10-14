@@ -91,6 +91,16 @@ final class OptionSelectionRequestMapper
             case "values":
                 $dto->setValues((array) $value);
                 break;
+            case "pagination":
+                $convertedArray = [];
+                foreach ($value as $element) {
+                    $convertedArray[] = $this->objectManager
+                        ->create(\Magento\CatalogStorefrontApi\Api\Data\PaginationRequestMapper::class)
+                        ->setData($element)
+                        ->build();
+                }
+                $dto->setPagination($convertedArray);
+                break;
         }
     }
 }

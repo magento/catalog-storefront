@@ -54,6 +54,10 @@ final class ProductReviewResponseArrayMapper
                 ->convertToArray($fieldArrayDto);
         }
         $result["items"] = $fieldArray;
+        if ($dto->getPagination() !== null) {
+            $result["pagination"] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\PaginationResponseArrayMapper::class)
+                ->convertToArray($dto->getPagination());
+        }
         return $result;
     }
 }

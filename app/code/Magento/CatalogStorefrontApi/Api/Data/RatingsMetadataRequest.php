@@ -29,6 +29,11 @@ final class RatingsMetadataRequest implements RatingsMetadataRequestInterface
      * @var string
      */
     private $store;
+
+    /**
+     * @var array
+     */
+    private $pagination;
     
     /**
      * @inheritdoc
@@ -70,5 +75,26 @@ final class RatingsMetadataRequest implements RatingsMetadataRequestInterface
     public function setStore(string $value): void
     {
         $this->store = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return \Magento\CatalogStorefrontApi\Api\Data\PaginationRequestInterface[]
+     */
+    public function getPagination(): array
+    {
+        return (array) $this->pagination;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param \Magento\CatalogStorefrontApi\Api\Data\PaginationRequestInterface[] $value
+     * @return void
+     */
+    public function setPagination(array $value): void
+    {
+        $this->pagination = $value;
     }
 }

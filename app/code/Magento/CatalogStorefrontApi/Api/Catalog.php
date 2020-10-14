@@ -102,6 +102,21 @@ class Catalog implements CatalogInterface
                 $values[] = $newValue;
             }
             $r->setAttributeCodes($values);
+            $res = [];
+            foreach ($value->getPagination() as $item4) {
+                // convert data from \Magento\CatalogStorefrontApi\Api\Data\PaginationRequest
+                // to \Magento\CatalogStorefrontApi\Proto\PaginationRequest
+                /** @var \Magento\CatalogStorefrontApi\Api\Data\PaginationRequest $item4 **/
+                $p = function () use ($item4) {
+                    $r = new \Magento\CatalogStorefrontApi\Proto\PaginationRequest();
+                    $r->setName($item4->getName());
+                    $r->setValue($item4->getValue());
+                    return $r;
+                };
+                $proto = $p();
+                $res[] = $proto;
+            }
+            $r->setPagination($res);
             return $r;
         };
         $proto = $p();
@@ -519,6 +534,21 @@ class Catalog implements CatalogInterface
                 $res[] = $out;
             }
             $r->setItems($res);
+            $prop2 = $value->getPagination();
+            if ($prop2 !== null) {
+                // convert data from \Magento\CatalogStorefrontApi\Proto\PaginationResponse
+                // to \Magento\CatalogStorefrontApi\Api\Data\PaginationResponse
+                /** @var \Magento\CatalogStorefrontApi\Proto\PaginationResponse $prop2 **/
+                $p = function () use ($prop2) {
+                    $r = new \Magento\CatalogStorefrontApi\Api\Data\PaginationResponse();
+                    $r->setPageSize($prop2->getPageSize());
+                    $r->setCurrentPage($prop2->getCurrentPage());
+                    $r->setTotalPages($prop2->getTotalPages());
+                    return $r;
+                };
+                $out = $p();
+                $r->setPagination($out);
+            }
             return $r;
         };
         $out = $p();
@@ -1357,6 +1387,21 @@ class Catalog implements CatalogInterface
                 $values[] = $newValue;
             }
             $r->setAttributeCodes($values);
+            $res = [];
+            foreach ($value->getPagination() as $item5) {
+                // convert data from \Magento\CatalogStorefrontApi\Api\Data\PaginationRequest
+                // to \Magento\CatalogStorefrontApi\Proto\PaginationRequest
+                /** @var \Magento\CatalogStorefrontApi\Api\Data\PaginationRequest $item5 **/
+                $p = function () use ($item5) {
+                    $r = new \Magento\CatalogStorefrontApi\Proto\PaginationRequest();
+                    $r->setName($item5->getName());
+                    $r->setValue($item5->getValue());
+                    return $r;
+                };
+                $proto = $p();
+                $res[] = $proto;
+            }
+            $r->setPagination($res);
             return $r;
         };
         $proto = $p();
@@ -1455,6 +1500,21 @@ class Catalog implements CatalogInterface
                 $res[] = $out;
             }
             $r->setItems($res);
+            $prop2 = $value->getPagination();
+            if ($prop2 !== null) {
+                // convert data from \Magento\CatalogStorefrontApi\Proto\PaginationResponse
+                // to \Magento\CatalogStorefrontApi\Api\Data\PaginationResponse
+                /** @var \Magento\CatalogStorefrontApi\Proto\PaginationResponse $prop2 **/
+                $p = function () use ($prop2) {
+                    $r = new \Magento\CatalogStorefrontApi\Api\Data\PaginationResponse();
+                    $r->setPageSize($prop2->getPageSize());
+                    $r->setCurrentPage($prop2->getCurrentPage());
+                    $r->setTotalPages($prop2->getTotalPages());
+                    return $r;
+                };
+                $out = $p();
+                $r->setPagination($out);
+            }
             return $r;
         };
         $out = $p();

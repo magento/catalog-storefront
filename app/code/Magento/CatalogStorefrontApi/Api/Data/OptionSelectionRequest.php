@@ -29,6 +29,11 @@ final class OptionSelectionRequest implements OptionSelectionRequestInterface
      * @var array
      */
     private $values;
+
+    /**
+     * @var array
+     */
+    private $pagination;
     
     /**
      * @inheritdoc
@@ -70,5 +75,26 @@ final class OptionSelectionRequest implements OptionSelectionRequestInterface
     public function setValues(array $value): void
     {
         $this->values = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return \Magento\CatalogStorefrontApi\Api\Data\PaginationRequestInterface[]
+     */
+    public function getPagination(): array
+    {
+        return (array) $this->pagination;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param \Magento\CatalogStorefrontApi\Api\Data\PaginationRequestInterface[] $value
+     * @return void
+     */
+    public function setPagination(array $value): void
+    {
+        $this->pagination = $value;
     }
 }

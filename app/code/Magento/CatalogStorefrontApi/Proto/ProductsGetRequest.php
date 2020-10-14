@@ -34,6 +34,15 @@ class ProductsGetRequest extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>repeated string attribute_codes = 3;</code>
      */
     private $attribute_codes;
+    /**
+     * A map of request parameters
+     * Could be useful to identify customer group or any other request-specific data
+     * Temporary disabled due to lack of "map" support in php Magento generator
+     *map<string, string> params = 6;
+     *
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.PaginationRequest pagination = 7;</code>
+     */
+    private $pagination;
 
     /**
      * Constructor.
@@ -50,6 +59,11 @@ class ProductsGetRequest extends \Google\Protobuf\Internal\Message
      *     @type string[]|\Google\Protobuf\Internal\RepeatedField $attribute_codes
      *           A list of attributes to extract
      *           Use dot notation in order to extract nested or complex attributes
+     *     @type \Magento\CatalogStorefrontApi\Proto\PaginationRequest[]|\Google\Protobuf\Internal\RepeatedField $pagination
+     *           A map of request parameters
+     *           Could be useful to identify customer group or any other request-specific data
+     *           Temporary disabled due to lack of "map" support in php Magento generator
+     *          map<string, string> params = 6;
      * }
      */
     public function __construct($data = null)
@@ -138,6 +152,38 @@ class ProductsGetRequest extends \Google\Protobuf\Internal\Message
     {
         $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::STRING);
         $this->attribute_codes = $arr;
+
+        return $this;
+    }
+
+    /**
+     * A map of request parameters
+     * Could be useful to identify customer group or any other request-specific data
+     * Temporary disabled due to lack of "map" support in php Magento generator
+     *map<string, string> params = 6;
+     *
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.PaginationRequest pagination = 7;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getPagination()
+    {
+        return $this->pagination;
+    }
+
+    /**
+     * A map of request parameters
+     * Could be useful to identify customer group or any other request-specific data
+     * Temporary disabled due to lack of "map" support in php Magento generator
+     *map<string, string> params = 6;
+     *
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.PaginationRequest pagination = 7;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\PaginationRequest[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setPagination($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\PaginationRequest::class);
+        $this->pagination = $arr;
 
         return $this;
     }

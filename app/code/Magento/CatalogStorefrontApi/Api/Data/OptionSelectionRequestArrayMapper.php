@@ -49,6 +49,13 @@ final class OptionSelectionRequestArrayMapper
         $result = [];
         $result["store"] = $dto->getStore();
         $result["values"] = $dto->getValues();
+        /** Convert complex Array field **/
+        $fieldArray = [];
+        foreach ($dto->getPagination() as $fieldArrayDto) {
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\PaginationRequestArrayMapper::class)
+                ->convertToArray($fieldArrayDto);
+        }
+        $result["pagination"] = $fieldArray;
         return $result;
     }
 }

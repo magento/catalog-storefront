@@ -41,6 +41,10 @@ class CategoriesGetRequest extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>repeated string attribute_codes = 4;</code>
      */
     private $attribute_codes;
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.PaginationRequest pagination = 7;</code>
+     */
+    private $pagination;
 
     /**
      * Constructor.
@@ -60,6 +64,7 @@ class CategoriesGetRequest extends \Google\Protobuf\Internal\Message
      *     @type string[]|\Google\Protobuf\Internal\RepeatedField $attribute_codes
      *           A list of attributes to extract
      *           Use dot notation in order to extract nested or complex attributes
+     *     @type \Magento\CatalogStorefrontApi\Proto\PaginationRequest[]|\Google\Protobuf\Internal\RepeatedField $pagination
      * }
      */
     public function __construct($data = null)
@@ -176,6 +181,28 @@ class CategoriesGetRequest extends \Google\Protobuf\Internal\Message
     {
         $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::STRING);
         $this->attribute_codes = $arr;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.PaginationRequest pagination = 7;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getPagination()
+    {
+        return $this->pagination;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.PaginationRequest pagination = 7;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\PaginationRequest[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setPagination($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\PaginationRequest::class);
+        $this->pagination = $arr;
 
         return $this;
     }

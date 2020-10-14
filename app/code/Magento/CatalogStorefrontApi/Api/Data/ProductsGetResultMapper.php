@@ -95,6 +95,14 @@ final class ProductsGetResultMapper
                 }
                 $dto->setItems($convertedArray);
                 break;
+            case "pagination":
+                $dto->setPagination(
+                    $this->objectManager
+                       ->create(\Magento\CatalogStorefrontApi\Api\Data\PaginationResponseMapper::class)
+                       ->setData($value)
+                       ->build()
+                );
+                break;
         }
     }
 }

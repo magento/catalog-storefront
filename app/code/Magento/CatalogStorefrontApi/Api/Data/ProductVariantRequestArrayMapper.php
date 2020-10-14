@@ -49,6 +49,13 @@ final class ProductVariantRequestArrayMapper
         $result = [];
         $result["product_Id"] = $dto->getProductId();
         $result["store"] = $dto->getStore();
+        /** Convert complex Array field **/
+        $fieldArray = [];
+        foreach ($dto->getPagination() as $fieldArrayDto) {
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\PaginationRequestArrayMapper::class)
+                ->convertToArray($fieldArrayDto);
+        }
+        $result["pagination"] = $fieldArray;
         return $result;
     }
 }

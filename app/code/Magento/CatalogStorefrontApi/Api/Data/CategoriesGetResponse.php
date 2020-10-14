@@ -24,6 +24,11 @@ final class CategoriesGetResponse implements CategoriesGetResponseInterface
      * @var array
      */
     private $items;
+
+    /**
+     * @var \Magento\CatalogStorefrontApi\Api\Data\PaginationResponseInterface
+     */
+    private $pagination;
     
     /**
      * @inheritdoc
@@ -44,5 +49,26 @@ final class CategoriesGetResponse implements CategoriesGetResponseInterface
     public function setItems(array $value): void
     {
         $this->items = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return \Magento\CatalogStorefrontApi\Api\Data\PaginationResponseInterface|null
+     */
+    public function getPagination(): ?\Magento\CatalogStorefrontApi\Api\Data\PaginationResponseInterface
+    {
+        return $this->pagination;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param \Magento\CatalogStorefrontApi\Api\Data\PaginationResponseInterface $value
+     * @return void
+     */
+    public function setPagination(\Magento\CatalogStorefrontApi\Api\Data\PaginationResponseInterface $value): void
+    {
+        $this->pagination = $value;
     }
 }

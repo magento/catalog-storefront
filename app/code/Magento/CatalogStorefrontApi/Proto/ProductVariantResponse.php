@@ -17,6 +17,10 @@ class ProductVariantResponse extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.ProductVariant matched_variants = 3;</code>
      */
     private $matched_variants;
+    /**
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.PaginationResponse pagination = 2;</code>
+     */
+    protected $pagination = null;
 
     /**
      * Constructor.
@@ -25,6 +29,7 @@ class ProductVariantResponse extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type \Magento\CatalogStorefrontApi\Proto\ProductVariant[]|\Google\Protobuf\Internal\RepeatedField $matched_variants
+     *     @type \Magento\CatalogStorefrontApi\Proto\PaginationResponse $pagination
      * }
      */
     public function __construct($data = null)
@@ -51,6 +56,28 @@ class ProductVariantResponse extends \Google\Protobuf\Internal\Message
     {
         $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\ProductVariant::class);
         $this->matched_variants = $arr;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.PaginationResponse pagination = 2;</code>
+     * @return \Magento\CatalogStorefrontApi\Proto\PaginationResponse
+     */
+    public function getPagination()
+    {
+        return $this->pagination;
+    }
+
+    /**
+     * Generated from protobuf field <code>.magento.catalogStorefrontApi.proto.PaginationResponse pagination = 2;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\PaginationResponse $var
+     * @return $this
+     */
+    public function setPagination($var)
+    {
+        GPBUtil::checkMessage($var, \Magento\CatalogStorefrontApi\Proto\PaginationResponse::class);
+        $this->pagination = $var;
 
         return $this;
     }

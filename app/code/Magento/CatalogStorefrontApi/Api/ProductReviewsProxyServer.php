@@ -317,6 +317,21 @@ class ProductReviewsProxyServer implements \Magento\CatalogStorefrontApi\Proto\P
                 $res[] = $proto;
             }
             $r->setItems($res);
+            $prop2 = $value->getPagination();
+            if ($prop2 !== null) {
+                // convert data from \Magento\CatalogStorefrontApi\Api\Data\PaginationResponse
+                // to \Magento\CatalogStorefrontApi\Proto\PaginationResponse
+                /** @var \Magento\CatalogStorefrontApi\Api\Data\PaginationResponse $prop2 **/
+                $p = function () use ($prop2) {
+                    $r = new \Magento\CatalogStorefrontApi\Proto\PaginationResponse();
+                    $r->setPageSize($prop2->getPageSize());
+                    $r->setCurrentPage($prop2->getCurrentPage());
+                    $r->setTotalPages($prop2->getTotalPages());
+                    return $r;
+                };
+                $proto = $p();
+                $r->setPagination($proto);
+            }
             return $r;
         };
         $proto = $p();
@@ -363,6 +378,21 @@ class ProductReviewsProxyServer implements \Magento\CatalogStorefrontApi\Proto\P
             $r = new \Magento\CatalogStorefrontApi\Api\Data\CustomerProductReviewRequest();
             $r->setCustomerId($value->getCustomerId());
             $r->setStore($value->getStore());
+            $res = [];
+            foreach ($value->getPagination() as $item3) {
+                // convert data from \Magento\CatalogStorefrontApi\Proto\PaginationRequest
+                // to \Magento\CatalogStorefrontApi\Api\Data\PaginationRequest
+                /** @var \Magento\CatalogStorefrontApi\Proto\PaginationRequest $item3 **/
+                $p = function () use ($item3) {
+                    $r = new \Magento\CatalogStorefrontApi\Api\Data\PaginationRequest();
+                    $r->setName($item3->getName());
+                    $r->setValue($item3->getValue());
+                    return $r;
+                };
+                $out = $p();
+                $res[] = $out;
+            }
+            $r->setPagination($res);
             return $r;
         };
         $out = $p();
@@ -417,6 +447,21 @@ class ProductReviewsProxyServer implements \Magento\CatalogStorefrontApi\Proto\P
                 $res[] = $proto;
             }
             $r->setItems($res);
+            $prop2 = $value->getPagination();
+            if ($prop2 !== null) {
+                // convert data from \Magento\CatalogStorefrontApi\Api\Data\PaginationResponse
+                // to \Magento\CatalogStorefrontApi\Proto\PaginationResponse
+                /** @var \Magento\CatalogStorefrontApi\Api\Data\PaginationResponse $prop2 **/
+                $p = function () use ($prop2) {
+                    $r = new \Magento\CatalogStorefrontApi\Proto\PaginationResponse();
+                    $r->setPageSize($prop2->getPageSize());
+                    $r->setCurrentPage($prop2->getCurrentPage());
+                    $r->setTotalPages($prop2->getTotalPages());
+                    return $r;
+                };
+                $proto = $p();
+                $r->setPagination($proto);
+            }
             return $r;
         };
         $proto = $p();

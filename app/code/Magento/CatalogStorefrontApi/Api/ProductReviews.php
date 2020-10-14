@@ -300,6 +300,21 @@ class ProductReviews implements ProductReviewsInterface
                 $res[] = $out;
             }
             $r->setItems($res);
+            $prop2 = $value->getPagination();
+            if ($prop2 !== null) {
+                // convert data from \Magento\CatalogStorefrontApi\Proto\PaginationResponse
+                // to \Magento\CatalogStorefrontApi\Api\Data\PaginationResponse
+                /** @var \Magento\CatalogStorefrontApi\Proto\PaginationResponse $prop2 **/
+                $p = function () use ($prop2) {
+                    $r = new \Magento\CatalogStorefrontApi\Api\Data\PaginationResponse();
+                    $r->setPageSize($prop2->getPageSize());
+                    $r->setCurrentPage($prop2->getCurrentPage());
+                    $r->setTotalPages($prop2->getTotalPages());
+                    return $r;
+                };
+                $out = $p();
+                $r->setPagination($out);
+            }
             return $r;
         };
         $out = $p();
@@ -339,6 +354,21 @@ class ProductReviews implements ProductReviewsInterface
             $r = new \Magento\CatalogStorefrontApi\Proto\CustomerProductReviewRequest();
             $r->setCustomerId($value->getCustomerId());
             $r->setStore($value->getStore());
+            $res = [];
+            foreach ($value->getPagination() as $item3) {
+                // convert data from \Magento\CatalogStorefrontApi\Api\Data\PaginationRequest
+                // to \Magento\CatalogStorefrontApi\Proto\PaginationRequest
+                /** @var \Magento\CatalogStorefrontApi\Api\Data\PaginationRequest $item3 **/
+                $p = function () use ($item3) {
+                    $r = new \Magento\CatalogStorefrontApi\Proto\PaginationRequest();
+                    $r->setName($item3->getName());
+                    $r->setValue($item3->getValue());
+                    return $r;
+                };
+                $proto = $p();
+                $res[] = $proto;
+            }
+            $r->setPagination($res);
             return $r;
         };
         $proto = $p();
@@ -393,6 +423,21 @@ class ProductReviews implements ProductReviewsInterface
                 $res[] = $out;
             }
             $r->setItems($res);
+            $prop2 = $value->getPagination();
+            if ($prop2 !== null) {
+                // convert data from \Magento\CatalogStorefrontApi\Proto\PaginationResponse
+                // to \Magento\CatalogStorefrontApi\Api\Data\PaginationResponse
+                /** @var \Magento\CatalogStorefrontApi\Proto\PaginationResponse $prop2 **/
+                $p = function () use ($prop2) {
+                    $r = new \Magento\CatalogStorefrontApi\Api\Data\PaginationResponse();
+                    $r->setPageSize($prop2->getPageSize());
+                    $r->setCurrentPage($prop2->getCurrentPage());
+                    $r->setTotalPages($prop2->getTotalPages());
+                    return $r;
+                };
+                $out = $p();
+                $r->setPagination($out);
+            }
             return $r;
         };
         $out = $p();
