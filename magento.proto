@@ -475,6 +475,7 @@ service ProductReviews {
   rpc DeleteProductReviews (DeleteReviewsRequest) returns (DeleteReviewsResponse) {}
   rpc GetProductReviews (ProductReviewRequest) returns (ProductReviewResponse) {}
   rpc GetCustomerProductReviews (CustomerProductReviewRequest) returns (CustomerProductReviewResponse) {}
+  rpc GetProductReviewCount (ProductReviewCountRequest) returns (ProductReviewCountResponse) {}
 }
 
 message ImportReviewsRequest {
@@ -500,6 +501,7 @@ message DeleteReviewsResponse {
 message ProductReviewRequest {
   string product_id = 1;
   string store = 2;
+  map<string, string> pagination = 10;
 }
 
 message ProductReviewResponse {
@@ -509,10 +511,20 @@ message ProductReviewResponse {
 message CustomerProductReviewRequest {
   string customer_id = 1;
   string store = 2;
+  map<string, string> pagination = 10;
 }
 
 message CustomerProductReviewResponse {
   repeated ReadReview items = 1;
+}
+
+message ProductReviewCountRequest {
+  string product_id = 1;
+  string store = 2;
+}
+
+message ProductReviewCountResponse {
+  int32 review_count = 1;
 }
 
 service RatingsMetadata {
