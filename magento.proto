@@ -570,7 +570,8 @@ message ImportReview {
   string nickname = 4;
   string text = 5;
   string customer_id = 6;
-  repeated Rating ratings = 7;
+  repeated string visibility = 7; // array of scope codes
+  repeated Rating ratings = 8;
 }
 
 message ReadReview {
