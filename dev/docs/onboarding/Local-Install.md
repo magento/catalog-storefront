@@ -20,7 +20,15 @@ All required technologies must installed in the system including:
 
 [Required system dependencies](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#elasticsearch)
 
-[RabbitMQ](https://devdocs.magento.com/guides/v2.4/config-guide/mq/rabbitmq-overview.html)
+[RabbitMQ](https://devdocs.magento.com/guides/v2.4/config-guide/mq/rabbitmq-overview.html) is an optional for Magento, but mandatory for SF APP.
+
+For SF APP gRPC and GraphQL Node Server also used.
+
+[gRPC Server](https://github.com/magento/catalog-storefront/tree/develop/app/code/Magento/Grpc)
+
+[grpcui](https://github.com/fullstorydev/grpcui) is a useful tool to interact with gRPC server via a browser. 
+
+[GraphQL Node Server](https://github.com/magento/graphql/blob/master/docs/DEVELOPMENT.md)
 
 If you have some issues with setup take a look into [prerequisites](https://devdocs.magento.com/guides/v2.4/install-gde/prereq/prereq-overview.html) to make sure everything installed as needed.
 

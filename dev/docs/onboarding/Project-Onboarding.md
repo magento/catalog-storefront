@@ -15,10 +15,9 @@ Possible ways to understand which branches to use:
 There are multiple options to setup local development environment.
 Please read the following documents to understand main concepts and choose the option that works best for you.
 
-1. [Magento Cloud DevBox](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/development/Magento-Cloud-DevBox-for-Local-Development.md)
-2. [DevBox from Andrii Lugoviy](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/development/Andrii-Lugovyi-DevBox-for-Local-Development.md)
-3. [Custom DevBox](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/development/Custom-DevBox-for-Local-Development.md)
-4. [Local SF APP installation](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/development/Local-Install.md)
+1. [DevBox from Performance team](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/development/Andrii-Lugovyi-DevBox-for-Local-Development.md) (recommended, created by from Andrii Lugoviy)
+2. [Magento Cloud DevBox](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/development/Magento-Cloud-DevBox-for-Local-Development.md) (under construction) 
+3. [Local installation](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/development/Local-Install.md)
 
 ## Setup for web API/integration tests
 
