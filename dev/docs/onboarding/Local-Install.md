@@ -35,22 +35,16 @@ If you have some issues with setup take a look into [prerequisites](https://devd
 ## Required repositories
 
 You need to have access to the following repositories in order to contribute to SF APP
+(add link without adobe.)
 
-https://github.com/magento/magento2.git
-
-https://github.com/magento/partners-magento2ee.git
-
-https://github.com/magento/catalog-storefront.git
-
-https://github.com/magento/catalog-storefront-ee.git
-
-https://github.com/magento/saas-export.git
-
-https://github.com/magento/data-solutions-services-id.git
-
-https://github.com/magento/magento-services-connector.git
 
 To check the latest actual repositories and branches visit the [following link](https://git.corp.adobe.com/ecp/magento-repos/blob/cloud/sources.yaml)
+^^^^
+https://github.com/orgs/magento/teams/pap-strorefront-api/repositories
+
+storefront-cloud-project/blob/develop/production/.magento.env.yaml
+^^^
+where did we lose it?
 
 ## Project initialization
 
@@ -65,7 +59,7 @@ php dev/tools/build-ee.php --ce-source ../magento2ce --ee-source ../magento2ee &
 cd ..
 ```
 
-if  you need to install B2B edition (currently not used), then clone and link it as well:
+if  you need to install B2B edition (currently not used with SF APP), then clone and link it as well:
 ```
 git clone git@github.com:magento/magento2b2b.git -b 1.2.0-develop && \
 mkdir -p magento2b2b/dev/tools && \
