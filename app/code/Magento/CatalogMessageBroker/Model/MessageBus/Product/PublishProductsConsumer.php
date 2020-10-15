@@ -9,7 +9,7 @@ namespace Magento\CatalogMessageBroker\Model\MessageBus\Product;
 use Magento\CatalogExport\Event\Data\Entity;
 use Magento\CatalogMessageBroker\Model\Converter\AttributeCodesConverter;
 use Magento\CatalogMessageBroker\Model\FetchProductsInterface;
-use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
+use Magento\CatalogMessageBroker\Model\Publisher\ProductPublisher;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterface;
 use Psr\Log\LoggerInterface;
 

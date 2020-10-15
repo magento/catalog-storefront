@@ -4,9 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\CatalogStorefrontConnector\Model\Publisher;
+namespace Magento\CatalogMessageBroker\Model\Publisher;
 
-use Magento\CatalogExtractor\DataProvider\DataProviderInterface;
+use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
+use Magento\CatalogMessageBroker\Model\FetchProductsInterface;
 use Magento\CatalogMessageBroker\Model\MessageBus\Product\PublishProductsConsumer;
 use Magento\CatalogMessageBroker\Model\ProductDataProcessor;
 use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
@@ -20,15 +21,9 @@ use Psr\Log\LoggerInterface;
  * Product publisher
  *
  * Push product data for given product ids and store id to the Storefront via Import API
- * TODO: move to CatalogMessageBroker module
  */
 class ProductPublisher
 {
-    /**
-     * @var DataProviderInterface
-     */
-    private $productsDataProvider;
-
     /**
      * @var int
      */
@@ -63,28 +58,38 @@ class ProductPublisher
      * @var ImportProductDataRequestMapper
      */
     private $importProductDataRequestMapper;
+    /**
+     * @var FetchProductsInterface
+     */
+    private $fetchProducts;
 
     /**
-     * @param DataProviderInterface $productsDataProvider
+     * @var ChangedEntitiesMessageBuilder
+     */
+    private $changedEntitiesMessageBuilder;
+
+    /**
      * @param State $state
      * @param LoggerInterface $logger
      * @param CatalogServerInterface $catalogServer
      * @param ImportProductsRequestInterfaceFactory $importProductsRequestInterfaceFactory
      * @param ProductDataProcessor $productDataProcessor
      * @param ImportProductDataRequestMapper $importProductDataRequestMapper
+     * @param FetchProductsInterface $fetchProducts
+     * @param ChangedEntitiesMessageBuilder $changedEntitiesMessageBuilder
      * @param int $batchSize
      */
     public function __construct(
-        DataProviderInterface $productsDataProvider,
         State $state,
         LoggerInterface $logger,
         CatalogServerInterface $catalogServer,
         ImportProductsRequestInterfaceFactory $importProductsRequestInterfaceFactory,
         ProductDataProcessor $productDataProcessor,
         ImportProductDataRequestMapper $importProductDataRequestMapper,
+        FetchProductsInterface $fetchProducts,
+        ChangedEntitiesMessageBuilder $changedEntitiesMessageBuilder,
         int $batchSize
     ) {
-        $this->productsDataProvider = $productsDataProvider;
         $this->batchSize = $batchSize;
         $this->state = $state;
         $this->logger = $logger;
@@ -92,6 +97,8 @@ class ProductPublisher
         $this->importProductsRequestInterfaceFactory = $importProductsRequestInterfaceFactory;
         $this->productDataProcessor = $productDataProcessor;
         $this->importProductDataRequestMapper = $importProductDataRequestMapper;
+        $this->fetchProducts = $fetchProducts;
+        $this->changedEntitiesMessageBuilder = $changedEntitiesMessageBuilder;
     }
 
     /**
@@ -113,23 +120,18 @@ class ProductPublisher
         string $actionType,
         array $overrideProducts = []
     ): void {
-        $this->state->emulateAreaCode(
-            \Magento\Framework\App\Area::AREA_FRONTEND,
-            function () use ($productIds, $storeCode, $actionType, $overrideProducts) {
-                try {
-                    $this->publishEntities($productIds, $storeCode, $actionType, $overrideProducts);
-                } catch (\Throwable $e) {
-                    $this->logger->critical(
-                        \sprintf(
-                            'Error on publish product ids "%s" in store %s',
-                            \implode(', ', $productIds),
-                            $storeCode
-                        ),
-                        ['exception' => $e]
-                    );
-                }
-            }
-        );
+        try {
+            $this->publishEntities($productIds, $storeCode, $actionType, $overrideProducts);
+        } catch (\Throwable $e) {
+            $this->logger->critical(
+                \sprintf(
+                    'Error on publish product ids "%s" in store %s',
+                    \implode(', ', $productIds),
+                    $storeCode
+                ),
+                ['exception' => $e]
+            );
+        }
     }
 
     /**
@@ -149,8 +151,20 @@ class ProductPublisher
         array $overrideProducts = []
     ): void {
         foreach (\array_chunk($productIds, $this->batchSize) as $idsBunch) {
-            // @todo eliminate calling old API when new API can provide all of the necessary data
-            $productsData = $this->productsDataProvider->fetch($idsBunch, [], ['store' => $storeCode]);
+            $entitiesData = array_map(function($id) {
+                return [
+                    'entity_id' => $id
+                ];
+            }, $idsBunch);
+            $message = $this->changedEntitiesMessageBuilder->build(
+                $actionType,
+                $entitiesData,
+                $storeCode
+            );
+            $productsData = $this->fetchProducts->execute(
+                $message->getData()->getEntities(),
+                $message->getMeta()->getScope()
+            );
             $this->logger->debug(
                 \sprintf('Publish products with ids "%s" in store %s', \implode(', ', $productIds), $storeCode),
                 ['verbose' => $productsData]
@@ -185,8 +199,8 @@ class ProductPublisher
         }
 
         foreach ($products as $product) {
-            if (isset($newApiProducts[$product['entity_id']])) {
-                $product = $this->productDataProcessor->merge($newApiProducts[$product['entity_id']], $product);
+            if (isset($newApiProducts[$product['product_id']])) {
+                $product = $this->productDataProcessor->merge($newApiProducts[$product['product_id']], $product);
             }
 
             // be sure, that data passed to Import API in the expected format

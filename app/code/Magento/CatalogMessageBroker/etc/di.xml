@@ -48,4 +48,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogMessageBroker\Model\Publisher\ProductPublisher">
+        <arguments>
+            <argument name="batchSize" xsi:type="number">500</argument>
+        </arguments>
+    </type>
 </config>
