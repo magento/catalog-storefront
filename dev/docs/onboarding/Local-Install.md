@@ -11,12 +11,12 @@ All required technologies must installed in the system including the following:
 [Composer](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#composer-latest-stable-version)    
 [Database](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#database)  
 [PHP](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#database) with [required PHP extensions](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#database)    
-for gRPC PHP should have an additional set of extensions, see information in gRPC Server part.   
+for gRPC PHP should have an additional set of extensions, see information in [gRPC Server](https://github.com/magento/catalog-storefront/tree/develop/app/code/Magento/Grpc) how to set up them.   
 [Elasticsearch](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#elasticsearch)    
 [SSL](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#elasticsearch)  
 [Required system dependencies](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#elasticsearch)  
 
-The following technologies required for Catalog Storefront service.
+The following technologies required for Catalog Storefront service:
 [RabbitMQ](https://devdocs.magento.com/guides/v2.4/config-guide/mq/rabbitmq-overview.html) is an optional for Magento, but mandatory for SF APP.  
 [gRPC Server](https://github.com/magento/catalog-storefront/tree/develop/app/code/Magento/Grpc)  
 [grpcui](https://github.com/fullstorydev/grpcui) is a useful tool to interact with gRPC server via a browser. 
@@ -67,7 +67,8 @@ Consumers processes messages from message queue: fetche data via `Export API` an
 
 ## Checking that SF APP works.
 
-Navigate to admin and create a simple product.
-Send get request to Elasticsearch and check if it contains a created index (`catalog_storefront_v1_default_product`)
-and product information:
-`curl http://elastic:9200/_search?pretty`
+1. Navigate to admin and create a simple product.  
+1. (optional) send GET request to Elasticsearch to check if it contains a created index (`catalog_storefront_v1_default_product`)
+and product information:  
+`curl http://elastic:9200/_search?pretty`, where `elastic` is a host of elasticsearch  
+1. To ensure data propagated to Storefront you can also do a gRPC call with `https://github.com/fullstorydev/grpcui`
