@@ -9,18 +9,22 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- * Generated from protobuf message <code>magento.catalogStorefrontApi.proto.DynamicAttributeValue</code>
+ * Generated from protobuf message <code>magento.catalogStorefrontApi.proto.Attribute</code>
  */
-class DynamicAttributeValue extends \Google\Protobuf\Internal\Message
+class Attribute extends \Google\Protobuf\Internal\Message
 {
     /**
      * Generated from protobuf field <code>string code = 1;</code>
      */
     protected $code = '';
     /**
-     * Generated from protobuf field <code>string value = 2;</code>
+     * Generated from protobuf field <code>string type = 2;</code>
      */
-    protected $value = '';
+    protected $type = '';
+    /**
+     * Generated from protobuf field <code>repeated string values = 3;</code>
+     */
+    private $values;
 
     /**
      * Constructor.
@@ -29,7 +33,8 @@ class DynamicAttributeValue extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type string $code
-     *     @type string $value
+     *     @type string $type
+     *     @type string[]|\Google\Protobuf\Internal\RepeatedField $values
      * }
      */
     public function __construct($data = null)
@@ -61,23 +66,45 @@ class DynamicAttributeValue extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>string value = 2;</code>
+     * Generated from protobuf field <code>string type = 2;</code>
      * @return string
      */
-    public function getValue()
+    public function getType()
     {
-        return $this->value;
+        return $this->type;
     }
 
     /**
-     * Generated from protobuf field <code>string value = 2;</code>
+     * Generated from protobuf field <code>string type = 2;</code>
      * @param string $var
      * @return $this
      */
-    public function setValue($var)
+    public function setType($var)
     {
         GPBUtil::checkString($var, true);
-        $this->value = $var;
+        $this->type = $var;
+
+        return $this;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated string values = 3;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
+     */
+    public function getValues()
+    {
+        return $this->values;
+    }
+
+    /**
+     * Generated from protobuf field <code>repeated string values = 3;</code>
+     * @param string[]|\Google\Protobuf\Internal\RepeatedField $var
+     * @return $this
+     */
+    public function setValues($var)
+    {
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::STRING);
+        $this->values = $arr;
 
         return $this;
     }
