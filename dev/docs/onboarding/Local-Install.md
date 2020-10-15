@@ -58,13 +58,12 @@ bin/magento setup:upgrade && \
 bin/magento cache:clean
 ```
 
-Start SF APP consumers:
+Start SF APP consumers:  
 ```
 bin/magento queue:consumers:start catalog.product.export.consumer & \
-bin/magento queue:consumers:start catalog.category.export.consumer & \
-bin/magento queue:consumers:start storefront.catalog.product.update & \
-bin/magento queue:consumers:start storefront.catalog.category.update &
+bin/magento queue:consumers:start catalog.category.export.consumer &
 ```
+Consumers processes messages from message queue: fetche data via `Export API` and store them into `SF APP storage`.
 
 ## Checking that SF APP works.
 
