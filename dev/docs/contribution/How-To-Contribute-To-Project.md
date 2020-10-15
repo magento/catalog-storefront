@@ -1,6 +1,6 @@
-Two main points that underlie the following instruction:
+Two main points that is underlie the following instruction:
 1) magento org is a read-only replica of new primary fork visible only to internal teams
-2) Sync from that invisible primary fork to magento org happens in eventually consistent way
+2) sync from that invisible primary fork to magento org happens in eventually consistent way
 
 The example would be given for complex task that has a code changes for catalog-storefront and saas-export repos but whatever repo of Storefront project you need to contribute the flow will look same. 
 
