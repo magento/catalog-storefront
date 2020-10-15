@@ -18,10 +18,11 @@ Please read the following documents to understand main concepts and choose the o
 1. [Magento Cloud DevBox](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/development/Magento-Cloud-DevBox-for-Local-Development.md)
 2. [DevBox from Andrii Lugoviy](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/development/Andrii-Lugovyi-DevBox-for-Local-Development.md)
 3. [Custom DevBox](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/development/Custom-DevBox-for-Local-Development.md)
+4. [Local SF APP installation](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/development/Local-Install.md)
 
 ## Setup for web API/integration tests
 
-Add parameter to dev/tests/api-functional/config/install-config-mysql.php.dist (notice that dashes used here)
+Add a parameter to dev/tests/api-functional/config/install-config-mysql.php.dist (notice that dashes used here)
 
 ```
 'consumers-wait-for-messages'  => '0',
