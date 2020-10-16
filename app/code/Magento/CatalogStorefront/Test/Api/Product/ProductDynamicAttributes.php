@@ -70,12 +70,13 @@ class ProductDynamicAttributes extends StorefrontTestsAbstract
         $expected = [
             [
                 'code' => 'boolean_attribute',
-                'value' => '1'
+                'type' => 'boolean',
+                'values' => ['yes']
             ]
         ];
-        $actual = $this->getApiResult('simple_with_boolean', ['boolean_attribute']);
-        self::assertArrayHasKey('dynamic_attributes', $actual);
-        $this->compare($expected, $actual['dynamic_attributes']);
+        $actual = $this->getApiResult('simple_with_boolean');
+        self::assertArrayHasKey('attributes', $actual);
+        $this->compare($expected, $actual['attributes']);
     }
 
     /**
@@ -86,16 +87,16 @@ class ProductDynamicAttributes extends StorefrontTestsAbstract
      */
     public function testProductMultiselectAttribute(): void
     {
-        //TODO option ID or option value?
         $expected = [
             [
                 'code' => 'multiselect_attribute',
-                'value' => 'Option 1'
+                'type' => 'multiselect',
+                'values' => ['Option 1']
             ]
         ];
-        $actual = $this->getApiResult('simple_with_multiselect', ['multiselect_attribute']);
-        self::assertArrayHasKey('dynamic_attributes', $actual);
-        $this->compare($expected, $actual['dynamic_attributes']);
+        $actual = $this->getApiResult('simple_with_multiselect');
+        self::assertArrayHasKey('attributes', $actual);
+        $this->compare($expected, $actual['attributes']);
     }
 
     /**
@@ -109,12 +110,13 @@ class ProductDynamicAttributes extends StorefrontTestsAbstract
         $expected = [
             [
                 'code' => 'image_attribute',
-                'value' => 'imagepath'
+                'type' => 'media_image',
+                'values' => ['imagepath']
             ]
         ];
-        $actual = $this->getApiResult('simple_with_image', ['image_attribute']);
-        self::assertArrayHasKey('dynamic_attributes', $actual);
-        $this->compare($expected, $actual['dynamic_attributes']);
+        $actual = $this->getApiResult('simple_with_image');
+        self::assertArrayHasKey('attributes', $actual);
+        $this->compare($expected, $actual['attributes']);
     }
 
     /**
@@ -128,12 +130,13 @@ class ProductDynamicAttributes extends StorefrontTestsAbstract
         $expected = [
             [
                 'code' => 'decimal_attribute',
-                'value' => '100'
+                'type' => 'price',
+                'values' => ['100.000000']
             ]
         ];
-        $actual = $this->getApiResult('simple_with_decimal', ['decimal_attribute']);
-        self::assertArrayHasKey('dynamic_attributes', $actual);
-        $this->compare($expected, $actual['dynamic_attributes']);
+        $actual = $this->getApiResult('simple_with_decimal');
+        self::assertArrayHasKey('attributes', $actual);
+        $this->compare($expected, $actual['attributes']);
     }
 
     /**
@@ -147,12 +150,13 @@ class ProductDynamicAttributes extends StorefrontTestsAbstract
         $expected = [
             [
                 'code' => 'text_editor_attribute',
-                'value' => 'text Editor Attribute test'
+                'type' => 'textarea',
+                'values' => ['text Editor Attribute test']
             ]
         ];
-        $actual = $this->getApiResult('simple_with_text_editor', ['text_editor_attribute']);
-        self::assertArrayHasKey('dynamic_attributes', $actual);
-        $this->compare($expected, $actual['dynamic_attributes']);
+        $actual = $this->getApiResult('simple_with_text_editor');
+        self::assertArrayHasKey('attributes', $actual);
+        $this->compare($expected, $actual['attributes']);
     }
 
     /**
@@ -163,23 +167,27 @@ class ProductDynamicAttributes extends StorefrontTestsAbstract
      */
     public function testProductDateAttribute(): void
     {
+        $productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
+        $product = $productRepository->get('simple_with_date');
+
         $expected = [
             [
                 'code' => 'date_attribute',
-                'value' => date('Y-m-d')
+                'type' => 'date',
+                'values' => [$product->getData('date_attribute')]
             ]
         ];
-        $actual = $this->getApiResult('simple_with_date', ['date_attribute']);
-        self::assertArrayHasKey('dynamic_attributes', $actual);
-        $this->compare($expected, $actual['dynamic_attributes']);
+        $actual = $this->getApiResult('simple_with_date');
+        self::assertArrayHasKey('attributes', $actual);
+        $this->compare($expected, $actual['attributes']);
     }
 
-    public function getApiResult($sku, $attributeCodes) : array
+    public function getApiResult($sku) : array
     {
         $product = $this->productRepository->get($sku);
         $this->productsGetRequestInterface->setIds([$product->getId()]);
         $this->productsGetRequestInterface->setStore(self::STORE_CODE);
-        $this->productsGetRequestInterface->setAttributeCodes($attributeCodes);
+        $this->productsGetRequestInterface->setAttributeCodes(['attributes']);
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
         self::assertNotEmpty($catalogServiceItem->getItems());
 
