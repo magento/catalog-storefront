@@ -10,6 +10,7 @@ namespace Magento\CatalogStorefront\Test\Api;
 use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
 use Magento\CatalogStorefront\Model\Storage\State;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Indexer\Model\Indexer;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Workaround\ConsumerInvoker;
@@ -143,6 +144,7 @@ abstract class StorefrontTestsAbstract extends TestCase
     public function run(TestResult $result = null): TestResult
     {
         $this->cleanOldMessages();
+        $this->resetIndexerToOnSave();
         return parent::run($result);
     }
 
@@ -153,7 +155,7 @@ abstract class StorefrontTestsAbstract extends TestCase
      */
     protected function runTest()
     {
-        if ($this->isSoap()) {
+        if (!$this->isSoap()) {
             $this->runConsumers();
             parent::runTest();
         }
@@ -166,7 +168,7 @@ abstract class StorefrontTestsAbstract extends TestCase
      */
     private function isSoap(): bool
     {
-        return TESTS_WEB_API_ADAPTER !== 'soap';
+        return TESTS_WEB_API_ADAPTER === 'soap';
     }
 
     /**
@@ -178,6 +180,19 @@ abstract class StorefrontTestsAbstract extends TestCase
     {
         $consumerInvoker = Bootstrap::getObjectManager()->create(ConsumerInvoker::class);
         $consumerInvoker->invoke($consumers);
+    }
+
+    /**
+     * Resetting indexer to 'on save' mode
+     *
+     * @return void
+     */
+    private function resetIndexerToOnSave(): void
+    {
+        $indexer =  \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(Indexer::class);
+        $indexer->load('catalog_data_exporter_products');
+        $indexer->setScheduled(false);
     }
 
     /**
