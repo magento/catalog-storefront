@@ -469,3 +469,75 @@ service VariantService {
   // get all variants which contain at least one of merchant selection (|| operation)
   //rpc GetVariantsInclude (OptionSelectionRequest) returns (ProductVariantResponse) {}
 }
+ ​
+message ProductSearchRequest {
+  // search query to perform full-text search
+  repeated string query = 1;
+    ​
+  // filters to filter result by specified attribute values
+  repeated Filter filters = 2;
+    ​
+  // number of product ids to return in set
+  int32 page_size = 3;
+    ​
+  // current page of result set to return
+  int32 current_page = 4;
+    ​
+  // sort order of returned product by specified attribute in specified order
+  repeated Sort sort = 5;
+}
+    ​
+message Filter {
+  // attribute code to filer
+  string attribute = 1;
+    ​
+  // attribute value to filer
+  string value = 2;
+    ​
+  // operators to perform filtering e.g.: "eq", "to", "from" etc
+  repeated string operator = 3;
+}
+    ​
+message Sort {
+  // attribute code to sort
+  string attribute = 1;
+    ​
+  // direction of sorting
+  string order = 2;
+}
+    ​
+message ProductsSearchResult {
+  // product ids that match search criteria
+  repeated string ids = 1;
+    ​
+  repeated Aggregation aggregations = 2;
+}
+    ​
+message Aggregation {
+  // aggregation attribute code
+  string attribute = 1;
+    ​
+  // number of filter items in aggregation
+  int32 count = 2;
+    ​
+  // aggregation label
+  string label = 3;
+    ​
+  // aggregation options (filter group options)
+  repeated AggregationOption options = 4;
+}
+    ​
+message AggregationOption {
+  // number of items (products) in current aggregation option
+  int32 count = 1;
+    ​
+  // aggregation option label
+  string label = 2;
+    ​
+  // id (value) of current filter option
+  string value = 3;
+}
+
+service Search {
+  rpc searchProducts (ProductSearchRequest) returns (ProductsSearchResult) {}
+}
