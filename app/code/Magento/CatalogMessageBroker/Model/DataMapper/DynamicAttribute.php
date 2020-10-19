@@ -12,19 +12,6 @@ namespace Magento\CatalogMessageBroker\Model\DataMapper;
 class DynamicAttribute implements DataMapperInterface
 {
     /**
-     * @var array
-     */
-    private $attributePool;
-
-    /**
-     * @param array $attributePool
-     */
-    public function __construct(array $attributePool)
-    {
-        $this->attributePool = $attributePool;
-    }
-
-    /**
      * @inheritDoc
      */
     public function map(array $productData): array
