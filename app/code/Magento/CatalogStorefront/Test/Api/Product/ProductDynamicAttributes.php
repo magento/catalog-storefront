@@ -91,7 +91,7 @@ class ProductDynamicAttributes extends StorefrontTestsAbstract
             [
                 'code' => 'multiselect_attribute',
                 'type' => 'multiselect',
-                'values' => ['Option 12']
+                'values' => ['Option 1']
             ]
         ];
         $actual = $this->getApiResult('simple_with_multiselect');
