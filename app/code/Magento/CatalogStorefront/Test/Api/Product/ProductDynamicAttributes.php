@@ -76,7 +76,7 @@ class ProductDynamicAttributes extends StorefrontTestsAbstract
         ];
         $actual = $this->getApiResult('simple_with_boolean');
         self::assertArrayHasKey('attributes', $actual);
-        $this->compare($expected, $actual['attributes']);
+        self::assertEquals($expected, $actual['attributes']);
     }
 
     /**
@@ -91,12 +91,12 @@ class ProductDynamicAttributes extends StorefrontTestsAbstract
             [
                 'code' => 'multiselect_attribute',
                 'type' => 'multiselect',
-                'values' => ['Option 1']
+                'values' => ['Option 12']
             ]
         ];
         $actual = $this->getApiResult('simple_with_multiselect');
         self::assertArrayHasKey('attributes', $actual);
-        $this->compare($expected, $actual['attributes']);
+        self::assertEquals($expected, $actual['attributes']);
     }
 
     /**
@@ -116,7 +116,7 @@ class ProductDynamicAttributes extends StorefrontTestsAbstract
         ];
         $actual = $this->getApiResult('simple_with_image');
         self::assertArrayHasKey('attributes', $actual);
-        $this->compare($expected, $actual['attributes']);
+        self::assertEquals($expected, $actual['attributes']);
     }
 
     /**
@@ -136,7 +136,7 @@ class ProductDynamicAttributes extends StorefrontTestsAbstract
         ];
         $actual = $this->getApiResult('simple_with_decimal');
         self::assertArrayHasKey('attributes', $actual);
-        $this->compare($expected, $actual['attributes']);
+        self::assertEquals($expected, $actual['attributes']);
     }
 
     /**
@@ -156,7 +156,7 @@ class ProductDynamicAttributes extends StorefrontTestsAbstract
         ];
         $actual = $this->getApiResult('simple_with_text_editor');
         self::assertArrayHasKey('attributes', $actual);
-        $this->compare($expected, $actual['attributes']);
+        self::assertEquals($expected, $actual['attributes']);
     }
 
     /**
@@ -179,7 +179,7 @@ class ProductDynamicAttributes extends StorefrontTestsAbstract
         ];
         $actual = $this->getApiResult('simple_with_date');
         self::assertArrayHasKey('attributes', $actual);
-        $this->compare($expected, $actual['attributes']);
+        self::assertEquals($expected, $actual['attributes']);
     }
 
     public function getApiResult($sku) : array
