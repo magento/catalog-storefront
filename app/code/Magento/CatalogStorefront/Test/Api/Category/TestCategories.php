@@ -168,7 +168,7 @@ class TestCategories extends StorefrontTestsAbstract
                     'meta_title' => 'Category_en Meta Title',
                     'meta_description' => 'Category_en Meta Description',
                     'meta_keywords' => 'Category_en Meta Keywords',
-                    'dynamic_attributes' => []
+                    'attributes' => []
                 ]
             ]
         ];
