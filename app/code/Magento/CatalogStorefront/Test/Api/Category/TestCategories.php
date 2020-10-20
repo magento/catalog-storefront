@@ -133,7 +133,7 @@ class TestCategories extends StorefrontTestsAbstract
         $this->runCategoryConsumer(402);
         $actual = $this->getApiResults(402, ['breadcrumbs']);
         self::assertArrayHasKey('breadcrumbs', $actual);
-        $this->compareKeyValuesPairs($expected, $actual['breadcrumbs']);
+        self::assertEquals($expected, $actual['breadcrumbs']);
     }
 
     public function categoryDataProvider(): array
