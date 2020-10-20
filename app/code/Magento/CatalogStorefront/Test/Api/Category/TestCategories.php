@@ -116,7 +116,7 @@ class TestCategories extends StorefrontTestsAbstract
     {
         $this->runCategoryConsumer(10);
         $actual = $this->getApiResults(10, $this->attributeCodes);
-        $this->compareKeyValuesPairs($expected, $actual);
+        self::assertEquals($expected, $actual);
     }
 
     /**
