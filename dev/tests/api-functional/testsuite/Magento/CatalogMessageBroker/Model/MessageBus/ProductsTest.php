@@ -12,7 +12,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
 use Magento\CatalogMessageBroker\Model\MessageBus\Product\ProductsConsumer;
-use Magento\CatalogStorefront\Model\CatalogService;
+use Magento\CatalogStorefront\Model\SearchService;
 use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\DataExporter\Model\FeedInterface;
@@ -39,7 +39,7 @@ class ProductsTest extends StorefrontTestsAbstract
     private $productsConsumer;
 
     /**
-     * @var CatalogService
+     * @var SearchService
      */
     private $catalogService;
 
@@ -70,7 +70,7 @@ class ProductsTest extends StorefrontTestsAbstract
     {
         parent::setUp();
         $this->productsConsumer = Bootstrap::getObjectManager()->create(ProductsConsumer::class);
-        $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
+        $this->catalogService = Bootstrap::getObjectManager()->create(SearchService::class);
         $this->productsGetRequestInterface = Bootstrap::getObjectManager()->create(ProductsGetRequestInterface::class);
         $this->messageBuilder = Bootstrap::getObjectManager()->create(ChangedEntitiesMessageBuilder::class);
         $this->productFeed = Bootstrap::getObjectManager()->get(FeedPool::class)->getFeed('products');

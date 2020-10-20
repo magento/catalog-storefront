@@ -11,7 +11,7 @@ namespace Magento\CatalogMessageBroker\Model\MessageBus;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
 use Magento\CatalogMessageBroker\Model\MessageBus\Category\CategoriesConsumer;
-use Magento\CatalogStorefront\Model\CatalogService;
+use Magento\CatalogStorefront\Model\SearchService;
 use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use Magento\DataExporter\Model\FeedInterface;
@@ -40,7 +40,7 @@ class CatergoriesTest extends StorefrontTestsAbstract
     private $categoriesConsumer;
 
     /**
-     * @var CatalogService
+     * @var SearchService
      */
     private $catalogService;
 
@@ -76,7 +76,7 @@ class CatergoriesTest extends StorefrontTestsAbstract
     {
         parent::setUp();
         $this->categoriesConsumer = Bootstrap::getObjectManager()->create(CategoriesConsumer::class);
-        $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
+        $this->catalogService = Bootstrap::getObjectManager()->create(SearchService::class);
         $this->categoriesGetRequestInterface = Bootstrap::getObjectManager()->create(
             CategoriesGetRequestInterface::class
         );

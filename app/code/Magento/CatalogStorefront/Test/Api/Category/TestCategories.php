@@ -15,8 +15,6 @@ use Magento\CatalogStorefront\Model\CatalogService;
 use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryArrayMapper;
-use Magento\DataExporter\Model\FeedInterface;
-use Magento\DataExporter\Model\FeedPool;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\RuntimeException;
@@ -85,11 +83,6 @@ class TestCategories extends StorefrontTestsAbstract
     private $categoryRepository;
 
     /**
-     * @var FeedInterface
-     */
-    private $categoryFeed;
-
-    /**
      * @var CategoryArrayMapper
      */
     private $arrayMapper;
@@ -107,92 +100,39 @@ class TestCategories extends StorefrontTestsAbstract
         );
         $this->messageBuilder = Bootstrap::getObjectManager()->create(ChangedEntitiesMessageBuilder::class);
         $this->categoryRepository = Bootstrap::getObjectManager()->create(CategoryRepositoryInterface::class);
-        $this->categoryFeed = Bootstrap::getObjectManager()->get(FeedPool::class)->getFeed('categories');
         $this->arrayMapper = Bootstrap::getObjectManager()->get(CategoryArrayMapper::class);
     }
 
     /**
-     * Validate category data
+     * Validate category data retrieved from SF API after whole cycle save/index/export/import
      *
      * @magentoDataFixture Magento/Catalog/_files/category_specific_fields.php
      * @magentoDbIsolation disabled
      * @param array $expected
-     * @throws FileSystemException
-     * @throws NoSuchEntityException
-     * @throws RuntimeException
      * @throws \Throwable
      * @dataProvider categoryDataProvider
      */
     public function testCategoryData(array $expected): void
     {
-        $expectedCategoryId = 10;
-        $category = $this->categoryRepository->get($expectedCategoryId);
-        self::assertEquals($expectedCategoryId, $category->getId());
-        $entitiesData = [
-            [
-                'entity_id' => (int)$category->getId(),
-            ]
-        ];
-        $message = $this->messageBuilder->build(
-            CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
-            $entitiesData,
-            self::STORE_CODE
-        );
-        $this->categoriesConsumer->processMessage($message);
-
-        $this->categoriesGetRequestInterface->setIds([$category->getId()]);
-        $this->categoriesGetRequestInterface->setStore(self::STORE_CODE);
-        $this->categoriesGetRequestInterface->setAttributeCodes($this->attributeCodes);
-        $catalogServiceItem = $this->catalogService->getCategories($this->categoriesGetRequestInterface);
-        self::assertNotEmpty($catalogServiceItem->getItems());
-        $item = $catalogServiceItem->getItems()[0];
-        self::assertEquals($item->getId(), $category->getId());
-
-        $actual = $this->arrayMapper->convertToArray($item);
-
+        $this->runCategoryConsumer(10);
+        $actual = $this->getApiResults(10, $this->attributeCodes);
         $this->compareKeyValuesPairs($expected, $actual);
     }
 
     /**
-     * Validate category data
+     * Validate category breadcrumbs data retrieved from SF API after whole cycle save/index/export/import
      *
      * @magentoDataFixture Magento/Catalog/_files/category_tree.php
      * @magentoDbIsolation disabled
      * @param array $expected
-     * @throws FileSystemException
-     * @throws NoSuchEntityException
-     * @throws RuntimeException
      * @throws \Throwable
-     * @dataProvider categoryUrlRewritesProvider
+     * @dataProvider categoryBreadcrumbsProvider
      */
-    public function testCategoryUrlRewriteData(array $expected): void
+    public function testCategoryBreadcrumbsData(array $expected): void
     {
-        $expectedCategoryId = 402;
-        $category = $this->categoryRepository->get($expectedCategoryId);
-        self::assertEquals($expectedCategoryId, $category->getId());
-        $entitiesData = [
-            [
-                'entity_id' => (int)$category->getId(),
-            ]
-        ];
-        $message = $this->messageBuilder->build(
-            CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
-            $entitiesData,
-            self::STORE_CODE
-        );
-        $this->categoriesConsumer->processMessage($message);
-
-        $this->categoriesGetRequestInterface->setIds([$category->getId()]);
-        $this->categoriesGetRequestInterface->setStore(self::STORE_CODE);
-        $this->categoriesGetRequestInterface->setAttributeCodes(['breadcrumbs']);
-        $catalogServiceItem = $this->catalogService->getCategories($this->categoriesGetRequestInterface);
-        self::assertNotEmpty($catalogServiceItem->getItems());
-        $item = $catalogServiceItem->getItems()[0];
-        self::assertEquals($item->getId(), $category->getId());
-
-        $actual = $this->arrayMapper->convertToArray($item);
+        $this->runCategoryConsumer(402);
+        $actual = $this->getApiResults(402, ['breadcrumbs']);
         self::assertArrayHasKey('breadcrumbs', $actual);
-
         $this->compareKeyValuesPairs($expected, $actual['breadcrumbs']);
     }
 
@@ -234,7 +174,7 @@ class TestCategories extends StorefrontTestsAbstract
         ];
     }
 
-    public function categoryUrlRewritesProvider(): array
+    public function categoryBreadcrumbsProvider(): array
     {
         return [
             [
@@ -256,5 +196,47 @@ class TestCategories extends StorefrontTestsAbstract
                 ]
             ]
         ];
+    }
+
+    /**
+     * @param int $categoryId
+     * @throws NoSuchEntityException
+     */
+    private function runCategoryConsumer($categoryId): void
+    {
+        $category = $this->categoryRepository->get($categoryId);
+        self::assertEquals($categoryId, $category->getId());
+        $entitiesData = [
+            [
+                'entity_id' => (int)$category->getId(),
+            ]
+        ];
+        $message = $this->messageBuilder->build(
+            CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
+            $entitiesData,
+            self::STORE_CODE
+        );
+        $this->categoriesConsumer->processMessage($message);
+    }
+
+    /**
+     * @param int $categoryId
+     * @param array $attributes
+     * @return array
+     * @throws FileSystemException
+     * @throws RuntimeException
+     * @throws \Throwable
+     */
+    private function getApiResults($categoryId, $attributes): array
+    {
+        $this->categoriesGetRequestInterface->setIds([$categoryId]);
+        $this->categoriesGetRequestInterface->setStore(self::STORE_CODE);
+        $this->categoriesGetRequestInterface->setAttributeCodes($attributes);
+        $catalogServiceItem = $this->catalogService->getCategories($this->categoriesGetRequestInterface);
+        self::assertNotEmpty($catalogServiceItem->getItems());
+        $item = $catalogServiceItem->getItems()[0];
+        self::assertEquals($item->getId(), $categoryId);
+
+        return $this->arrayMapper->convertToArray($item);
     }
 }
