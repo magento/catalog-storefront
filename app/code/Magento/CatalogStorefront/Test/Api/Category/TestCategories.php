@@ -54,7 +54,7 @@ class TestCategories extends StorefrontTestsAbstract
         'meta_title',
         'meta_description',
         'meta_keywords',
-        'dynamic_attributes'
+        'attributes'
     ];
 
     /**
