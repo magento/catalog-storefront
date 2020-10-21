@@ -14,7 +14,7 @@ namespace Magento\CatalogExport\Event\Data;
 class Entity
 {
     /**
-     * @var int
+     * @var int|string
      */
     private $entityId;
 
@@ -26,9 +26,9 @@ class Entity
     /**
      * Get entity id.
      *
-     * @return int
+     * @return int|string
      */
-    public function getEntityId(): int
+    public function getEntityId()
     {
         return $this->entityId;
     }
@@ -36,11 +36,11 @@ class Entity
     /**
      * Set entity id.
      *
-     * @param int $entityId
+     * @param int|string $entityId
      *
      * @return void
      */
-    public function setEntityId(int $entityId): void
+    public function setEntityId($entityId): void
     {
         $this->entityId = $entityId;
     }
