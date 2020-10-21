@@ -13,6 +13,7 @@ use Magento\CatalogStorefrontApi\Api\Data\CustomerProductReviewRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CustomerProductReviewResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteReviewsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteReviewsResponseInterface;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteReviewsResponseInterfaceFactory;
 use Magento\CatalogStorefrontApi\Api\Data\ImportReviewArrayMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ImportReviewsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportReviewsResponseInterface;
@@ -40,6 +41,11 @@ class ProductReviewsServer implements ProductReviewsServerInterface
     private $importReviewsResponseInterfaceFactory;
 
     /**
+     * @var DeleteReviewsResponseInterfaceFactory
+     */
+    private $deleteReviewsResponseInterfaceFactory;
+
+    /**
      * @var CatalogRepository
      */
     private $catalogRepository;
@@ -52,17 +58,20 @@ class ProductReviewsServer implements ProductReviewsServerInterface
     /**
      * @param ImportReviewArrayMapper $importReviewArrayMapper
      * @param ImportReviewsResponseInterfaceFactory $importReviewsResponseInterfaceFactory
+     * @param DeleteReviewsResponseInterfaceFactory $deleteReviewsResponseInterfaceFactory
      * @param CatalogRepository $catalogRepository
      * @param LoggerInterface $logger
      */
     public function __construct(
         ImportReviewArrayMapper $importReviewArrayMapper,
         ImportReviewsResponseInterfaceFactory $importReviewsResponseInterfaceFactory,
+        DeleteReviewsResponseInterfaceFactory $deleteReviewsResponseInterfaceFactory,
         CatalogRepository $catalogRepository,
         LoggerInterface $logger
     ) {
         $this->importReviewArrayMapper = $importReviewArrayMapper;
         $this->importReviewsResponseInterfaceFactory = $importReviewsResponseInterfaceFactory;
+        $this->deleteReviewsResponseInterfaceFactory = $deleteReviewsResponseInterfaceFactory;
         $this->catalogRepository = $catalogRepository;
         $this->logger = $logger;
     }
@@ -82,7 +91,7 @@ class ProductReviewsServer implements ProductReviewsServerInterface
                 // TODO change review_id to id in proto
                 $review['id'] = $review['review_id'];
                 unset($review['review_id']);
-                $reviewsInElasticFormat['review']['']['save'][] = $review;
+                $reviewsInElasticFormat['review'][$request->getStore()]['save'][] = $review;
             }
 
             $this->catalogRepository->saveToStorage($reviewsInElasticFormat);
@@ -103,7 +112,30 @@ class ProductReviewsServer implements ProductReviewsServerInterface
      */
     public function DeleteProductReviews(DeleteReviewsRequestInterface $request): DeleteReviewsResponseInterface
     {
-        // TODO: Implement DeleteProductReviews() method.
+        $response = $this->deleteReviewsResponseInterfaceFactory->create();
+
+        try {
+            $reviewsInElasticFormat = [
+                'review' => [
+                    $request->getStore() => [
+                        'delete' => $request->getReviewIds(),
+                    ]
+                ]
+            ];
+
+            $this->catalogRepository->saveToStorage($reviewsInElasticFormat);
+
+            $response->setMessage('Reviews were removed successfully');
+            $response->setStatus(true);
+        } catch (\Throwable $exception) {
+            $response->setMessage(
+                $message = \sprintf('Cannot process reviews delete operation: %s', $exception->getMessage())
+            );
+            $response->setStatus(false);
+            $this->logger->error($message, ['exception' => $exception]);
+        }
+
+        return $response;
     }
 
     /**

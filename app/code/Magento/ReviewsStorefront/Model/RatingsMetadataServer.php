@@ -11,6 +11,7 @@ namespace Magento\ReviewsStorefront\Model;
 use Magento\CatalogStorefront\Model\CatalogRepository;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteRatingsMetadataRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteRatingsMetadataResponseInterface;
+use Magento\CatalogStorefrontApi\Api\Data\DeleteRatingsMetadataResponseInterfaceFactory;
 use Magento\CatalogStorefrontApi\Api\Data\ImportRatingsMetadataRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportRatingsMetadataResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportRatingsMetadataResponseInterfaceFactory;
@@ -36,6 +37,11 @@ class RatingsMetadataServer implements RatingsMetadataServerInterface
     private $importRatingsMetadataResponseInterfaceFactory;
 
     /**
+     * @var DeleteRatingsMetadataResponseInterfaceFactory
+     */
+    private $deleteRatingsMetadataResponseInterfaceFactory;
+
+    /**
      * @var CatalogRepository
      */
     private $catalogRepository;
@@ -48,17 +54,20 @@ class RatingsMetadataServer implements RatingsMetadataServerInterface
     /**
      * @param RatingMetadataArrayMapper $ratingMetadataArrayMapper
      * @param ImportRatingsMetadataResponseInterfaceFactory $importRatingsMetadataResponseInterfaceFactory
+     * @param DeleteRatingsMetadataResponseInterfaceFactory $deleteRatingsMetadataResponseInterfaceFactory
      * @param CatalogRepository $catalogRepository
      * @param LoggerInterface $logger
      */
     public function __construct(
         RatingMetadataArrayMapper $ratingMetadataArrayMapper,
         ImportRatingsMetadataResponseInterfaceFactory $importRatingsMetadataResponseInterfaceFactory,
+        DeleteRatingsMetadataResponseInterfaceFactory $deleteRatingsMetadataResponseInterfaceFactory,
         CatalogRepository $catalogRepository,
         LoggerInterface $logger
     ) {
         $this->ratingMetadataArrayMapper = $ratingMetadataArrayMapper;
         $this->importRatingsMetadataResponseInterfaceFactory = $importRatingsMetadataResponseInterfaceFactory;
+        $this->deleteRatingsMetadataResponseInterfaceFactory = $deleteRatingsMetadataResponseInterfaceFactory;
         $this->catalogRepository = $catalogRepository;
         $this->logger = $logger;
     }
@@ -103,7 +112,30 @@ class RatingsMetadataServer implements RatingsMetadataServerInterface
     public function DeleteRatingsMetadata(
         DeleteRatingsMetadataRequestInterface $request
     ): DeleteRatingsMetadataResponseInterface {
-        // TODO: Implement DeleteRatingsMetadata() method.
+        $response = $this->deleteRatingsMetadataResponseInterfaceFactory->create();
+
+        try {
+            $ratingsMetadataInElasticFormat = [
+                'rating_metadata' => [
+                    $request->getStore() => [
+                        'delete' => \array_map('base64_decode', $request->getRatingIds()),
+                    ]
+                ]
+            ];
+
+            $this->catalogRepository->saveToStorage($ratingsMetadataInElasticFormat);
+
+            $response->setMessage('Ratings metadata was removed successfully');
+            $response->setStatus(true);
+        } catch (\Throwable $exception) {
+            $response->setMessage(
+                $message = \sprintf('Cannot process rating metadata delete operation: %s', $exception->getMessage())
+            );
+            $response->setStatus(false);
+            $this->logger->error($message, ['exception' => $exception]);
+        }
+
+        return $response;
     }
 
     /**

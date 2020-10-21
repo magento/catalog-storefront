@@ -18,7 +18,7 @@
                     Magento\ReviewsMessageBroker\Model\MessageBus\Review\PublishReviewsConsumer
                 </item>
                 <item name="reviews_deleted" xsi:type="string">
-                    Magento\ReviewsMessageBroker\Model\MessageBus\Reviews\DeleteReviewsConsumer
+                    Magento\ReviewsMessageBroker\Model\MessageBus\Review\DeleteReviewsConsumer
                 </item>
                 <item name="rating_metadata_updated" xsi:type="string">
                     Magento\ReviewsMessageBroker\Model\MessageBus\Rating\PublishRatingMetadataConsumer
