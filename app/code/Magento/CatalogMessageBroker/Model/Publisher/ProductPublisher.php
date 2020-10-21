@@ -104,10 +104,9 @@ class ProductPublisher
     /**
      * Publish data to Storefront directly
      *
-     * @param array $productIds
+     * @param array $products
      * @param string $storeCode
      * @param string $actionType
-     * @param array $overrideProducts Temporary variables to support transition period between new and old Export API
      *
      * @return void
      *
@@ -115,18 +114,17 @@ class ProductPublisher
      * @deprecated
      */
     public function publish(
-        array $productIds,
+        array $products,
         string $storeCode,
-        string $actionType,
-        array $overrideProducts = []
+        string $actionType
     ): void {
         try {
-            $this->publishEntities($productIds, $storeCode, $actionType, $overrideProducts);
+            $this->publishEntities($products, $storeCode, $actionType);
         } catch (\Throwable $e) {
             $this->logger->critical(
                 \sprintf(
                     'Error on publish product ids "%s" in store %s',
-                    \implode(', ', $productIds),
+                    \implode(', ', array_keys($products)),
                     $storeCode
                 ),
                 ['exception' => $e]
@@ -137,7 +135,7 @@ class ProductPublisher
     /**
      * Publish entities to the queue
      *
-     * @param array $productIds
+     * @param array $products
      * @param string $storeCode
      * @param string $actionType
      * @param array $overrideProducts
@@ -145,32 +143,21 @@ class ProductPublisher
      * @return void
      */
     private function publishEntities(
-        array $productIds,
+        array $products,
         string $storeCode,
-        string $actionType,
-        array $overrideProducts = []
+        string $actionType
     ): void {
-        foreach (\array_chunk($productIds, $this->batchSize) as $idsBunch) {
-            $entitiesData = array_map(function($id) {
-                return [
-                    'entity_id' => $id
-                ];
-            }, $idsBunch);
-            $message = $this->changedEntitiesMessageBuilder->build(
-                $actionType,
-                $entitiesData,
-                $storeCode
-            );
-            $productsData = $this->fetchProducts->execute(
-                $message->getData()->getEntities(),
-                $message->getMeta()->getScope()
-            );
+        foreach (\array_chunk($products, $this->batchSize) as $productsData) {
             $this->logger->debug(
-                \sprintf('Publish products with ids "%s" in store %s', \implode(', ', $productIds), $storeCode),
+                \sprintf(
+                    'Publish products with ids "%s" in store %s',
+                    \implode(', ', array_keys($productsData)),
+                    $storeCode
+                ),
                 ['verbose' => $productsData]
             );
             if (count($productsData)) {
-                $this->importProducts($storeCode, array_values($productsData), $actionType, $overrideProducts);
+                $this->importProducts($storeCode, array_values($productsData), $actionType);
             }
         }
     }
@@ -181,28 +168,18 @@ class ProductPublisher
      * @param string $storeCode
      * @param array $products
      * @param string $actionType
-     * @param array $overrideProducts
      *
      * @throws \Throwable
      */
     private function importProducts(
         string $storeCode,
         array $products,
-        string $actionType,
-        array $overrideProducts = []
+        string $actionType
     ): void {
-        $newApiProducts = [];
         $productsRequestData = [];
 
-        foreach ($overrideProducts as $product) {
-            $newApiProducts[$product['product_id']] = $product;
-        }
-
         foreach ($products as $product) {
-            if (isset($newApiProducts[$product['product_id']])) {
-                $product = $this->productDataProcessor->merge($newApiProducts[$product['product_id']], $product);
-            }
-
+            $product = $this->productDataProcessor->merge($product);
             // be sure, that data passed to Import API in the expected format
             $productsRequestData[] = $this->importProductDataRequestMapper->setData(
                 [

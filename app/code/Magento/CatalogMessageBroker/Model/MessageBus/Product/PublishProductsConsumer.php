@@ -144,7 +144,7 @@ class PublishProductsConsumer implements ConsumerEventInterface
     private function publishProducts(array $products, string $storeCode, string $actionType): void
     {
         try {
-            $this->productPublisher->publish(\array_keys($products), $storeCode, $actionType, $products);
+            $this->productPublisher->publish($products, $storeCode, $actionType);
         } catch (\Throwable $e) {
             $this->logger->critical(sprintf('Exception while publishing products: "%s"', $e));
         }
