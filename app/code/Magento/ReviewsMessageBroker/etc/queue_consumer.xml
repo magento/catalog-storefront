@@ -10,8 +10,8 @@
               queue="export.product.reviews.queue"
               connection="amqp"
               handler="Magento\ReviewsMessageBroker\Model\MessageBus\Review\ReviewsConsumer::processMessage"/>
-<!--    <consumer name="export.rating.metadata.consumer"-->
-<!--              queue="export.rating.metadata.queue"-->
-<!--              connection="amqp"-->
-<!--              handler="Magento\CatalogMessageBroker\Model\MessageBus\Rating\RatingMetadataConsumer::processMessage"/>-->
+    <consumer name="export.rating.metadata.consumer"
+              queue="export.rating.metadata.queue"
+              connection="amqp"
+              handler="Magento\ReviewsMessageBroker\Model\MessageBus\Rating\RatingMetadataConsumer::processMessage"/>
 </config>

@@ -15,12 +15,12 @@ use Psr\Log\LoggerInterface;
 /**
  * @inheritdoc
  */
-class FetchReviews implements FetchReviewsInterface
+class FetchRatingsMetadata implements FetchRatingsMetadataInterface
 {
     /**
-     * Route to Export API reviews retrieval
+     * Route to Export API ratings metadata retrieval
      */
-    private const EXPORT_API_GET_REVIEWS = '/V1/reviews-export/reviews';
+    private const EXPORT_API_GET_RATINGS_METADATA = '/V1/reviews-export/ratings-metadata';
 
     /**
      * @var RestClient
@@ -47,21 +47,22 @@ class FetchReviews implements FetchReviewsInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $entities): array
+    public function execute(array $entities, string $scope): array
     {
         try {
             $reviews = $this->restClient->get(
-                self::EXPORT_API_GET_REVIEWS,
-                $this->prepareRequestData($entities)
+                self::EXPORT_API_GET_RATINGS_METADATA,
+                $this->prepareRequestData($entities, $scope)
             );
         } catch (\Throwable $e) {
             $this->logger->error(
                 \sprintf(
-                    'Cannot load reviews via "%s" with ids "%s"',
-                    self::EXPORT_API_GET_REVIEWS,
+                    'Cannot load ratings metadata via "%s" with ids "%s" for scope "%s"',
+                    self::EXPORT_API_GET_RATINGS_METADATA,
                     \implode(',', \array_map(function (Entity $entity) {
                         return $entity->getEntityId();
-                    }, $entities))
+                    }, $entities)),
+                    $scope
                 ),
                 ['exception' => $e]
             );
@@ -75,22 +76,24 @@ class FetchReviews implements FetchReviewsInterface
      * Prepare client request data
      *
      * @param Entity[] $entities
+     * @param string $storeCode
      *
      * @return array
      */
-    private function prepareRequestData(array $entities): array
+    private function prepareRequestData(array $entities, string $storeCode): array
     {
-        $reviews = [];
+        $ratings = [];
 
         foreach ($entities as $entity) {
-            $reviews[] = [
+            $ratings[] = [
                 'entity_id' => $entity->getEntityId(),
             ];
         }
 
         return [
             'request' => [
-                'entities' => $reviews,
+                'entities' => $ratings,
+                'storeViewCodes' => [$storeCode],
             ],
         ];
     }

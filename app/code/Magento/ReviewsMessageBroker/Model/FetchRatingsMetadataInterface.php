@@ -10,16 +10,17 @@ namespace Magento\ReviewsMessageBroker\Model;
 use Magento\CatalogExport\Event\Data\Entity;
 
 /**
- * Fetch reviews data
+ * Fetch ratings metadata
  */
-interface FetchReviewsInterface
+interface FetchRatingsMetadataInterface
 {
     /**
-     * Fetch reviews data
+     * Fetch ratings metadata
      *
      * @param Entity[] $entities
+     * @param string $scope
      *
      * @return array
      */
-    public function execute(array $entities): array;
+    public function execute(array $entities, string $scope): array;
 }

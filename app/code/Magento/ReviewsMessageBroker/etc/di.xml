@@ -6,7 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\ReviewsMessageBroker\Model\FetchReviewsInterface" type="Magento\ReviewsMessageBroker\Model\FetchReviews"/>
+    <preference for="Magento\ReviewsMessageBroker\Model\FetchReviewsInterface"
+                type="Magento\ReviewsMessageBroker\Model\FetchReviews"/>
+    <preference for="Magento\ReviewsMessageBroker\Model\FetchRatingsMetadataInterface"
+                type="Magento\ReviewsMessageBroker\Model\FetchRatingsMetadata"/>
 
     <type name="Magento\ReviewsMessageBroker\Model\MessageBus\ConsumerEventInterfaceFactory">
         <arguments>
@@ -16,6 +19,12 @@
                 </item>
                 <item name="reviews_deleted" xsi:type="string">
                     Magento\ReviewsMessageBroker\Model\MessageBus\Reviews\DeleteReviewsConsumer
+                </item>
+                <item name="rating_metadata_updated" xsi:type="string">
+                    Magento\ReviewsMessageBroker\Model\MessageBus\Rating\PublishRatingMetadataConsumer
+                </item>
+                <item name="rating_metadata_deleted" xsi:type="string">
+                    Magento\ReviewsMessageBroker\Model\MessageBus\Rating\DeleteRatingMetadataConsumer
                 </item>
             </argument>
         </arguments>
