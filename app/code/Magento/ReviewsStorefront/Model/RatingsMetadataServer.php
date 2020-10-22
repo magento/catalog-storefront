@@ -16,9 +16,12 @@ use Magento\CatalogStorefrontApi\Api\Data\ImportRatingsMetadataRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportRatingsMetadataResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportRatingsMetadataResponseInterfaceFactory;
 use Magento\CatalogStorefrontApi\Api\Data\RatingMetadataArrayMapper;
+use Magento\CatalogStorefrontApi\Api\Data\RatingMetadataMapper;
 use Magento\CatalogStorefrontApi\Api\Data\RatingsMetadataRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\RatingsMetadataResponse;
 use Magento\CatalogStorefrontApi\Api\Data\RatingsMetadataResponseInterface;
 use Magento\CatalogStorefrontApi\Api\RatingsMetadataServerInterface;
+use Magento\ReviewsStorefront\DataProvider\RatingMetadataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -47,6 +50,16 @@ class RatingsMetadataServer implements RatingsMetadataServerInterface
     private $catalogRepository;
 
     /**
+     * @var RatingMetadataProvider
+     */
+    private $ratingMetadataProvider;
+
+    /**
+     * @var RatingMetadataMapper
+     */
+    private $ratingMetadataMapper;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -56,6 +69,8 @@ class RatingsMetadataServer implements RatingsMetadataServerInterface
      * @param ImportRatingsMetadataResponseInterfaceFactory $importRatingsMetadataResponseInterfaceFactory
      * @param DeleteRatingsMetadataResponseInterfaceFactory $deleteRatingsMetadataResponseInterfaceFactory
      * @param CatalogRepository $catalogRepository
+     * @param RatingMetadataProvider $ratingMetadataProvider
+     * @param RatingMetadataMapper $ratingMetadataMapper
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -63,12 +78,16 @@ class RatingsMetadataServer implements RatingsMetadataServerInterface
         ImportRatingsMetadataResponseInterfaceFactory $importRatingsMetadataResponseInterfaceFactory,
         DeleteRatingsMetadataResponseInterfaceFactory $deleteRatingsMetadataResponseInterfaceFactory,
         CatalogRepository $catalogRepository,
+        RatingMetadataProvider $ratingMetadataProvider,
+        RatingMetadataMapper $ratingMetadataMapper,
         LoggerInterface $logger
     ) {
         $this->ratingMetadataArrayMapper = $ratingMetadataArrayMapper;
         $this->importRatingsMetadataResponseInterfaceFactory = $importRatingsMetadataResponseInterfaceFactory;
         $this->deleteRatingsMetadataResponseInterfaceFactory = $deleteRatingsMetadataResponseInterfaceFactory;
         $this->catalogRepository = $catalogRepository;
+        $this->ratingMetadataProvider = $ratingMetadataProvider;
+        $this->ratingMetadataMapper = $ratingMetadataMapper;
         $this->logger = $logger;
     }
 
@@ -86,8 +105,9 @@ class RatingsMetadataServer implements RatingsMetadataServerInterface
 
             foreach ($request->getMetadata() as $metadata) {
                 $ratingMetadata = $this->ratingMetadataArrayMapper->convertToArray($metadata);
-                $ratingMetadata['id'] = \base64_decode($ratingMetadata['rating_id']);
-                $ratingMetadata['store_code'] = $storeCode;
+                // TODO change rating_id to id in proto
+                $ratingMetadata['id'] = $ratingMetadata['rating_id'];
+                unset($ratingMetadata['rating_id']);
                 $ratingsMetadataInElasticFormat['rating_metadata'][$storeCode]['save'][] = $ratingMetadata;
             }
 
@@ -118,7 +138,7 @@ class RatingsMetadataServer implements RatingsMetadataServerInterface
             $ratingsMetadataInElasticFormat = [
                 'rating_metadata' => [
                     $request->getStore() => [
-                        'delete' => \array_map('base64_decode', $request->getRatingIds()),
+                        'delete' => $request->getRatingIds(),
                     ]
                 ]
             ];
@@ -144,6 +164,16 @@ class RatingsMetadataServer implements RatingsMetadataServerInterface
     public function GetRatingsMetadata(
         RatingsMetadataRequestInterface $request
     ): RatingsMetadataResponseInterface {
-        // TODO: Implement GetRatingsMetadata() method.
+        $items = [];
+        $metadata = $this->ratingMetadataProvider->fetch([$request->getRatingId()], $request->getStore());
+
+        foreach ($metadata as $data) {
+            $items[] = $this->ratingMetadataMapper->setData($data)->build();
+        }
+
+        $result = new RatingsMetadataResponse();
+        $result->setItems($items);
+
+        return $result;
     }
 }
