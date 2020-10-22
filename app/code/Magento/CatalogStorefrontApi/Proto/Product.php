@@ -117,9 +117,9 @@ class Product extends \Google\Protobuf\Internal\Message
      * TODO: Uncomment options
      *    repeated Option options = 46;
      *
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DynamicAttributeValue dynamic_attributes = 50;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Attribute attributes = 50;</code>
      */
-    private $dynamic_attributes;
+    private $attributes;
     /**
      * TODO: qty is missing for only-x-left-in-stock functionality
      * TODO: Meta fields not populated by catalog SF app
@@ -271,7 +271,7 @@ class Product extends \Google\Protobuf\Internal\Message
      *     @type \Magento\CatalogStorefrontApi\Proto\Sample[]|\Google\Protobuf\Internal\RepeatedField $samples
      *     @type string $visibility
      *           where to display product
-     *     @type \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue[]|\Google\Protobuf\Internal\RepeatedField $dynamic_attributes
+     *     @type \Magento\CatalogStorefrontApi\Proto\Attribute[]|\Google\Protobuf\Internal\RepeatedField $attributes
      *              PriceRange prices = 44;//-
      *           TODO: Uncomment options
      *              repeated Option options = 46;
@@ -812,12 +812,12 @@ class Product extends \Google\Protobuf\Internal\Message
      * TODO: Uncomment options
      *    repeated Option options = 46;
      *
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DynamicAttributeValue dynamic_attributes = 50;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Attribute attributes = 50;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
      */
-    public function getDynamicAttributes()
+    public function getAttributes()
     {
-        return $this->dynamic_attributes;
+        return $this->attributes;
     }
 
     /**
@@ -825,14 +825,14 @@ class Product extends \Google\Protobuf\Internal\Message
      * TODO: Uncomment options
      *    repeated Option options = 46;
      *
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DynamicAttributeValue dynamic_attributes = 50;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue[]|\Google\Protobuf\Internal\RepeatedField $var
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Attribute attributes = 50;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\Attribute[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
-    public function setDynamicAttributes($var)
+    public function setAttributes($var)
     {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue::class);
-        $this->dynamic_attributes = $arr;
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\Attribute::class);
+        $this->attributes = $arr;
 
         return $this;
     }

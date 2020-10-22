@@ -190,6 +190,8 @@ class GiftCardProductTest extends StorefrontTestsAbstract
             [
                 'productOptions' => [
                     [
+                        'label' => 'Amount',
+                        'render_type' => 'drop_down',
                         'type' => 'giftcard',
                         'values' => [
                             // phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -198,10 +200,18 @@ class GiftCardProductTest extends StorefrontTestsAbstract
                     ]
                 ],
                 'productShopperInputOptions' => [
-                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    ['id' => \base64_encode('giftcard/giftcard_recipient_name')],
-                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    ['id' => \base64_encode('giftcard/giftcard_sender_name')]
+                    [
+                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        'id' => \base64_encode('giftcard/giftcard_sender_name'),
+                        'label' => 'Sender Name',
+                        'render_type' => 'text'
+                    ],
+                    [
+                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        'id' => \base64_encode('giftcard/giftcard_recipient_name'),
+                        'label' => 'Recipient Name',
+                        'render_type' => 'text'
+                    ]
                 ]
             ]
         ];
@@ -210,6 +220,7 @@ class GiftCardProductTest extends StorefrontTestsAbstract
     /**
      * Virtual gift card with fixed and open amount data provider
      *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
     public function getVirtualMultiWebsiteDataProvider(): array
@@ -218,6 +229,8 @@ class GiftCardProductTest extends StorefrontTestsAbstract
             [
                 'defaultWebsiteOptions' => [
                     [
+                        'label' => 'Amount',
+                        'render_type' => 'drop_down',
                         'type' => 'giftcard',
                         'values' => [
                             // phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -228,17 +241,35 @@ class GiftCardProductTest extends StorefrontTestsAbstract
                     ]
                 ],
                 'defaultWebsiteInputOptions' => [
-                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    ['id' => \base64_encode('giftcard/giftcard_recipient_name')],
-                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    ['id' => \base64_encode('giftcard/giftcard_sender_name')],
-                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    ['id' => \base64_encode('giftcard/giftcard_recipient_email')],
-                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    ['id' => \base64_encode('giftcard/giftcard_sender_email')],
+                    [
+                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        'id' => \base64_encode('giftcard/giftcard_sender_name'),
+                        'label' => 'Sender Name',
+                        'render_type' => 'text'
+                    ],
+                    [
+                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        'id' => \base64_encode('giftcard/giftcard_recipient_name'),
+                        'label' => 'Recipient Name',
+                        'render_type' => 'text'
+                    ],
+                    [
+                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        'id' => \base64_encode('giftcard/giftcard_sender_email'),
+                        'label' => 'Sender Email',
+                        'render_type' => 'email'
+                    ],
+                    [
+                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        'id' => \base64_encode('giftcard/giftcard_recipient_email'),
+                        'label' => 'Recipient Email',
+                        'render_type' => 'email'
+                    ],
                     [
                         // phpcs:ignore Magento2.Functions.DiscouragedFunction
                         'id' => \base64_encode('giftcard/giftcard_message'),
+                        'label' => 'Message',
+                        'render_type' => 'text',
                         'range' => [
                             'from' => 0.0,
                             'to' => 255.0
@@ -247,6 +278,8 @@ class GiftCardProductTest extends StorefrontTestsAbstract
                     [
                         // phpcs:ignore Magento2.Functions.DiscouragedFunction
                         'id' => \base64_encode('giftcard/custom_giftcard_amount'),
+                        'label' => 'Amount in',
+                        'render_type' => 'giftcardopenamount',
                         'range' => [
                             'from' => 100.0,
                             'to' => 150.0
@@ -255,6 +288,8 @@ class GiftCardProductTest extends StorefrontTestsAbstract
                 ],
                 'secondWebsiteOptions' => [
                     [
+                        'label' => 'Amount',
+                        'render_type' => 'drop_down',
                         'type' => 'giftcard',
                         'values' => [
                             // phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -265,17 +300,35 @@ class GiftCardProductTest extends StorefrontTestsAbstract
                     ]
                 ],
                 'secondWebsiteInputOptions' => [
-                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    ['id' => \base64_encode('giftcard/giftcard_recipient_name')],
-                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    ['id' => \base64_encode('giftcard/giftcard_sender_name')],
-                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    ['id' => \base64_encode('giftcard/giftcard_recipient_email')],
-                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    ['id' => \base64_encode('giftcard/giftcard_sender_email')],
+                    [
+                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        'id' => \base64_encode('giftcard/giftcard_sender_name'),
+                        'label' => 'Sender Name',
+                        'render_type' => 'text'
+                    ],
+                    [
+                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        'id' => \base64_encode('giftcard/giftcard_recipient_name'),
+                        'label' => 'Recipient Name',
+                        'render_type' => 'text'
+                    ],
+                    [
+                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        'id' => \base64_encode('giftcard/giftcard_sender_email'),
+                        'label' => 'Sender Email',
+                        'render_type' => 'email'
+                    ],
+                    [
+                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        'id' => \base64_encode('giftcard/giftcard_recipient_email'),
+                        'label' => 'Recipient Email',
+                        'render_type' => 'email'
+                    ],
                     [
                         // phpcs:ignore Magento2.Functions.DiscouragedFunction
                         'id' => \base64_encode('giftcard/giftcard_message'),
+                        'label' => 'Message',
+                        'render_type' => 'text',
                         'range' => [
                             'from' => 0.0,
                             'to' => 255.0
@@ -284,6 +337,8 @@ class GiftCardProductTest extends StorefrontTestsAbstract
                     [
                         // phpcs:ignore Magento2.Functions.DiscouragedFunction
                         'id' => \base64_encode('giftcard/custom_giftcard_amount'),
+                        'label' => 'Amount in',
+                        'render_type' => 'giftcardopenamount',
                         'range' => [
                             'from' => 100.0,
                             'to' => 150.0
