@@ -79,11 +79,11 @@ final class CategoryArrayMapper
         $result["meta_keywords"] = $dto->getMetaKeywords();
         /** Convert complex Array field **/
         $fieldArray = [];
-        foreach ($dto->getDynamicAttributes() as $fieldArrayDto) {
-            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueArrayMapper::class)
+        foreach ($dto->getAttributes() as $fieldArrayDto) {
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\AttributeArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
-        $result["dynamic_attributes"] = $fieldArray;
+        $result["attributes"] = $fieldArray;
         return $result;
     }
 }
