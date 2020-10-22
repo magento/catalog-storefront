@@ -19,14 +19,10 @@ class DynamicAttribute implements DataMapperInterface
         $dynamicAttributes = [];
 
         foreach ($productData['attributes'] ?? [] as $attribute) {
-            $values = [];
-            foreach ($attribute['value'] ?? [] as $option) {
-                $values[] = $option['value'];
-            }
             $dynamicAttributes[] = [
                 'code' => $attribute['attribute_code'],
                 'type' => $attribute['type'],
-                'values' => $values
+                'values' => $attribute['value']
             ];
         }
 
