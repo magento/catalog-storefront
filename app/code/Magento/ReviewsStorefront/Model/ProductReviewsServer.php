@@ -10,6 +10,7 @@ namespace Magento\ReviewsStorefront\Model;
 
 use Magento\CatalogStorefront\Model\CatalogRepository;
 use Magento\CatalogStorefrontApi\Api\Data\CustomerProductReviewRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\CustomerProductReviewResponse;
 use Magento\CatalogStorefrontApi\Api\Data\CustomerProductReviewResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteReviewsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteReviewsResponseInterface;
@@ -19,10 +20,14 @@ use Magento\CatalogStorefrontApi\Api\Data\ImportReviewsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportReviewsResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportReviewsResponseInterfaceFactory;
 use Magento\CatalogStorefrontApi\Api\Data\ProductReviewCountRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductReviewCountResponse;
 use Magento\CatalogStorefrontApi\Api\Data\ProductReviewCountResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductReviewRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductReviewResponse;
 use Magento\CatalogStorefrontApi\Api\Data\ProductReviewResponseInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ReadReviewMapper;
 use Magento\CatalogStorefrontApi\Api\ProductReviewsServerInterface;
+use Magento\ReviewsStorefront\DataProvider\ReviewDataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -51,6 +56,16 @@ class ProductReviewsServer implements ProductReviewsServerInterface
     private $catalogRepository;
 
     /**
+     * @var ReviewDataProvider
+     */
+    private $reviewDataProvider;
+
+    /**
+     * @var ReadReviewMapper
+     */
+    private $readReviewMapper;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -60,6 +75,8 @@ class ProductReviewsServer implements ProductReviewsServerInterface
      * @param ImportReviewsResponseInterfaceFactory $importReviewsResponseInterfaceFactory
      * @param DeleteReviewsResponseInterfaceFactory $deleteReviewsResponseInterfaceFactory
      * @param CatalogRepository $catalogRepository
+     * @param ReviewDataProvider $reviewDataProvider
+     * @param ReadReviewMapper $readReviewMapper
      * @param LoggerInterface $logger
      */
     public function __construct(
@@ -67,12 +84,16 @@ class ProductReviewsServer implements ProductReviewsServerInterface
         ImportReviewsResponseInterfaceFactory $importReviewsResponseInterfaceFactory,
         DeleteReviewsResponseInterfaceFactory $deleteReviewsResponseInterfaceFactory,
         CatalogRepository $catalogRepository,
+        ReviewDataProvider $reviewDataProvider,
+        ReadReviewMapper $readReviewMapper,
         LoggerInterface $logger
     ) {
         $this->importReviewArrayMapper = $importReviewArrayMapper;
         $this->importReviewsResponseInterfaceFactory = $importReviewsResponseInterfaceFactory;
         $this->deleteReviewsResponseInterfaceFactory = $deleteReviewsResponseInterfaceFactory;
         $this->catalogRepository = $catalogRepository;
+        $this->reviewDataProvider = $reviewDataProvider;
+        $this->readReviewMapper = $readReviewMapper;
         $this->logger = $logger;
     }
 
@@ -140,19 +161,41 @@ class ProductReviewsServer implements ProductReviewsServerInterface
 
     /**
      * @inheritdoc
+     * TODO pagination support
      */
     public function GetProductReviews(ProductReviewRequestInterface $request): ProductReviewResponseInterface
     {
-        // TODO: Implement GetProductReviews() method.
+        $items = [];
+        $reviews = $this->reviewDataProvider->fetchByProductId((int)$request->getProductId(), $request->getStore());
+
+        foreach ($reviews as $review) {
+            $items[] = $this->readReviewMapper->setData($review)->build();
+        }
+
+        $result = new ProductReviewResponse();
+        $result->setItems($items);
+
+        return $result;
     }
 
     /**
      * @inheritdoc
+     * TODO pagination support
      */
     public function GetCustomerProductReviews(
         CustomerProductReviewRequestInterface $request
     ): CustomerProductReviewResponseInterface {
-        // TODO: Implement GetCustomerProductReviews() method.
+        $items = [];
+        $reviews = $this->reviewDataProvider->fetchByCustomerId((int)$request->getCustomerId(), $request->getStore());
+
+        foreach ($reviews as $review) {
+            $items[] = $this->readReviewMapper->setData($review)->build();
+        }
+
+        $result = new CustomerProductReviewResponse();
+        $result->setItems($items);
+
+        return $result;
     }
 
     /**
@@ -161,6 +204,11 @@ class ProductReviewsServer implements ProductReviewsServerInterface
     public function GetProductReviewCount(
         ProductReviewCountRequestInterface $request
     ): ProductReviewCountResponseInterface {
-        // TODO: Implement GetProductReviewCount() method.
+        $reviewCount = $this->reviewDataProvider->getReviewsCount((int)$request->getProductId(), $request->getStore());
+
+        $result = new ProductReviewCountResponse();
+        $result->setReviewCount($reviewCount);
+
+        return $result;
     }
 }

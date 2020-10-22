@@ -28,6 +28,35 @@ class Review implements EntityConfigInterface
         return [
             'dynamic_templates' => [
                 [
+                    'product_id_mapping' => [
+                        'match' => 'product_id',
+                        'match_mapping_type' => 'string',
+                        'mapping' => [
+                            'type' => 'integer',
+                            'index' => true,
+                        ],
+                    ],
+                ],
+                [
+                    'customer_id_mapping' => [
+                        'match' => 'customer_id',
+                        'match_mapping_type' => 'string',
+                        'mapping' => [
+                            'type' => 'integer',
+                            'index' => true,
+                        ],
+                    ],
+                ],
+                [
+                    'visibility_mapping' => [
+                        'match' => 'visibility',
+                        'match_mapping_type' => 'string',
+                        'mapping' => [
+                            'index' => true,
+                        ],
+                    ],
+                ],
+                [
                     'default_mapping' => [
                         'match' => '*',
                         'match_mapping_type' => '*',
@@ -35,7 +64,7 @@ class Review implements EntityConfigInterface
                             'index' => false,
                         ],
                     ],
-                ]
+                ],
             ],
         ];
     }
