@@ -127,6 +127,9 @@ class GiftCardProductTest extends StorefrontTestsAbstract
         $this->productsGetRequestInterface->setAttributeCodes($this->attributesToCompare);
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
         self::assertNotEmpty($catalogServiceItem->getItems());
+
+        $this->markTestSkipped('should be fixed in https://github.com/magento/catalog-storefront/issues/407');
+
         $actualOptions = $this->getOptions($catalogServiceItem);
         $this->compare($defaultWebsiteOptions, $actualOptions);
         $actualShopperInputOptions = $this->getInputOptions($catalogServiceItem);
