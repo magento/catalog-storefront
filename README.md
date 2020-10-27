@@ -1,14 +1,8 @@
 # Overview
-This repository responsible for 2 different services (will be split in future):
-- Message Broker: connects Backoffice and Storefront application.
-- Storefront Application: provides Read/Write API through gRPC
+This repository is responsible for Catalog Storefront Application
+- provides Read/Write API through gRPC
 
-### Message Broker Responsibilities
-- request actual data from Export API (via REST)
-- map Export API format to Storefront API format
-- write data (through gRPC) to Storefront API
-
-### Storefront Application Responsibilities
+### Catalog Storefront Application Responsibilities
 - provide Read API for specific attributes, scope
 - provide Write API for specific attributes, scope
 - store data in an efficient way in own database(s)
@@ -21,6 +15,12 @@ This repository responsible for 2 different services (will be split in future):
 - grpc/grpc
 - spiral/php-grpc
 - nette/php-generator
+
+### Contributing
+Contributions are welcomed! Read the [Contributing Guide](./CONTRIBUTING.md) for more information.
+
+### Licensing
+This project is licensed under the Apache V2 License. See [LICENSE](./LICENSE.md) for more information.
 
 # SF APP Project Documents
 * [Project Overview:](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/home/Home.md)
