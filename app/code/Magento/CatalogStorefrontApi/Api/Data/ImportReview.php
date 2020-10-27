@@ -23,7 +23,7 @@ final class ImportReview implements ImportReviewInterface
     /**
      * @var string
      */
-    private $reviewId;
+    private $id;
 
     /**
      * @var string
@@ -65,9 +65,9 @@ final class ImportReview implements ImportReviewInterface
      *
      * @return string
      */
-    public function getReviewId(): string
+    public function getId(): string
     {
-        return (string) $this->reviewId;
+        return (string) $this->id;
     }
     
     /**
@@ -76,9 +76,9 @@ final class ImportReview implements ImportReviewInterface
      * @param string $value
      * @return void
      */
-    public function setReviewId(string $value): void
+    public function setId(string $value): void
     {
-        $this->reviewId = $value;
+        $this->id = $value;
     }
     
     /**

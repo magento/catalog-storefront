@@ -85,8 +85,8 @@ final class RatingsMetadataRequestMapper
     private function setByKey(RatingsMetadataRequest $dto, string $key, $value): void
     {
         switch ($key) {
-            case "rating_id":
-                $dto->setRatingId((string) $value);
+            case "rating_ids":
+                $dto->setRatingIds((array) $value);
                 break;
             case "store":
                 $dto->setStore((string) $value);

@@ -14,9 +14,9 @@ use Google\Protobuf\Internal\GPBUtil;
 class ReadReview extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Generated from protobuf field <code>string review_id = 1;</code>
+     * Generated from protobuf field <code>string id = 1;</code>
      */
-    protected $review_id = '';
+    protected $id = '';
     /**
      * Generated from protobuf field <code>string product_id = 2;</code>
      */
@@ -44,7 +44,7 @@ class ReadReview extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type string $review_id
+     *     @type string $id
      *     @type string $product_id
      *     @type string $title
      *     @type string $nickname
@@ -59,23 +59,23 @@ class ReadReview extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>string review_id = 1;</code>
+     * Generated from protobuf field <code>string id = 1;</code>
      * @return string
      */
-    public function getReviewId()
+    public function getId()
     {
-        return $this->review_id;
+        return $this->id;
     }
 
     /**
-     * Generated from protobuf field <code>string review_id = 1;</code>
+     * Generated from protobuf field <code>string id = 1;</code>
      * @param string $var
      * @return $this
      */
-    public function setReviewId($var)
+    public function setId($var)
     {
         GPBUtil::checkString($var, true);
-        $this->review_id = $var;
+        $this->id = $var;
 
         return $this;
     }

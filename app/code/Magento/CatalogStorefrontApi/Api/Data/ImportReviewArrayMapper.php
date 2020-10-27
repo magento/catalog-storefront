@@ -47,7 +47,7 @@ final class ImportReviewArrayMapper
     public function convertToArray(ImportReview $dto)
     {
         $result = [];
-        $result["review_id"] = $dto->getReviewId();
+        $result["id"] = $dto->getId();
         $result["product_id"] = $dto->getProductId();
         $result["title"] = $dto->getTitle();
         $result["nickname"] = $dto->getNickname();

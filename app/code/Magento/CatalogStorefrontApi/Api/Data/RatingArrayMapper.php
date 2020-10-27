@@ -47,7 +47,7 @@ final class RatingArrayMapper
     public function convertToArray(Rating $dto)
     {
         $result = [];
-        $result["rating_id"] = $dto->getRatingId();
+        $result["id"] = $dto->getId();
         $result["value"] = $dto->getValue();
         return $result;
     }

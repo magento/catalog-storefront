@@ -14,9 +14,9 @@ use Google\Protobuf\Internal\GPBUtil;
 class RatingsMetadataRequest extends \Google\Protobuf\Internal\Message
 {
     /**
-     * Generated from protobuf field <code>string rating_id = 1;</code>
+     * Generated from protobuf field <code>repeated string rating_ids = 1;</code>
      */
-    protected $rating_id = '';
+    private $rating_ids;
     /**
      * Generated from protobuf field <code>string store = 2;</code>
      */
@@ -32,7 +32,7 @@ class RatingsMetadataRequest extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type string $rating_id
+     *     @type string[]|\Google\Protobuf\Internal\RepeatedField $rating_ids
      *     @type string $store
      *     @type \Magento\CatalogStorefrontApi\Proto\PaginationRequest[]|\Google\Protobuf\Internal\RepeatedField $pagination
      * }
@@ -44,23 +44,23 @@ class RatingsMetadataRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>string rating_id = 1;</code>
-     * @return string
+     * Generated from protobuf field <code>repeated string rating_ids = 1;</code>
+     * @return \Google\Protobuf\Internal\RepeatedField
      */
-    public function getRatingId()
+    public function getRatingIds()
     {
-        return $this->rating_id;
+        return $this->rating_ids;
     }
 
     /**
-     * Generated from protobuf field <code>string rating_id = 1;</code>
-     * @param string $var
+     * Generated from protobuf field <code>repeated string rating_ids = 1;</code>
+     * @param string[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
-    public function setRatingId($var)
+    public function setRatingIds($var)
     {
-        GPBUtil::checkString($var, true);
-        $this->rating_id = $var;
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::STRING);
+        $this->rating_ids = $arr;
 
         return $this;
     }
