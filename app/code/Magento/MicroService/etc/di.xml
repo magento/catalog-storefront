@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="topology-installer" xsi:type="object">Magento\MicroService\Console\Command\TopologyInstall</item>
+                <item name="microservice-installer" xsi:type="object">Magento\MicroService\Console\Command\MicroServiceInstall</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="\Magento\MessageQueue\Model\ResourceModel\Lock" type="Magento\Amqp\Model\ResourceModel\MessageQueueLock" />
+</config>

@@ -5,16 +5,18 @@
  */
 namespace Magento\CatalogMessageBroker\HttpClient;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\UrlInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * Client for invoking REST API
  * TODO: ad-hoc solution. replace with some ready-to-use library
+ * What for to replace with already existing library? There are a lot of custom logic here?
  */
 class RestClient
 {
+    const BACKOFFICE_URL_WEB_PATH = 'system/default/backoffice/web/base_url';
     /**
      * @var string REST URL base path
      */
@@ -31,31 +33,31 @@ class RestClient
     private $jsonSerializer;
 
     /**
-     * @var UrlInterface
-     */
-    private $url;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * @param CurlClient $curlClient
      * @param Json $jsonSerializer
-     * @param UrlInterface $url
+     * @param DeploymentConfig $deploymentConfig
      * @param LoggerInterface $logger
      */
     public function __construct(
         CurlClient $curlClient,
         Json $jsonSerializer,
-        UrlInterface $url,
+        DeploymentConfig $deploymentConfig,
         LoggerInterface $logger
     ) {
         $this->curlClient = $curlClient;
         $this->jsonSerializer = $jsonSerializer;
-        $this->url = $url;
         $this->logger = $logger;
+        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -99,8 +101,7 @@ class RestClient
      */
     private function constructResourceUrl($resourcePath): string
     {
-        // TODO: for test purposes only. base URL of "Export API" should be retrieved from configuration/ or from event
-        $storefrontAppHost = $this->url->getBaseUrl();
+        $storefrontAppHost = $this->deploymentConfig->get(self::BACKOFFICE_URL_WEB_PATH);
         return rtrim($storefrontAppHost, '/') . $this->restBasePath . ltrim($resourcePath, '/');
     }
 }

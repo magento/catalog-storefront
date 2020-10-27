@@ -1,0 +1,78 @@
+{
+  "name": "magento/message-broker",
+  "type": "project",
+  "repositories": {
+    "repo-magento": {
+      "type": "composer",
+      "url": "https://repo.magento.com/"
+    }
+  },
+  "extra": {
+    "magento-root-dir": "./"
+  },
+  "require": {
+    "magento/framework": "^103.0",
+    "laminas/laminas-captcha": "^2.7.1",
+    "laminas/laminas-code": "~3.4.1",
+    "laminas/laminas-config": "^2.6.0",
+    "laminas/laminas-console": "^2.6.0",
+    "laminas/laminas-crypt": "^2.6.0",
+    "laminas/laminas-db": "^2.8.2",
+    "laminas/laminas-dependency-plugin": "^1.0",
+    "laminas/laminas-di": "^2.6.1",
+    "laminas/laminas-eventmanager": "^3.0.0",
+    "laminas/laminas-feed": "^2.9.0",
+    "laminas/laminas-form": "^2.10.0",
+    "laminas/laminas-http": "^2.6.0",
+    "laminas/laminas-i18n": "^2.7.3",
+    "laminas/laminas-json": "^2.6.1",
+    "laminas/laminas-log": "^2.9.1",
+    "laminas/laminas-mail": "^2.9.0",
+    "laminas/laminas-mime": "^2.5.0",
+    "laminas/laminas-modulemanager": "^2.7",
+    "laminas/laminas-mvc": "~2.7.0",
+    "laminas/laminas-serializer": "^2.7.2",
+    "laminas/laminas-server": "^2.6.1",
+    "laminas/laminas-servicemanager": "^2.7.8",
+    "laminas/laminas-session": "^2.7.3",
+    "laminas/laminas-soap": "^2.7.0",
+    "laminas/laminas-stdlib": "^3.2.1",
+    "laminas/laminas-text": "^2.6.0",
+    "laminas/laminas-uri": "^2.5.1",
+    "laminas/laminas-validator": "^2.6.0",
+    "laminas/laminas-view": "~2.11.2",
+    "colinmollenhour/cache-backend-file": "^1.4",
+    "colinmollenhour/cache-backend-redis": "^1.14",
+    "colinmollenhour/credis": "1.11.1",
+    "colinmollenhour/php-redis-session-abstract": "^1.4",
+    "elasticsearch/elasticsearch": "^7.9",
+    "magento/module-amqp": "*",
+    "magento/module-message-queue": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Magento\\Framework\\": "lib/internal/Magento/Framework/",
+      "Magento\\Setup\\": "setup/src/Magento/Setup/",
+      "Magento\\": "app/code/Magento/",
+      "Zend\\Mvc\\Controller\\": "setup/src/Zend/Mvc/Controller/"
+    },
+    "psr-0": {
+      "": [
+        "app/code/",
+        "generated/code/"
+      ]
+    },
+    "files": [
+      "app/etc/NonComposerComponentRegistration.php"
+    ],
+    "config": {
+      "preferred-install": "dist",
+      "sort-packages": true
+    },
+    "exclude-from-classmap": [
+      "**/dev/**",
+      "**/update/**",
+      "**/Test/**"
+    ]
+  }
+}
