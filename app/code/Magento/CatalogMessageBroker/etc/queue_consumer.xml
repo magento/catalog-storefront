@@ -7,5 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
     <consumer name="catalog.product.export.consumer" queue="catalog.product.export.queue" connection="amqp" handler="Magento\CatalogMessageBroker\Model\MessageBus\Product\ProductsConsumer::processMessage"/>
+    <consumer name="catalog.product.variants.export.consumer" queue="catalog.product.variants.export.queue" connection="amqp" handler="Magento\CatalogMessageBroker\Model\MessageBus\ProductVariants\ProductVariantsConsumer::processMessage"/>
     <consumer name="catalog.category.export.consumer" queue="catalog.category.export.queue" connection="amqp" handler="Magento\CatalogMessageBroker\Model\MessageBus\Category\CategoriesConsumer::processMessage"/>
 </config>

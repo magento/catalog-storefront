@@ -21,6 +21,7 @@ class ElasticsearchCommand implements CommandInterface
     private const BULK_ACTION_INDEX = 'index';
     private const BULK_ACTION_CREATE = 'create';
     private const BULK_ACTION_DELETE = 'delete';
+    private const ACTION_DELETE_BY_QUERY = 'delete_by_query';
     private const BULK_ACTION_UPDATE = 'update';
     /**#@-*/
 
@@ -135,6 +136,10 @@ class ElasticsearchCommand implements CommandInterface
                 '_type' => $entityName,
                 '_index' => $indexName
             ];
+            if (isset($document['_id'])) {
+                $metaInfo['_id'] = $document['_id'];
+                unset($document['_id']);
+            }
             if (isset($document['parent_id']['parent'])) {
                 $metaInfo['routing'] = $document['parent_id']['parent'];
             }
@@ -150,6 +155,40 @@ class ElasticsearchCommand implements CommandInterface
         }
 
         return $bulkArray;
+    }
+
+    /**
+     * Reformat documents array to delete by query format.
+     *
+     * todo: Improve this query for efficiency.
+     *
+     * @param string $indexName
+     * @param string $entityName
+     * @param array $documents
+     * @return array
+     */
+    private function getDocsArrayInDeleteByQueryFormat(
+        string $indexName,
+        string $entityName,
+        array $documents
+    ): array {
+        $array = [
+            'index' => $indexName,
+            'type' => $entityName,
+            'body' => [
+                'min_score' => '1'
+            ],
+            'refresh' => false,
+        ];
+        foreach ($documents as $document) {
+            foreach ($document as $key => $value) {
+                $array['body']['query']['bool']['must'][] = [
+                    'match' => [$key => $value]
+                ];
+            }
+        }
+
+        return $array;
     }
 
     /**
@@ -210,6 +249,37 @@ class ElasticsearchCommand implements CommandInterface
                     'Error occurred while bulk delete from "%1" index. Entity ids: "%2"',
                     $dataSourceName,
                     \implode(',', $ids)
+                ),
+                $throwable
+            );
+        }
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @throws BulkException
+     */
+    public function deleteByQuery(string $dataSourceName, string $entityName, array $entries): void
+    {
+        $query = $this->getDocsArrayInDeleteByQueryFormat(
+            $dataSourceName,
+            $entityName,
+            $entries
+        );
+        try {
+            $result = $this->getConnection()->deleteByQuery($query);
+            $error = $result['errors'] ?? false;
+            if ($error) {
+                $this->handleBulkError($result['items'] ?? [], self::ACTION_DELETE_BY_QUERY);
+            }
+        } catch (\Throwable $throwable) {
+            throw new BulkException(
+                __(
+                    'Error occurred while deleting by query from "%1" index. Entity data: "%2". Error: %3',
+                    $dataSourceName,
+                    $entries,
+                    $throwable->getMessage()
                 ),
                 $throwable
             );

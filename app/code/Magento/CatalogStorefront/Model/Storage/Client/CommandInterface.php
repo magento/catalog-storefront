@@ -59,4 +59,14 @@ interface CommandInterface
      * @return void
      */
     public function bulkDelete(string $dataSourceName, string $entityName, array $ids): void;
+
+    /**
+     * Performs delete by query.
+     *
+     * @param string $dataSourceName
+     * @param string $entityName
+     * @param array $entries
+     * @throws BulkException
+     */
+    public function deleteByQuery(string $dataSourceName, string $entityName, array $entries): void;
 }

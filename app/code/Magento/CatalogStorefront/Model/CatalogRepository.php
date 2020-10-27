@@ -20,6 +20,7 @@ use Psr\Log\LoggerInterface;
 class CatalogRepository
 {
     protected const DELETE = 'delete';
+    protected const DELETE_BY_QUERY = 'delete_by_query';
     protected const SAVE = 'save';
     protected const UPDATE = 'update';
 
@@ -74,6 +75,7 @@ class CatalogRepository
             foreach ($dataPerStore as $storeCode => $data) {
                 $sourceName = $this->storageState->getCurrentDataSourceName([$storeCode, $entityType]);
                 $this->deleteEntities($data[self::DELETE] ?? [], $sourceName, $entityType);
+                $this->deleteEntitiesByQuery($data[self::DELETE_BY_QUERY] ?? [], $sourceName, $entityType);
                 $this->saveEntities($data[self::SAVE] ?? [], $sourceName, $entityType);
                 $this->updateEntities($data[self::UPDATE] ?? [], $sourceName, $entityType);
             }
@@ -105,6 +107,34 @@ class CatalogRepository
             ['verbose' => $data]
         );
         $this->storageWriteSource->bulkDelete($sourceName, $entityType, $data);
+    }
+
+    /**
+     * Delete bulk of entities by data, source name and entity type
+     *
+     * @param array $data
+     * @param string $sourceName
+     * @param string $entityType
+     * @return void
+     * @throws BulkException
+     */
+    private function deleteEntitiesByQuery(array $data, string $sourceName, string $entityType): void
+    {
+        if (!$data) {
+            return;
+        }
+        if (!$this->storageSchemaManager->existsDataSource($sourceName)) {
+            $this->logger->debug(
+                \sprintf('Cannot delete entities "%s" by query: Index "%s" does not exist', \implode(',', $data), $sourceName)
+            );
+            return;
+        }
+
+        $this->logger->debug(
+            \sprintf('Delete from storage "%s" %s record(s)', $sourceName, count($data)),
+            ['verbose' => $data]
+        );
+        $this->storageWriteSource->deleteByQuery($sourceName, $entityType, $data);
     }
 
     /**
