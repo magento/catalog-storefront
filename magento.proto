@@ -577,7 +577,7 @@ message DeleteRatingsMetadataResponse {
 }
 
 message RatingsMetadataRequest {
-  string rating_id = 1;
+  repeated string rating_ids = 1;
   string store = 2;
   repeated PaginationRequest pagination = 3;
 }
@@ -589,7 +589,7 @@ message RatingsMetadataResponse {
 
 // catalog_data_exporter_product_reviews
 message ImportReview {
-  string review_id = 1;
+  string id = 1;
   string product_id = 2;
   string title = 3;
   string nickname = 4;
@@ -600,7 +600,7 @@ message ImportReview {
 }
 
 message ReadReview {
-  string review_id = 1;
+  string id = 1;
   string product_id = 2;
   string title = 3;
   string nickname = 4;
@@ -609,7 +609,7 @@ message ReadReview {
 }
 
 message Rating {
-  string rating_id = 1; // Base64 encoded rating ID
+  string id = 1; // Base64 encoded rating ID
   string value = 2; // Rating Value
 }
 
