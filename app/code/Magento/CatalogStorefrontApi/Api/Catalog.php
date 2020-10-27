@@ -281,20 +281,25 @@ class Catalog implements CatalogInterface
                     $r->setSamples($res);
                     $r->setVisibility($item1->getVisibility());
                     $res = [];
-                    foreach ($item1->getDynamicAttributes() as $item23) {
-                        // convert data from \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue
-                        // to \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue
-                        /** @var \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue $item23 **/
+                    foreach ($item1->getAttributes() as $item23) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\Attribute
+                        // to \Magento\CatalogStorefrontApi\Api\Data\Attribute
+                        /** @var \Magento\CatalogStorefrontApi\Proto\Attribute $item23 **/
                         $p = function () use ($item23) {
-                            $r = new \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue();
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\Attribute();
                             $r->setCode($item23->getCode());
-                            $r->setValue($item23->getValue());
+                            $r->setType($item23->getType());
+                            $values = [];
+                            foreach ($item23->getValues() as $newValue) {
+                                $values[] = $newValue;
+                            }
+                            $r->setValues($values);
                             return $r;
                         };
                         $out = $p();
                         $res[] = $out;
                     }
-                    $r->setDynamicAttributes($res);
+                    $r->setAttributes($res);
                     $r->setMetaDescription($item1->getMetaDescription());
                     $r->setMetaKeyword($item1->getMetaKeyword());
                     $r->setMetaTitle($item1->getMetaTitle());
@@ -736,20 +741,25 @@ class Catalog implements CatalogInterface
                             $r->setSamples($res);
                             $r->setVisibility($prop2->getVisibility());
                             $res = [];
-                            foreach ($prop2->getDynamicAttributes() as $item24) {
-                                // convert data from \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue
-                                // to \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue
-                                /** @var \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue $item24 **/
+                            foreach ($prop2->getAttributes() as $item24) {
+                                // convert data from \Magento\CatalogStorefrontApi\Api\Data\Attribute
+                                // to \Magento\CatalogStorefrontApi\Proto\Attribute
+                                /** @var \Magento\CatalogStorefrontApi\Api\Data\Attribute $item24 **/
                                 $p = function () use ($item24) {
-                                    $r = new \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue();
+                                    $r = new \Magento\CatalogStorefrontApi\Proto\Attribute();
                                     $r->setCode($item24->getCode());
-                                    $r->setValue($item24->getValue());
+                                    $r->setType($item24->getType());
+                                    $values = [];
+                                    foreach ($item24->getValues() as $newValue) {
+                                        $values[] = $newValue;
+                                    }
+                                    $r->setValues($values);
                                     return $r;
                                 };
                                 $proto = $p();
                                 $res[] = $proto;
                             }
-                            $r->setDynamicAttributes($res);
+                            $r->setAttributes($res);
                             $r->setMetaDescription($prop2->getMetaDescription());
                             $r->setMetaKeyword($prop2->getMetaKeyword());
                             $r->setMetaTitle($prop2->getMetaTitle());
@@ -1270,20 +1280,25 @@ class Catalog implements CatalogInterface
                             $r->setMetaDescription($prop2->getMetaDescription());
                             $r->setMetaKeywords($prop2->getMetaKeywords());
                             $res = [];
-                            foreach ($prop2->getDynamicAttributes() as $item27) {
-                                // convert data from \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue
-                                // to \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue
-                                /** @var \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue $item27 **/
+                            foreach ($prop2->getAttributes() as $item27) {
+                                // convert data from \Magento\CatalogStorefrontApi\Api\Data\Attribute
+                                // to \Magento\CatalogStorefrontApi\Proto\Attribute
+                                /** @var \Magento\CatalogStorefrontApi\Api\Data\Attribute $item27 **/
                                 $p = function () use ($item27) {
-                                    $r = new \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue();
+                                    $r = new \Magento\CatalogStorefrontApi\Proto\Attribute();
                                     $r->setCode($item27->getCode());
-                                    $r->setValue($item27->getValue());
+                                    $r->setType($item27->getType());
+                                    $values = [];
+                                    foreach ($item27->getValues() as $newValue) {
+                                        $values[] = $newValue;
+                                    }
+                                    $r->setValues($values);
                                     return $r;
                                 };
                                 $proto = $p();
                                 $res[] = $proto;
                             }
-                            $r->setDynamicAttributes($res);
+                            $r->setAttributes($res);
                             return $r;
                         };
                         $proto = $p();
@@ -1480,20 +1495,25 @@ class Catalog implements CatalogInterface
                     $r->setMetaDescription($item1->getMetaDescription());
                     $r->setMetaKeywords($item1->getMetaKeywords());
                     $res = [];
-                    foreach ($item1->getDynamicAttributes() as $item26) {
-                        // convert data from \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue
-                        // to \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue
-                        /** @var \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue $item26 **/
+                    foreach ($item1->getAttributes() as $item26) {
+                        // convert data from \Magento\CatalogStorefrontApi\Proto\Attribute
+                        // to \Magento\CatalogStorefrontApi\Api\Data\Attribute
+                        /** @var \Magento\CatalogStorefrontApi\Proto\Attribute $item26 **/
                         $p = function () use ($item26) {
-                            $r = new \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValue();
+                            $r = new \Magento\CatalogStorefrontApi\Api\Data\Attribute();
                             $r->setCode($item26->getCode());
-                            $r->setValue($item26->getValue());
+                            $r->setType($item26->getType());
+                            $values = [];
+                            foreach ($item26->getValues() as $newValue) {
+                                $values[] = $newValue;
+                            }
+                            $r->setValues($values);
                             return $r;
                         };
                         $out = $p();
                         $res[] = $out;
                     }
-                    $r->setDynamicAttributes($res);
+                    $r->setAttributes($res);
                     return $r;
                 };
                 $out = $p();
