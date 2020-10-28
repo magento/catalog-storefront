@@ -128,8 +128,6 @@ class GiftCardProductTest extends StorefrontTestsAbstract
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
         self::assertNotEmpty($catalogServiceItem->getItems());
 
-        $this->markTestSkipped('should be fixed in https://github.com/magento/catalog-storefront/issues/407');
-
         $actualOptions = $this->getOptions($catalogServiceItem);
         $this->compare($defaultWebsiteOptions, $actualOptions);
         $actualShopperInputOptions = $this->getInputOptions($catalogServiceItem);
@@ -194,11 +192,11 @@ class GiftCardProductTest extends StorefrontTestsAbstract
                 'productOptions' => [
                     [
                         'label' => 'Amount',
-                        'render_type' => 'drop_down',
+                        'render_type' => 'giftcard_amount',
                         'type' => 'giftcard',
                         'values' => [
                             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                            ['id' => \base64_encode('giftcard/giftcard_amount/10.0000')]
+                            ['id' => \base64_encode('giftcard/giftcard_amount/10.0000'), 'price' => 10.0]
                         ]
                     ]
                 ],
@@ -233,13 +231,13 @@ class GiftCardProductTest extends StorefrontTestsAbstract
                 'defaultWebsiteOptions' => [
                     [
                         'label' => 'Amount',
-                        'render_type' => 'drop_down',
+                        'render_type' => 'giftcard_amount',
                         'type' => 'giftcard',
                         'values' => [
                             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                            ['id' => \base64_encode('giftcard/giftcard_amount/7.0000')],
+                            ['id' => \base64_encode('giftcard/giftcard_amount/7.0000'), 'price' => 7.0],
                             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                            ['id' => \base64_encode('giftcard/giftcard_amount/17.0000')]
+                            ['id' => \base64_encode('giftcard/giftcard_amount/17.0000'), 'price' => 17.0]
                         ]
                     ]
                 ],
@@ -282,7 +280,7 @@ class GiftCardProductTest extends StorefrontTestsAbstract
                         // phpcs:ignore Magento2.Functions.DiscouragedFunction
                         'id' => \base64_encode('giftcard/custom_giftcard_amount'),
                         'label' => 'Amount in',
-                        'render_type' => 'giftcardopenamount',
+                        'render_type' => 'giftcard_open_amount',
                         'range' => [
                             'from' => 100.0,
                             'to' => 150.0
@@ -292,13 +290,13 @@ class GiftCardProductTest extends StorefrontTestsAbstract
                 'secondWebsiteOptions' => [
                     [
                         'label' => 'Amount',
-                        'render_type' => 'drop_down',
+                        'render_type' => 'giftcard_amount',
                         'type' => 'giftcard',
                         'values' => [
                             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                            ['id' => \base64_encode('giftcard/giftcard_amount/7.0000')],
+                            ['id' => \base64_encode('giftcard/giftcard_amount/7.0000'), 'price' => 7.0],
                             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                            ['id' => \base64_encode('giftcard/giftcard_amount/17.0000')]
+                            ['id' => \base64_encode('giftcard/giftcard_amount/17.0000'), 'price' => 17.0]
                         ]
                     ]
                 ],
@@ -341,7 +339,7 @@ class GiftCardProductTest extends StorefrontTestsAbstract
                         // phpcs:ignore Magento2.Functions.DiscouragedFunction
                         'id' => \base64_encode('giftcard/custom_giftcard_amount'),
                         'label' => 'Amount in',
-                        'render_type' => 'giftcardopenamount',
+                        'render_type' => 'giftcard_open_amount',
                         'range' => [
                             'from' => 100.0,
                             'to' => 150.0
