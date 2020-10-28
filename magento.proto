@@ -49,7 +49,7 @@ message Product {
   //    PriceRange prices = 44;//-
   // TODO: Uncomment options
   //    repeated Option options = 46;
-  repeated DynamicAttributeValue dynamic_attributes = 50;
+  repeated Attribute attributes = 50;
 
   // TODO: qty is missing for only-x-left-in-stock functionality
   // TODO: Meta fields not populated by catalog SF app
@@ -225,10 +225,11 @@ message KeyValue {
   string value = 2;
 }
 
-message DynamicAttributeValue
+message Attribute
 {
   string code = 1;
-  string value = 2;
+  string type = 2;
+  repeated string values = 3;
 }
 
 message MediaResource {
@@ -377,7 +378,7 @@ message Category {
   string meta_description = 23;
   string meta_keywords = 24;
 
-  repeated DynamicAttributeValue dynamic_attributes = 50;
+  repeated Attribute attributes = 50;
 }
 
 message Breadcrumb {
@@ -577,7 +578,7 @@ message DeleteRatingsMetadataResponse {
 }
 
 message RatingsMetadataRequest {
-  string rating_id = 1;
+  repeated string rating_ids = 1;
   string store = 2;
   repeated PaginationRequest pagination = 3;
 }
@@ -589,7 +590,7 @@ message RatingsMetadataResponse {
 
 // catalog_data_exporter_product_reviews
 message ImportReview {
-  string review_id = 1;
+  string id = 1;
   string product_id = 2;
   string title = 3;
   string nickname = 4;
@@ -600,7 +601,7 @@ message ImportReview {
 }
 
 message ReadReview {
-  string review_id = 1;
+  string id = 1;
   string product_id = 2;
   string title = 3;
   string nickname = 4;
@@ -609,7 +610,7 @@ message ReadReview {
 }
 
 message Rating {
-  string rating_id = 1; // Base64 encoded rating ID
+  string id = 1; // Base64 encoded rating ID
   string value = 2; // Rating Value
 }
 

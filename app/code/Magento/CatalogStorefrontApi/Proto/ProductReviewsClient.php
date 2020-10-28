@@ -26,7 +26,6 @@ class ProductReviewsClient extends \Grpc\BaseStub
      * @param \Magento\CatalogStorefrontApi\Proto\ImportReviewsRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Magento\CatalogStorefrontApi\Proto\ImportReviewsResponse
      */
     public function ImportProductReviews(
         \Magento\CatalogStorefrontApi\Proto\ImportReviewsRequest $argument,
@@ -47,7 +46,6 @@ class ProductReviewsClient extends \Grpc\BaseStub
      * @param \Magento\CatalogStorefrontApi\Proto\DeleteReviewsRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Magento\CatalogStorefrontApi\Proto\DeleteReviewsResponse
      */
     public function DeleteProductReviews(
         \Magento\CatalogStorefrontApi\Proto\DeleteReviewsRequest $argument,
@@ -68,7 +66,6 @@ class ProductReviewsClient extends \Grpc\BaseStub
      * @param \Magento\CatalogStorefrontApi\Proto\ProductReviewRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Magento\CatalogStorefrontApi\Proto\ProductReviewResponse
      */
     public function GetProductReviews(
         \Magento\CatalogStorefrontApi\Proto\ProductReviewRequest $argument,
@@ -89,7 +86,6 @@ class ProductReviewsClient extends \Grpc\BaseStub
      * @param \Magento\CatalogStorefrontApi\Proto\CustomerProductReviewRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Magento\CatalogStorefrontApi\Proto\CustomerProductReviewResponse
      */
     public function GetCustomerProductReviews(
         \Magento\CatalogStorefrontApi\Proto\CustomerProductReviewRequest $argument,
@@ -110,7 +106,6 @@ class ProductReviewsClient extends \Grpc\BaseStub
      * @param \Magento\CatalogStorefrontApi\Proto\ProductReviewCountRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Magento\CatalogStorefrontApi\Proto\ProductReviewCountResponse
      */
     public function GetProductReviewCount(
         \Magento\CatalogStorefrontApi\Proto\ProductReviewCountRequest $argument,

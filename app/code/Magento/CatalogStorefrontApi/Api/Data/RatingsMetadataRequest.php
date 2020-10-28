@@ -21,9 +21,9 @@ final class RatingsMetadataRequest implements RatingsMetadataRequestInterface
 {
 
     /**
-     * @var string
+     * @var array
      */
-    private $ratingId;
+    private $ratingIds;
 
     /**
      * @var string
@@ -38,22 +38,22 @@ final class RatingsMetadataRequest implements RatingsMetadataRequestInterface
     /**
      * @inheritdoc
      *
-     * @return string
+     * @return string[]
      */
-    public function getRatingId(): string
+    public function getRatingIds(): array
     {
-        return (string) $this->ratingId;
+        return (array) $this->ratingIds;
     }
     
     /**
      * @inheritdoc
      *
-     * @param string $value
+     * @param string[] $value
      * @return void
      */
-    public function setRatingId(string $value): void
+    public function setRatingIds(array $value): void
     {
-        $this->ratingId = $value;
+        $this->ratingIds = $value;
     }
     
     /**

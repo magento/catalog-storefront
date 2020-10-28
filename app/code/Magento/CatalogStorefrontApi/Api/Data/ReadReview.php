@@ -23,7 +23,7 @@ final class ReadReview implements ReadReviewInterface
     /**
      * @var string
      */
-    private $reviewId;
+    private $id;
 
     /**
      * @var string
@@ -55,9 +55,9 @@ final class ReadReview implements ReadReviewInterface
      *
      * @return string
      */
-    public function getReviewId(): string
+    public function getId(): string
     {
-        return (string) $this->reviewId;
+        return (string) $this->id;
     }
     
     /**
@@ -66,9 +66,9 @@ final class ReadReview implements ReadReviewInterface
      * @param string $value
      * @return void
      */
-    public function setReviewId(string $value): void
+    public function setId(string $value): void
     {
-        $this->reviewId = $value;
+        $this->id = $value;
     }
     
     /**
