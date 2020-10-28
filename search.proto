@@ -16,17 +16,23 @@ message ProductSearchRequest {
   // search query to perform full-text search
   string phrase = 1;
 
+  //scope to check
+  int32 store = 2;
+
+  //customer group for price aggregation
+  int32 customerGroupId = 3;
+
   // number of product ids to return in set
-  int32 page_size = 2;
+  int32 page_size = 4;
 
   // current page of result set to return
-  int32 current_page = 3;
+  int32 current_page = 5;
 
   // filters to filter result by specified attribute values
-  repeated Filter filters = 4;
+  repeated Filter filters = 6;
 
   // sort order of returned product by specified attribute in specified order
-  repeated Sort sort = 5;
+  repeated Sort sort = 7;
 }
 
 message Filter {
@@ -44,9 +50,9 @@ message Filter {
 }
 
 message SearchRange {
-   float from = 1;
+  float from = 1;
 
-   float to = 2;
+  float to = 2;
 }
 
 message ProductsSearchResult {
@@ -55,33 +61,35 @@ message ProductsSearchResult {
   // response items - at the moment item has only 1 field: product id
   repeated string items = 2;
 
-  repeated Aggregation facets = 3;
+  repeated Bucket facets = 3;
 
   SearchResultPageInfo page_info = 4;
 }
 
 message SearchResultPageInfo {
-    int32 current_page = 1;
+  int32 current_page = 1;
 
-    int32 page_size = 2;
+  int32 page_size = 2;
 
-    int32 total_pages = 3;
-}
-
-message Aggregation {
-  string attribute = 1;
-
-  string title = 2;
-
-  repeated Bucket buckets = 3;
+  int32 total_pages = 3;
 }
 
 message Bucket {
-  int32 count = 1;
+  string attribute = 1;
 
-  string title = 2;
+  string label = 2;
 
-  string value = 3;
+  int32 count = 3;
+
+  repeated Option options = 5;
+}
+
+message Option {
+  string value = 1;
+
+  string label = 2;
+
+  int32 count = 3;
 }
 
 message Sort {
