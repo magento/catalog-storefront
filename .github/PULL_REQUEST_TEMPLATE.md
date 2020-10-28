@@ -20,7 +20,7 @@
 
 ### Fixed Issues (if relevant)
 <!---
-    If relevant, please provide a list of fixed issues in the format magento/magento2#<issue_number>.
+    If relevant, please provide a list of fixed issues in the format magento/catalog-storefront#<issue_number>.
     There could be 1 or more issues linked here and it will help us find some more information about the reasoning behind this change.
 -->
 1. Fixes magento/catalog-storefront#<issue_number>
@@ -34,13 +34,13 @@
 
 ### Code Review Checklist (*)
 
-See dataied [checklist](https://github.com/magento/catalog-storefront/wiki/Code-Review-checklist)
+See detailed [checklist](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/projectAgreements/Code-Review-checklist.md)
 
 - [ ] Story AC is completed
 - [ ] proposed changes correspond to [Magento Technical Vision](https://devdocs.magento.com/guides/v2.2/coding-standards/technical-guidelines.html)
 - [ ] new or changed code is covered with web-api/integration tests (if applicable)
   - expected results in test verified with data from fixture
-- [ ] no backward incompatibile changes
+- [ ] no backward incompatible changes
 - [ ] Export API (et_schema.xml) and SF API schemas (proto schema) are reflected in the codebase
   - prerequisite: story branch created with all needed generated classes according to proposes schema-changes
   - DTO classes do not contain any manual changes (Magento\CatalogExportApi\*, Magento\CatalogStorefrontApi\*)

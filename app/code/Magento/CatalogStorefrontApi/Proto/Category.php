@@ -110,9 +110,9 @@ class Category extends \Google\Protobuf\Internal\Message
      */
     protected $meta_keywords = '';
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DynamicAttributeValue dynamic_attributes = 50;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Attribute attributes = 50;</code>
      */
-    private $dynamic_attributes;
+    private $attributes;
 
     /**
      * Constructor.
@@ -144,7 +144,7 @@ class Category extends \Google\Protobuf\Internal\Message
      *     @type string $meta_title
      *     @type string $meta_description
      *     @type string $meta_keywords
-     *     @type \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue[]|\Google\Protobuf\Internal\RepeatedField $dynamic_attributes
+     *     @type \Magento\CatalogStorefrontApi\Proto\Attribute[]|\Google\Protobuf\Internal\RepeatedField $attributes
      * }
      */
     public function __construct($data = null)
@@ -682,23 +682,23 @@ class Category extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DynamicAttributeValue dynamic_attributes = 50;</code>
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Attribute attributes = 50;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
      */
-    public function getDynamicAttributes()
+    public function getAttributes()
     {
-        return $this->dynamic_attributes;
+        return $this->attributes;
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.DynamicAttributeValue dynamic_attributes = 50;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue[]|\Google\Protobuf\Internal\RepeatedField $var
+     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.Attribute attributes = 50;</code>
+     * @param \Magento\CatalogStorefrontApi\Proto\Attribute[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
-    public function setDynamicAttributes($var)
+    public function setAttributes($var)
     {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\DynamicAttributeValue::class);
-        $this->dynamic_attributes = $arr;
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\Attribute::class);
+        $this->attributes = $arr;
 
         return $this;
     }

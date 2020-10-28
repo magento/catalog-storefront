@@ -1,14 +1,8 @@
 # Overview
-This repository responsible for 2 different services (will be split in future):
-- Message Broker: connects Backoffice and Storefront application.
-- Storefront Application: provides Read/Write API through gRPC
+This repository is responsible for Catalog Storefront Application
+- provides Read/Write API through gRPC
 
-### Message Broker Responsibilities
-- request actual data from Export API (via REST)
-- map Export API format to Storefront API format
-- write data (through gRPC) to Storefront API
-
-### Storefront Application Responsibilities
+### Catalog Storefront Application Responsibilities
 - provide Read API for specific attributes, scope
 - provide Write API for specific attributes, scope
 - store data in an efficient way in own database(s)
@@ -22,6 +16,12 @@ This repository responsible for 2 different services (will be split in future):
 - spiral/php-grpc
 - nette/php-generator
 
+### Contributing
+Contributions are welcomed! Read the [Contributing Guide](./CONTRIBUTING.md) for more information.
+
+### Licensing
+This project is licensed under the Apache V2 License. See [LICENSE](./LICENSE.md) for more information.
+
 # SF APP Project Documents
 * [Project Overview:](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/home/Home.md)
   * [Scopes (Milestones)](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/home/Milestones.md)
@@ -31,10 +31,11 @@ This repository responsible for 2 different services (will be split in future):
    * [Time Off Tracking List](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/onboarding/Time-Off-Tracking.md)
 * Development:
    * [DevBox](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/development/Local-Development.md)
+   * [How to Contribute To Project](https://github.com/magento-commerce/catalog-storefront-ce/blob/develop/dev/docs/contribution/How-To-Contribute-To-Project.md)
    * [Running Tests on PR](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/development/Running-tests-on-PR.md)
 * Agreements:
    * [Branching Strategy](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/projectAgreements/Branching-strategy.md)
-   * [Code Review Checklist](https://github.com/magento/catalog-storefront/dev/blob/develop/docs/projectAgreements/Code-Review-checklist.md)
+   * [Code Review Checklist](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/projectAgreements/Code-Review-checklist.md)
    * [[GraphQL] Deprecation Policy](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/projectAgreements/[GraphQL]-Deprecation-policy.md)
    * [System Behavior](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/projectAgreements/Behaviors-in-Eventually-Consistent-Distributed-System.md)
 * Design Documents:
