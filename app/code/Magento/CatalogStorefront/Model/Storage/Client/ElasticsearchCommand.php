@@ -159,8 +159,7 @@ class ElasticsearchCommand implements CommandInterface
 
     /**
      * Reformat documents array to delete by query format.
-     *
-     * todo: Improve this query for efficiency.
+     * TODO: Improve this query for efficiency.
      *
      * @param string $indexName
      * @param string $entityName

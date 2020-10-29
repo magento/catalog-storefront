@@ -81,6 +81,8 @@ class PublishProductVariantsConsumer implements ConsumerEventInterface
     }
 
     /**
+     * Build product variant import object
+     *
      * @param array $variantsData
      * @return ProductVariantImportInterface
      */
@@ -98,7 +100,6 @@ class PublishProductVariantsConsumer implements ConsumerEventInterface
      * Import variants
      *
      * @param ProductVariantImportInterface[] $variants
-     *
      * @return void
      */
     private function importVariants(array $variants): void

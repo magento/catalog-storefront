@@ -61,7 +61,9 @@ class DeleteProductVariantsConsumer implements ConsumerEventInterface
         try {
             $importResult = $this->variantsServer->DeleteProductVariants($deleteVariantsRequest);
             if ($importResult->getStatus() === false) {
-                $this->logger->error(sprintf('Product variants deletion has failed: "%s"', $importResult->getMessage()));
+                $this->logger->error(
+                    sprintf('Product variants deletion has failed: "%s"', $importResult->getMessage())
+                );
             }
         } catch (\Throwable $e) {
             $this->logger->critical(sprintf('Exception while deleting product variants: "%s"', $e));

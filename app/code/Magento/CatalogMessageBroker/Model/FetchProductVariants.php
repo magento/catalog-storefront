@@ -76,7 +76,6 @@ class FetchProductVariants implements FetchProductVariantsInterface
      * Prepare client request data
      *
      * @param Entity[] $entities
-     * @param string $storeCode
      *
      * @return array
      */

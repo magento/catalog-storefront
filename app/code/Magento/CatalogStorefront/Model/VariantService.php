@@ -36,9 +36,9 @@ class VariantService implements VariantServiceServerInterface
 {
     /**
      * Temporary store placeholder
-     * todo: Adapt to work without store code and remove this constant
+     * TODO: Adapt to work without store code and remove this constant
      */
-    public const EMPTY_STORE_VIEW = '';
+    public const EMPTY_STORE_CODE = '';
 
     /**
      * Product enabled status.
@@ -141,8 +141,8 @@ class VariantService implements VariantServiceServerInterface
                         'product_id' => $childId,
                         'parent_id' => $parentId
                     ];
-                    //todo: Adapt to work without store code
-                    $variantsInElasticFormat['product_variant'][self::EMPTY_STORE_VIEW]['save'][] = $variant;
+                    //TODO: Adapt to work without store code
+                    $variantsInElasticFormat['product_variant'][self::EMPTY_STORE_CODE]['save'][] = $variant;
                 }
             }
 
@@ -176,7 +176,8 @@ class VariantService implements VariantServiceServerInterface
 
         $variantsInElasticFormat = [
             'product_variant' => [
-                self::EMPTY_STORE_VIEW => [
+                //TODO: Adapt to work without store code
+                self::EMPTY_STORE_CODE => [
                     'delete_by_query' => $deleteFields
                 ]
             ]
@@ -248,10 +249,11 @@ class VariantService implements VariantServiceServerInterface
     }
 
     /**
-     * TODO: Implement GetVariantsMatch() method.
+     * TODO: Implement GetVariantsMatch() method and remove the warning suppression.
      *
      * @param OptionSelectionRequestInterface $request
      * @return ProductVariantResponseInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function GetVariantsMatch(OptionSelectionRequestInterface $request): ProductVariantResponseInterface
     {

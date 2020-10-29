@@ -124,9 +124,11 @@ class CatalogRepository
             return;
         }
         if (!$this->storageSchemaManager->existsDataSource($sourceName)) {
-            $this->logger->debug(
-                \sprintf('Cannot delete entities "%s" by query: Index "%s" does not exist', \implode(',', $data), $sourceName)
-            );
+            $this->logger->debug(\sprintf(
+                'Cannot delete entities "%s" by query: Index "%s" does not exist',
+                \implode(',', $data),
+                $sourceName
+            ));
             return;
         }
 
@@ -143,9 +145,9 @@ class CatalogRepository
      * @param array $data
      * @param string $sourceName
      * @param string $entityType
-     * @throws BulkException
-     * @throws CouldNotSaveException
      * @return void
+     * @throws CouldNotSaveException
+     * @throws BulkException
      */
     private function saveEntities(array $data, string $sourceName, string $entityType): void
     {
