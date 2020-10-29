@@ -61,6 +61,15 @@ class PublishReviewsConsumer implements ConsumerEventInterface
     public function execute(array $entities, string $scope = null): void
     {
         $reviewsData = $this->fetchReviews->execute($entities);
+
+        foreach ($reviewsData as &$data) {
+            $data['id'] = $data['review_id'];
+
+            foreach ($data['ratings'] as &$rating) {
+                $rating['id'] = $rating['rating_id'];
+            }
+        }
+
         $importRequest = $this->importReviewsRequestMapper->setData(['reviews' => $reviewsData])->build();
         $importResult = $this->productReviewsServer->ImportProductReviews($importRequest);
 

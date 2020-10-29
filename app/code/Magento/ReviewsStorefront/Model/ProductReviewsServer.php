@@ -109,9 +109,6 @@ class ProductReviewsServer implements ProductReviewsServerInterface
 
             foreach ($request->getReviews() as $review) {
                 $review = $this->importReviewArrayMapper->convertToArray($review);
-                // TODO change review_id to id in proto
-                $review['id'] = $review['review_id'];
-                unset($review['review_id']);
                 $reviewsInElasticFormat['review'][$request->getStore()]['save'][] = $review;
             }
 
@@ -166,7 +163,7 @@ class ProductReviewsServer implements ProductReviewsServerInterface
     public function GetProductReviews(ProductReviewRequestInterface $request): ProductReviewResponseInterface
     {
         $items = [];
-        $reviews = $this->reviewDataProvider->fetchByProductId((int)$request->getProductId(), $request->getStore());
+        $reviews = $this->reviewDataProvider->fetchByProductId($request->getProductId(), $request->getStore());
 
         foreach ($reviews as $review) {
             $items[] = $this->readReviewMapper->setData($review)->build();
@@ -204,7 +201,7 @@ class ProductReviewsServer implements ProductReviewsServerInterface
     public function GetProductReviewCount(
         ProductReviewCountRequestInterface $request
     ): ProductReviewCountResponseInterface {
-        $reviewCount = $this->reviewDataProvider->getReviewsCount((int)$request->getProductId(), $request->getStore());
+        $reviewCount = $this->reviewDataProvider->getReviewsCount($request->getProductId(), $request->getStore());
 
         $result = new ProductReviewCountResponse();
         $result->setReviewCount($reviewCount);

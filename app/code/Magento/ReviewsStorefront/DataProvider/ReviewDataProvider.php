@@ -53,7 +53,7 @@ class ReviewDataProvider
     /**
      * Fetch reviews by product id and scope code
      *
-     * @param int $productId
+     * @param string $productId
      * @param string $scope
      *
      * @return array
@@ -62,7 +62,7 @@ class ReviewDataProvider
      * @throws RuntimeException
      * @throws \Throwable
      */
-    public function fetchByProductId(int $productId, string $scope): array
+    public function fetchByProductId(string $productId, string $scope): array
     {
         $storageName = $this->storageState->getCurrentDataSourceName([Review::ENTITY_NAME]);
 
@@ -125,14 +125,16 @@ class ReviewDataProvider
     }
 
     /**
-     * @param int $productId
+     * Retrieve product reviews count
+     *
+     * @param string $productId
      * @param string $scope
      *
      * @return int
      *
      * @throws \Throwable
      */
-    public function getReviewsCount(int $productId, string $scope): int
+    public function getReviewsCount(string $productId, string $scope): int
     {
         $storageName = $this->storageState->getCurrentDataSourceName([Review::ENTITY_NAME]);
 
