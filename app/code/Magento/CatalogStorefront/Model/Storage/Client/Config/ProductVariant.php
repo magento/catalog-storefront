@@ -48,7 +48,6 @@ class ProductVariant implements EntityConfigInterface
                 ],
                 'parent_id' => [
                     'type' => 'text',
-                    'index' => false
                 ],
                 'product_id' => [
                     'type' => 'text',

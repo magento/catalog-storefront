@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\CatalogStorefront\Model\Storage\Client;
@@ -12,6 +11,7 @@ use Magento\CatalogStorefront\Model\Storage\Data\DocumentFactory;
 use Magento\CatalogStorefront\Model\Storage\Data\DocumentIteratorFactory;
 use Magento\CatalogStorefront\Model\Storage\Data\EntryInterface;
 use Magento\CatalogStorefront\Model\Storage\Data\EntryIteratorInterface;
+use Magento\CatalogStorefront\Model\Storage\Data\SearchResultIteratorFactory;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\RuntimeException;
 use Psr\Log\LoggerInterface;
@@ -21,11 +21,6 @@ use Psr\Log\LoggerInterface;
  */
 class ElasticsearchQuery implements QueryInterface
 {
-    /**
-     * @var Config
-     */
-    private $config;
-
     /**
      * @var ConnectionPull
      */
@@ -42,6 +37,11 @@ class ElasticsearchQuery implements QueryInterface
     private $documentIteratorFactory;
 
     /**
+     * @var SearchResultIteratorFactory
+     */
+    private $searchResultIteratorFactory;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -49,22 +49,22 @@ class ElasticsearchQuery implements QueryInterface
     /**
      * Initialize Elasticsearch Client
      *
-     * @param Config $config
      * @param ConnectionPull $connectionPull
      * @param DocumentFactory $documentFactory
      * @param DocumentIteratorFactory $documentIteratorFactory
+     * @param SearchResultIteratorFactory $searchResultIteratorFactory
      * @param LoggerInterface $logger
      */
     public function __construct(
-        Config $config,
         ConnectionPull $connectionPull,
         DocumentFactory $documentFactory,
         DocumentIteratorFactory $documentIteratorFactory,
+        SearchResultIteratorFactory $searchResultIteratorFactory,
         LoggerInterface $logger
     ) {
-        $this->config = $config;
         $this->documentFactory = $documentFactory;
         $this->documentIteratorFactory = $documentIteratorFactory;
+        $this->searchResultIteratorFactory = $searchResultIteratorFactory;
         $this->connectionPull = $connectionPull;
         $this->logger = $logger;
     }
@@ -90,6 +90,33 @@ class ElasticsearchQuery implements QueryInterface
         }
 
         return $this->documentFactory->create($result);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function searchEntries(string $indexName, string $entityName, array $searchBody): EntryIteratorInterface
+    {
+        $query = [
+            'index' => $indexName,
+            'type' => $entityName,
+        ];
+
+        foreach ($searchBody as $key => $value) {
+            $query['body']['query']['bool']['must'][]['match'][$key] = $value;
+        }
+
+        try {
+            $result = $this->connectionPull->getConnection()->search($query);
+        } catch (\Throwable $throwable) {
+            throw new RuntimeException(
+                __("Storage error: {$throwable->getMessage()} Query was:" . \json_encode($query)),
+                $throwable
+            );
+        }
+        $this->checkErrors($result, $indexName);
+
+        return $this->searchResultIteratorFactory->create($result);
     }
 
     /**
@@ -127,7 +154,7 @@ class ElasticsearchQuery implements QueryInterface
      * @param string $indexName
      * @throws NotFoundException
      */
-    private function checkErrors(array $result, string $indexName)
+    private function checkErrors(array $result, string $indexName): void
     {
         $errors = [];
         $notFound = [];

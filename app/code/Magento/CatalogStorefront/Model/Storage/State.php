@@ -40,7 +40,7 @@ class State
 
     /**
      * Get current data source name of storage taking into account version of the data source.
-     * todo: adapt to work without store_code?
+     * todo: Adapt to work without store code
      *
      * @param array $scopes
      * @return string

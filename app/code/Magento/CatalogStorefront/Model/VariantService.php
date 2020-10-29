@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefront\Model;
 
+use Magento\CatalogStorefront\DataProvider\ProductVariantsDataProvider;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteVariantsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteVariantsResponseFactory;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteVariantsResponseInterface;
@@ -14,10 +15,13 @@ use Magento\CatalogStorefrontApi\Api\Data\ImportVariantsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportVariantsResponseFactory;
 use Magento\CatalogStorefrontApi\Api\Data\ImportVariantsResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\OptionSelectionRequestInterface;
-use Magento\CatalogStorefrontApi\Api\Data\ProductVariantArrayMapper;
+use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterfaceFactory;
+use Magento\CatalogStorefrontApi\Api\Data\ProductVariantMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ProductVariantRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\ProductVariantResponse;
 use Magento\CatalogStorefrontApi\Api\Data\ProductVariantResponseInterface;
 use Magento\CatalogStorefrontApi\Api\VariantServiceServerInterface;
+use Magento\Framework\Exception\RuntimeException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -31,14 +35,20 @@ use Psr\Log\LoggerInterface;
 class VariantService implements VariantServiceServerInterface
 {
     /**
+     * Temporary store placeholder
+     * todo: Adapt to work without store code and remove this constant
+     */
+    public const EMPTY_STORE_VIEW = '';
+
+    /**
+     * Product enabled status.
+     */
+    private const PRODUCT_STATUS_ENABLED = 'Enabled';
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
-
-    /**
-     * @var ProductVariantArrayMapper
-     */
-    private $variantArrayMapper;
 
     /**
      * @var ImportVariantsResponseFactory
@@ -56,25 +66,53 @@ class VariantService implements VariantServiceServerInterface
     private $deleteVariantsResponseFactory;
 
     /**
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @param ProductVariantArrayMapper $variantArrayMapper
+     * @var ProductVariantsDataProvider
+     */
+    private $productVariantsDataProvider;
+
+    /**
+     * @var ProductVariantMapper
+     */
+    private $productVariantMapper;
+
+    /**
+     * @var CatalogService
+     */
+    private $catalogService;
+
+    /**
+     * @var ProductsGetRequestInterfaceFactory
+     */
+    private $productsGetRequestInterfaceFactory;
+
+    /**
      * @param ImportVariantsResponseFactory $importVariantsResponseFactory
      * @param DeleteVariantsResponseFactory $deleteVariantsResponseFactory
      * @param LoggerInterface $logger
      * @param CatalogRepository $catalogRepository
+     * @param ProductVariantsDataProvider $productVariantsDataProvider
+     * @param ProductVariantMapper $productVariantMapper
+     * @param CatalogService $catalogService
+     * @param ProductsGetRequestInterfaceFactory $productsGetRequestInterfaceFactory
      */
     public function __construct(
-        ProductVariantArrayMapper $variantArrayMapper,
         ImportVariantsResponseFactory $importVariantsResponseFactory,
         DeleteVariantsResponseFactory $deleteVariantsResponseFactory,
         LoggerInterface $logger,
-        CatalogRepository $catalogRepository
+        CatalogRepository $catalogRepository,
+        ProductVariantsDataProvider $productVariantsDataProvider,
+        ProductVariantMapper $productVariantMapper,
+        CatalogService $catalogService,
+        ProductsGetRequestInterfaceFactory $productsGetRequestInterfaceFactory
     ) {
-        $this->variantArrayMapper = $variantArrayMapper;
         $this->importVariantsResponseFactory = $importVariantsResponseFactory;
         $this->logger = $logger;
         $this->catalogRepository = $catalogRepository;
         $this->deleteVariantsResponseFactory = $deleteVariantsResponseFactory;
+        $this->productVariantsDataProvider = $productVariantsDataProvider;
+        $this->productVariantMapper = $productVariantMapper;
+        $this->catalogService = $catalogService;
+        $this->productsGetRequestInterfaceFactory = $productsGetRequestInterfaceFactory;
     }
 
     /**
@@ -86,8 +124,6 @@ class VariantService implements VariantServiceServerInterface
     public function ImportProductVariants(ImportVariantsRequestInterface $request): ImportVariantsResponseInterface
     {
         try {
-            $storeCode = 'default'; //todo: temporary solution. Remove store code or infer the default somehow.
-
             $variantsInElasticFormat = [];
             foreach ($request->getVariants() as $variantData) {
                 $optionValues = $variantData->getOptionValues();
@@ -105,7 +141,8 @@ class VariantService implements VariantServiceServerInterface
                         'product_id' => $childId,
                         'parent_id' => $parentId
                     ];
-                    $variantsInElasticFormat['product_variant'][$storeCode]['save'][] = $variant;
+                    //todo: Adapt to work without store code
+                    $variantsInElasticFormat['product_variant'][self::EMPTY_STORE_VIEW]['save'][] = $variant;
                 }
             }
 
@@ -133,15 +170,14 @@ class VariantService implements VariantServiceServerInterface
      */
     public function DeleteProductVariants(DeleteVariantsRequestInterface $request): DeleteVariantsResponseInterface
     {
-        $decodedIds = \array_map(function ($id) {
+        $deleteFields = \array_map(function ($id) {
             return ['id' => $id];
         }, $request->getId());
-        $storeId = 'default';
 
         $variantsInElasticFormat = [
             'product_variant' => [
-                $storeId => [
-                    'delete_by_query' => $decodedIds
+                self::EMPTY_STORE_VIEW => [
+                    'delete_by_query' => $deleteFields
                 ]
             ]
         ];
@@ -161,13 +197,64 @@ class VariantService implements VariantServiceServerInterface
         return $deleteVariantsResponse;
     }
 
+    /**
+     * Get product variants from storage.
+     * Only variants whose corresponding products are 'enabled' and stored in storage are returned.
+     *
+     * @param ProductVariantRequestInterface $request
+     * @return ProductVariantResponseInterface
+     * @throws \InvalidArgumentException
+     * @throws RuntimeException
+     * @throws \Throwable
+     */
     public function GetProductVariants(ProductVariantRequestInterface $request): ProductVariantResponseInterface
     {
-        // TODO: Implement GetProductVariants() method.
+        $productId = $request->getProductId();
+        $store = $request->getStore();
+        $rawVariants = $this->productVariantsDataProvider->fetchByProductId((int)$productId);
+
+        //todo: add exception for empty response.
+
+        $compositeVariants = [];
+        foreach ($rawVariants as $rawVariant) {
+            $compositeVariants[$rawVariant['id']]['id'] = $rawVariant['id'];
+            $compositeVariants[$rawVariant['id']]['option_values'][] = $rawVariant['option_value'];
+            $compositeVariants[$rawVariant['id']]['product_id'] = $rawVariant['product_id'];
+        }
+
+        $productsGetRequest = $this->productsGetRequestInterfaceFactory->create();
+        $productsGetRequest->setIds(\array_column($compositeVariants, 'product_id'));
+        $productsGetRequest->setStore($store);
+        $productsGetRequest->setAttributeCodes(["id", "status"]);
+        $catalogProducts = $this->catalogService->getProducts($productsGetRequest)->getItems();
+
+        $activeProducts = [];
+        foreach ($catalogProducts as $product) {
+            if ($product->getStatus() === self::PRODUCT_STATUS_ENABLED) {
+                $activeProducts[$product->getId()] = $product->getId();
+            }
+        }
+
+        $variants = [];
+        foreach ($compositeVariants as $compositeVariant) {
+            if (isset($activeProducts[$compositeVariant['product_id']])) {
+                $variants[] = $this->productVariantMapper->setData($compositeVariant)->build();
+            }
+        }
+
+        $response = new ProductVariantResponse();
+        $response->setMatchedVariants($variants);
+        return $response;
     }
 
+    /**
+     * TODO: Implement GetVariantsMatch() method.
+     *
+     * @param OptionSelectionRequestInterface $request
+     * @return ProductVariantResponseInterface
+     */
     public function GetVariantsMatch(OptionSelectionRequestInterface $request): ProductVariantResponseInterface
     {
-        // TODO: Implement GetVariantsMatch() method.
+        return new ProductVariantResponse();
     }
 }

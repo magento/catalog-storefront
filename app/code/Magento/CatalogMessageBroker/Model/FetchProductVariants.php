@@ -20,7 +20,6 @@ class FetchProductVariants implements FetchProductVariantsInterface
      * Route to Export API product variants retrieval
      */
     private const EXPORT_API_GET_VARIANTS = '/V1/catalog-export/product-variants';
-    private const EXPORT_API_GET_VARIANTS_BY_PRODUCT_ID = '/V1/catalog-export/product-variants/product-ids';
 
     /**
      * @var RestClient
@@ -49,16 +48,18 @@ class FetchProductVariants implements FetchProductVariantsInterface
      */
     public function execute(array $entities): array
     {
+        $data = $this->prepareRequestData($entities);
         try {
             $variants = $this->restClient->get(
                 self::EXPORT_API_GET_VARIANTS,
-                $this->prepareRequestData($entities)
+                $data
             );
+
         } catch (\Throwable $e) {
             $this->logger->error(
                 \sprintf(
                     'Cannot load product variants via "%s" with ids "%s"',
-                    self::EXPORT_API_GET_PRODUCTS,
+                    self::EXPORT_API_GET_VARIANTS,
                     \implode(',', \array_map(function (Entity $entity) {
                         return $entity->getEntityId();
                     }, $entities))

@@ -54,7 +54,7 @@ class DocumentIteratorFactory
             if (isset($item['found']) && $item['found'] === false) {
                 continue;
             }
-            $tmp[(int)$item['_id']] = $this->documentFactory->create($item);
+            $tmp[$item['_id']] = $this->documentFactory->create($item);
         }
 
         foreach ($ids as $id) {

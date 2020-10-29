@@ -57,4 +57,22 @@ interface QueryInterface
         array $ids,
         array $fields
     ): EntryIteratorInterface;
+
+    /**
+     * Search entries by specified search arguments.
+     * Search works using the "must match" logic.
+     *
+     * $searchBody contains "search field" -> "search value".
+     * "search field" must be indexed.
+     *
+     * @param string $indexName
+     * @param string $entityName
+     * @param array $searchBody
+     *
+     * @return EntryIteratorInterface
+     *
+     * @throws NotFoundException
+     * @throws RuntimeException
+     */
+    public function searchEntries(string $indexName, string $entityName, array $searchBody): EntryIteratorInterface;
 }
