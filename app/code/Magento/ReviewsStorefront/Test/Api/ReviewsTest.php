@@ -235,7 +235,7 @@ class ReviewsTest extends StorefrontTestsAbstract
     /**
      * Validate product review count data
      *
-     * @magentoDataFixture Magento/Review/_files/customer_review_with_rating.php
+     * @magentoDataFixture Magento/Review/_files/different_reviews.php
      * @magentoDbIsolation disabled
      *
      * @return void
@@ -253,6 +253,6 @@ class ReviewsTest extends StorefrontTestsAbstract
         $this->productReviewCountRequest->setStore('default');
 
         $reviewCount = $this->reviewService->GetProductReviewCount($this->productReviewCountRequest)->getReviewCount();
-        self::assertEquals(1, $reviewCount);
+        self::assertEquals(2, $reviewCount);
     }
 }

@@ -65,7 +65,8 @@ class PublishReviewsConsumer implements ConsumerEventInterface
         foreach ($reviewsData as &$data) {
             $data['id'] = $data['review_id'];
 
-            foreach ($data['ratings'] as &$rating) {
+            // TODO change id to rating_id in proto
+            foreach ($data['ratings'] ?? [] as &$rating) {
                 $rating['id'] = $rating['rating_id'];
             }
         }
