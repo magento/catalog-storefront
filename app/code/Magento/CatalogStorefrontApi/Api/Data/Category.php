@@ -143,7 +143,7 @@ final class Category implements CategoryInterface
     /**
      * @var array
      */
-    private $dynamicAttributes;
+    private $attributes;
     
     /**
      * @inheritdoc
@@ -652,21 +652,21 @@ final class Category implements CategoryInterface
     /**
      * @inheritdoc
      *
-     * @return \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface[]
+     * @return \Magento\CatalogStorefrontApi\Api\Data\AttributeInterface[]
      */
-    public function getDynamicAttributes(): array
+    public function getAttributes(): array
     {
-        return (array) $this->dynamicAttributes;
+        return (array) $this->attributes;
     }
     
     /**
      * @inheritdoc
      *
-     * @param \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface[] $value
+     * @param \Magento\CatalogStorefrontApi\Api\Data\AttributeInterface[] $value
      * @return void
      */
-    public function setDynamicAttributes(array $value): void
+    public function setAttributes(array $value): void
     {
-        $this->dynamicAttributes = $value;
+        $this->attributes = $value;
     }
 }
