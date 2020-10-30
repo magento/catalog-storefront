@@ -26,14 +26,9 @@ final class ProductSearchRequest implements ProductSearchRequestInterface
     private $phrase;
 
     /**
-     * @var int
+     * @var string
      */
     private $store;
-
-    /**
-     * @var int
-     */
-    private $customerGroupId;
 
     /**
      * @var int
@@ -54,6 +49,16 @@ final class ProductSearchRequest implements ProductSearchRequestInterface
      * @var array
      */
     private $sort;
+
+    /**
+     * @var bool
+     */
+    private $includeAggregations;
+
+    /**
+     * @var int
+     */
+    private $customerGroupId;
     
     /**
      * @inheritdoc
@@ -79,43 +84,22 @@ final class ProductSearchRequest implements ProductSearchRequestInterface
     /**
      * @inheritdoc
      *
-     * @return int
+     * @return string
      */
-    public function getStore(): int
+    public function getStore(): string
     {
-        return (int) $this->store;
+        return (string) $this->store;
     }
     
     /**
      * @inheritdoc
      *
-     * @param int $value
+     * @param string $value
      * @return void
      */
-    public function setStore(int $value): void
+    public function setStore(string $value): void
     {
         $this->store = $value;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @return int
-     */
-    public function getCustomerGroupId(): int
-    {
-        return (int) $this->customerGroupId;
-    }
-    
-    /**
-     * @inheritdoc
-     *
-     * @param int $value
-     * @return void
-     */
-    public function setCustomerGroupId(int $value): void
-    {
-        $this->customerGroupId = $value;
     }
     
     /**
@@ -200,5 +184,47 @@ final class ProductSearchRequest implements ProductSearchRequestInterface
     public function setSort(array $value): void
     {
         $this->sort = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return bool
+     */
+    public function getIncludeAggregations(): bool
+    {
+        return (bool) $this->includeAggregations;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param bool $value
+     * @return void
+     */
+    public function setIncludeAggregations(bool $value): void
+    {
+        $this->includeAggregations = $value;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @return int
+     */
+    public function getCustomerGroupId(): int
+    {
+        return (int) $this->customerGroupId;
+    }
+    
+    /**
+     * @inheritdoc
+     *
+     * @param int $value
+     * @return void
+     */
+    public function setCustomerGroupId(int $value): void
+    {
+        $this->customerGroupId = $value;
     }
 }

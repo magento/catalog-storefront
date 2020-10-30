@@ -76,32 +76,31 @@ class SearchProxyServer implements \Magento\SearchStorefrontApi\Proto\SearchInte
             $r = new \Magento\SearchStorefrontApi\Api\Data\ProductSearchRequest();
             $r->setPhrase($value->getPhrase());
             $r->setStore($value->getStore());
-            $r->setCustomerGroupId($value->getCustomerGroupId());
             $r->setPageSize($value->getPageSize());
             $r->setCurrentPage($value->getCurrentPage());
             $res = [];
-            foreach ($value->getFilters() as $item6) {
+            foreach ($value->getFilters() as $item5) {
                 // convert data from \Magento\SearchStorefrontApi\Proto\Filter
                 // to \Magento\SearchStorefrontApi\Api\Data\Filter
-                /** @var \Magento\SearchStorefrontApi\Proto\Filter $item6 **/
-                $p = function () use ($item6) {
+                /** @var \Magento\SearchStorefrontApi\Proto\Filter $item5 **/
+                $p = function () use ($item5) {
                     $r = new \Magento\SearchStorefrontApi\Api\Data\Filter();
-                    $r->setAttribute($item6->getAttribute());
+                    $r->setAttribute($item5->getAttribute());
                     $values = [];
-                    foreach ($item6->getIn() as $newValue) {
+                    foreach ($item5->getIn() as $newValue) {
                         $values[] = $newValue;
                     }
                     $r->setIn($values);
-                    $r->setEq($item6->getEq());
-                    $prop10 = $item6->getRange();
-                    if ($prop10 !== null) {
+                    $r->setEq($item5->getEq());
+                    $prop9 = $item5->getRange();
+                    if ($prop9 !== null) {
                         // convert data from \Magento\SearchStorefrontApi\Proto\SearchRange
                         // to \Magento\SearchStorefrontApi\Api\Data\SearchRange
-                        /** @var \Magento\SearchStorefrontApi\Proto\SearchRange $prop10 **/
-                        $p = function () use ($prop10) {
+                        /** @var \Magento\SearchStorefrontApi\Proto\SearchRange $prop9 **/
+                        $p = function () use ($prop9) {
                             $r = new \Magento\SearchStorefrontApi\Api\Data\SearchRange();
-                            $r->setFrom($prop10->getFrom());
-                            $r->setTo($prop10->getTo());
+                            $r->setFrom($prop9->getFrom());
+                            $r->setTo($prop9->getTo());
                             return $r;
                         };
                         $out = $p();
@@ -114,20 +113,22 @@ class SearchProxyServer implements \Magento\SearchStorefrontApi\Proto\SearchInte
             }
             $r->setFilters($res);
             $res = [];
-            foreach ($value->getSort() as $item7) {
+            foreach ($value->getSort() as $item6) {
                 // convert data from \Magento\SearchStorefrontApi\Proto\Sort
                 // to \Magento\SearchStorefrontApi\Api\Data\Sort
-                /** @var \Magento\SearchStorefrontApi\Proto\Sort $item7 **/
-                $p = function () use ($item7) {
+                /** @var \Magento\SearchStorefrontApi\Proto\Sort $item6 **/
+                $p = function () use ($item6) {
                     $r = new \Magento\SearchStorefrontApi\Api\Data\Sort();
-                    $r->setAttribute($item7->getAttribute());
-                    $r->setTitle($item7->getTitle());
+                    $r->setAttribute($item6->getAttribute());
+                    $r->setDirection($item6->getDirection());
                     return $r;
                 };
                 $out = $p();
                 $res[] = $out;
             }
             $r->setSort($res);
+            $r->setIncludeAggregations($value->getIncludeAggregations());
+            $r->setCustomerGroupId($value->getCustomerGroupId());
             return $r;
         };
         $out = $p();

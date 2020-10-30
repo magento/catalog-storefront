@@ -88,8 +88,8 @@ final class SortMapper
             case "attribute":
                 $dto->setAttribute((string) $value);
                 break;
-            case "title":
-                $dto->setTitle((string) $value);
+            case "direction":
+                $dto->setDirection((string) $value);
                 break;
         }
     }

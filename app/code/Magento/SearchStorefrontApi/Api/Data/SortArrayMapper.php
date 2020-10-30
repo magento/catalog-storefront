@@ -48,7 +48,7 @@ final class SortArrayMapper
     {
         $result = [];
         $result["attribute"] = $dto->getAttribute();
-        $result["title"] = $dto->getTitle();
+        $result["direction"] = $dto->getDirection();
         return $result;
     }
 }

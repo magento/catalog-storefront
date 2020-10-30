@@ -89,10 +89,7 @@ final class ProductSearchRequestMapper
                 $dto->setPhrase((string) $value);
                 break;
             case "store":
-                $dto->setStore((int) $value);
-                break;
-            case "customerGroupId":
-                $dto->setCustomerGroupId((int) $value);
+                $dto->setStore((string) $value);
                 break;
             case "page_size":
                 $dto->setPageSize((int) $value);
@@ -119,6 +116,12 @@ final class ProductSearchRequestMapper
                         ->build();
                 }
                 $dto->setSort($convertedArray);
+                break;
+            case "include_aggregations":
+                $dto->setIncludeAggregations((bool) $value);
+                break;
+            case "customer_group_id":
+                $dto->setCustomerGroupId((int) $value);
                 break;
         }
     }

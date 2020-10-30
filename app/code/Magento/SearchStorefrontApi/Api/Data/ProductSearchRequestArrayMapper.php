@@ -49,7 +49,6 @@ final class ProductSearchRequestArrayMapper
         $result = [];
         $result["phrase"] = $dto->getPhrase();
         $result["store"] = $dto->getStore();
-        $result["customerGroupId"] = $dto->getCustomerGroupId();
         $result["page_size"] = $dto->getPageSize();
         $result["current_page"] = $dto->getCurrentPage();
         /** Convert complex Array field **/
@@ -66,6 +65,8 @@ final class ProductSearchRequestArrayMapper
                 ->convertToArray($fieldArrayDto);
         }
         $result["sort"] = $fieldArray;
+        $result["include_aggregations"] = $dto->getIncludeAggregations();
+        $result["customer_group_id"] = $dto->getCustomerGroupId();
         return $result;
     }
 }

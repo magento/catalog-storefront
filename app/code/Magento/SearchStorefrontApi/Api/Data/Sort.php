@@ -28,7 +28,7 @@ final class Sort implements SortInterface
     /**
      * @var string
      */
-    private $title;
+    private $direction;
     
     /**
      * @inheritdoc
@@ -56,9 +56,9 @@ final class Sort implements SortInterface
      *
      * @return string
      */
-    public function getTitle(): string
+    public function getDirection(): string
     {
-        return (string) $this->title;
+        return (string) $this->direction;
     }
     
     /**
@@ -67,8 +67,8 @@ final class Sort implements SortInterface
      * @param string $value
      * @return void
      */
-    public function setTitle(string $value): void
+    public function setDirection(string $value): void
     {
-        $this->title = $value;
+        $this->direction = $value;
     }
 }
