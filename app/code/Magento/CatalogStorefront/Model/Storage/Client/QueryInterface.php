@@ -65,18 +65,24 @@ interface QueryInterface
      * $searchBody contains "search field" -> "search value".
      * "search field" must be indexed. @see \Magento\ReviewsStorefront\Model\Storage\Client\Config\Review::getSettings()
      *
-     * TODO move to Magento_ReviewsStorefront
-     *
      * @param string $indexName
      * @param string $entityName
      * @param array $searchBody
+     * @param int|null $size
+     * @param int|null $pointer
      *
      * @return EntryIteratorInterface
      *
      * @throws NotFoundException
      * @throws RuntimeException
      */
-    public function searchEntries(string $indexName, string $entityName, array $searchBody): EntryIteratorInterface;
+    public function searchEntries(
+        string $indexName,
+        string $entityName,
+        array $searchBody,
+        ?int $size = null,
+        ?int $pointer = null
+    ): EntryIteratorInterface;
 
     /**
      * Retrieve entries count using terms.

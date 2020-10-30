@@ -19,6 +19,7 @@ use Magento\CatalogStorefrontApi\Api\Data\ImportReviewArrayMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ImportReviewsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportReviewsResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportReviewsResponseInterfaceFactory;
+use Magento\CatalogStorefrontApi\Api\Data\PaginationResponse;
 use Magento\CatalogStorefrontApi\Api\Data\ProductReviewCountRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductReviewCountResponse;
 use Magento\CatalogStorefrontApi\Api\Data\ProductReviewCountResponseInterface;
@@ -158,19 +159,29 @@ class ProductReviewsServer implements ProductReviewsServerInterface
 
     /**
      * @inheritdoc
-     * TODO pagination support
      */
     public function GetProductReviews(ProductReviewRequestInterface $request): ProductReviewResponseInterface
     {
         $items = [];
-        $reviews = $this->reviewDataProvider->fetchByProductId($request->getProductId(), $request->getStore());
+        $reviews = $this->reviewDataProvider->fetchByProductId(
+            $request->getProductId(),
+            $request->getStore(),
+            $request->getPagination()
+        );
 
         foreach ($reviews as $review) {
-            $items[] = $this->readReviewMapper->setData($review)->build();
+            $items[$review['id']] = $this->readReviewMapper->setData($review)->build();
         }
 
         $result = new ProductReviewResponse();
         $result->setItems($items);
+
+        if (!empty($request->getPagination()) && !empty($items)) {
+            $paginationResult = new PaginationResponse();
+            $paginationResult->setPageSize(\count($items)); // Size of items returned
+            $paginationResult->setCurrentPage(\array_key_last($items)); // current page = pointer = last id returned
+            $result->setPagination($paginationResult);
+        }
 
         return $result;
     }

@@ -10,6 +10,7 @@ namespace Magento\ReviewsStorefront\Test\Api;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CustomerProductReviewRequestInterface;
+use Magento\CatalogStorefrontApi\Api\Data\PaginationRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductReviewCountRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductReviewRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\RatingMetadataArrayMapper;
@@ -254,5 +255,83 @@ class ReviewsTest extends StorefrontTestsAbstract
 
         $reviewCount = $this->reviewService->GetProductReviewCount($this->productReviewCountRequest)->getReviewCount();
         self::assertEquals(2, $reviewCount);
+    }
+
+    /**
+     * Validate reviews data using pagination
+     * TODO increase reviews count
+     *
+     * @param array ...$dataProvider
+     *
+     * @magentoDataFixture Magento/Review/_files/different_reviews.php
+     * @magentoDbIsolation disabled
+     * @dataProvider getPaginationReviewsDataProvider
+     *
+     * @return void
+     *
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws NoSuchEntityException
+     * @throws \Throwable
+     */
+    public function testReviewsPagination(array ...$dataProvider): void
+    {
+        $product = $this->productRepository->get('simple');
+        $pointer = 0;
+
+        $this->productReviewRequest->setProductId((string)$product->getId());
+        $this->productReviewRequest->setStore('default');
+
+        /* @var $sizePaginationData PaginationRequestInterface */
+        $sizePaginationData = Bootstrap::getObjectManager()->create(PaginationRequestInterface::class);
+        $sizePaginationData->setName('size');
+        $sizePaginationData->setValue('1');
+
+        /* @var $pointerPaginationData PaginationRequestInterface */
+        $pointerPaginationData = Bootstrap::getObjectManager()->create(PaginationRequestInterface::class);
+        $pointerPaginationData->setName('pointer');
+
+        foreach ($dataProvider as $expectedData) {
+            $pointerPaginationData->setValue((string)$pointer);
+            $this->productReviewRequest->setPagination([$sizePaginationData, $pointerPaginationData]);
+
+            $reviews = $this->reviewService->GetProductReviews($this->productReviewRequest);
+
+            self::assertNotNull($reviews->getPagination());
+
+            $pointer = $reviews->getPagination()->getCurrentPage();
+            $items = $reviews->getItems();
+
+            self::assertEquals(1, $reviews->getPagination()->getPageSize());
+            self::assertCount(1, $items);
+
+            $item = \array_shift($items);
+            $this->compare($expectedData, $this->productReviewArrayMapper->convertToArray($item));
+        }
+    }
+
+    /**
+     * Retrieve pagination reviews data provider
+     *
+     * @return array
+     */
+    public function getPaginationReviewsDataProvider(): array
+    {
+        return [
+            'reviewData' => [
+                'firstReview' => [
+                    'product_id' => '1',
+                    'title' => '2 filter first review',
+                    'nickname' => 'Nickname',
+                    'text' => 'Review text',
+                ],
+                'secondReview' => [
+                    'product_id' => '1',
+                    'title' => '1 filter second review',
+                    'nickname' => 'Nickname',
+                    'text' => 'Review text',
+                ]
+            ],
+        ];
     }
 }

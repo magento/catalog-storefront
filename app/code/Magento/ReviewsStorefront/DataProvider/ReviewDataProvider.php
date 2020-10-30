@@ -10,6 +10,7 @@ namespace Magento\ReviewsStorefront\DataProvider;
 
 use Magento\CatalogStorefront\Model\Storage\Client\QueryInterface;
 use Magento\CatalogStorefront\Model\Storage\State;
+use Magento\CatalogStorefrontApi\Api\Data\PaginationRequestInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\ReviewsStorefront\Model\Storage\Client\Config\Review;
@@ -55,6 +56,7 @@ class ReviewDataProvider
      *
      * @param string $productId
      * @param string $scope
+     * @param PaginationRequestInterface[] $pagination => [['name' => 'size', 'value' => '20'], ['name' => 'pointer', 'value' => '0']]
      *
      * @return array
      *
@@ -62,15 +64,28 @@ class ReviewDataProvider
      * @throws RuntimeException
      * @throws \Throwable
      */
-    public function fetchByProductId(string $productId, string $scope): array
+    public function fetchByProductId(string $productId, string $scope, array $pagination = []): array
     {
         $storageName = $this->storageState->getCurrentDataSourceName([Review::ENTITY_NAME]);
+        $size = null;
+        $pointer = null;
+
+        // Parse pagination request
+        foreach ($pagination as $paginationData) {
+            if ($paginationData->getName() === 'size') {
+                $size = (int)$paginationData->getValue();
+            } elseif ($paginationData->getName() === 'pointer') {
+                $pointer = (int)$paginationData->getValue();
+            }
+        }
 
         try {
             $entities = $this->query->searchEntries(
                 $storageName,
                 Review::ENTITY_NAME,
-                ['product_id' => $productId, 'visibility' => $scope]
+                ['product_id' => $productId, 'visibility' => $scope],
+                $size,
+                $pointer
             );
         } catch (NotFoundException $notFoundException) {
             $this->logger->error(

@@ -104,8 +104,13 @@ class ElasticsearchQuery implements QueryInterface
     /**
      * @inheritdoc
      */
-    public function searchEntries(string $indexName, string $entityName, array $searchBody): EntryIteratorInterface
-    {
+    public function searchEntries(
+        string $indexName,
+        string $entityName,
+        array $searchBody,
+        ?int $size = null,
+        ?int $pointer = null
+    ): EntryIteratorInterface {
         $query = [
             'index' => $indexName,
             'type' => $entityName,
@@ -113,6 +118,12 @@ class ElasticsearchQuery implements QueryInterface
 
         foreach ($searchBody as $key => $value) {
             $query['body']['query']['bool']['must'][]['match'][$key] = $value;
+        }
+
+        if (null !== $size) {
+            $query['body']['size'] = $size;
+            $query['body']['sort'][] = ['_id' => 'asc'];
+            $query['body']['search_after'] = [$pointer ?? 0];
         }
 
         try {
