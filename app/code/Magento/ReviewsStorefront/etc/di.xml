@@ -23,4 +23,12 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchCommand">
+        <arguments>
+            <argument name="entitiesVisibleInSearch" xsi:type="array">
+                <item name="review" xsi:type="string">review</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

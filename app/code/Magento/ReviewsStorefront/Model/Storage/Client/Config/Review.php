@@ -32,7 +32,6 @@ class Review implements EntityConfigInterface
                         'match' => 'product_id',
                         'match_mapping_type' => 'string',
                         'mapping' => [
-                            'type' => 'integer',
                             'index' => true,
                         ],
                     ],
@@ -42,7 +41,6 @@ class Review implements EntityConfigInterface
                         'match' => 'customer_id',
                         'match_mapping_type' => 'string',
                         'mapping' => [
-                            'type' => 'integer',
                             'index' => true,
                         ],
                     ],

@@ -12,7 +12,6 @@ use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
 use Magento\CatalogStorefront\Model\Storage\State;
 use Magento\Framework\Amqp\Config;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Indexer\Model\Indexer;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
@@ -30,6 +29,8 @@ use PHPUnit\Framework\TestResult;
 abstract class StorefrontTestsAbstract extends TestCase
 {
     /**
+     * List of reviews & ratings metadata feed names
+     *
      * @var array
      */
     private const FEEDS = [
@@ -38,11 +39,23 @@ abstract class StorefrontTestsAbstract extends TestCase
     ];
 
     /**
+     * List of queues used for reviews & ratings metadata
+     *
      * @var array
      */
     private const QUEUES = [
         'export.product.reviews.queue',
         'export.rating.metadata.queue',
+    ];
+
+    /**
+     * List of reviews & ratings metadata consumers
+     *
+     * @var array
+     */
+    private const CONSUMERS = [
+        'export.product.reviews.consumer',
+        'export.rating.metadata.consumer',
     ];
 
     /**
@@ -69,6 +82,16 @@ abstract class StorefrontTestsAbstract extends TestCase
         $this->clearCatalogStorage();
         $this->cleanFeeds();
         $this->cleanOldMessages();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function run(TestResult $result = null): TestResult
+    {
+        $this->cleanOldMessages();
+
+        return parent::run($result);
     }
 
     /**
@@ -149,17 +172,6 @@ abstract class StorefrontTestsAbstract extends TestCase
     }
 
     /**
-     * @inheritdoc
-     */
-    public function run(TestResult $result = null): TestResult
-    {
-        $this->cleanOldMessages();
-        $this->resetIndexerToOnSave();
-
-        return parent::run($result);
-    }
-
-    /**
      * Runs consumers before test execution
      *
      * @throws \Throwable
@@ -167,7 +179,7 @@ abstract class StorefrontTestsAbstract extends TestCase
     protected function runTest()
     {
         if (!$this->isSoap()) {
-            $this->runConsumers();
+            Bootstrap::getObjectManager()->create(ConsumerInvoker::class)->invoke(self::CONSUMERS);
             parent::runTest();
         }
     }
@@ -180,29 +192,6 @@ abstract class StorefrontTestsAbstract extends TestCase
     private function isSoap(): bool
     {
         return TESTS_WEB_API_ADAPTER === 'soap';
-    }
-
-    /**
-     * Run all/selected consumers
-     *
-     * @param array $consumers
-     */
-    public function runConsumers(array $consumers = []) : void
-    {
-        $consumerInvoker = Bootstrap::getObjectManager()->create(ConsumerInvoker::class);
-        $consumerInvoker->invoke($consumers);
-    }
-
-    /**
-     * Resetting indexer to 'on save' mode
-     *
-     * @return void
-     */
-    private function resetIndexerToOnSave(): void
-    {
-        $indexer = Bootstrap::getObjectManager()->get(Indexer::class);
-        $indexer->load('catalog_data_exporter_product_reviews');
-        $indexer->setScheduled(false);
     }
 
     /**

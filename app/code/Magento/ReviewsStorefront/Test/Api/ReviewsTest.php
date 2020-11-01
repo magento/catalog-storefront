@@ -13,7 +13,6 @@ use Magento\CatalogStorefrontApi\Api\Data\CustomerProductReviewRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\PaginationRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductReviewCountRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductReviewRequestInterface;
-use Magento\CatalogStorefrontApi\Api\Data\RatingMetadataArrayMapper;
 use Magento\CatalogStorefrontApi\Api\Data\RatingsMetadataRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ReadReviewArrayMapper;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -66,11 +65,6 @@ class ReviewsTest extends StorefrontTestsAbstract
     private $ratingMetadataRequest;
 
     /**
-     * @var RatingMetadataArrayMapper
-     */
-    private $ratingMetadataArrayMapper;
-
-    /**
      * @var CustomerRepositoryInterface
      */
     private $customerRepository;
@@ -90,7 +84,6 @@ class ReviewsTest extends StorefrontTestsAbstract
         $this->reviewService = Bootstrap::getObjectManager()->create(ProductReviewsServer::class);
         $this->ratingService = Bootstrap::getObjectManager()->create(RatingsMetadataServer::class);
         $this->ratingMetadataRequest = Bootstrap::getObjectManager()->create(RatingsMetadataRequestInterface::class);
-        $this->ratingMetadataArrayMapper = Bootstrap::getObjectManager()->create(RatingMetadataArrayMapper::class);
         $this->productReviewRequest = Bootstrap::getObjectManager()->create(ProductReviewRequestInterface::class);
         $this->customerReviewRequest = Bootstrap::getObjectManager()->create(
             CustomerProductReviewRequestInterface::class
