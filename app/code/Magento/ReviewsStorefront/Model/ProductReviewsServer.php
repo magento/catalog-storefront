@@ -188,13 +188,16 @@ class ProductReviewsServer implements ProductReviewsServerInterface
 
     /**
      * @inheritdoc
-     * TODO pagination support
      */
     public function GetCustomerProductReviews(
         CustomerProductReviewRequestInterface $request
     ): CustomerProductReviewResponseInterface {
         $items = [];
-        $reviews = $this->reviewDataProvider->fetchByCustomerId((int)$request->getCustomerId(), $request->getStore());
+        $reviews = $this->reviewDataProvider->fetchByCustomerId(
+            $request->getCustomerId(),
+            $request->getStore(),
+            $request->getPagination()
+        );
 
         foreach ($reviews as $review) {
             $items[] = $this->readReviewMapper->setData($review)->build();
@@ -202,6 +205,13 @@ class ProductReviewsServer implements ProductReviewsServerInterface
 
         $result = new CustomerProductReviewResponse();
         $result->setItems($items);
+
+        if (!empty($request->getPagination()) && !empty($items)) {
+            $paginationResult = new PaginationResponse();
+            $paginationResult->setPageSize(\count($items)); // Size of items returned
+            $paginationResult->setCurrentPage(\array_key_last($items)); // current page = pointer = last id returned
+            $result->setPagination($paginationResult);
+        }
 
         return $result;
     }

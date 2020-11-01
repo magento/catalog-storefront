@@ -56,7 +56,8 @@ class ReviewDataProvider
      *
      * @param string $productId
      * @param string $scope
-     * @param PaginationRequestInterface[] $pagination => [['name' => 'size', 'value' => '20'], ['name' => 'pointer', 'value' => '0']]
+     * @param PaginationRequestInterface[] $pagination
+     * $pagination => [['name' => 'size', 'value' => '20'], ['name' => 'pointer', 'value' => '0']]
      *
      * @return array
      *
@@ -67,25 +68,15 @@ class ReviewDataProvider
     public function fetchByProductId(string $productId, string $scope, array $pagination = []): array
     {
         $storageName = $this->storageState->getCurrentDataSourceName([Review::ENTITY_NAME]);
-        $size = null;
-        $pointer = null;
-
-        // Parse pagination request
-        foreach ($pagination as $paginationData) {
-            if ($paginationData->getName() === 'size') {
-                $size = (int)$paginationData->getValue();
-            } elseif ($paginationData->getName() === 'pointer') {
-                $pointer = (int)$paginationData->getValue();
-            }
-        }
+        $paginationData = $this->preparePaginationData($pagination);
 
         try {
             $entities = $this->query->searchEntries(
                 $storageName,
                 Review::ENTITY_NAME,
                 ['product_id' => $productId, 'visibility' => $scope],
-                $size,
-                $pointer
+                isset($paginationData['size']) ? (int)$paginationData['size'] : null,
+                isset($paginationData['pointer']) ? (int)$paginationData['pointer'] : null
             );
         } catch (NotFoundException $notFoundException) {
             $this->logger->error(
@@ -103,10 +94,30 @@ class ReviewDataProvider
     }
 
     /**
+     * Prepare pagination data
+     *
+     * @param PaginationRequestInterface[] $pagination
+     *
+     * @return array
+     */
+    private function preparePaginationData(array $pagination): array
+    {
+        $data = [];
+
+        foreach ($pagination as $paginationData) {
+            $data[$paginationData->getName()] = $paginationData->getValue();
+        }
+
+        return $data;
+    }
+
+    /**
      * Fetch reviews by customer id and scope code
      *
-     * @param int $customerId
+     * @param string $customerId
      * @param string $scope
+     * @param PaginationRequestInterface[] $pagination
+     * $pagination => [['name' => 'size', 'value' => '20'], ['name' => 'pointer', 'value' => '0']]
      *
      * @return array
      *
@@ -114,15 +125,18 @@ class ReviewDataProvider
      * @throws RuntimeException
      * @throws \Throwable
      */
-    public function fetchByCustomerId(int $customerId, string $scope): array
+    public function fetchByCustomerId(string $customerId, string $scope, array $pagination = []): array
     {
         $storageName = $this->storageState->getCurrentDataSourceName([Review::ENTITY_NAME]);
+        $paginationData = $this->preparePaginationData($pagination);
 
         try {
             $entities = $this->query->searchEntries(
                 $storageName,
                 Review::ENTITY_NAME,
-                ['customer_id' => $customerId, 'visibility' => $scope]
+                ['customer_id' => $customerId, 'visibility' => $scope],
+                isset($paginationData['size']) ? (int)$paginationData['size'] : null,
+                isset($paginationData['pointer']) ? (int)$paginationData['pointer'] : null
             );
         } catch (NotFoundException $notFoundException) {
             $this->logger->error(
