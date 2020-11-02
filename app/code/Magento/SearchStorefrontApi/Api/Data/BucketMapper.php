@@ -98,7 +98,7 @@ final class BucketMapper
                 $convertedArray = [];
                 foreach ($value as $element) {
                     $convertedArray[] = $this->objectManager
-                        ->create(\Magento\SearchStorefrontApi\Api\Data\OptionMapper::class)
+                        ->create(\Magento\SearchStorefrontApi\Api\Data\BucketOptionMapper::class)
                         ->setData($element)
                         ->build();
                 }

@@ -106,7 +106,7 @@ final class Bucket implements BucketInterface
     /**
      * @inheritdoc
      *
-     * @return \Magento\SearchStorefrontApi\Api\Data\OptionInterface[]
+     * @return \Magento\SearchStorefrontApi\Api\Data\BucketOptionInterface[]
      */
     public function getOptions(): array
     {
@@ -116,7 +116,7 @@ final class Bucket implements BucketInterface
     /**
      * @inheritdoc
      *
-     * @param \Magento\SearchStorefrontApi\Api\Data\OptionInterface[] $value
+     * @param \Magento\SearchStorefrontApi\Api\Data\BucketOptionInterface[] $value
      * @return void
      */
     public function setOptions(array $value): void

@@ -53,7 +53,7 @@ final class BucketArrayMapper
         /** Convert complex Array field **/
         $fieldArray = [];
         foreach ($dto->getOptions() as $fieldArrayDto) {
-            $fieldArray[] = $this->objectManager->get(\Magento\SearchStorefrontApi\Api\Data\OptionArrayMapper::class)
+            $fieldArray[] = $this->objectManager->get(\Magento\SearchStorefrontApi\Api\Data\BucketOptionArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
         $result["options"] = $fieldArray;

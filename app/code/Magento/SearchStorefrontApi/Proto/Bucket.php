@@ -26,7 +26,7 @@ class Bucket extends \Google\Protobuf\Internal\Message
      */
     protected $count = 0;
     /**
-     * Generated from protobuf field <code>repeated .magento.searchStorefrontApi.proto.Option options = 5;</code>
+     * Generated from protobuf field <code>repeated .magento.searchStorefrontApi.proto.BucketOption options = 5;</code>
      */
     private $options;
 
@@ -39,7 +39,7 @@ class Bucket extends \Google\Protobuf\Internal\Message
      *     @type string $attribute
      *     @type string $label
      *     @type int $count
-     *     @type \Magento\SearchStorefrontApi\Proto\Option[]|\Google\Protobuf\Internal\RepeatedField $options
+     *     @type \Magento\SearchStorefrontApi\Proto\BucketOption[]|\Google\Protobuf\Internal\RepeatedField $options
      * }
      */
     public function __construct($data = null)
@@ -115,7 +115,7 @@ class Bucket extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.searchStorefrontApi.proto.Option options = 5;</code>
+     * Generated from protobuf field <code>repeated .magento.searchStorefrontApi.proto.BucketOption options = 5;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
      */
     public function getOptions()
@@ -124,13 +124,13 @@ class Bucket extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     * Generated from protobuf field <code>repeated .magento.searchStorefrontApi.proto.Option options = 5;</code>
-     * @param \Magento\SearchStorefrontApi\Proto\Option[]|\Google\Protobuf\Internal\RepeatedField $var
+     * Generated from protobuf field <code>repeated .magento.searchStorefrontApi.proto.BucketOption options = 5;</code>
+     * @param \Magento\SearchStorefrontApi\Proto\BucketOption[]|\Google\Protobuf\Internal\RepeatedField $var
      * @return $this
      */
     public function setOptions($var)
     {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\SearchStorefrontApi\Proto\Option::class);
+        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\SearchStorefrontApi\Proto\BucketOption::class);
         $this->options = $arr;
 
         return $this;

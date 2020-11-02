@@ -168,65 +168,14 @@ class SearchProxyServer implements \Magento\SearchStorefrontApi\Proto\SearchInte
                     $r->setCount($item3->getCount());
                     $res = [];
                     foreach ($item3->getOptions() as $item7) {
-                        // convert data from \Magento\SearchStorefrontApi\Api\Data\Option
-                        // to \Magento\SearchStorefrontApi\Proto\Option
-                        /** @var \Magento\SearchStorefrontApi\Api\Data\Option $item7 **/
+                        // convert data from \Magento\SearchStorefrontApi\Api\Data\BucketOption
+                        // to \Magento\SearchStorefrontApi\Proto\BucketOption
+                        /** @var \Magento\SearchStorefrontApi\Api\Data\BucketOption $item7 **/
                         $p = function () use ($item7) {
-                            $r = new \Magento\SearchStorefrontApi\Proto\Option();
-                            $r->setOptionId($item7->getOptionId());
-                            $r->setProductId($item7->getProductId());
-                            $r->setType($item7->getType());
-                            $r->setIsRequire($item7->getIsRequire());
-                            $r->setSku($item7->getSku());
-                            $r->setMaxCharacters($item7->getMaxCharacters());
-                            $r->setFileExtension($item7->getFileExtension());
-                            $r->setImageSizeX($item7->getImageSizeX());
-                            $r->setImageSizeY($item7->getImageSizeY());
-                            $r->setSortOrder($item7->getSortOrder());
-                            $r->setDefaultTitle($item7->getDefaultTitle());
-                            $r->setStoreTitle($item7->getStoreTitle());
-                            $r->setTitle($item7->getTitle());
-                            $r->setDefaultPrice($item7->getDefaultPrice());
-                            $r->setDefaultPriceType($item7->getDefaultPriceType());
-                            $r->setStorePrice($item7->getStorePrice());
-                            $r->setStorePriceType($item7->getStorePriceType());
-                            $r->setPrice($item7->getPrice());
-                            $r->setPriceType($item7->getPriceType());
-                            $r->setRequired($item7->getRequired());
-                            $r->setProductSku($item7->getProductSku());
-                            $res = [];
-                            foreach ($item7->getValue() as $item29) {
-                                // convert data from \Magento\CatalogStorefrontApi\Api\Data\OptionValue
-                                // to \Magento\CatalogStorefrontApi\Proto\OptionValue
-                                /** @var \Magento\CatalogStorefrontApi\Api\Data\OptionValue $item29 **/
-                                $p = function () use ($item29) {
-                                    $r = new \Magento\CatalogStorefrontApi\Proto\OptionValue();
-                                    $r->setOptionId($item29->getOptionId());
-                                    $r->setProductId($item29->getProductId());
-                                    $r->setType($item29->getType());
-                                    $r->setIsRequire($item29->getIsRequire());
-                                    $r->setSku($item29->getSku());
-                                    $r->setMaxCharacters($item29->getMaxCharacters());
-                                    $r->setFileExtension($item29->getFileExtension());
-                                    $r->setImageSizeX($item29->getImageSizeX());
-                                    $r->setImageSizeY($item29->getImageSizeY());
-                                    $r->setSortOrder($item29->getSortOrder());
-                                    $r->setDefaultTitle($item29->getDefaultTitle());
-                                    $r->setStoreTitle($item29->getStoreTitle());
-                                    $r->setTitle($item29->getTitle());
-                                    $r->setDefaultPrice($item29->getDefaultPrice());
-                                    $r->setDefaultPriceType($item29->getDefaultPriceType());
-                                    $r->setStorePrice($item29->getStorePrice());
-                                    $r->setStorePriceType($item29->getStorePriceType());
-                                    $r->setPrice($item29->getPrice());
-                                    $r->setPriceType($item29->getPriceType());
-                                    $r->setOptionTypeId($item29->getOptionTypeId());
-                                    return $r;
-                                };
-                                $proto = $p();
-                                $res[] = $proto;
-                            }
-                            $r->setValue($res);
+                            $r = new \Magento\SearchStorefrontApi\Proto\BucketOption();
+                            $r->setValue($item7->getValue());
+                            $r->setLabel($item7->getLabel());
+                            $r->setCount($item7->getCount());
                             return $r;
                         };
                         $proto = $p();
