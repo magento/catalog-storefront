@@ -61,6 +61,11 @@ class PublishRatingMetadataConsumer implements ConsumerEventInterface
     public function execute(array $entities, string $scope = null): void
     {
         $ratingsMetadata = $this->fetchRatingsMetadata->execute($entities, $scope);
+
+        foreach ($ratingsMetadata as &$data) {
+            $data['id'] = $data['rating_id'];
+        }
+
         $importRequest = $this->importRatingsMetadataRequestMapper->setData(
             [
                 'metadata' => $ratingsMetadata,

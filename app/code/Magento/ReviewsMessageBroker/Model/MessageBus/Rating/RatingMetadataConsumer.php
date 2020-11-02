@@ -19,13 +19,6 @@ use Psr\Log\LoggerInterface;
 class RatingMetadataConsumer
 {
     /**
-     * Event types to handle incoming messages from Export API
-     * TODO: make private after https://github.com/magento/catalog-storefront/issues/242
-     */
-    const REVIEWS_UPDATED_EVENT_TYPE = 'rating_metadata_updated';
-    const REVIEWS_DELETED_EVENT_TYPE = 'rating_metadata_deleted';
-
-    /**
      * @var LoggerInterface
      */
     private $logger;

@@ -64,11 +64,6 @@ class PublishReviewsConsumer implements ConsumerEventInterface
 
         foreach ($reviewsData as &$data) {
             $data['id'] = $data['review_id'];
-
-            // TODO change id to rating_id in proto
-            foreach ($data['ratings'] ?? [] as $key => $rating) {
-                $data['ratings'][$key]['id'] = $rating['rating_id'];
-            }
         }
 
         $importRequest = $this->importReviewsRequestMapper->setData(['reviews' => $reviewsData])->build();

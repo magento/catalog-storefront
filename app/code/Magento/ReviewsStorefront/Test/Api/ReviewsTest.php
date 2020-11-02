@@ -176,7 +176,7 @@ class ReviewsTest extends StorefrontTestsAbstract
     private function validateReviewData(array $actualData, array $expectedData): void
     {
         $ratingIds = \array_map(function ($rating) {
-            return $rating['id'];
+            return $rating['rating_id'];
         }, $actualData['ratings']);
 
         $this->ratingMetadataRequest->setRatingIds($ratingIds);
@@ -187,11 +187,11 @@ class ReviewsTest extends StorefrontTestsAbstract
 
         $ratingNames = [];
         foreach ($ratingItems as $ratingItem) {
-            $ratingNames[$ratingItem->getRatingId()] = $ratingItem->getName();
+            $ratingNames[$ratingItem->getId()] = $ratingItem->getName();
         }
 
         foreach ($actualData['ratings'] as &$rating) {
-            $rating['name'] = $ratingNames[$rating['id']];
+            $rating['name'] = $ratingNames[$rating['rating_id']];
         }
 
         $this->compare($expectedData, $actualData);
@@ -252,7 +252,6 @@ class ReviewsTest extends StorefrontTestsAbstract
 
     /**
      * Validate reviews data using pagination
-     * TODO increase reviews count
      *
      * @param array ...$dataProvider
      *

@@ -105,8 +105,6 @@ class RatingsMetadataServer implements RatingsMetadataServerInterface
 
             foreach ($request->getMetadata() as $metadata) {
                 $ratingMetadata = $this->ratingMetadataArrayMapper->convertToArray($metadata);
-                // TODO change rating_id to id in proto
-                $ratingMetadata['id'] = $ratingMetadata['rating_id'];
                 $ratingsMetadataInElasticFormat['rating_metadata'][$storeCode]['save'][] = $ratingMetadata;
             }
 
