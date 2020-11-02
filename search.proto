@@ -84,10 +84,10 @@ message Bucket {
 
   int32 count = 3;
 
-  repeated Option options = 5;
+  repeated BucketOption options = 5;
 }
 
-message Option {
+message BucketOption {
   string value = 1;
 
   string label = 2;
