@@ -179,7 +179,10 @@ class ProductPublisher
         $productsRequestData = [];
 
         foreach ($products as $product) {
-            $product = $this->productDataProcessor->merge($product);
+            $product = array_replace_recursive(
+                $product,
+                $this->productDataProcessor->merge($product)
+            );
             // be sure, that data passed to Import API in the expected format
             $productsRequestData[] = $this->importProductDataRequestMapper->setData(
                 [
