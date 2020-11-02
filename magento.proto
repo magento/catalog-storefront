@@ -580,12 +580,10 @@ message DeleteRatingsMetadataResponse {
 message RatingsMetadataRequest {
   repeated string rating_ids = 1;
   string store = 2;
-  repeated PaginationRequest pagination = 3;
 }
 
 message RatingsMetadataResponse {
   repeated RatingMetadata items = 1;
-  PaginationResponse pagination = 2;
 }
 
 // catalog_data_exporter_product_reviews
