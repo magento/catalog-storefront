@@ -20,7 +20,7 @@ This repository is responsible for Catalog Storefront Application
 Contributions are welcomed! Read the [Contributing Guide](./CONTRIBUTING.md) for more information.
 
 ### Licensing
-This project is licensed under the Apache V2 License. See [LICENSE](./LICENSE.md) for more information.
+This project is licensed under the OSL-3.0 License. See [LICENSE](./LICENSE.md) for more information.
 
 # SF APP Project Documents
 * [Project Overview:](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/home/Home.md)
