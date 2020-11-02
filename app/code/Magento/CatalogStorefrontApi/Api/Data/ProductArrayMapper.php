@@ -88,11 +88,11 @@ final class ProductArrayMapper
         $result["visibility"] = $dto->getVisibility();
         /** Convert complex Array field **/
         $fieldArray = [];
-        foreach ($dto->getDynamicAttributes() as $fieldArrayDto) {
-            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueArrayMapper::class)
+        foreach ($dto->getAttributes() as $fieldArrayDto) {
+            $fieldArray[] = $this->objectManager->get(\Magento\CatalogStorefrontApi\Api\Data\AttributeArrayMapper::class)
                 ->convertToArray($fieldArrayDto);
         }
-        $result["dynamic_attributes"] = $fieldArray;
+        $result["attributes"] = $fieldArray;
         $result["meta_description"] = $dto->getMetaDescription();
         $result["meta_keyword"] = $dto->getMetaKeyword();
         $result["meta_title"] = $dto->getMetaTitle();

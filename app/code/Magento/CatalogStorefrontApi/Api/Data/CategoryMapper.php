@@ -164,15 +164,15 @@ final class CategoryMapper
             case "meta_keywords":
                 $dto->setMetaKeywords((string) $value);
                 break;
-            case "dynamic_attributes":
+            case "attributes":
                 $convertedArray = [];
                 foreach ($value as $element) {
                     $convertedArray[] = $this->objectManager
-                        ->create(\Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueMapper::class)
+                        ->create(\Magento\CatalogStorefrontApi\Api\Data\AttributeMapper::class)
                         ->setData($element)
                         ->build();
                 }
-                $dto->setDynamicAttributes($convertedArray);
+                $dto->setAttributes($convertedArray);
                 break;
         }
     }

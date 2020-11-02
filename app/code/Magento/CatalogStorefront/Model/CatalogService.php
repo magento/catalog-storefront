@@ -13,9 +13,8 @@ use Magento\CatalogStorefrontApi\Api\CatalogServerInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponse;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetResponseInterface;
-use Magento\CatalogStorefrontApi\Api\Data\Category;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryArrayMapper;
-use Magento\CatalogStorefrontApi\Api\Data\CategoryInterface;
+use Magento\CatalogStorefrontApi\Api\Data\CategoryMapper;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesResponseFactory;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteCategoriesResponseInterface;
@@ -24,7 +23,6 @@ use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseFactory;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\DeleteProductsResponseInterfaceFactory;
-use Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterfaceFactory;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseFactory;
 use Magento\CatalogStorefrontApi\Api\Data\ImportCategoriesResponseInterface;
@@ -32,14 +30,10 @@ use Magento\CatalogStorefrontApi\Api\Data\ImportProductsRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseFactory;
 use Magento\CatalogStorefrontApi\Api\Data\ImportProductsResponseInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductArrayMapper;
-use Magento\CatalogStorefrontApi\Api\Data\ProductInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductMapper;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResult;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetResultInterface;
-use Magento\CatalogStorefrontApi\Api\Data\UrlRewrite;
-use Magento\CatalogStorefrontApi\Api\Data\UrlRewriteParameter;
-use Magento\Framework\Api\DataObjectHelper;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -56,11 +50,6 @@ class CatalogService implements CatalogServerInterface
      * @var ProductDataProvider
      */
     private $dataProvider;
-
-    /**
-     * @var DataObjectHelper
-     */
-    private $dataObjectHelper;
 
     /**
      * @var ImportProductsResponseFactory
@@ -93,11 +82,6 @@ class CatalogService implements CatalogServerInterface
     private $categoryDataProvider;
 
     /**
-     * @var DynamicAttributeValueInterfaceFactory
-     */
-    private $dynamicAttributeFactory;
-
-    /**
      * @var ProductArrayMapper
      */
     private $productArrayMapper;
@@ -118,10 +102,13 @@ class CatalogService implements CatalogServerInterface
     private $productMapper;
 
     /**
+     * @var CategoryMapper
+     */
+    private $categoryMapper;
+
+    /**
      * @param ProductDataProvider $dataProvider
-     * @param DataObjectHelper $dataObjectHelper
      * @param CategoryDataProvider $categoryDataProvider
-     * @param DynamicAttributeValueInterfaceFactory $dynamicAttributeFactory
      * @param ImportProductsResponseFactory $importProductsResponseFactory
      * @param DeleteProductsResponseFactory $deleteProductsResponseFactory
      * @param DeleteCategoriesResponseFactory $deleteCategoriesResponseFactory
@@ -130,14 +117,13 @@ class CatalogService implements CatalogServerInterface
      * @param ProductArrayMapper $productArrayMapper
      * @param CategoryArrayMapper $categoryArrayMapper
      * @param ProductMapper $productMapper
+     * @param CategoryMapper $categoryMapper
      * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ProductDataProvider $dataProvider,
-        DataObjectHelper $dataObjectHelper,
         CategoryDataProvider $categoryDataProvider,
-        DynamicAttributeValueInterfaceFactory $dynamicAttributeFactory,
         ImportProductsResponseFactory $importProductsResponseFactory,
         DeleteProductsResponseFactory $deleteProductsResponseFactory,
         DeleteCategoriesResponseFactory $deleteCategoriesResponseFactory,
@@ -146,20 +132,20 @@ class CatalogService implements CatalogServerInterface
         ProductArrayMapper $productArrayMapper,
         CategoryArrayMapper $categoryArrayMapper,
         ProductMapper $productMapper,
+        CategoryMapper $categoryMapper,
         LoggerInterface $logger
     ) {
         $this->dataProvider = $dataProvider;
-        $this->dataObjectHelper = $dataObjectHelper;
         $this->importProductsResponseFactory = $importProductsResponseFactory;
         $this->deleteProductsResponseFactory = $deleteProductsResponseFactory;
         $this->deleteCategoriesResponseFactory = $deleteCategoriesResponseFactory;
         $this->importCategoriesResponseFactory = $importCategoriesResponseFactory;
         $this->catalogRepository = $catalogRepository;
         $this->categoryDataProvider = $categoryDataProvider;
-        $this->dynamicAttributeFactory = $dynamicAttributeFactory;
         $this->productArrayMapper = $productArrayMapper;
         $this->categoryArrayMapper = $categoryArrayMapper;
         $this->productMapper = $productMapper;
+        $this->categoryMapper = $categoryMapper;
         $this->logger = $logger;
     }
 
@@ -200,30 +186,11 @@ class CatalogService implements CatalogServerInterface
 
         $products = [];
         foreach ($rawItems as $item) {
-            $products[] = $this->prepareProduct($item);
+            $products[] = $this->productMapper->setData($item)->build();
         }
 
         $result->setItems($products);
 
-        return $result;
-    }
-
-    /**
-     * Unset null values in provided array recursively
-     *
-     * @param array $array
-     * @return array
-     */
-    private function cleanUpNullValues(array $array): array
-    {
-        $result = [];
-        foreach ($array as $key => $value) {
-            if ($value === null || $value === '') {
-                continue;
-            }
-
-            $result[$key] = is_array($value) ? $this->cleanUpNullValues($value) : $value;
-        }
         return $result;
     }
 
@@ -245,41 +212,16 @@ class CatalogService implements CatalogServerInterface
 
             foreach ($request->getProducts() as $productData) {
                 $product = $this->productArrayMapper->convertToArray($productData->getProduct());
+                $product['store_code'] = $storeCode;
 
                 if (!empty($productData->getAttributes())) {
                     $product = \array_filter($product, function ($code) use ($productData) {
                         return \in_array($code, $productData->getAttributes());
                     }, ARRAY_FILTER_USE_KEY);
-                }
 
-                if (empty($product)) {
-                    continue;
-                }
-
-                $productInElasticFormat = $product;
-                $productInElasticFormat['store_code'] = $storeCode;
-
-                if (isset($productInElasticFormat['dynamic_attributes'])) {
-                    foreach ($productInElasticFormat['dynamic_attributes'] as $dynamicAttribute) {
-                        $productInElasticFormat[$dynamicAttribute['code']] = $dynamicAttribute['value'];
-                    }
-                    unset($productInElasticFormat['dynamic_attributes']);
-                }
-
-                if (isset($productInElasticFormat['short_description'])) {
-                    $productInElasticFormat['short_description'] = [
-                        'html' => $productInElasticFormat['short_description']
-                    ];
-                }
-
-                if (isset($productInElasticFormat['description'])) {
-                    $productInElasticFormat['description'] = ['html' => $productInElasticFormat['description']];
-                }
-
-                if (!empty($productData->getAttributes())) {
-                    $productsInElasticFormat['product'][$storeCode]['update'][] = $productInElasticFormat;
+                    $productsInElasticFormat['product'][$storeCode]['update'][] = $product;
                 } else {
-                    $productsInElasticFormat['product'][$storeCode]['save'][] = $productInElasticFormat;
+                    $productsInElasticFormat['product'][$storeCode]['save'][] = $product;
                 }
             }
 
@@ -436,114 +378,11 @@ class CatalogService implements CatalogServerInterface
 
         $items = [];
         foreach ($categories as $category) {
-            //We need to bypass inactive categories
-            if (isset($category['is_active']) && $category['is_active'] == 0) {
-                continue;
-            }
-            $item = new Category();
-            $category = $this->cleanUpNullValues($category);
-
-            $this->dataObjectHelper->populateWithArray($item, $category, CategoryInterface::class);
-
-            $children = [];
-            foreach ($category['children'] ?? [] as $categoryId) {
-                $children[$categoryId] = $categoryId;
-            }
-            $item->setChildren($children);
-            $items[] = $item;
+            $items[] = $this->categoryMapper->setData($category)->build();
         }
+
         $result->setItems($items);
+
         return $result;
-    }
-
-    /**
-     * Prepare product from raw data
-     *
-     * @param array $item
-     * @return ProductInterface
-     */
-    private function prepareProduct(array $item): ProductInterface
-    {
-        $item = $this->cleanUpNullValues($item);
-
-        $item['description'] = $item['description']['html'] ?? '';
-        $item['short_description'] = $item['short_description']['html'] ?? '';
-        //Convert option values to unified array format
-        if (!empty($item['options'])) {
-            foreach ($item['options'] as &$option) {
-                $firstValue = reset($option['value']);
-                if (!is_array($firstValue)) {
-                    $option['value'] = [0 => $option['value']];
-                    continue;
-                }
-            }
-        }
-
-        $product = $this->productMapper->setData($item)->build();
-
-        $urlRewritesData = $item['url_rewrites'] ?? [];
-        $urlRewrites = [];
-        foreach ($urlRewritesData as $urlRewriteData) {
-            $urlRewrites[] = $this->prepareUrlRewrite($urlRewriteData);
-        }
-
-        $product->setUrlRewrites($urlRewrites);
-        $product = $this->setDynamicAttributes($item, $product);
-
-        return $product;
-    }
-
-    /**
-     * Set dynamic attributes (custom attributes created in admin) to product entity.
-     *
-     * @param array $item
-     * @param \Magento\CatalogStorefrontApi\Api\Data\Product $product
-     * @return \Magento\CatalogStorefrontApi\Api\Data\Product
-     */
-    private function setDynamicAttributes(
-        array $item,
-        \Magento\CatalogStorefrontApi\Api\Data\Product $product
-    ): \Magento\CatalogStorefrontApi\Api\Data\Product {
-        $dynamicAttributes = [];
-
-        foreach ($item as $attributeCode => $value) {
-            $parts = explode('_', $attributeCode);
-            $parts = array_map("ucfirst", $parts);
-            $getterMethodName = 'get' . implode('', $parts);
-            if (\method_exists($product, $getterMethodName)) {
-                continue;
-            }
-            /** @var \Magento\CatalogStorefrontApi\Api\Data\DynamicAttributeValueInterface $dynamicAttribute */
-            $dynamicAttribute = $this->dynamicAttributeFactory->create();
-            $dynamicAttribute->setCode((string)$attributeCode);
-            $dynamicAttribute->setValue((string)$value);
-            $dynamicAttributes[] = $dynamicAttribute;
-        }
-
-        $product->setDynamicAttributes($dynamicAttributes);
-
-        return $product;
-    }
-
-    /**
-     * Prepare Url Rewrite data
-     *
-     * @param array $urlRewriteData
-     * @return UrlRewrite $urlRewriteData
-     */
-    private function prepareUrlRewrite(array $urlRewriteData): UrlRewrite
-    {
-        $rewrite = new UrlRewrite;
-        $rewrite->setUrl($urlRewriteData['url'] ?? '');
-        $parameters = [];
-        foreach ($urlRewriteData['parameters'] ?? [] as $parameterData) {
-            $parameter = new UrlRewriteParameter;
-            $parameter->setName($parameterData['name'] ?? '');
-            $parameter->setValue($parameterData['value'] ?? '');
-            $parameters[] = $parameter;
-        }
-        $rewrite->setParameters($parameters);
-
-        return $rewrite;
     }
 }
