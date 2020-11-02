@@ -66,7 +66,7 @@ interface CommandInterface
      * @param string $dataSourceName
      * @param string $entityName
      * @param array $entries
-     * @throws BulkException
+     * @throws \RuntimeException
      */
     public function deleteByQuery(string $dataSourceName, string $entityName, array $entries): void;
 }

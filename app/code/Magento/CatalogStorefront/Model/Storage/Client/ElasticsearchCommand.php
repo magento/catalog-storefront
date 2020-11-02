@@ -21,7 +21,6 @@ class ElasticsearchCommand implements CommandInterface
     private const BULK_ACTION_INDEX = 'index';
     private const BULK_ACTION_CREATE = 'create';
     private const BULK_ACTION_DELETE = 'delete';
-    private const ACTION_DELETE_BY_QUERY = 'delete_by_query';
     private const BULK_ACTION_UPDATE = 'update';
     /**#@-*/
 
@@ -159,7 +158,6 @@ class ElasticsearchCommand implements CommandInterface
 
     /**
      * Reformat documents array to delete by query format.
-     * TODO: Improve this query for efficiency.
      *
      * @param string $indexName
      * @param string $entityName
@@ -174,19 +172,14 @@ class ElasticsearchCommand implements CommandInterface
         $array = [
             'index' => $indexName,
             'type' => $entityName,
-            'body' => [
-                'min_score' => '1'
-            ],
-            'refresh' => false,
-        ];
+            'body' => [],
+            'refresh' => false
+            ];
         foreach ($documents as $document) {
             foreach ($document as $key => $value) {
-                $array['body']['query']['bool']['must'][] = [
-                    'match' => [$key => $value]
-                ];
+                $array['body']['query']['bool']['filter']['terms'][$key][] = $value;
             }
         }
-
         return $array;
     }
 
@@ -257,7 +250,7 @@ class ElasticsearchCommand implements CommandInterface
     /**
      * @inheritdoc
      *
-     * @throws BulkException
+     * @throws \RuntimeException
      */
     public function deleteByQuery(string $dataSourceName, string $entityName, array $entries): void
     {
@@ -265,19 +258,16 @@ class ElasticsearchCommand implements CommandInterface
             $dataSourceName,
             $entityName,
             $entries
+        //            'wait_for_completion' => true
         );
         try {
-            $result = $this->getConnection()->deleteByQuery($query);
-            $error = $result['errors'] ?? false;
-            if ($error) {
-                $this->handleBulkError($result['items'] ?? [], self::ACTION_DELETE_BY_QUERY);
-            }
+            $this->getConnection()->deleteByQuery($query);
         } catch (\Throwable $throwable) {
-            throw new BulkException(
+            throw new \RuntimeException(
                 __(
                     'Error occurred while deleting by query from "%1" index. Entity data: "%2". Error: %3',
                     $dataSourceName,
-                    $entries,
+                    \json_encode($entries),
                     $throwable->getMessage()
                 ),
                 $throwable

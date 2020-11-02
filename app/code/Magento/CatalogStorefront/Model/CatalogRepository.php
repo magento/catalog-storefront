@@ -68,6 +68,7 @@ class CatalogRepository
      * @param array $dataPerType
      * @throws BulkException
      * @throws CouldNotSaveException
+     * @throws \RuntimeException
      */
     public function saveToStorage(array $dataPerType): void
     {
@@ -116,7 +117,7 @@ class CatalogRepository
      * @param string $sourceName
      * @param string $entityType
      * @return void
-     * @throws BulkException
+     * @throws \RuntimeException
      */
     private function deleteEntitiesByQuery(array $data, string $sourceName, string $entityType): void
     {

@@ -40,7 +40,7 @@ class ProductVariant implements EntityConfigInterface
             ],
             'properties' => [
                 'id' => [
-                    'type' => 'text'
+                    'type' => 'keyword'
                 ],
                 'option_value' => [
                     'type' => 'text',

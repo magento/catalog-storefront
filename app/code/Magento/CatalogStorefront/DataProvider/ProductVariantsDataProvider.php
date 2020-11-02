@@ -61,7 +61,9 @@ class ProductVariantsDataProvider
     public function fetchByProductId(int $parentId): array
     {
         // todo: Adapt to work without store code
-        $storageName = $this->storageState->getCurrentDataSourceName([VariantService::EMPTY_STORE_VIEW, ProductVariant::ENTITY_NAME]);
+        $storageName = $this->storageState->getCurrentDataSourceName(
+            [VariantService::EMPTY_STORE_CODE, ProductVariant::ENTITY_NAME]
+        );
         try {
             $entities = $this->query->searchEntries(
                 $storageName,

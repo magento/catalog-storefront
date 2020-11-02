@@ -200,6 +200,7 @@ class VariantService implements VariantServiceServerInterface
 
     /**
      * Get product variants from storage.
+     *
      * Only variants whose corresponding products are 'enabled' and stored in storage are returned.
      *
      * @param ProductVariantRequestInterface $request
@@ -210,11 +211,18 @@ class VariantService implements VariantServiceServerInterface
      */
     public function GetProductVariants(ProductVariantRequestInterface $request): ProductVariantResponseInterface
     {
-        $productId = $request->getProductId();
+        $productId = $request->getProductId(); //todo test with null here from test.
         $store = $request->getStore();
         $rawVariants = $this->productVariantsDataProvider->fetchByProductId((int)$productId);
 
-        //todo: add exception for empty response.
+        if (empty($rawVariants)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'No products variants for product with id %s are found in catalog.',
+                    $productId
+                )
+            );
+        }
 
         $compositeVariants = [];
         foreach ($rawVariants as $rawVariant) {
@@ -241,6 +249,15 @@ class VariantService implements VariantServiceServerInterface
             if (isset($activeProducts[$compositeVariant['product_id']])) {
                 $variants[] = $this->productVariantMapper->setData($compositeVariant)->build();
             }
+        }
+
+        if (empty($variants)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'No valid products variants for product with id %s are found in catalog.',
+                    $productId
+                )
+            );
         }
 
         $response = new ProductVariantResponse();
