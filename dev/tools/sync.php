@@ -1,5 +1,8 @@
 <?php
 /**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ *
  * Ad-hoc solution to quickly sync data without AMQP or CRON enabled
  */
 use Magento\CatalogMessageBroker\Model\MessageBus\Category\CategoriesConsumer;
