@@ -43,8 +43,6 @@ class SearchResultIteratorFactory
      * @param array $result
      *
      * @return DocumentIterator
-     *
-     * TODO move to Magento_ReviewsStorefront
      */
     public function create(array $result): DocumentIterator
     {

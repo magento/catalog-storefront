@@ -1,3 +1,0 @@
-# Overview
-
-Magento_ReviewsStorefrontApi
