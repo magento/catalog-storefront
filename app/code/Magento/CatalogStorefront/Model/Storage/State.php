@@ -47,7 +47,7 @@ class State
     public function getCurrentDataSourceName(array $scopes): string
     {
         return $this->config->getSourcePrefix() . $this->config->getCurrentSourceVersion() . '_'
-            . \implode('_', $scopes);
+            . \ltrim(\implode('_', $scopes), '_');
     }
 
     /**

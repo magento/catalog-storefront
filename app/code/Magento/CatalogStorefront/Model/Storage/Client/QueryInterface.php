@@ -57,4 +57,45 @@ interface QueryInterface
         array $ids,
         array $fields
     ): EntryIteratorInterface;
+
+    /**
+     * Search entries by specified search arguments.
+     * Search works using the "must match" logic.
+     *
+     * $searchBody contains "search field" -> "search value".
+     * "search field" must be indexed. @see \Magento\ReviewsStorefront\Model\Storage\Client\Config\Review::getSettings()
+     *
+     * @param string $indexName
+     * @param string $entityName
+     * @param array $searchBody
+     * @param int|null $size
+     * @param int|null $pointer
+     *
+     * @return EntryIteratorInterface
+     *
+     * @throws NotFoundException
+     * @throws RuntimeException
+     */
+    public function searchEntries(
+        string $indexName,
+        string $entityName,
+        array $searchBody,
+        ?int $size = null,
+        ?int $pointer = null
+    ): EntryIteratorInterface;
+
+    /**
+     * Retrieve entries count using terms.
+     *
+     * $terms contains "term field" -> "term value"
+     *
+     * @param string $indexName
+     * @param string $entityName
+     * @param array $terms
+     *
+     * @return int
+     *
+     * @throws RuntimeException
+     */
+    public function getEntriesCount(string $indexName, string $entityName, array $terms): int;
 }

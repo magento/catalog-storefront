@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\CatalogStorefrontApi\Api\ProductReviewsServerInterface"
+                type="Magento\ReviewsStorefront\Model\ProductReviewsServer"/>
+    <preference for="Magento\CatalogStorefrontApi\Api\RatingsMetadataServerInterface"
+                type="Magento\ReviewsStorefront\Model\RatingsMetadataServer"/>
+
+    <type name="Magento\CatalogStorefront\Model\Storage\Client\Config\EntityConfigPool">
+        <arguments>
+            <argument name="configs" xsi:type="array">
+                <item name="review" xsi:type="object">
+                    Magento\ReviewsStorefront\Model\Storage\Client\Config\Review
+                </item>
+                <item name="rating_metadata" xsi:type="object">
+                    Magento\ReviewsStorefront\Model\Storage\Client\Config\RatingMetadata
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchCommand">
+        <arguments>
+            <argument name="entitiesVisibleInSearch" xsi:type="array">
+                <item name="review" xsi:type="string">review</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
