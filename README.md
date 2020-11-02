@@ -24,7 +24,6 @@ This project is licensed under the OSL-3.0 License. See [LICENSE](./LICENSE.md) 
 
 # SF APP Project Documents
 * [Project Overview:](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/home/Home.md)
-  * [Scopes (Milestones)](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/home/Milestones.md)
 * [Onboarding:](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/onboarding/Project-Onboarding.md)
    * [Repositories](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/onboarding/Repositories.md)
    * [Services Responsibilities](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/onboarding/Services-responsibilities.md)
