@@ -23,8 +23,7 @@ class GiftCardProductOptions implements DataMapperInterface
      */
     public function map(array $productData): array
     {
-        if (
-            !isset($productData['type']) ||
+        if (!isset($productData['type']) ||
             $productData['type'] !== self::PRODUCT_TYPE_GIFTCARD ||
             empty($productData['product_options'])
         ) {
