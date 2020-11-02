@@ -85,8 +85,8 @@ final class RatingMapper
     private function setByKey(Rating $dto, string $key, $value): void
     {
         switch ($key) {
-            case "id":
-                $dto->setId((string) $value);
+            case "rating_id":
+                $dto->setRatingId((string) $value);
                 break;
             case "value":
                 $dto->setValue((string) $value);

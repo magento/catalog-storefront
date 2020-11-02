@@ -23,7 +23,7 @@ final class RatingMetadata implements RatingMetadataInterface
     /**
      * @var string
      */
-    private $ratingId;
+    private $id;
 
     /**
      * @var string
@@ -40,9 +40,9 @@ final class RatingMetadata implements RatingMetadataInterface
      *
      * @return string
      */
-    public function getRatingId(): string
+    public function getId(): string
     {
-        return (string) $this->ratingId;
+        return (string) $this->id;
     }
     
     /**
@@ -51,9 +51,9 @@ final class RatingMetadata implements RatingMetadataInterface
      * @param string $value
      * @return void
      */
-    public function setRatingId(string $value): void
+    public function setId(string $value): void
     {
-        $this->ratingId = $value;
+        $this->id = $value;
     }
     
     /**

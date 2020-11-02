@@ -16,9 +16,9 @@ class Rating extends \Google\Protobuf\Internal\Message
     /**
      * Base64 encoded rating ID
      *
-     * Generated from protobuf field <code>string id = 1;</code>
+     * Generated from protobuf field <code>string rating_id = 1;</code>
      */
-    protected $id = '';
+    protected $rating_id = '';
     /**
      * Rating Value
      *
@@ -32,7 +32,7 @@ class Rating extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
-     *     @type string $id
+     *     @type string $rating_id
      *           Base64 encoded rating ID
      *     @type string $value
      *           Rating Value
@@ -47,25 +47,25 @@ class Rating extends \Google\Protobuf\Internal\Message
     /**
      * Base64 encoded rating ID
      *
-     * Generated from protobuf field <code>string id = 1;</code>
+     * Generated from protobuf field <code>string rating_id = 1;</code>
      * @return string
      */
-    public function getId()
+    public function getRatingId()
     {
-        return $this->id;
+        return $this->rating_id;
     }
 
     /**
      * Base64 encoded rating ID
      *
-     * Generated from protobuf field <code>string id = 1;</code>
+     * Generated from protobuf field <code>string rating_id = 1;</code>
      * @param string $var
      * @return $this
      */
-    public function setId($var)
+    public function setRatingId($var)
     {
         GPBUtil::checkString($var, true);
-        $this->id = $var;
+        $this->rating_id = $var;
 
         return $this;
     }

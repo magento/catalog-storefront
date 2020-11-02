@@ -112,7 +112,7 @@ class ProductReviews implements ProductReviewsInterface
                         /** @var \Magento\CatalogStorefrontApi\Api\Data\Rating $item9 **/
                         $p = function () use ($item9) {
                             $r = new \Magento\CatalogStorefrontApi\Proto\Rating();
-                            $r->setId($item9->getId());
+                            $r->setRatingId($item9->getRatingId());
                             $r->setValue($item9->getValue());
                             return $r;
                         };
@@ -310,7 +310,7 @@ class ProductReviews implements ProductReviewsInterface
                         /** @var \Magento\CatalogStorefrontApi\Proto\Rating $item7 **/
                         $p = function () use ($item7) {
                             $r = new \Magento\CatalogStorefrontApi\Api\Data\Rating();
-                            $r->setId($item7->getId());
+                            $r->setRatingId($item7->getRatingId());
                             $r->setValue($item7->getValue());
                             return $r;
                         };
@@ -433,7 +433,7 @@ class ProductReviews implements ProductReviewsInterface
                         /** @var \Magento\CatalogStorefrontApi\Proto\Rating $item7 **/
                         $p = function () use ($item7) {
                             $r = new \Magento\CatalogStorefrontApi\Api\Data\Rating();
-                            $r->setId($item7->getId());
+                            $r->setRatingId($item7->getRatingId());
                             $r->setValue($item7->getValue());
                             return $r;
                         };

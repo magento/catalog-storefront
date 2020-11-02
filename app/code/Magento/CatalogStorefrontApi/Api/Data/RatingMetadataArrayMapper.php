@@ -47,7 +47,7 @@ final class RatingMetadataArrayMapper
     public function convertToArray(RatingMetadata $dto)
     {
         $result = [];
-        $result["rating_id"] = $dto->getRatingId();
+        $result["id"] = $dto->getId();
         $result["name"] = $dto->getName();
         /** Convert complex Array field **/
         $fieldArray = [];
