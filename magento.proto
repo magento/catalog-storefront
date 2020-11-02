@@ -610,13 +610,13 @@ message ReadReview {
 }
 
 message Rating {
-  string id = 1; // Base64 encoded rating ID
+  string rating_id = 1; // Base64 encoded rating ID
   string value = 2; // Rating Value
 }
 
 // catalog_data_exporter_rating_metadata
 message RatingMetadata {
-  string rating_id = 1;  // Base64 encoded rating ID
+  string id = 1;  // Base64 encoded rating ID
   string name = 2; // The label assigned to an aspect of a product that is being rated, such as quality or price
   repeated RatingValue values = 3; // List of product review ratings
 }
