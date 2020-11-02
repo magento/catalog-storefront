@@ -237,7 +237,11 @@ class RatingsMetadata implements RatingsMetadataInterface
         /** @var \Magento\CatalogStorefrontApi\Api\Data\RatingsMetadataRequest $value **/
         $p = function () use ($value) {
             $r = new \Magento\CatalogStorefrontApi\Proto\RatingsMetadataRequest();
-            $r->setRatingId($value->getRatingId());
+            $values = [];
+            foreach ($value->getRatingIds() as $newValue) {
+                $values[] = $newValue;
+            }
+            $r->setRatingIds($values);
             $r->setStore($value->getStore());
             $res = [];
             foreach ($value->getPagination() as $item3) {

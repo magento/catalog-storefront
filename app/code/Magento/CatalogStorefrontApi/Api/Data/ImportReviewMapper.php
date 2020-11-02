@@ -85,8 +85,8 @@ final class ImportReviewMapper
     private function setByKey(ImportReview $dto, string $key, $value): void
     {
         switch ($key) {
-            case "review_id":
-                $dto->setReviewId((string) $value);
+            case "id":
+                $dto->setId((string) $value);
                 break;
             case "product_id":
                 $dto->setProductId((string) $value);

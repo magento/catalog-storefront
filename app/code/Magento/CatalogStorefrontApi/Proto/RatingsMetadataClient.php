@@ -26,7 +26,6 @@ class RatingsMetadataClient extends \Grpc\BaseStub
      * @param \Magento\CatalogStorefrontApi\Proto\ImportRatingsMetadataRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Magento\CatalogStorefrontApi\Proto\ImportRatingsMetadataResponse
      */
     public function ImportRatingsMetadata(
         \Magento\CatalogStorefrontApi\Proto\ImportRatingsMetadataRequest $argument,
@@ -47,7 +46,6 @@ class RatingsMetadataClient extends \Grpc\BaseStub
      * @param \Magento\CatalogStorefrontApi\Proto\DeleteRatingsMetadataRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Magento\CatalogStorefrontApi\Proto\DeleteRatingsMetadataResponse
      */
     public function DeleteRatingsMetadata(
         \Magento\CatalogStorefrontApi\Proto\DeleteRatingsMetadataRequest $argument,
@@ -68,7 +66,6 @@ class RatingsMetadataClient extends \Grpc\BaseStub
      * @param \Magento\CatalogStorefrontApi\Proto\RatingsMetadataRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
-     * @return \Magento\CatalogStorefrontApi\Proto\RatingsMetadataResponse
      */
     public function GetRatingsMetadata(
         \Magento\CatalogStorefrontApi\Proto\RatingsMetadataRequest $argument,
