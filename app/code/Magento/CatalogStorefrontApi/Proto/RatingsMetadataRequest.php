@@ -21,10 +21,6 @@ class RatingsMetadataRequest extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>string store = 2;</code>
      */
     protected $store = '';
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.PaginationRequest pagination = 3;</code>
-     */
-    private $pagination;
 
     /**
      * Constructor.
@@ -34,7 +30,6 @@ class RatingsMetadataRequest extends \Google\Protobuf\Internal\Message
      *
      *     @type string[]|\Google\Protobuf\Internal\RepeatedField $rating_ids
      *     @type string $store
-     *     @type \Magento\CatalogStorefrontApi\Proto\PaginationRequest[]|\Google\Protobuf\Internal\RepeatedField $pagination
      * }
      */
     public function __construct($data = null)
@@ -83,28 +78,6 @@ class RatingsMetadataRequest extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, true);
         $this->store = $var;
-
-        return $this;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.PaginationRequest pagination = 3;</code>
-     * @return \Google\Protobuf\Internal\RepeatedField
-     */
-    public function getPagination()
-    {
-        return $this->pagination;
-    }
-
-    /**
-     * Generated from protobuf field <code>repeated .magento.catalogStorefrontApi.proto.PaginationRequest pagination = 3;</code>
-     * @param \Magento\CatalogStorefrontApi\Proto\PaginationRequest[]|\Google\Protobuf\Internal\RepeatedField $var
-     * @return $this
-     */
-    public function setPagination($var)
-    {
-        $arr = GPBUtil::checkRepeatedField($var, \Google\Protobuf\Internal\GPBType::MESSAGE, \Magento\CatalogStorefrontApi\Proto\PaginationRequest::class);
-        $this->pagination = $arr;
 
         return $this;
     }

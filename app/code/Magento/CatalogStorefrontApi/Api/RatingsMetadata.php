@@ -86,7 +86,7 @@ class RatingsMetadata implements RatingsMetadataInterface
                 /** @var \Magento\CatalogStorefrontApi\Api\Data\RatingMetadata $item1 **/
                 $p = function () use ($item1) {
                     $r = new \Magento\CatalogStorefrontApi\Proto\RatingMetadata();
-                    $r->setRatingId($item1->getRatingId());
+                    $r->setId($item1->getId());
                     $r->setName($item1->getName());
                     $res = [];
                     foreach ($item1->getValues() as $item4) {
@@ -243,21 +243,6 @@ class RatingsMetadata implements RatingsMetadataInterface
             }
             $r->setRatingIds($values);
             $r->setStore($value->getStore());
-            $res = [];
-            foreach ($value->getPagination() as $item3) {
-                // convert data from \Magento\CatalogStorefrontApi\Api\Data\PaginationRequest
-                // to \Magento\CatalogStorefrontApi\Proto\PaginationRequest
-                /** @var \Magento\CatalogStorefrontApi\Api\Data\PaginationRequest $item3 **/
-                $p = function () use ($item3) {
-                    $r = new \Magento\CatalogStorefrontApi\Proto\PaginationRequest();
-                    $r->setName($item3->getName());
-                    $r->setValue($item3->getValue());
-                    return $r;
-                };
-                $proto = $p();
-                $res[] = $proto;
-            }
-            $r->setPagination($res);
             return $r;
         };
         $proto = $p();
@@ -286,7 +271,7 @@ class RatingsMetadata implements RatingsMetadataInterface
                 /** @var \Magento\CatalogStorefrontApi\Proto\RatingMetadata $item1 **/
                 $p = function () use ($item1) {
                     $r = new \Magento\CatalogStorefrontApi\Api\Data\RatingMetadata();
-                    $r->setRatingId($item1->getRatingId());
+                    $r->setId($item1->getId());
                     $r->setName($item1->getName());
                     $res = [];
                     foreach ($item1->getValues() as $item4) {
@@ -310,21 +295,6 @@ class RatingsMetadata implements RatingsMetadataInterface
                 $res[] = $out;
             }
             $r->setItems($res);
-            $prop2 = $value->getPagination();
-            if ($prop2 !== null) {
-                // convert data from \Magento\CatalogStorefrontApi\Proto\PaginationResponse
-                // to \Magento\CatalogStorefrontApi\Api\Data\PaginationResponse
-                /** @var \Magento\CatalogStorefrontApi\Proto\PaginationResponse $prop2 **/
-                $p = function () use ($prop2) {
-                    $r = new \Magento\CatalogStorefrontApi\Api\Data\PaginationResponse();
-                    $r->setPageSize($prop2->getPageSize());
-                    $r->setCurrentPage($prop2->getCurrentPage());
-                    $r->setTotalPages($prop2->getTotalPages());
-                    return $r;
-                };
-                $out = $p();
-                $r->setPagination($out);
-            }
             return $r;
         };
         $out = $p();

@@ -23,7 +23,7 @@ final class Rating implements RatingInterface
     /**
      * @var string
      */
-    private $id;
+    private $ratingId;
 
     /**
      * @var string
@@ -35,9 +35,9 @@ final class Rating implements RatingInterface
      *
      * @return string
      */
-    public function getId(): string
+    public function getRatingId(): string
     {
-        return (string) $this->id;
+        return (string) $this->ratingId;
     }
     
     /**
@@ -46,9 +46,9 @@ final class Rating implements RatingInterface
      * @param string $value
      * @return void
      */
-    public function setId(string $value): void
+    public function setRatingId(string $value): void
     {
-        $this->id = $value;
+        $this->ratingId = $value;
     }
     
     /**

@@ -85,8 +85,8 @@ final class RatingMetadataMapper
     private function setByKey(RatingMetadata $dto, string $key, $value): void
     {
         switch ($key) {
-            case "rating_id":
-                $dto->setRatingId((string) $value);
+            case "id":
+                $dto->setId((string) $value);
                 break;
             case "name":
                 $dto->setName((string) $value);
