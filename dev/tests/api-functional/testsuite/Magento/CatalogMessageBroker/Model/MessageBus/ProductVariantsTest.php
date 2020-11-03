@@ -162,7 +162,7 @@ class ProductVariantsTest extends StorefrontTestsAbstract
             return \array_map(function (array $feedItem) {
                 $childId = \explode('/', $feedItem['id'])[2];
                 $feedItem['product_id'] = $childId;
-                unset($feedItem['modifiedAt'], $feedItem['deleted']);
+                unset($feedItem['modifiedAt'], $feedItem['deleted'], $feedItem['parent_id']);
                 return $feedItem;
             }, $feedData);
         } catch (\Exception $e) {
