@@ -2,21 +2,21 @@ Two main points that is underlie the following instruction:
 1) magento org is a read-only replica of new primary fork visible only to internal teams
 2) sync from that invisible primary fork to magento org happens in eventually consistent way
 
-The example would be given for complex task that has a code changes for catalog-storefront and saas-export repos but whatever repo of Storefront project you need to contribute the flow will look same. 
+The example would be given for complex task that has a code changes for catalog-storefront and commerce-data-export repos but whatever repo of Storefront project you need to contribute the flow will look same. 
 
 ## Step #1
-Make a fork of catalog-storefront and saas-export repos from magento org to your own organisation. 
+Make a fork of catalog-storefront and commerce-data-export repos from magento org to your own organisation. 
 ## Step #2 [optional]
 If you are working together with someone else in a team, please create your story-branch from magento/catalog-storefront/develop branch and push it to your fork.
 For example, you need auto-generated files from proto-scheme, then someone from internal magento team would be able to create a PR to your story-branch.
 ## Step #3
-When you ready, create a PR from your fork to magento/catalog-storefront and magento/saas-export repos
+When you ready, create a PR from your fork to magento/catalog-storefront and magento/commerce-data-export repos
 
 *Note:* don't forget to link the PRs by providing this information under the _Related Pull Requests_ section
 *Examples:*
 ```
 ### Related Pull Requests
-https://github.com/magento/saas-export/pull/9999999
+https://github.com/magento/commerce-data-export/pull/9999999
 <!-- related pull request placeholder -->
 ```
 ## Step #4

@@ -8,9 +8,9 @@ This repository is responsible for Catalog Storefront Application
 - store data in an efficient way in own database(s)
 
 ### Service repository Dependencies 
-- https://github.com/magento/saas-export/ (Provides API to Export entities from Magento to any subscribed consumer)
+- https://github.com/magento/commerce-data-export (Provides API to Export entities from Magento to any subscribed consumer)
 
-### 3rd-party dependecnies (composer packages)
+### 3rd-party dependencies (composer packages)
 - google/protobuf
 - grpc/grpc
 - spiral/php-grpc
@@ -24,9 +24,8 @@ This project is licensed under the OSL-3.0 License. See [LICENSE](./LICENSE.md) 
 
 # SF APP Project Documents
 * [Project Overview:](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/home/Home.md)
-  * [Scopes (Milestones)](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/home/Milestones.md)
 * [Onboarding:](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/onboarding/Project-Onboarding.md)
-   * [Repositories](https://github.com/magento/storefront-cloud-project/blob/develop/production/.magento.env.yaml)
+   * [Repositories](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/onboarding/Repositories.md)
    * [Services Responsibilities](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/onboarding/Services-responsibilities.md)
    * [Time Off Tracking List](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/onboarding/Time-Off-Tracking.md)
 * Development:
@@ -42,8 +41,8 @@ This project is licensed under the OSL-3.0 License. See [LICENSE](./LICENSE.md) 
    * [Catalog Storefront Service Overview](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/designDocuments/Catalog-Storefront-Service.md)
    * [Plan to Introduce Back Office APIs](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/designDocuments/Plan-to-introduce-back-office-APIs.md)
    * [Product Variants and Type Specific Options](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/designDocuments/Product-variants-and-type-specific-options.md)
-   * [Catalog Media Tech Vision](https://github.com/magento/architecture/blob/develop/master/design-documents/media/catalog-images.md)
-   * [Configuration Propagation](https://github.com/magento/architecture/blob/develop/master/design-documents/storefront/configuraiton-propagation.md)
+   * [Catalog Media Tech Vision](https://github.com/magento/architecture/blob/master/design-documents/media/catalog-images.md)
+   * [Configuration Propagation](https://github.com/magento/architecture/blob/master/design-documents/storefront/configuraiton-propagation.md)
    * [Configurable Product Variants](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/designDocuments/Configurable-products-option-variants.md)
    * [Product Variants Services](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/designDocuments/Product-Variants-services.md)
 * QA:
@@ -52,4 +51,3 @@ This project is licensed under the OSL-3.0 License. See [LICENSE](./LICENSE.md) 
    * [How To Demo "Add Product with Options to Cart"](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/demo/How-To-Demo-"Add-Product-with-Options-to-Cart".md)
 * Contacts:
    * [Slack](https://magentocommeng.slack.com/archives/G0157R0PF3J)
-
