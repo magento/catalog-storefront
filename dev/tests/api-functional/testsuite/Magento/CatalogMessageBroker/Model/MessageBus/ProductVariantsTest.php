@@ -24,7 +24,7 @@ use Magento\ProductVariantDataExporter\Model\ProductVariantFeedInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Test class for Products message bus
+ * Test class for Products variants message bus
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -90,14 +90,14 @@ class ProductVariantsTest extends StorefrontTestsAbstract
     }
 
     /**
-     * Validate something
+     * Validate save and delete product variant operations
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_products_with_two_attributes.php
      * @magentoDbIsolation disabled
      * @throws NoSuchEntityException
      * @throws StateException
      * @throws \Throwable
      */
-    public function testSaveAndDeleteProduct(): void
+    public function testSaveAndDeleteProductVariant(): void
     {
         $configurable = $this->getProduct(self::CONFIGURABLE_SKU);
         $configurableId = $configurable->getId();
