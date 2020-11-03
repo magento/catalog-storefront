@@ -28,9 +28,4 @@ return [
             'translator' => 'MvcTranslator'
         ]
     ],
-    'controllers' => [
-        'abstract_factories' => [
-            \Zend\Mvc\Controller\LazyControllerAbstractFactory::class,
-        ],
-    ],
 ];

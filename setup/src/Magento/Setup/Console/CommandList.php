@@ -40,20 +40,12 @@ class CommandList
     protected function getCommandsClasses()
     {
         return [
-            \Magento\Setup\Console\Command\ConfigSetCommand::class,
             \Magento\Setup\Console\Command\DependenciesShowFrameworkCommand::class,
             \Magento\Setup\Console\Command\DependenciesShowModulesCircularCommand::class,
             \Magento\Setup\Console\Command\DependenciesShowModulesCommand::class,
-            \Magento\Setup\Console\Command\DiCompileCommand::class,
             \Magento\Setup\Console\Command\ModuleEnableCommand::class,
             \Magento\Setup\Console\Command\ModuleDisableCommand::class,
             \Magento\Setup\Console\Command\ModuleStatusCommand::class,
-            \Magento\Setup\Console\Command\ModuleUninstallCommand::class,
-            \Magento\Setup\Console\Command\ModuleConfigStatusCommand::class,
-            \Magento\Setup\Console\Command\MaintenanceAllowIpsCommand::class,
-            \Magento\Setup\Console\Command\MaintenanceDisableCommand::class,
-            \Magento\Setup\Console\Command\MaintenanceEnableCommand::class,
-            \Magento\Setup\Console\Command\MaintenanceStatusCommand::class,
         ];
     }
 
