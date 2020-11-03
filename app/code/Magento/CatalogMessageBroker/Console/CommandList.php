@@ -5,11 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MicroService\Console;
+namespace Magento\CatalogMessageBroker\Console;
 
+use Magento\CatalogMessageBroker\Console\Command\InstallCommand;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\MicroService\Console\Command\MicroServiceInstall;
-use Magento\MicroService\Console\Command\TopologyInstall;
 
 /**
  * Class CommandList
@@ -41,8 +40,7 @@ class CommandList implements \Magento\Framework\Console\CommandListInterface
     private function getCommandsClasses(): array
     {
         return [
-            TopologyInstall::class,
-            MicroServiceInstall::class
+            InstallCommand::class
         ];
     }
 

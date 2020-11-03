@@ -5,5 +5,5 @@
  */
 
 if (PHP_SAPI == 'cli') {
-    \Magento\Framework\Console\CommandLocator::register(\Magento\MicroService\Console\CommandList::class);
+    \Magento\Framework\Console\CommandLocator::register(\Magento\CatalogMessageBrokerMessageQueue\Console\CommandList::class);
 }

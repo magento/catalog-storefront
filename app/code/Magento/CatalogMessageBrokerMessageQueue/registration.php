@@ -6,4 +6,4 @@
 
 use \Magento\Framework\Component\ComponentRegistrar;
 
-ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Magento_MicroService', __DIR__);
+ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Magento_CatalogMessageBrokerMessageQueue', __DIR__);

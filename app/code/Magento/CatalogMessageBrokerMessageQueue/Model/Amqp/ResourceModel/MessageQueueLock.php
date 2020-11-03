@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\MicroService\Model\Amqp\ResourceModel;
+namespace Magento\CatalogMessageBrokerMessageQueue\Model\Amqp\ResourceModel;
 
 use \Magento\Framework\MessageQueue\Lock\ReaderInterface;
 use \Magento\Framework\MessageQueue\Lock\WriterInterface;

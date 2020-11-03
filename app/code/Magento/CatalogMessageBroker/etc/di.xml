@@ -11,7 +11,14 @@
     <preference for="Magento\CatalogMessageBroker\Model\MessageBus\Data\ChangedEntitiesInterface" type="Magento\CatalogMessageBroker\Model\MessageBus\Data\ChangedEntities" />
     <preference for="Magento\CatalogMessageBroker\Model\MessageBus\Data\DataInterface" type="Magento\CatalogMessageBroker\Model\MessageBus\Data\Data" />
     <preference for="Magento\CatalogMessageBroker\Model\MessageBus\Data\MetaInterface" type="Magento\CatalogMessageBroker\Model\MessageBus\Data\Meta" />
-
+    
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="message-broker-installer" xsi:type="object">Magento\CatalogMessageBroker\Console\Command\InstallCommand</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\CatalogMessageBroker\Model\ProductDataProcessor">
         <arguments>
             <argument name="dataMappers" xsi:type="array">

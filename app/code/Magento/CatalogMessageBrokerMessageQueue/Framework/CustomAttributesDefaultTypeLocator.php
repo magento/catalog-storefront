@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\MicroService\Framework;
+namespace Magento\CatalogMessageBrokerMessageQueue\Framework;
 
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface;

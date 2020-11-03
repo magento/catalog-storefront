@@ -5,7 +5,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\MicroService\Framework\App\Request;
+namespace Magento\CatalogMessageBrokerMessageQueue\Framework\App\Request;
 
 use Magento\Framework\App\Request\PathInfoProcessorInterface;
 

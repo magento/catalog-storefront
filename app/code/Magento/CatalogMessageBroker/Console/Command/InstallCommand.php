@@ -3,9 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\MicroService\Console\Command;
+namespace Magento\CatalogMessageBroker\Console\Command;
 
-use Magento\MicroService\Model\MicroService\Installer;
+use Magento\CatalogMessageBroker\Model\Installer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MicroServiceInstall extends  Command
+class InstallCommand extends  Command
 {
     /**
      * Configuration for AMQP
@@ -33,19 +33,19 @@ class MicroServiceInstall extends  Command
     /**
      * @var Installer
      */
-    private $microServiceInstaller;
+    private $installer;
 
     /**
      * TopologyInstall constructor.
-     * @param Installer $microServiceInstaller
+     * @param Installer $installer
      * @param string|null $name
      */
     public function __construct(
-        Installer $microServiceInstaller,
+        Installer $installer,
         string $name = null
     ) {
         parent::__construct($name);
-        $this->microServiceInstaller = $microServiceInstaller;
+        $this->installer = $installer;
     }
 
     /**
@@ -53,8 +53,8 @@ class MicroServiceInstall extends  Command
      */
     protected function configure()
     {
-        $this->setName('microservice:install')
-            ->setDescription('Install microservice')
+        $this->setName('catalog:message-broker:install')
+            ->setDescription('Install catalog message broker')
             ->setDefinition($this->getOptionsList());
 
         parent::configure();
@@ -150,7 +150,7 @@ class MicroServiceInstall extends  Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->microServiceInstaller->install(
+        $this->installer->install(
             $this->mapOptions($input->getOptions())
         );
     }

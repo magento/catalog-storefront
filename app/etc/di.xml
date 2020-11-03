@@ -1838,7 +1838,7 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\MicroService\Framework\App\Request\DefaultPathInfoProcessor" />
-    <preference for="Magento\Framework\Json\EncoderInterface" type="Magento\MicroService\Framework\Json\Encoder" />
-    <preference for="Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface" type="Magento\MicroService\Framework\CustomAttributesDefaultTypeLocator" />
+    <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\CatalogMessageBrokerMessageQueue\Framework\App\Request\DefaultPathInfoProcessor" />
+    <preference for="Magento\Framework\Json\EncoderInterface" type="Magento\CatalogMessageBrokerMessageQueue\Framework\Json\Encoder" />
+    <preference for="Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface" type="Magento\CatalogMessageBrokerMessageQueue\Framework\CustomAttributesDefaultTypeLocator" />
 </config>

@@ -1,6 +1,6 @@
 <?php
 
-namespace Magento\MicroService\Model\MicroService;
+namespace Magento\CatalogMessageBroker\Model;
 
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Stdlib\DateTime;
