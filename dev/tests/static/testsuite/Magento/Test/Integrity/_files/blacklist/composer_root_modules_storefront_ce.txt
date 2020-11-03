@@ -12,3 +12,5 @@ magento/module-catalog-storefront-graph-ql
 magento/module-configurable-product-extractor
 magento/module-storefront-graph-ql
 magento/module-downloadable-product-data-exporter
+magento/module-reviews-storefront
+magento/module-reviews-message-broker

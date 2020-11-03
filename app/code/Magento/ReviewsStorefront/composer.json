@@ -7,7 +7,6 @@
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
-        "magento/framework-message-queue": "*",
         "magento/module-catalog-storefront-api": "*",
         "magento/module-catalog-storefront": "*"
     },
