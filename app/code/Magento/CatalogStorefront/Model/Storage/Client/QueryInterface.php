@@ -59,8 +59,7 @@ interface QueryInterface
     ): EntryIteratorInterface;
 
     /**
-     * Search entries by specified search arguments.
-     * Search works using the "must match" logic.
+     * Search entries by specified search arguments. Search works using the "must match" logic.
      *
      * $searchBody contains "search field" -> "search value".
      * "search field" must be indexed. @see \Magento\ReviewsStorefront\Model\Storage\Client\Config\Review::getSettings()

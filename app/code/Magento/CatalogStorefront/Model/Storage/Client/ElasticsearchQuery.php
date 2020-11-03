@@ -19,6 +19,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Elasticsearch client adapter for read access operations.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ElasticsearchQuery implements QueryInterface
 {
@@ -53,8 +55,6 @@ class ElasticsearchQuery implements QueryInterface
     private $logger;
 
     /**
-     * Initialize Elasticsearch Client
-     *
      * @param Config $config
      * @param ConnectionPull $connectionPull
      * @param DocumentFactory $documentFactory

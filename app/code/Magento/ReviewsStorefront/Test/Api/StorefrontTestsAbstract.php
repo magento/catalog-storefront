@@ -25,6 +25,8 @@ use PHPUnit\Framework\TestResult;
  * Test abstract class for store front tests
  * Storefront API tests should be run as WebAPI test due to Message Broker do a REST call to the Export API to receive
  * reviews and ratings data.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class StorefrontTestsAbstract extends TestCase
 {

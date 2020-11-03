@@ -7,7 +7,9 @@
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
-        "magento/module-reviews-storefront-api": "*"
+        "magento/module-catalog-export": "*",
+        "magento/module-catalog-message-broker": "*",
+        "magento/module-catalog-storefront-api": "*"
     },
     "type": "magento2-module",
     "license": [

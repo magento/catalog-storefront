@@ -26,6 +26,8 @@ use SebastianBergmann\RecursionContext\InvalidArgumentException;
 
 /**
  * Test for product reviews data
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReviewsTest extends StorefrontTestsAbstract
 {

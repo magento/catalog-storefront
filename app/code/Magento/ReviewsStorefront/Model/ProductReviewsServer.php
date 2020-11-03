@@ -33,6 +33,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class for retrieving & importing reviews data
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductReviewsServer implements ProductReviewsServerInterface
 {
