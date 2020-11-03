@@ -42,7 +42,6 @@ class ProductDataProcessor
         'updated_at' => 'updated_at',
         'attributes' => 'dynamic_attributes',
         'price_view' => 'price_view',
-        // 'variants' => 'variants', // \Magento\CatalogStorefrontApi\Api\Data\VariantInterface[]
         'category_ids' => 'categories',
         'images' => 'images', //type: \Magento\CatalogStorefrontApi\Api\Data\ImageInterface[]
         'videos' => 'videos', //type: \Magento\CatalogStorefrontApi\Api\Data\VideoInterface[]

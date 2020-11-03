@@ -8,7 +8,6 @@
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
         "magento/module-catalog-inventory": "*",
-        "magento/module-configurable-product-extractor": "*",
         "magento/module-catalog-storefront-connector": "*",
         "magento/module-catalog-extractor": "*",
         "magento/module-catalog-search": "*",
