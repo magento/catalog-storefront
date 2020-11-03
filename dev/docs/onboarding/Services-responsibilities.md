@@ -22,7 +22,7 @@ This simplified diagram highlights the main "parts" of Storefront Application (G
 
 ## Responsibilities
 ### Export API. 
-Source: https://github.com/magento/saas-export/tree/develop-storefront   
+Source: https://github.com/magento/commerce-data-export/tree/main   
 **Provide API to Export entities from Magento to any subscribed consumer**   
 Implement 2 different strategies:   
 - Push strategy (used by PRex): push changes to remote end-point called Injection Service
@@ -31,7 +31,7 @@ Implement 2 different strategies:
 By fact contract of Export API is described in et_schema.xml
 
 ### Message Broker. 
-Source: https://github.com/magento/catalog-storefront/tree/develop/app/code/Magento/CatalogMessageBroker   
+Source: https://github.com/magento/storefront-message-broker   
 **Connect Backoffice and Storefront application.**   
 
 Responsibilities:
@@ -46,18 +46,6 @@ Source: https://github.com/magento/catalog-storefront/tree/develop/app/code/Mage
 Responsibilities:
 - provide Read API for specific attributes, scope
 - store data in efficient way in own databases
-
-## Modules that will be eliminated (transition period)
-
-### Old Export API
-Source: [CatalogExtractor](https://github.com/magento/catalog-storefront/tree/develop/app/code/Magento/CatalogExtractor), any "*Extractor" module   
-**The previous implementation of Export API. Will be migrated to new Export API**   
-Will be eliminated after migration all existing Data Providers to Export API
-
-### Connector 
-Source: https://github.com/magento/catalog-storefront/tree/develop/app/code/Magento/CatalogStorefrontConnector   
-Responsibilities:
-- expose events "storefront.catalog.category.update", "storefront.catalog.product.update" which publish product ids on different events: product saved, category assigned to product, store created...
 
 ## Legacy approach (historical notes)
 
