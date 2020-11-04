@@ -138,7 +138,6 @@ class ProductPublisher
      * @param array $products
      * @param string $storeCode
      * @param string $actionType
-     * @param array $overrideProducts
      *
      * @return void
      */
