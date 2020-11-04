@@ -8,13 +8,13 @@ https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.htm
 
 All required technologies must installed in the system including the following:
 
-[Composer](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#composer-latest-stable-version)    
+[Composer](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#composer)    
 [Database](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#database)  
-[PHP](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#database) with [required PHP extensions](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#database)    
+[PHP](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#php) with [required PHP extensions](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#required-php-extensions)    
 for gRPC PHP should have an additional set of extensions, see information in [gRPC Server](https://github.com/magento/catalog-storefront/tree/develop/app/code/Magento/Grpc) how to set up them.   
 [Elasticsearch](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#elasticsearch)    
 [SSL](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#ssl)  
-[Required system dependencies](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#elasticsearch)  
+[Required system dependencies](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#required-system-dependencies)  
 
 The following technologies required for Catalog Storefront service:
 [RabbitMQ](https://devdocs.magento.com/guides/v2.4/config-guide/mq/rabbitmq-overview.html) is an optional for Magento, but mandatory for SF APP.  
@@ -25,7 +25,7 @@ The following technologies required for Catalog Storefront service:
 If you have any issues with setup take a look into [prerequisites](https://devdocs.magento.com/guides/v2.4/install-gde/prereq/prereq-overview.html) to make sure everything installed as needed.
 
 ## Required repositories  
-You need to have access to the [following repositories](https://github.com/magento/storefront-cloud-project/blob/production/.magento.env.yaml) in order to contribute to SF APP
+You need to have access to the [following repositories](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/onboarding/Repositories.md) in order to contribute to SF APP
 
 ## Project installation  
  
