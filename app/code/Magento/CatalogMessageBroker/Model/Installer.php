@@ -4,7 +4,6 @@ namespace Magento\CatalogMessageBroker\Model;
 
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Stdlib\DateTime;
-use Magento\Setup\Model\ConfigGenerator;
 
 class Installer
 {
@@ -38,24 +37,16 @@ class Installer
     private $dateTime;
 
     /**
-     * @var ConfigGenerator
-     */
-    private $configGenerator;
-
-    /**
      * Installer constructor.
      * @param Writer $deploymentConfigWriter
      * @param DateTime $dateTime
-     * @param ConfigGenerator $configGenerator
      */
     public function __construct(
         Writer $deploymentConfigWriter,
-        DateTime $dateTime,
-        ConfigGenerator $configGenerator
+        DateTime $dateTime
     ) {
         $this->deploymentConfigWriter = $deploymentConfigWriter;
         $this->dateTime = $dateTime;
-        $this->configGenerator = $configGenerator;
     }
 
     /**
@@ -113,12 +104,6 @@ class Installer
                 ]
             ]
         ];
-
-        $config['app_env'] = array_replace_recursive(
-            $config['app_env'],
-            $this->configGenerator->createCryptConfig([])->getData(),
-            $this->configGenerator->createModeConfig()->getData()
-        );
 
         $this->deploymentConfigWriter->saveConfig($config);
     }

@@ -17,9 +17,13 @@ try {
     exit(1);
 }
 try {
-    $handler = new \Magento\Framework\App\ErrorHandler();
-    set_error_handler([$handler, 'handler']);
-    $application = new Magento\Framework\Console\Cli('Magento CLI');
+    $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $_SERVER);
+    $om = $bootstrap->getObjectManager();
+    /** @var \Magento\Framework\Console\CommandListInterface $commandsList */
+    $commandsList = $om->get(\Magento\Framework\Console\CommandListInterface::class);
+    $commands = $commandsList->getCommands();
+    $application = new \Symfony\Component\Console\Application('Magento CLI');
+    $application->addCommands($commands);
     $application->run();
 } catch (\Exception $e) {
     while ($e) {
