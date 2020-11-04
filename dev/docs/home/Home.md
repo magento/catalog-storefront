@@ -72,7 +72,7 @@ The next data should be exposed in Magento:
 * Category system attributes.
 * Product attributes metadata.
 
-[Optional] By introducing extractor API for Magento we have enough control to deduplicate messages even before they were emitted. And do not emit messages if Magento did not really change the data. (Example1: the product has been saved but no properties were changed, such an event should be ignored; Example 2: Magento should not issue a new event if the product changed inventory records only.). This option is available for the Magento data exporter only. See implementation example https://github.com/magento/saas-export/
+[Optional] By introducing extractor API for Magento we have enough control to deduplicate messages even before they were emitted. And do not emit messages if Magento did not really change the data. (Example1: the product has been saved but no properties were changed, such an event should be ignored; Example 2: Magento should not issue a new event if the product changed inventory records only.). This option is available for the Magento data exporter only. See implementation example https://github.com/magento/commerce-data-export
 
 In the general case, the messages filtration should happen at the import step. 
 
