@@ -16,6 +16,7 @@
         <arguments>
             <argument name="dataMappers" xsi:type="array">
                 <item name="dynamic_attributes" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\DynamicAttribute</item>
+                <item name="giftcard_product_options" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\GiftCardProductOptions</item>
             </argument>
         </arguments>
     </type>
