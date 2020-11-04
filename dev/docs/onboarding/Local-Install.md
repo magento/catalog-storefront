@@ -13,7 +13,7 @@ All required technologies must installed in the system including the following:
 [PHP](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#database) with [required PHP extensions](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#database)    
 for gRPC PHP should have an additional set of extensions, see information in [gRPC Server](https://github.com/magento/catalog-storefront/tree/develop/app/code/Magento/Grpc) how to set up them.   
 [Elasticsearch](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#elasticsearch)    
-[SSL](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#elasticsearch)  
+[SSL](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#ssl)  
 [Required system dependencies](https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html#elasticsearch)  
 
 The following technologies required for Catalog Storefront service:
@@ -30,9 +30,7 @@ You need to have access to the [following repositories](https://github.com/magen
 ## Project installation  
  
 Mentioned repositories should be installed.  
-Use correspond repositories from `magento/partners-magento2{ee|b2b}` to install Enterprise/B2B editions.  
-`data-solutions-services-id` and `magento-services-connector` may be skip because they required only for some edge cases and will be eliminated in a future.  
-If you need to run `bin/magento setup:di:compile` need to install there dependencies as well.
+Use correspond repositories from `magento/partners-magento2{ee|b2b}` to install Enterprise/B2B editions.    
 
 Run composer to install dependencies.
 ```
