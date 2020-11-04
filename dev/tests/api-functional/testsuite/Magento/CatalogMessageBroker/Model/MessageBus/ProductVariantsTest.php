@@ -180,7 +180,7 @@ class ProductVariantsTest extends StorefrontTestsAbstract
         try {
             return $this->productRepository->get($sku);
         } catch (NoSuchEntityException $e) {
-            throw new NoSuchEntityException();
+            throw new NoSuchEntityException(__('Could not retrieve product with sku ' . $sku));
         }
     }
 
@@ -199,7 +199,7 @@ class ProductVariantsTest extends StorefrontTestsAbstract
             $registry->unregister('isSecureArea');
             $registry->register('isSecureArea', false);
         } catch (NoSuchEntityException $e) {
-            throw new NoSuchEntityException();
+            throw new NoSuchEntityException(__('Could not delete product with sku ' . $sku));
         }
     }
 }

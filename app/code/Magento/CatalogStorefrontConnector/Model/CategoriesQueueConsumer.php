@@ -153,7 +153,7 @@ class CategoriesQueueConsumer
         $entitiesArray = [];
         foreach ($entityIds as $id) {
             $entitiesArray[] = [
-                'entity_id' => (int)$id,
+                'entity_id' => (string)$id,
             ];
         }
 

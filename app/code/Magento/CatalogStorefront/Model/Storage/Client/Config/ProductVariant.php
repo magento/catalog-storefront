@@ -43,15 +43,13 @@ class ProductVariant implements EntityConfigInterface
                     'type' => 'keyword'
                 ],
                 'option_value' => [
-                    'type' => 'text',
-                    'index' => false
+                    'type' => 'keyword',
                 ],
                 'parent_id' => [
-                    'type' => 'text',
+                    'type' => 'keyword',
                 ],
                 'product_id' => [
-                    'type' => 'text',
-                    'index' => false
+                    'type' => 'keyword',
                 ],
             ]
         ];
