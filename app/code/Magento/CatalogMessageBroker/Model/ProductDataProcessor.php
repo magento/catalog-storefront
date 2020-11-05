@@ -87,12 +87,11 @@ class ProductDataProcessor
      * Override data returned from old API with data returned from new API
      *
      * @param array $product
-     * @param array $oldExportDataProduct
      * @return array
      * @deprecated this is a temporary solution that will be replaced
      * with declarative schema of mapping exported data format to storefront format
      */
-    public function merge(array $product, array $oldExportDataProduct): array
+    public function merge(array $product): array
     {
         $importProduct = [];
 
@@ -103,7 +102,6 @@ class ProductDataProcessor
             if (\array_key_exists($nameInExport, $product)) {
                 $importProduct[$nameInImport] = $product[$nameInExport];
             }
-            unset($oldExportDataProduct[$nameInExport]);
         }
 
         /** @var DataMapperInterface $dataMapper */
@@ -112,7 +110,6 @@ class ProductDataProcessor
             $importProduct = \array_merge($importProduct, $dataMapper->map($product));
         }
 
-        // TODO: only $importProduct must be returned https://github.com/magento/catalog-storefront/issues/165
-        return array_merge($oldExportDataProduct, $importProduct);
+        return $importProduct;
     }
 }

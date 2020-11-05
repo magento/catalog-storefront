@@ -40,9 +40,7 @@ abstract class StorefrontTestsAbstract extends TestCase
     private const QUEUES = [
         'catalog.category.export.queue',
         'catalog.product.export.queue',
-        'catalog.product.variants.export.queue',
-        'storefront.catalog.product.connector',
-        'storefront.catalog.category.connector',
+        'catalog.product.variants.export.queue'
     ];
 
     /**
@@ -202,7 +200,7 @@ abstract class StorefrontTestsAbstract extends TestCase
      *
      * @param array $consumers
      */
-    public function runConsumers(array $consumers = []): void
+    public function runConsumers(array $consumers = []) : void
     {
         $consumerInvoker = Bootstrap::getObjectManager()->create(ConsumerInvoker::class);
         $consumerInvoker->invoke($consumers);

@@ -17,6 +17,7 @@
         <arguments>
             <argument name="dataMappers" xsi:type="array">
                 <item name="dynamic_attributes" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\DynamicAttribute</item>
+                <item name="giftcard_product_options" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\GiftCardProductOptions</item>
             </argument>
         </arguments>
     </type>
@@ -42,6 +43,11 @@
                     Magento\CatalogMessageBroker\Model\MessageBus\ProductVariants\DeleteProductVariantsConsumer
                 </item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogMessageBroker\Model\Publisher\ProductPublisher">
+        <arguments>
+            <argument name="batchSize" xsi:type="number">500</argument>
         </arguments>
     </type>
 </config>
