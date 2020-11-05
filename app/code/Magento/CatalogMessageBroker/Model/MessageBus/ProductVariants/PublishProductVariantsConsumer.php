@@ -68,7 +68,7 @@ class PublishProductVariantsConsumer implements ConsumerEventInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $entities, string $scope = null): void
+    public function execute(array $entities, ?string $scope = null): void
     {
         $variantsData = $this->fetchProductVariants->execute($entities);
         $variantsImportData = [];

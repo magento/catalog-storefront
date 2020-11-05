@@ -132,7 +132,7 @@ class VariantService implements VariantServiceServerInterface
                 $parentId = $explodedId[1];
                 $childId = $explodedId[2];
                 foreach ($optionValues as $optionValue) {
-                    preg_match('/(?<=\:)(.*)(?=\/)/', $optionValue, $match);
+                    preg_match('/(?<=:)(.*)(?=\/)/', $optionValue, $match);
                     $attrCode = $match[0];
                     $variant = [
                         '_id' => $id . '/' . $attrCode,
@@ -142,7 +142,8 @@ class VariantService implements VariantServiceServerInterface
                         'parent_id' => $parentId
                     ];
                     //TODO: Adapt to work without store code
-                    $variantsInElasticFormat['product_variant'][self::EMPTY_STORE_CODE]['save'][] = $variant;
+                    $variantsInElasticFormat['product_variant'][self::EMPTY_STORE_CODE][CatalogRepository::SAVE][] =
+                        $variant;
                 }
             }
 
@@ -178,7 +179,7 @@ class VariantService implements VariantServiceServerInterface
             'product_variant' => [
                 //TODO: Adapt to work without store code
                 self::EMPTY_STORE_CODE => [
-                    'delete_by_query' => $deleteFields
+                    CatalogRepository::DELETE_BY_QUERY => $deleteFields
                 ]
             ]
         ];

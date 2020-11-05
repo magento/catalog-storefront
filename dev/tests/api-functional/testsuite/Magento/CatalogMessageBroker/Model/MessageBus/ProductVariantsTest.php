@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\CatalogMessageBroker\Model\MessageBus;
@@ -12,7 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
 use Magento\CatalogMessageBroker\Model\MessageBus\ProductVariants\ProductVariantsConsumer;
-use \Magento\CatalogStorefront\Model\VariantService;
+use Magento\CatalogStorefront\Model\VariantService;
 use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
 use Magento\CatalogStorefrontApi\Api\Data\ProductVariantRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductVariantResponseArrayMapper;
@@ -91,7 +90,8 @@ class ProductVariantsTest extends StorefrontTestsAbstract
 
     /**
      * Validate save and delete product variant operations
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_products_with_two_attributes.php
+     *
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
      * @magentoDbIsolation disabled
      * @throws NoSuchEntityException
      * @throws StateException
@@ -143,9 +143,8 @@ class ProductVariantsTest extends StorefrontTestsAbstract
         );
         $this->productVariantsConsumer->processMessage($deleteMessage);
         //This sleep ensures that the elastic index has sufficient time to refresh
-        // after the records have been deleted by the _delete_by_query call.
         //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
-        sleep(3);
+        sleep(5);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf(self::ERROR_MESSAGE, $configurableId));
@@ -153,6 +152,8 @@ class ProductVariantsTest extends StorefrontTestsAbstract
     }
 
     /**
+     * Transform variant feed data in catalog storefront format
+     *
      * @param array $feedData
      * @return array|void
      */
@@ -171,6 +172,8 @@ class ProductVariantsTest extends StorefrontTestsAbstract
     }
 
     /**
+     * Get product
+     *
      * @param string $sku
      * @return ProductInterface
      * @throws NoSuchEntityException
@@ -185,6 +188,8 @@ class ProductVariantsTest extends StorefrontTestsAbstract
     }
 
     /**
+     * Delete product
+     *
      * @param string $sku
      * @throws NoSuchEntityException
      * @throws StateException

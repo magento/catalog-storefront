@@ -19,10 +19,10 @@ use Psr\Log\LoggerInterface;
  */
 class CatalogRepository
 {
-    protected const DELETE = 'delete';
-    protected const DELETE_BY_QUERY = 'delete_by_query';
-    protected const SAVE = 'save';
-    protected const UPDATE = 'update';
+    public const DELETE = 'delete';
+    public const DELETE_BY_QUERY = 'delete_by_query';
+    public const SAVE = 'save';
+    public const UPDATE = 'update';
 
     /**
      * @var CommandInterface

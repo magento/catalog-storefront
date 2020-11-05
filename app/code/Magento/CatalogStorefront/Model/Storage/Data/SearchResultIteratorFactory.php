@@ -37,7 +37,7 @@ class SearchResultIteratorFactory
     }
 
     /**
-     * Create class instance with specified parameters
+     * Create SearchResultIterator class instance with specified parameters
      *
      * @param array $result
      *

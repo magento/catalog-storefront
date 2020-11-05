@@ -258,7 +258,6 @@ class ElasticsearchCommand implements CommandInterface
             $dataSourceName,
             $entityName,
             $entries
-        //            'wait_for_completion' => true
         );
         try {
             $this->getConnection()->deleteByQuery($query);

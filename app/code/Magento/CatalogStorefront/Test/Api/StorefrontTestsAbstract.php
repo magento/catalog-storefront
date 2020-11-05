@@ -93,11 +93,11 @@ abstract class StorefrontTestsAbstract extends TestCase
      */
     private function clearCatalogStorage(): void
     {
-        $entityTypes = ['category', 'product', 'product_variants'];
+        $entityTypes = ['category', 'product', 'product_variant'];
         $availableStores = $this->storeManager->getStores();
 
         foreach ($entityTypes as $entityType) {
-            if ($entityType === 'product_variants') {
+            if ($entityType === 'product_variant') {
                 $this->deleteDataSource('', $entityType);
             } else {
                 foreach ($availableStores as $store) {

@@ -22,5 +22,5 @@ interface ConsumerEventInterface
      *
      * @return void
      */
-    public function execute(array $entities, string $scope = null): void;
+    public function execute(array $entities, ?string $scope = null): void;
 }

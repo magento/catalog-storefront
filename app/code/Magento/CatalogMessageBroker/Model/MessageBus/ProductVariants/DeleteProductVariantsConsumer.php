@@ -48,7 +48,7 @@ class DeleteProductVariantsConsumer implements ConsumerEventInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $entities, string $scope = null): void
+    public function execute(array $entities, ?string $scope = null): void
     {
         $ids = [];
         foreach ($entities as $entity) {
