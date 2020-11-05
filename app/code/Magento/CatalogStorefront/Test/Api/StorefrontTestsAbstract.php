@@ -37,9 +37,7 @@ abstract class StorefrontTestsAbstract extends TestCase
      */
     private const QUEUES = [
         'catalog.category.export.queue',
-        'catalog.product.export.queue',
-        'storefront.catalog.product.connector',
-        'storefront.catalog.category.connector',
+        'catalog.product.export.queue'
     ];
 
     /**
