@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogStorefront\Test\Api\ProductVariants\ConfigurableTest;
+namespace Magento\CatalogStorefront\Test\Api\ProductVariants;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
@@ -76,6 +76,9 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
         $this->variantsRequestInterface->setProductId((string)$configurable->getId());
         $this->variantsRequestInterface->setStore('default');
 
+        //Seems that elastic needs time to refresh the product and variant indexes
+        //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
+        sleep(1);
         /** @var $variantServiceItem ProductVariantResponse */
         $variantServiceItem = $this->variantService->GetProductVariants($this->variantsRequestInterface);
         $actual = $this->responseArrayMapper->convertToArray($variantServiceItem)['matched_variants'];
@@ -101,6 +104,9 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
         $this->variantsRequestInterface->setProductId((string)$configurable->getId());
         $this->variantsRequestInterface->setStore('default');
 
+        //Seems that elastic needs time to refresh the product and variant indexes
+        //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
+        sleep(1);
         /** @var $variantServiceItem ProductVariantResponse */
         $variantServiceItem = $this->variantService->GetProductVariants($this->variantsRequestInterface);
         $actual = $this->responseArrayMapper->convertToArray($variantServiceItem)['matched_variants'];
