@@ -10,10 +10,12 @@ namespace Magento\CatalogStorefront\Test\Api;
 use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
 use Magento\CatalogStorefront\Model\Storage\State;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Indexer\Model\Indexer;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Workaround\ConsumerInvoker;
 use Magento\TestFramework\Helper\CompareArraysRecursively;
+use PHPUnit\Framework\TestResult;
 
 /**
  * Test abstract class for store front tests
@@ -28,6 +30,14 @@ abstract class StorefrontTestsAbstract extends TestCase
     private const FEEDS = [
         'catalog_data_exporter_categories',
         'catalog_data_exporter_products'
+    ];
+
+    /**
+     * @var array
+     */
+    private const QUEUES = [
+        'catalog.category.export.queue',
+        'catalog.product.export.queue'
     ];
 
     /**
@@ -52,6 +62,7 @@ abstract class StorefrontTestsAbstract extends TestCase
         parent::tearDown();
         $this->clearCatalogStorage();
         $this->cleanFeeds();
+        $this->cleanOldMessages();
     }
 
     /**
@@ -103,14 +114,59 @@ abstract class StorefrontTestsAbstract extends TestCase
     }
 
     /**
+     * Clean old messages from rabbitmq
+     *
+     * @return void
+     */
+    private function cleanOldMessages(): void
+    {
+        if ($this->isSoap()) {
+            return;
+        }
+
+        /** @var \Magento\Framework\Amqp\Config $amqpConfig */
+        $amqpConfig = Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\Amqp\Config::class);
+
+        foreach (self::QUEUES as $queue) {
+            $amqpConfig->getChannel()->queue_purge($queue);
+        }
+    }
+
+    /**
+     * Run tests and clean old messages before running other tests
+     *
+     * @param TestResult|null $result
+     * @return TestResult
+     */
+    public function run(TestResult $result = null): TestResult
+    {
+        $this->cleanOldMessages();
+        $this->resetIndexerToOnSave();
+        return parent::run($result);
+    }
+
+    /**
      * Runs consumers before test execution
      *
      * @throws \Throwable
      */
     protected function runTest()
     {
-        $this->runConsumers();
-        parent::runTest();
+        if (!$this->isSoap()) {
+            $this->runConsumers();
+            parent::runTest();
+        }
+    }
+
+    /**
+     * Check if it is SOAP request
+     *
+     * @return bool
+     */
+    private function isSoap(): bool
+    {
+        return TESTS_WEB_API_ADAPTER === 'soap';
     }
 
     /**
@@ -122,6 +178,19 @@ abstract class StorefrontTestsAbstract extends TestCase
     {
         $consumerInvoker = Bootstrap::getObjectManager()->create(ConsumerInvoker::class);
         $consumerInvoker->invoke($consumers);
+    }
+
+    /**
+     * Resetting indexer to 'on save' mode
+     *
+     * @return void
+     */
+    private function resetIndexerToOnSave(): void
+    {
+        $indexer =  \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(Indexer::class);
+        $indexer->load('catalog_data_exporter_products');
+        $indexer->setScheduled(false);
     }
 
     /**

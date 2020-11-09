@@ -24,7 +24,7 @@ System has 3 simple products which reflects 3 combinations of those options (blu
 2. simple "Red XL"  {id: 2, storeViewId: ["default", "storeview2"], color: "red",   size: "xl"}
 3. simple "Red L"   {id: 3, storeViewId: ["default", "storeview2"], color: "red",   size: "l"}
 
-## Saas-export part
+## Commerce Data Export
 in `et_schema.xml` there's the following structure for ProductVariant:
 ```
     <record name="ProductVariant">

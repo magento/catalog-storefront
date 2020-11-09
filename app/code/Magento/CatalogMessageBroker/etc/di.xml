@@ -16,17 +16,7 @@
         <arguments>
             <argument name="dataMappers" xsi:type="array">
                 <item name="dynamic_attributes" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\DynamicAttribute</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\CatalogMessageBroker\Model\DataMapper\DynamicAttribute">
-        <arguments>
-            <argument name="attributePool" xsi:type="array">
-                <item name="boolean" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\BooleanType</item>
-                <item name="select" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\SelectOptionType</item>
-                <item name="text" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\Type</item>
-                <item name="price" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\Type</item>
-                <item name="multiselect" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\MultiselectOptionType</item>
+                <item name="giftcard_product_options" xsi:type="object">Magento\CatalogMessageBroker\Model\DataMapper\GiftCardProductOptions</item>
             </argument>
         </arguments>
     </type>
@@ -46,6 +36,11 @@
                     Magento\CatalogMessageBroker\Model\MessageBus\Product\DeleteProductsConsumer
                 </item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogMessageBroker\Model\Publisher\ProductPublisher">
+        <arguments>
+            <argument name="batchSize" xsi:type="number">500</argument>
         </arguments>
     </type>
 </config>

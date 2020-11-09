@@ -22,7 +22,7 @@ This simplified diagram highlights the main "parts" of Storefront Application (G
 
 ## Responsibilities
 ### Export API. 
-Source: https://github.com/magento/saas-export/tree/develop-storefront   
+Source: https://github.com/magento/commerce-data-export/tree/main   
 **Provide API to Export entities from Magento to any subscribed consumer**   
 Implement 2 different strategies:   
 - Push strategy (used by PRex): push changes to remote end-point called Injection Service
@@ -31,13 +31,13 @@ Implement 2 different strategies:
 By fact contract of Export API is described in et_schema.xml
 
 ### Message Broker. 
-Source: https://github.com/magento/catalog-storefront/tree/develop/app/code/Magento/CatalogMessageBroker   
+Source: https://github.com/magento/storefront-message-broker   
 **Connect Backoffice and Storefront application.**   
 
 Responsibilities:
 - do callback request (REST) for actual data to Export API
 - map Export API format to Storefront API format
-- Write data (gRPC) to Storefront API
+- write data (gRPC) to Storefront API
 
 
 ### Storefront Application. 
@@ -45,25 +45,7 @@ Source: https://github.com/magento/catalog-storefront/tree/develop/app/code/Mage
 **Provides Read/Write API**   
 Responsibilities:
 - provide Read API for specific attributes, scope
-- store data in an efficient way in own databases
-
-## Modules that will be eliminated (transition period)
-
-### Extension for Backoffice dependent on saas-export repo
-Source: [CatalogExport](https://github.com/magento/catalog-storefront/tree/develop/app/code/Magento/CatalogExport), [CatalogExportAPI](https://github.com/magento/catalog-storefront/tree/develop/app/code/Magento/CatalogExportAPI)   
-Will be eliminated in https://github.com/magento/catalog-storefront/issues/185
-
-
-
-### Old Export API
-Source: [CatalogExtractor](https://github.com/magento/catalog-storefront/tree/develop/app/code/Magento/CatalogExtractor), any "*Extractor" module   
-**The previous implementation of Export API. Will be migrated to new Export API**   
-Will be eliminated after migration all existing Data Providers to Export API
-
-### Connector 
-Source: https://github.com/magento/catalog-storefront/tree/develop/app/code/Magento/CatalogStorefrontConnector   
-Responsibilities:
-- expose events "storefront.catalog.category.update", "storefront.catalog.product.update" which publish product ids on different events: product saved, category assigned to product, store created...
+- store data in efficient way in own databases
 
 ## Legacy approach (historical notes)
 
