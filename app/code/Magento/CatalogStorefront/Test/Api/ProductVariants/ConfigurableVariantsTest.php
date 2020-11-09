@@ -76,7 +76,7 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
         $this->variantsRequestInterface->setProductId((string)$configurable->getId());
         $this->variantsRequestInterface->setStore('default');
 
-        //Seems that elastic needs time to refresh the product and variant indexes
+        //This sleep ensures that the elastic index has sufficient time to refresh
         //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
         sleep(1);
         /** @var $variantServiceItem ProductVariantResponse */
@@ -104,7 +104,7 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
         $this->variantsRequestInterface->setProductId((string)$configurable->getId());
         $this->variantsRequestInterface->setStore('default');
 
-        //Seems that elastic needs time to refresh the product and variant indexes
+        //This sleep ensures that the elastic index has sufficient time to refresh
         //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
         sleep(1);
         /** @var $variantServiceItem ProductVariantResponse */

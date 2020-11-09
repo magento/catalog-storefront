@@ -127,6 +127,9 @@ class ProductVariantsTest extends StorefrontTestsAbstract
 
         $this->variantsGetRequestInterface->setProductId((string)$configurableId);
         $this->variantsGetRequestInterface->setStore(self::STORE_CODE);
+        //This sleep ensures that the elastic index has sufficient time to refresh
+        //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
+        sleep(1);
         $response = $this->variantService->GetProductVariants($this->variantsGetRequestInterface);
         $variants = $this->responseArrayMapper->convertToArray($response);
 
@@ -144,7 +147,7 @@ class ProductVariantsTest extends StorefrontTestsAbstract
         $this->productVariantsConsumer->processMessage($deleteMessage);
         //This sleep ensures that the elastic index has sufficient time to refresh
         //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
-        sleep(5);
+        sleep(4);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf(self::ERROR_MESSAGE, $configurableId));

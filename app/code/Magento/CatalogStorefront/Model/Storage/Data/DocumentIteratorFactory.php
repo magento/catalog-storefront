@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefront\Model\Storage\Data;
 
 /**
- * Document iterator factory.
+ * Factory for DocumentIterator class
  */
 class DocumentIteratorFactory
 {

@@ -10,7 +10,7 @@ namespace Magento\CatalogStorefront\Model\Storage\Data;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Search result iterator factory.
+ * Factory for SearchResultIterator class
  */
 class SearchResultIteratorFactory
 {

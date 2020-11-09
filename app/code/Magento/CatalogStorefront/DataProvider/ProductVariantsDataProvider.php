@@ -65,7 +65,7 @@ class ProductVariantsDataProvider
             [VariantService::EMPTY_STORE_CODE, ProductVariant::ENTITY_NAME]
         );
         try {
-            $entities = $this->query->searchEntries(
+            $entities = $this->query->searchFilteredEntries(
                 $storageName,
                 ProductVariant::ENTITY_NAME,
                 ['parent_id' => $parentId]

@@ -95,15 +95,39 @@ class ElasticsearchQuery implements QueryInterface
     /**
      * @inheritdoc
      */
-    public function searchEntries(string $indexName, string $entityName, array $searchBody): EntryIteratorInterface
+    public function searchMatchedEntries(string $indexName, string $entityName, array $searchBody, ?string $queryContext = 'must'): EntryIteratorInterface
+    {
+        return $this->searchEntries($indexName, $entityName, $searchBody, $queryContext, 'match');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function searchFilteredEntries(string $indexName, string $entityName, array $searchBody, ?string $clauseType = 'term'): EntryIteratorInterface
+    {
+        return $this->searchEntries($indexName, $entityName, $searchBody, 'filter', $clauseType);
+    }
+
+    /**
+     * @param string $indexName
+     * @param string $entityName
+     * @param array $searchBody
+     * @param string $queryContext
+     * @param string $clauseType
+     * @return EntryIteratorInterface
+     * @throws NotFoundException
+     * @throws RuntimeException
+     */
+    private function searchEntries(string $indexName, string $entityName, array $searchBody, string $queryContext, string $clauseType): EntryIteratorInterface
     {
         $query = [
             'index' => $indexName,
             'type' => $entityName,
+            'body' => []
         ];
 
         foreach ($searchBody as $key => $value) {
-            $query['body']['query']['bool']['must'][]['match'][$key] = $value;
+            $query['body']['query']['bool'][$queryContext][][$clauseType][$key] = $value;
         }
 
         try {
