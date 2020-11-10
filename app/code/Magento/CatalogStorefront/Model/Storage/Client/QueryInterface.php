@@ -93,5 +93,10 @@ interface QueryInterface
      * @throws NotFoundException
      * @throws RuntimeException
      */
-    public function searchFilteredEntries(string $indexName, string $entityName, array $searchBody, ?string $clauseType = 'term'): EntryIteratorInterface;
+    public function searchFilteredEntries(
+        string $indexName,
+        string $entityName,
+        array $searchBody,
+        ?string $clauseType = 'term'
+    ): EntryIteratorInterface;
 }
