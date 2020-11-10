@@ -36,7 +36,7 @@ class VariantService implements VariantServiceServerInterface
 {
     /**
      * Temporary store placeholder
-     * TODO: Adapt to work without store code and remove this constant
+     * TODO: Adapt to work without store code https://github.com/magento/catalog-storefront/issues/417 and remove this constant
      */
     public const EMPTY_STORE_CODE = '';
 
@@ -141,7 +141,7 @@ class VariantService implements VariantServiceServerInterface
                         'product_id' => $childId,
                         'parent_id' => $parentId
                     ];
-                    //TODO: Adapt to work without store code
+                    //TODO: Adapt to work without store code https://github.com/magento/catalog-storefront/issues/417
                     $variantsInElasticFormat['product_variant'][self::EMPTY_STORE_CODE][CatalogRepository::SAVE][] =
                         $variant;
                 }
@@ -177,7 +177,7 @@ class VariantService implements VariantServiceServerInterface
 
         $variantsInElasticFormat = [
             'product_variant' => [
-                //TODO: Adapt to work without store code
+                //TODO: Adapt to work without store code https://github.com/magento/catalog-storefront/issues/417
                 self::EMPTY_STORE_CODE => [
                     CatalogRepository::DELETE_BY_QUERY => $deleteFields
                 ]
@@ -203,6 +203,7 @@ class VariantService implements VariantServiceServerInterface
      * Get product variants from storage.
      *
      * Only variants whose corresponding products are 'enabled' and stored in storage are returned.
+     * TODO: Add pagination https://github.com/magento/catalog-storefront/issues/418
      *
      * @param ProductVariantRequestInterface $request
      * @return ProductVariantResponseInterface
@@ -212,7 +213,7 @@ class VariantService implements VariantServiceServerInterface
      */
     public function GetProductVariants(ProductVariantRequestInterface $request): ProductVariantResponseInterface
     {
-        $productId = $request->getProductId(); //todo test with null here from test.
+        $productId = $request->getProductId();
         $store = $request->getStore();
         $rawVariants = $this->productVariantsDataProvider->fetchByProductId((int)$productId);
 

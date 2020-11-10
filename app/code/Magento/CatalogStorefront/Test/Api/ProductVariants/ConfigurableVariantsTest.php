@@ -59,19 +59,30 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
     /**
      * Validate configurable product variants data
      *
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_nine_simples.php
      * @magentoDbIsolation disabled
      * @throws NoSuchEntityException
      * @throws \Throwable
      */
     public function testConfigurableProductVariants(): void
     {
+        $simpleSkus = [
+            'simple_0',
+            'simple_1',
+            'simple_2',
+            'simple_3',
+            'simple_4',
+            'simple_5',
+            'simple_6',
+            'simple_7',
+            'simple_8'
+        ];
         /** @var $configurable Product */
         $configurable = $this->productRepository->get('configurable');
-        $simples = [
-            $this->productRepository->get('simple_10'),
-            $this->productRepository->get('simple_20')
-        ];
+        $simples = [];
+        foreach ($simpleSkus as $sku) {
+            $simples[] = $this->productRepository->get($sku);
+        }
 
         $this->variantsRequestInterface->setProductId((string)$configurable->getId());
         $this->variantsRequestInterface->setStore('default');
@@ -84,7 +95,7 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
         $actual = $this->responseArrayMapper->convertToArray($variantServiceItem)['matched_variants'];
 
         $expected = $this->getExpectedProductVariants($configurable, $simples);
-        self::assertCount(2, $actual);
+        self::assertCount(9, $actual);
         $this->compare($expected, $actual);
     }
 

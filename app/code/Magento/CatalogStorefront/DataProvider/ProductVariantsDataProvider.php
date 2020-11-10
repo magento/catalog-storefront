@@ -60,7 +60,7 @@ class ProductVariantsDataProvider
      */
     public function fetchByProductId(int $parentId): array
     {
-        // todo: Adapt to work without store code
+        // TODO: Adapt to work without store code https://github.com/magento/catalog-storefront/issues/417
         $storageName = $this->storageState->getCurrentDataSourceName(
             [VariantService::EMPTY_STORE_CODE, ProductVariant::ENTITY_NAME]
         );

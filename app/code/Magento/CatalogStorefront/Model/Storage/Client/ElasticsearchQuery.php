@@ -21,6 +21,9 @@ use Psr\Log\LoggerInterface;
  */
 class ElasticsearchQuery implements QueryInterface
 {
+    //TODO: Add pagination and remove max size search size https://github.com/magento/catalog-storefront/issues/418
+    private const SEARCH_LIMIT = 5000;
+
     /**
      * @var ConnectionPull
      */
@@ -95,16 +98,24 @@ class ElasticsearchQuery implements QueryInterface
     /**
      * @inheritdoc
      */
-    public function searchMatchedEntries(string $indexName, string $entityName, array $searchBody, ?string $queryContext = 'must'): EntryIteratorInterface
-    {
+    public function searchMatchedEntries(
+        string $indexName,
+        string $entityName,
+        array $searchBody,
+        ?string $queryContext = 'must'
+    ): EntryIteratorInterface {
         return $this->searchEntries($indexName, $entityName, $searchBody, $queryContext, 'match');
     }
 
     /**
      * @inheritdoc
      */
-    public function searchFilteredEntries(string $indexName, string $entityName, array $searchBody, ?string $clauseType = 'term'): EntryIteratorInterface
-    {
+    public function searchFilteredEntries(
+        string $indexName,
+        string $entityName,
+        array $searchBody,
+        ?string $clauseType = 'term'
+    ): EntryIteratorInterface {
         return $this->searchEntries($indexName, $entityName, $searchBody, 'filter', $clauseType);
     }
 
@@ -118,12 +129,19 @@ class ElasticsearchQuery implements QueryInterface
      * @throws NotFoundException
      * @throws RuntimeException
      */
-    private function searchEntries(string $indexName, string $entityName, array $searchBody, string $queryContext, string $clauseType): EntryIteratorInterface
-    {
+    private function searchEntries(
+        string $indexName,
+        string $entityName,
+        array $searchBody,
+        string $queryContext,
+        string $clauseType
+    ): EntryIteratorInterface {
+        //TODO: Add pagination and remove max size search size https://github.com/magento/catalog-storefront/issues/418
         $query = [
             'index' => $indexName,
             'type' => $entityName,
-            'body' => []
+            'body' => [],
+            'size' => self::SEARCH_LIMIT
         ];
 
         foreach ($searchBody as $key => $value) {
@@ -138,6 +156,13 @@ class ElasticsearchQuery implements QueryInterface
                 $throwable
             );
         }
+        //TODO: Add pagination and remove max size search size https://github.com/magento/catalog-storefront/issues/418
+        if (isset($result['hits']['total']['value']) && $result['hits']['total']['value'] > self::SEARCH_LIMIT) {
+            throw new \OverflowException(
+                "Storage error: Search returned too many results to handle. Query was: " . \json_encode($query)
+            );
+        }
+
         $this->checkErrors($result, $indexName);
 
         return $this->searchResultIteratorFactory->create($result);

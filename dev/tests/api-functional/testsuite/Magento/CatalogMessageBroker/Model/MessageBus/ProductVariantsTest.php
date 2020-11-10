@@ -30,8 +30,17 @@ use Magento\TestFramework\Helper\Bootstrap;
 class ProductVariantsTest extends StorefrontTestsAbstract
 {
     const CONFIGURABLE_SKU = 'configurable';
-    const SIMPLE1_SKU = 'simple_10';
-    const SIMPLE2_SKU = 'simple_20';
+    const SIMPLE_SKUS = [
+        'simple_0',
+        'simple_1',
+        'simple_2',
+        'simple_3',
+        'simple_4',
+        'simple_5',
+        'simple_6',
+        'simple_7',
+        'simple_8'
+    ];
 
     const STORE_CODE = 'default';
     const ERROR_MESSAGE = 'No products variants for product with id %s are found in catalog.';
@@ -91,7 +100,7 @@ class ProductVariantsTest extends StorefrontTestsAbstract
     /**
      * Validate save and delete product variant operations
      *
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_nine_simples.php
      * @magentoDbIsolation disabled
      * @throws NoSuchEntityException
      * @throws StateException
@@ -101,22 +110,16 @@ class ProductVariantsTest extends StorefrontTestsAbstract
     {
         $configurable = $this->getProduct(self::CONFIGURABLE_SKU);
         $configurableId = $configurable->getId();
-        $simple1 = $this->getProduct(self::SIMPLE1_SKU);
-        $simple1Id = $simple1->getId();
-        $simple2 = $this->getProduct(self::SIMPLE2_SKU);
-        $simple2Id = $simple2->getId();
-        $entitiesData = [
-            [
-                'entity_id' => \sprintf('configurable/%1$s/%2$s', $configurableId, $simple1Id)
-            ],
-            [
-                'entity_id' => \sprintf('configurable/%1$s/%2$s', $configurableId, $simple2Id)
-            ]
-        ];
+
+        $entitiesData = [];
+        foreach (self::SIMPLE_SKUS as $simpleSku) {
+            $simpleId = $this->getProduct($simpleSku)->getId();
+            $entitiesData[]['entity_id'] = \sprintf('configurable/%1$s/%2$s', $configurableId, $simpleId);
+        }
 
         $productVariantFeed = $this->productVariantFeed->getFeedByProductIds([$configurableId]);
         $this->assertNotEmpty($productVariantFeed['feed']);
-        $this->assertCount(2, $productVariantFeed['feed']);
+        $this->assertCount(9, $productVariantFeed['feed']);
         $expectedData = $this->formatFeedData($productVariantFeed['feed']);
 
         $updateMessage = $this->messageBuilder->build(
