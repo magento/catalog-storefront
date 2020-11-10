@@ -120,6 +120,8 @@ class ElasticsearchQuery implements QueryInterface
     }
 
     /**
+     * Searches entries into elastic search storage.
+     *
      * @param string $indexName
      * @param string $entityName
      * @param array $searchBody

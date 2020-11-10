@@ -72,7 +72,12 @@ interface QueryInterface
      * @throws NotFoundException
      * @throws RuntimeException
      */
-    public function searchMatchedEntries(string $indexName, string $entityName, array $searchBody, ?string $queryContext = 'must'): EntryIteratorInterface;
+    public function searchMatchedEntries(
+        string $indexName,
+        string $entityName,
+        array $searchBody,
+        ?string $queryContext = 'must'
+    ): EntryIteratorInterface;
 
     /**
      * Search entries by specified search arguments using filter query context and supplied clause type.

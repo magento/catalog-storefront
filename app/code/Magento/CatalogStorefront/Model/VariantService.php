@@ -36,7 +36,8 @@ class VariantService implements VariantServiceServerInterface
 {
     /**
      * Temporary store placeholder
-     * TODO: Adapt to work without store code https://github.com/magento/catalog-storefront/issues/417 and remove this constant
+     * TODO: Adapt to work without store code
+     * https://github.com/magento/catalog-storefront/issues/417 and remove this constant
      */
     public const EMPTY_STORE_CODE = '';
 
