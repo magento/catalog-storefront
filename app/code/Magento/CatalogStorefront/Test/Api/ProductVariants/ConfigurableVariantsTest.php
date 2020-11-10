@@ -91,7 +91,7 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
         //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
         sleep(1);
         /** @var $variantServiceItem ProductVariantResponse */
-        $variantServiceItem = $this->variantService->GetProductVariants($this->variantsRequestInterface);
+        $variantServiceItem = $this->variantService->getProductVariants($this->variantsRequestInterface);
         $actual = $this->responseArrayMapper->convertToArray($variantServiceItem)['matched_variants'];
 
         $expected = $this->getExpectedProductVariants($configurable, $simples);
@@ -119,7 +119,7 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
         //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
         sleep(1);
         /** @var $variantServiceItem ProductVariantResponse */
-        $variantServiceItem = $this->variantService->GetProductVariants($this->variantsRequestInterface);
+        $variantServiceItem = $this->variantService->getProductVariants($this->variantsRequestInterface);
         $actual = $this->responseArrayMapper->convertToArray($variantServiceItem)['matched_variants'];
         self::assertCount(1, $actual);
     }

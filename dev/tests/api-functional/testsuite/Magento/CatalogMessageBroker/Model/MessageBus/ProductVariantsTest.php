@@ -133,7 +133,7 @@ class ProductVariantsTest extends StorefrontTestsAbstract
         //This sleep ensures that the elastic index has sufficient time to refresh
         //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
         sleep(1);
-        $response = $this->variantService->GetProductVariants($this->variantsGetRequestInterface);
+        $response = $this->variantService->getProductVariants($this->variantsGetRequestInterface);
         $variants = $this->responseArrayMapper->convertToArray($response);
 
         $this->assertNotEmpty($variants);
@@ -154,7 +154,7 @@ class ProductVariantsTest extends StorefrontTestsAbstract
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf(self::ERROR_MESSAGE, $configurableId));
-        $this->variantService->GetProductVariants($this->variantsGetRequestInterface);
+        $this->variantService->getProductVariants($this->variantsGetRequestInterface);
     }
 
     /**

@@ -122,7 +122,7 @@ class VariantService implements VariantServiceServerInterface
      * @param ImportVariantsRequestInterface $request
      * @return ImportVariantsResponseInterface
      */
-    public function ImportProductVariants(ImportVariantsRequestInterface $request): ImportVariantsResponseInterface
+    public function importProductVariants(ImportVariantsRequestInterface $request): ImportVariantsResponseInterface
     {
         try {
             $variantsInElasticFormat = [];
@@ -170,7 +170,7 @@ class VariantService implements VariantServiceServerInterface
      * @param DeleteVariantsRequestInterface $request
      * @return DeleteVariantsResponseInterface
      */
-    public function DeleteProductVariants(DeleteVariantsRequestInterface $request): DeleteVariantsResponseInterface
+    public function deleteProductVariants(DeleteVariantsRequestInterface $request): DeleteVariantsResponseInterface
     {
         $deleteFields = \array_map(function ($id) {
             return ['id' => $id];
@@ -212,7 +212,7 @@ class VariantService implements VariantServiceServerInterface
      * @throws RuntimeException
      * @throws \Throwable
      */
-    public function GetProductVariants(ProductVariantRequestInterface $request): ProductVariantResponseInterface
+    public function getProductVariants(ProductVariantRequestInterface $request): ProductVariantResponseInterface
     {
         $productId = $request->getProductId();
         $store = $request->getStore();
@@ -269,13 +269,13 @@ class VariantService implements VariantServiceServerInterface
     }
 
     /**
-     * TODO: Implement GetVariantsMatch() method and remove the warning suppression.
+     * TODO: Implement getVariantsMatch() method and remove the warning suppression.
      *
      * @param OptionSelectionRequestInterface $request
      * @return ProductVariantResponseInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function GetVariantsMatch(OptionSelectionRequestInterface $request): ProductVariantResponseInterface
+    public function getVariantsMatch(OptionSelectionRequestInterface $request): ProductVariantResponseInterface
     {
         return new ProductVariantResponse();
     }

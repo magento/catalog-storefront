@@ -112,7 +112,7 @@ so exported `ProductVariants` will look like this:
 
 ## Storefront Application part
 
-Import API (`ImportProductVariants`) should split `option_values` and save them as separate records into SF App storage.
+Import API (`importProductVariants`) should split `option_values` and save them as separate records into SF App storage.
 Parent id can be parsed from `option_values` too
 
 | product_id   | id | feed_data    |
@@ -151,18 +151,18 @@ message ProductVariantResponse {
 }
 service VariantSearchService {
     // get all variants that belong to a product
-    rpc GetProductVariants (ProductVariantRequest) returns (ProductVariantResponse);
+    rpc getProductVariants (ProductVariantRequest) returns (ProductVariantResponse);
     // match the variants which correspond, and do not contradict, the merchant selection (%like operation)
-    rpc GetVariantsMatch (OptionSelectionRequest) returns (ProductVariantResponse);
+    rpc getVariantsMatch (OptionSelectionRequest) returns (ProductVariantResponse);
     // match the variants which exactly matched with merchant selection (&& operation)
-    rpc GetVariantsExactlyMatch (OptionSelectionRequest) returns (ProductVariantResponse);
+    rpc getVariantsExactlyMatch (OptionSelectionRequest) returns (ProductVariantResponse);
     // get all variants which contain at least one of merchant selection (|| operation)
-    rpc GetVariantsInclude (OptionSelectionRequest) returns (ProductVariantResponse);
+    rpc getVariantsInclude (OptionSelectionRequest) returns (ProductVariantResponse);
 }
 ```
 
 ### Get all variants for a configurable product with id `42`
-`rpc GetProductVariants (ProductVariantRequest) returns (ProductVariantResponse)`
+`rpc getProductVariants (ProductVariantRequest) returns (ProductVariantResponse)`
 
 1. internal Request to get variants data for by parent id:
 `getVariants(parent_id, ...)`

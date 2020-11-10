@@ -108,7 +108,7 @@ class PublishProductVariantsConsumer implements ConsumerEventInterface
         $importVariantsRequest->setVariants($variants);
 
         try {
-            $importResult = $this->variantService->ImportProductVariants($importVariantsRequest);
+            $importResult = $this->variantService->importProductVariants($importVariantsRequest);
             if ($importResult->getStatus() === false) {
                 $this->logger->error(sprintf('Product variants import failed: "%s"', $importResult->getMessage()));
             }

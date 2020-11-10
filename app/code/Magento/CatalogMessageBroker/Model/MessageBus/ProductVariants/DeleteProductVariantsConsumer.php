@@ -59,7 +59,7 @@ class DeleteProductVariantsConsumer implements ConsumerEventInterface
         $deleteVariantsRequest->setId($ids);
 
         try {
-            $importResult = $this->variantsServer->DeleteProductVariants($deleteVariantsRequest);
+            $importResult = $this->variantsServer->deleteProductVariants($deleteVariantsRequest);
             if ($importResult->getStatus() === false) {
                 $this->logger->error(
                     sprintf('Product variants deletion has failed: "%s"', $importResult->getMessage())
