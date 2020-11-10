@@ -25,6 +25,8 @@ class ConsumerInvoker
     private const CONSUMERS = [
         'catalog.product.export.consumer',
         'catalog.category.export.consumer',
+        'export.product.reviews.consumer',
+        'export.rating.metadata.consumer',
     ];
 
     /**
