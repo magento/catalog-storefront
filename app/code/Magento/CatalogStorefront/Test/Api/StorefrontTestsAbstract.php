@@ -29,9 +29,7 @@ abstract class StorefrontTestsAbstract extends TestCase
      */
     private const FEEDS = [
         'catalog_data_exporter_categories',
-        'catalog_data_exporter_products',
-        'catalog_data_exporter_product_reviews',
-        'catalog_data_exporter_rating_metadata',
+        'catalog_data_exporter_products'
     ];
 
     /**
@@ -39,9 +37,7 @@ abstract class StorefrontTestsAbstract extends TestCase
      */
     private const QUEUES = [
         'catalog.category.export.queue',
-        'catalog.product.export.queue',
-        'export.product.reviews.queue',
-        'export.rating.metadata.queue',
+        'catalog.product.export.queue'
     ];
 
     /**
@@ -82,7 +78,7 @@ abstract class StorefrontTestsAbstract extends TestCase
         $storageState = Bootstrap::getObjectManager()->get(
             State::class
         );
-        $entityTypes = ['category', 'product', 'rating_metadata'];
+        $entityTypes = ['category', 'product'];
         /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
         $storeManager = Bootstrap::getObjectManager()
             ->get(\Magento\Store\Model\StoreManagerInterface::class);
@@ -96,13 +92,6 @@ abstract class StorefrontTestsAbstract extends TestCase
                     // Do nothing if no source
                 }
             }
-        }
-
-        try {
-            $sourceName = $storageState->getCurrentDataSourceName(['review']);
-            $dataDefinition->deleteDataSource($sourceName);
-        } catch (\Exception $e) {
-
         }
     }
 
