@@ -218,6 +218,7 @@ class VariantService implements VariantServiceServerInterface
         $store = $request->getStore();
         $rawVariants = $this->productVariantsDataProvider->fetchByProductId((int)$productId);
 
+        \ksort($rawVariants);
         if (empty($rawVariants)) {
             throw new \InvalidArgumentException(
                 sprintf(
