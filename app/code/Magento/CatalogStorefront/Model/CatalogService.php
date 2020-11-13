@@ -219,9 +219,9 @@ class CatalogService implements CatalogServerInterface
                         return \in_array($code, $productData->getAttributes());
                     }, ARRAY_FILTER_USE_KEY);
 
-                    $productsInElasticFormat['product'][$storeCode]['update'][] = $product;
+                    $productsInElasticFormat['product'][$storeCode][CatalogRepository::UPDATE][] = $product;
                 } else {
-                    $productsInElasticFormat['product'][$storeCode]['save'][] = $product;
+                    $productsInElasticFormat['product'][$storeCode][CatalogRepository::SAVE][] = $product;
                 }
             }
 
@@ -251,7 +251,7 @@ class CatalogService implements CatalogServerInterface
         $productsInElasticFormat = [
             'product' => [
                 $storeCode => [
-                    'delete' => $request->getProductIds()
+                    CatalogRepository::DELETE => $request->getProductIds()
                 ]
             ]
         ];
@@ -297,9 +297,9 @@ class CatalogService implements CatalogServerInterface
                         return \in_array($code, $categoryData->getAttributes());
                     }, ARRAY_FILTER_USE_KEY);
 
-                    $categoriesInElasticFormat['category'][$storeCode]['update'][] = $category;
+                    $categoriesInElasticFormat['category'][$storeCode][CatalogRepository::UPDATE][] = $category;
                 } else {
-                    $categoriesInElasticFormat['category'][$storeCode]['save'][] = $category;
+                    $categoriesInElasticFormat['category'][$storeCode][CatalogRepository::SAVE][] = $category;
                 }
             }
 
@@ -333,7 +333,7 @@ class CatalogService implements CatalogServerInterface
         $categoriesInElasticFormat = [
             'category' => [
                 $storeId => [
-                    'delete' => $request->getCategoryIds()
+                    CatalogRepository::DELETE => $request->getCategoryIds()
                 ]
             ]
         ];

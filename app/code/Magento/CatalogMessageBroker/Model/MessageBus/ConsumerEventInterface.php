@@ -18,9 +18,9 @@ interface ConsumerEventInterface
      * Execute consumers by ids for specified scope
      *
      * @param Entity[] $entities
-     * @param string $scope
+     * @param string|null $scope
      *
      * @return void
      */
-    public function execute(array $entities, string $scope): void;
+    public function execute(array $entities, ?string $scope = null): void;
 }

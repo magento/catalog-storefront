@@ -24,6 +24,7 @@ class ConsumerInvoker
      */
     private const CONSUMERS = [
         'catalog.product.export.consumer',
+        'catalog.product.variants.export.consumer',
         'catalog.category.export.consumer',
     ];
 

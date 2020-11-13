@@ -28,14 +28,14 @@ class VariantServiceClient extends \Grpc\BaseStub
      * @param array $options call options
      * @return \Magento\CatalogStorefrontApi\Proto\ImportVariantsResponse
      */
-    public function ImportProductVariants(
+    public function importProductVariants(
         \Magento\CatalogStorefrontApi\Proto\ImportVariantsRequest $argument,
         $metadata = [],
         $options = []
     )
     {
         return $this->_simpleRequest(
-            '/magento.catalogStorefrontApi.proto.VariantService/ImportProductVariants',
+            '/magento.catalogStorefrontApi.proto.VariantService/importProductVariants',
             $argument,
             ['\Magento\CatalogStorefrontApi\Proto\ImportVariantsResponse', 'decode'],
             $metadata,
@@ -49,14 +49,14 @@ class VariantServiceClient extends \Grpc\BaseStub
      * @param array $options call options
      * @return \Magento\CatalogStorefrontApi\Proto\DeleteVariantsResponse
      */
-    public function DeleteProductVariants(
+    public function deleteProductVariants(
         \Magento\CatalogStorefrontApi\Proto\DeleteVariantsRequest $argument,
         $metadata = [],
         $options = []
     )
     {
         return $this->_simpleRequest(
-            '/magento.catalogStorefrontApi.proto.VariantService/DeleteProductVariants',
+            '/magento.catalogStorefrontApi.proto.VariantService/deleteProductVariants',
             $argument,
             ['\Magento\CatalogStorefrontApi\Proto\DeleteVariantsResponse', 'decode'],
             $metadata,
@@ -71,14 +71,14 @@ class VariantServiceClient extends \Grpc\BaseStub
      * @param array $options call options
      * @return \Magento\CatalogStorefrontApi\Proto\ProductVariantResponse
      */
-    public function GetProductVariants(
+    public function getProductVariants(
         \Magento\CatalogStorefrontApi\Proto\ProductVariantRequest $argument,
         $metadata = [],
         $options = []
     )
     {
         return $this->_simpleRequest(
-            '/magento.catalogStorefrontApi.proto.VariantService/GetProductVariants',
+            '/magento.catalogStorefrontApi.proto.VariantService/getProductVariants',
             $argument,
             ['\Magento\CatalogStorefrontApi\Proto\ProductVariantResponse', 'decode'],
             $metadata,
@@ -93,14 +93,14 @@ class VariantServiceClient extends \Grpc\BaseStub
      * @param array $options call options
      * @return \Magento\CatalogStorefrontApi\Proto\ProductVariantResponse
      */
-    public function GetVariantsMatch(
+    public function getVariantsMatch(
         \Magento\CatalogStorefrontApi\Proto\OptionSelectionRequest $argument,
         $metadata = [],
         $options = []
     )
     {
         return $this->_simpleRequest(
-            '/magento.catalogStorefrontApi.proto.VariantService/GetVariantsMatch',
+            '/magento.catalogStorefrontApi.proto.VariantService/getVariantsMatch',
             $argument,
             ['\Magento\CatalogStorefrontApi\Proto\ProductVariantResponse', 'decode'],
             $metadata,
