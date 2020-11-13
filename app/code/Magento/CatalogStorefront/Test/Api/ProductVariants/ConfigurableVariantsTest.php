@@ -66,6 +66,8 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
      */
     public function testConfigurableProductVariants(): void
     {
+        $this->runConsumers();
+        sleep(15);
         $simpleSkus = [
             'simple_0',
             'simple_1',
