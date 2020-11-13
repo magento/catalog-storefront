@@ -60,13 +60,13 @@ class ProductDataProcessor
         'options_container', //type: string
         'msrp_display_actual_price_type', //type: string
         'is_returnable', //type: string
-        'url_suffix', //type: string
-        'url_rewrites', //type: \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteInterface[]
+        'url_rewrites' => 'url_rewrites', //type: \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteInterface[]
         'country_of_manufacture', //type: string
         'special_price', //type: float
         'special_from_date', //type: string
         'special_to_date', //type: string
-        'canonical_url', //type: string
+        'product_links', //type: \Magento\CatalogStorefrontApi\Api\Data\ProductLinkInterface[]
+        'url' => 'canonical_url', //type: string
         'items', //type: \Magento\CatalogStorefrontApi\Api\Data\BundleItemInterface[]
         'links_purchased_separately', //type: bool
         'samples' => 'samples', //type: \Magento\CatalogStorefrontApi\Api\Data\Sample[]
