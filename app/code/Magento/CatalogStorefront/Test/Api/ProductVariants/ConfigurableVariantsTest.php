@@ -57,6 +57,20 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
     }
 
     /**
+     * Temporary debug function
+     * @throws \Exception
+     */
+    private function debug()
+    {
+        $indexerRegistry = Bootstrap::getObjectManager()->create(\Magento\Framework\Indexer\IndexerRegistry::class);
+        $indexer = $indexerRegistry->get(
+            \Magento\ProductVariantDataExporter\Model\Indexer\ProductVariantFeedIndexer::INDEXER_ID
+        );
+        $debugMessage = $indexer->isScheduled() ? 'Indexer is on Schedule' : 'Indexer is on Save';
+        throw new \Exception($debugMessage);
+    }
+
+    /**
      * Validate configurable product variants data
      *
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_nine_simples.php
@@ -66,6 +80,7 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
      */
     public function testConfigurableProductVariants(): void
     {
+        $this->debug();
         $simpleSkus = [
             'simple_0',
             'simple_1',
