@@ -67,7 +67,8 @@ class ProtoMarshalCommand extends Command
          * TODO: probably we need to have a dedicated extension point in setup:di:compile for code generation
          *
          * Currently is not used, use cli command
-         * `bin/magento storefront:grpc:init \\Magento\\CatalogStorefrontApi\\Api\\CatalogProxyServer` instead
+         * `bin/magento storefront:grpc:init \\Magento\\CatalogStorefrontApi\\Api\\CatalogProxyServer
+         *      \\Magento\\CatalogStorefrontApi\\Api\\VariantServiceProxyServer` instead
          */
 
 //        if (\Magento\Setup\Console\Command\DiCompileCommand::NAME == $input->getFirstArgument()) {

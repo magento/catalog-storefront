@@ -23,7 +23,8 @@ interface EntryIteratorInterface extends \Iterator
     /**
      * Convert data to array.
      *
+     * @param bool $sortById
      * @return array
      */
-    public function toArray(): array;
+    public function toArray(bool $sortById = true): array;
 }

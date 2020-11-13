@@ -135,6 +135,10 @@ class ElasticsearchCommand implements CommandInterface
                 '_type' => $entityName,
                 '_index' => $indexName
             ];
+            if (isset($document['_id'])) {
+                $metaInfo['_id'] = $document['_id'];
+                unset($document['_id']);
+            }
             if (isset($document['parent_id']['parent'])) {
                 $metaInfo['routing'] = $document['parent_id']['parent'];
             }
@@ -150,6 +154,33 @@ class ElasticsearchCommand implements CommandInterface
         }
 
         return $bulkArray;
+    }
+
+    /**
+     * Reformat documents array to delete by query format.
+     *
+     * @param string $indexName
+     * @param string $entityName
+     * @param array $documents
+     * @return array
+     */
+    private function getDocsArrayInDeleteByQueryFormat(
+        string $indexName,
+        string $entityName,
+        array $documents
+    ): array {
+        $array = [
+            'index' => $indexName,
+            'type' => $entityName,
+            'body' => [],
+            'refresh' => false
+            ];
+        foreach ($documents as $document) {
+            foreach ($document as $key => $value) {
+                $array['body']['query']['bool']['filter']['terms'][$key][] = $value;
+            }
+        }
+        return $array;
     }
 
     /**
@@ -210,6 +241,33 @@ class ElasticsearchCommand implements CommandInterface
                     'Error occurred while bulk delete from "%1" index. Entity ids: "%2"',
                     $dataSourceName,
                     \implode(',', $ids)
+                ),
+                $throwable
+            );
+        }
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @throws \RuntimeException
+     */
+    public function deleteByQuery(string $dataSourceName, string $entityName, array $entries): void
+    {
+        $query = $this->getDocsArrayInDeleteByQueryFormat(
+            $dataSourceName,
+            $entityName,
+            $entries
+        );
+        try {
+            $this->getConnection()->deleteByQuery($query);
+        } catch (\Throwable $throwable) {
+            throw new \RuntimeException(
+                __(
+                    'Error occurred while deleting by query from "%1" index. Entity data: "%2". Error: %3',
+                    $dataSourceName,
+                    \json_encode($entries),
+                    $throwable->getMessage()
                 ),
                 $throwable
             );
