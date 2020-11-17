@@ -1,27 +1,26 @@
 # Code Sources
 
-Final product developed on the project consists of multiple repositories.
-New repositories may be added as needed.
-Different features may work with different set of repositories (not only branches).
-Due to this complexity, it's important to always make sure local development is started with correct set of branches.
-Possible ways to understand which branches to use:
+A final product developed on the project consists of multiple repositories.  
+New repositories can be added as needed.  
+Different features may work with different set of repositories (not only branches).  
+List of required repositories can be found [here](https://github.com/magento/storefront-cloud-project/blob/production/.magento.env.yaml).    
+Possible ways to understand which branches to use in a task:
 
-1. Ticket description. Each ticket should contain repositories and branches to work with. If this is not the case for the issue you get, please highlight this in the project Slack channel and/or on the stand up.
-2. [.magento.env.yaml](https://github.com/magento/storefront-cloud-project/blob/production/.magento.env.yaml) in the [storefront-cloud-project](https://github.com/magento/storefront-cloud-project). Find the branch that corresponds to your ticket (see the ticket or ask in the Slack channel).
-3. Slack channel. This would be the most up-to-date information, but it's easy to lose track of what was said in the channel, so use with caution.
+1. Ticket description. Each ticket should contain repositories and branches to work with. If this is not the case for the issue you get, please highlight this in the project's Slack channel and/or on the stand up meeting.
+2. Slack channel. This would be the most up-to-date information, but it's easy to lose a track of what was said in the channel, so use with caution.
 
 # Local Development
 
-There are multiple options to setup local development environment.
-Please read the following documents to understand main concepts and choose the option that works best for you.
+There are multiple options setup local development environment.
+Please read the following documents to install development environment and choose the option that works best for you.
 
-1. [Magento Cloud DevBox](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/development/Magento-Cloud-DevBox-for-Local-Development.md)
-2. [DevBox from Andrii Lugoviy](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/development/Andrii-Lugovyi-DevBox-for-Local-Development.md)
-3. [Custom DevBox](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/development/Custom-DevBox-for-Local-Development.md)
+1. [Recommended DevBox](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/development/Andrii-Lugovyi-DevBox-for-Local-Development.md)  
+1. [Local installation](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/development/Local-Install.md)  
+1. [Magento Cloud DevBox](https://github.com/magento/catalog-storefront/blob/develop/dev/docs/development/Magento-Cloud-DevBox-for-Local-Development.md) (under construction)   
 
 ## Setup for web API/integration tests
 
-Add parameter to dev/tests/api-functional/config/install-config-mysql.php.dist (notice that dashes used here)
+Add a parameter to dev/tests/api-functional/config/install-config-mysql.php.dist (notice that dashes used here)
 
 ```
 'consumers-wait-for-messages'  => '0',

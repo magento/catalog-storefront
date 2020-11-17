@@ -49,7 +49,7 @@ message Product {
   //    PriceRange prices = 44;//-
   // TODO: Uncomment options
   //    repeated Option options = 46;
-  repeated DynamicAttributeValue dynamic_attributes = 50;
+  repeated Attribute attributes = 50;
 
   // TODO: qty is missing for only-x-left-in-stock functionality
   // TODO: Meta fields not populated by catalog SF app
@@ -225,10 +225,11 @@ message KeyValue {
   string value = 2;
 }
 
-message DynamicAttributeValue
+message Attribute
 {
   string code = 1;
-  string value = 2;
+  string type = 2;
+  repeated string values = 3;
 }
 
 message MediaResource {
@@ -375,7 +376,7 @@ message Category {
   string meta_description = 23;
   string meta_keywords = 24;
 
-  repeated DynamicAttributeValue dynamic_attributes = 50;
+  repeated Attribute attributes = 50;
 }
 
 message Breadcrumb {
@@ -455,17 +456,17 @@ message OptionSelectionRequest
 }
 
 service VariantService {
-  rpc ImportProductVariants (ImportVariantsRequest) returns (ImportVariantsResponse)  {}
-  rpc DeleteProductVariants (DeleteVariantsRequest) returns (DeleteVariantsResponse) {}
+  rpc importProductVariants (ImportVariantsRequest) returns (ImportVariantsResponse)  {}
+  rpc deleteProductVariants (DeleteVariantsRequest) returns (DeleteVariantsResponse) {}
   // get all variants that belong to a product
-  rpc GetProductVariants (ProductVariantRequest) returns (ProductVariantResponse) {}
+  rpc getProductVariants (ProductVariantRequest) returns (ProductVariantResponse) {}
 
   // match the variants which correspond, and do not contradict, the merchant selection (%like operation)
-  rpc GetVariantsMatch (OptionSelectionRequest) returns (ProductVariantResponse) {}
+  rpc getVariantsMatch (OptionSelectionRequest) returns (ProductVariantResponse) {}
 
   // will be implemented in future
   // match the variants which exactly matched with merchant selection (&& operation)
-  //rpc GetVariantsExactlyMatch (OptionSelectionRequest) returns (ProductVariantResponse) {}
+  //rpc getVariantsExactlyMatch (OptionSelectionRequest) returns (ProductVariantResponse) {}
   // get all variants which contain at least one of merchant selection (|| operation)
-  //rpc GetVariantsInclude (OptionSelectionRequest) returns (ProductVariantResponse) {}
+  //rpc getVariantsInclude (OptionSelectionRequest) returns (ProductVariantResponse) {}
 }

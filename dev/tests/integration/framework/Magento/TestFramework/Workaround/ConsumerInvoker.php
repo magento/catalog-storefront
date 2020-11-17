@@ -23,9 +23,8 @@ class ConsumerInvoker
      * List of storefront consumers
      */
     private const CONSUMERS = [
-        'storefront.catalog.category.update',
-        'storefront.catalog.product.update',
         'catalog.product.export.consumer',
+        'catalog.product.variants.export.consumer',
         'catalog.category.export.consumer',
     ];
 

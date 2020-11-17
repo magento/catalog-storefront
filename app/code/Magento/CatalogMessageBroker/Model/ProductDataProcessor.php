@@ -42,7 +42,6 @@ class ProductDataProcessor
         'updated_at' => 'updated_at',
         'attributes' => 'dynamic_attributes',
         'price_view' => 'price_view',
-        // 'variants' => 'variants', // \Magento\CatalogStorefrontApi\Api\Data\VariantInterface[]
         'category_ids' => 'categories',
         'images' => 'images', //type: \Magento\CatalogStorefrontApi\Api\Data\ImageInterface[]
         'videos' => 'videos', //type: \Magento\CatalogStorefrontApi\Api\Data\VideoInterface[]
@@ -61,13 +60,13 @@ class ProductDataProcessor
         'options_container', //type: string
         'msrp_display_actual_price_type', //type: string
         'is_returnable', //type: string
-        'url_suffix', //type: string
-        'url_rewrites', //type: \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteInterface[]
+        'url_rewrites' => 'url_rewrites', //type: \Magento\CatalogStorefrontApi\Api\Data\UrlRewriteInterface[]
         'country_of_manufacture', //type: string
         'special_price', //type: float
         'special_from_date', //type: string
         'special_to_date', //type: string
-        'canonical_url', //type: string
+        'product_links', //type: \Magento\CatalogStorefrontApi\Api\Data\ProductLinkInterface[]
+        'url' => 'canonical_url', //type: string
         'items', //type: \Magento\CatalogStorefrontApi\Api\Data\BundleItemInterface[]
         'links_purchased_separately', //type: bool
         'samples' => 'samples', //type: \Magento\CatalogStorefrontApi\Api\Data\Sample[]
@@ -88,12 +87,11 @@ class ProductDataProcessor
      * Override data returned from old API with data returned from new API
      *
      * @param array $product
-     * @param array $oldExportDataProduct
      * @return array
      * @deprecated this is a temporary solution that will be replaced
      * with declarative schema of mapping exported data format to storefront format
      */
-    public function merge(array $product, array $oldExportDataProduct): array
+    public function merge(array $product): array
     {
         $importProduct = [];
 
@@ -104,7 +102,6 @@ class ProductDataProcessor
             if (\array_key_exists($nameInExport, $product)) {
                 $importProduct[$nameInImport] = $product[$nameInExport];
             }
-            unset($oldExportDataProduct[$nameInExport]);
         }
 
         /** @var DataMapperInterface $dataMapper */
@@ -113,7 +110,6 @@ class ProductDataProcessor
             $importProduct = \array_merge($importProduct, $dataMapper->map($product));
         }
 
-        // TODO: only $importProduct must be returned https://github.com/magento/catalog-storefront/issues/165
-        return array_merge($oldExportDataProduct, $importProduct);
+        return $importProduct;
     }
 }

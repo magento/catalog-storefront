@@ -25,7 +25,7 @@ class Document implements EntryInterface
     public function __construct(array $data)
     {
         $this->data = $data['_source'] ?? [];
-        $this->data['id'] = (string)$data['_id'];
+        $this->data['id'] = $this->data['id'] ?? (string)$data['_id'];
     }
 
     /**

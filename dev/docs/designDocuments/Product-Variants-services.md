@@ -35,7 +35,7 @@ message ProductVariantResponse {
 }
 ```
 ------------------------------------------------------
-rpc GetVariantsExactlyMatch (OptionSelectionRequest) returns (ProductVariantResponse) {}
+rpc getVariantsExactlyMatch (OptionSelectionRequest) returns (ProductVariantResponse) {}
 
 REQUEST #1.1:
 ```
@@ -76,12 +76,12 @@ Response #1.2:
 [
 ]
 ```
-`GetVariantsExactlyMatch` should return only fully matched records.
+`getVariantsExactlyMatch` should return only fully matched records.
 `42:size/Y29uZmlndXJhYmxlLzpzaXplLWlkOi86eGwtaWQ6` option value is present in `configurable/42/1` and `configurable/42/2` variants,
 but matched variants partially, because each variant has 2 option values, requested values should match both records as into Request 1.1
 
 ------------------------------------------------------
-rpc GetVariantsInclude (OptionSelectionRequest) returns (ProductVariantResponse) {}
+rpc getVariantsInclude (OptionSelectionRequest) returns (ProductVariantResponse) {}
 
 REQUEST #2.1:
 ```
@@ -142,7 +142,7 @@ Response #2.2 (2 variants matches with 3 option_values):
 ```
 
 ------------------------------------------------------
-rpc GetVariantsMatch (OptionSelectionRequest) returns (ProductVariantResponse) {}
+rpc getVariantsMatch (OptionSelectionRequest) returns (ProductVariantResponse) {}
 
 REQUEST #3.1:
 ```

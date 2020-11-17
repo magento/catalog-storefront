@@ -92,10 +92,10 @@ class ProductsTest extends StorefrontTestsAbstract
         $this->assertEquals(self::TEST_SKU, $product->getSku());
         $entitiesData = [
             [
-                'entity_id' => (int) $product->getId(),
+                'entity_id' => (string) $product->getId(),
             ]
         ];
-        $productFeed = $this->productFeed->getFeedByIds([(int)$product->getId()], [self::STORE_CODE]);
+        $productFeed = $this->productFeed->getFeedByIds([(string)$product->getId()], [self::STORE_CODE]);
         $this->assertNotEmpty($productFeed);
 
         $updateMessage = $this->messageBuilder->build(
@@ -113,7 +113,7 @@ class ProductsTest extends StorefrontTestsAbstract
         $this->assertEquals($item->getSku(), $product->getSku());
 
         $this->deleteProduct($product->getSku());
-        $deletedFeed = $this->productFeed->getDeletedByIds([(int)$product->getId()], [self::STORE_CODE]);
+        $deletedFeed = $this->productFeed->getDeletedByIds([(string)$product->getId()], [self::STORE_CODE]);
         $this->assertNotEmpty($deletedFeed);
 
         $deleteMessage = $this->messageBuilder->build(

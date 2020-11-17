@@ -69,12 +69,13 @@ class DocumentIterator implements EntryIteratorInterface
     /**
      * @inheritdoc
      */
-    public function toArray(): array
+    public function toArray(bool $sortById = true): array
     {
         $data = [];
         reset($this->documents);
-        foreach ($this->documents as $doc) {
-            $data[$doc->getId()] = $doc->getData();
+        foreach ($this->documents as $docKey => $doc) {
+            $id = $sortById ? $doc->getId() : $docKey;
+            $data[$id] = $doc->getData();
         }
         return $data;
     }

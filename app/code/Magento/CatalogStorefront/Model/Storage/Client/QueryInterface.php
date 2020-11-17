@@ -57,4 +57,46 @@ interface QueryInterface
         array $ids,
         array $fields
     ): EntryIteratorInterface;
+
+    /**
+     * Search entries by specified search arguments using match query context and supplied clause type.
+     *
+     * $searchBody contains "search field" -> "search value".
+     * "search field" must be indexed in order for this query to work.
+     *
+     * @param string $indexName
+     * @param string $entityName
+     * @param array $searchBody
+     * @param string|null $queryContext
+     * @return EntryIteratorInterface
+     * @throws NotFoundException
+     * @throws RuntimeException
+     */
+    public function searchMatchedEntries(
+        string $indexName,
+        string $entityName,
+        array $searchBody,
+        ?string $queryContext = 'must'
+    ): EntryIteratorInterface;
+
+    /**
+     * Search entries by specified search arguments using filter query context and supplied clause type.
+     *
+     * $searchBody contains "search field" -> "search value".
+     * "search field" must be indexed in order for this query to work.
+     *
+     * @param string $indexName
+     * @param string $entityName
+     * @param array $searchBody
+     * @param string|null $clauseType
+     * @return EntryIteratorInterface
+     * @throws NotFoundException
+     * @throws RuntimeException
+     */
+    public function searchFilteredEntries(
+        string $indexName,
+        string $entityName,
+        array $searchBody,
+        ?string $clauseType = 'term'
+    ): EntryIteratorInterface;
 }

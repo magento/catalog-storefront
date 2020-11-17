@@ -9,7 +9,7 @@ namespace Magento\CatalogMessageBroker\Model\MessageBus\Product;
 use Magento\CatalogExport\Event\Data\Entity;
 use Magento\CatalogMessageBroker\Model\Converter\AttributeCodesConverter;
 use Magento\CatalogMessageBroker\Model\FetchProductsInterface;
-use Magento\CatalogStorefrontConnector\Model\Publisher\ProductPublisher;
+use Magento\CatalogMessageBroker\Model\Publisher\ProductPublisher;
 use Magento\CatalogMessageBroker\Model\MessageBus\ConsumerEventInterface;
 use Psr\Log\LoggerInterface;
 
@@ -73,7 +73,7 @@ class PublishProductsConsumer implements ConsumerEventInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $entities, string $scope): void
+    public function execute(array $entities, ?string $scope = null): void
     {
         $productsData = $this->fetchProducts->execute($entities, $scope);
         $attributesArray = $this->getAttributesArray($entities);
@@ -144,7 +144,7 @@ class PublishProductsConsumer implements ConsumerEventInterface
     private function publishProducts(array $products, string $storeCode, string $actionType): void
     {
         try {
-            $this->productPublisher->publish(\array_keys($products), $storeCode, $actionType, $products);
+            $this->productPublisher->publish($products, $storeCode, $actionType);
         } catch (\Throwable $e) {
             $this->logger->critical(sprintf('Exception while publishing products: "%s"', $e));
         }

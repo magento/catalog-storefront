@@ -14,12 +14,12 @@ Here is a “Code Review checklist" for the Storefront Application project that 
  - Export API (et_schema.xml) and SF API schemas (proto schema) are reflected in the codebase
   - prerequisite: story branch created with all needed generated classes according to proposes schema-changes
   - DTO classes does not contain any manual changes (Magento\CatalogExportApi\*, Magento\CatalogStorefrontApi\*)
-- Class usage: magento/catalog-storefront repo don't use directly classes from magento/saas-export repo and vise-verse
+- Class usage: magento/catalog-storefront repo don't use directly classes from magento/commerce-data-export repo and vise-verse
   - Check composer.json dependencies
   - note: Can be automated by static test
 - Legacy code is deleted
   - Any Data Providers present in Connector part  (Magento\CatalogStorefrontConnector, Magento\*Extractor modules)
-  - And Data Providers from Export API (magento/saas-export repo) that is not relevant anymore
+  - And Data Providers from Export API (magento/commerce-data-export repo) that is not relevant anymore
   - Any DTO for Export API/SF API which does not reflect current schema: et_schema, proto schema
   - Any “mapper” on Message Broker (between Export API and SF API)
     - if mapper still needed, verify fields used in mapping, remove not relevant fields

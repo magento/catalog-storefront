@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefront\Model\Storage\Data;
 
 /**
- * Document iterator factory.
+ * Factory for DocumentIterator class
  */
 class DocumentIteratorFactory
 {
@@ -54,7 +54,7 @@ class DocumentIteratorFactory
             if (isset($item['found']) && $item['found'] === false) {
                 continue;
             }
-            $tmp[(int)$item['_id']] = $this->documentFactory->create($item);
+            $tmp[$item['_id']] = $this->documentFactory->create($item);
         }
 
         foreach ($ids as $id) {
