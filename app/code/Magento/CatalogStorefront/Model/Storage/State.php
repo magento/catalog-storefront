@@ -41,6 +41,8 @@ class State
     /**
      * Get current data source name of storage taking into account version of the data source.
      *
+     * TODO: Adapt to work without store code https://github.com/magento/catalog-storefront/issues/417
+     *
      * @param array $scopes
      * @return string
      */

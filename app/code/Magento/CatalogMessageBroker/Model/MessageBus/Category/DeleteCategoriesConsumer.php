@@ -49,7 +49,7 @@ class DeleteCategoriesConsumer implements ConsumerEventInterface
     /**
      * @inheritdoc
      */
-    public function execute(array $entities, string $scope): void
+    public function execute(array $entities, ?string $scope = null): void
     {
         $ids = [];
 

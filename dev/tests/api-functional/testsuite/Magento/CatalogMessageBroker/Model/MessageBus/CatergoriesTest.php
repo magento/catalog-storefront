@@ -104,7 +104,7 @@ class CatergoriesTest extends StorefrontTestsAbstract
         self::assertEquals(self::CATEGORY_ID, $category->getId());
         $entitiesData = [
             [
-                'entity_id' => (int) $category->getId(),
+                'entity_id' => (string) $category->getId(),
             ]
         ];
         $message = $this->messageBuilder->build(

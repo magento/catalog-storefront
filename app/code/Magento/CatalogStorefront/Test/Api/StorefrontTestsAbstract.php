@@ -11,6 +11,7 @@ use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
 use Magento\CatalogStorefront\Model\Storage\State;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Indexer\Model\Indexer;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Workaround\ConsumerInvoker;
@@ -29,7 +30,8 @@ abstract class StorefrontTestsAbstract extends TestCase
      */
     private const FEEDS = [
         'catalog_data_exporter_categories',
-        'catalog_data_exporter_products'
+        'catalog_data_exporter_products',
+        'catalog_data_exporter_product_variants'
     ];
 
     /**
@@ -37,7 +39,8 @@ abstract class StorefrontTestsAbstract extends TestCase
      */
     private const QUEUES = [
         'catalog.category.export.queue',
-        'catalog.product.export.queue'
+        'catalog.product.export.queue',
+        'catalog.product.variants.export.queue'
     ];
 
     /**
@@ -46,12 +49,30 @@ abstract class StorefrontTestsAbstract extends TestCase
     private $compareArraysRecursively;
 
     /**
+     * @var DataDefinitionInterface
+     */
+    private $dataDefinition;
+
+    /**
+     * @var State
+     */
+    private $storageState;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         parent::setUp();
         $this->compareArraysRecursively = Bootstrap::getObjectManager()->create(CompareArraysRecursively::class);
+        $this->dataDefinition = Bootstrap::getObjectManager()->get(DataDefinitionInterface::class);
+        $this->storageState = Bootstrap::getObjectManager()->get(State::class);
+        $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -70,28 +91,33 @@ abstract class StorefrontTestsAbstract extends TestCase
      */
     private function clearCatalogStorage(): void
     {
-        /** @var DataDefinitionInterface $dataDefinition */
-        $dataDefinition = Bootstrap::getObjectManager()->get(
-            DataDefinitionInterface::class
-        );
-        /** @var State $storageState */
-        $storageState = Bootstrap::getObjectManager()->get(
-            State::class
-        );
-        $entityTypes = ['category', 'product'];
-        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-        $storeManager = Bootstrap::getObjectManager()
-            ->get(\Magento\Store\Model\StoreManagerInterface::class);
-        $availableStores = $storeManager->getStores();
+        $entityTypes = ['category', 'product', 'product_variant'];
+        $availableStores = $this->storeManager->getStores();
+
         foreach ($entityTypes as $entityType) {
-            foreach ($availableStores as $store) {
-                try {
-                    $sourceName = $storageState->getCurrentDataSourceName([$store->getCode(), $entityType]);
-                    $dataDefinition->deleteDataSource($sourceName);
-                } catch (\Exception $e) {
-                    // Do nothing if no source
+            if ($entityType === 'product_variant') {
+                $this->deleteDataSource('', $entityType);
+            } else {
+                foreach ($availableStores as $store) {
+                    $this->deleteDataSource($store->getCode(), $entityType);
                 }
             }
+        }
+    }
+
+    /**
+     * Delete data source
+     *
+     * @param string $scope
+     * @param string $entityType
+     */
+    private function deleteDataSource(string $scope, string $entityType): void
+    {
+        try {
+            $sourceName = $this->storageState->getCurrentDataSourceName([$scope, $entityType]);
+            $this->dataDefinition->deleteDataSource($sourceName);
+        } catch (\Exception $e) {
+            // Do nothing if no source
         }
     }
 
@@ -187,9 +213,11 @@ abstract class StorefrontTestsAbstract extends TestCase
      */
     private function resetIndexerToOnSave(): void
     {
-        $indexer =  \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        $indexer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(Indexer::class);
         $indexer->load('catalog_data_exporter_products');
+        $indexer->setScheduled(false);
+        $indexer->load('catalog_data_exporter_product_variants');
         $indexer->setScheduled(false);
     }
 

@@ -18,7 +18,7 @@ interface VariantServiceInterface extends GRPC\ServiceInterface
     *
     * @throws GRPC\Exception\InvokeException
     */
-    public function ImportProductVariants(GRPC\ContextInterface $ctx, ImportVariantsRequest $in): ImportVariantsResponse;
+    public function importProductVariants(GRPC\ContextInterface $ctx, ImportVariantsRequest $in): ImportVariantsResponse;
 
     /**
     * @param GRPC\ContextInterface $ctx
@@ -27,7 +27,7 @@ interface VariantServiceInterface extends GRPC\ServiceInterface
     *
     * @throws GRPC\Exception\InvokeException
     */
-    public function DeleteProductVariants(GRPC\ContextInterface $ctx, DeleteVariantsRequest $in): DeleteVariantsResponse;
+    public function deleteProductVariants(GRPC\ContextInterface $ctx, DeleteVariantsRequest $in): DeleteVariantsResponse;
 
     /**
     * @param GRPC\ContextInterface $ctx
@@ -36,7 +36,7 @@ interface VariantServiceInterface extends GRPC\ServiceInterface
     *
     * @throws GRPC\Exception\InvokeException
     */
-    public function GetProductVariants(GRPC\ContextInterface $ctx, ProductVariantRequest $in): ProductVariantResponse;
+    public function getProductVariants(GRPC\ContextInterface $ctx, ProductVariantRequest $in): ProductVariantResponse;
 
     /**
     * @param GRPC\ContextInterface $ctx
@@ -45,5 +45,5 @@ interface VariantServiceInterface extends GRPC\ServiceInterface
     *
     * @throws GRPC\Exception\InvokeException
     */
-    public function GetVariantsMatch(GRPC\ContextInterface $ctx, OptionSelectionRequest $in): ProductVariantResponse;
+    public function getVariantsMatch(GRPC\ContextInterface $ctx, OptionSelectionRequest $in): ProductVariantResponse;
 }

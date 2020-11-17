@@ -3,7 +3,7 @@
 This module provides gRPC entry point for Magento. Additionally, it provides possibility to expose gRPC APIs for other Magento modules
 
 # Installation
-* Run `bin/magento storefront:grpc:init \\Magento\\CatalogStorefrontApi\\Api\\CatalogProxyServer` CLI command. The command does the following actions:
+* Run `bin/magento storefront:grpc:init \\Magento\\CatalogStorefrontApi\\Api\\CatalogProxyServer \\Magento\\CatalogStorefrontApi\\Api\\VariantServiceProxyServer` CLI command. The command does the following actions:
   * Copies certain bin files to `vendor/bin` directory
   * Register services for later use in gRPC sever
 * Install `rr-grpc` server - https://github.com/spiral/php-grpc. Put the binary in some directory registered in PATH system variable
