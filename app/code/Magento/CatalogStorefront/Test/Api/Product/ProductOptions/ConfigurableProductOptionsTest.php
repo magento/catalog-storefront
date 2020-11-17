@@ -80,47 +80,16 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_different_option_labels_per_store_views.php
      * @magentoDbIsolation disabled
      * @param array $expected
+     * @param string $storeCode
      * @throws NoSuchEntityException
      * @throws \Throwable
-     * @dataProvider getConfigurableProductOptionDefaultStoreProvider
+     * @dataProvider getConfigurableProductOptionsInTwoStores
      */
-    public function testConfigurableProductOptionsDefaultStore(array $expected)
+    public function testConfigurableProductOptionsTwoStores(string $storeCode, array $expected)
     {
         $product = $this->productRepository->get(self::TEST_SKU);
         $this->productsGetRequestInterface->setIds([$product->getId()]);
-        $this->productsGetRequestInterface->setStore(self::STORE_CODE);
-        $this->productsGetRequestInterface->setAttributeCodes($this->attributesToCompare);
-        $catalogServiceItemDefaultStore = $this->catalogService->getProducts($this->productsGetRequestInterface);
-        $this->assertNotEmpty($catalogServiceItemDefaultStore->getItems());
-
-        $actual = [];
-        foreach ($catalogServiceItemDefaultStore->getItems()[0]->getProductOptions() as $productOption) {
-            $actual[] = $this->arrayMapper->convertToArray($productOption);
-        }
-
-        $diff = $this->compareArraysRecursively->execute(
-            $expected,
-            $actual
-        );
-
-        self::assertEquals([], $diff, "Actual response doesn't equal expected data");
-    }
-
-    /**
-     * Validate configurable product data
-     *
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_different_option_labels_per_store_views.php
-     * @magentoDbIsolation disabled
-     * @param array $expected
-     * @throws NoSuchEntityException
-     * @throws \Throwable
-     * @dataProvider getConfigurableProductOptionFixtureStoreProvider
-     */
-    public function testConfigurableProductOptionsFixtureStore(array $expected)
-    {
-        $product = $this->productRepository->get(self::TEST_SKU);
-        $this->productsGetRequestInterface->setIds([$product->getId()]);
-        $this->productsGetRequestInterface->setStore(self::FIXTURE_STORE);
+        $this->productsGetRequestInterface->setStore($storeCode);
         $this->productsGetRequestInterface->setAttributeCodes($this->attributesToCompare);
         $catalogServiceItemDefaultStore = $this->catalogService->getProducts($this->productsGetRequestInterface);
         $this->assertNotEmpty($catalogServiceItemDefaultStore->getItems());
@@ -143,21 +112,24 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function getConfigurableProductOptionDefaultStoreProvider()
+    public function getConfigurableProductOptionsInTwoStores()
     {
-        return [
-            [
+        $storeCodes = [self::STORE_CODE, self::FIXTURE_STORE];
+        $expectedData = [];
+        foreach ($storeCodes as $storeCode) {
+            $expectedData[$storeCode] = [
+                $storeCode,
                 [
                     [
-                        'id' => 'different_labels_attribute',
-                        'label' => 'Default store label',
+                        'id' => 'first_test_attribute',
+                        'label' => $storeCode . ' first test attribute',
                         'sort_order' => 0,
                         'required' => false,
                         'render_type' => '',
                         'type' => 'configurable',
                         'values' => [
                             [
-                                'label' => 'Option 1 Default Store',
+                                'label' => $storeCode . ' First Option 1',
                                 'sort_order' => '',
                                 'default' => false,
                                 'image_url' => '',
@@ -166,7 +138,7 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
                                 'info_url' => ''
                             ],
                             [
-                                'label' => 'Option 2 Default Store',
+                                'label' => $storeCode . ' First Option 2',
                                 'sort_order' => '',
                                 'default' => false,
                                 'image_url' => '',
@@ -175,7 +147,54 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
                                 'info_url' => ''
                             ],
                             [
-                                'label' => 'Option 3 Default Store',
+                                'label' => $storeCode . ' First Option 3',
+                                'sort_order' => '',
+                                'default' => false,
+                                'image_url' => '',
+                                'qty_mutability' => false,
+                                'qty' => (float)0,
+                                'info_url' => ''
+                            ],
+                        ],
+                    ],
+                    [
+                        'id' => 'second_test_attribute',
+                        'label' => $storeCode . ' second test attribute',
+                        'sort_order' => 1,
+                        'required' => false,
+                        'render_type' => '',
+                        'type' => 'configurable',
+                        'values' => [
+                            [
+                                'label' => $storeCode . ' Second Option 1',
+                                'sort_order' => '',
+                                'default' => false,
+                                'image_url' => '',
+                                'qty_mutability' => false,
+                                'qty' => (float)0,
+                                'info_url' => ''
+                            ],
+                            [
+                                'label' => $storeCode . ' Second Option 2',
+                                'sort_order' => '',
+                                'default' => false,
+                                'image_url' => '',
+                                'qty_mutability' => false,
+                                'qty' => (float)0,
+                                'info_url' => ''
+                            ],
+                        ],
+                    ],
+                    [
+                        'id' => 'third_test_attribute',
+                        'label' => $storeCode . ' third test attribute',
+                        'sort_order' => 2,
+                        'required' => false,
+                        'render_type' => '',
+                        'type' => 'configurable',
+                        'values' => [
+                            [
+                                'label' => $storeCode . ' Third Option 1',
                                 'sort_order' => '',
                                 'default' => false,
                                 'image_url' => '',
@@ -186,59 +205,9 @@ class ConfigurableProductOptionsTest extends StorefrontTestsAbstract
                         ],
                     ],
                 ]
-            ]
-        ];
-    }
+            ];
+        }
 
-    /**
-     * Data provider for configurable product options
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @return array
-     */
-    public function getConfigurableProductOptionFixtureStoreProvider()
-    {
-        return [
-            [
-                [
-                    [
-                        'id' => 'different_labels_attribute',
-                        'label' => 'Fixture store label',
-                        'sort_order' => 0,
-                        'required' => false,
-                        'render_type' => '',
-                        'type' => 'configurable',
-                        'values' => [
-                            [
-                                'label' => 'Option 1 Second Store',
-                                'sort_order' => '',
-                                'default' => false,
-                                'image_url' => '',
-                                'qty_mutability' => false,
-                                'qty' => (float)0,
-                                'info_url' => ''
-                            ],
-                            [
-                                'label' => 'Option 2 Second Store',
-                                'sort_order' => '',
-                                'default' => false,
-                                'image_url' => '',
-                                'qty_mutability' => false,
-                                'qty' => (float)0,
-                                'info_url' => ''
-                            ],
-                            [
-                                'label' => 'Option 3 Second Store',
-                                'sort_order' => '',
-                                'default' => false,
-                                'image_url' => '',
-                                'qty_mutability' => false,
-                                'qty' => (float)0,
-                                'info_url' => ''
-                            ],
-                        ],
-                    ],
-                ]
-            ]
-        ];
+        return $expectedData;
     }
 }

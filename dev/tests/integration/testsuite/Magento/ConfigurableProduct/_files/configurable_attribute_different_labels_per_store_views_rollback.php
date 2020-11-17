@@ -20,7 +20,9 @@ $registry->register('isSecureArea', true);
 $attributeRepository = $objectManager->get(ProductAttributeRepositoryInterface::class);
 
 try {
-    $attributeRepository->deleteById('different_labels_attribute');
+    $attributeRepository->deleteById('first_test_attribute');
+    $attributeRepository->deleteById('second_test_attribute');
+    $attributeRepository->deleteById('third_test_attribute');
 } catch (NoSuchEntityException $e) {
     //already deleted
 }
