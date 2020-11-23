@@ -103,8 +103,7 @@ interface QueryInterface
     ): EntryIteratorInterface;
 
     /**
-     * Search entries by specified search arguments using filter query context and supplied clause type, then
-     * aggregate the results by a specific field
+     * Search entries by specified search arguments, then aggregate the results by a specific field
      *
      * $searchBody contains "search field" -> "search value".
      * "search field" must be indexed in order for this query to work.
@@ -114,9 +113,9 @@ interface QueryInterface
      * @param string $indexName
      * @param string $entityName
      * @param array $searchBody
-     * @param string|null $clauseType
      * @param string $aggregateField
      * @param int $minDocCount
+     * @param string|null $clauseType
      * @return array
      * @throws RuntimeException
      * @throws \OverflowException

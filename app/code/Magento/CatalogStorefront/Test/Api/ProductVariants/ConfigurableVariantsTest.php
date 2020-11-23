@@ -56,7 +56,9 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
         parent::setUp();
         $this->variantService = Bootstrap::getObjectManager()->create(VariantService::class);
         $this->variantsRequestInterface = Bootstrap::getObjectManager()->create(ProductVariantRequestInterface::class);
-        $this->optionSelectionRequestInterface = Bootstrap::getObjectManager()->create(OptionSelectionRequestInterface::class);
+        $this->optionSelectionRequestInterface = Bootstrap::getObjectManager()->create(
+            OptionSelectionRequestInterface::class
+        );
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
         $this->responseArrayMapper = Bootstrap::getObjectManager()->create(
             ProductVariantResponseArrayMapper::class

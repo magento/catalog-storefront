@@ -315,7 +315,6 @@ class VariantService implements VariantServiceServerInterface
         return $variants;
     }
 
-
     /**
      * Validate that the variant products exist and are enabled. Unset invalid variants.
      *
