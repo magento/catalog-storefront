@@ -104,7 +104,9 @@ class ElasticsearchQuery implements QueryInterface
         array $searchBody,
         ?string $queryContext = 'must'
     ): EntryIteratorInterface {
-        return $this->searchEntries($indexName, $entityName, $searchBody, $queryContext, 'match');
+        $searchQuery = $this->buildSearchQuery($searchBody, $queryContext, 'match');
+        $searchResult = $this->searchEntries($indexName, $entityName, $searchQuery);
+        return $this->searchResultIteratorFactory->create($searchResult);
     }
 
     /**
@@ -114,9 +116,36 @@ class ElasticsearchQuery implements QueryInterface
         string $indexName,
         string $entityName,
         array $searchBody,
-        ?string $clauseType = 'term'
+        ?string $clauseType = 'terms'
     ): EntryIteratorInterface {
-        return $this->searchEntries($indexName, $entityName, $searchBody, 'filter', $clauseType);
+        $searchQuery = $this->buildSearchQuery($searchBody, 'filter', $clauseType);
+        $searchResult = $this->searchEntries($indexName, $entityName, $searchQuery);
+        return $this->searchResultIteratorFactory->create($searchResult);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function searchAggregatedFilteredEntries(
+        string $indexName,
+        string $entityName,
+        array $searchBody,
+        string $aggregateField,
+        int $minDocCount,
+        ?string $clauseType = 'terms'
+    ): array {
+        $searchQuery = $this->buildSearchQuery($searchBody, 'filter', $clauseType);
+        $aggregationQuery = $this->buildTermsAggregationQuery($aggregateField, $minDocCount, $entityName);
+        $searchResult = $this->searchEntries($indexName, $entityName, $searchQuery, $aggregationQuery);
+        $buckets = $searchResult['aggregations'][$entityName]['buckets'];
+        $result = [];
+        foreach ($buckets as $match) {
+            $result[] = [
+                $aggregateField => $match['key'],
+                'doc_count' => $match['doc_count']
+            ];
+        }
+        return $result;
     }
 
     /**
@@ -124,31 +153,46 @@ class ElasticsearchQuery implements QueryInterface
      *
      * @param string $indexName
      * @param string $entityName
-     * @param array $searchBody
-     * @param string $queryContext
-     * @param string $clauseType
-     * @return EntryIteratorInterface
-     * @throws NotFoundException
+     * @param array $searchQuery
+     * @param array $aggregationQuery
+     * @return array
      * @throws RuntimeException
+     * @throws \OverflowException
      */
     private function searchEntries(
         string $indexName,
         string $entityName,
-        array $searchBody,
-        string $queryContext,
-        string $clauseType
-    ): EntryIteratorInterface {
-        //TODO: Add pagination and remove max size search size https://github.com/magento/catalog-storefront/issues/418
+        array $searchQuery,
+        array $aggregationQuery = []
+    ): array {
+        $searchBody['query'] = $searchQuery;
+        $size = self::SEARCH_LIMIT;
+        if (!empty($aggregationQuery)) {
+            $searchBody['aggregations'] = $aggregationQuery;
+            $size = 0;
+        }
+        return $this->searchRequest($indexName, $entityName, $searchBody, $size);
+    }
+
+    /**
+     * Perform client search request.
+     *
+     * @param string $indexName
+     * @param string $entityName
+     * @param array $searchBody
+     * @param int $size
+     * @return array
+     * @throws RuntimeException
+     * @throws \OverflowException
+     */
+    private function searchRequest(string $indexName, string $entityName, array $searchBody, int $size): array
+    {
         $query = [
             'index' => $indexName,
             'type' => $entityName,
-            'body' => [],
-            'size' => self::SEARCH_LIMIT
+            'body' => $searchBody,
+            'size' => $size
         ];
-
-        foreach ($searchBody as $key => $value) {
-            $query['body']['query']['bool'][$queryContext][][$clauseType][$key] = $value;
-        }
 
         try {
             $result = $this->connectionPull->getConnection()->search($query);
@@ -158,6 +202,7 @@ class ElasticsearchQuery implements QueryInterface
                 $throwable
             );
         }
+
         //TODO: Add pagination and remove max size search size https://github.com/magento/catalog-storefront/issues/418
         if (isset($result['hits']['total']['value']) && $result['hits']['total']['value'] > self::SEARCH_LIMIT) {
             throw new \OverflowException(
@@ -165,9 +210,43 @@ class ElasticsearchQuery implements QueryInterface
             );
         }
 
-        $this->checkErrors($result, $indexName);
+        return $result;
+    }
 
-        return $this->searchResultIteratorFactory->create($result);
+    /**
+     * Form a search query
+     *
+     * @param array $searchBody
+     * @param string $queryContext
+     * @param string $clauseType
+     * @return array
+     */
+    private function buildSearchQuery(array $searchBody, string $queryContext, string $clauseType): array
+    {
+        $query = [];
+        foreach ($searchBody as $key => $value) {
+            $query['bool'][$queryContext][][$clauseType][$key] = $value;
+        }
+        return $query;
+    }
+
+    /**
+     * Form a query for terms aggregation
+     *
+     * @param string $field
+     * @param int $minDocCount
+     * @param string $entityName
+     * @return array
+     */
+    private function buildTermsAggregationQuery(string $field, int $minDocCount, string $entityName): array
+    {
+        //TODO: Add pagination and remove max size search size https://github.com/magento/catalog-storefront/issues/418
+        $query[$entityName]['terms'] = [
+            'size' => self::SEARCH_LIMIT,
+            'field' => $field,
+            'min_doc_count' => $minDocCount
+        ];
+        return $query;
     }
 
     /**

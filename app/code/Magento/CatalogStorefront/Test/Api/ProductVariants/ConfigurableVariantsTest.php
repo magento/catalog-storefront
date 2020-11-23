@@ -11,6 +11,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogStorefront\Model\VariantService;
 use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
+use Magento\CatalogStorefrontApi\Api\Data\OptionSelectionRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductVariantRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\ProductVariantResponse;
 use Magento\CatalogStorefrontApi\Api\Data\ProductVariantResponseArrayMapper;
@@ -43,6 +44,11 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
     private $responseArrayMapper;
 
     /**
+     * @var OptionSelectionRequestInterface
+     */
+    private $optionSelectionRequestInterface;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -50,6 +56,7 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
         parent::setUp();
         $this->variantService = Bootstrap::getObjectManager()->create(VariantService::class);
         $this->variantsRequestInterface = Bootstrap::getObjectManager()->create(ProductVariantRequestInterface::class);
+        $this->optionSelectionRequestInterface = Bootstrap::getObjectManager()->create(OptionSelectionRequestInterface::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
         $this->responseArrayMapper = Bootstrap::getObjectManager()->create(
             ProductVariantResponseArrayMapper::class
@@ -66,6 +73,9 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
      */
     public function testConfigurableProductVariants(): void
     {
+        //This sleep ensures that the elastic index has sufficient time to refresh
+        //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
+        sleep(1);
         $simpleSkus = [
             'simple_0',
             'simple_1',
@@ -86,10 +96,6 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
 
         $this->variantsRequestInterface->setProductId((string)$configurable->getId());
         $this->variantsRequestInterface->setStore('default');
-
-        //This sleep ensures that the elastic index has sufficient time to refresh
-        //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
-        sleep(1);
         /** @var $variantServiceItem ProductVariantResponse */
         $variantServiceItem = $this->variantService->getProductVariants($this->variantsRequestInterface);
         $actual = $this->responseArrayMapper->convertToArray($variantServiceItem)['matched_variants'];
@@ -109,19 +115,75 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
      */
     public function testProductVariantsDisabledProduct(): void
     {
+        //This sleep ensures that the elastic index has sufficient time to refresh
+        //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
+        sleep(1);
         /** @var $configurable Product */
         $configurable = $this->productRepository->get('configurable');
 
         $this->variantsRequestInterface->setProductId((string)$configurable->getId());
         $this->variantsRequestInterface->setStore('default');
-
-        //This sleep ensures that the elastic index has sufficient time to refresh
-        //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
-        sleep(1);
         /** @var $variantServiceItem ProductVariantResponse */
         $variantServiceItem = $this->variantService->getProductVariants($this->variantsRequestInterface);
         $actual = $this->responseArrayMapper->convertToArray($variantServiceItem)['matched_variants'];
         self::assertCount(1, $actual);
+    }
+
+    /**
+     * Validate matching of variants by option values
+     *
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_nine_simples.php
+     * @magentoDbIsolation disabled
+     * @throws NoSuchEntityException
+     * @throws \Throwable
+     */
+    public function testVariantsMatch(): void
+    {
+        //This sleep ensures that the elastic index has sufficient time to refresh
+        //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
+        sleep(1);
+        $simpleSkus = [
+            'simple_0',
+            'simple_1',
+            'simple_2',
+            'simple_3',
+            'simple_4',
+            'simple_5',
+            'simple_6',
+            'simple_7',
+            'simple_8'
+        ];
+        /** @var $configurable Product */
+        $configurable = $this->productRepository->get('configurable');
+        $simples = [];
+        foreach ($simpleSkus as $sku) {
+            $simples[] = $this->productRepository->get($sku);
+        }
+        $availableVariants = $this->getExpectedProductVariants($configurable, $simples);
+        self::assertCount(9, $availableVariants, 'Wrong number of expected variants');
+
+        // Match using one option value. Expect 3 simple products.
+        $optionValues = [$availableVariants[0]['option_values'][0]];
+        $this->optionSelectionRequestInterface->setStore('default');
+        $this->optionSelectionRequestInterface->setValues($optionValues);
+        /** @var $variantServiceItem ProductVariantResponse */
+        $variantServiceItem = $this->variantService->getVariantsMatch($this->optionSelectionRequestInterface);
+        $actual = $this->responseArrayMapper->convertToArray($variantServiceItem)['matched_variants'];
+        $expected = \array_values(\array_filter($availableVariants, function ($variant) use ($optionValues) {
+            return \in_array($optionValues, $variant['option_values']);
+        }));
+        self::assertCount(3, $actual);
+        $this->compare($expected, $actual);
+
+        // Match using two option values. Expect 1 simple product.
+        $optionValues = [$availableVariants[3]['option_values'][0], $availableVariants[3]['option_values'][1]];
+        $this->optionSelectionRequestInterface->setValues($optionValues);
+        /** @var $variantServiceItem ProductVariantResponse */
+        $variantServiceItem = $this->variantService->getVariantsMatch($this->optionSelectionRequestInterface);
+        $actual = $this->responseArrayMapper->convertToArray($variantServiceItem)['matched_variants'];
+        $expected = [$availableVariants[3]];
+        self::assertCount(1, $actual);
+        $this->compare($expected, $actual);
     }
 
     /**
