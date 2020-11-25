@@ -57,6 +57,7 @@ if ($repos) {
 
     shell_exec('cd ' . $magentoDir);
     shell_exec('composer update');
+    shell_exec('composer require nette/php-generator');
 }
 
 echo "Project composer.json updated.\n";
