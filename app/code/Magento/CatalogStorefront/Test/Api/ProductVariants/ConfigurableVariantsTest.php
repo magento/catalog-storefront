@@ -162,7 +162,6 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
             $simples[] = $this->productRepository->get($sku);
         }
         $availableVariants = $this->getExpectedProductVariants($configurable, $simples);
-        self::assertCount(9, $availableVariants, 'Wrong number of expected variants');
 
         // Match using one option value. Expect 3 simple products.
         $optionValues = [$availableVariants[0]['option_values'][0]];
