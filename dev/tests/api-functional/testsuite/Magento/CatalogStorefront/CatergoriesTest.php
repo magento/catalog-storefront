@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\CatalogMessageBroker\Model\MessageBus;
+namespace Magento\CatalogStorefront;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
