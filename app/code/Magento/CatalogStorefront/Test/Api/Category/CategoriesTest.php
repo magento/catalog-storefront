@@ -8,15 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefront\Test\Api\Category;
 
-use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
-use Magento\CatalogMessageBroker\Model\MessageBus\Category\CategoriesConsumer;
 use Magento\CatalogStorefront\Model\CatalogService;
 use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
 use Magento\CatalogStorefrontApi\Api\Data\CategoriesGetRequestInterface;
 use Magento\CatalogStorefrontApi\Api\Data\CategoryArrayMapper;
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -25,7 +21,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TestCategories extends StorefrontTestsAbstract
+class CategoriesTest extends StorefrontTestsAbstract
 {
     private const STORE_CODE = 'default';
 
@@ -58,11 +54,6 @@ class TestCategories extends StorefrontTestsAbstract
     ];
 
     /**
-     * @var CategoriesConsumer
-     */
-    private $categoriesConsumer;
-
-    /**
      * @var CatalogService
      */
     private $catalogService;
@@ -71,16 +62,6 @@ class TestCategories extends StorefrontTestsAbstract
      * @var CategoriesGetRequestInterface
      */
     private $categoriesGetRequestInterface;
-
-    /**
-     * @var ChangedEntitiesMessageBuilder
-     */
-    private $messageBuilder;
-
-    /**
-     * @var CategoryRepositoryInterface
-     */
-    private $categoryRepository;
 
     /**
      * @var CategoryArrayMapper
@@ -93,13 +74,10 @@ class TestCategories extends StorefrontTestsAbstract
     protected function setUp(): void
     {
         parent::setUp();
-        $this->categoriesConsumer = Bootstrap::getObjectManager()->create(CategoriesConsumer::class);
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
         $this->categoriesGetRequestInterface = Bootstrap::getObjectManager()->create(
             CategoriesGetRequestInterface::class
         );
-        $this->messageBuilder = Bootstrap::getObjectManager()->create(ChangedEntitiesMessageBuilder::class);
-        $this->categoryRepository = Bootstrap::getObjectManager()->create(CategoryRepositoryInterface::class);
         $this->arrayMapper = Bootstrap::getObjectManager()->get(CategoryArrayMapper::class);
     }
 
@@ -114,7 +92,6 @@ class TestCategories extends StorefrontTestsAbstract
      */
     public function testCategoryData(array $expected): void
     {
-        $this->runCategoryConsumer(10);
         $actual = $this->getApiResults(10, $this->attributeCodes);
         self::assertEquals($expected, $actual);
     }
@@ -130,7 +107,6 @@ class TestCategories extends StorefrontTestsAbstract
      */
     public function testCategoryBreadcrumbsData(array $expected): void
     {
-        $this->runCategoryConsumer(402);
         $actual = $this->getApiResults(402, ['breadcrumbs']);
         self::assertArrayHasKey('breadcrumbs', $actual);
         self::assertEquals($expected, $actual['breadcrumbs']);
@@ -196,27 +172,6 @@ class TestCategories extends StorefrontTestsAbstract
                 ]
             ]
         ];
-    }
-
-    /**
-     * @param int $categoryId
-     * @throws NoSuchEntityException
-     */
-    private function runCategoryConsumer($categoryId): void
-    {
-        $category = $this->categoryRepository->get($categoryId);
-        self::assertEquals($categoryId, $category->getId());
-        $entitiesData = [
-            [
-                'entity_id' => (int)$category->getId(),
-            ]
-        ];
-        $message = $this->messageBuilder->build(
-            CategoriesConsumer::CATEGORIES_UPDATED_EVENT_TYPE,
-            $entitiesData,
-            self::STORE_CODE
-        );
-        $this->categoriesConsumer->processMessage($message);
     }
 
     /**
