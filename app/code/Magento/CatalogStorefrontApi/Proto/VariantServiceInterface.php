@@ -46,4 +46,22 @@ interface VariantServiceInterface extends GRPC\ServiceInterface
     * @throws GRPC\Exception\InvokeException
     */
     public function getVariantsMatch(GRPC\ContextInterface $ctx, OptionSelectionRequest $in): ProductVariantResponse;
+
+    /**
+    * @param GRPC\ContextInterface $ctx
+    * @param OptionSelectionRequest $in
+    * @return ProductVariantResponse
+    *
+    * @throws GRPC\Exception\InvokeException
+    */
+    public function getVariantsExactlyMatch(GRPC\ContextInterface $ctx, OptionSelectionRequest $in): ProductVariantResponse;
+
+    /**
+    * @param GRPC\ContextInterface $ctx
+    * @param OptionSelectionRequest $in
+    * @return ProductVariantResponse
+    *
+    * @throws GRPC\Exception\InvokeException
+    */
+    public function getVariantsInclude(GRPC\ContextInterface $ctx, OptionSelectionRequest $in): ProductVariantResponse;
 }
