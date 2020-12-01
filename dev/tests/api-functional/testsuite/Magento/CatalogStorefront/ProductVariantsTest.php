@@ -152,9 +152,10 @@ class ProductVariantsTest extends StorefrontTestsAbstract
         //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
         sleep(4);
 
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage(sprintf(self::ERROR_MESSAGE, $configurableId));
-        $this->variantService->getProductVariants($this->variantsGetRequestInterface);
+        $response = $this->variantService->getProductVariants($this->variantsGetRequestInterface);
+        $variants = $this->responseArrayMapper->convertToArray($response);
+        $this->assertEmpty($variants);
+
     }
 
     /**
