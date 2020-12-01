@@ -264,28 +264,13 @@ class VariantService implements VariantServiceServerInterface
         $values = $request->getValues();
         $store = $request->getStore();
         $variantIds = $this->productVariantsDataProvider->fetchVariantIdsByOptionValues($values);
-        $variantData = $this->productVariantsDataProvider->fetchByVariantIds($variantIds);
+        $variantData = empty($variantIds) ? [] : $this->productVariantsDataProvider->fetchByVariantIds($variantIds);
 
-        \ksort($variantData);
-        if (empty($variantData)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'No products variants with option values %s are found in catalog',
-                    \implode(",", $values)
-                )
-            );
-        }
-
-        $variants = $this->formatVariants($variantData);
-        $validVariants = $this->validateVariants($variants, $store);
-
-        if (empty($validVariants)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'No valid product variants for options are found in catalog with option values: %s.',
-                    \implode(",", $values)
-                )
-            );
+        $validVariants = [];
+        if (!empty($variantData)) {
+            \ksort($variantData);
+            $variants = $this->formatVariants($variantData);
+            $validVariants = $this->validateVariants($variants, $store);
         }
 
         $output = [];
