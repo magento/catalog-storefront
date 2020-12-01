@@ -24,6 +24,21 @@ use Magento\TestFramework\Helper\Bootstrap;
 class ConfigurableVariantsTest extends StorefrontTestsAbstract
 {
     /**
+     * Simple product skus from Magento/ConfigurableProduct/_files/configurable_product_nine_simples.php
+     */
+    private const SIMPLE_SKUS = [
+        'simple_0',
+        'simple_1',
+        'simple_2',
+        'simple_3',
+        'simple_4',
+        'simple_5',
+        'simple_6',
+        'simple_7',
+        'simple_8'
+    ];
+
+    /**
      * @var VariantService
      */
     private $variantService;
@@ -78,21 +93,10 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
         //This sleep ensures that the elastic index has sufficient time to refresh
         //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
         sleep(1);
-        $simpleSkus = [
-            'simple_0',
-            'simple_1',
-            'simple_2',
-            'simple_3',
-            'simple_4',
-            'simple_5',
-            'simple_6',
-            'simple_7',
-            'simple_8'
-        ];
         /** @var $configurable Product */
         $configurable = $this->productRepository->get('configurable');
         $simples = [];
-        foreach ($simpleSkus as $sku) {
+        foreach (self::SIMPLE_SKUS as $sku) {
             $simples[] = $this->productRepository->get($sku);
         }
 
@@ -132,33 +136,22 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
     }
 
     /**
-     * Validate matching of variants by option values
+     * Validate matching of variants by option values using getVariantsMatch
      *
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_nine_simples.php
      * @magentoDbIsolation disabled
      * @throws NoSuchEntityException
      * @throws \Throwable
      */
-    public function testVariantsMatch(): void
+    public function testGetVariantsMatch(): void
     {
         //This sleep ensures that the elastic index has sufficient time to refresh
         //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
         sleep(1);
-        $simpleSkus = [
-            'simple_0',
-            'simple_1',
-            'simple_2',
-            'simple_3',
-            'simple_4',
-            'simple_5',
-            'simple_6',
-            'simple_7',
-            'simple_8'
-        ];
         /** @var $configurable Product */
         $configurable = $this->productRepository->get('configurable');
         $simples = [];
-        foreach ($simpleSkus as $sku) {
+        foreach (self::SIMPLE_SKUS as $sku) {
             $simples[] = $this->productRepository->get($sku);
         }
         $availableVariants = $this->getExpectedProductVariants($configurable, $simples);
@@ -184,6 +177,90 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
         $actual = $this->responseArrayMapper->convertToArray($variantServiceItem)['matched_variants'];
         $expected = [$availableVariants[3]];
         self::assertCount(1, $actual);
+        $this->compare($expected, $actual);
+    }
+
+    /**
+     * Validate matching of variants by option values using getVariantsExactlyMatch
+     *
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_nine_simples.php
+     * @magentoDbIsolation disabled
+     * @throws NoSuchEntityException
+     * @throws \Throwable
+     */
+    public function testGetVariantsExactlyMatch(): void
+    {
+        //This sleep ensures that the elastic index has sufficient time to refresh
+        //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
+        sleep(1);
+        /** @var $configurable Product */
+        $configurable = $this->productRepository->get('configurable');
+        $simples = [];
+        foreach (self::SIMPLE_SKUS as $sku) {
+            $simples[] = $this->productRepository->get($sku);
+        }
+        $availableVariants = $this->getExpectedProductVariants($configurable, $simples);
+
+        // Use exact match using two option values. Expect 1 simple product.
+        $optionValues = $availableVariants[0]['option_values'];
+        $this->optionSelectionRequestInterface->setStore('default');
+        $this->optionSelectionRequestInterface->setValues($optionValues);
+        /** @var $variantServiceItem ProductVariantResponse */
+        $variantServiceItem = $this->variantService->getVariantsExactlyMatch($this->optionSelectionRequestInterface);
+        $actual = $this->responseArrayMapper->convertToArray($variantServiceItem)['matched_variants'];
+        $expected = [$availableVariants[0]];
+        self::assertCount(1, $actual);
+        $this->compare($expected, $actual);
+
+        // Use exact match using one option value. Expect 0 simple products.
+        $optionValues = [$availableVariants[0]['option_values'][0]];
+        $this->optionSelectionRequestInterface->setValues($optionValues);
+        /** @var $variantServiceItem ProductVariantResponse */
+        $variantServiceItem = $this->variantService->getVariantsExactlyMatch($this->optionSelectionRequestInterface);
+        $actual = $this->responseArrayMapper->convertToArray($variantServiceItem)['matched_variants'];
+        self::assertEmpty($actual);
+    }
+
+    /**
+     * Validate matching of variants by option values using getVariantsInclude
+     *
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_nine_simples.php
+     * @magentoDbIsolation disabled
+     * @throws NoSuchEntityException
+     * @throws \Throwable
+     */
+    public function testGetVariantsInclude(): void
+    {
+        //This sleep ensures that the elastic index has sufficient time to refresh
+        //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
+        sleep(1);
+        /** @var $configurable Product */
+        $configurable = $this->productRepository->get('configurable');
+        $simples = [];
+        foreach (self::SIMPLE_SKUS as $sku) {
+            $simples[] = $this->productRepository->get($sku);
+        }
+        $availableVariants = $this->getExpectedProductVariants($configurable, $simples);
+
+        // Use include match using two option values. Expect 6 simple products.
+        $optionValues = [
+            $availableVariants[0]['option_values'][0],
+            $availableVariants[1]['option_values'][0]
+        ];
+        $this->optionSelectionRequestInterface->setStore('default');
+        $this->optionSelectionRequestInterface->setValues($optionValues);
+        /** @var $variantServiceItem ProductVariantResponse */
+        $variantServiceItem = $this->variantService->getVariantsInclude($this->optionSelectionRequestInterface);
+        $actual = $this->responseArrayMapper->convertToArray($variantServiceItem)['matched_variants'];
+        $expected = \array_values(\array_filter($availableVariants, function ($variant) use ($optionValues) {
+            foreach ($optionValues as $optionValue) {
+                if (\in_array($optionValue, $variant['option_values'])) {
+                    return true;
+                }
+            }
+            return false;
+        }));
+        self::assertCount(6, $actual);
         $this->compare($expected, $actual);
     }
 

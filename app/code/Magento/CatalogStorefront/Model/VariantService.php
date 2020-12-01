@@ -284,6 +284,72 @@ class VariantService implements VariantServiceServerInterface
     }
 
     /**
+     * Match full variant which matches the merchant selection exactly
+     *
+     * @param OptionSelectionRequestInterface $request
+     * @return ProductVariantResponseInterface
+     * @throws RuntimeException
+     * @throws \Throwable
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getVariantsExactlyMatch(OptionSelectionRequestInterface $request): ProductVariantResponseInterface
+    {
+        $values = $request->getValues();
+        $store = $request->getStore();
+        $variantIds = $this->productVariantsDataProvider->fetchVariantIdsByOptionValues($values);
+        $variantData = count($variantIds) !== 1 ? [] : $this->productVariantsDataProvider->fetchByVariantIds($variantIds);
+
+        $validVariants = [];
+        if (!empty($variantData) && count($variantData) === count($values)) {
+            \ksort($variantData);
+            $variants = $this->formatVariants($variantData);
+            $validVariants = $this->validateVariants($variants, $store);
+        }
+
+        $output = [];
+        foreach ($validVariants as $variant) {
+            $output[] = $this->productVariantMapper->setData($variant)->build();
+        }
+
+        $response = new ProductVariantResponse();
+        $response->setMatchedVariants($output);
+        return $response;
+    }
+
+    /**
+     * Get all variants which contain at least one of merchant selections
+     *
+     * @param OptionSelectionRequestInterface $request
+     * @return ProductVariantResponseInterface
+     * @throws RuntimeException
+     * @throws \Throwable
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getVariantsInclude(OptionSelectionRequestInterface $request): ProductVariantResponseInterface
+    {
+        $values = $request->getValues();
+        $store = $request->getStore();
+        $variantIds = $this->productVariantsDataProvider->fetchVariantIdsByOptionValues($values, false);
+        $variantData = empty($variantIds) ? [] : $this->productVariantsDataProvider->fetchByVariantIds($variantIds);
+
+        $validVariants = [];
+        if (!empty($variantData)) {
+            \ksort($variantData);
+            $variants = $this->formatVariants($variantData);
+            $validVariants = $this->validateVariants($variants, $store);
+        }
+
+        $output = [];
+        foreach ($validVariants as $variant) {
+            $output[] = $this->productVariantMapper->setData($variant)->build();
+        }
+
+        $response = new ProductVariantResponse();
+        $response->setMatchedVariants($output);
+        return $response;
+    }
+
+    /**
      * Combine option values into product variants
      *
      * @param array $optionValueData
