@@ -155,7 +155,6 @@ class ProductVariantsTest extends StorefrontTestsAbstract
         $response = $this->variantService->getProductVariants($this->variantsGetRequestInterface);
         $variants = $this->responseArrayMapper->convertToArray($response);
         $this->assertEmpty($variants);
-
     }
 
     /**
