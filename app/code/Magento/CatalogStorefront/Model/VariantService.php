@@ -297,7 +297,9 @@ class VariantService implements VariantServiceServerInterface
         $values = $request->getValues();
         $store = $request->getStore();
         $variantIds = $this->productVariantsDataProvider->fetchVariantIdsByOptionValues($values);
-        $variantData = count($variantIds) !== 1 ? [] : $this->productVariantsDataProvider->fetchByVariantIds($variantIds);
+        $variantData = count($variantIds) !== 1 ?
+            [] :
+            $this->productVariantsDataProvider->fetchByVariantIds($variantIds);
 
         $validVariants = [];
         if (!empty($variantData) && count($variantData) === count($values)) {
