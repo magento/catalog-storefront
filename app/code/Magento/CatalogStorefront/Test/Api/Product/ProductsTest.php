@@ -10,20 +10,16 @@ namespace Magento\CatalogStorefront;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\CatalogExport\Model\ChangedEntitiesMessageBuilder;
-use Magento\CatalogMessageBroker\Model\MessageBus\Product\ProductsConsumer;
 use Magento\CatalogStorefront\Model\CatalogService;
 use Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract;
 use Magento\CatalogStorefrontApi\Api\Data\ProductsGetRequestInterface;
-use Magento\DataExporter\Model\FeedInterface;
-use Magento\DataExporter\Model\FeedPool;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Test class for Products message bus
+ * Test for Product storefront service
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -32,11 +28,6 @@ class ProductsTest extends StorefrontTestsAbstract
     const TEST_SKU = 'in-stock-product';
     const STORE_CODE = 'default';
     const ERROR_MESSAGE = 'Products with the following ids are not found in catalog: %s';
-
-    /**
-     * @var ProductsConsumer
-     */
-    private $productsConsumer;
 
     /**
      * @var CatalogService
@@ -49,16 +40,6 @@ class ProductsTest extends StorefrontTestsAbstract
     private $productsGetRequestInterface;
 
     /**
-     * @var ChangedEntitiesMessageBuilder
-     */
-    private $messageBuilder;
-
-    /**
-     * @var FeedInterface
-     */
-    private $productFeed;
-
-    /**
      * @var ProductRepositoryInterface
      */
     private $productRepository;
@@ -69,11 +50,8 @@ class ProductsTest extends StorefrontTestsAbstract
     protected function setUp(): void
     {
         parent::setUp();
-        $this->productsConsumer = Bootstrap::getObjectManager()->create(ProductsConsumer::class);
         $this->catalogService = Bootstrap::getObjectManager()->create(CatalogService::class);
         $this->productsGetRequestInterface = Bootstrap::getObjectManager()->create(ProductsGetRequestInterface::class);
-        $this->messageBuilder = Bootstrap::getObjectManager()->create(ChangedEntitiesMessageBuilder::class);
-        $this->productFeed = Bootstrap::getObjectManager()->get(FeedPool::class)->getFeed('products');
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
     }
 
@@ -89,22 +67,6 @@ class ProductsTest extends StorefrontTestsAbstract
     public function testSaveAndDeleteProduct() : void
     {
         $product = $this->getProduct(self::TEST_SKU);
-        $this->assertEquals(self::TEST_SKU, $product->getSku());
-        $entitiesData = [
-            [
-                'entity_id' => (string) $product->getId(),
-            ]
-        ];
-        $productFeed = $this->productFeed->getFeedByIds([(string)$product->getId()], [self::STORE_CODE]);
-        $this->assertNotEmpty($productFeed);
-
-        $updateMessage = $this->messageBuilder->build(
-            ProductsConsumer::PRODUCTS_UPDATED_EVENT_TYPE,
-            $entitiesData,
-            self::STORE_CODE
-        );
-        $this->productsConsumer->processMessage($updateMessage);
-
         $this->productsGetRequestInterface->setIds([$product->getId()]);
         $this->productsGetRequestInterface->setStore(self::STORE_CODE);
         $catalogServiceItem = $this->catalogService->getProducts($this->productsGetRequestInterface);
@@ -113,17 +75,7 @@ class ProductsTest extends StorefrontTestsAbstract
         $this->assertEquals($item->getSku(), $product->getSku());
 
         $this->deleteProduct($product->getSku());
-        $deletedFeed = $this->productFeed->getDeletedByIds([(string)$product->getId()], [self::STORE_CODE]);
-        $this->assertNotEmpty($deletedFeed);
-
-        $deleteMessage = $this->messageBuilder->build(
-            ProductsConsumer::PRODUCTS_DELETED_EVENT_TYPE,
-            $entitiesData,
-            self::STORE_CODE
-        );
-
-        $this->productsConsumer->processMessage($deleteMessage);
-
+        $this->runConsumers(['catalog.product.export.consumer']);
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf(self::ERROR_MESSAGE, $product->getId()));
         $this->catalogService->getProducts($this->productsGetRequestInterface);
@@ -144,6 +96,8 @@ class ProductsTest extends StorefrontTestsAbstract
     }
 
     /**
+     * Delete product from database
+     *
      * @param string $sku
      * @throws NoSuchEntityException
      * @throws StateException

@@ -16,8 +16,14 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\TestFramework\Helper\Bootstrap;
 
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\Registry;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+
 /**
- * Test class for Categories message bus
+ * Test for Categories storefront service
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -69,6 +75,16 @@ class CategoriesTest extends StorefrontTestsAbstract
     private $arrayMapper;
 
     /**
+     * @var Registry
+     */
+    private $registry;
+
+    /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -79,6 +95,8 @@ class CategoriesTest extends StorefrontTestsAbstract
             CategoriesGetRequestInterface::class
         );
         $this->arrayMapper = Bootstrap::getObjectManager()->get(CategoryArrayMapper::class);
+        $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
+        $this->categoryRepository = Bootstrap::getObjectManager()->create(CategoryRepositoryInterface::class);
     }
 
     /**
@@ -92,8 +110,32 @@ class CategoriesTest extends StorefrontTestsAbstract
      */
     public function testCategoryData(array $expected): void
     {
-        $actual = $this->getApiResults(10, $this->attributeCodes);
+        $apiResults = $this->getApiResults(10, $this->attributeCodes);
+        self::assertNotEmpty($apiResults);
+        $item = $apiResults[0];
+        self::assertEquals($item->getId(), 10);
+        $actual = $this->arrayMapper->convertToArray($item);
         self::assertEquals($expected, $actual);
+    }
+
+    /**
+     * Validate category data retrieved from SF API after whole cycle save/index/export/import
+     *
+     * @magentoDataFixture Magento/Catalog/_files/category.php
+     * @magentoDbIsolation disabled
+     * @throws \Throwable
+     * @dataProvider categoryDataProvider
+     */
+    public function testCategoryDelete(): void
+    {
+        $apiResults = $this->getApiResults(333, ['id']);
+        self::assertNotEmpty($apiResults);
+        $item = $apiResults[0];
+        self::assertEquals($item->getId(), 333);
+        $this->deleteCategory(333);
+        $this->runConsumers(['catalog.category.export.consumer']);
+        $deleted = $this->getApiResults(333, ['id']);
+        self::assertEmpty($deleted);
     }
 
     /**
@@ -107,7 +149,11 @@ class CategoriesTest extends StorefrontTestsAbstract
      */
     public function testCategoryBreadcrumbsData(array $expected): void
     {
-        $actual = $this->getApiResults(402, ['breadcrumbs']);
+        $apiResults = $this->getApiResults(402, ['breadcrumbs']);
+        self::assertNotEmpty($apiResults);
+        $item = $apiResults[0];
+        self::assertEquals($item->getId(), 402);
+        $actual = $this->arrayMapper->convertToArray($item);
         self::assertArrayHasKey('breadcrumbs', $actual);
         self::assertEquals($expected, $actual['breadcrumbs']);
     }
@@ -182,16 +228,29 @@ class CategoriesTest extends StorefrontTestsAbstract
      * @throws RuntimeException
      * @throws \Throwable
      */
-    private function getApiResults($categoryId, $attributes): array
+    private function getApiResults(int $categoryId, array $attributes): array
     {
         $this->categoriesGetRequestInterface->setIds([$categoryId]);
         $this->categoriesGetRequestInterface->setStore(self::STORE_CODE);
         $this->categoriesGetRequestInterface->setAttributeCodes($attributes);
         $catalogServiceItem = $this->catalogService->getCategories($this->categoriesGetRequestInterface);
-        self::assertNotEmpty($catalogServiceItem->getItems());
-        $item = $catalogServiceItem->getItems()[0];
-        self::assertEquals($item->getId(), $categoryId);
+        return $catalogServiceItem->getItems();
+    }
 
-        return $this->arrayMapper->convertToArray($item);
+    /**
+     * Delete category from database
+     *
+     * @param int $id
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @throws StateException
+     */
+    private function deleteCategory(int $id) : void
+    {
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', true);
+        $this->categoryRepository->deleteByIdentifier($id);
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', false);
     }
 }
