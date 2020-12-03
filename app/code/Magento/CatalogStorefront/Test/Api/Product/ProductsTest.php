@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\CatalogStorefront;
+namespace Magento\CatalogStorefront\Test\Api\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -64,7 +64,7 @@ class ProductsTest extends StorefrontTestsAbstract
      * @throws StateException
      * @throws \Throwable
      */
-    public function testSaveAndDeleteProduct() : void
+    public function testSaveAndDeleteProduct(): void
     {
         $product = $this->getProduct(self::TEST_SKU);
         $this->productsGetRequestInterface->setIds([$product->getId()]);
@@ -86,7 +86,7 @@ class ProductsTest extends StorefrontTestsAbstract
      * @return ProductInterface
      * @throws NoSuchEntityException
      */
-    private function getProduct(string $sku) : ProductInterface
+    private function getProduct(string $sku): ProductInterface
     {
         try {
             return $this->productRepository->get($sku);
@@ -102,7 +102,7 @@ class ProductsTest extends StorefrontTestsAbstract
      * @throws NoSuchEntityException
      * @throws StateException
      */
-    private function deleteProduct(string $sku) : void
+    private function deleteProduct(string $sku): void
     {
         try {
             $registry = Bootstrap::getObjectManager()->get(Registry::class);

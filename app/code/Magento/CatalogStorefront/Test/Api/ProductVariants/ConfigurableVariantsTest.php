@@ -192,7 +192,7 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
      * @throws NoSuchEntityException
      * @throws StateException
      */
-    private function deleteProduct(string $sku) : void
+    private function deleteProduct(string $sku): void
     {
         try {
             $registry = Bootstrap::getObjectManager()->get(Registry::class);

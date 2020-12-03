@@ -15,7 +15,6 @@ use Magento\CatalogStorefrontApi\Api\Data\CategoryArrayMapper;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\TestFramework\Helper\Bootstrap;
-
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
@@ -245,7 +244,7 @@ class CategoriesTest extends StorefrontTestsAbstract
      * @throws NoSuchEntityException
      * @throws StateException
      */
-    private function deleteCategory(int $id) : void
+    private function deleteCategory(int $id): void
     {
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', true);
