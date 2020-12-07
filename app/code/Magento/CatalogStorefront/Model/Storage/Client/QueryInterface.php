@@ -71,6 +71,7 @@ interface QueryInterface
      * @return EntryIteratorInterface
      * @throws NotFoundException
      * @throws RuntimeException
+     * @throws \OverflowException
      */
     public function searchMatchedEntries(
         string $indexName,
@@ -92,11 +93,39 @@ interface QueryInterface
      * @return EntryIteratorInterface
      * @throws NotFoundException
      * @throws RuntimeException
+     * @throws \OverflowException
      */
     public function searchFilteredEntries(
         string $indexName,
         string $entityName,
         array $searchBody,
-        ?string $clauseType = 'term'
+        ?string $clauseType = 'terms'
     ): EntryIteratorInterface;
+
+    /**
+     * Search entries by specified search arguments, then aggregate the results by a specific field
+     *
+     * $searchBody contains "search field" -> "search value".
+     * "search field" must be indexed in order for this query to work.
+     * $aggregateField contains a field which will be used for the aggregate query,
+     * $minDocCount is the minimum match requirement for the aggregate
+     *
+     * @param string $indexName
+     * @param string $entityName
+     * @param array $searchBody
+     * @param string $aggregateField
+     * @param int $minDocCount
+     * @param string|null $clauseType
+     * @return array
+     * @throws RuntimeException
+     * @throws \OverflowException
+     */
+    public function searchAggregatedFilteredEntries(
+        string $indexName,
+        string $entityName,
+        array $searchBody,
+        string $aggregateField,
+        int $minDocCount,
+        ?string $clauseType = 'terms'
+    ): array;
 }

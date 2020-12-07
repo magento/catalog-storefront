@@ -107,4 +107,48 @@ class VariantServiceClient extends \Grpc\BaseStub
             $options
         );
     }
+
+    /**
+     * match the variants which exactly matched with merchant selection (&& operation)
+     * @param \Magento\CatalogStorefrontApi\Proto\OptionSelectionRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Magento\CatalogStorefrontApi\Proto\ProductVariantResponse
+     */
+    public function getVariantsExactlyMatch(
+        \Magento\CatalogStorefrontApi\Proto\OptionSelectionRequest $argument,
+        $metadata = [],
+        $options = []
+    )
+    {
+        return $this->_simpleRequest(
+            '/magento.catalogStorefrontApi.proto.VariantService/getVariantsExactlyMatch',
+            $argument,
+            ['\Magento\CatalogStorefrontApi\Proto\ProductVariantResponse', 'decode'],
+            $metadata,
+            $options
+        );
+    }
+
+    /**
+     * get all variants which contain at least one of merchant selection (|| operation)
+     * @param \Magento\CatalogStorefrontApi\Proto\OptionSelectionRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Magento\CatalogStorefrontApi\Proto\ProductVariantResponse
+     */
+    public function getVariantsInclude(
+        \Magento\CatalogStorefrontApi\Proto\OptionSelectionRequest $argument,
+        $metadata = [],
+        $options = []
+    )
+    {
+        return $this->_simpleRequest(
+            '/magento.catalogStorefrontApi.proto.VariantService/getVariantsInclude',
+            $argument,
+            ['\Magento\CatalogStorefrontApi\Proto\ProductVariantResponse', 'decode'],
+            $metadata,
+            $options
+        );
+    }
 }
