@@ -23,56 +23,113 @@ Resolver::getInstance()->requireDataFixture(
 );
 
 $objectManager = Bootstrap::getObjectManager();
+
 /** @var ProductAttributeRepositoryInterface $productAttributeRepository */
 $productAttributeRepository = $objectManager->get(ProductAttributeRepositoryInterface::class);
-$attribute = $productAttributeRepository->get('different_labels_attribute');
-$options = $attribute->getOptions();
+
 /** @var WebsiteRepositoryInterface $websiteRepository */
 $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 $baseWebsite = $websiteRepository->get('base');
+
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $productRepository->cleanCache();
+
 /** @var ProductFactory $productFactory */
 $productFactory = $objectManager->get(ProductFactory::class);
-$attributeValues = [];
-$associatedProductIds = [];
 $rootCategoryId = $baseWebsite->getDefaultStore()->getRootCategoryId();
-array_shift($options);
 
-foreach ($options as $option) {
-    $product = $productFactory->create();
-    $product->setTypeId(ProductType::TYPE_SIMPLE)
-        ->setAttributeSetId($product->getDefaultAttributeSetId())
-        ->setWebsiteIds([$baseWebsite->getId()])
-        ->setName('Configurable Option ' . $option->getLabel())
-        ->setSku(strtolower(str_replace(' ', '_', 'simple ' . $option->getLabel())))
-        ->setPrice(150)
-        ->setDifferentLabelsAttribute($option->getValue())
-        ->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE)
-        ->setStatus(Status::STATUS_ENABLED)
-        ->setCategoryIds([$rootCategoryId])
-        ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
-    $product = $productRepository->save($product);
+$firstAttribute = $productAttributeRepository->get('first_test_attribute');
+$firstAttributeOptions = $firstAttribute->getOptions();
+array_shift($firstAttributeOptions);
 
-    $attributeValues[] = [
-        'label' => 'test',
-        'attribute_id' => $attribute->getId(),
-        'value_index' => $option->getValue(),
-    ];
-    $associatedProductIds[] = $product->getId();
+$secondAttribute = $productAttributeRepository->get('second_test_attribute');
+$secondAttributeOptions = $secondAttribute->getOptions();
+array_shift($secondAttributeOptions);
+
+$thirdAttribute = $productAttributeRepository->get('third_test_attribute');
+$thirdAttributeOptions = $thirdAttribute->getOptions();
+array_shift($thirdAttributeOptions);
+
+
+/** Create simple products */
+$associatedProductIds = [];
+$firstAttributeValues = [];
+$secondAttributeValues = [];
+$thirdAttributeValues = [];
+$i = 0;
+foreach ($firstAttributeOptions as $firstAttributeOption) {
+    foreach ($secondAttributeOptions as $secondAttributeOption) {
+        foreach ($thirdAttributeOptions as $thirdAttributeOption) {
+            $childProduct = $productFactory->create();
+            $childProduct->setTypeId(ProductType::TYPE_SIMPLE)
+                ->setAttributeSetId($childProduct->getDefaultAttributeSetId())
+                ->setWebsiteIds([$baseWebsite->getId()])
+                ->setName('Simple ' . $i)
+                ->setSku('simple_' . $i)
+                ->setPrice(45)
+                ->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE)
+                ->setStatus(Status::STATUS_ENABLED)
+                ->setStockData([
+                    'use_config_manage_stock' => 1,
+                    'qty' => 100,
+                    'is_qty_decimal' => 0,
+                    'is_in_stock' => 1
+                ])
+                ->setCategoryIds([$rootCategoryId])
+                ->setFirstTestAttribute($firstAttributeOption->getValue())
+                ->setSecondTestAttribute($secondAttributeOption->getValue())
+                ->setThirdTestAttribute($thirdAttributeOption->getValue());
+
+            $childProduct = $productRepository->save($childProduct);
+
+            $firstAttributeValues[] = [
+                'label' => 'first test ' . $i,
+                'attribute_id' => $firstAttribute->getId(),
+                'value_index' => $firstAttributeOption->getValue(),
+            ];
+            $secondAttributeValues[] = [
+                'label' => 'second test ' . $i,
+                'attribute_id' => $secondAttribute->getId(),
+                'value_index' => $secondAttributeOption->getValue(),
+            ];
+            $thirdAttributeValues[] = [
+                'label' => 'third test ' . $i,
+                'attribute_id' => $thirdAttribute->getId(),
+                'value_index' => $thirdAttributeOption->getValue(),
+            ];
+            $associatedProductIds[] = $childProduct->getId();
+            $i++;
+        }
+    }
 }
+
 /** @var Factory $optionsFactory */
-$optionsFactory = $objectManager->get(Factory::class);
+$optionsFactory = $objectManager->create(Factory::class);
 $configurableAttributesData = [
     [
-        'attribute_id' => $attribute->getId(),
-        'code' => $attribute->getAttributeCode(),
-        'label' => $attribute->getStoreLabel(),
+        'attribute_id' => $firstAttribute->getId(),
+        'code' => $firstAttribute->getAttributeCode(),
+        'label' => $firstAttribute->getStoreLabel(),
         'position' => '0',
-        'values' => $attributeValues,
+        'values' => $firstAttributeValues,
     ],
+    [
+        'attribute_id' => $secondAttribute->getId(),
+        'code' => $secondAttribute->getAttributeCode(),
+        'label' => $secondAttribute->getStoreLabel(),
+        'position' => '1',
+        'values' => $secondAttributeValues,
+    ],
+    [
+        'attribute_id' => $thirdAttribute->getId(),
+        'code' => $secondAttribute->getAttributeCode(),
+        'label' => $secondAttribute->getStoreLabel(),
+        'position' => '2',
+        'values' => $thirdAttributeValues,
+    ]
 ];
+
 $configurableOptions = $optionsFactory->create($configurableAttributesData);
 
 $product = $productFactory->create();
