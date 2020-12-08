@@ -248,7 +248,7 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
     {
         //This sleep ensures that the elastic index has sufficient time to refresh
         //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
-        sleep(3);
+        sleep(10);
         /** @var $configurable Product */
         $configurable = $this->productRepository->get('configurable');
         $simples = [];
@@ -256,20 +256,19 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
             $simples[] = $this->productRepository->get($sku);
         }
         $availableVariants = $this->getExpectedProductVariants($configurable, $simples);
-        self::assertCount(9, $availableVariants);
-
-        $this->variantsRequestInterface->setProductId((string)$configurable->getId());
-        $this->variantsRequestInterface->setStore('default');
-        /** @var $variantServiceItem ProductVariantResponse */
-        $variantServiceItem = $this->variantService->getProductVariants($this->variantsRequestInterface);
-        $actual = $this->responseArrayMapper->convertToArray($variantServiceItem)['matched_variants'];
-        self::assertCount(9, $actual);
 
         // Use include match using two option values. Expect 6 simple products.
         $optionValues = [
             $availableVariants[0]['option_values'][0],
-            $availableVariants[1]['option_values'][0]
         ];
+        foreach ($availableVariants as $availableVariant) {
+            $firstOption = $availableVariant['option_values'][0];
+            if ($optionValues[0] !== $firstOption) {
+                $optionValues[] = $firstOption;
+                break;
+            }
+        }
+
         $this->optionSelectionRequestInterface->setStore('default');
         $this->optionSelectionRequestInterface->setValues($optionValues);
         /** @var $variantServiceItem ProductVariantResponse */
