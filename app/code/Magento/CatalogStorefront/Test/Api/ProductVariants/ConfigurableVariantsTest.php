@@ -248,7 +248,7 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
     {
         //This sleep ensures that the elastic index has sufficient time to refresh
         //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
-        sleep(1);
+        sleep(3);
         /** @var $configurable Product */
         $configurable = $this->productRepository->get('configurable');
         $simples = [];
