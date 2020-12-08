@@ -17,12 +17,16 @@ use Magento\CatalogStorefrontApi\Api\Data\ProductVariantResponse;
 use Magento\CatalogStorefrontApi\Api\Data\ProductVariantResponseArrayMapper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Registry;
+use Magento\Framework\Exception\StateException;
 
 /**
- * Tests configurable product variants on storefront
+ * Test for Configurable ProductVariants storefront service
  */
 class ConfigurableVariantsTest extends StorefrontTestsAbstract
 {
+    const ERROR_MESSAGE = 'No products variants for product with id %s are found in catalog.';
+
     /**
      * Simple product skus from Magento/ConfigurableProduct/_files/configurable_product_nine_simples.php
      */
@@ -109,6 +113,17 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
         $expected = $this->getExpectedProductVariants($configurable, $simples);
         self::assertCount(9, $actual);
         $this->compare($expected, $actual);
+
+        $this->deleteProduct($configurable->getSku());
+        $this->runConsumers(['catalog.product.variants.export.consumer']);
+
+        //This sleep ensures that the elastic index has sufficient time to refresh
+        //See https://www.elastic.co/guide/en/elasticsearch/reference/6.8/docs-refresh.html#docs-refresh
+        sleep(4);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(sprintf(self::ERROR_MESSAGE, $configurable->getId()));
+        $this->variantService->getProductVariants($this->variantsRequestInterface);
     }
 
     /**
@@ -308,5 +323,26 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
             ];
         }
         return array_values($variants);
+    }
+
+    /**
+     * Delete product from database
+     *
+     * @param string $sku
+     * @throws NoSuchEntityException
+     * @throws StateException
+     */
+    private function deleteProduct(string $sku): void
+    {
+        try {
+            $registry = Bootstrap::getObjectManager()->get(Registry::class);
+            $registry->unregister('isSecureArea');
+            $registry->register('isSecureArea', true);
+            $this->productRepository->deleteById($sku);
+            $registry->unregister('isSecureArea');
+            $registry->register('isSecureArea', false);
+        } catch (NoSuchEntityException $e) {
+            throw new NoSuchEntityException();
+        }
     }
 }
