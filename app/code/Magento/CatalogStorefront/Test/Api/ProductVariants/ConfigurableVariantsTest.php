@@ -256,6 +256,14 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
             $simples[] = $this->productRepository->get($sku);
         }
         $availableVariants = $this->getExpectedProductVariants($configurable, $simples);
+        self::assertCount(9, $availableVariants);
+
+        $this->variantsRequestInterface->setProductId((string)$configurable->getId());
+        $this->variantsRequestInterface->setStore('default');
+        /** @var $variantServiceItem ProductVariantResponse */
+        $variantServiceItem = $this->variantService->getProductVariants($this->variantsRequestInterface);
+        $actual = $this->responseArrayMapper->convertToArray($variantServiceItem)['matched_variants'];
+        self::assertCount(9, $actual);
 
         // Use include match using two option values. Expect 6 simple products.
         $optionValues = [
