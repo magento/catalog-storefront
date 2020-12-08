@@ -257,11 +257,17 @@ class ConfigurableVariantsTest extends StorefrontTestsAbstract
         }
         $availableVariants = $this->getExpectedProductVariants($configurable, $simples);
 
-        // Use include match using two option values. Expect 6 simple products.
+        // Use include match using two different option values. Expect 6 simple products.
         $optionValues = [
             $availableVariants[0]['option_values'][0],
-            $availableVariants[1]['option_values'][0]
         ];
+        foreach ($availableVariants as $availableVariant) {
+            if ($optionValues[0] !== $availableVariant['option_values'][0]) {
+                $optionValues[] = $availableVariant['option_values'][0];
+                break;
+            }
+        }
+
         $this->optionSelectionRequestInterface->setStore('default');
         $this->optionSelectionRequestInterface->setValues($optionValues);
         /** @var $variantServiceItem ProductVariantResponse */
