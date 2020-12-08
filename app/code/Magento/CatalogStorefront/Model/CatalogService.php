@@ -230,7 +230,7 @@ class CatalogService implements CatalogServerInterface
             $importProductsResponse->setMessage('Records imported successfully');
             $importProductsResponse->setStatus(true);
         } catch (\Throwable $e) {
-            $message = 'Cannot process product import';
+            $message = \sprintf('Cannot process product import, error: "%s"', $e->getMessage());
             $this->logger->error($message, ['exception' => $e]);
             $importProductsResponse->setMessage($message);
             $importProductsResponse->setStatus(false);

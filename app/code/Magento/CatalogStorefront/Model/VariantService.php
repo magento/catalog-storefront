@@ -216,10 +216,10 @@ class VariantService implements VariantServiceServerInterface
     {
         $productId = $request->getProductId();
         $store = $request->getStore();
-        $rawVariants = $this->productVariantsDataProvider->fetchByProductId((int)$productId);
+        $variantData = $this->productVariantsDataProvider->fetchByParentIds([(int)$productId]);
 
-        \ksort($rawVariants);
-        if (empty($rawVariants)) {
+        \ksort($variantData);
+        if (empty($variantData)) {
             throw new \InvalidArgumentException(
                 sprintf(
                     'No products variants for product with id %s are found in catalog.',
@@ -228,34 +228,10 @@ class VariantService implements VariantServiceServerInterface
             );
         }
 
-        $compositeVariants = [];
-        foreach ($rawVariants as $rawVariant) {
-            $compositeVariants[$rawVariant['id']]['id'] = $rawVariant['id'];
-            $compositeVariants[$rawVariant['id']]['option_values'][] = $rawVariant['option_value'];
-            $compositeVariants[$rawVariant['id']]['product_id'] = $rawVariant['product_id'];
-        }
+        $variants = $this->formatVariants($variantData);
+        $validVariants = $this->validateVariants($variants, $store);
 
-        $productsGetRequest = $this->productsGetRequestInterfaceFactory->create();
-        $productsGetRequest->setIds(\array_column($compositeVariants, 'product_id'));
-        $productsGetRequest->setStore($store);
-        $productsGetRequest->setAttributeCodes(["id", "status"]);
-        $catalogProducts = $this->catalogService->getProducts($productsGetRequest)->getItems();
-
-        $activeProducts = [];
-        foreach ($catalogProducts as $product) {
-            if ($product->getStatus() === self::PRODUCT_STATUS_ENABLED) {
-                $activeProducts[$product->getId()] = $product->getId();
-            }
-        }
-
-        $variants = [];
-        foreach ($compositeVariants as $compositeVariant) {
-            if (isset($activeProducts[$compositeVariant['product_id']])) {
-                $variants[] = $this->productVariantMapper->setData($compositeVariant)->build();
-            }
-        }
-
-        if (empty($variants)) {
+        if (empty($validVariants)) {
             throw new \InvalidArgumentException(
                 sprintf(
                     'No valid products variants for product with id %s are found in catalog.',
@@ -264,20 +240,163 @@ class VariantService implements VariantServiceServerInterface
             );
         }
 
+        $output = [];
+        foreach ($validVariants as $variant) {
+            $output[] = $this->productVariantMapper->setData($variant)->build();
+        }
+
         $response = new ProductVariantResponse();
-        $response->setMatchedVariants($variants);
+        $response->setMatchedVariants($output);
         return $response;
     }
 
     /**
-     * TODO: Implement getVariantsMatch() method and remove the warning suppression.
+     * Match the variants which correspond, and do not contradict, the merchant selection.
      *
      * @param OptionSelectionRequestInterface $request
      * @return ProductVariantResponseInterface
+     * @throws RuntimeException
+     * @throws \Throwable
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getVariantsMatch(OptionSelectionRequestInterface $request): ProductVariantResponseInterface
     {
-        return new ProductVariantResponse();
+        $values = $request->getValues();
+        $store = $request->getStore();
+        $variantIds = $this->productVariantsDataProvider->fetchVariantIdsByOptionValues($values);
+        $variantData = empty($variantIds) ? [] : $this->productVariantsDataProvider->fetchByVariantIds($variantIds);
+
+        $validVariants = [];
+        if (!empty($variantData)) {
+            \ksort($variantData);
+            $variants = $this->formatVariants($variantData);
+            $validVariants = $this->validateVariants($variants, $store);
+        }
+
+        $output = [];
+        foreach ($validVariants as $variant) {
+            $output[] = $this->productVariantMapper->setData($variant)->build();
+        }
+
+        $response = new ProductVariantResponse();
+        $response->setMatchedVariants($output);
+        return $response;
+    }
+
+    /**
+     * Match full variant which matches the merchant selection exactly
+     *
+     * @param OptionSelectionRequestInterface $request
+     * @return ProductVariantResponseInterface
+     * @throws RuntimeException
+     * @throws \Throwable
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getVariantsExactlyMatch(OptionSelectionRequestInterface $request): ProductVariantResponseInterface
+    {
+        $values = $request->getValues();
+        $store = $request->getStore();
+        $variantIds = $this->productVariantsDataProvider->fetchVariantIdsByOptionValues($values);
+        $variantData = count($variantIds) !== 1 ?
+            [] :
+            $this->productVariantsDataProvider->fetchByVariantIds($variantIds);
+
+        $validVariants = [];
+        if (!empty($variantData) && count($variantData) === count($values)) {
+            \ksort($variantData);
+            $variants = $this->formatVariants($variantData);
+            $validVariants = $this->validateVariants($variants, $store);
+        }
+
+        $output = [];
+        foreach ($validVariants as $variant) {
+            $output[] = $this->productVariantMapper->setData($variant)->build();
+        }
+
+        $response = new ProductVariantResponse();
+        $response->setMatchedVariants($output);
+        return $response;
+    }
+
+    /**
+     * Get all variants which contain at least one of merchant selections
+     *
+     * @param OptionSelectionRequestInterface $request
+     * @return ProductVariantResponseInterface
+     * @throws RuntimeException
+     * @throws \Throwable
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getVariantsInclude(OptionSelectionRequestInterface $request): ProductVariantResponseInterface
+    {
+        $values = $request->getValues();
+        $store = $request->getStore();
+        $variantIds = $this->productVariantsDataProvider->fetchVariantIdsByOptionValues($values, false);
+        $variantData = empty($variantIds) ? [] : $this->productVariantsDataProvider->fetchByVariantIds($variantIds);
+
+        $validVariants = [];
+        if (!empty($variantData)) {
+            \ksort($variantData);
+            $variants = $this->formatVariants($variantData);
+            $validVariants = $this->validateVariants($variants, $store);
+        }
+
+        $output = [];
+        foreach ($validVariants as $variant) {
+            $output[] = $this->productVariantMapper->setData($variant)->build();
+        }
+
+        $response = new ProductVariantResponse();
+        $response->setMatchedVariants($output);
+        return $response;
+    }
+
+    /**
+     * Combine option values into product variants
+     *
+     * @param array $optionValueData
+     * @return array
+     */
+    private function formatVariants(array $optionValueData): array
+    {
+        $variants = [];
+        foreach ($optionValueData as $optionValue) {
+            $variants[$optionValue['id']]['id'] = $optionValue['id'];
+            $variants[$optionValue['id']]['option_values'][] = $optionValue['option_value'];
+            $variants[$optionValue['id']]['product_id'] = $optionValue['product_id'];
+        }
+        return $variants;
+    }
+
+    /**
+     * Validate that the variant products exist and are enabled. Unset invalid variants.
+     *
+     * @param array $variants
+     * @param string $store
+     * @return array
+     * @throws \Throwable
+     */
+    private function validateVariants(array $variants, string $store): array
+    {
+        $productsGetRequest = $this->productsGetRequestInterfaceFactory->create();
+        $productsGetRequest->setIds(\array_column($variants, 'product_id'));
+        $productsGetRequest->setStore($store);
+        $productsGetRequest->setAttributeCodes(["id", "status"]);
+        $catalogProducts = $this->catalogService->getProducts($productsGetRequest)->getItems();
+
+        $activeProductIds = [];
+        foreach ($catalogProducts as $product) {
+            if ($product->getStatus() === self::PRODUCT_STATUS_ENABLED) {
+                $activeProductIds[$product->getId()] = $product->getId();
+            }
+        }
+
+        foreach ($variants as $key => $compositeVariant) {
+            if (!isset($activeProductIds[$compositeVariant['product_id']])) {
+                unset($variants[$key]);
+            }
+        }
+
+        return $variants;
     }
 }
