@@ -8,18 +8,8 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Catalog;
 
 
-class GqlServerTest extends \Magento\CatalogStorefront\Test\Api\StorefrontTestsAbstract
+class GqlServerTest extends \Magento\CatalogStorefront\Test\Api\StorefrontGraphQlTestsAbstract
 {
-    /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    private $objectManager;
-
-    protected function setUp(): void
-    {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-    }
-
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      *
