@@ -29,7 +29,6 @@ class GqlServerTest extends \Magento\CatalogStorefront\Test\Api\StorefrontGraphQ
      */
     public function testGrpcRequest()
     {
-        echo "URL" . TESTS_BASE_URL;
         $query = <<<QUERY
 {
   productByID(id: 1) {
@@ -38,10 +37,9 @@ class GqlServerTest extends \Magento\CatalogStorefront\Test\Api\StorefrontGraphQ
     }
 }
 QUERY;
-        //        <const name="TESTS_BASE_URL" value="http://magento.url"/>
         $response = $this->graphQlQuery($query);
 
         print_r($response);
-        self::assertEquals('1', $response['products']['items'][0]['id']);
+        self::assertEquals('simple', $response['productByID']['id']);
     }
 }
