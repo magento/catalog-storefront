@@ -38,6 +38,8 @@ In case of data is not found for specified id Service doesn't return any data
 }
 ```
 
+proto/services is set of services needed for storefront:grpc:init command
+
 
 ## Storage
 
