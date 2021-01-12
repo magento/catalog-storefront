@@ -18,16 +18,17 @@ class GqlServerTest extends \Magento\CatalogStorefront\Test\Api\StorefrontGraphQ
     public function testGrpcRequest()
     {
         $query = <<<QUERY
-{
-  productByID(id: 1) {
-    id
-    name
+getProductsByIds(ids: [1]) {
+    items {
+      sku
+      name
+      url_key
     }
-}
+  }
 QUERY;
         $response = $this->graphQlQuery($query);
 
         print_r($response);
-        self::assertEquals('simple', $response['productByID']['id']);
+        self::assertEquals('simple', $response['products']['items'][0]['sku']);
     }
 }
