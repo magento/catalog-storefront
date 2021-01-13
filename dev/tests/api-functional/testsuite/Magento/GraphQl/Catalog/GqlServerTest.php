@@ -31,6 +31,6 @@ QUERY;
         $response = $this->graphQlQuery($query);
 
         print_r($response);
-        self::assertEquals('simple', $response['products']['items'][0]['sku']);
+        self::assertEquals('simple', $response['getProductsByIds']['items'][0]['sku']);
     }
 }
