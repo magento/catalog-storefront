@@ -30,7 +30,6 @@ class GqlServerTest extends \Magento\CatalogStorefront\Test\Api\StorefrontGraphQ
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        print_r($response);
         self::assertEquals('simple', $response['getProductsByIds']['items'][0]['sku']);
     }
 }
