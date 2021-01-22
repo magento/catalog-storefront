@@ -1,5 +1,7 @@
 grpc:
   listen: "tcp://:9001"
+  # .rr.default.yaml is used to setup gRPC server run for catalog-storefront-ce as default service,
+  # it is an ad-hoc solution to support run tests on CI with a monolithic installation approach
   proto: "magento.proto"
   workers:
     command: "./vendor/bin/worker"
