@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogStorefront\Test\Integration\Model\Storage;
+namespace Magento\CatalogStorefront\Test\Integration\Model\Storage\Client;
 
 use Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchCommand;
 use Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchDataDefinitionAdapter;
