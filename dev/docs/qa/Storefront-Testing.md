@@ -21,3 +21,15 @@ GitHub App will ask “Magento Test API” to run tests in PR with [configuratio
 * We can skip running GQL API-functional tests for some time while missing components and infrastructure are under development.
 * GQL API-functional tests running should be re-enabled right after all components became available.
 * Green GQL API-functional tests build is a must-have as the only proof that all components interact as expected.
+
+### Flow for sending and receiving data via GraphQL queries through the GQL Server
+* Create a product in Magento
+* Trigger indexer "on save" for CatalogFeedIndexer
+* Indexer triggers callback \Magento\CatalogExport\Model\Indexer\EntityIndexerCallback::execute
+    * Callback send into Message Bus message with product update {id:x} RabbitMQ
+* Consumer in Message Broker accept message: \Magento\CatalogMessageBroker\Model\MessageBus\Product\ProductsConsumer::processMessage
+    * Consumer send REST to Magento go get product data (collected recently by feed indexer)
+    * Consumer send data to Catalog Service via gRPC
+* Call Query "productByID" to GQl Server
+    * Send request to "127.0.0.1"
+    * GQL Server accept query and go to Storefront Service to get Data \Magento\CatalogStorefront\Model\CatalogService::getProducts

@@ -38,6 +38,9 @@ In case of data is not found for specified id Service doesn't return any data
 }
 ```
 
+## Configuration
+`proto/services` file contains a list of services needed to run `storefront:grpc:init` command
+
 
 ## Storage
 
