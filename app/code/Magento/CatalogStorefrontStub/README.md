@@ -1,0 +1,1 @@
+Stubs for Catalog Storefront service
