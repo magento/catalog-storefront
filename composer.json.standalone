@@ -34,7 +34,7 @@
             ]
         },
         "files": [
-            "app/etc/storefront_product_review/NonComposerComponentRegistration.php"
+            "app/etc/catalog-storefront/NonComposerComponentRegistration.php"
         ],
         "config": {
             "preferred-install": "dist",

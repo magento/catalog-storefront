@@ -12,6 +12,15 @@ use Magento\Framework\Stdlib\DateTime;
 class Installer
 {
     /**
+     * Configuration for Search Service DB connection
+     */
+    const DB_HOST = 'magento-db-host';
+    const DB_NAME = 'magento-db-name';
+    const DB_USER = 'magento-db-user';
+    const DB_PASSWORD = 'magento-db-password';
+    const DB_TABLE_PREFIX = 'magento-db-table-prefix';
+
+    /**
      * Configuration for Search Service ElasticSearch
      */
     const ES_ENGINE = 'magento-es-engine';
@@ -76,7 +85,25 @@ class Installer
                         'connection' => 'default'
                     ]
                 ],
-                'storefront-search' => [
+                'db' => [
+                    'connection' => [
+                        'default' => [
+                            'host' => $optional[self::DB_HOST],
+                            'dbname' => $optional[self::DB_NAME],
+                            'username' => $optional[self::DB_USER],
+                            'password' => $optional[self::DB_PASSWORD],
+                            'model' => 'mysql4',
+                            'engine' => 'innodb',
+                            'initStatements' => 'SET NAMES utf8;',
+                            'active' => '1',
+                            'driver_options' => [
+                                1014 => false
+                            ]
+                        ]
+                    ],
+                    'table_prefix' => $optional[self::DB_TABLE_PREFIX]
+                ],
+                'storefront-catalog' => [
                     'connections' => [
                         //Connection config to monolith ES
                         'magento' => [
