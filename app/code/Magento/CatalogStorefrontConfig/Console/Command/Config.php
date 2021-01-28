@@ -93,37 +93,6 @@ class Config extends Command
     {
         return [
             new InputOption(
-                Installer::DB_HOST,
-                null,
-                InputOption::VALUE_REQUIRED,
-                'Database hostname'
-            ),
-            new InputOption(
-                Installer::DB_NAME,
-                null,
-                InputOption::VALUE_REQUIRED,
-                'Database name',
-            ),
-            new InputOption(
-                Installer::DB_USER,
-                null,
-                InputOption::VALUE_REQUIRED,
-                'Database user'
-            ),
-            new InputOption(
-                Installer::DB_PASSWORD,
-                null,
-                InputOption::VALUE_REQUIRED,
-                'Database password'
-            ),
-            new InputOption(
-                Installer::DB_TABLE_PREFIX,
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Database table prefix',
-                ''
-            ),
-            new InputOption(
                 Installer::ES_ENGINE,
                 null,
                 InputOption::VALUE_REQUIRED,
