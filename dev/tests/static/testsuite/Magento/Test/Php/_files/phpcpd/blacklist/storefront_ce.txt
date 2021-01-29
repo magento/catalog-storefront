@@ -5,3 +5,4 @@ Magento/CatalogStorefrontApi/Api
 Magento/CatalogStorefrontApi/Proto
 Magento/CatalogExportApi/Api/Data
 Config.php
+Installer.php
