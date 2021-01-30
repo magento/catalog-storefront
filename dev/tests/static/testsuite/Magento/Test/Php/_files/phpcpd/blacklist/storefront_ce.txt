@@ -6,3 +6,5 @@ Magento/CatalogStorefrontApi/Proto
 Magento/CatalogExportApi/Api/Data
 Config.php
 Installer.php
+storefront_catalog_product_autoload.php
+storefront_catalog_product_bootstrap.php
