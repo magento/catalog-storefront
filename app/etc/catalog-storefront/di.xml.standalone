@@ -47,7 +47,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="catalog-storefront-installer" xsi:type="object">
-                    Magento\CatalogStorefrontConfig\Console\Command\Config
+                    Magento\CatalogStorefrontConfig\Console\Command\Init
                 </item>
             </argument>
         </arguments>

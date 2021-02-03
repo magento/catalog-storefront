@@ -14,12 +14,15 @@ class Installer
     /**
      * Configuration for Search Service ElasticSearch
      */
+    const ES_PROTOCOL = 'es-protocol';
     const ES_ENGINE = 'es-engine';
     const ES_HOSTNAME = 'es-hostname';
     const ES_PORT = 'es-port';
     const ES_INDEX_PREFIX = 'es-index-prefix';
     const ES_USERNAME = 'es-username';
     const ES_PASSWORD = 'es-password';
+
+    const DEFAULT_PROTOCOL = 'http';
 
     /**
      * Enable cache config value
@@ -80,7 +83,7 @@ class Installer
                     'connections' => [
                         //Connection config to monolith ES
                         'default' => [
-                            'protocol' => 'http',
+                            'protocol' => $optional[self::ES_PROTOCOL] ?? self::DEFAULT_PROTOCOL,
                             'hostname' => $optional[self::ES_HOSTNAME],
                             'port' => $optional[self::ES_PORT],
                             'enable_auth' => $optional[self::ES_USERNAME] !== '',

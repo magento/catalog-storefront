@@ -16,18 +16,18 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command for search service minimum config set up
+ * Command for catalog storefront service minimum config set up
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Config extends Command
+class Init extends Command
 {
     /**
      * Command name
      *
      * @var string
      */
-    private const COMMAND_NAME = 'storefront:catalog:init';
+    private const COMMAND_NAME = 'storefront:init';
 
     /**
      * @var Installer
