@@ -1,0 +1,51 @@
+{
+    "name": "magento/storefront-catalog-storefront-ce",
+    "type": "project",
+    "repositories": {
+        "repo-magento": {
+            "type": "composer",
+            "url": "https://repo.magento.com/"
+        },
+        "module-grpc": {
+            "type": "git",
+            "url": "https://github.com/magento/module-grpc"
+        }
+    },
+    "extra": {
+        "magento-root-dir": "./"
+    },
+    "require": {
+        "magento/framework": "^103.0",
+        "magento/framework-message-queue": "*",
+        "colinmollenhour/cache-backend-file": "^1.4",
+        "elasticsearch/elasticsearch": "^7.9.0",
+        "magento/module-grpc": "dev-master",
+        "google/protobuf": "^3.11",
+        "grpc/grpc": "^1.27",
+        "spiral/php-grpc": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Magento\\Framework\\": "vendor/magento/framework/",
+            "Magento\\": "app/code/Magento/"
+        },
+        "psr-0": {
+            "": [
+                "app/code/",
+                "generated/code/"
+            ]
+        },
+        "files": [
+            "app/etc/catalog-storefront/NonComposerComponentRegistration.php"
+        ],
+        "config": {
+            "preferred-install": "dist",
+            "sort-packages": true
+        },
+        "exclude-from-classmap": [
+            "**/dev/**",
+            "**/update/**",
+            "**/Test/**"
+        ]
+    }
+}
