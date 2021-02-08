@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefront\Model\Storage\Client\Config;
 
+use Magento\StorefrontStorage\Model\Client\Config\EntityConfigInterface;
+
 /**
  * Category entity type config.
  */

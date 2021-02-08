@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefront\Model;
 
-use Magento\CatalogStorefront\Model\Storage\Client\CommandInterface;
-use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
-use Magento\CatalogStorefront\Model\Storage\State;
+use Magento\StorefrontStorage\Model\Client\CommandInterface;
+use Magento\StorefrontStorage\Model\Client\DataDefinitionInterface;
+use Magento\StorefrontStorage\Model\State;
 use Magento\Framework\Exception\BulkException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Psr\Log\LoggerInterface;

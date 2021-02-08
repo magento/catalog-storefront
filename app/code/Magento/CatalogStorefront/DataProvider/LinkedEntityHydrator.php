@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefront\DataProvider;
 
-use Magento\CatalogStorefront\Model\Storage\Client\Config\Category;
-use Magento\CatalogStorefront\Model\Storage\Client\Config\Product;
+use Magento\StorefrontStorage\Model\Client\Config\Category;
+use Magento\StorefrontStorage\Model\Client\Config\Product;
 
 /**
  * Hydrate entities with linked entities defined map $linkedEntityPath

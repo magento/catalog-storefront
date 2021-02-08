@@ -5,8 +5,8 @@
  */
 namespace Magento\CatalogStorefront\Test\Api;
 
-use Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface;
-use Magento\CatalogStorefront\Model\Storage\State;
+use Magento\StorefrontStorage\Model\Client\DataDefinitionInterface;
+use Magento\StorefrontStorage\Model\State;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Indexer\Model\Indexer;
 use Magento\Store\Model\StoreManagerInterface;

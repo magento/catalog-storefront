@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefront\Test\Integration\Model\Storage\Client;
 
-use Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchCommand;
-use Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchDataDefinitionAdapter;
-use Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchQuery;
-use Magento\CatalogStorefront\Model\Storage\State;
+use Magento\StorefrontStorage\Model\Client\ElasticsearchCommand;
+use Magento\StorefrontStorage\Model\Client\ElasticsearchDataDefinitionAdapter;
+use Magento\StorefrontStorage\Model\Client\ElasticsearchQuery;
+use Magento\StorefrontStorage\Model\State;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 
