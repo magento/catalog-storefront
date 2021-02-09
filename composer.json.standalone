@@ -9,10 +9,6 @@
         "module-grpc": {
             "type": "git",
             "url": "https://github.com/magento/module-grpc"
-        },
-        "libraries": {
-            "type": "path",
-            "url": "/var/www/storefront-libraries/modules/*"
         }
     },
     "extra": {
@@ -31,11 +27,6 @@
         "google/protobuf": "^3.11",
         "grpc/grpc": "^1.27",
         "spiral/php-grpc": "^1.1"
-    },
-    "scripts": {
-        "post-autoload-dump": [
-            "cp vendor/magento/module-storefront-framework-stub/etc/framework.xml app/etc/framework.di.xml"
-        ]
     },
     "autoload": {
         "psr-4": {
