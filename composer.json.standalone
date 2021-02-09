@@ -9,6 +9,10 @@
         "module-grpc": {
             "type": "git",
             "url": "https://github.com/magento/module-grpc"
+        },
+        "libraries": {
+            "type": "path",
+            "url": "/var/www/storefront-libraries/modules/*"
         }
     },
     "extra": {
@@ -17,6 +21,9 @@
     "require": {
         "magento/module-storefront-storage": "*",
         "magento/module-storefront-framework-stub": "*",
+        "magento/module-storefront-cache": "*",
+        "magento/module-storefront-di": "*",
+        "magento/module-storefront-deploy": "*",
         "magento/framework-message-queue": "*",
         "colinmollenhour/cache-backend-file": "^1.4",
         "elasticsearch/elasticsearch": "^7.9.0",
