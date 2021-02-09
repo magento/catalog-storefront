@@ -15,7 +15,7 @@
         "magento-root-dir": "./"
     },
     "require": {
-        "magento/framework": "^103.0",
+        "magento/module-storefront-framework": "*"
         "magento/framework-message-queue": "*",
         "colinmollenhour/cache-backend-file": "^1.4",
         "elasticsearch/elasticsearch": "^7.9.0",
