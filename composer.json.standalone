@@ -15,7 +15,6 @@
         "magento-root-dir": "./"
     },
     "require": {
-        "magento/module-storefront-framework": "*",
         "magento/module-storefront-storage": "*",
         "magento/module-storefront-framework-stub": "*",
         "magento/framework-message-queue": "*",
@@ -25,6 +24,11 @@
         "google/protobuf": "^3.11",
         "grpc/grpc": "^1.27",
         "spiral/php-grpc": "^1.1"
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "cp vendor/magento/module-storefront-framework-stub/etc/framework.xml app/etc/framework.di.xml"
+        ]
     },
     "autoload": {
         "psr-4": {
