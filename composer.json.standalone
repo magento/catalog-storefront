@@ -16,6 +16,8 @@
     },
     "require": {
         "magento/module-storefront-framework": "*",
+        "magento/module-storefront-storage": "*",
+        "magento/module-storefront-framework-stub": "*",
         "magento/framework-message-queue": "*",
         "colinmollenhour/cache-backend-file": "^1.4",
         "elasticsearch/elasticsearch": "^7.9.0",
@@ -26,7 +28,6 @@
     },
     "autoload": {
         "psr-4": {
-            "Magento\\Framework\\": "vendor/magento/framework/",
             "Magento\\": "app/code/Magento/"
         },
         "psr-0": {
