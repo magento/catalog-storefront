@@ -20,13 +20,9 @@
         "magento/module-storefront-cache": "*",
         "magento/module-storefront-di": "*",
         "magento/module-storefront-deploy": "*",
-        "magento/framework-message-queue": "*",
-        "colinmollenhour/cache-backend-file": "^1.4",
-        "elasticsearch/elasticsearch": "^7.9.0",
         "magento/module-grpc": "dev-main",
-        "google/protobuf": "^3.11",
-        "grpc/grpc": "^1.27",
-        "spiral/php-grpc": "^1.1"
+        "magento/framework-message-queue": "*",
+        "elasticsearch/elasticsearch": "^7.9.0"
     },
     "autoload": {
         "psr-4": {
