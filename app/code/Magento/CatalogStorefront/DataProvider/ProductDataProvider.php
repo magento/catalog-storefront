@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefront\DataProvider;
 
-use Magento\StorefrontStorage\Model\Client\Config\Product;
+use Magento\CatalogStorefront\Model\Storage\Client\Config\Product;
 use Magento\StorefrontStorage\Model\Client\QueryInterface;
 use Magento\StorefrontStorage\Model\State;
 use Magento\Framework\Exception\NotFoundException;
