@@ -16,7 +16,7 @@
     },
     "require": {
         "magento/module-storefront-storage": "*",
-        "magento/module-storefront-framework-stub": "*",
+        "magento/module-storefront-framework": "*",
         "magento/module-storefront-cache": "*",
         "magento/module-storefront-di": "*",
         "magento/module-storefront-deploy": "*",
