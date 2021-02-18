@@ -10,13 +10,10 @@
     <!-- Product search -->
     <preference for="Magento\CatalogStorefrontApi\Api\CatalogInterface" type="Magento\CatalogStorefrontApi\Api\InMemoryCatalog"/>
     <preference for="Magento\CatalogStorefrontApi\Api\CatalogServerInterface" type="Magento\CatalogStorefront\Model\CatalogService"/>
-    <preference for="Magento\CatalogStorefront\Model\Storage\Client\DataDefinitionInterface" type="Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchDataDefinitionAdapter"/>
-    <preference for="Magento\CatalogStorefront\Model\Storage\Client\QueryInterface" type="Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchQuery"/>
-    <preference for="Magento\CatalogStorefront\Model\Storage\Client\CommandInterface" type="Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchCommand"/>
     <preference for="Magento\CatalogStorefrontApi\Api\VariantServiceInterface" type="Magento\CatalogStorefrontApi\Api\InMemoryVariantService"/>
     <preference for="Magento\CatalogStorefrontApi\Api\VariantServiceServerInterface" type="Magento\CatalogStorefront\Model\VariantService"/>
 
-    <type name="Magento\CatalogStorefront\Model\Storage\Client\Config\EntityConfigPool">
+    <type name="Magento\StorefrontStorage\Model\Client\Config\EntityConfigPool">
         <arguments>
             <argument name="configs" xsi:type="array">
                 <item name="product" xsi:type="object">Magento\CatalogStorefront\Model\Storage\Client\Config\Product</item>
@@ -58,7 +55,7 @@
             <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogStorefront\Model\Storage\Client\ElasticsearchQuery">
+    <type name="Magento\StorefrontStorage\Model\Client\ElasticsearchQuery">
         <arguments>
             <argument name="logger" xsi:type="object">CatalogStorefrontLogger</argument>
         </arguments>

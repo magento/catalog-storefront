@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\CatalogStorefront\DataProvider;
 
 use Magento\CatalogStorefront\Model\Storage\Client\Config\ProductVariant;
-use Magento\CatalogStorefront\Model\Storage\Client\QueryInterface;
-use Magento\CatalogStorefront\Model\Storage\State;
+use Magento\StorefrontStorage\Model\Client\QueryInterface;
+use Magento\StorefrontStorage\Model\State;
 use Magento\CatalogStorefront\Model\VariantService;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\RuntimeException;

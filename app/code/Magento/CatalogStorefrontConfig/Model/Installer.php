@@ -25,11 +25,6 @@ class Installer
     const DEFAULT_PROTOCOL = 'http';
 
     /**
-     * Enable cache config value
-     */
-    private const CACHE_ENABLED = 1;
-
-    /**
      * @var Writer
      */
     private $deploymentConfigWriter;
@@ -99,12 +94,6 @@ class Installer
                     'alias_name' => 'catalog_storefront',
                     'source_prefix' => 'catalog_storefront_v',
                     'source_current_version' => 1
-                ],
-                'cache_types' => [
-                    'config' => self::CACHE_ENABLED,
-                    'reflection' => self::CACHE_ENABLED,
-                    'db_ddl' => self::CACHE_ENABLED,
-                    'compiled_config' => self::CACHE_ENABLED,
                 ],
                 'MAGE_MODE' => 'developer'
             ],

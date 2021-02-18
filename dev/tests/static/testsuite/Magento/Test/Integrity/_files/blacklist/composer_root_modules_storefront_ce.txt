@@ -13,3 +13,5 @@ magento/module-storefront-graph-ql
 magento/module-downloadable-product-data-exporter
 magento/module-catalog-storefront-config
 magento/module-catalog-storefront-stub
+magento/module-storefront-framework
+magento/module-storefront-storage

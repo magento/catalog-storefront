@@ -6,7 +6,7 @@
     },
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
+        "magento/module-storefront-framework": "*",
         "google/protobuf": "^3.11",
         "grpc/grpc": "^1.27",
         "spiral/php-grpc": "^1.1"

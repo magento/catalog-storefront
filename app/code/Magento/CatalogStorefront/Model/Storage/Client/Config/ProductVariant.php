@@ -8,8 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogStorefront\Model\Storage\Client\Config;
 
-use Magento\Framework\App\DeploymentConfig\Reader;
-use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\StorefrontStorage\Model\Client\Config\EntityConfigInterface;
 
 /**
  * Product variant entity type config.
