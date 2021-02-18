@@ -19,7 +19,7 @@ class GqlServerTest extends \Magento\CatalogStorefront\Test\Api\StorefrontGraphQ
     {
         $query = <<<QUERY
 {
-    getProductsByIds(ids: [1]) {
+    getProductsByIds(ids: ["1"]) {
         items {
             sku
             name
