@@ -52,5 +52,6 @@ See detailed [checklist](https://github.com/magento/catalog-storefront/blob/deve
   - Any DTO for Export API/SF API which does not reflect current schema: et_schema, proto schema
   - Any “mapper” on Message Broker (between Export API and SF API)
     - if mapper still needed, verify fields used in mapping, remove not relevant fields
+- [ ] README.md files for modified modules are updated and included in the pull request if any [README.md predefined sections](https://github.com/magento/devdocs/wiki/Magento-module-README.md) require an update
 
 
