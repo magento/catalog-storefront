@@ -1,3 +1,9 @@
+## ⚠️ Archived — No Longer Maintained
+
+This repository is no longer maintained and has been archived. Please use [magento/magento2](https://github.com/magento/magento2) instead.
+
+---
+
 # Overview
 This repository is responsible for Catalog Storefront Application
 - provides Read/Write API through gRPC
